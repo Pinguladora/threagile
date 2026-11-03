@@ -5,15 +5,6 @@ project_name: threagile
 before:
   hooks:
     - go mod download # Ensures dependencies are fetched before build starts
-    # Stage the run-time assets in the layout of the upstream image's /app folder,
-    # which is what threagile's --app-dir defaults expect (archives cannot rename).
-    - rm -rf build/app
-    - mkdir -p build/app/report build/app/server
-    - cp report/template/background.pdf support/openapi.yaml support/schema.json support/live-templates.txt build/app/
-    - cp report/threagile-logo.png build/app/report/
-    - cp -r server/static build/app/server/
-    - cp demo/example/threagile.yaml build/app/threagile-example-model.yaml
-    - cp demo/stub/threagile.yaml build/app/threagile-stub-model.yaml
 
 builds:
   - id: production
@@ -84,16 +75,10 @@ archives:
     # this name template makes the OS and Arch compatible with `uname`.
     name_template: >-
       {{ .ProjectName }}_ {{- title .Os }}_ {{- if eq .Arch "amd64" }}x86_64 {{- else if eq .Arch "arm64" }}aarch64 {{- else }}{{ .Arch }}{{ end }} {{- with .Amd64 }}_{{ . }}{{ end }} {{- with .Arm64 }}_{{ . }}{{ end }}
-    # threagile reads these from its --app-dir at run time, so they ship next to
-    # the binary until they are embedded into it (staged by the before hooks).
+    # The run-time assets are embedded in the binary, so only the docs ship with it.
     files:
       - LICENSE.txt
       - README.md
-      # **/* skips the top-level files, so they are listed separately.
-      - src: build/app/*
-        dst: .
-      - src: build/app/**/*
-        dst: .
     # use zip for windows archives
     format_overrides:
       - goos: windows
