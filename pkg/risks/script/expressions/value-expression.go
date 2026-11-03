@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 	"github.com/shopspring/decimal"
-	"github.com/threagile/threagile/pkg/risks/script/common"
 )
 
 type ValueExpression struct {

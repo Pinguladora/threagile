@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/threagile/threagile/pkg/risks/script/common"
-	"github.com/threagile/threagile/pkg/risks/script/expressions"
-	"github.com/threagile/threagile/pkg/risks/script/statements"
-	"github.com/threagile/threagile/pkg/types"
+	"github.com/Pinguladora/threagile/pkg/risks/script/common"
+	"github.com/Pinguladora/threagile/pkg/risks/script/expressions"
+	"github.com/Pinguladora/threagile/pkg/risks/script/statements"
+	"github.com/Pinguladora/threagile/pkg/types"
 	"gopkg.in/yaml.v3"
 )
 

@@ -22,10 +22,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/Pinguladora/threagile/pkg/input"
+	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/threagile/threagile/pkg/input"
-	"github.com/threagile/threagile/pkg/types"
 	"golang.org/x/crypto/argon2"
 	"gopkg.in/yaml.v3"
 )

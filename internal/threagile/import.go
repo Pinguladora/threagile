@@ -3,10 +3,10 @@ package threagile
 import (
 	"fmt"
 
+	"github.com/Pinguladora/threagile/pkg/model"
+	"github.com/Pinguladora/threagile/pkg/report"
+	"github.com/Pinguladora/threagile/pkg/risks"
 	"github.com/spf13/cobra"
-	"github.com/threagile/threagile/pkg/model"
-	"github.com/threagile/threagile/pkg/report"
-	"github.com/threagile/threagile/pkg/risks"
 )
 
 func (what *Threagile) initImport() *Threagile {

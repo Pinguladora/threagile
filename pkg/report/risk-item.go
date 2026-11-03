@@ -1,6 +1,6 @@
 package report
 
-import "github.com/threagile/threagile/pkg/types"
+import "github.com/Pinguladora/threagile/pkg/types"
 
 type RiskItem struct {
 	Columns  []string

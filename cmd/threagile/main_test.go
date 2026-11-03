@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/Pinguladora/threagile/pkg/input"
 	"github.com/akedrou/textdiff"
-	"github.com/threagile/threagile/pkg/input"
 )
 
 func TestParseModelYaml(t *testing.T) {

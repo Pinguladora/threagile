@@ -4,9 +4,9 @@ import (
 	"sort"
 	"strconv"
 
+	"github.com/Pinguladora/threagile/pkg/input"
+	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/mpvl/unique"
-	"github.com/threagile/threagile/pkg/input"
-	"github.com/threagile/threagile/pkg/types"
 )
 
 type removeUnusedTagsMacro struct{}

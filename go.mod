@@ -1,4 +1,4 @@
-module github.com/threagile/threagile
+module github.com/Pinguladora/threagile
 
 go 1.26.0
 

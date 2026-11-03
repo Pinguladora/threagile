@@ -3,8 +3,8 @@ package common
 import (
 	"testing"
 
+	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/stretchr/testify/assert"
-	"github.com/threagile/threagile/pkg/types"
 )
 
 func TestScope_Init(t *testing.T) {

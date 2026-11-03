@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/threagile/threagile/pkg/risks/script"
-	"github.com/threagile/threagile/pkg/types"
+	"github.com/Pinguladora/threagile/pkg/risks/script"
+	"github.com/Pinguladora/threagile/pkg/types"
 	"gopkg.in/yaml.v3"
 )
 

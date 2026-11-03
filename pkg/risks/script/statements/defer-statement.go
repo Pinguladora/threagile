@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/threagile/threagile/pkg/risks/script/common"
+	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 )
 
 type DeferStatement struct {

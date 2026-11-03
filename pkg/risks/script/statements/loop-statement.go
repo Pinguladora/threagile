@@ -3,9 +3,9 @@ package statements
 import (
 	"fmt"
 
+	"github.com/Pinguladora/threagile/pkg/risks/script/common"
+	"github.com/Pinguladora/threagile/pkg/risks/script/expressions"
 	"github.com/shopspring/decimal"
-	"github.com/threagile/threagile/pkg/risks/script/common"
-	"github.com/threagile/threagile/pkg/risks/script/expressions"
 )
 
 type LoopStatement struct {

@@ -1,8 +1,8 @@
 package macros
 
 import (
-	"github.com/threagile/threagile/pkg/input"
-	"github.com/threagile/threagile/pkg/types"
+	"github.com/Pinguladora/threagile/pkg/input"
+	"github.com/Pinguladora/threagile/pkg/types"
 )
 
 type PrettyPrintMacro struct{}

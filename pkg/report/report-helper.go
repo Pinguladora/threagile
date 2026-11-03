@@ -3,7 +3,7 @@ package report
 import (
 	"sort"
 
-	"github.com/threagile/threagile/pkg/types"
+	"github.com/Pinguladora/threagile/pkg/types"
 )
 
 func filteredByRiskStatus(parsedModel *types.Model, status types.RiskStatus) []*types.Risk {

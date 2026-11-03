@@ -1,7 +1,7 @@
 package builtin
 
 import (
-	"github.com/threagile/threagile/pkg/types"
+	"github.com/Pinguladora/threagile/pkg/types"
 )
 
 type MissingAuthenticationRule struct{}

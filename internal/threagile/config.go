@@ -11,8 +11,8 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/threagile/threagile/pkg/report"
-	"github.com/threagile/threagile/pkg/types"
+	"github.com/Pinguladora/threagile/pkg/report"
+	"github.com/Pinguladora/threagile/pkg/types"
 	"gopkg.in/yaml.v3"
 )
 

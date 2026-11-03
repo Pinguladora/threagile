@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/threagile/threagile/pkg/types"
+	"github.com/Pinguladora/threagile/pkg/types"
 )
 
 func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,

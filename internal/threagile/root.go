@@ -12,10 +12,10 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/Pinguladora/threagile/pkg/report"
 	"github.com/chzyer/readline"
 	"github.com/mattn/go-shellwords"
 	"github.com/spf13/cobra"
-	"github.com/threagile/threagile/pkg/report"
 )
 
 const (

@@ -3,7 +3,7 @@ package common
 import (
 	"fmt"
 
-	"github.com/threagile/threagile/pkg/risks/script/property"
+	"github.com/Pinguladora/threagile/pkg/risks/script/property"
 )
 
 type Property struct {

@@ -7,8 +7,8 @@ package threagile
 import (
 	"fmt"
 
+	"github.com/Pinguladora/threagile/pkg/examples"
 	"github.com/spf13/cobra"
-	"github.com/threagile/threagile/pkg/examples"
 )
 
 func (what *Threagile) initCreate() *Threagile {

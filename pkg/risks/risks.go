@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"io/fs"
 
-	"github.com/threagile/threagile/pkg/risks/builtin"
-	"github.com/threagile/threagile/pkg/risks/script"
-	"github.com/threagile/threagile/pkg/types"
+	"github.com/Pinguladora/threagile/pkg/risks/builtin"
+	"github.com/Pinguladora/threagile/pkg/risks/script"
+	"github.com/Pinguladora/threagile/pkg/types"
 )
 
 func GetBuiltInRiskRules() types.RiskRules {
