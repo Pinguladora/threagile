@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"image"
 	"log"
+	"maps"
 	"os"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -1803,8 +1805,8 @@ func filterByModelFailures(parsedModel *types.Model, risksByCat map[string][]*ty
 
 func flattenRiskSlice(risksByCat map[string][]*types.Risk) []*types.Risk {
 	result := make([]*types.Risk, 0)
-	for _, risks := range risksByCat {
-		result = append(result, risks...)
+	for _, categoryId := range slices.Sorted(maps.Keys(risksByCat)) {
+		result = append(result, risksByCat[categoryId]...)
 	}
 	return result
 }
@@ -2433,17 +2435,14 @@ func (r *pdfReporter) createSTRIDE(parsedModel *types.Model) {
 }
 
 func getRiskCategories(parsedModel *types.Model, categoryIDs []string) []*types.RiskCategory {
-	categoryMap := make(map[string]*types.RiskCategory)
+	categories := make([]*types.RiskCategory, 0)
+	seen := make(map[string]bool)
 	for _, categoryId := range categoryIDs {
 		category := parsedModel.GetRiskCategory(categoryId)
-		if category != nil {
-			categoryMap[categoryId] = category
+		if category != nil && !seen[categoryId] {
+			seen[categoryId] = true
+			categories = append(categories, category)
 		}
-	}
-
-	categories := make([]*types.RiskCategory, 0)
-	for categoryId := range categoryMap {
-		categories = append(categories, categoryMap[categoryId])
 	}
 
 	return categories
@@ -2480,11 +2479,7 @@ func reduceToOnlyStillAtRisk(risksByCategory map[string][]*types.Risk) []string 
 }
 
 func keysAsSlice(categories map[string]struct{}) []string {
-	result := make([]string, 0, len(categories))
-	for k := range categories {
-		result = append(result, k)
-	}
-	return result
+	return slices.Sorted(maps.Keys(categories))
 }
 
 func (r *pdfReporter) createSecurityRequirements(parsedModel *types.Model) {
@@ -4401,7 +4396,8 @@ func (r *pdfReporter) createRiskRulesChecked(parsedModel *types.Model, modelFile
 	skipped := ""
 	r.pdf.Ln(-1)
 
-	for id, customRule := range customRiskRules {
+	for _, id := range slices.Sorted(maps.Keys(customRiskRules)) {
+		customRule := customRiskRules[id]
 		r.pdf.Ln(-1)
 		r.pdf.SetFont("Helvetica", "B", fontSizeBody)
 		if contains(skipRiskRules, id) {
@@ -4475,7 +4471,8 @@ func (r *pdfReporter) createRiskRulesChecked(parsedModel *types.Model, modelFile
 		r.pdf.MultiCell(160, 6, individualRiskCategory.RiskAssessment, "0", "0", false)
 	}
 
-	for _, rule := range r.riskRules {
+	for _, id := range slices.Sorted(maps.Keys(r.riskRules)) {
+		rule := r.riskRules[id]
 		r.pdf.Ln(-1)
 		r.pdf.SetFont("Helvetica", "B", fontSizeBody)
 		if contains(skipRiskRules, rule.Category().ID) {
@@ -4617,7 +4614,7 @@ func (r *pdfReporter) createTargetDescription(parsedModel *types.Model, baseFold
 func (r *pdfReporter) addCustomImages(customImages []map[string]string, baseFolder string, html gofpdf.HTMLBasicType) error {
 	var text strings.Builder
 	for _, customImage := range customImages {
-		for imageFilename := range customImage {
+		for _, imageFilename := range slices.Sorted(maps.Keys(customImage)) {
 			imageFilenameWithoutPath := filepath.Base(imageFilename)
 			// check JPEG, PNG or GIF
 			extension := strings.ToLower(filepath.Ext(imageFilenameWithoutPath))

@@ -65,9 +65,9 @@ func WriteRisksExcelToFile(parsedModel *types.Model, filename string, config rep
 		return fmt.Errorf("unable to set header/footer: %w", setHeaderFooterError)
 	}
 
-	// set header row
-	for columnLetter, column := range columns {
-		setCellValueError := excel.SetCellValue(sheetName, columnLetter+"1", column.Title)
+	// set header row (in column order: the shared strings table numbers the strings as they are first written)
+	for _, columnLetter := range columns.SortedLetters() {
+		setCellValueError := excel.SetCellValue(sheetName, columnLetter+"1", columns[columnLetter].Title)
 		if setCellValueError != nil {
 			return fmt.Errorf("unable to set cell value: %w", setCellValueError)
 		}
@@ -211,9 +211,9 @@ func WriteRisksExcelToFile(parsedModel *types.Model, filename string, config rep
 	}
 
 	// hide some columns
-	for columnLetter, column := range columns {
+	for _, columnLetter := range columns.SortedLetters() {
 		for _, hiddenColumn := range config.GetRiskExcelConfigHideColumns() {
-			if strings.EqualFold(hiddenColumn, column.Title) {
+			if strings.EqualFold(hiddenColumn, columns[columnLetter].Title) {
 				hideColumnError := excel.SetColVisible(sheetName, columnLetter, false)
 				if hideColumnError != nil {
 					return fmt.Errorf("unable to hide column: %w", hideColumnError)

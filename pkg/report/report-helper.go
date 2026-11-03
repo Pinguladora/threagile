@@ -1,6 +1,8 @@
 package report
 
 import (
+	"maps"
+	"slices"
 	"sort"
 
 	"github.com/Pinguladora/threagile/pkg/types"
@@ -8,7 +10,7 @@ import (
 
 func filteredByRiskStatus(parsedModel *types.Model, status types.RiskStatus) []*types.Risk {
 	filteredRisks := make([]*types.Risk, 0)
-	for _, risks := range parsedModel.GeneratedRisksByCategoryWithCurrentStatus() {
+	for _, risks := range sortedByCategory(parsedModel.GeneratedRisksByCategoryWithCurrentStatus()) {
 		for _, risk := range risks {
 			if risk.RiskStatus == status {
 				filteredRisks = append(filteredRisks, risk)
@@ -20,15 +22,24 @@ func filteredByRiskStatus(parsedModel *types.Model, status types.RiskStatus) []*
 
 func filteredByRiskFunction(parsedModel *types.Model, function types.RiskFunction) []*types.Risk {
 	filteredRisks := make([]*types.Risk, 0)
-	for categoryId, risks := range parsedModel.GeneratedRisksByCategory {
+	for _, categoryId := range slices.Sorted(maps.Keys(parsedModel.GeneratedRisksByCategory)) {
 		category := parsedModel.GetRiskCategory(categoryId)
-		for _, risk := range risks {
+		for _, risk := range parsedModel.GeneratedRisksByCategory[categoryId] {
 			if category.Function == function {
 				filteredRisks = append(filteredRisks, risk)
 			}
 		}
 	}
 	return filteredRisks
+}
+
+// sortedByCategory returns the risk lists of a by-category map in category id order.
+func sortedByCategory(risksByCategory map[string][]*types.Risk) [][]*types.Risk {
+	result := make([][]*types.Risk, 0, len(risksByCategory))
+	for _, categoryId := range slices.Sorted(maps.Keys(risksByCategory)) {
+		result = append(result, risksByCategory[categoryId])
+	}
+	return result
 }
 
 func reduceToRiskStatus(risks []*types.Risk, status types.RiskStatus) []*types.Risk {
@@ -103,7 +114,7 @@ func sortedKeysOfQuestions(parsedModel *types.Model) []string {
 
 func filteredBySeverity(parsedModel *types.Model, severity types.RiskSeverity) []*types.Risk {
 	filteredRisks := make([]*types.Risk, 0)
-	for _, risks := range parsedModel.GeneratedRisksByCategoryWithCurrentStatus() {
+	for _, risks := range sortedByCategory(parsedModel.GeneratedRisksByCategoryWithCurrentStatus()) {
 		for _, risk := range risks {
 			if risk.Severity == severity {
 				filteredRisks = append(filteredRisks, risk)
@@ -124,7 +135,7 @@ func sortedTechnicalAssetsByRiskSeverityAndTitle(parsedModel *types.Model) []*ty
 
 func filteredByStillAtRisk(parsedModel *types.Model) []*types.Risk {
 	filteredRisks := make([]*types.Risk, 0)
-	for _, risks := range parsedModel.GeneratedRisksByCategoryWithCurrentStatus() {
+	for _, risks := range sortedByCategory(parsedModel.GeneratedRisksByCategoryWithCurrentStatus()) {
 		stillAtRisk := types.ReduceToOnlyStillAtRisk(risks)
 		filteredRisks = append(filteredRisks, stillAtRisk...)
 	}
