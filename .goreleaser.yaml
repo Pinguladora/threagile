@@ -67,6 +67,26 @@ gomod:
   proxy: true # Verifiable builds: fetch modules from the proxy
   mod: readonly # Prevent accidental go.mod/go.sum changes during build
 
+kos:
+  # The binary is static (CGO off, diagrams rendered in-process) and embeds its
+  # assets, so it runs on the minimal hi/static base with nothing else installed.
+  - id: threagile-image
+    build: production
+    base_image: registry.access.redhat.com/hi/static:latest@sha256:f4d5109b57cf7eab0a7adc566f2d78f80fa0c5ec9ccab698c9fb8eb448db6071
+    bare: true
+    repositories:
+      - ghcr.io/pinguladora/threagile
+    user: "65532:65532"
+    tags:
+      - latest
+      - "{{.Tag}}"
+    platforms:
+      - linux/amd64
+      - linux/arm64
+    sbom: spdx
+    creation_time: "{{.CommitTimestamp}}"
+    ko_data_creation_time: "{{.CommitTimestamp}}"
+
 archives:
   - id: standard
     ids: [production, dev]
@@ -150,5 +170,17 @@ signs:
       - "sign-blob"
       - "--bundle=${signature}"
       - "${artifact}"
+      - "--yes"
+    output: true
+
+docker_signs:
+  - id: keyless-image-sign
+    artifacts: all
+    cmd: cosign
+    args:
+      - "sign"
+      # Sign by digest, not tag: it pins exactly what was pushed without racing a
+      # moving tag.
+      - "${artifact}@${digest}"
       - "--yes"
     output: true
