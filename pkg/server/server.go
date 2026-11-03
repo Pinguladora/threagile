@@ -6,7 +6,9 @@ package server
 
 import (
 	"fmt"
+	"html/template"
 	"log"
+	"mime"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -15,6 +17,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/Pinguladora/threagile"
 	"github.com/Pinguladora/threagile/pkg/model"
 	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/gin-gonic/gin"
@@ -91,39 +94,7 @@ func RunServer(config serverConfigReader, builtinRiskRules types.RiskRules) {
 		builtinRiskRules:               builtinRiskRules,
 	}
 	router := gin.Default()
-	router.LoadHTMLGlob(filepath.Join(s.config.GetServerFolder(), "static", "*.html")) // <==
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", gin.H{})
-	})
-	router.HEAD("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", gin.H{})
-	})
-	router.GET("/edit-model", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "edit-model.html", gin.H{})
-	})
-	router.HEAD("/edit-model", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "edit-model.html", gin.H{})
-	})
-	router.StaticFile("/css/edit-model.css", filepath.Join(s.config.GetServerFolder(), "static", "css", "edit-model.css"))       // <==
-	router.StaticFile("/js/edit-model.js", filepath.Join(s.config.GetServerFolder(), "static", "js", "edit-model.js"))           // <==
-	router.StaticFile("/js/property-editor.js", filepath.Join(s.config.GetServerFolder(), "static", "js", "property-editor.js")) // <==
-	router.StaticFile("/js/schema.js", filepath.Join(s.config.GetServerFolder(), "static", "js", "schema.js"))                   // <==
-
-	router.StaticFile("/threagile.png", filepath.Join(s.config.GetServerFolder(), "static", "threagile.png")) // <==
-	router.StaticFile("/site.webmanifest", filepath.Join(s.config.GetServerFolder(), "static", "site.webmanifest"))
-	router.StaticFile("/favicon.ico", filepath.Join(s.config.GetServerFolder(), "static", "favicon.ico"))
-	router.StaticFile("/favicon-32x32.png", filepath.Join(s.config.GetServerFolder(), "static", "favicon-32x32.png"))
-	router.StaticFile("/favicon-16x16.png", filepath.Join(s.config.GetServerFolder(), "static", "favicon-16x16.png"))
-	router.StaticFile("/apple-touch-icon.png", filepath.Join(s.config.GetServerFolder(), "static", "apple-touch-icon.png"))
-	router.StaticFile("/android-chrome-512x512.png", filepath.Join(s.config.GetServerFolder(), "static", "android-chrome-512x512.png"))
-	router.StaticFile("/android-chrome-192x192.png", filepath.Join(s.config.GetServerFolder(), "static", "android-chrome-192x192.png"))
-
-	router.StaticFile("/schema.json", filepath.Join(s.config.GetAppFolder(), "schema.json"))
-	router.StaticFile("/live-templates.txt", filepath.Join(s.config.GetAppFolder(), "live-templates.txt"))
-	router.StaticFile("/openapi.yaml", filepath.Join(s.config.GetAppFolder(), "openapi.yaml"))
-
-	router.GET("/threagile-example-model.yaml", s.exampleFile)
-	router.GET("/threagile-stub-model.yaml", s.stubFile)
+	s.addStaticRoutes(router)
 
 	router.GET("/meta/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -230,8 +201,70 @@ func RunServer(config serverConfigReader, builtinRiskRules types.RiskRules) {
 	_ = router.Run(":" + strconv.Itoa(s.config.GetServerPort())) // listen and serve on 0.0.0.0:8080 or whatever port was specified
 }
 
+// addStaticRoutes serves the web UI and the files from the app folder. The web
+// UI always comes from the copy embedded in the binary (the server folder only
+// holds run-time storage such as the keys). The app folder files prefer a copy
+// in --app-dir and fall back to the embedded one.
+func (s *server) addStaticRoutes(router *gin.Engine) {
+	static := threagile.Static()
+	router.SetHTMLTemplate(template.Must(template.ParseFS(static, "*.html")))
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", gin.H{})
+	})
+	router.HEAD("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", gin.H{})
+	})
+	router.GET("/edit-model", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "edit-model.html", gin.H{})
+	})
+	router.HEAD("/edit-model", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "edit-model.html", gin.H{})
+	})
+
+	for _, name := range []string{
+		"css/edit-model.css", "js/edit-model.js", "js/property-editor.js", "js/schema.js",
+		"threagile.png", "site.webmanifest", "favicon.ico", "favicon-32x32.png", "favicon-16x16.png",
+		"apple-touch-icon.png", "android-chrome-512x512.png", "android-chrome-192x192.png",
+	} {
+		router.StaticFileFS("/"+name, name, http.FS(static))
+	}
+
+	for _, file := range []struct {
+		name  string
+		asset threagile.Asset
+	}{
+		{"schema.json", threagile.Schema},
+		{"live-templates.txt", threagile.LiveTemplates},
+		{"openapi.yaml", threagile.OpenAPI},
+	} {
+		router.GET("/"+file.name, s.appFile(file.asset, file.name))
+		router.HEAD("/"+file.name, s.appFile(file.asset, file.name))
+	}
+
+	router.GET("/threagile-example-model.yaml", s.exampleFile)
+	router.GET("/threagile-stub-model.yaml", s.stubFile)
+}
+
+// appFile serves the named file from the app folder, or the embedded asset when
+// the folder does not hold it.
+func (s *server) appFile(asset threagile.Asset, name string) gin.HandlerFunc {
+	return func(ginContext *gin.Context) {
+		data, err := asset.ReadFile(filepath.Join(s.config.GetAppFolder(), name))
+		if err != nil {
+			handleErrorInServiceCall(err, ginContext)
+			return
+		}
+
+		contentType := mime.TypeByExtension(filepath.Ext(name))
+		if contentType == "" {
+			contentType = http.DetectContentType(data)
+		}
+		ginContext.Data(http.StatusOK, contentType, data)
+	}
+}
+
 func (s *server) exampleFile(ginContext *gin.Context) {
-	example, err := os.ReadFile(filepath.Join(s.config.GetAppFolder(), "threagile-example-model.yaml"))
+	example, err := threagile.ExampleModel.ReadFile(filepath.Join(s.config.GetAppFolder(), "threagile-example-model.yaml"))
 	if err != nil {
 		handleErrorInServiceCall(err, ginContext)
 		return
@@ -240,7 +273,7 @@ func (s *server) exampleFile(ginContext *gin.Context) {
 }
 
 func (s *server) stubFile(ginContext *gin.Context) {
-	stub, err := os.ReadFile(filepath.Join(s.config.GetAppFolder(), "threagile-stub-model.yaml"))
+	stub, err := threagile.StubModel.ReadFile(filepath.Join(s.config.GetAppFolder(), "threagile-stub-model.yaml"))
 	if err != nil {
 		handleErrorInServiceCall(err, ginContext)
 		return
