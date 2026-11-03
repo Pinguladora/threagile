@@ -3,8 +3,8 @@ package statements
 import (
 	"testing"
 
+	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 	"github.com/stretchr/testify/assert"
-	"github.com/threagile/threagile/pkg/risks/script/common"
 )
 
 func TestReturnStatement_ParseStringSucceeds(t *testing.T) {

@@ -3,8 +3,8 @@ package builtin
 import (
 	"testing"
 
+	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/stretchr/testify/assert"
-	"github.com/threagile/threagile/pkg/types"
 )
 
 func TestCrossSiteScriptingRuleGenerateRisksEmptyModelNotRisksCreated(t *testing.T) {

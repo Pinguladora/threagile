@@ -3,8 +3,8 @@ package expressions
 import (
 	"testing"
 
+	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 	"github.com/stretchr/testify/assert"
-	"github.com/threagile/threagile/pkg/risks/script/common"
 )
 
 func TestEqualOrLessExpression_EvalBool_Equal_ReturnsTrue(t *testing.T) {

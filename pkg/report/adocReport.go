@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/threagile/threagile/pkg/types"
+	"github.com/Pinguladora/threagile/pkg/types"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )

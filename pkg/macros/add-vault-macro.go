@@ -4,8 +4,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/threagile/threagile/pkg/input"
-	"github.com/threagile/threagile/pkg/types"
+	"github.com/Pinguladora/threagile/pkg/input"
+	"github.com/Pinguladora/threagile/pkg/types"
 )
 
 type AddVaultMacro struct {

@@ -3,8 +3,8 @@ package expressions
 import (
 	"fmt"
 
+	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 	"github.com/shopspring/decimal"
-	"github.com/threagile/threagile/pkg/risks/script/common"
 )
 
 type CountExpression struct {

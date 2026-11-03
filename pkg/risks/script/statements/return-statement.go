@@ -3,8 +3,8 @@ package statements
 import (
 	"fmt"
 
-	"github.com/threagile/threagile/pkg/risks/script/common"
-	"github.com/threagile/threagile/pkg/risks/script/expressions"
+	"github.com/Pinguladora/threagile/pkg/risks/script/common"
+	"github.com/Pinguladora/threagile/pkg/risks/script/expressions"
 )
 
 type ReturnStatement struct {

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/threagile/threagile/pkg/risks/script/common"
-	"github.com/threagile/threagile/pkg/risks/script/expressions"
+	"github.com/Pinguladora/threagile/pkg/risks/script/common"
+	"github.com/Pinguladora/threagile/pkg/risks/script/expressions"
 )
 
 type IfStatement struct {

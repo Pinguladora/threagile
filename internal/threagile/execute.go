@@ -7,10 +7,10 @@ package threagile
 import (
 	"fmt"
 
+	"github.com/Pinguladora/threagile/pkg/macros"
+	"github.com/Pinguladora/threagile/pkg/model"
+	"github.com/Pinguladora/threagile/pkg/risks"
 	"github.com/spf13/cobra"
-	"github.com/threagile/threagile/pkg/macros"
-	"github.com/threagile/threagile/pkg/model"
-	"github.com/threagile/threagile/pkg/risks"
 )
 
 func (what *Threagile) initExecute() *Threagile {

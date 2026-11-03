@@ -7,10 +7,10 @@ package model
 import (
 	"testing"
 
+	"github.com/Pinguladora/threagile/pkg/input"
+	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"github.com/threagile/threagile/pkg/input"
-	"github.com/threagile/threagile/pkg/types"
 )
 
 func TestDefaultInputNotFail(t *testing.T) {

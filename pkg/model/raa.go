@@ -3,7 +3,7 @@ package model
 import (
 	"sort"
 
-	"github.com/threagile/threagile/pkg/types"
+	"github.com/Pinguladora/threagile/pkg/types"
 )
 
 func applyRAA(input *types.Model, progressReporter types.ProgressReporter) string {

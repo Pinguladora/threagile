@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/threagile/threagile/internal/threagile"
+	"github.com/Pinguladora/threagile/internal/threagile"
 )
 
 var buildTimestamp = ""

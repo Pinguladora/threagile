@@ -3,8 +3,8 @@ package common
 import (
 	"fmt"
 
+	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/shopspring/decimal"
-	"github.com/threagile/threagile/pkg/types"
 )
 
 const (

@@ -4,9 +4,9 @@ import (
 	_ "embed"
 	"testing"
 
+	"github.com/Pinguladora/threagile/pkg/risks/script"
+	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/stretchr/testify/assert"
-	"github.com/threagile/threagile/pkg/risks/script"
-	"github.com/threagile/threagile/pkg/types"
 )
 
 // TODO: fix when there are no technical assets in scope

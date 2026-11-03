@@ -16,10 +16,10 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/Pinguladora/threagile/pkg/input"
+	"github.com/Pinguladora/threagile/pkg/model"
+	"github.com/Pinguladora/threagile/pkg/risks"
 	"github.com/gin-gonic/gin"
-	"github.com/threagile/threagile/pkg/input"
-	"github.com/threagile/threagile/pkg/model"
-	"github.com/threagile/threagile/pkg/risks"
 )
 
 func (s *server) analyze(ginContext *gin.Context) {

@@ -3,7 +3,7 @@ package builtin
 import (
 	"sort"
 
-	"github.com/threagile/threagile/pkg/types"
+	"github.com/Pinguladora/threagile/pkg/types"
 )
 
 type MixedTargetsOnSharedRuntimeRule struct{}

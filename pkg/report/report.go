@@ -13,9 +13,9 @@ import (
 	"time"
 	"unicode/utf8"
 
+	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/jung-kurt/gofpdf"
 	"github.com/jung-kurt/gofpdf/contrib/gofpdi"
-	"github.com/threagile/threagile/pkg/types"
 	"github.com/wcharczuk/go-chart"
 	"github.com/wcharczuk/go-chart/drawing"
 )

@@ -10,8 +10,8 @@ import (
 	"path/filepath"
 	"slices"
 
-	"github.com/threagile/threagile/pkg/model"
-	"github.com/threagile/threagile/pkg/types"
+	"github.com/Pinguladora/threagile/pkg/model"
+	"github.com/Pinguladora/threagile/pkg/types"
 )
 
 type GenerateCommands struct {

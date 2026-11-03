@@ -15,9 +15,9 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/Pinguladora/threagile/pkg/model"
+	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/gin-gonic/gin"
-	"github.com/threagile/threagile/pkg/model"
-	"github.com/threagile/threagile/pkg/types"
 )
 
 type serverConfigReader interface {

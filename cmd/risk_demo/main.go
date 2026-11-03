@@ -7,8 +7,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/threagile/threagile/pkg/model"
-	"github.com/threagile/threagile/pkg/types"
+	"github.com/Pinguladora/threagile/pkg/model"
+	"github.com/Pinguladora/threagile/pkg/types"
 	"gopkg.in/yaml.v3"
 )
 

@@ -1,9 +1,9 @@
 package threagile
 
 import (
+	"github.com/Pinguladora/threagile/pkg/risks"
+	"github.com/Pinguladora/threagile/pkg/server"
 	"github.com/spf13/cobra"
-	"github.com/threagile/threagile/pkg/risks"
-	"github.com/threagile/threagile/pkg/server"
 )
 
 func (what *Threagile) initServer() *Threagile {
