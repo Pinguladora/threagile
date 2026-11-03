@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"hash/fnv"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"regexp"
 	"sort"
@@ -418,56 +417,10 @@ func determineArrowColor(cl *types.CommunicationLink, parsedModel *types.Model) 
 }
 
 func GenerateDataFlowDiagramGraphvizImage(dotFile *os.File, targetDir string,
-	tempFolder, dataFlowDiagramFilenamePNG string, progressReporter progressReporter, keepGraphVizDataFile bool,
+	dataFlowDiagramFilenamePNG string, progressReporter progressReporter,
 ) error {
 	progressReporter.Info("Rendering data flow diagram input")
-	// tmp files
-	tmpFileDOT, err := os.CreateTemp(tempFolder, "diagram-*-.gv")
-	if err != nil {
-		return fmt.Errorf("error creating temp file: %w", err)
-	}
-	if !keepGraphVizDataFile {
-		defer func() { _ = os.Remove(tmpFileDOT.Name()) }()
-	}
-
-	tmpFilePNG, err := os.CreateTemp(tempFolder, "diagram-*-.png")
-	if err != nil {
-		return fmt.Errorf("error creating temp file: %w", err)
-	}
-	if !keepGraphVizDataFile {
-		defer func() { _ = os.Remove(tmpFilePNG.Name()) }()
-	}
-
-	// copy into tmp file as input
-	inputDOT, err := os.ReadFile(dotFile.Name())
-	if err != nil {
-		return fmt.Errorf("error reading %s: %w", dotFile.Name(), err)
-	}
-	err = os.WriteFile(filepath.Clean(tmpFileDOT.Name()), inputDOT, 0o600) // #nosec G703
-	if err != nil {
-		return fmt.Errorf("error creating %s: %w", tmpFileDOT.Name(), err)
-	}
-
-	// exec
-
-	cmd := exec.Command("dot", "-Tpng", tmpFileDOT.Name(), "-o", tmpFilePNG.Name()) // #nosec G204
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	err = cmd.Run()
-	if err != nil {
-		return fmt.Errorf("graph rendering call failed with error: %w", err)
-	}
-	// copy into resulting file
-	inputPNG, err := os.ReadFile(tmpFilePNG.Name())
-	if err != nil {
-		return fmt.Errorf("failed to copy to file %s: %w", tmpFilePNG.Name(), err)
-	}
-	pngFile := filepath.Clean(filepath.Join(targetDir, dataFlowDiagramFilenamePNG))
-	err = os.WriteFile(pngFile, inputPNG, 0o600) // #nosec G703
-	if err != nil {
-		return fmt.Errorf("failed to create %s: %w", filepath.Join(targetDir, dataFlowDiagramFilenamePNG), err)
-	}
-	return nil
+	return renderDiagramGraphvizImage(dotFile, filepath.Join(targetDir, dataFlowDiagramFilenamePNG))
 }
 
 func makeDiagramSameRankNodeTweaks(parsedModel *types.Model) (string, error) {
@@ -822,49 +775,24 @@ func determineTechnicalAssetLabelColor(ta *types.TechnicalAsset, model *types.Mo
 }
 
 func GenerateDataAssetDiagramGraphvizImage(dotFile *os.File, targetDir string,
-	tempFolder, dataAssetDiagramFilenamePNG string, progressReporter progressReporter,
+	dataAssetDiagramFilenamePNG string, progressReporter progressReporter,
 ) error {
 	progressReporter.Info("Rendering data asset diagram input")
-	// tmp files
-	tmpFileDOT, err := os.CreateTemp(tempFolder, "diagram-*-.gv")
-	if err != nil {
-		return fmt.Errorf("error creating temp file: %w", err)
-	}
-	defer func() { _ = os.Remove(tmpFileDOT.Name()) }()
+	return renderDiagramGraphvizImage(dotFile, filepath.Join(targetDir, dataAssetDiagramFilenamePNG))
+}
 
-	tmpFilePNG, err := os.CreateTemp(tempFolder, "diagram-*-.png")
-	if err != nil {
-		return fmt.Errorf("error creating temp file: %w", err)
-	}
-	defer func() { _ = os.Remove(tmpFilePNG.Name()) }()
-
-	// copy into tmp file as input
+func renderDiagramGraphvizImage(dotFile *os.File, pngFile string) error {
 	inputDOT, err := os.ReadFile(dotFile.Name())
 	if err != nil {
 		return fmt.Errorf("error reading %s: %w", dotFile.Name(), err)
 	}
-	err = os.WriteFile(filepath.Clean(tmpFileDOT.Name()), inputDOT, 0o600) // #nosec G703
+	inputPNG, err := renderDiagramPNG(inputDOT)
 	if err != nil {
-		return fmt.Errorf("error creating %s: %w", tmpFileDOT.Name(), err)
+		return fmt.Errorf("error rendering %s: %w", dotFile.Name(), err)
 	}
-
-	// exec
-	cmd := exec.Command("dot", "-Tpng", tmpFileDOT.Name(), "-o", tmpFilePNG.Name()) // #nosec G204
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	err = cmd.Run()
+	err = os.WriteFile(filepath.Clean(pngFile), inputPNG, 0o600) // #nosec G703
 	if err != nil {
-		return fmt.Errorf("graph rendering call failed with error: %w", err)
-	}
-	// copy into resulting file
-	inputPNG, err := os.ReadFile(tmpFilePNG.Name())
-	if err != nil {
-		return fmt.Errorf("failed to copy to file %s: %w", tmpFilePNG.Name(), err)
-	}
-	pngFile := filepath.Clean(filepath.Join(targetDir, dataAssetDiagramFilenamePNG))
-	err = os.WriteFile(pngFile, inputPNG, 0o600) // #nosec G703
-	if err != nil {
-		return fmt.Errorf("failed to create %s: %w", filepath.Join(targetDir, dataAssetDiagramFilenamePNG), err)
+		return fmt.Errorf("failed to create %s: %w", pngFile, err)
 	}
 	return nil
 }

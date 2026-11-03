@@ -4,7 +4,9 @@ go 1.26.0
 
 require (
 	github.com/chzyer/readline v1.5.1
+	github.com/fogleman/gg v1.3.0
 	github.com/gin-gonic/gin v1.10.0
+	github.com/goccy/go-graphviz v0.2.10
 	github.com/google/uuid v1.6.0
 	github.com/jung-kurt/gofpdf v1.16.2
 	github.com/mattn/go-shellwords v1.0.12
@@ -21,6 +23,8 @@ require (
 	github.com/bytedance/sonic/loader v0.2.4 // indirect
 	github.com/cloudwego/base64x v0.1.5 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/disintegration/imaging v1.6.2 // indirect
+	github.com/flopp/go-findfont v0.1.0 // indirect
 	github.com/gin-contrib/sse v1.1.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
@@ -37,6 +41,7 @@ require (
 	github.com/richardlehane/mscfb v1.0.4 // indirect
 	github.com/richardlehane/msoleps v1.0.4 // indirect
 	github.com/spf13/pflag v1.0.6 // indirect
+	github.com/tetratelabs/wazero v1.10.1 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	golang.org/x/sys v0.41.0 // indirect
 )
@@ -47,7 +52,7 @@ require (
 	github.com/bytedance/sonic v1.13.2 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
 	github.com/go-playground/validator/v10 v10.26.0 // indirect
-	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
@@ -58,7 +63,7 @@ require (
 	github.com/xuri/efp v0.0.0-20250227110027-3491fafc2b79 // indirect
 	github.com/xuri/nfp v0.0.0-20250226145837-86d5fc24b2ba // indirect
 	golang.org/x/arch v0.17.0 // indirect
-	golang.org/x/image v0.26.0 // indirect
+	golang.org/x/image v0.26.0
 	golang.org/x/net v0.51.0 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 )

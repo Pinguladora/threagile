@@ -130,7 +130,7 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 		}
 
 		err = GenerateDataFlowDiagramGraphvizImage(dotFile, config.GetOutputFolder(),
-			config.GetTempFolder(), config.GetDataFlowDiagramFilenamePNG(), progressReporter, config.GetKeepDiagramSourceFiles())
+			config.GetDataFlowDiagramFilenamePNG(), progressReporter)
 		if err != nil {
 			progressReporter.Warn(err)
 		}
@@ -151,7 +151,7 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 			return fmt.Errorf("error while generating data asset diagram: %w", err)
 		}
 		err = GenerateDataAssetDiagramGraphvizImage(dotFile, config.GetOutputFolder(),
-			config.GetTempFolder(), config.GetDataAssetDiagramFilenamePNG(), progressReporter)
+			config.GetDataAssetDiagramFilenamePNG(), progressReporter)
 		if err != nil {
 			progressReporter.Warn(err)
 		}
