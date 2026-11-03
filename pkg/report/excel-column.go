@@ -1,6 +1,9 @@
 package report
 
 import (
+	"cmp"
+	"maps"
+	"slices"
 	"strings"
 
 	"github.com/xuri/excelize/v2"
@@ -33,6 +36,15 @@ func (what *ExcelColumns) GetColumns() ExcelColumns {
 	}
 
 	return *what
+}
+
+// SortedLetters returns the column letters in sheet order (A to Z, then AA and so on).
+func (what *ExcelColumns) SortedLetters() []string {
+	letters := slices.Collect(maps.Keys(*what))
+	slices.SortFunc(letters, func(a, b string) int {
+		return cmp.Or(cmp.Compare(len(a), len(b)), cmp.Compare(a, b))
+	})
+	return letters
 }
 
 func (what *ExcelColumns) FindColumnNameByTitle(title string) string {

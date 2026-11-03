@@ -6,9 +6,11 @@ import (
 	"image"
 	"io"
 	"log"
+	"maps"
 	"os"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -880,7 +882,7 @@ func (adoc adocReport) writeImpactRemainingRisks() error {
 
 func addCustomImages(f *os.File, customImages []map[string]string, baseFolder string) {
 	for _, customImage := range customImages {
-		for imageFilename := range customImage {
+		for _, imageFilename := range slices.Sorted(maps.Keys(customImage)) {
 			imageFilenameWithoutPath := filepath.Base(imageFilename)
 			imageFullFilename := filepath.Join(baseFolder, imageFilenameWithoutPath)
 			writeLine(f, "image::"+imageFullFilename+"[]")
@@ -2139,7 +2141,8 @@ func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRi
 	// TODO use the new run system to discover risk rules instead of hard-coding them here:
 	skipped := ""
 
-	for id, customRule := range customRiskRules {
+	for _, id := range slices.Sorted(maps.Keys(customRiskRules)) {
+		customRule := customRiskRules[id]
 		if contains(skipRiskRules, id) {
 			skipped = "SKIPPED - "
 		} else {
@@ -2177,7 +2180,8 @@ func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRi
 `)
 	}
 
-	for _, rule := range adoc.riskRules {
+	for _, id := range slices.Sorted(maps.Keys(adoc.riskRules)) {
+		rule := adoc.riskRules[id]
 		if contains(skipRiskRules, rule.Category().ID) {
 			skipped = "SKIPPED - "
 		} else {
@@ -2239,8 +2243,8 @@ func (adoc adocReport) appendixRating(f *os.File) {
 	writeLine(f, "|===")
 	writeLine(f, "| Name | Value | Description")
 	writeLine(f, "")
-	for key, value := range confValues {
-		writeLine(f, "| "+key.String()+" | "+value+" | "+key.Explain())
+	for _, key := range slices.Sorted(maps.Keys(confValues)) {
+		writeLine(f, "| "+key.String()+" | "+confValues[key]+" | "+key.Explain())
 	}
 	writeLine(f, "|===")
 	writeLine(f, "")
@@ -2251,8 +2255,8 @@ func (adoc adocReport) appendixRating(f *os.File) {
 	writeLine(f, "|===")
 	writeLine(f, "| Name | Value | Description")
 	writeLine(f, "")
-	for key, value := range critValues {
-		writeLine(f, "| "+key.String()+" | "+value+" | "+key.Explain())
+	for _, key := range slices.Sorted(maps.Keys(critValues)) {
+		writeLine(f, "| "+key.String()+" | "+critValues[key]+" | "+key.Explain())
 	}
 	writeLine(f, "|===")
 }
