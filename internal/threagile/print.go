@@ -3,9 +3,9 @@ package threagile
 import (
 	"errors"
 	"fmt"
-	"os"
 	"path/filepath"
 
+	"github.com/Pinguladora/threagile"
 	"github.com/spf13/cobra"
 )
 
@@ -35,7 +35,8 @@ func (what *Threagile) initPrint() *Threagile {
 				return errors.New("weird app folder")
 			}
 
-			content, err := os.ReadFile(filepath.Clean(filepath.Join(appDir, "LICENSE.txt")))
+			// A LICENSE.txt in the app folder wins over the one embedded in the binary.
+			content, err := threagile.License.ReadFile(filepath.Join(appDir, "LICENSE.txt"))
 			if err != nil {
 				cmd.Printf("Unable to read license file: %v", err)
 				return err
