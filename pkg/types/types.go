@@ -4,7 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 
 package types
 
-// TypeDescription contains a name for a type and its description
+// TypeDescription contains a name for a type and its description.
 type TypeDescription struct {
 	Name        string
 	Description string

@@ -5,6 +5,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package server
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -111,7 +112,7 @@ func (s *server) execute(ginContext *gin.Context, dryRun bool) (yamlContent []by
 			}
 		}
 		if !found {
-			panic(fmt.Errorf("no yaml file found in uploaded archive"))
+			panic(errors.New("no yaml file found in uploaded archive"))
 		}
 	}
 
@@ -140,7 +141,8 @@ func (s *server) execute(ginContext *gin.Context, dryRun bool) (yamlContent []by
 		handleErrorInServiceCall(err, ginContext)
 		return yamlContent, false
 	}
-	err = os.WriteFile(filepath.Clean(filepath.Join(tmpOutputDir, s.config.GetInputFile())), yamlContent, 0400) // #nosec G703
+	inputFile := filepath.Clean(filepath.Join(tmpOutputDir, s.config.GetInputFile()))
+	err = os.WriteFile(inputFile, yamlContent, 0o400) // #nosec G703
 	if err != nil {
 		handleErrorInServiceCall(err, ginContext)
 		return yamlContent, false
@@ -176,13 +178,16 @@ func (s *server) execute(ginContext *gin.Context, dryRun bool) (yamlContent []by
 	return yamlContent, true
 }
 
-// ultimately to avoid any in-process memory and/or data leaks by the used third party libs like PDF generation: exec and quit
+// ultimately to avoid any in-process memory and/or data leaks by the used third party libs like PDF
+// generation: exec and quit.
 func (s *server) doItViaRuntimeCall(modelFile string, outputDir string,
 	generateDataFlowDiagram, generateDataAssetDiagram, generateReportPdf, generateRisksExcel, generateTagsExcel, generateRisksJSON, generateTechnicalAssetsJSON, generateStatsJSON bool,
-	dpi int) {
+	dpi int,
+) {
 	// Remember to also add the same args to the exec based sub-process calls!
 	var cmd *exec.Cmd
-	args := []string{"analyze-model",
+	args := []string{
+		"analyze-model",
 		"--model", modelFile,
 		"--output", outputDir,
 		"--execute-model-macro", s.config.GetExecuteModelMacro(),

@@ -1,28 +1,28 @@
 package input
 
 import (
-	"fmt"
+	"errors"
 	"sort"
 	"strings"
 )
 
 type Author struct {
-	Name     string `yaml:"name,omitempty" json:"name,omitempty"`
-	Contact  string `yaml:"contact,omitempty" json:"contact,omitempty"`
-	Homepage string `yaml:"homepage,omitempty" json:"homepage,omitempty"`
+	Name     string `json:"name,omitempty"     yaml:"name,omitempty"`
+	Contact  string `json:"contact,omitempty"  yaml:"contact,omitempty"`
+	Homepage string `json:"homepage,omitempty" yaml:"homepage,omitempty"`
 }
 
 func (what *Author) Merge(other Author) error {
 	if len(what.Name) > 0 && !strings.EqualFold(what.Name, other.Name) {
-		return fmt.Errorf("author name mismatch")
+		return errors.New("author name mismatch")
 	}
 
 	if len(what.Contact) > 0 && !strings.EqualFold(what.Contact, other.Contact) {
-		return fmt.Errorf("author contact mismatch")
+		return errors.New("author contact mismatch")
 	}
 
 	if len(what.Homepage) > 0 && !strings.EqualFold(what.Homepage, other.Homepage) {
-		return fmt.Errorf("author homepage mismatch")
+		return errors.New("author homepage mismatch")
 	}
 
 	what.Name = other.Name

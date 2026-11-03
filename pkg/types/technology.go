@@ -63,12 +63,12 @@ const (
 )
 
 type Technology struct {
-	Name        string          `yaml:"name,omitempty" json:"name,omitempty"`
-	Parent      string          `yaml:"parent,omitempty" json:"parent,omitempty"`
-	Description string          `yaml:"description,omitempty" json:"description,omitempty"`
-	Aliases     []string        `yaml:"aliases,omitempty" json:"aliases,omitempty"`
-	Examples    []string        `yaml:"examples,omitempty" json:"examples,omitempty"`
-	Attributes  map[string]bool `yaml:"attributes,omitempty" json:"attributes,omitempty"`
+	Name        string          `json:"name,omitempty"        yaml:"name,omitempty"`
+	Parent      string          `json:"parent,omitempty"      yaml:"parent,omitempty"`
+	Description string          `json:"description,omitempty" yaml:"description,omitempty"`
+	Aliases     []string        `json:"aliases,omitempty"     yaml:"aliases,omitempty"`
+	Examples    []string        `json:"examples,omitempty"    yaml:"examples,omitempty"`
+	Attributes  map[string]bool `json:"attributes,omitempty"  yaml:"attributes,omitempty"`
 }
 
 func (what Technology) String() string {

@@ -44,8 +44,20 @@ func (*MissingCloudHardeningRule) Category() *types.RiskCategory {
 	}
 }
 
-var specificSubTagsAWS = []string{"aws:vpc", "aws:ec2", "aws:s3", "aws:ebs", "aws:apigateway", "aws:lambda", "aws:dynamodb", "aws:rds", "aws:sqs", "aws:iam"}
-var providers = []string{"AWS", "Azure", "GCP", "OCP"}
+const (
+	providerAWS   = "AWS"
+	providerAzure = "Azure"
+	providerGCP   = "GCP"
+	providerOCP   = "OCP"
+)
+
+var (
+	specificSubTagsAWS = []string{
+		"aws:vpc", "aws:ec2", "aws:s3", "aws:ebs", "aws:apigateway",
+		"aws:lambda", "aws:dynamodb", "aws:rds", "aws:sqs", "aws:iam",
+	}
+	providers = []string{providerAWS, providerAzure, providerGCP, providerOCP}
+)
 
 func (*MissingCloudHardeningRule) SupportedTags() []string {
 	res := []string{
@@ -65,15 +77,15 @@ type CloudAssets struct {
 }
 
 func (r *MissingCloudHardeningRule) GenerateRisks(input *types.Model) ([]*types.Risk, error) {
-	cloudAssets := initCloudAssets([]string{"AWS", "Azure", "GCP", "OCP", "Unspecified"})
+	cloudAssets := initCloudAssets([]string{providerAWS, providerAzure, providerGCP, providerOCP, "Unspecified"})
 	techAssetIDsWithSubtagSpecificCloudRisks := make(map[string]struct{})
 
 	risks := make([]*types.Risk, 0)
 	addedFlags := map[string]*bool{
-		"AWS":   new(bool),
-		"Azure": new(bool),
-		"GCP":   new(bool),
-		"OCP":   new(bool),
+		providerAWS:   new(bool),
+		providerAzure: new(bool),
+		providerGCP:   new(bool),
+		providerOCP:   new(bool),
 	}
 
 	r.collectCloudAssets(input, cloudAssets, techAssetIDsWithSubtagSpecificCloudRisks)
@@ -131,7 +143,7 @@ func (r *MissingCloudHardeningRule) collectCloudAssets(input *types.Model, cloud
 }
 
 func (r *MissingCloudHardeningRule) deduplicateUnspecifiedAssets(cloudAssets map[string]*CloudAssets) {
-	providers := []string{"AWS", "Azure", "GCP", "OCP"}
+	providers := []string{providerAWS, providerAzure, providerGCP, providerOCP}
 	for _, provider := range providers {
 		for id := range cloudAssets[provider].SharedRuntimeIDs {
 			delete(cloudAssets["Unspecified"].SharedRuntimeIDs, id)
@@ -211,10 +223,10 @@ func (r *MissingCloudHardeningRule) cloudConfigs(added map[string]*bool) []struc
 		Benchmark string
 		AddedFlag *bool
 	}{
-		{"AWS", "CIS Benchmark for AWS", added["AWS"]},
-		{"Azure", "CIS Benchmark for Microsoft Azure", added["Azure"]},
-		{"GCP", "CIS Benchmark for Google Cloud Computing Platform", added["GCP"]},
-		{"OCP", "Vendor Best Practices for Oracle Cloud Platform", added["OCP"]},
+		{providerAWS, "CIS Benchmark for AWS", added[providerAWS]},
+		{providerAzure, "CIS Benchmark for Microsoft Azure", added[providerAzure]},
+		{providerGCP, "CIS Benchmark for Google Cloud Computing Platform", added[providerGCP]},
+		{providerOCP, "Vendor Best Practices for Oracle Cloud Platform", added[providerOCP]},
 	}
 }
 
@@ -283,7 +295,8 @@ func (r *MissingCloudHardeningRule) addTrustBoundaryAccordingToBaseTag(
 
 func (r *MissingCloudHardeningRule) addSharedRuntimeAccordingToBaseTag(
 	sharedRuntime *types.SharedRuntime,
-	cloudAssets map[string]*CloudAssets,) {
+	cloudAssets map[string]*CloudAssets,
+) {
 	if sharedRuntime.IsTaggedWithAny(r.SupportedTags()...) {
 		for _, provider := range providers {
 			if isTaggedWithBaseTag(sharedRuntime.Tags, strings.ToLower(provider)) {
@@ -375,7 +388,8 @@ func (r *MissingCloudHardeningRule) createCloudHardeningRisk(id, title, prefix, 
 }
 
 func (r *MissingCloudHardeningRule) createRiskForSharedRuntime(
-	input *types.Model, sharedRuntime *types.SharedRuntime, prefix, details string) *types.Risk {
+	input *types.Model, sharedRuntime *types.SharedRuntime, prefix, details string,
+) *types.Risk {
 	return r.createCloudHardeningRisk(
 		sharedRuntime.Id,
 		sharedRuntime.Title,
@@ -389,7 +403,8 @@ func (r *MissingCloudHardeningRule) createRiskForSharedRuntime(
 }
 
 func (r *MissingCloudHardeningRule) createRiskForTrustBoundary(
-	input *types.Model, trustBoundary *types.TrustBoundary, prefix, details string) *types.Risk {
+	input *types.Model, trustBoundary *types.TrustBoundary, prefix, details string,
+) *types.Risk {
 	return r.createCloudHardeningRisk(
 		trustBoundary.Id,
 		trustBoundary.Title,
@@ -403,7 +418,8 @@ func (r *MissingCloudHardeningRule) createRiskForTrustBoundary(
 }
 
 func (r *MissingCloudHardeningRule) createRiskForTechnicalAsset(
-	input *types.Model, technicalAsset *types.TechnicalAsset, prefix, details string) *types.Risk {
+	input *types.Model, technicalAsset *types.TechnicalAsset, prefix, details string,
+) *types.Risk {
 	return r.createCloudHardeningRisk(
 		technicalAsset.Id,
 		technicalAsset.Title,

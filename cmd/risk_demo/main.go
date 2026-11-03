@@ -4,12 +4,12 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"io"
 	"os"
 
 	"github.com/threagile/threagile/pkg/model"
 	"github.com/threagile/threagile/pkg/types"
+	"gopkg.in/yaml.v3"
 )
 
 type customRiskRule string

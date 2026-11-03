@@ -22,22 +22,20 @@ const (
 	size            = "size"
 )
 
-var (
-	cast = map[string]castFunc{
-		authentication:  toAuthentication,
-		authorization:   toAuthorization,
-		confidentiality: toConfidentiality,
-		criticality:     toCriticality,
-		integrity:       toCriticality,
-		availability:    toCriticality,
-		probability:     toProbability,
-		encryption:      toEncryption,
-		quantity:        toQuantity,
-		impact:          toImpact,
-		likelihood:      toLikelihood,
-		size:            toSize,
-	}
-)
+var cast = map[string]castFunc{
+	authentication:  toAuthentication,
+	authorization:   toAuthorization,
+	confidentiality: toConfidentiality,
+	criticality:     toCriticality,
+	integrity:       toCriticality,
+	availability:    toCriticality,
+	probability:     toProbability,
+	encryption:      toEncryption,
+	quantity:        toQuantity,
+	impact:          toImpact,
+	likelihood:      toLikelihood,
+	size:            toSize,
+}
 
 type castFunc func(value Value) (Value, error)
 

@@ -1,12 +1,13 @@
 package script
 
 import (
+	"errors"
 	"fmt"
+	"strings"
+
 	"github.com/threagile/threagile/pkg/risks/script/common"
 	"github.com/threagile/threagile/pkg/risks/script/expressions"
 	"github.com/threagile/threagile/pkg/risks/script/statements"
-	"strings"
-
 	"github.com/threagile/threagile/pkg/types"
 	"gopkg.in/yaml.v3"
 )
@@ -85,7 +86,7 @@ func (what *Script) ParseScripts(items map[string]any) (map[string]*Script, erro
 		}
 	}
 
-	return nil, fmt.Errorf("no scripts found")
+	return nil, errors.New("no scripts found")
 }
 
 func (what *Script) ParseCategoryFromData(text []byte) (*Script, error) {
@@ -131,7 +132,7 @@ func (what *Script) ParseScript(script map[string]any) (*Script, error) {
 		case common.ID:
 			stringItem, ok := value.(map[string]any)
 			if !ok {
-				return nil, fmt.Errorf("ID expression is not a script (map[string]any)")
+				return nil, errors.New("ID expression is not a script (map[string]any)")
 			}
 
 			what.id = stringItem
@@ -169,7 +170,7 @@ func (what *Script) ParseScript(script map[string]any) (*Script, error) {
 func (what *Script) GetTechnicalAssetsByRiskID(scope *common.Scope, riskID string) ([]any, error) {
 	value, valueOk := what.getItem(scope.Model, "technical_assets")
 	if !valueOk {
-		return nil, fmt.Errorf("no technical assets in scope")
+		return nil, errors.New("no technical assets in scope")
 	}
 
 	techAssets, techAssetsOk := value.(map[string]common.Value)
@@ -199,7 +200,7 @@ func (what *Script) GetTechnicalAssetsByRiskID(scope *common.Scope, riskID strin
 func (what *Script) GenerateRisks(scope *common.Scope) ([]*types.Risk, string, error) {
 	value, valueOk := what.getItem(scope.Model, "technical_assets")
 	if !valueOk {
-		return nil, "", fmt.Errorf("no technical assets in scope")
+		return nil, "", errors.New("no technical assets in scope")
 	}
 
 	techAssets, techAssetsOk := value.(map[string]any)
@@ -275,7 +276,7 @@ func (what *Script) matchRisk(outerScope *common.Scope, techAsset common.Value) 
 
 func (what *Script) generateRisk(outerScope *common.Scope, techAssetName string, techAsset common.Value, isMatchEvent *common.Event) (*types.Risk, string, error) {
 	if what.data == nil {
-		return nil, "", fmt.Errorf("no data template")
+		return nil, "", errors.New("no data template")
 	}
 
 	scope, cloneError := outerScope.Clone()
@@ -403,7 +404,7 @@ func (what *Script) Explain(history []*common.Event) []string {
 
 func (what *Script) getRiskID(outerScope *common.Scope, techAsset common.Value, risk *types.Risk) (string, string, error) {
 	if len(what.id) == 0 {
-		return "", "", fmt.Errorf("no ID expression")
+		return "", "", errors.New("no ID expression")
 	}
 
 	scope, cloneError := outerScope.Clone()

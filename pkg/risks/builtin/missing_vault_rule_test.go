@@ -16,7 +16,6 @@ func TestMissingVaultRuleGenerateRisksEmptyModelRiskCreated(t *testing.T) {
 	assert.Len(t, risks, 1)
 	assert.Equal(t, "<b>Missing Vault (Secret Storage)</b> in the threat model", risks[0].Title)
 	assert.Equal(t, types.LowImpact, risks[0].ExploitationImpact)
-
 }
 
 func TestMissingVaultRuleGenerateRisksHasVaultNoRisksCreated(t *testing.T) {

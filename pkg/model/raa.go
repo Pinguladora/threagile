@@ -25,7 +25,7 @@ func applyRAA(input *types.Model, progressReporter types.ProgressReporter) strin
 		"attacker-attractive technical assets:"
 }
 
-// set the concrete value in relation to the minimum and maximum of all
+// set the concrete value in relation to the minimum and maximum of all.
 func calculateRelativeAttackerAttractiveness(input *types.Model, attractiveness float64) float64 {
 	var attackerAttractivenessMinimum, attackerAttractivenessMaximum, spread float64 = 0, 0, 0
 	if attackerAttractivenessMinimum == 0 || attackerAttractivenessMaximum == 0 {
@@ -61,7 +61,8 @@ func calculateRelativeAttackerAttractiveness(input *types.Model, attractiveness 
 	return percent
 }
 
-// increase the RAA (relative attacker attractiveness) by one third (1/3) of the delta to the highest outgoing neighbour (if positive delta)
+// increase the RAA (relative attacker attractiveness) by one third (1/3) of the delta to the highest
+// outgoing neighbour (if positive delta).
 func calculatePivotingNeighbourEffectAdjustment(input *types.Model, techAsset *types.TechnicalAsset) float64 {
 	if techAsset.OutOfScope {
 		return 0
@@ -69,11 +70,10 @@ func calculatePivotingNeighbourEffectAdjustment(input *types.Model, techAsset *t
 	adjustment := 0.0
 	for _, commLink := range techAsset.CommunicationLinks {
 		outgoingNeighbour := input.TechnicalAssets[commLink.TargetId]
-		//if outgoingNeighbour.getTrustBoundary() == techAsset.getTrustBoundary() { // same trust boundary
+		// if outgoingNeighbour.getTrustBoundary() == techAsset.getTrustBoundary() { // same trust boundary
 		delta := calculateRelativeAttackerAttractiveness(input, calculateAttackerAttractiveness(input, outgoingNeighbour)) - calculateRelativeAttackerAttractiveness(input, calculateAttackerAttractiveness(input, techAsset))
 		if delta > 0 {
 			potentialIncrease := delta / 3
-			//fmt.Println("Positive delta from", techAsset.ID, "to", outgoingNeighbour.ID, "is", delta, "yields to pivoting neighbour effect of an increase of", potentialIncrease)
 			if potentialIncrease > adjustment {
 				adjustment = potentialIncrease
 			}
@@ -84,12 +84,12 @@ func calculatePivotingNeighbourEffectAdjustment(input *types.Model, techAsset *t
 }
 
 // The sum of all CIAs of the asset itself (fibonacci scale) plus the sum of the comm-links' transferred CIAs
-// Multiplied by the quantity values of the data asset for C and I (not A)
+// Multiplied by the quantity values of the data asset for C and I (not A).
 func calculateAttackerAttractiveness(input *types.Model, techAsset *types.TechnicalAsset) float64 {
 	if techAsset.OutOfScope {
 		return 0
 	}
-	var score = 0.0
+	score := 0.0
 	score += techAsset.Confidentiality.AttackerAttractivenessForAsset()
 	score += techAsset.Integrity.AttackerAttractivenessForAsset()
 	score += techAsset.Availability.AttackerAttractivenessForAsset()

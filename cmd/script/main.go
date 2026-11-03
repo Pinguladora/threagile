@@ -3,13 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+
 	"github.com/threagile/threagile/pkg/risks/script"
 	"github.com/threagile/threagile/pkg/types"
 	"gopkg.in/yaml.v3"
-	"os"
-	"path/filepath"
-
-	"strings"
 )
 
 func main() {

@@ -22,16 +22,15 @@ import (
 	"sync"
 	"time"
 
-	"gopkg.in/yaml.v3"
-
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/threagile/threagile/pkg/input"
 	"github.com/threagile/threagile/pkg/types"
 	"golang.org/x/crypto/argon2"
+	"gopkg.in/yaml.v3"
 )
 
-// creates a sub-folder (named by a new UUID) inside the token folder
+// creates a sub-folder (named by a new UUID) inside the token folder.
 func (s *server) createNewModel(ginContext *gin.Context) {
 	folderNameOfKey, key, ok := s.checkTokenToFolderName(ginContext)
 	if !ok {
@@ -45,7 +44,7 @@ func (s *server) createNewModel(ginContext *gin.Context) {
 	defer s.unlockFolder(folderNameOfKey)
 
 	aUuid := uuid.New().String()
-	err := os.Mkdir(folderNameForModel(folderNameOfKey, aUuid), 0700)
+	err := os.Mkdir(folderNameForModel(folderNameOfKey, aUuid), 0o700)
 	if err != nil {
 		ginContext.JSON(http.StatusInternalServerError, gin.H{
 			"error": "unable to create model",
@@ -94,10 +93,10 @@ diagram_tweak_same_rank_assets: []`
 }
 
 type payloadModels struct {
-	ID                string    `yaml:"id" json:"id"`
-	Title             string    `yaml:"title" json:"title"`
-	TimestampCreated  time.Time `yaml:"timestamp_created" json:"timestamp_created"`
-	TimestampModified time.Time `yaml:"timestamp_modified" json:"timestamp_modified"`
+	ID                string    `json:"id"                 yaml:"id"`
+	Title             string    `json:"title"              yaml:"title"`
+	TimestampCreated  time.Time `json:"timestamp_created"  yaml:"timestamp_created"`
+	TimestampModified time.Time `json:"timestamp_modified" yaml:"timestamp_modified"`
 }
 
 func (s *server) listModels(ginContext *gin.Context) { // TODO currently returns error when any model is no longer valid in syntax, so eventually have some fallback to not just bark on an invalid model...
@@ -179,9 +178,9 @@ func (s *server) deleteModel(ginContext *gin.Context) {
 }
 
 type payloadCover struct {
-	Title  string       `yaml:"title" json:"title"`
-	Date   time.Time    `yaml:"date" json:"date"`
-	Author input.Author `yaml:"author" json:"author"`
+	Title  string       `json:"title"  yaml:"title"`
+	Date   time.Time    `json:"date"   yaml:"date"`
+	Author input.Author `json:"author" yaml:"author"`
 }
 
 func (s *server) setCover(ginContext *gin.Context) {
@@ -234,10 +233,10 @@ func (s *server) getCover(ginContext *gin.Context) {
 }
 
 type payloadOverview struct {
-	ManagementSummaryComment string         `yaml:"management_summary_comment" json:"management_summary_comment"`
-	BusinessCriticality      string         `yaml:"business_criticality" json:"business_criticality"`
-	BusinessOverview         input.Overview `yaml:"business_overview" json:"business_overview"`
-	TechnicalOverview        input.Overview `yaml:"technical_overview" json:"technical_overview"`
+	ManagementSummaryComment string         `json:"management_summary_comment" yaml:"management_summary_comment"`
+	BusinessCriticality      string         `json:"business_criticality"       yaml:"business_criticality"`
+	BusinessOverview         input.Overview `json:"business_overview"          yaml:"business_overview"`
+	TechnicalOverview        input.Overview `json:"technical_overview"         yaml:"technical_overview"`
 }
 
 func (s *server) setOverview(ginContext *gin.Context) {
@@ -383,18 +382,18 @@ func (s *server) getSecurityRequirements(ginContext *gin.Context) {
 }
 
 type payloadDataAsset struct {
-	Title                  string   `yaml:"title" json:"title"`
-	Id                     string   `yaml:"id" json:"id"`
-	Description            string   `yaml:"description" json:"description"`
-	Usage                  string   `yaml:"usage" json:"usage"`
-	Tags                   []string `yaml:"tags" json:"tags"`
-	Origin                 string   `yaml:"origin" json:"origin"`
-	Owner                  string   `yaml:"owner" json:"owner"`
-	Quantity               string   `yaml:"quantity" json:"quantity"`
-	Confidentiality        string   `yaml:"confidentiality" json:"confidentiality"`
-	Integrity              string   `yaml:"integrity" json:"integrity"`
-	Availability           string   `yaml:"availability" json:"availability"`
-	JustificationCiaRating string   `yaml:"justification_cia_rating" json:"justification_cia_rating"`
+	Title                  string   `json:"title"                    yaml:"title"`
+	Id                     string   `json:"id"                       yaml:"id"`
+	Description            string   `json:"description"              yaml:"description"`
+	Usage                  string   `json:"usage"                    yaml:"usage"`
+	Tags                   []string `json:"tags"                     yaml:"tags"`
+	Origin                 string   `json:"origin"                   yaml:"origin"`
+	Owner                  string   `json:"owner"                    yaml:"owner"`
+	Quantity               string   `json:"quantity"                 yaml:"quantity"`
+	Confidentiality        string   `json:"confidentiality"          yaml:"confidentiality"`
+	Integrity              string   `json:"integrity"                yaml:"integrity"`
+	Availability           string   `json:"availability"             yaml:"availability"`
+	JustificationCiaRating string   `json:"justification_cia_rating" yaml:"justification_cia_rating"`
 }
 
 func (s *server) getDataAssets(ginContext *gin.Context) {
@@ -451,7 +450,7 @@ func (s *server) deleteDataAsset(ginContext *gin.Context) {
 				for _, techAsset := range modelInput.TechnicalAssets {
 					if techAsset.DataAssetsProcessed != nil {
 						for i, parsedChangeCandidateAsset := range techAsset.DataAssetsProcessed {
-							referencedAsset := fmt.Sprintf("%v", parsedChangeCandidateAsset)
+							referencedAsset := parsedChangeCandidateAsset
 							if referencedAsset == dataAsset.ID { // apply the removal
 								referencesDeleted = true
 								// Remove the element at index i
@@ -464,7 +463,7 @@ func (s *server) deleteDataAsset(ginContext *gin.Context) {
 					}
 					if techAsset.DataAssetsStored != nil {
 						for i, parsedChangeCandidateAsset := range techAsset.DataAssetsStored {
-							referencedAsset := fmt.Sprintf("%v", parsedChangeCandidateAsset)
+							referencedAsset := parsedChangeCandidateAsset
 							if referencedAsset == dataAsset.ID { // apply the removal
 								referencesDeleted = true
 								// Remove the element at index i
@@ -478,7 +477,7 @@ func (s *server) deleteDataAsset(ginContext *gin.Context) {
 					if techAsset.CommunicationLinks != nil {
 						for title, commLink := range techAsset.CommunicationLinks {
 							for i, dataAssetSent := range commLink.DataAssetsSent {
-								referencedAsset := fmt.Sprintf("%v", dataAssetSent)
+								referencedAsset := dataAssetSent
 								if referencedAsset == dataAsset.ID { // apply the removal
 									referencesDeleted = true
 									// Remove the element at index i
@@ -491,7 +490,7 @@ func (s *server) deleteDataAsset(ginContext *gin.Context) {
 								}
 							}
 							for i, dataAssetReceived := range commLink.DataAssetsReceived {
-								referencedAsset := fmt.Sprintf("%v", dataAssetReceived)
+								referencedAsset := dataAssetReceived
 								if referencedAsset == dataAsset.ID { // apply the removal
 									referencesDeleted = true
 									// Remove the element at index i
@@ -571,7 +570,7 @@ func (s *server) setDataAsset(ginContext *gin.Context) {
 					for techAssetTitle, techAsset := range modelInput.TechnicalAssets {
 						if techAsset.DataAssetsProcessed != nil {
 							for i, parsedChangeCandidateAsset := range techAsset.DataAssetsProcessed {
-								referencedAsset := fmt.Sprintf("%v", parsedChangeCandidateAsset)
+								referencedAsset := parsedChangeCandidateAsset
 								if referencedAsset == dataAsset.ID { // apply the ID change
 									modelInput.TechnicalAssets[techAssetTitle].DataAssetsProcessed[i] = dataAssetInput.ID
 								}
@@ -579,7 +578,7 @@ func (s *server) setDataAsset(ginContext *gin.Context) {
 						}
 						if techAsset.DataAssetsStored != nil {
 							for i, parsedChangeCandidateAsset := range techAsset.DataAssetsStored {
-								referencedAsset := fmt.Sprintf("%v", parsedChangeCandidateAsset)
+								referencedAsset := parsedChangeCandidateAsset
 								if referencedAsset == dataAsset.ID { // apply the ID change
 									modelInput.TechnicalAssets[techAssetTitle].DataAssetsStored[i] = dataAssetInput.ID
 								}
@@ -588,13 +587,13 @@ func (s *server) setDataAsset(ginContext *gin.Context) {
 						if techAsset.CommunicationLinks != nil {
 							for title, commLink := range techAsset.CommunicationLinks {
 								for i, dataAssetSent := range commLink.DataAssetsSent {
-									referencedAsset := fmt.Sprintf("%v", dataAssetSent)
+									referencedAsset := dataAssetSent
 									if referencedAsset == dataAsset.ID { // apply the ID change
 										modelInput.TechnicalAssets[techAssetTitle].CommunicationLinks[title].DataAssetsSent[i] = dataAssetInput.ID
 									}
 								}
 								for i, dataAssetReceived := range commLink.DataAssetsReceived {
-									referencedAsset := fmt.Sprintf("%v", dataAssetReceived)
+									referencedAsset := dataAssetReceived
 									if referencedAsset == dataAsset.ID { // apply the ID change
 										modelInput.TechnicalAssets[techAssetTitle].CommunicationLinks[title].DataAssetsReceived[i] = dataAssetInput.ID
 									}
@@ -739,11 +738,11 @@ func (s *server) getTrustBoundaries(ginContext *gin.Context) {
 }
 
 type payloadSharedRuntime struct {
-	Title                  string   `yaml:"title" json:"title"`
-	Id                     string   `yaml:"id" json:"id"`
-	Description            string   `yaml:"description" json:"description"`
-	Tags                   []string `yaml:"tags" json:"tags"`
-	TechnicalAssetsRunning []string `yaml:"technical_assets_running" json:"technical_assets_running"`
+	Title                  string   `json:"title"                    yaml:"title"`
+	Id                     string   `json:"id"                       yaml:"id"`
+	Description            string   `json:"description"              yaml:"description"`
+	Tags                   []string `json:"tags"                     yaml:"tags"`
+	TechnicalAssetsRunning []string `json:"technical_assets_running" yaml:"technical_assets_running"`
 }
 
 func (s *server) setSharedRuntime(ginContext *gin.Context) {
@@ -1089,7 +1088,7 @@ func (s *server) getModel(ginContext *gin.Context) {
 			handleErrorInServiceCall(err, ginContext)
 			return
 		}
-		err = os.WriteFile(tmpResultFile.Name(), []byte(yamlText), 0400) // #nosec G703
+		err = os.WriteFile(tmpResultFile.Name(), []byte(yamlText), 0o400) // #nosec G703
 		if err != nil {
 			log.Println(err)
 			ginContext.JSON(http.StatusInternalServerError, gin.H{
@@ -1102,7 +1101,7 @@ func (s *server) getModel(ginContext *gin.Context) {
 	}
 }
 
-// fully replaces threagile.yaml in sub-folder given by UUID
+// fully replaces threagile.yaml in sub-folder given by UUID.
 func (s *server) importModel(ginContext *gin.Context) {
 	folderNameOfKey, key, ok := s.checkTokenToFolderName(ginContext)
 	if !ok {
@@ -1179,14 +1178,14 @@ func (s *server) analyzeModelOnServerDirectly(ginContext *gin.Context) {
 	}
 	defer func() { _ = os.Remove(tmpResultFile.Name()) }() // #nosec G703
 
-	err = os.WriteFile(tmpModelFile.Name(), []byte(yamlText), 0400) // #nosec G703
+	err = os.WriteFile(tmpModelFile.Name(), []byte(yamlText), 0o400) // #nosec G703
 
 	s.doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, true, true, true, true, true, true, true, true, dpi)
 	if err != nil {
 		handleErrorInServiceCall(err, ginContext)
 		return
 	}
-	err = os.WriteFile(filepath.Join(tmpOutputDir, s.config.GetInputFile()), []byte(yamlText), 0400)
+	err = os.WriteFile(filepath.Join(tmpOutputDir, s.config.GetInputFile()), []byte(yamlText), 0o400)
 	if err != nil {
 		handleErrorInServiceCall(err, ginContext)
 		return
@@ -1311,7 +1310,7 @@ func (s *server) backupModelToHistory(modelFolder string, changeReasonForHistory
 	}
 	historyFolder := filepath.Join(cleanModelFolder, "history")
 	if _, err := os.Stat(historyFolder); os.IsNotExist(err) {
-		err = os.Mkdir(historyFolder, 0700)
+		err = os.Mkdir(historyFolder, 0o700)
 		if err != nil {
 			return err
 		}
@@ -1322,7 +1321,7 @@ func (s *server) backupModelToHistory(modelFolder string, changeReasonForHistory
 		return err
 	}
 	historyFile := filepath.Join(historyFolder, time.Now().Format("2006-01-02 15:04:05")+" "+safeReason+".backup")
-	err = os.WriteFile(historyFile, inputModel, 0400) // #nosec G703
+	err = os.WriteFile(historyFile, inputModel, 0o400) // #nosec G703
 	if err != nil {
 		return err
 	}

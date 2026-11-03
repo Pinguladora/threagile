@@ -8,8 +8,7 @@ import (
 	"github.com/threagile/threagile/pkg/types"
 )
 
-type SeedRiskTrackingMacro struct {
-}
+type SeedRiskTrackingMacro struct{}
 
 func NewSeedRiskTracking() *SeedRiskTrackingMacro {
 	return &SeedRiskTrackingMacro{}
@@ -36,7 +35,8 @@ func (*SeedRiskTrackingMacro) GoBack() (message string, validResult bool, err er
 }
 
 func (*SeedRiskTrackingMacro) GetFinalChangeImpact(_ *input.Model, _ *types.Model) (changes []string, message string, validResult bool, err error) {
-	return []string{"seed the model file with with initial risk tracking entries for all untracked risks"}, "Changeset valid", true, err
+	changes = []string{"seed the model file with initial risk tracking entries for all untracked risks"}
+	return changes, changesetValid, true, err
 }
 
 func (*SeedRiskTrackingMacro) Execute(modelInput *input.Model, parsedModel *types.Model) (message string, validResult bool, err error) {

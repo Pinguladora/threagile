@@ -3,20 +3,20 @@ package input
 import "fmt"
 
 type CommunicationLink struct {
-	Target                 string   `yaml:"target,omitempty" json:"target,omitempty"`
-	Description            string   `yaml:"description,omitempty" json:"description,omitempty"`
-	Protocol               string   `yaml:"protocol,omitempty" json:"protocol,omitempty"`
-	Authentication         string   `yaml:"authentication,omitempty" json:"authentication,omitempty"`
-	Authorization          string   `yaml:"authorization,omitempty" json:"authorization,omitempty"`
-	Tags                   []string `yaml:"tags,omitempty" json:"tags,omitempty"`
-	VPN                    bool     `yaml:"vpn,omitempty" json:"vpn,omitempty"`
-	IpFiltered             bool     `yaml:"ip_filtered,omitempty" json:"ip_filtered,omitempty"`
-	Readonly               bool     `yaml:"readonly,omitempty" json:"readonly,omitempty"`
-	Usage                  string   `yaml:"usage,omitempty" json:"usage,omitempty"`
-	DataAssetsSent         []string `yaml:"data_assets_sent,omitempty" json:"data_assets_sent,omitempty"`
-	DataAssetsReceived     []string `yaml:"data_assets_received,omitempty" json:"data_assets_received,omitempty"`
-	DiagramTweakWeight     int      `yaml:"diagram_tweak_weight,omitempty" json:"diagram_tweak_weight,omitempty"`
-	DiagramTweakConstraint bool     `yaml:"diagram_tweak_constraint,omitempty" json:"diagram_tweak_constraint,omitempty"`
+	Target                 string   `json:"target,omitempty"                   yaml:"target,omitempty"`
+	Description            string   `json:"description,omitempty"              yaml:"description,omitempty"`
+	Protocol               string   `json:"protocol,omitempty"                 yaml:"protocol,omitempty"`
+	Authentication         string   `json:"authentication,omitempty"           yaml:"authentication,omitempty"`
+	Authorization          string   `json:"authorization,omitempty"            yaml:"authorization,omitempty"`
+	Tags                   []string `json:"tags,omitempty"                     yaml:"tags,omitempty"`
+	VPN                    bool     `json:"vpn,omitempty"                      yaml:"vpn,omitempty"`
+	IpFiltered             bool     `json:"ip_filtered,omitempty"              yaml:"ip_filtered,omitempty"`
+	Readonly               bool     `json:"readonly,omitempty"                 yaml:"readonly,omitempty"`
+	Usage                  string   `json:"usage,omitempty"                    yaml:"usage,omitempty"`
+	DataAssetsSent         []string `json:"data_assets_sent,omitempty"         yaml:"data_assets_sent,omitempty"`
+	DataAssetsReceived     []string `json:"data_assets_received,omitempty"     yaml:"data_assets_received,omitempty"`
+	DiagramTweakWeight     int      `json:"diagram_tweak_weight,omitempty"     yaml:"diagram_tweak_weight,omitempty"`
+	DiagramTweakConstraint bool     `json:"diagram_tweak_constraint,omitempty" yaml:"diagram_tweak_constraint,omitempty"`
 }
 
 func (what *CommunicationLink) Merge(other CommunicationLink) error {

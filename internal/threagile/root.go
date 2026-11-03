@@ -9,11 +9,11 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/chzyer/readline"
 	"github.com/mattn/go-shellwords"
-
 	"github.com/spf13/cobra"
 	"github.com/threagile/threagile/pkg/report"
 )
@@ -94,7 +94,8 @@ func (what *Threagile) initFlags() *Threagile {
 
 	what.rootCmd.PersistentFlags().IntVar(&what.flags.ServerPortValue, serverPortFlagName, what.config.GetServerPort(), "server port")
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.ServerFolderValue, serverDirFlagName, what.config.GetDataFolder(), "base folder for server mode (default: "+DataDir+")")
-	what.rootCmd.PersistentFlags().IntVar(&what.flags.DiagramDPIValue, diagramDpiFlagName, what.config.GetDiagramDPI(), "DPI used to render: maximum is "+fmt.Sprintf("%d", what.config.GetMaxGraphvizDPI())+"")
+	what.rootCmd.PersistentFlags().IntVar(&what.flags.DiagramDPIValue, diagramDpiFlagName, what.config.GetDiagramDPI(),
+		"DPI used to render: maximum is "+strconv.Itoa(what.config.GetMaxGraphvizDPI()))
 	// MaxGraphvizDPIValue not available as flags
 	what.rootCmd.PersistentFlags().IntVar(&what.flags.BackupHistoryFilesToKeepValue, backupHistoryFilesToKeepFlagName, what.config.GetBackupHistoryFilesToKeep(), "number of backup history files to keep")
 

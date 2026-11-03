@@ -1,5 +1,7 @@
 package types
 
+import "maps"
+
 type RiskRule interface {
 	Category() *RiskCategory
 	SupportedTags() []string
@@ -9,9 +11,7 @@ type RiskRule interface {
 type RiskRules map[string]RiskRule
 
 func (what RiskRules) Merge(rules RiskRules) RiskRules {
-	for key, value := range rules {
-		what[key] = value
-	}
+	maps.Copy(what, rules)
 
 	return what
 }

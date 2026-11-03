@@ -52,7 +52,6 @@ func ParseAuthentication(value string) (authentication Authentication, err error
 
 func (what Authentication) String() string {
 	// NOTE: maintain list also in schema.json for validation in IDEs
-	//return [...]string{"none", "credentials", "session-id", "token", "client-certificate", "two-factor", "externalized"}[what]
 	return AuthenticationTypeDescription[what].Name
 }
 
@@ -90,7 +89,7 @@ func (what *Authentication) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (what Authentication) MarshalYAML() (interface{}, error) {
+func (what Authentication) MarshalYAML() (any, error) {
 	return what.String(), nil
 }
 

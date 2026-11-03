@@ -1,7 +1,6 @@
 package builtin
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -225,7 +224,7 @@ func TestUnencryptedAssetRuleGenerateRisks(t *testing.T) {
 			if testCase.riskCreated {
 				assert.NotEmpty(t, risks)
 				assert.Equal(t, testCase.expectedImpact, risks[0].ExploitationImpact)
-				expectedMessage := fmt.Sprintf("<b>Unencrypted Technical Asset</b> named <b>Test Technical Asset</b>%s", testCase.expectedSuffixTitle)
+				expectedMessage := "<b>Unencrypted Technical Asset</b> named <b>Test Technical Asset</b>" + testCase.expectedSuffixTitle
 				assert.Equal(t, risks[0].Title, expectedMessage)
 			} else {
 				assert.Empty(t, risks)

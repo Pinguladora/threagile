@@ -2,9 +2,10 @@ package report
 
 import (
 	"fmt"
+	"sort"
+
 	"github.com/mpvl/unique"
 	"github.com/xuri/excelize/v2"
-	"sort"
 )
 
 type RiskGroup struct {

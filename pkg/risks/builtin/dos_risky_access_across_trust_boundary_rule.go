@@ -76,8 +76,8 @@ func (asl DosRiskyAccessAcrossTrustBoundaryRule) skipAsset(techAsset *types.Tech
 
 func (r *DosRiskyAccessAcrossTrustBoundaryRule) potentiallyAddRisk(
 	input *types.Model, technicalAsset *types.TechnicalAsset, incomingAccess *types.CommunicationLink,
-	linkId string, hopBetween string, risks []*types.Risk) []*types.Risk {
-
+	linkId string, hopBetween string, risks []*types.Risk,
+) []*types.Risk {
 	if !isAcrossTrustBoundaryNetworkOnly(input, incomingAccess) {
 		return risks
 	}
@@ -94,7 +94,8 @@ func (r *DosRiskyAccessAcrossTrustBoundaryRule) potentiallyAddRisk(
 }
 
 func (r *DosRiskyAccessAcrossTrustBoundaryRule) createRisk(techAsset *types.TechnicalAsset, dataFlow *types.CommunicationLink, linkId string, hopBetween string,
-	clientOutsideTrustBoundary *types.TechnicalAsset, moreRisky bool) *types.Risk {
+	clientOutsideTrustBoundary *types.TechnicalAsset, moreRisky bool,
+) *types.Risk {
 	impact := types.LowImpact
 	if moreRisky {
 		impact = types.MediumImpact

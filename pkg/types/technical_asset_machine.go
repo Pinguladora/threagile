@@ -75,7 +75,7 @@ func (what *TechnicalAssetMachine) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (what TechnicalAssetMachine) MarshalYAML() (interface{}, error) {
+func (what TechnicalAssetMachine) MarshalYAML() (any, error) {
 	return what.String(), nil
 }
 

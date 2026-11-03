@@ -157,7 +157,7 @@ func TestWrongCommunicationLinkContentRuleSendDataAssetRisksCreated(t *testing.T
 
 			riskCreated: false,
 		},
-		"protocol type ContainerSpawning does not match target target machine type": {
+		"protocol type ContainerSpawning does not match target machine type": {
 			receiveAnyData: false,
 			sendAnyData:    false,
 			readonly:       false,

@@ -1,6 +1,7 @@
 package script
 
 import (
+	"errors"
 	"fmt"
 	"io/fs"
 	"path/filepath"
@@ -60,7 +61,7 @@ func (what *RiskRule) SupportedTags() []string {
 
 func (what *RiskRule) GenerateRisks(parsedModel *types.Model) ([]*types.Risk, error) {
 	if what.script == nil {
-		return nil, fmt.Errorf("no script found in risk rule")
+		return nil, errors.New("no script found in risk rule")
 	}
 
 	newScope, scopeError := what.script.NewScope(&what.category)

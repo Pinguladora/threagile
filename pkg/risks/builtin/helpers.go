@@ -1,26 +1,27 @@
 package builtin
 
 import (
+	"slices"
 	"strings"
 
 	"github.com/threagile/threagile/pkg/types"
 )
 
 func isAcrossTrustBoundaryNetworkOnly(parsedModel *types.Model, communicationLink *types.CommunicationLink) bool {
-
 	isAcrossNetworkTrustBoundary := func(
-		trustBoundaryOfSourceAsset *types.TrustBoundary, trustBoundaryOfTargetAsset *types.TrustBoundary) bool {
+		trustBoundaryOfSourceAsset *types.TrustBoundary, trustBoundaryOfTargetAsset *types.TrustBoundary,
+	) bool {
 		return trustBoundaryOfSourceAsset.Id != trustBoundaryOfTargetAsset.Id && trustBoundaryOfTargetAsset.Type.IsNetworkBoundary()
 	}
 
-	trustBoundaryOfSourceAsset, trustBoundaryOfSourceAssetOk :=
-		parsedModel.DirectContainingTrustBoundaryMappedByTechnicalAssetId[communicationLink.SourceId]
+	boundaryOf := parsedModel.DirectContainingTrustBoundaryMappedByTechnicalAssetId
+
+	trustBoundaryOfSourceAsset, trustBoundaryOfSourceAssetOk := boundaryOf[communicationLink.SourceId]
 	if !isNetworkOnly(parsedModel, trustBoundaryOfSourceAssetOk, trustBoundaryOfSourceAsset) {
 		return false
 	}
 
-	trustBoundaryOfTargetAsset, trustBoundaryOfTargetAssetOk :=
-		parsedModel.DirectContainingTrustBoundaryMappedByTechnicalAssetId[communicationLink.TargetId]
+	trustBoundaryOfTargetAsset, trustBoundaryOfTargetAssetOk := boundaryOf[communicationLink.TargetId]
 	if !isNetworkOnly(parsedModel, trustBoundaryOfTargetAssetOk, trustBoundaryOfTargetAsset) {
 		return false
 	}
@@ -42,12 +43,7 @@ func isNetworkOnly(parsedModel *types.Model, trustBoundaryOk bool, trustBoundary
 }
 
 func contains(as []string, b string) bool {
-	for _, a := range as {
-		if b == a {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(as, b)
 }
 
 func containsCaseInsensitiveAny(as []string, bs ...string) bool {
@@ -77,7 +73,6 @@ func isSameExecutionEnvironment(parsedModel *types.Model, ta *types.TechnicalAss
 }
 
 func isSameTrustBoundaryNetworkOnly(parsedModel *types.Model, ta *types.TechnicalAsset, otherAssetId string) bool {
-
 	useParentBoundary := func(trustBoundaryOfAsset **types.TrustBoundary, parsedModel *types.Model, trustBoundaryOfAssetOk *bool) {
 		if trustBoundaryOfAsset == nil {
 			return

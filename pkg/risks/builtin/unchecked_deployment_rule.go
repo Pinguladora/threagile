@@ -56,7 +56,7 @@ func (r *UncheckedDeploymentRule) createRisk(input *types.Model, technicalAsset 
 	// impact is depending on highest rating
 	impact := types.LowImpact
 	// data breach at all deployment targets
-	uniqueDataBreachTechnicalAssetIDs := make(map[string]interface{})
+	uniqueDataBreachTechnicalAssetIDs := make(map[string]any)
 	uniqueDataBreachTechnicalAssetIDs[technicalAsset.Id] = true
 	for _, codeDeploymentTargetCommLink := range technicalAsset.CommunicationLinks {
 		if codeDeploymentTargetCommLink.Usage != types.DevOps {

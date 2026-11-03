@@ -3,17 +3,17 @@ package input
 import "fmt"
 
 type DataAsset struct {
-	ID                     string   `yaml:"id,omitempty" json:"id,omitempty"`
-	Description            string   `yaml:"description,omitempty" json:"description,omitempty"`
-	Usage                  string   `yaml:"usage,omitempty" json:"usage,omitempty"`
-	Tags                   []string `yaml:"tags,omitempty" json:"tags,omitempty"`
-	Origin                 string   `yaml:"origin,omitempty" json:"origin,omitempty"`
-	Owner                  string   `yaml:"owner,omitempty" json:"owner,omitempty"`
-	Quantity               string   `yaml:"quantity,omitempty" json:"quantity,omitempty"`
-	Confidentiality        string   `yaml:"confidentiality,omitempty" json:"confidentiality,omitempty"`
-	Integrity              string   `yaml:"integrity,omitempty" json:"integrity,omitempty"`
-	Availability           string   `yaml:"availability,omitempty" json:"availability,omitempty"`
-	JustificationCiaRating string   `yaml:"justification_cia_rating,omitempty" json:"justification_cia_rating,omitempty"`
+	ID                     string   `json:"id,omitempty"                       yaml:"id,omitempty"`
+	Description            string   `json:"description,omitempty"              yaml:"description,omitempty"`
+	Usage                  string   `json:"usage,omitempty"                    yaml:"usage,omitempty"`
+	Tags                   []string `json:"tags,omitempty"                     yaml:"tags,omitempty"`
+	Origin                 string   `json:"origin,omitempty"                   yaml:"origin,omitempty"`
+	Owner                  string   `json:"owner,omitempty"                    yaml:"owner,omitempty"`
+	Quantity               string   `json:"quantity,omitempty"                 yaml:"quantity,omitempty"`
+	Confidentiality        string   `json:"confidentiality,omitempty"          yaml:"confidentiality,omitempty"`
+	Integrity              string   `json:"integrity,omitempty"                yaml:"integrity,omitempty"`
+	Availability           string   `json:"availability,omitempty"             yaml:"availability,omitempty"`
+	JustificationCiaRating string   `json:"justification_cia_rating,omitempty" yaml:"justification_cia_rating,omitempty"`
 }
 
 func (what *DataAsset) Merge(other DataAsset) error {

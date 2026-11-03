@@ -3,13 +3,14 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/akedrou/textdiff"
-	"github.com/threagile/threagile/pkg/input"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 	"testing"
+
+	"github.com/akedrou/textdiff"
+	"github.com/threagile/threagile/pkg/input"
 )
 
 func TestParseModelYaml(t *testing.T) {
@@ -73,7 +74,7 @@ func TestParseModelJson(t *testing.T) {
 	unmarshalError := json.Unmarshal(modelJson, &modelStruct)
 	if unmarshalError != nil {
 		jsonFile := "test.json"
-		_ = os.WriteFile(jsonFile, modelJson, 0644)
+		_ = os.WriteFile(jsonFile, modelJson, 0o600)
 		fmt.Printf("Yaml file: %v\n", modelFile)
 		fmt.Printf("Json file: %v\n", jsonFile)
 		t.Error("Unable to parse model json: ", unmarshalError)

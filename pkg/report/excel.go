@@ -257,7 +257,8 @@ func WriteRisksExcelToFile(parsedModel *types.Model, filename string, config rep
 	return nil
 }
 
-// TODO: eventually when len(sortedTagsAvailable) == 0 is: write a hint in the Excel that no tags are used
+// WriteTagsExcelToFile writes the tag matrix of the model as an Excel sheet. A model
+// without tags currently yields an empty sheet rather than a hint saying so.
 func WriteTagsExcelToFile(parsedModel *types.Model, filename string, config reportConfigReader) error {
 	excelRow := 0
 	excel := excelize.NewFile()
@@ -416,7 +417,8 @@ func sortedDataAssetsByTitle(parsedModel *types.Model) []*types.DataAsset {
 }
 
 func writeRow(excel *excelize.File, excelRow *int, sheetName string, _ string, styleBlackLeftBold int, styleBlackCenter int,
-	sortedTags []string, assetTitle string, tagsUsed []string) error {
+	sortedTags []string, assetTitle string, tagsUsed []string,
+) error {
 	*excelRow++
 
 	firstCellName, firstCoordinatesToCellNameError := excelize.CoordinatesToCellName(1, *excelRow)

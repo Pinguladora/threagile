@@ -2,6 +2,7 @@ package common
 
 import (
 	"fmt"
+
 	"github.com/shopspring/decimal"
 	"github.com/threagile/threagile/pkg/types"
 )
@@ -10,11 +11,9 @@ const (
 	calculateSeverity = "calculate_severity"
 )
 
-var (
-	callers = map[string]builtInFunc{
-		calculateSeverity: calculateSeverityFunc,
-	}
-)
+var callers = map[string]builtInFunc{
+	calculateSeverity: calculateSeverityFunc,
+}
 
 type builtInFunc func(parameters []Value) (Value, error)
 

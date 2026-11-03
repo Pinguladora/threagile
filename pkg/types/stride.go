@@ -86,7 +86,7 @@ func (what *STRIDE) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (what STRIDE) MarshalYAML() (interface{}, error) {
+func (what STRIDE) MarshalYAML() (any, error) {
 	return what.String(), nil
 }
 

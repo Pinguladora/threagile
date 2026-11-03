@@ -233,7 +233,7 @@ func (what *Protocol) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (what Protocol) MarshalYAML() (interface{}, error) {
+func (what Protocol) MarshalYAML() (any, error) {
 	return what.String(), nil
 }
 

@@ -164,7 +164,6 @@ func TestPathTraversalRuleGenerateRisksRiskCreated(t *testing.T) {
 
 	for name, testCase := range testCases {
 		t.Run(name, func(t *testing.T) {
-
 			rule := NewPathTraversalRule()
 			risks, err := rule.GenerateRisks(&types.Model{
 				TechnicalAssets: map[string]*types.TechnicalAsset{

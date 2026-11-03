@@ -102,7 +102,7 @@ func (s *server) streamResponse(ginContext *gin.Context, responseType responseTy
 		return
 	}
 	defer func() { _ = os.RemoveAll(tmpOutputDir) }()
-	err = os.WriteFile(tmpModelFile.Name(), []byte(yamlText), 0400)
+	err = os.WriteFile(tmpModelFile.Name(), []byte(yamlText), 0o400)
 	switch responseType {
 	case dataFlowDiagram:
 		s.doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, true, false, false, false, false, false, false, false, dpi)

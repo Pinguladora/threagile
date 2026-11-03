@@ -5,9 +5,10 @@ package model
 import (
 	"bytes"
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"os"
 	"os/exec"
+
+	"gopkg.in/yaml.v3"
 )
 
 type runner struct {

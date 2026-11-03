@@ -8,7 +8,6 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/threagile/threagile/pkg/input"
 	"github.com/threagile/threagile/pkg/types"
@@ -186,8 +185,7 @@ func createDataAsset(confidentiality types.Confidentiality, integrity types.Crit
 	}
 }
 
-type mockConfig struct {
-}
+type mockConfig struct{}
 
 func (m *mockConfig) GetAppFolder() string {
 	return ""

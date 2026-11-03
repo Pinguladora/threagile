@@ -30,7 +30,7 @@ func (what *Date) UnmarshalJSON(bytes []byte) error {
 	return nil
 }
 
-func (what Date) MarshalYAML() (interface{}, error) {
+func (what Date) MarshalYAML() (any, error) {
 	return what.Format(yamlDateFormat), nil
 }
 

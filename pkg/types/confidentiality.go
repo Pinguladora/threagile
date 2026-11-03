@@ -57,10 +57,12 @@ func (what Confidentiality) AttackerAttractivenessForAsset() float64 {
 	// fibonacci starting at 8
 	return [...]float64{8, 13, 21, 34, 55}[what]
 }
+
 func (what Confidentiality) AttackerAttractivenessForProcessedOrStoredData() float64 {
 	// fibonacci starting at 5
 	return [...]float64{5, 8, 13, 21, 34}[what]
 }
+
 func (what Confidentiality) AttackerAttractivenessForInOutTransferredData() float64 {
 	// fibonacci starting at 2
 	return [...]float64{2, 3, 5, 8, 13}[what]
@@ -117,7 +119,7 @@ func (what *Confidentiality) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (what Confidentiality) MarshalYAML() (interface{}, error) {
+func (what Confidentiality) MarshalYAML() (any, error) {
 	return what.String(), nil
 }
 

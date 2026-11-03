@@ -1,7 +1,6 @@
 package builtin
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -259,7 +258,7 @@ func TestUntrustedDeserializationRuleGenerateRisks(t *testing.T) {
 			assert.NotEmpty(t, risks)
 			assert.Equal(t, testCase.expectedImpact, risks[0].ExploitationImpact)
 			assert.Equal(t, testCase.expectedLikelihood, risks[0].ExploitationLikelihood)
-			expectedMessage := fmt.Sprintf("<b>Untrusted Deserialization</b> risk at <b>Target Technical Asset</b>%s", testCase.expectedSuffixTitle)
+			expectedMessage := "<b>Untrusted Deserialization</b> risk at <b>Target Technical Asset</b>" + testCase.expectedSuffixTitle
 			assert.Equal(t, risks[0].Title, expectedMessage)
 		})
 	}

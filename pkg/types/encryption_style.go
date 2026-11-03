@@ -87,7 +87,7 @@ func (what *EncryptionStyle) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (what EncryptionStyle) MarshalYAML() (interface{}, error) {
+func (what EncryptionStyle) MarshalYAML() (any, error) {
 	return what.String(), nil
 }
 

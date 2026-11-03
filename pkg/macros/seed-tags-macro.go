@@ -5,13 +5,11 @@ import (
 	"strconv"
 
 	"github.com/mpvl/unique"
-
 	"github.com/threagile/threagile/pkg/input"
 	"github.com/threagile/threagile/pkg/types"
 )
 
-type SeedTagsMacro struct {
-}
+type SeedTagsMacro struct{}
 
 func NewSeedTags() *SeedTagsMacro {
 	return &SeedTagsMacro{}
@@ -38,7 +36,7 @@ func (*SeedTagsMacro) GoBack() (message string, validResult bool, err error) {
 }
 
 func (*SeedTagsMacro) GetFinalChangeImpact(_ *input.Model, _ *types.Model) (changes []string, message string, validResult bool, err error) {
-	return []string{"seed the model file with supported tags from all risk rules"}, "Changeset valid", true, err
+	return []string{"seed the model file with supported tags from all risk rules"}, changesetValid, true, err
 }
 
 func (*SeedTagsMacro) Execute(modelInput *input.Model, parsedModel *types.Model) (message string, validResult bool, err error) {

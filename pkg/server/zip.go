@@ -56,11 +56,11 @@ func unzip(src string, dest string) ([]string, error) {
 		filenames = append(filenames, path)
 		if f.FileInfo().IsDir() {
 			// Make Folder
-			_ = os.MkdirAll(path, 0700)
+			_ = os.MkdirAll(path, 0o700)
 			continue
 		}
 		// Make File
-		if err = os.MkdirAll(filepath.Dir(path), 0700); err != nil {
+		if err = os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
 			return filenames, err
 		}
 		if path != filepath.Clean(path) {
@@ -111,7 +111,7 @@ func addFileToZip(zipWriter *zip.Writer, filename string) error {
 
 	// Using FileInfoHeader() above only uses the basename of the file. If we want
 	// to preserve the folder structure we can overwrite this with the full path.
-	//header.Title = filename
+	// header.Title = filename
 
 	// Change to deflate to gain better compression
 	// see http://golang.org/pkg/archive/zip/#pkg-constants

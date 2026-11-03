@@ -1,21 +1,21 @@
 package types
 
 type Risk struct {
-	CategoryId                      string                     `yaml:"category,omitempty" json:"category,omitempty"`       // used for better JSON marshalling, is assigned in risk evaluation phase automatically
-	RiskStatus                      RiskStatus                 `yaml:"risk_status,omitempty" json:"risk_status,omitempty"` // used for better JSON marshalling, is assigned in risk evaluation phase automatically
-	Severity                        RiskSeverity               `yaml:"severity,omitempty" json:"severity,omitempty"`
-	ExploitationLikelihood          RiskExploitationLikelihood `yaml:"exploitation_likelihood,omitempty" json:"exploitation_likelihood,omitempty"`
-	ExploitationImpact              RiskExploitationImpact     `yaml:"exploitation_impact,omitempty" json:"exploitation_impact,omitempty"`
-	Title                           string                     `yaml:"title,omitempty" json:"title,omitempty"`
-	SyntheticId                     string                     `yaml:"synthetic_id,omitempty" json:"synthetic_id,omitempty"`
-	MostRelevantDataAssetId         string                     `yaml:"most_relevant_data_asset,omitempty" json:"most_relevant_data_asset,omitempty"`
-	MostRelevantTechnicalAssetId    string                     `yaml:"most_relevant_technical_asset,omitempty" json:"most_relevant_technical_asset,omitempty"`
-	MostRelevantTrustBoundaryId     string                     `yaml:"most_relevant_trust_boundary,omitempty" json:"most_relevant_trust_boundary,omitempty"`
-	MostRelevantSharedRuntimeId     string                     `yaml:"most_relevant_shared_runtime,omitempty" json:"most_relevant_shared_runtime,omitempty"`
-	MostRelevantCommunicationLinkId string                     `yaml:"most_relevant_communication_link,omitempty" json:"most_relevant_communication_link,omitempty"`
-	DataBreachProbability           DataBreachProbability      `yaml:"data_breach_probability,omitempty" json:"data_breach_probability,omitempty"`
-	DataBreachTechnicalAssetIDs     []string                   `yaml:"data_breach_technical_assets,omitempty" json:"data_breach_technical_assets,omitempty"`
-	RiskExplanation                 []string                   `yaml:"risk_explanation,omitempty" json:"risk_explanation,omitempty"`
-	RatingExplanation               []string                   `yaml:"rating_explanation,omitempty" json:"rating_explanation,omitempty"`
+	CategoryId                      string                     `json:"category,omitempty"                         yaml:"category,omitempty"`    // used for better JSON marshalling, is assigned in risk evaluation phase automatically
+	RiskStatus                      RiskStatus                 `json:"risk_status,omitempty"                      yaml:"risk_status,omitempty"` // used for better JSON marshalling, is assigned in risk evaluation phase automatically
+	Severity                        RiskSeverity               `json:"severity,omitempty"                         yaml:"severity,omitempty"`
+	ExploitationLikelihood          RiskExploitationLikelihood `json:"exploitation_likelihood,omitempty"          yaml:"exploitation_likelihood,omitempty"`
+	ExploitationImpact              RiskExploitationImpact     `json:"exploitation_impact,omitempty"              yaml:"exploitation_impact,omitempty"`
+	Title                           string                     `json:"title,omitempty"                            yaml:"title,omitempty"`
+	SyntheticId                     string                     `json:"synthetic_id,omitempty"                     yaml:"synthetic_id,omitempty"`
+	MostRelevantDataAssetId         string                     `json:"most_relevant_data_asset,omitempty"         yaml:"most_relevant_data_asset,omitempty"`
+	MostRelevantTechnicalAssetId    string                     `json:"most_relevant_technical_asset,omitempty"    yaml:"most_relevant_technical_asset,omitempty"`
+	MostRelevantTrustBoundaryId     string                     `json:"most_relevant_trust_boundary,omitempty"     yaml:"most_relevant_trust_boundary,omitempty"`
+	MostRelevantSharedRuntimeId     string                     `json:"most_relevant_shared_runtime,omitempty"     yaml:"most_relevant_shared_runtime,omitempty"`
+	MostRelevantCommunicationLinkId string                     `json:"most_relevant_communication_link,omitempty" yaml:"most_relevant_communication_link,omitempty"`
+	DataBreachProbability           DataBreachProbability      `json:"data_breach_probability,omitempty"          yaml:"data_breach_probability,omitempty"`
+	DataBreachTechnicalAssetIDs     []string                   `json:"data_breach_technical_assets,omitempty"     yaml:"data_breach_technical_assets,omitempty"`
+	RiskExplanation                 []string                   `json:"risk_explanation,omitempty"                 yaml:"risk_explanation,omitempty"`
+	RatingExplanation               []string                   `json:"rating_explanation,omitempty"               yaml:"rating_explanation,omitempty"`
 	// TODO: refactor all "ID" here to "ID"?
 }

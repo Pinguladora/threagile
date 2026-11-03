@@ -256,7 +256,7 @@ func ExecuteModelMacro(modelInput *input.Model, inputFile string, parsedModel *t
 				yamlBytes = model.ReformatYAML(yamlBytes)
 			*/
 			fmt.Println("Writing model file:", inputFile)
-			err = os.WriteFile(inputFile, yamlBytes, 0400)
+			err = os.WriteFile(inputFile, yamlBytes, 0o400)
 			if err != nil {
 				return err
 			}
@@ -318,6 +318,9 @@ type MacroQuestion struct {
 }
 
 const NoMoreQuestionsID = ""
+
+// changesetValid is the message macros report when their final change set is valid.
+const changesetValid = "Changeset valid"
 
 func NoMoreQuestions() MacroQuestion {
 	return MacroQuestion{

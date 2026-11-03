@@ -16,7 +16,8 @@ import (
 
 func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 	diagramFilenameDOT string, dpi int, addModelTitle bool, addLegend bool,
-	progressReporter progressReporter) (*os.File, error) {
+	progressReporter progressReporter,
+) (*os.File, error) {
 	progressReporter.Info("Writing data flow diagram input")
 
 	var dotContent strings.Builder
@@ -132,7 +133,7 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 `)
 
 	// Trust Boundaries ===============================================================================
-	var subgraphSnippetsById = make(map[string]string)
+	subgraphSnippetsById := make(map[string]string)
 	// first create them in memory (see the link replacement below for nested trust boundaries) - otherwise in Go ranging over map is random order
 	// range over them in sorted (hence re-producible) way:
 	keys := make([]string, 0)
@@ -163,7 +164,6 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 			color, fontColor, bgColor, style, fontname := rgbHexColorTwilight(), rgbHexColorTwilight() /*"#550E0C"*/, "#FAFAFA", "dashed", "Verdana"
 			penWidth := 4.5
 			if len(trustBoundary.TrustBoundariesNested) > 0 {
-				//color, fontColor, style, fontname = Blue, Blue, "dashed", "Verdana"
 				penWidth = 5.5
 			}
 			if parsedModel.FindParentTrustBoundary(trustBoundary) != nil {
@@ -193,7 +193,7 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 			keys := trustBoundary.TechnicalAssetsInside
 			sort.Strings(keys)
 			for _, technicalAssetInside := range keys {
-				//log.Println("About to add technical asset link to trust boundary: ", technicalAssetInside)
+				// log.Println("About to add technical asset link to trust boundary: ", technicalAssetInside)
 				technicalAsset := parsedModel.TechnicalAssets[technicalAssetInside]
 				snippet.WriteString(hash(technicalAsset.Id))
 				snippet.WriteString(";\n")
@@ -201,7 +201,7 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 			keys = trustBoundary.TrustBoundariesNested
 			sort.Strings(keys)
 			for _, trustBoundaryNested := range keys {
-				//log.Println("About to add nested trust boundary to trust boundary: ", trustBoundaryNested)
+				// log.Println("About to add nested trust boundary to trust boundary: ", trustBoundaryNested)
 				trustBoundaryNested := parsedModel.TrustBoundaries[trustBoundaryNested]
 				snippet.WriteString("LINK-NEEDS-REPLACED-BY-cluster_" + hash(trustBoundaryNested.Id))
 				snippet.WriteString(";\n")
@@ -257,7 +257,7 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 		for _, dataFlow := range technicalAsset.CommunicationLinks {
 			sourceId := technicalAsset.Id
 			targetId := dataFlow.TargetId
-			//log.Println("About to add link from", sourceId, "to", targetId, "with id", dataFlow.ID)
+			// log.Println("About to add link from", sourceId, "to", targetId, "with id", dataFlow.ID)
 			var arrowStyle, arrowColor, readOrWriteHead, readOrWriteTail string
 			if dataFlow.Readonly {
 				readOrWriteHead = "empty"
@@ -377,7 +377,7 @@ func determineArrowLineStyle(cl *types.CommunicationLink) string {
 	return "solid"
 }
 
-// pink when model forgery attempt (i.e. nothing being sent and received)
+// pink when model forgery attempt (i.e. nothing being sent and received).
 func determineArrowColor(cl *types.CommunicationLink, parsedModel *types.Model) string {
 	// TODO: Just move into main.go and let the generated risk determine the color, don't duplicate the logic here
 	if len(cl.DataAssetsSent) == 0 && len(cl.DataAssetsReceived) == 0 ||
@@ -418,7 +418,8 @@ func determineArrowColor(cl *types.CommunicationLink, parsedModel *types.Model) 
 }
 
 func GenerateDataFlowDiagramGraphvizImage(dotFile *os.File, targetDir string,
-	tempFolder, dataFlowDiagramFilenamePNG string, progressReporter progressReporter, keepGraphVizDataFile bool) error {
+	tempFolder, dataFlowDiagramFilenamePNG string, progressReporter progressReporter, keepGraphVizDataFile bool,
+) error {
 	progressReporter.Info("Rendering data flow diagram input")
 	// tmp files
 	tmpFileDOT, err := os.CreateTemp(tempFolder, "diagram-*-.gv")
@@ -442,7 +443,7 @@ func GenerateDataFlowDiagramGraphvizImage(dotFile *os.File, targetDir string,
 	if err != nil {
 		return fmt.Errorf("error reading %s: %w", dotFile.Name(), err)
 	}
-	err = os.WriteFile(filepath.Clean(tmpFileDOT.Name()), inputDOT, 0600) // #nosec G703
+	err = os.WriteFile(filepath.Clean(tmpFileDOT.Name()), inputDOT, 0o600) // #nosec G703
 	if err != nil {
 		return fmt.Errorf("error creating %s: %w", tmpFileDOT.Name(), err)
 	}
@@ -461,7 +462,8 @@ func GenerateDataFlowDiagramGraphvizImage(dotFile *os.File, targetDir string,
 	if err != nil {
 		return fmt.Errorf("failed to copy to file %s: %w", tmpFilePNG.Name(), err)
 	}
-	err = os.WriteFile(filepath.Clean(filepath.Join(targetDir, dataFlowDiagramFilenamePNG)), inputPNG, 0600) // #nosec G703
+	pngFile := filepath.Clean(filepath.Join(targetDir, dataFlowDiagramFilenamePNG))
+	err = os.WriteFile(pngFile, inputPNG, 0o600) // #nosec G703
 	if err != nil {
 		return fmt.Errorf("failed to create %s: %w", filepath.Join(targetDir, dataFlowDiagramFilenamePNG), err)
 	}
@@ -517,7 +519,8 @@ func makeDiagramInvisibleConnectionsTweaks(parsedModel *types.Model) (string, er
 }
 
 func WriteDataAssetDiagramGraphvizDOT(parsedModel *types.Model, diagramFilenameDOT string, dpi int,
-	progressReporter progressReporter) (*os.File, error) {
+	progressReporter progressReporter,
+) (*os.File, error) {
 	progressReporter.Info("Writing data asset diagram input")
 
 	var dotContent strings.Builder
@@ -665,7 +668,7 @@ func makeTechAssetNode(parsedModel *types.Model, technicalAsset *types.Technical
 	}
 
 	var shape, title string
-	var lineBreak = ""
+	lineBreak := ""
 	switch technicalAsset.Type {
 	case types.ExternalEntity:
 		shape = "box"
@@ -747,7 +750,7 @@ func determineShapeBorderPenWidth(ta *types.TechnicalAsset, parsedModel *types.M
 
 // red when mission-critical integrity, but still unauthenticated (non-readonly) channels access it
 // amber when critical integrity, but still unauthenticated (non-readonly) channels access it
-// pink when model forgery attempt (i.e. nothing being processed)
+// pink when model forgery attempt (i.e. nothing being processed).
 func determineShapeBorderColor(ta *types.TechnicalAsset, parsedModel *types.Model) string {
 	// Check for red
 	if ta.Confidentiality == types.StrictlyConfidential {
@@ -777,7 +780,7 @@ func determineShapePeripheries(ta *types.TechnicalAsset) int {
 	return 1
 }
 
-// dotted when model forgery attempt (i.e. nothing being processed or stored)
+// dotted when model forgery attempt (i.e. nothing being processed or stored).
 func determineShapeBorderLineStyle(ta *types.TechnicalAsset) string {
 	if len(ta.DataAssetsProcessed) == 0 || ta.OutOfScope {
 		return "dotted" // dotted, because it's strange when too many technical communication links transfer no data... some ok, but many in a diagram ist a sign of model forgery...
@@ -785,7 +788,7 @@ func determineShapeBorderLineStyle(ta *types.TechnicalAsset) string {
 	return "solid"
 }
 
-// red when >= confidential data stored in unencrypted technical asset
+// red when >= confidential data stored in unencrypted technical asset.
 func determineTechnicalAssetLabelColor(ta *types.TechnicalAsset, model *types.Model) string {
 	// Check for red
 	if ta.Integrity == types.MissionCritical {
@@ -819,7 +822,8 @@ func determineTechnicalAssetLabelColor(ta *types.TechnicalAsset, model *types.Mo
 }
 
 func GenerateDataAssetDiagramGraphvizImage(dotFile *os.File, targetDir string,
-	tempFolder, dataAssetDiagramFilenamePNG string, progressReporter progressReporter) error { // TODO dedupe with other render...() method here
+	tempFolder, dataAssetDiagramFilenamePNG string, progressReporter progressReporter,
+) error {
 	progressReporter.Info("Rendering data asset diagram input")
 	// tmp files
 	tmpFileDOT, err := os.CreateTemp(tempFolder, "diagram-*-.gv")
@@ -839,7 +843,7 @@ func GenerateDataAssetDiagramGraphvizImage(dotFile *os.File, targetDir string,
 	if err != nil {
 		return fmt.Errorf("error reading %s: %w", dotFile.Name(), err)
 	}
-	err = os.WriteFile(filepath.Clean(tmpFileDOT.Name()), inputDOT, 0600) // #nosec G703
+	err = os.WriteFile(filepath.Clean(tmpFileDOT.Name()), inputDOT, 0o600) // #nosec G703
 	if err != nil {
 		return fmt.Errorf("error creating %s: %w", tmpFileDOT.Name(), err)
 	}
@@ -857,7 +861,8 @@ func GenerateDataAssetDiagramGraphvizImage(dotFile *os.File, targetDir string,
 	if err != nil {
 		return fmt.Errorf("failed to copy to file %s: %w", tmpFilePNG.Name(), err)
 	}
-	err = os.WriteFile(filepath.Clean(filepath.Join(targetDir, dataAssetDiagramFilenamePNG)), inputPNG, 0600) // #nosec G703
+	pngFile := filepath.Clean(filepath.Join(targetDir, dataAssetDiagramFilenamePNG))
+	err = os.WriteFile(pngFile, inputPNG, 0o600) // #nosec G703
 	if err != nil {
 		return fmt.Errorf("failed to create %s: %w", filepath.Join(targetDir, dataAssetDiagramFilenamePNG), err)
 	}
@@ -867,7 +872,7 @@ func GenerateDataAssetDiagramGraphvizImage(dotFile *os.File, targetDir string,
 func hash(s string) string {
 	h := fnv.New32a()
 	_, _ = h.Write([]byte(s))
-	return fmt.Sprintf("%v", h.Sum32())
+	return strconv.FormatUint(uint64(h.Sum32()), 10)
 }
 
 func encode(value string) string {

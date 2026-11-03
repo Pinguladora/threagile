@@ -80,7 +80,7 @@ func (what *TechnicalAssetSize) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (what TechnicalAssetSize) MarshalYAML() (interface{}, error) {
+func (what TechnicalAssetSize) MarshalYAML() (any, error) {
 	return what.String(), nil
 }
 

@@ -16,7 +16,6 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
-
 	"github.com/threagile/threagile/pkg/model"
 	"github.com/threagile/threagile/pkg/types"
 )
@@ -198,13 +197,13 @@ func RunServer(config serverConfigReader, builtinRiskRules types.RiskRules) {
 	router.PUT("/models/:model-id/cover", s.setCover)
 	router.GET("/models/:model-id/overview", s.getOverview)
 	router.PUT("/models/:model-id/overview", s.setOverview)
-	//router.GET("/models/:model-id/questions", getQuestions)
+	// router.GET("/models/:model-id/questions", getQuestions)
 	//router.PUT("/models/:model-id/questions", setQuestions)
 	router.GET("/models/:model-id/abuse-cases", s.getAbuseCases)
 	router.PUT("/models/:model-id/abuse-cases", s.setAbuseCases)
 	router.GET("/models/:model-id/security-requirements", s.getSecurityRequirements)
 	router.PUT("/models/:model-id/security-requirements", s.setSecurityRequirements)
-	//router.GET("/models/:model-id/tags", getTags)
+	// router.GET("/models/:model-id/tags", getTags)
 	//router.PUT("/models/:model-id/tags", setTags)
 
 	router.GET("/models/:model-id/data-assets", s.getDataAssets)

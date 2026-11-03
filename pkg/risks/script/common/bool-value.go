@@ -2,6 +2,7 @@ package common
 
 import (
 	"fmt"
+	"strconv"
 )
 
 type BoolValue struct {
@@ -31,7 +32,7 @@ func (what BoolValue) PlainValue() any {
 }
 
 func (what BoolValue) Text() []string {
-	return []string{fmt.Sprintf("%v", what.value)}
+	return []string{strconv.FormatBool(what.value)}
 }
 
 func (what BoolValue) BoolValue() bool {

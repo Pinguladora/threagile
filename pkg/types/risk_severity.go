@@ -91,7 +91,7 @@ func (what *RiskSeverity) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (what RiskSeverity) MarshalYAML() (interface{}, error) {
+func (what RiskSeverity) MarshalYAML() (any, error) {
 	return what.String(), nil
 }
 

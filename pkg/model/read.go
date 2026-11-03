@@ -1,14 +1,15 @@
 package model
 
 import (
+	"errors"
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/threagile/threagile/pkg/input"
 	"github.com/threagile/threagile/pkg/types"
+	"gopkg.in/yaml.v3"
 )
 
 type ReadResult struct {
@@ -19,14 +20,12 @@ type ReadResult struct {
 	CustomRiskRules  types.RiskRules
 }
 
-type explainRiskConfig interface {
-}
+type explainRiskConfig any
 
-type explainRiskReporter interface {
-}
+type explainRiskReporter any
 
 func (what ReadResult) ExplainRisk(cfg explainRiskConfig, risk string, reporter explainRiskReporter) error {
-	return fmt.Errorf("not implemented")
+	return errors.New("not implemented")
 }
 
 // TODO: consider about splitting this function into smaller ones for better reusability
@@ -97,7 +96,6 @@ func ReadAndAnalyzeModel(config configReader, builtinRiskRules types.RiskRules, 
 }
 
 func AnalyzeModel(modelInput *input.Model, config configReader, builtinRiskRules types.RiskRules, customRiskRules types.RiskRules, progressReporter types.ProgressReporter) (*ReadResult, error) {
-
 	parsedModel, parseError := ParseModel(config, modelInput, builtinRiskRules, customRiskRules)
 	if parseError != nil {
 		return nil, fmt.Errorf("unable to parse model yaml: %w", parseError)
@@ -127,7 +125,8 @@ func AnalyzeModel(modelInput *input.Model, config configReader, builtinRiskRules
 
 func applyRiskGeneration(parsedModel *types.Model, rules types.RiskRules,
 	skipRiskRules []string,
-	progressReporter types.ProgressReporter) {
+	progressReporter types.ProgressReporter,
+) {
 	progressReporter.Info("Applying risk generation")
 
 	skippedRules := make(map[string]bool)
@@ -191,9 +190,9 @@ func writeToFile(name string, item any, filename string, progressReporter types.
 		return
 	}
 
-	_ = os.MkdirAll(filepath.Dir(filename), 0750)
+	_ = os.MkdirAll(filepath.Dir(filename), 0o750)
 
-	writeError := os.WriteFile(filename, exported, 0600)
+	writeError := os.WriteFile(filename, exported, 0o600)
 	if writeError != nil {
 		progressReporter.Warnf("Unable to write %v to %q: %v", name, filename, writeError)
 		return

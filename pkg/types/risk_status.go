@@ -90,7 +90,7 @@ func (what *RiskStatus) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (what RiskStatus) MarshalYAML() (interface{}, error) {
+func (what RiskStatus) MarshalYAML() (any, error) {
 	return what.String(), nil
 }
 

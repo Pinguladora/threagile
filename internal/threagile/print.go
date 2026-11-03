@@ -1,6 +1,7 @@
 package threagile
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -31,7 +32,7 @@ func (what *Threagile) initPrint() *Threagile {
 			if appDir != filepath.Clean(appDir) {
 				// TODO: do we need this check here?
 				cmd.Printf("weird app folder %v", appDir)
-				return fmt.Errorf("weird app folder")
+				return errors.New("weird app folder")
 			}
 
 			content, err := os.ReadFile(filepath.Clean(filepath.Join(appDir, "LICENSE.txt")))

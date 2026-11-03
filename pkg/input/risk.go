@@ -3,16 +3,16 @@ package input
 import "fmt"
 
 type RiskIdentified struct {
-	Severity                      string   `yaml:"severity,omitempty" json:"severity,omitempty"`
-	ExploitationLikelihood        string   `yaml:"exploitation_likelihood,omitempty" json:"exploitation_likelihood,omitempty"`
-	ExploitationImpact            string   `yaml:"exploitation_impact,omitempty" json:"exploitation_impact,omitempty"`
-	DataBreachProbability         string   `yaml:"data_breach_probability,omitempty" json:"data_breach_probability,omitempty"`
-	DataBreachTechnicalAssets     []string `yaml:"data_breach_technical_assets,omitempty" json:"data_breach_technical_assets,omitempty"`
-	MostRelevantDataAsset         string   `yaml:"most_relevant_data_asset,omitempty" json:"most_relevant_data_asset,omitempty"`
-	MostRelevantTechnicalAsset    string   `yaml:"most_relevant_technical_asset,omitempty" json:"most_relevant_technical_asset,omitempty"`
-	MostRelevantCommunicationLink string   `yaml:"most_relevant_communication_link,omitempty" json:"most_relevant_communication_link,omitempty"`
-	MostRelevantTrustBoundary     string   `yaml:"most_relevant_trust_boundary,omitempty" json:"most_relevant_trust_boundary,omitempty"`
-	MostRelevantSharedRuntime     string   `yaml:"most_relevant_shared_runtime,omitempty" json:"most_relevant_shared_runtime,omitempty"`
+	Severity                      string   `json:"severity,omitempty"                         yaml:"severity,omitempty"`
+	ExploitationLikelihood        string   `json:"exploitation_likelihood,omitempty"          yaml:"exploitation_likelihood,omitempty"`
+	ExploitationImpact            string   `json:"exploitation_impact,omitempty"              yaml:"exploitation_impact,omitempty"`
+	DataBreachProbability         string   `json:"data_breach_probability,omitempty"          yaml:"data_breach_probability,omitempty"`
+	DataBreachTechnicalAssets     []string `json:"data_breach_technical_assets,omitempty"     yaml:"data_breach_technical_assets,omitempty"`
+	MostRelevantDataAsset         string   `json:"most_relevant_data_asset,omitempty"         yaml:"most_relevant_data_asset,omitempty"`
+	MostRelevantTechnicalAsset    string   `json:"most_relevant_technical_asset,omitempty"    yaml:"most_relevant_technical_asset,omitempty"`
+	MostRelevantCommunicationLink string   `json:"most_relevant_communication_link,omitempty" yaml:"most_relevant_communication_link,omitempty"`
+	MostRelevantTrustBoundary     string   `json:"most_relevant_trust_boundary,omitempty"     yaml:"most_relevant_trust_boundary,omitempty"`
+	MostRelevantSharedRuntime     string   `json:"most_relevant_shared_runtime,omitempty"     yaml:"most_relevant_shared_runtime,omitempty"`
 }
 
 func (what *RiskIdentified) Merge(other RiskIdentified) error {
