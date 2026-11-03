@@ -2,6 +2,8 @@ package common
 
 import (
 	"fmt"
+	"maps"
+	"slices"
 
 	"github.com/shopspring/decimal"
 )
@@ -49,7 +51,8 @@ func (what AnyValue) Text() []string {
 
 	case map[string]any:
 		text := make([]string, 0)
-		for name, item := range castValue {
+		for _, name := range slices.Sorted(maps.Keys(castValue)) {
+			item := castValue[name]
 			text = append(text, fmt.Sprintf("  %v: %v", name, item))
 		}
 

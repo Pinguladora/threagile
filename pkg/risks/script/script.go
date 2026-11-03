@@ -3,6 +3,8 @@ package script
 import (
 	"errors"
 	"fmt"
+	"maps"
+	"slices"
 	"strings"
 
 	"github.com/Pinguladora/threagile/pkg/risks/script/common"
@@ -18,6 +20,14 @@ type Script struct {
 	data      map[string]any
 	utils     map[string]*statements.MethodStatement
 	formatter formatter
+}
+
+// ratingFields are the risk fields whose values get a rating explanation, in the order they are explained.
+var ratingFields = []struct{ name, title string }{
+	{name: "exploitation_likelihood", title: "Exploitation Likelihood"},
+	{name: "exploitation_impact", title: "Exploitation Impact"},
+	{name: "data_breach_probability", title: "Data Breach Probability"},
+	{name: "severity", title: "Severity"},
 }
 
 type formatter interface {
@@ -179,9 +189,8 @@ func (what *Script) GetTechnicalAssetsByRiskID(scope *common.Scope, riskID strin
 	}
 
 	matchingTechAssets := make([]any, 0)
-	for techAssetName, techAsset := range techAssets {
-		_ = techAssetName
-
+	for _, techAssetName := range slices.Sorted(maps.Keys(techAssets)) {
+		techAsset := techAssets[techAssetName]
 		isMatch, _, matchError := what.matchRisk(scope, techAsset)
 		if matchError != nil {
 			return nil, matchError
@@ -209,7 +218,8 @@ func (what *Script) GenerateRisks(scope *common.Scope) ([]*types.Risk, string, e
 	}
 
 	risks := make([]*types.Risk, 0)
-	for techAssetName, techAsset := range techAssets {
+	for _, techAssetName := range slices.Sorted(maps.Keys(techAssets)) {
+		techAsset := techAssets[techAssetName]
 		techAssetValue := common.SomeValue(techAsset, common.NewEvent(common.NewValueProperty(techAsset), common.NewPath(fmt.Sprintf("technical asset '%v'", techAssetName))))
 		isMatch, errorMatchLiteral, matchError := what.matchRisk(scope, techAssetValue)
 		if matchError != nil {
@@ -305,10 +315,10 @@ func (what *Script) generateRisk(outerScope *common.Scope, techAssetName string,
 		}
 	}
 
-	ratingExplanation := make([]string, 0)
 	riskMap := make(map[string]any)
-	for name, value := range what.data {
-		expression, errorParseLiteral, parseError := new(expressions.ValueExpression).ParseValue(value)
+	fieldValues := make(map[string]common.Value)
+	for _, name := range slices.Sorted(maps.Keys(what.data)) {
+		expression, errorParseLiteral, parseError := new(expressions.ValueExpression).ParseValue(what.data[name])
 		if parseError != nil {
 			return nil, common.ToLiteral(errorParseLiteral), fmt.Errorf("failed to parse field value: %w", parseError)
 		}
@@ -319,26 +329,17 @@ func (what *Script) generateRisk(outerScope *common.Scope, techAssetName string,
 		}
 
 		riskMap[name] = newValue.PlainValue()
+		fieldValues[name] = newValue
+	}
 
-		title := ""
-		switch name {
-		case "severity":
-			title = "Severity"
-
-		case "exploitation_likelihood":
-			title = "Exploitation Likelihood"
-
-		case "exploitation_impact":
-			title = "Exploitation Impact"
-
-		case "data_breach_probability":
-			title = "Data Breach Probability"
-
-		default:
+	ratingExplanation := make([]string, 0)
+	for _, field := range ratingFields {
+		newValue, ok := fieldValues[field.name]
+		if !ok {
 			continue
 		}
 
-		text := fmt.Sprintf("'%v' is '%v'", title, newValue.PlainValue())
+		text := fmt.Sprintf("'%v' is '%v'", field.title, newValue.PlainValue())
 		explanation := what.Explain([]*common.Event{newValue.Event()})
 		if len(explanation) > 0 {
 			ratingExplanation = append(ratingExplanation, text+" because")
@@ -487,7 +488,8 @@ func (what *Script) getItem(value any, path ...string) (any, bool) {
 
 	head, rest := path[0], path[1:]
 
-	for name, item := range object {
+	for _, name := range slices.Sorted(maps.Keys(object)) {
+		item := object[name]
 		if strings.EqualFold(head, name) {
 			if len(rest) > 0 {
 				return what.getItem(item, rest...)

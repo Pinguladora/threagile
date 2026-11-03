@@ -2,6 +2,8 @@ package expressions
 
 import (
 	"fmt"
+	"maps"
+	"slices"
 
 	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 	"github.com/shopspring/decimal"
@@ -159,7 +161,8 @@ func (what *AllExpression) evalBool(scope *common.Scope, inValue common.Value) (
 		}
 
 		values := make([]common.Value, 0)
-		for name, item := range castValue {
+		for _, name := range slices.Sorted(maps.Keys(castValue)) {
+			item := castValue[name]
 			if len(what.index) > 0 {
 				scope.Set(what.index, common.SomeStringValue(name, nil))
 			}
