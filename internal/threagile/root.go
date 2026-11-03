@@ -63,7 +63,8 @@ func (what *Threagile) initFlags() *Threagile {
 	what.rootCmd.PersistentFlags().BoolVarP(&what.flags.VerboseValue, verboseFlagName, verboseFlagShorthand, what.config.GetVerbose(), "Verbose output")
 	what.rootCmd.PersistentFlags().BoolVarP(&what.flags.InteractiveValue, interactiveFlagName, interactiveFlagShorthand, what.config.GetInteractive(), "interactive mode")
 
-	what.rootCmd.PersistentFlags().StringVar(&what.flags.AppFolderValue, appDirFlagName, what.config.GetAppFolder(), "app folder")
+	what.rootCmd.PersistentFlags().StringVar(&what.flags.AppFolderValue, appDirFlagName, what.config.GetAppFolder(),
+		"optional folder with files that override the ones embedded in the binary")
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.PluginFolderValue, pluginDirFlagName, what.config.GetPluginFolder(), "plugin directory")
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.DataFolderValue, dataDirFlagName, what.config.GetDataFolder(), "data directory")
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.OutputFolderValue, outputFlagName, what.config.GetOutputFolder(), "output directory")
