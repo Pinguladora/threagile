@@ -76,8 +76,8 @@ func (r *ContainerPlatformEscapeRule) createRisk(parsedModel *types.Model, techn
 	}
 	// data breach at all container assets
 	dataBreachTechnicalAssetIDs := make([]string, 0)
-	for id, techAsset := range parsedModel.TechnicalAssets {
-		if techAsset.Machine == types.Container {
+	for _, id := range parsedModel.SortedTechnicalAssetIDs() {
+		if parsedModel.TechnicalAssets[id].Machine == types.Container {
 			dataBreachTechnicalAssetIDs = append(dataBreachTechnicalAssetIDs, id)
 		}
 	}

@@ -3,8 +3,10 @@ package model
 import (
 	"errors"
 	"fmt"
+	"maps"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 
 	"github.com/Pinguladora/threagile/pkg/input"
@@ -136,7 +138,8 @@ func applyRiskGeneration(parsedModel *types.Model, rules types.RiskRules,
 		}
 	}
 
-	for id, rule := range rules {
+	for _, id := range slices.Sorted(maps.Keys(rules)) {
+		rule := rules[id]
 		_, ok := skippedRules[id]
 		if ok {
 			progressReporter.Infof("Skipping risk rule: %v", id)
@@ -152,18 +155,14 @@ func applyRiskGeneration(parsedModel *types.Model, rules types.RiskRules,
 		}
 
 		if len(newRisks) > 0 {
+			// rules collect their risks while ranging over model maps; keep them in the order the reports use
+			types.SortByRiskSeverity(newRisks)
 			parsedModel.GeneratedRisksByCategory[id] = newRisks
 		}
 	}
 
 	if len(skippedRules) > 0 {
-		keys := make([]string, 0)
-		for k := range skippedRules {
-			keys = append(keys, k)
-		}
-		if len(keys) > 0 {
-			progressReporter.Infof("Unknown risk rules to skip: %v", keys)
-		}
+		progressReporter.Infof("Unknown risk rules to skip: %v", slices.Sorted(maps.Keys(skippedRules)))
 	}
 
 	// save also in map keyed by synthetic risk-id
