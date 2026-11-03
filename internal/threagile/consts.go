@@ -74,29 +74,35 @@ const (
 	Logo             = "  _____ _                          _ _      \n |_   _| |__  _ __ ___  __ _  __ _(_) | ___ \n   | | | '_ \\| '__/ _ \\/ _` |/ _` | | |/ _ \\\n   | | | | | | | |  __/ (_| | (_| | | |  __/\n   |_| |_| |_|_|  \\___|\\__,_|\\__, |_|_|\\___|\n                             |___/        " +
 		"\nThreagile - Agile Threat Modeling"
 	VersionText = "Documentation: https://threagile.io\n" +
-		"Docker Images: https://hub.docker.com/r/threagile/threagile\n" +
-		"Sourcecode: https://github.com/threagile\n" +
+		"Container image: " + containerImage + "\n" +
+		"Sourcecode: https://github.com/Pinguladora/threagile\n" +
 		"License: Open-Source (MIT License)\n" +
 		"Version: " + ThreagileVersion + " (%v)"
-	Examples = "Examples:\n\n" +
+	// The image runs as an unprivileged user, so the examples run it as the
+	// caller's user to let it write into the mounted working directory.
+	containerImage = "ghcr.io/pinguladora/threagile"
+	containerUser  = " docker run --rm -it --user \"$(id -u):$(id -g)\""
+	containerRun   = containerUser + " -v \"$(pwd)\":/work -w /work " + containerImage + " "
+	Examples       = "Examples:\n\n" +
 		"If you want to create an example model (via docker) as a starting point to learn about Threagile just run: \n" +
-		" docker run --rm -it -v \"$(pwd)\":app/work threagile/threagile " + CreateExampleModelCommand + " --output app/work \n\n" +
+		containerRun + CreateExampleModelCommand + " --output .\n\n" +
 		"If you want to create a minimal stub model (via docker) as a starting point for your own model just run: \n" +
-		" docker run --rm -it -v \"$(pwd)\":app/work threagile/threagile " + CreateStubModelCommand + " --output app/work \n\n" +
+		containerRun + CreateStubModelCommand + " --output .\n\n" +
 		"If you want to execute Threagile on a model yaml file (via docker):  \n" +
-		" docker run --rm -it -v \"$(pwd)\":app/work threagile/threagile analyze-model --verbose --model --output app/work \n\n" +
+		containerRun + "analyze-model --verbose --model threagile.yaml --output .\n\n" +
 		"If you want to execute Threagile in interactive mode (via docker):  \n" +
-		" docker run --rm -it -v \"$(pwd)\":app/work threagile/threagile -i --verbose --model --output app/work \n\n" +
-		"If you want to run Threagile as a server (REST API) on some port (here 8080):  \n" +
-		" docker run --rm -it --shm-size=256m  -p 8080:8080 --mount 'type=volume,src=threagile-storage,dst=/data,readonly=false' threagile/threagile server --server-port 8080 \n\n" +
+		containerRun + "-i --verbose --model threagile.yaml --output .\n\n" +
+		"If you want to run Threagile as a server (REST API) on some port (here 8080), keeping its data in " +
+		"./server-data:  \n" +
+		containerUser + " -p 8080:8080 -v \"$(pwd)/server-data\":/data " + containerImage + " server --server-port 8080\n\n" +
 		"If you want to find out about the different enum values usable in the model yaml file: \n" +
-		" docker run --rm -it threagile/threagile " + ListTypesCommand + "\n\n" +
+		" docker run --rm -it " + containerImage + " " + ListTypesCommand + "\n\n" +
 		"If you want to use some nice editing help (syntax validation, autocompletion, and live templates) in your favourite IDE: \n" +
-		" docker run --rm -it -v \"$(pwd)\":app/work threagile/threagile " + CreateEditingSupportCommand + " --output app/work\n\n" +
+		containerRun + CreateEditingSupportCommand + " --output .\n\n" +
 		"If you want to list all available model macros (which are macros capable of reading a model yaml file, asking you questions in a wizard-style and then update the model yaml file accordingly): \n" +
-		" docker run --rm -it threagile/threagile " + ListModelMacrosCommand + " \n\n" +
+		" docker run --rm -it " + containerImage + " " + ListModelMacrosCommand + "\n\n" +
 		"If you want to execute a certain model macro on the model yaml file (here the macro add-build-pipeline): \n" +
-		" docker run --rm -it -v \"$(pwd)\":app/work threagile/threagile --model app/work/threagile.yaml --output app/work execute-model-macro add-build-pipeline"
+		containerRun + "--model threagile.yaml --output . execute-model-macro add-build-pipeline"
 	ThirdPartyLicenses = " - golang (Google Go License): https://golang.org/LICENSE\n" +
 		" - go-yaml (MIT License): https://github.com/go-yaml/yaml/blob/v3/LICENSE\n" +
 		" - graphviz (EPL License): https://graphviz.org/license/\n" +
