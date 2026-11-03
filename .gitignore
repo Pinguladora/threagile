@@ -39,9 +39,8 @@ stats.json
 /tmp/
 /threagile.yaml
 
-# GoReleaser output and the staged release assets
+# GoReleaser output
 /dist/
-/build/
 
 # local analysis output (mise run analyze / serve)
 /out/
