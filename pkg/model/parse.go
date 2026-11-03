@@ -3,6 +3,7 @@ package model
 import (
 	"errors"
 	"fmt"
+	"maps"
 	"path/filepath"
 	"regexp"
 	"slices"
@@ -81,7 +82,8 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 
 	// Data Assets ===============================================================================
 	parsedModel.DataAssets = make(map[string]*types.DataAsset)
-	for title, asset := range modelInput.DataAssets {
+	for _, title := range slices.Sorted(maps.Keys(modelInput.DataAssets)) {
+		asset := modelInput.DataAssets[title]
 		id := asset.ID
 
 		usage, err := types.ParseUsage(asset.Usage)
@@ -134,7 +136,8 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 
 	// Technical Assets ===============================================================================
 	parsedModel.TechnicalAssets = make(map[string]*types.TechnicalAsset)
-	for title, asset := range modelInput.TechnicalAssets {
+	for _, title := range slices.Sorted(maps.Keys(modelInput.TechnicalAssets)) {
+		asset := modelInput.TechnicalAssets[title]
 		id := asset.ID
 
 		usage, err := types.ParseUsage(asset.Usage)
@@ -232,7 +235,8 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 
 		communicationLinks := make([]*types.CommunicationLink, 0)
 		if asset.CommunicationLinks != nil {
-			for commLinkTitle, commLink := range asset.CommunicationLinks {
+			for _, commLinkTitle := range slices.Sorted(maps.Keys(asset.CommunicationLinks)) {
+				commLink := asset.CommunicationLinks[commLinkTitle]
 				weight := 1
 				var dataAssetsSent []string
 				var dataAssetsReceived []string
@@ -303,7 +307,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 				if err != nil {
 					return nil, err
 				}
-				commLink := &types.CommunicationLink{
+				link := &types.CommunicationLink{
 					Id:                     commLinkId,
 					SourceId:               id,
 					TargetId:               commLink.Target,
@@ -322,12 +326,12 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 					DiagramTweakWeight:     weight,
 					DiagramTweakConstraint: !commLink.DiagramTweakConstraint,
 				}
-				communicationLinks = append(communicationLinks, commLink)
+				communicationLinks = append(communicationLinks, link)
 				// track all comm links
-				parsedModel.CommunicationLinks[commLink.Id] = commLink
+				parsedModel.CommunicationLinks[link.Id] = link
 				// keep track of map of *all* comm links mapped by target-id (to be able to look up "who is calling me" kind of things)
-				parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[commLink.TargetId] = append(
-					parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[commLink.TargetId], commLink)
+				parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[link.TargetId] = append(
+					parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[link.TargetId], link)
 			}
 		}
 
@@ -394,7 +398,8 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 	}
 
 	// A target of a communication link implicitly processes all data assets that are sent to or received by that target
-	for id, techAsset := range parsedModel.TechnicalAssets {
+	for _, id := range parsedModel.SortedTechnicalAssetIDs() {
+		techAsset := parsedModel.TechnicalAssets[id]
 		for _, commLink := range techAsset.CommunicationLinks {
 			if commLink.TargetId == id {
 				continue
@@ -422,7 +427,8 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 	// Trust Boundaries ===============================================================================
 	checklistToAvoidAssetBeingModeledInMultipleTrustBoundaries := make(map[string]bool)
 	parsedModel.TrustBoundaries = make(map[string]*types.TrustBoundary)
-	for title, boundary := range modelInput.TrustBoundaries {
+	for _, title := range slices.Sorted(maps.Keys(modelInput.TrustBoundaries)) {
+		boundary := modelInput.TrustBoundaries[title]
 		id := boundary.ID
 
 		technicalAssetsInside := make([]string, 0)
@@ -489,7 +495,8 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 
 	// Shared Runtime ===============================================================================
 	parsedModel.SharedRuntimes = make(map[string]*types.SharedRuntime)
-	for title, inputRuntime := range modelInput.SharedRuntimes {
+	for _, title := range slices.Sorted(maps.Keys(modelInput.SharedRuntimes)) {
+		inputRuntime := modelInput.SharedRuntimes[title]
 		id := inputRuntime.ID
 
 		technicalAssetsRunning := make([]string, 0)
@@ -526,12 +533,12 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 		parsedModel.SharedRuntimes[id] = sharedRuntime
 	}
 
-	for _, rule := range builtinRiskRules {
-		parsedModel.BuiltInRiskCategories = append(parsedModel.BuiltInRiskCategories, rule.Category())
+	for _, id := range slices.Sorted(maps.Keys(builtinRiskRules)) {
+		parsedModel.BuiltInRiskCategories = append(parsedModel.BuiltInRiskCategories, builtinRiskRules[id].Category())
 	}
 
-	for _, rule := range customRiskRules {
-		parsedModel.CustomRiskCategories = append(parsedModel.CustomRiskCategories, rule.Category())
+	for _, id := range slices.Sorted(maps.Keys(customRiskRules)) {
+		parsedModel.CustomRiskCategories = append(parsedModel.CustomRiskCategories, customRiskRules[id].Category())
 	}
 
 	// Individual Risk Categories (just used as regular risk categories) ===============================================================================
@@ -581,7 +588,8 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 		// NOW THE INDIVIDUAL RISK INSTANCES:
 		// individualRiskInstances := make([]model.Risk, 0)
 		if customRiskCategoryCategory.RisksIdentified != nil { // TODO: also add syntax checks of input YAML when linked asset is not found or when synthetic-id is already used...
-			for title, individualRiskInstance := range customRiskCategoryCategory.RisksIdentified {
+			for _, title := range slices.Sorted(maps.Keys(customRiskCategoryCategory.RisksIdentified)) {
+				individualRiskInstance := customRiskCategoryCategory.RisksIdentified[title]
 				var mostRelevantDataAssetId, mostRelevantTechnicalAssetId, mostRelevantCommunicationLinkId, mostRelevantTrustBoundaryId, mostRelevantSharedRuntimeId string
 				var dataBreachProbability types.DataBreachProbability
 				var dataBreachTechnicalAssetIDs []string
@@ -707,7 +715,8 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 	}
 
 	// ====================== model consistency check (linking)
-	for _, technicalAsset := range parsedModel.TechnicalAssets {
+	for _, id := range parsedModel.SortedTechnicalAssetIDs() {
+		technicalAsset := parsedModel.TechnicalAssets[id]
 		for _, commLink := range technicalAsset.CommunicationLinks {
 			err := parsedModel.CheckTechnicalAssetExists(commLink.TargetId, "communication link '"+commLink.Title+"' of technical asset '"+technicalAsset.Title+"'", false)
 			if err != nil {
