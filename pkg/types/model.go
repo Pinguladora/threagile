@@ -6,6 +6,7 @@ package types
 
 import (
 	"fmt"
+	"maps"
 	"regexp"
 	"slices"
 	"sort"
@@ -107,13 +108,16 @@ func (model *Model) CheckTags(tags []string, where string) ([]string, error) {
 
 func (model *Model) ApplyWildcardRiskTrackingEvaluation(ignoreOrphanedRiskTracking bool, progressReporter ProgressReporter) error {
 	progressReporter.Info("Executing risk tracking evaluation")
-	for syntheticRiskIdPattern, riskTracking := range model.GetDeferredRiskTrackingDueToWildcardMatching() {
+	// several patterns can match the same risk and the first one wins, so apply them in a fixed order
+	deferredRiskTracking := model.GetDeferredRiskTrackingDueToWildcardMatching()
+	for _, syntheticRiskIdPattern := range slices.Sorted(maps.Keys(deferredRiskTracking)) {
+		riskTracking := deferredRiskTracking[syntheticRiskIdPattern]
 		progressReporter.Infof("Applying wildcard risk tracking for risk id: %v", syntheticRiskIdPattern)
 
 		foundSome := false
 		matchingRiskIdExpression := regexp.MustCompile(
 			strings.ReplaceAll(regexp.QuoteMeta(syntheticRiskIdPattern), `\*`, `[^@]+`))
-		for syntheticRiskId := range model.GeneratedRisksBySyntheticId {
+		for _, syntheticRiskId := range slices.Sorted(maps.Keys(model.GeneratedRisksBySyntheticId)) {
 			if matchingRiskIdExpression.Match([]byte(syntheticRiskId)) && model.HasNotYetAnyDirectNonWildcardRiskTracking(syntheticRiskId) {
 				foundSome = true
 				model.RiskTracking[syntheticRiskId] = &RiskTracking{
@@ -142,7 +146,8 @@ func (model *Model) ApplyWildcardRiskTrackingEvaluation(ignoreOrphanedRiskTracki
 
 func (model *Model) CheckRiskTracking(ignoreOrphanedRiskTracking bool, progressReporter ProgressReporter) error {
 	progressReporter.Info("Checking risk tracking")
-	for _, tracking := range model.RiskTracking {
+	for _, syntheticRiskId := range slices.Sorted(maps.Keys(model.RiskTracking)) {
+		tracking := model.RiskTracking[syntheticRiskId]
 		foundSome := false
 		matchingRiskIdExpression := regexp.MustCompile(
 			strings.ReplaceAll(regexp.QuoteMeta(tracking.SyntheticRiskId), `\*`, `[^@]+`))
@@ -249,7 +254,8 @@ func CalculateSeverity(likelihood RiskExploitationLikelihood, impact RiskExploit
 
 func (model *Model) InScopeTechnicalAssets() []*TechnicalAsset {
 	result := make([]*TechnicalAsset, 0)
-	for _, asset := range model.TechnicalAssets {
+	for _, id := range model.SortedTechnicalAssetIDs() {
+		asset := model.TechnicalAssets[id]
 		if !asset.OutOfScope {
 			result = append(result, asset)
 		}
@@ -282,7 +288,8 @@ func (model *Model) TagsActuallyUsed() []string {
 
 func (model *Model) TechnicalAssetsTaggedWithAny(tags ...string) []*TechnicalAsset {
 	result := make([]*TechnicalAsset, 0)
-	for _, candidate := range model.TechnicalAssets {
+	for _, id := range model.SortedTechnicalAssetIDs() {
+		candidate := model.TechnicalAssets[id]
 		if candidate.IsTaggedWithAny(tags...) {
 			result = append(result, candidate)
 		}
@@ -292,8 +299,8 @@ func (model *Model) TechnicalAssetsTaggedWithAny(tags ...string) []*TechnicalAss
 
 func (model *Model) CommunicationLinksTaggedWithAny(tags ...string) []*CommunicationLink {
 	result := make([]*CommunicationLink, 0)
-	for _, asset := range model.TechnicalAssets {
-		for _, candidate := range asset.CommunicationLinks {
+	for _, id := range model.SortedTechnicalAssetIDs() {
+		for _, candidate := range model.TechnicalAssets[id].CommunicationLinks {
 			if candidate.IsTaggedWithAny(tags...) {
 				result = append(result, candidate)
 			}
@@ -304,7 +311,8 @@ func (model *Model) CommunicationLinksTaggedWithAny(tags ...string) []*Communica
 
 func (model *Model) DataAssetsTaggedWithAny(tags ...string) []*DataAsset {
 	result := make([]*DataAsset, 0)
-	for _, candidate := range model.DataAssets {
+	for _, id := range slices.Sorted(maps.Keys(model.DataAssets)) {
+		candidate := model.DataAssets[id]
 		if candidate.IsTaggedWithAny(tags...) {
 			result = append(result, candidate)
 		}
@@ -314,7 +322,8 @@ func (model *Model) DataAssetsTaggedWithAny(tags ...string) []*DataAsset {
 
 func (model *Model) TrustBoundariesTaggedWithAny(tags ...string) []*TrustBoundary {
 	result := make([]*TrustBoundary, 0)
-	for _, candidate := range model.TrustBoundaries {
+	for _, id := range slices.Sorted(maps.Keys(model.TrustBoundaries)) {
+		candidate := model.TrustBoundaries[id]
 		if candidate.IsTaggedWithAny(tags...) {
 			result = append(result, candidate)
 		}
@@ -324,7 +333,8 @@ func (model *Model) TrustBoundariesTaggedWithAny(tags ...string) []*TrustBoundar
 
 func (model *Model) SharedRuntimesTaggedWithAny(tags ...string) []*SharedRuntime {
 	result := make([]*SharedRuntime, 0)
-	for _, candidate := range model.SharedRuntimes {
+	for _, id := range slices.Sorted(maps.Keys(model.SharedRuntimes)) {
+		candidate := model.SharedRuntimes[id]
 		if candidate.IsTaggedWithAny(tags...) {
 			result = append(result, candidate)
 		}
@@ -440,7 +450,8 @@ func (model *Model) FindParentTrustBoundary(tb *TrustBoundary) *TrustBoundary {
 	if tb == nil {
 		return nil
 	}
-	for _, candidate := range model.TrustBoundaries {
+	for _, id := range slices.Sorted(maps.Keys(model.TrustBoundaries)) {
+		candidate := model.TrustBoundaries[id]
 		if contains(candidate.TrustBoundariesNested, tb.Id) {
 			return candidate
 		}
@@ -487,6 +498,9 @@ func (model *Model) SortByRiskCategoryHighestContainingRiskSeveritySortStillAtRi
 			if len(risksLeft) > 0 && len(risksRight) == 0 {
 				return true
 			}
+			if riskCategories[i].Title == riskCategories[j].Title {
+				return riskCategories[i].ID < riskCategories[j].ID
+			}
 			return riskCategories[i].Title < riskCategories[j].Title
 		}
 		return highestLeft > highestRight
@@ -513,10 +527,11 @@ func (model *Model) GetRiskCategory(categoryID string) *RiskCategory {
 	return nil
 }
 
+// AllRisks returns the generated risks grouped by category, with the categories in id order.
 func (model *Model) AllRisks() []*Risk {
 	result := make([]*Risk, 0)
-	for _, risks := range model.GeneratedRisksByCategory {
-		result = append(result, risks...)
+	for _, categoryId := range slices.Sorted(maps.Keys(model.GeneratedRisksByCategory)) {
+		result = append(result, model.GeneratedRisksByCategory[categoryId]...)
 	}
 	return result
 }
