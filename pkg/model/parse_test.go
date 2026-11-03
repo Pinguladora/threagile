@@ -5,6 +5,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package model
 
 import (
+	"slices"
 	"testing"
 
 	"github.com/Pinguladora/threagile/pkg/input"
@@ -193,4 +194,36 @@ func (m *mockConfig) GetAppFolder() string {
 
 func (m *mockConfig) GetTechnologyFilename() string {
 	return ""
+}
+
+func TestCommunicationLinksOrderedByTitle(t *testing.T) {
+	source := createTechnicalAsset(types.Internal, types.Operational, types.Operational)
+	target := createTechnicalAsset(types.Internal, types.Operational, types.Operational)
+	titles := []string{"hotel", "charlie", "foxtrot", "alpha", "golf", "echo", "bravo", "delta"}
+	source.CommunicationLinks = make(map[string]input.CommunicationLink)
+	for _, title := range titles {
+		source.CommunicationLinks[title] = input.CommunicationLink{
+			Target:         target.ID,
+			Protocol:       "https",
+			Authentication: "none",
+			Authorization:  "none",
+			Usage:          "business",
+		}
+	}
+	ta := map[string]input.TechnicalAsset{"source": source, "target": target}
+
+	parsedModel, err := ParseModel(&mockConfig{}, createInputModel(ta, make(map[string]input.DataAsset)), make(types.RiskRules), make(types.RiskRules))
+
+	assert.NoError(t, err)
+	sorted := slices.Sorted(slices.Values(titles))
+	outgoing := make([]string, 0, len(titles))
+	for _, link := range parsedModel.TechnicalAssets[source.ID].CommunicationLinks {
+		outgoing = append(outgoing, link.Title)
+	}
+	assert.Equal(t, sorted, outgoing)
+	incoming := make([]string, 0, len(titles))
+	for _, link := range parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[target.ID] {
+		incoming = append(incoming, link.Title)
+	}
+	assert.Equal(t, sorted, incoming)
 }
