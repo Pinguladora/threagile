@@ -47,5 +47,8 @@ func (what ByTechnicalCommunicationLinkTitleSort) Len() int      { return len(wh
 func (what ByTechnicalCommunicationLinkTitleSort) Swap(i, j int) { what[i], what[j] = what[j], what[i] }
 
 func (what ByTechnicalCommunicationLinkTitleSort) Less(i, j int) bool {
+	if what[i].Title == what[j].Title {
+		return what[i].Id > what[j].Id
+	}
 	return what[i].Title > what[j].Title
 }

@@ -38,6 +38,9 @@ func SortByRiskSeverity(risks []*Risk) {
 					likelihoodLeft := risks[i].ExploitationLikelihood
 					likelihoodRight := risks[j].ExploitationLikelihood
 					if likelihoodLeft == likelihoodRight {
+						if risks[i].Title == risks[j].Title {
+							return risks[i].SyntheticId < risks[j].SyntheticId
+						}
 						return risks[i].Title < risks[j].Title
 					} else {
 						return likelihoodLeft > likelihoodRight
@@ -61,5 +64,8 @@ func (what ByRiskCategoryTitleSort) Swap(i, j int) {
 }
 
 func (what ByRiskCategoryTitleSort) Less(i, j int) bool {
+	if what[i].Title == what[j].Title {
+		return what[i].ID < what[j].ID
+	}
 	return what[i].Title < what[j].Title
 }
