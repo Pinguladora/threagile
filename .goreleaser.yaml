@@ -1,0 +1,169 @@
+version: 2
+
+project_name: threagile
+
+before:
+  hooks:
+    - go mod download # Ensures dependencies are fetched before build starts
+    # Stage the run-time assets in the layout of the upstream image's /app folder,
+    # which is what threagile's --app-dir defaults expect (archives cannot rename).
+    - rm -rf build/app
+    - mkdir -p build/app/report build/app/server
+    - cp report/template/background.pdf support/openapi.yaml support/schema.json support/live-templates.txt build/app/
+    - cp report/threagile-logo.png build/app/report/
+    - cp -r server/static build/app/server/
+    - cp demo/example/threagile.yaml build/app/threagile-example-model.yaml
+    - cp demo/stub/threagile.yaml build/app/threagile-stub-model.yaml
+
+builds:
+  - id: production
+    main: ./cmd/threagile
+    binary: threagile
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath # Removes local system paths
+      - -buildvcs=false # Removes dependency on the local .git state
+    ldflags:
+      - -s -w # Strips debug info
+      - -buildid= # Zeroes out the build ID for hash parity
+      - -X main.buildTimestamp={{.CommitDate}} # Use CommitDate, NOT current time
+      - -extldflags="-static"
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    targets:
+      # AMD64 tiers
+      - linux_amd64_v3 # Baseline: AVX2, BMI2 (Haswell+ 2013)
+      - linux_amd64_v4 # Performance: AVX-512 (Ice Lake+)
+      - windows_amd64_v3
+      - windows_amd64_v4
+      - darwin_amd64_v3
+      - darwin_amd64_v4
+      # ARM64 tiers
+      - linux_arm64_v8.0 # Baseline: RPi 3/4/5, Jetson Nano, most IoT SBCs
+      - linux_arm64_v9.0 # Performance: Cortex-X2+, Neoverse V2+
+      - darwin_arm64_v8.0
+      - darwin_arm64_v9.0
+    # only runs on actual tags/releases
+    skip: "{{ .IsSnapshot }}"
+
+  - id: dev
+    main: ./cmd/threagile
+    binary: threagile
+    env:
+      - CGO_ENABLED=0
+    gcflags:
+      - all=-N -l # Disable optimizations and inlining for better debugging
+    ldflags:
+      - -X main.buildTimestamp={{.Version}}-dev
+      - -extldflags="-static"
+    targets:
+      - linux_amd64_v3
+      - linux_amd64_v4
+      - windows_amd64_v3
+      - windows_amd64_v4
+      - darwin_amd64_v3
+      - darwin_amd64_v4
+      - linux_arm64_v8.0
+      - linux_arm64_v9.0
+      - darwin_arm64_v8.0
+      - darwin_arm64_v9.0
+    # only runs on snapshot builds
+    skip: "{{ not .IsSnapshot }}"
+
+report_sizes: true
+
+gomod:
+  proxy: true # Verifiable builds: fetch modules from the proxy
+  mod: readonly # Prevent accidental go.mod/go.sum changes during build
+
+archives:
+  - id: standard
+    ids: [production, dev]
+    allow_different_binary_count: true
+    formats: [tar.gz]
+    # this name template makes the OS and Arch compatible with `uname`.
+    name_template: >-
+      {{ .ProjectName }}_ {{- title .Os }}_ {{- if eq .Arch "amd64" }}x86_64 {{- else if eq .Arch "arm64" }}aarch64 {{- else }}{{ .Arch }}{{ end }} {{- with .Amd64 }}_{{ . }}{{ end }} {{- with .Arm64 }}_{{ . }}{{ end }}
+    # threagile reads these from its --app-dir at run time, so they ship next to
+    # the binary until they are embedded into it (staged by the before hooks).
+    files:
+      - LICENSE.txt
+      - README.md
+      # **/* skips the top-level files, so they are listed separately.
+      - src: build/app/*
+        dst: .
+      - src: build/app/**/*
+        dst: .
+    # use zip for windows archives
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+
+checksum:
+  name_template: "checksums.txt"
+  algorithm: sha256
+
+changelog:
+  use: github
+  sort: asc
+  format: "{{ .Message }}"
+  groups:
+    - title: "Breaking Changes"
+      regexp: '^.*?(\([[:word:]]+\))??!:.+$'
+      order: 0
+    - title: "Features"
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 100
+    - title: "Bug Fixes"
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 200
+    - title: "Dependency Updates"
+      regexp: '^.*?(feat|fix|chore)\(deps?.+\)!?:.+$'
+      order: 300
+    - title: "Miscellaneous Work"
+      order: 999
+  filters:
+    exclude:
+      - '^test(\(.+\))?:'
+      - '^refactor(\(.+\))?:'
+      - '^style(\(.+\))?:'
+
+release:
+  prerelease: auto
+  include_meta: true
+  footer: |
+    **Full Changelog**: https://github.com/Pinguladora/threagile/compare/{{ .PreviousTag }}...{{ .Tag }}
+
+sboms:
+  - id: cyclonedx
+    artifacts: archive
+    cmd: syft
+    args:
+      - "scan"
+      - "$artifact"
+      - "--output"
+      - "cyclonedx-json=$document"
+    documents:
+      - "${artifact}.cdx.json"
+  - id: spdx
+    artifacts: archive
+    cmd: syft
+    args:
+      - "scan"
+      - "$artifact"
+      - "--output"
+      - "spdx-json=$document"
+    documents:
+      - "${artifact}.spdx.json"
+
+signs:
+  - id: keyless-blob-sign
+    artifacts: checksum
+    cmd: cosign
+    signature: "${artifact}.sigstore.json"
+    args:
+      - "sign-blob"
+      - "--bundle=${signature}"
+      - "${artifact}"
+      - "--yes"
+    output: true

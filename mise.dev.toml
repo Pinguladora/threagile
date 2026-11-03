@@ -1,0 +1,23 @@
+# Local development tooling, layered on top of mise.toml when the `dev` env is
+# active. .miserc.toml sets `env = ["dev"]`, so this loads by default for local
+# work but never in CI (CI sets MISE_ENV=ci). Everything here is lint/format/hook
+# tooling the build and release never need.
+
+[env]
+HK_MISE = 1
+
+[hooks]
+# Install/update the git hooks when tools are installed. Lives here (not in
+# mise.toml) so it does not run in CI, where hk is not installed.
+postinstall = "hk install --mise"
+
+[tools]
+# actionlint and zizmor live in mise.toml (shared): the hk pre-push hook uses them
+# locally and the lint:gha CI job uses them too.
+hk = "2.3.0"
+pinact = "5.0.0"                   # pin GitHub Actions to a SHA (hk pre-push)
+oxlint = "1.82.0"                  # JS linter for the server's model editor (server/static)
+oxfmt = "0.71.0"                   # JS formatter
+yamlfmt = "0.21.0"                 # YAML formatter (hk pairs it with yamllint)
+yamllint = "1.38.0"
+"github:mongodb/kingfisher" = "v2.7.0"   # secret scanner (hk + secret:* tasks)

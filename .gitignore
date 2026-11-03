@@ -36,3 +36,19 @@ stats.json
 /config.yaml
 /tmp/
 /threagile.yaml
+
+# GoReleaser output and the staged release assets
+/dist/
+/build/
+
+# local analysis output (mise run analyze / serve)
+/out/
+/server/keys/
+
+# Go workspace file
+go.work
+go.work.sum
+
+# env file
+.env
+*:Zone.Identifier

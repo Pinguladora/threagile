@@ -1,0 +1,80 @@
+amends "package://github.com/jdx/hk/releases/download/v2.3.0/hk@2.3.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v2.3.0/hk@2.3.0#/Builtins.pkl"
+
+// Demo and test models are inputs to the analyser, kept byte-for-byte as written.
+local fixtures = #"^\.hk/|^demo/|^test/"#
+
+// Fast checks and fixers, run on every commit.
+local pre_commit = new Mapping<String, Step> {
+    ["check-added-large-files"] = (Builtins.check_added_large_files) { exclude = Regex(fixtures) }
+    ["check-case-conflict"] = (Builtins.check_case_conflict) { exclude = Regex(fixtures) }
+    ["check-executables-have-shebangs"] = (Builtins.check_executables_have_shebangs) { exclude = Regex(fixtures) }
+    ["check-yaml"] = (Builtins.yamllint) { exclude = Regex(fixtures) }
+    ["yamlfmt"] = (Builtins.yamlfmt) { exclude = Regex(fixtures) }
+    ["check-json"] = (Builtins.jq) { exclude = Regex(#"(\.devcontainer|\.vscode)/.*\.json|^\.hk/|^demo/|^test/"#) }
+    ["end-of-file-fixer"] = (Builtins.newlines) { exclude = Regex(fixtures) }
+    ["fix-byte-order-marker"] = (Builtins.byte_order_marker) { exclude = Regex(fixtures) }
+    ["fix-smart-quotes"] = (Builtins.fix_smart_quotes) { exclude = Regex(fixtures) }
+    ["mixed-line-ending"] = (Builtins.mixed_line_ending) { exclude = Regex(fixtures) }
+    ["trailing-whitespace"] = (Builtins.trailing_whitespace) { exclude = Regex(fixtures) }
+    ["kingfisher"] = (Builtins.kingfisher) { exclude = Regex(#"^\.hk/"#) }
+    // Restrict oxfmt to JS. Its default glob also matches html/css/md/yaml/json,
+    // and the model editor's HTML and the YAML configs have their own handling.
+    ["oxfmt"] = (Builtins.oxfmt) {
+        glob = new Listing<String> { "**/*.js"; "**/*.mjs"; "**/*.cjs" }
+        exclude = Regex(#"^\.hk/"#)
+    }
+    ["oxlint"] = (Builtins.ox_lint) { exclude = Regex(#"^\.hk/"#) }
+}
+
+// Slower checks, run before push.
+local pre_push = new Mapping<String, Step> {
+    ["golangci-lint-config-verify"] { check = "golangci-lint config verify" }
+    // Only findings new since main fail, the same baseline as `mise run lint:go`.
+    ["golangci-lint"] {
+        glob = new Listing<String> { "**/*.go"; ".golangci.yaml" }
+        check = "golangci-lint run --new-from-merge-base=main ./..."
+    }
+    // GitHub Actions hardening: pin actions to a SHA, lint the workflows, and run
+    // zizmor's security static analysis. zizmor is pinned to offline mode here
+    // (ZIZMOR_OFFLINE) so the pre-push hook stays fast and needs no token; the
+    // lint-gha workflow runs the online audits in CI.
+    ["pinact"] = Builtins.pinact
+    ["actionlint"] = Builtins.actionlint
+    ["zizmor"] = (Builtins.zizmor) { env { ["ZIZMOR_OFFLINE"] = "true" } }
+    ["go-mod-download"] { check = "go mod download" }
+    ["go-test"] { glob = new Listing<String> { "**/*.go"; "go.mod"; "go.sum" }; check = "go test ./..." }
+}
+
+hooks {
+    ["commit-msg"] {
+        steps {
+            ["cocogitto-commit-msg"] = (Builtins.cocogitto_commit_msg)
+        }
+    }
+    ["pre-commit"] {
+        fix = true
+        stash = "git"
+        steps {
+            ...pre_commit
+        }
+    }
+    ["pre-push"] {
+        steps {
+            ...pre_push
+        }
+    }
+    ["check"] {
+        steps {
+            ...pre_commit
+            ...pre_push
+        }
+    }
+    ["fix"] {
+        fix = true
+        steps {
+            ...pre_commit
+            ...pre_push
+        }
+    }
+}

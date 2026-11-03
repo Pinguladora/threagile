@@ -1,0 +1,15 @@
+{
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "no-unused-vars": [
+      "warn",
+      {
+        "args": "none",
+        "caughtErrors": "none",
+        "varsIgnorePattern": "^(schema|EditorGenerator)$"
+      }
+    ]
+  }
+}

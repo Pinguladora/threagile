@@ -1,0 +1,39 @@
+tag_prefix = "v"
+from_latest_tag = true
+ignore_merge_commits = true
+ignore_fixup_commits = true
+# Tag-only releases: cog bump just creates and pushes the tag, no bump commit and
+# no committed CHANGELOG.md. GoReleaser generates the release notes from git, and
+# the website changelog is generated at build time with `cog changelog`. This
+# keeps main and the tags in sync (no divergence, no branch push).
+disable_changelog = true
+disable_bump_commit = true
+generate_mono_repository_global_tag = true
+generate_mono_repository_package_tags = true
+monorepo_version_separator = "/"
+branch_whitelist = ["main"]
+skip_ci = "[skip ci]"
+skip_untracked = true
+post_bump_hooks = ["git push origin {{version_tag}}"]
+
+[git_hooks]
+
+[commit_types]
+chore    = { changelog_title = "", omit_from_changelog = true }
+ci       = { changelog_title = "", omit_from_changelog = true }
+docs     = { changelog_title = "", omit_from_changelog = true }
+refactor = { changelog_title = "", omit_from_changelog = true }
+style    = { changelog_title = "", omit_from_changelog = true }
+test     = { changelog_title = "", omit_from_changelog = true }
+
+[changelog]
+path = "CHANGELOG.md"
+template = "remote"
+remote = "github.com"
+repository = "threagile"
+owner = "Pinguladora"
+authors = [
+  { username = "Pinguladora", signature = "Pinguladora" },
+]
+
+[bump_profiles]

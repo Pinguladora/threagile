@@ -1,0 +1,119 @@
+[settings]
+experimental = true
+env_cache = true
+env_cache_ttl = "9h"
+minimum_release_age = "7d"
+pin = true
+lockfile = true
+locked = false
+prefer_offline = true
+disable_default_registry = true
+disable_backends = ["asdf", "vfox", "ubi"]
+
+# CI-only tools, layered onto mise.toml's toolchain when MISE_ENV=ci.
+[tools]
+# Full aqua path (not the short alias) so mise resolves it with the default
+# registry disabled and Renovate can track slsa-framework/slsa-verifier releases.
+"aqua:slsa-framework/slsa-verifier" = "2.7.1"
+
+[tasks."ci:git-config"]
+run = """
+git config --global core.compression 0
+git config --global core.fsync -all
+"""
+description = "Optimize Git config for CI (disable compression, fsync)"
+
+[tasks."ci:fmt"]
+run = """
+files=$(gofmt -l .)
+if [ -n "$files" ]; then
+  echo "Not gofmt-clean:"
+  echo "$files"
+  exit 1
+fi
+"""
+description = "Fail if any Go file is not gofmt-clean"
+
+[tasks."ci:tidy"]
+run = """
+go mod tidy
+git diff --exit-code go.mod go.sum
+"""
+description = "Fail if go.mod or go.sum are not tidy"
+
+[tasks."ci:build"]
+run = "go build ./..."
+description = "Compile every Go package in CI"
+
+[tasks."ci:vet"]
+run = "go vet ./..."
+description = "Vet all packages"
+
+[tasks."ci:test"]
+run = "go test -race -count=1 ./..."
+description = "Run Go tests with the race detector"
+
+[tasks."ci:lint"]
+# Depends on ci:build so the Go build cache is warm before golangci-lint loads
+# packages, instead of every ci:check task compiling it in parallel.
+depends = ["ci:build"]
+# Same baseline as the local lint:go task: only findings new since main fail.
+run = "golangci-lint run ./... --timeout=10m --new-from-merge-base=origin/main"
+description = "Lint Go code in CI"
+
+# Aggregate gate for CI.
+[tasks."ci:check"]
+description = "Full CI gate: format, tidy, build, vet, test, lint"
+depends = [
+  "ci:fmt",
+  "ci:tidy",
+  "ci:build",
+  "ci:vet",
+  "ci:test",
+  "ci:lint",
+]
+
+# ---------------------------------------------------------------------------
+# Release (GoReleaser) and post-release verification. goreleaser and syft come
+# from mise.toml; cosign is installed by the release workflow.
+# ---------------------------------------------------------------------------
+
+[tasks.release]
+run = "goreleaser release --clean"
+description = "Build, sign, and publish a release with GoReleaser"
+
+[tasks."release:security-check"]
+description = "Exit 0 when a commit since the last tag carries a [security] marker"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+if [ -z "$LAST_TAG" ]; then
+  echo "No tags yet; the first release is cut manually. Skipping."
+  exit 1
+fi
+if git log "${LAST_TAG}..HEAD" -i --grep='\[security\]' --format='%H' | grep -q .; then
+  echo "Security patch found since ${LAST_TAG}; a release is warranted."
+else
+  echo "No security patch since ${LAST_TAG}; skipping release."
+  exit 1
+fi
+'''
+
+[tasks."verify:binary"]
+description = "Verify a binary archive (checksum, cosign signature, SLSA provenance)"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+ARCHIVE="{{arg(i=0, name="archive")}}"
+sha256sum --check --ignore-missing checksums.txt
+cosign verify-blob \
+  --bundle checksums.txt.sigstore.json \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  --certificate-identity-regexp "^https://github.com/Pinguladora/threagile/" \
+  checksums.txt
+slsa-verifier verify-artifact \
+  --provenance-path provenance-binaries.intoto.jsonl \
+  --source-uri github.com/Pinguladora/threagile \
+  "${ARCHIVE}"
+'''

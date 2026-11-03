@@ -1,0 +1,146 @@
+version: "2"
+run:
+  tests: true
+  go: "1.26"
+  concurrency: 4
+  timeout: 10m
+
+linters:
+  default: none
+  enable:
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - containedctx
+    - contextcheck
+    - cyclop
+    - dogsled
+    - dupl
+    - dupword
+    - durationcheck
+    - errcheck
+    - errname
+    - exptostd
+    - fatcontext
+    - forcetypeassert
+    - funlen
+    - gochecknoinits
+    - gocritic
+    - gocognit
+    - goconst
+    - godoclint
+    - godot
+    - godox
+    - gosec
+    - govet
+    - ineffassign
+    - interfacebloat
+    - intrange
+    - lll
+    - mnd
+    - modernize
+    - musttag
+    - nilerr
+    - nilnil
+    - noctx
+    - nolintlint
+    - perfsprint
+    - prealloc
+    - predeclared
+    - recvcheck
+    - revive
+    - spancheck
+    - staticcheck
+    - tagalign
+    - thelper
+    - unconvert
+    - unparam
+    - unused
+    - usestdlibvars
+    - usetesting
+    - whitespace
+    - wrapcheck
+    - zerologlint
+  settings:
+    # fieldalignment is left off: reordering struct fields changes the field order
+    # of the JSON and YAML that threagile writes (risks.json, macro-edited models).
+    govet:
+      enable-all: false
+    goconst:
+      min-len: 3
+      min-occurrences: 3
+    godox:
+      keywords: [TODO, BUG, FIXME, OPTIMIZE, HACK]
+    interfacebloat:
+      max: 5
+    nolintlint:
+      require-explanation: false
+      require-specific: true
+      allow-unused: false
+    # The string-builder rewrites are off: the stringsbuilder autofix mis-nests
+    # builders for nested loops (it moved the ids outside their `{ rank=same; }`
+    # group in the Graphviz same-rank tweak), and these strings are small.
+    # omitzero is off too: switching omitempty to omitzero on nested structs would
+    # change which fields threagile writes into JSON and YAML.
+    modernize:
+      disable: [stringsbuilder, omitzero]
+    # File modes (0o700, 0o600, ...) are self-describing.
+    mnd:
+      ignored-functions:
+        - ^os\.(Mkdir|MkdirAll|WriteFile|OpenFile|Chmod)$
+    perfsprint:
+      concat-loop: false
+      int-conversion: true
+      err-error: true
+      errorf: true
+      sprintf1: true
+      strconcat: true
+    revive:
+      max-open-files: 2048
+      confidence: 0.8
+      severity: warning
+      enable-all-rules: false
+      rules:
+        - name: context-as-argument
+        - name: defer
+        - name: unexported-return
+    usetesting:
+      os-mkdir-temp: true
+      os-setenv: true
+      os-temp-dir: true
+      os-create-temp: true
+  exclusions:
+    generated: lax
+    rules:
+      - linters: [goconst]
+        path: (.+)_test\.go
+      - linters: [gosec]
+        text: "G204:"
+      - linters: [nilnil, wrapcheck, funlen, gocognit, cyclop, mnd, dupl, lll]
+        path: (.+)_test\.go
+      # The PDF and Excel report writers position every element with literal
+      # coordinates, sizes and colours; naming each one would not make the layout
+      # any clearer.
+      - linters: [mnd]
+        path: ^pkg/report/
+      # tagalign pads struct tags into columns, which pushes tagged fields past the
+      # line limit; the two linters cannot both be satisfied on those lines.
+      - linters: [lll]
+        source: '`(json|yaml):"'
+    paths: [third_party$, builtin$, examples$]
+formatters:
+  enable: [gci, gofumpt, goimports]
+  settings:
+    gci:
+      sections:
+        - standard
+        - default
+      custom-order: true
+  exclusions:
+    generated: lax
+    paths: [third_party$, builtin$, examples$]
+issues:
+  new: false
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  uniq-by-line: false

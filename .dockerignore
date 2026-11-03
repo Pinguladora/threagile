@@ -1,9 +1,0 @@
-**/.git
-**/.gitignore
-**/.DS_Store
-**/*.tmp
-
-.github
-.dockerignore
-Dockerfile
-Dockerfile.*

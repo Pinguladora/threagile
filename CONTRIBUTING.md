@@ -14,13 +14,33 @@ Thank you so much! :clap:
 
 ## Development
 
-Before running the project please install
+The toolchain is pinned with [mise](https://mise.jdx.dev/). Install mise, then from
+the repository root:
 
-- [go 1.24.2](https://go.dev/doc/install)
-- [Docker](https://docs.docker.com/engine/install/)
-- [pre-commit](https://pre-commit.com/)
-- [golangci-lint](https://golangci-lint.run/welcome/install/#local-installation)
-- [goimports](https://pkg.go.dev/golang.org/x/tools/cmd/goimports)
+```sh
+mise trust     # once: allow this repository's mise config
+mise install   # installs go, golangci-lint, goreleaser, hk, ... and the git hooks
+```
+
+`mise install` also runs `hk install --mise`, so the [hk](https://hk.jdx.dev/) hooks
+check formatting, YAML, secrets and Conventional Commit messages on commit, and run
+golangci-lint, the tests and the GitHub Actions audits before push.
+
+Common tasks (`mise tasks` lists them all):
+
+| Task | What it does |
+| --- | --- |
+| `mise run check` | The pre-commit gate: gofmt, vet, build, test, lint |
+| `mise run analyze [model.yaml]` | Analyse a model (default: the bundled example) into `out/` |
+| `mise run serve` | Run the REST server and model editor on :8080 |
+| `mise run snapshot` | Local GoReleaser build of every release archive into `dist/` |
+| `mise run debt` | Full lint report, including the findings inherited from upstream |
+
+Lint only fails on findings introduced since `main`; the code inherited from
+upstream still carries findings that are being burned down separately.
+
+Diagram rendering currently calls the Graphviz `dot` binary, so `analyze` needs
+Graphviz on your `PATH` (for example `mise exec conda:graphviz -- mise run analyze`).
 
 Main program is [threagile](./cmd/threagile/main.go).
 
@@ -148,4 +168,4 @@ To contribute the code simply make changes and create pull request. There is no 
 - it is easy to understand what the code change is achieving and why it was added
 - new change is covered with unit tests
 
-Before commiting the code please install [pre-commit](https://pre-commit.com/) and run ```pre-commit install``` to ensure that checks are running every time before commit.
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/); the hk `commit-msg` hook checks them, and releases are versioned from them with Cocogitto.
