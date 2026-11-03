@@ -7,7 +7,7 @@
 | `-config`                        | string(path to file)           | path to config file (more details [here](./config.md))                                      | ""             |
 | `-model`                         | string(path to file)           | path to threagile model (more details [here](./model.md))                                   | threagile.yaml |
 | `-interactive` or `--i`          | bool                           | turn on [interactive mode](./mode-interactive.md)                                           | false          |
-| `-app-dir`                       | string(path to directory)      | path to directory where all support files (example models, license, schema etc) are located | /app           |
+| `-app-dir`                       | string(path to directory)      | optional directory with support files (example models, license, schema etc) that override the copies embedded in the binary | /app           |
 | `-output`                        | string(path to directory)      | path to directory where generated results will be saved                                     | ""             |
 | `-tmp-dir`                       | string(path to directory)      | path to directory where temporary files will be created                                     | dev/shm        |
 | `-ignore-orphaned-risk-tracking` | bool                           | do not fail the application when risk tracking does not match any risk id                   | false          |
@@ -22,8 +22,8 @@ This flags is used when application run in [analyze mode](./mode-analyze.md)
 | Flag                              | Type                 | Description                                                        | Default Value             |
 |-----------------------------------|----------------------|--------------------------------------------------------------------| --------------------------|
 | `-diagram-dpi`                    | int                  | [GraphViz dpi](https://graphviz.org/docs/attrs/dpi/)               | 100                       |
-| `-background`                     | string(path to file) | path to pdf which will be used as background during pdf generation | background.pdf            |
-| `-reportLogoImagePath`            | string(path to file) | path to logo image file which will be used in adoc report          | report/threagile-logo.png |
+| `-background`                     | string(path to file) | path to pdf which will be used as background during pdf generation (a relative path is looked up in `-app-dir`; while left at the default and absent there, the embedded background is used) | background.pdf            |
+| `-reportLogoImagePath`            | string(path to file) | path to logo image file which will be used in adoc report (while left at the default and absent, the embedded logo is used) | report/threagile-logo.png |
 | `-generate-data-flow-diagram`     | bool                 | specify if data flow diagram shall be generated                    | true                      |
 | `-generate-data-asset-diagram`    | bool                 | specify if data asset diagram shall be generated                   | true                      |
 | `-generate-risks-json`            | bool                 | specify if JSON with risks shall be generated                      | true                      |
@@ -40,5 +40,5 @@ This flags is used when application run in [server mode](./mode-server.md)
 
 | Flag           | Type                      | Description                                             | Default Value  |
 |----------------|---------------------------|---------------------------------------------------------| ---------------|
-| `-server-dir`  | string(path to directory) | path to directory where static server files are located | /server        |
+| `-server-dir`  | string(path to directory) | path to directory where the server stores its data, such as the API keys (the web UI is embedded in the binary) | /data          |
 | `-server-port` | int                       | which port will be used to run the server               | 8080           |
