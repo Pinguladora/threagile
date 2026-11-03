@@ -77,7 +77,7 @@ func (what *Authorization) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (what Authorization) MarshalYAML() (interface{}, error) {
+func (what Authorization) MarshalYAML() (any, error) {
 	return what.String(), nil
 }
 

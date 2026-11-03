@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"slices"
 
 	"github.com/threagile/threagile/pkg/model"
 	"github.com/threagile/threagile/pkg/types"
@@ -86,8 +87,8 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 	generateDataFlowDiagram := commands.DataFlowDiagram
 	generateDataAssetsDiagram := commands.DataAssetDiagram
 
-	_ = os.MkdirAll(filepath.Clean(config.GetOutputFolder()), 0750)
-	_ = os.MkdirAll(filepath.Clean(config.GetTempFolder()), 0700)
+	_ = os.MkdirAll(filepath.Clean(config.GetOutputFolder()), 0o750)
+	_ = os.MkdirAll(filepath.Clean(config.GetTempFolder()), 0o700)
 
 	if commands.ReportPDF || commands.ReportADOC { // as the PDF report includes both diagrams
 		if !generateDataFlowDiagram {
@@ -279,10 +280,5 @@ type progressReporter interface {
 }
 
 func contains(a []string, x string) bool {
-	for _, n := range a {
-		if x == n {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(a, x)
 }

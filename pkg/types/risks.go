@@ -50,7 +50,6 @@ func SortByRiskSeverity(risks []*Risk) {
 			}
 		}
 		return risks[i].Severity > risks[j].Severity
-
 	})
 }
 
@@ -60,6 +59,7 @@ func (what ByRiskCategoryTitleSort) Len() int { return len(what) }
 func (what ByRiskCategoryTitleSort) Swap(i, j int) {
 	what[i], what[j] = what[j], what[i]
 }
+
 func (what ByRiskCategoryTitleSort) Less(i, j int) bool {
 	return what[i].Title < what[j].Title
 }

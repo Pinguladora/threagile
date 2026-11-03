@@ -8,7 +8,6 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-
 	"github.com/threagile/threagile/pkg/macros"
 	"github.com/threagile/threagile/pkg/model"
 	"github.com/threagile/threagile/pkg/risks"

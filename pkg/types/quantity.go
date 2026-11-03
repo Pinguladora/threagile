@@ -89,7 +89,7 @@ func (what *Quantity) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (what Quantity) MarshalYAML() (interface{}, error) {
+func (what Quantity) MarshalYAML() (any, error) {
 	return what.String(), nil
 }
 

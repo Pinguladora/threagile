@@ -1,6 +1,7 @@
 package report
 
 import (
+	"errors"
 	"fmt"
 	"image"
 	"io"
@@ -89,11 +90,11 @@ func writeLine(file *os.File, line string) {
 }
 
 func (adoc adocReport) writeDefaultTheme(logoImagePath string) error {
-	err := os.MkdirAll(filepath.Join(adoc.targetDirectory, "theme"), 0750)
+	err := os.MkdirAll(filepath.Join(adoc.targetDirectory, "theme"), 0o750)
 	if err != nil {
 		return err
 	}
-	err = os.MkdirAll(adoc.imagesDir, 0750)
+	err = os.MkdirAll(adoc.imagesDir, 0o750)
 	if err != nil {
 		return err
 	}
@@ -126,9 +127,11 @@ title-page:
     content: "{author}, {author-homepage}[]"
 `)
 	if adocLogoPath != "" {
+		// "image:" is both the asciidoctor-pdf theme key and the image macro. They are
+		// split into two literals so dupword does not "fix" the repeat away.
 		writeLine(theme,
 			`  logo:
-    image: image:`+adocLogoPath+`[]`)
+    image: `+"image:"+adocLogoPath+`[]`)
 	}
 	writeLine(theme,
 		`header:
@@ -215,8 +218,8 @@ func (adoc adocReport) WriteReport(model *types.Model,
 	introTextRAA string,
 	customRiskRules types.RiskRules,
 	logoImagePath string,
-	hideChapters map[ChaptersToShowHide]bool) error {
-
+	hideChapters map[ChaptersToShowHide]bool,
+) error {
 	adoc.model = model
 	err := adoc.initReport()
 	if err != nil {
@@ -327,7 +330,7 @@ func (adoc adocReport) WriteReport(model *types.Model,
 	}
 	err = adoc.writeAppendixRating()
 	if err != nil {
-		return fmt.Errorf("error creating appendix for the rating mappings")
+		return errors.New("error creating appendix for the rating mappings")
 	}
 	err = adoc.writeDisclaimer()
 	if err != nil {
@@ -338,7 +341,7 @@ func (adoc adocReport) WriteReport(model *types.Model,
 
 func (adoc *adocReport) initReport() error {
 	_ = os.RemoveAll(adoc.targetDirectory)
-	err := os.MkdirAll(adoc.targetDirectory, 0750)
+	err := os.MkdirAll(adoc.targetDirectory, 0o750)
 	if err != nil {
 		return err
 	}
@@ -582,7 +585,6 @@ func (adoc adocReport) addCategories(f *os.File, risksByCategory map[string][]*t
 }
 
 func (adoc adocReport) impactAnalysis(f *os.File, initialRisks bool) int {
-
 	count := 0
 	catCount := 0
 	initialStr := ""
@@ -639,7 +641,6 @@ func (adoc adocReport) writeImpactInitialRisks() error {
 }
 
 func (adoc adocReport) riskMitigationStatus(f *os.File) {
-
 	writeLine(f, "= Risk Mitigation")
 	writeLine(f, "The following chart gives a high-level overview of the risk tracking status (including mitigated risks):")
 
@@ -807,7 +808,6 @@ func (adoc adocReport) assetRegister(f *os.File) {
 	writeLine(f, "== Technical Assets")
 	writeLine(f, "")
 	for _, technicalAsset := range sortedTechnicalAssetsByTitle(adoc.model) {
-
 		fullLine := "<<" + technicalAsset.Id + ",*" + technicalAsset.Title + "*"
 		if technicalAsset.OutOfScope {
 			fullLine += ": out-of-scope"
@@ -1615,7 +1615,7 @@ func (adoc adocReport) riskCategories(f *os.File) {
 			lastLinkParts := strings.Split(cheatSheetLink, "/")
 			linkText := lastLinkParts[len(lastLinkParts)-1]
 			if strings.HasSuffix(linkText, ".html") || strings.HasSuffix(linkText, ".htm") {
-				var extension = filepath.Ext(linkText)
+				extension := filepath.Ext(linkText)
 				linkText = linkText[0 : len(linkText)-len(extension)]
 			}
 			cheatSheetLink = cheatSheetLink + "[" + linkText + "]"
@@ -1691,7 +1691,7 @@ func joinedOrNoneString(strs []string, noneValue string) string {
 		noneValue = "[GrayText]#none#"
 	}
 	sort.Strings(strs)
-	singleLine := strings.Join(strs[:], ", ")
+	singleLine := strings.Join(strs, ", ")
 	if len(singleLine) == 0 {
 		singleLine = noneValue
 	}
@@ -1916,7 +1916,6 @@ func (adoc adocReport) dataAssets(f *os.File) {
 	writeLine(f, "The following sub-chapters of this section describe the derived data breach probabilities grouped by data asset.") // TODO more explanation text
 	writeLine(f, "")
 	for _, dataAsset := range sortedDataAssetsByDataBreachProbabilityAndTitle(adoc.model) {
-
 		dataBreachProbability := identifiedDataBreachProbabilityStillAtRisk(adoc.model, dataAsset)
 		colorPrefix, colorSuffix := colorPrefixByDataBreachProbability(dataBreachProbability, false)
 		if !isDataBreachPotentialStillAtRisk(adoc.model, dataAsset) {
@@ -2038,7 +2037,6 @@ func (adoc adocReport) trustBoundaries(f *os.File) {
 |===
 `)
 	}
-
 }
 
 func (adoc adocReport) writeTrustBoundaries() error {

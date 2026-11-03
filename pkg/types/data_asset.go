@@ -5,18 +5,18 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package types
 
 type DataAsset struct {
-	Id                     string          `yaml:"id,omitempty" json:"id,omitempty"`                   // TODO: tag here still required?
-	Title                  string          `yaml:"title,omitempty" json:"title,omitempty"`             // TODO: tag here still required?
-	Description            string          `yaml:"description,omitempty" json:"description,omitempty"` // TODO: tag here still required?
-	Usage                  Usage           `yaml:"usage,omitempty" json:"usage,omitempty"`
-	Tags                   []string        `yaml:"tags,omitempty" json:"tags,omitempty"`
-	Origin                 string          `yaml:"origin,omitempty" json:"origin,omitempty"`
-	Owner                  string          `yaml:"owner,omitempty" json:"owner,omitempty"`
-	Quantity               Quantity        `yaml:"quantity,omitempty" json:"quantity,omitempty"`
-	Confidentiality        Confidentiality `yaml:"confidentiality,omitempty" json:"confidentiality,omitempty"`
-	Integrity              Criticality     `yaml:"integrity,omitempty" json:"integrity,omitempty"`
-	Availability           Criticality     `yaml:"availability,omitempty" json:"availability,omitempty"`
-	JustificationCiaRating string          `yaml:"justification_cia_rating,omitempty" json:"justification_cia_rating,omitempty"`
+	Id                     string          `json:"id,omitempty"                       yaml:"id,omitempty"`
+	Title                  string          `json:"title,omitempty"                    yaml:"title,omitempty"`
+	Description            string          `json:"description,omitempty"              yaml:"description,omitempty"`
+	Usage                  Usage           `json:"usage,omitempty"                    yaml:"usage,omitempty"`
+	Tags                   []string        `json:"tags,omitempty"                     yaml:"tags,omitempty"`
+	Origin                 string          `json:"origin,omitempty"                   yaml:"origin,omitempty"`
+	Owner                  string          `json:"owner,omitempty"                    yaml:"owner,omitempty"`
+	Quantity               Quantity        `json:"quantity,omitempty"                 yaml:"quantity,omitempty"`
+	Confidentiality        Confidentiality `json:"confidentiality,omitempty"          yaml:"confidentiality,omitempty"`
+	Integrity              Criticality     `json:"integrity,omitempty"                yaml:"integrity,omitempty"`
+	Availability           Criticality     `json:"availability,omitempty"             yaml:"availability,omitempty"`
+	JustificationCiaRating string          `json:"justification_cia_rating,omitempty" yaml:"justification_cia_rating,omitempty"`
 }
 
 func (what DataAsset) IsTaggedWithAny(tags ...string) bool {

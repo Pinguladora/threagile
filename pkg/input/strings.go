@@ -2,17 +2,17 @@ package input
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"slices"
 	"strings"
+
+	"gopkg.in/yaml.v3"
 )
 
 const (
 	lineSeparator = "\n<br><br>\n"
 )
 
-type Strings struct {
-}
+type Strings struct{}
 
 func (what *Strings) MergeSingleton(first string, second string) (string, error) {
 	if len(first) > 0 {

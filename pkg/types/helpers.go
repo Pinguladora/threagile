@@ -6,6 +6,7 @@ package types
 
 import (
 	"regexp"
+	"slices"
 	"strings"
 )
 
@@ -15,12 +16,7 @@ func MakeID(val string) string {
 }
 
 func contains(a []string, x string) bool {
-	for _, n := range a {
-		if x == n {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(a, x)
 }
 
 func containsCaseInsensitiveAny(a []string, x ...string) bool {

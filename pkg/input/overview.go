@@ -1,8 +1,8 @@
 package input
 
 type Overview struct {
-	Description string              `yaml:"description,omitempty" json:"description,omitempty"`
-	Images      []map[string]string `yaml:"images,omitempty" json:"images,omitempty"` // yes, array of map here, as array keeps the order of the image keys
+	Description string              `json:"description,omitempty" yaml:"description,omitempty"`
+	Images      []map[string]string `json:"images,omitempty"      yaml:"images,omitempty"` // yes, array of map here, as array keeps the order of the image keys
 }
 
 func (what *Overview) Merge(other Overview) error {

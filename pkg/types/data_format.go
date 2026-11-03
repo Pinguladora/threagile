@@ -67,8 +67,10 @@ func (what DataFormat) Title() string {
 }
 
 func (what DataFormat) Description() string {
-	return [...]string{"JSON marshalled object data", "XML structured data", "Serialization-based object graphs",
-		"File input/uploads", "CSV tabular data", "YAML structured configuration format"}[what]
+	return [...]string{
+		"JSON marshalled object data", "XML structured data", "Serialization-based object graphs",
+		"File input/uploads", "CSV tabular data", "YAML structured configuration format",
+	}[what]
 }
 
 type ByDataFormatAcceptedSort []DataFormat
@@ -99,7 +101,7 @@ func (what *DataFormat) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (what DataFormat) MarshalYAML() (interface{}, error) {
+func (what DataFormat) MarshalYAML() (any, error) {
 	return what.String(), nil
 }
 

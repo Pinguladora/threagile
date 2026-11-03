@@ -100,10 +100,11 @@ func TestUnnecessaryCommnuicationLinkRuleRisksCreated(t *testing.T) {
 			"ta1": {
 				Id:    "ta1",
 				Title: "Test technical asset",
-				CommunicationLinks: []*types.CommunicationLink{{
-					Title:    "Test communication link",
-					TargetId: "ta2",
-				},
+				CommunicationLinks: []*types.CommunicationLink{
+					{
+						Title:    "Test communication link",
+						TargetId: "ta2",
+					},
 				},
 			},
 			"ta2": {

@@ -2,6 +2,7 @@ package statements
 
 import (
 	"fmt"
+
 	"github.com/threagile/threagile/pkg/risks/script/common"
 	"github.com/threagile/threagile/pkg/risks/script/expressions"
 )

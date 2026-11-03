@@ -1,6 +1,8 @@
 package builtin
 
 import (
+	"slices"
+
 	"github.com/threagile/threagile/pkg/types"
 )
 
@@ -91,10 +93,8 @@ func isSharingSameParentTrustBoundary(input *types.Model, left, right *types.Tec
 	tbLeft, tbRight := input.TrustBoundaries[tbIDLeft], input.TrustBoundaries[tbIDRight]
 	tbParentsLeft, tbParentsRight := input.AllParentTrustBoundaryIDs(tbLeft), input.AllParentTrustBoundaryIDs(tbRight)
 	for _, parentLeft := range tbParentsLeft {
-		for _, parentRight := range tbParentsRight {
-			if parentLeft == parentRight {
-				return true
-			}
+		if slices.Contains(tbParentsRight, parentLeft) {
+			return true
 		}
 	}
 	return false

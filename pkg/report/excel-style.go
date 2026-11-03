@@ -1,7 +1,7 @@
 package report
 
 import (
-	"fmt"
+	"errors"
 	"strings"
 
 	"github.com/threagile/threagile/pkg/types"
@@ -61,7 +61,7 @@ func (what *styleCreator) NewStyle(style *excelize.Style) int {
 
 func (what *ExcelStyles) Init(excel *excelize.File, config reportConfigReader) (*ExcelStyles, error) {
 	if excel == nil {
-		return what, fmt.Errorf("no excel file provided to create styles")
+		return what, errors.New("no excel file provided to create styles")
 	}
 
 	creator := new(styleCreator).Init(excel)

@@ -1,7 +1,9 @@
 package statements
 
 import (
+	"errors"
 	"fmt"
+
 	"github.com/threagile/threagile/pkg/risks/script/common"
 	"github.com/threagile/threagile/pkg/risks/script/expressions"
 )
@@ -60,7 +62,7 @@ func (what *IfStatement) parse(key any, value any, script any) (common.Statement
 
 	default:
 		if what.expression != nil {
-			return nil, script, fmt.Errorf("if-statement has multiple expressions")
+			return nil, script, errors.New("if-statement has multiple expressions")
 		}
 
 		item, errorScript, itemError := new(expressions.ExpressionList).ParseExpression(map[string]any{fmt.Sprintf("%v", key): value})

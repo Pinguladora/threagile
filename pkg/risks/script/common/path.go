@@ -1,7 +1,6 @@
 package common
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -23,7 +22,7 @@ func (what *Path) Copy() *Path {
 	}
 
 	return &Path{
-		Path: what.Path[:],
+		Path: what.Path,
 	}
 }
 
@@ -61,7 +60,7 @@ func (what *Path) String() string {
 
 	path := make([]string, 0)
 	for _, item := range what.Path {
-		path = append([]string{fmt.Sprintf("%v", item)}, path...)
+		path = append([]string{item}, path...)
 	}
 
 	return strings.Join(path, " of ")

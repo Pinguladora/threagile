@@ -2,6 +2,7 @@ package expressions
 
 import (
 	"fmt"
+
 	"github.com/shopspring/decimal"
 	"github.com/threagile/threagile/pkg/risks/script/common"
 )

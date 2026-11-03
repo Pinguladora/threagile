@@ -67,7 +67,7 @@ func (r *ServerSideRequestForgeryRule) createRisk(input *types.Model, technicalA
 		impact = types.MediumImpact
 	}
 	// check all potential attack targets within the same trust boundary (accessible via web protocols)
-	uniqueDataBreachTechnicalAssetIDs := make(map[string]interface{})
+	uniqueDataBreachTechnicalAssetIDs := make(map[string]any)
 	uniqueDataBreachTechnicalAssetIDs[technicalAsset.Id] = true
 	for _, potentialTargetAsset := range input.TechnicalAssets {
 		if !isSameTrustBoundaryNetworkOnly(input, technicalAsset, potentialTargetAsset.Id) {

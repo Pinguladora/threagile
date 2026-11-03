@@ -6,12 +6,12 @@ package types
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"testing"
 
-	"gopkg.in/yaml.v3"
-
 	"github.com/stretchr/testify/assert"
+	"gopkg.in/yaml.v3"
 )
 
 type ParseQuantityTest struct {
@@ -40,7 +40,7 @@ func TestParseQuantity(t *testing.T) {
 		},
 		"unknown": {
 			input:         "unknown",
-			expectedError: fmt.Errorf("unknown quantity value \"unknown\""),
+			expectedError: errors.New("unknown quantity value \"unknown\""),
 		},
 	}
 

@@ -85,7 +85,7 @@ func (what *DataBreachProbability) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (what DataBreachProbability) MarshalYAML() (interface{}, error) {
+func (what DataBreachProbability) MarshalYAML() (any, error) {
 	return what.String(), nil
 }
 

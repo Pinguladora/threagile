@@ -80,7 +80,7 @@ func (what *RiskFunction) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (what RiskFunction) MarshalYAML() (interface{}, error) {
+func (what RiskFunction) MarshalYAML() (any, error) {
 	return what.String(), nil
 }
 

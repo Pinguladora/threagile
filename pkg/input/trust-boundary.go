@@ -3,12 +3,12 @@ package input
 import "fmt"
 
 type TrustBoundary struct {
-	ID                    string   `yaml:"id,omitempty" json:"id,omitempty"`
-	Description           string   `yaml:"description,omitempty" json:"description,omitempty"`
-	Type                  string   `yaml:"type,omitempty" json:"type,omitempty"`
-	Tags                  []string `yaml:"tags,omitempty" json:"tags,omitempty"`
-	TechnicalAssetsInside []string `yaml:"technical_assets_inside,omitempty" json:"technical_assets_inside,omitempty"`
-	TrustBoundariesNested []string `yaml:"trust_boundaries_nested,omitempty" json:"trust_boundaries_nested,omitempty"`
+	ID                    string   `json:"id,omitempty"                      yaml:"id,omitempty"`
+	Description           string   `json:"description,omitempty"             yaml:"description,omitempty"`
+	Type                  string   `json:"type,omitempty"                    yaml:"type,omitempty"`
+	Tags                  []string `json:"tags,omitempty"                    yaml:"tags,omitempty"`
+	TechnicalAssetsInside []string `json:"technical_assets_inside,omitempty" yaml:"technical_assets_inside,omitempty"`
+	TrustBoundariesNested []string `json:"trust_boundaries_nested,omitempty" yaml:"trust_boundaries_nested,omitempty"`
 }
 
 func (what *TrustBoundary) Merge(other TrustBoundary) error {

@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
 	"github.com/threagile/threagile/pkg/types"
 )
 
@@ -222,7 +221,6 @@ func Test_isSameExecutionEnvironment_TrustBoundariesAreSameReturnTrue(t *testing
 }
 
 func Test_isSameExecutionEnvironment_TrustBoundariesAreNotBothExecutionEnvironmentReturnFalse(t *testing.T) {
-
 	tests := []struct {
 		name                        string
 		assetTrustBoundaryType      types.TrustBoundaryType

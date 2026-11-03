@@ -2,12 +2,12 @@ package expressions
 
 import (
 	"fmt"
-	"github.com/threagile/threagile/pkg/risks/script/common"
 	"regexp"
 	"strconv"
 	"strings"
 
 	"github.com/shopspring/decimal"
+	"github.com/threagile/threagile/pkg/risks/script/common"
 )
 
 type ValueExpression struct {
@@ -368,7 +368,7 @@ func (what *ValueExpression) resolveMethodCall(scope *common.Scope, reString str
 	args := make([]common.Value, 0)
 	if len(strings.TrimSpace(match[2])) > 0 {
 		// todo: better arg parsing for '{var1}, {var2}'
-		for _, arg := range strings.Split(match[2], ",") {
+		for arg := range strings.SplitSeq(match[2], ",") {
 			val, errorLiteral, evalError := what.evalStringReference(scope, common.SomeStringValue(strings.TrimSpace(arg), value.Event()))
 			if evalError != nil {
 				return nil, errorLiteral, fmt.Errorf("failed to eval method parameter: %w", evalError)

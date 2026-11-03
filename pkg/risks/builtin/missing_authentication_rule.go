@@ -81,7 +81,9 @@ func (r *MissingAuthenticationRule) calculateImpact(commLink *types.Communicatio
 }
 
 func (r *MissingAuthenticationRule) createRisk(input *types.Model, technicalAsset *types.TechnicalAsset, incomingAccess, incomingAccessOrigin *types.CommunicationLink, hopBetween string,
-	impact types.RiskExploitationImpact, likelihood types.RiskExploitationLikelihood, twoFactor bool, category *types.RiskCategory) *types.Risk {
+	impact types.RiskExploitationImpact, likelihood types.RiskExploitationLikelihood,
+	twoFactor bool, category *types.RiskCategory,
+) *types.Risk {
 	factorString := ""
 	if twoFactor {
 		factorString = "Two-Factor "

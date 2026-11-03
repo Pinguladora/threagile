@@ -3,10 +3,10 @@ package input
 import "fmt"
 
 type SharedRuntime struct {
-	ID                     string   `yaml:"id,omitempty" json:"id,omitempty"`
-	Description            string   `yaml:"description,omitempty" json:"description,omitempty"`
-	Tags                   []string `yaml:"tags,omitempty" json:"tag,omitempty"`
-	TechnicalAssetsRunning []string `yaml:"technical_assets_running,omitempty" json:"technical_assets_running,omitempty"`
+	ID                     string   `json:"id,omitempty"                       yaml:"id,omitempty"`
+	Description            string   `json:"description,omitempty"              yaml:"description,omitempty"`
+	Tags                   []string `json:"tag,omitempty"                      yaml:"tags,omitempty"`
+	TechnicalAssetsRunning []string `json:"technical_assets_running,omitempty" yaml:"technical_assets_running,omitempty"`
 }
 
 func (what *SharedRuntime) Merge(other SharedRuntime) error {

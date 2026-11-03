@@ -1,9 +1,11 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"strings"
 	"time"
 
@@ -35,7 +37,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 		var parseError error
 		reportDate, parseError = time.Parse("2006-01-02", modelInput.Date)
 		if parseError != nil {
-			return nil, fmt.Errorf("unable to parse 'date' value of model file (expected format: '2006-01-02')")
+			return nil, errors.New("unable to parse 'date' value of model file (expected format: '2006-01-02')")
 		}
 	}
 
@@ -80,7 +82,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 	// Data Assets ===============================================================================
 	parsedModel.DataAssets = make(map[string]*types.DataAsset)
 	for title, asset := range modelInput.DataAssets {
-		id := fmt.Sprintf("%v", asset.ID)
+		id := asset.ID
 
 		usage, err := types.ParseUsage(asset.Usage)
 		if err != nil {
@@ -118,32 +120,32 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 			Id:                     id,
 			Title:                  title,
 			Usage:                  usage,
-			Description:            withDefault(fmt.Sprintf("%v", asset.Description), title),
+			Description:            withDefault(asset.Description, title),
 			Quantity:               quantity,
 			Tags:                   tags,
-			Origin:                 fmt.Sprintf("%v", asset.Origin),
-			Owner:                  fmt.Sprintf("%v", asset.Owner),
+			Origin:                 asset.Origin,
+			Owner:                  asset.Owner,
 			Confidentiality:        confidentiality,
 			Integrity:              integrity,
 			Availability:           availability,
-			JustificationCiaRating: fmt.Sprintf("%v", asset.JustificationCiaRating),
+			JustificationCiaRating: asset.JustificationCiaRating,
 		}
 	}
 
 	// Technical Assets ===============================================================================
 	parsedModel.TechnicalAssets = make(map[string]*types.TechnicalAsset)
 	for title, asset := range modelInput.TechnicalAssets {
-		id := fmt.Sprintf("%v", asset.ID)
+		id := asset.ID
 
 		usage, err := types.ParseUsage(asset.Usage)
 		if err != nil {
 			return nil, fmt.Errorf("unknown 'usage' value of technical asset %q: %v", title, asset.Usage)
 		}
 
-		var dataAssetsStored = make([]string, 0)
+		dataAssetsStored := make([]string, 0)
 		if asset.DataAssetsStored != nil {
 			for _, parsedStoredAssets := range asset.DataAssetsStored {
-				referencedAsset := fmt.Sprintf("%v", parsedStoredAssets)
+				referencedAsset := parsedStoredAssets
 				if contains(dataAssetsStored, referencedAsset) {
 					continue
 				}
@@ -156,10 +158,10 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 			}
 		}
 
-		var dataAssetsProcessed = dataAssetsStored
+		dataAssetsProcessed := dataAssetsStored
 		if asset.DataAssetsProcessed != nil {
 			for _, parsedProcessedAsset := range asset.DataAssetsProcessed {
-				referencedAsset := fmt.Sprintf("%v", parsedProcessedAsset)
+				referencedAsset := parsedProcessedAsset
 				if contains(dataAssetsProcessed, referencedAsset) {
 					continue
 				}
@@ -254,7 +256,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 
 				if commLink.DataAssetsSent != nil {
 					for _, dataAssetSent := range commLink.DataAssetsSent {
-						referencedAsset := fmt.Sprintf("%v", dataAssetSent)
+						referencedAsset := dataAssetSent
 						if !contains(dataAssetsSent, referencedAsset) {
 							err := parsedModel.CheckDataAssetTargetExists(referencedAsset, fmt.Sprintf("communication link %q of technical asset %q", commLinkTitle, title))
 							if err != nil {
@@ -271,7 +273,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 
 				if commLink.DataAssetsReceived != nil {
 					for _, dataAssetReceived := range commLink.DataAssetsReceived {
-						referencedAsset := fmt.Sprintf("%v", dataAssetReceived)
+						referencedAsset := dataAssetReceived
 						if contains(dataAssetsReceived, referencedAsset) {
 							continue
 						}
@@ -292,7 +294,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 					weight = commLink.DiagramTweakWeight
 				}
 
-				dataFlowTitle := fmt.Sprintf("%v", commLinkTitle)
+				dataFlowTitle := commLinkTitle
 				commLinkId, err := createDataFlowId(id, dataFlowTitle)
 				if err != nil {
 					return nil, err
@@ -343,8 +345,8 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 		parsedModel.TechnicalAssets[id] = &types.TechnicalAsset{
 			Id:                      id,
 			Usage:                   usage,
-			Title:                   title, //fmt.Sprintf("%v", asset["title"]),
-			Description:             withDefault(fmt.Sprintf("%v", asset.Description), title),
+			Title:                   title, // fmt.Sprintf("%v", asset["title"]),
+			Description:             withDefault(asset.Description, title),
 			Type:                    technicalAssetType,
 			Size:                    technicalAssetSize,
 			Technologies:            technicalAssetTechnologies,
@@ -357,12 +359,12 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 			CustomDevelopedParts:    asset.CustomDevelopedParts,
 			UsedAsClientByHuman:     asset.UsedAsClientByHuman,
 			OutOfScope:              asset.OutOfScope,
-			JustificationOutOfScope: fmt.Sprintf("%v", asset.JustificationOutOfScope),
-			Owner:                   fmt.Sprintf("%v", asset.Owner),
+			JustificationOutOfScope: asset.JustificationOutOfScope,
+			Owner:                   asset.Owner,
 			Confidentiality:         confidentiality,
 			Integrity:               integrity,
 			Availability:            availability,
-			JustificationCiaRating:  fmt.Sprintf("%v", asset.JustificationCiaRating),
+			JustificationCiaRating:  asset.JustificationCiaRating,
 			DataAssetsProcessed:     dataAssetsProcessed,
 			DataAssetsStored:        dataAssetsStored,
 			DataFormatsAccepted:     dataFormatsAccepted,
@@ -421,9 +423,9 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 	checklistToAvoidAssetBeingModeledInMultipleTrustBoundaries := make(map[string]bool)
 	parsedModel.TrustBoundaries = make(map[string]*types.TrustBoundary)
 	for title, boundary := range modelInput.TrustBoundaries {
-		id := fmt.Sprintf("%v", boundary.ID)
+		id := boundary.ID
 
-		var technicalAssetsInside = make([]string, 0)
+		technicalAssetsInside := make([]string, 0)
 		if boundary.TechnicalAssetsInside != nil {
 			parsedInsideAssets := boundary.TechnicalAssetsInside
 			technicalAssetsInside = make([]string, len(parsedInsideAssets))
@@ -437,16 +439,16 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 					return nil, fmt.Errorf("referenced technical asset %q at trust boundary %q is modeled in multiple trust boundaries", technicalAssetsInside[i], title)
 				}
 				checklistToAvoidAssetBeingModeledInMultipleTrustBoundaries[technicalAssetsInside[i]] = true
-				//fmt.Println("asset "+technicalAssetsInside[i]+" at i="+strconv.Itoa(i))
+				// fmt.Println("asset "+technicalAssetsInside[i]+" at i="+strconv.Itoa(i))
 			}
 		}
 
-		var trustBoundariesNested = make([]string, 0)
+		trustBoundariesNested := make([]string, 0)
 		if boundary.TrustBoundariesNested != nil {
 			parsedNestedBoundaries := boundary.TrustBoundariesNested
 			trustBoundariesNested = make([]string, len(parsedNestedBoundaries))
 			for i, parsedNestedBoundary := range parsedNestedBoundaries {
-				trustBoundariesNested[i] = fmt.Sprintf("%v", parsedNestedBoundary)
+				trustBoundariesNested[i] = parsedNestedBoundary
 			}
 		}
 
@@ -460,8 +462,8 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 		}
 		trustBoundary := &types.TrustBoundary{
 			Id:                    id,
-			Title:                 title, //fmt.Sprintf("%v", boundary["title"]),
-			Description:           withDefault(fmt.Sprintf("%v", boundary.Description), title),
+			Title:                 title, // fmt.Sprintf("%v", boundary["title"]),
+			Description:           withDefault(boundary.Description, title),
 			Type:                  trustBoundaryType,
 			Tags:                  tags,
 			TechnicalAssetsInside: technicalAssetsInside,
@@ -477,7 +479,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 		parsedModel.TrustBoundaries[id] = trustBoundary
 		for _, technicalAsset := range trustBoundary.TechnicalAssetsInside {
 			parsedModel.DirectContainingTrustBoundaryMappedByTechnicalAssetId[technicalAsset] = trustBoundary
-			//fmt.Println("Asset "+technicalAsset+" is directly in trust boundary "+trustBoundary.ID)
+			// fmt.Println("Asset "+technicalAsset+" is directly in trust boundary "+trustBoundary.ID)
 		}
 	}
 	err = parsedModel.CheckNestedTrustBoundariesExisting()
@@ -488,14 +490,14 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 	// Shared Runtime ===============================================================================
 	parsedModel.SharedRuntimes = make(map[string]*types.SharedRuntime)
 	for title, inputRuntime := range modelInput.SharedRuntimes {
-		id := fmt.Sprintf("%v", inputRuntime.ID)
+		id := inputRuntime.ID
 
-		var technicalAssetsRunning = make([]string, 0)
+		technicalAssetsRunning := make([]string, 0)
 		if inputRuntime.TechnicalAssetsRunning != nil {
 			parsedRunningAssets := inputRuntime.TechnicalAssetsRunning
 			technicalAssetsRunning = make([]string, len(parsedRunningAssets))
 			for i, parsedRunningAsset := range parsedRunningAssets {
-				assetId := fmt.Sprintf("%v", parsedRunningAsset)
+				assetId := parsedRunningAsset
 				err := parsedModel.CheckTechnicalAssetExists(assetId, "shared runtime '"+title+"'", false)
 				if err != nil {
 					return nil, err
@@ -509,8 +511,8 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 		}
 		sharedRuntime := &types.SharedRuntime{
 			Id:                     id,
-			Title:                  title, //fmt.Sprintf("%v", boundary["title"]),
-			Description:            withDefault(fmt.Sprintf("%v", inputRuntime.Description), title),
+			Title:                  title, // fmt.Sprintf("%v", boundary["title"]),
+			Description:            withDefault(inputRuntime.Description, title),
 			Tags:                   tags,
 			TechnicalAssetsRunning: technicalAssetsRunning,
 		}
@@ -577,7 +579,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 		}
 
 		// NOW THE INDIVIDUAL RISK INSTANCES:
-		//individualRiskInstances := make([]model.Risk, 0)
+		// individualRiskInstances := make([]model.Risk, 0)
 		if customRiskCategoryCategory.RisksIdentified != nil { // TODO: also add syntax checks of input YAML when linked asset is not found or when synthetic-id is already used...
 			for title, individualRiskInstance := range customRiskCategoryCategory.RisksIdentified {
 				var mostRelevantDataAssetId, mostRelevantTechnicalAssetId, mostRelevantCommunicationLinkId, mostRelevantTrustBoundaryId, mostRelevantSharedRuntimeId string
@@ -597,7 +599,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 				}
 
 				if len(individualRiskInstance.MostRelevantDataAsset) > 0 {
-					mostRelevantDataAssetId = fmt.Sprintf("%v", individualRiskInstance.MostRelevantDataAsset)
+					mostRelevantDataAssetId = individualRiskInstance.MostRelevantDataAsset
 					err := parsedModel.CheckDataAssetTargetExists(mostRelevantDataAssetId, fmt.Sprintf("individual risk %q", title))
 					if err != nil {
 						return nil, err
@@ -605,7 +607,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 				}
 
 				if len(individualRiskInstance.MostRelevantTechnicalAsset) > 0 {
-					mostRelevantTechnicalAssetId = fmt.Sprintf("%v", individualRiskInstance.MostRelevantTechnicalAsset)
+					mostRelevantTechnicalAssetId = individualRiskInstance.MostRelevantTechnicalAsset
 					err := parsedModel.CheckTechnicalAssetExists(mostRelevantTechnicalAssetId, fmt.Sprintf("individual risk %q", title), false)
 					if err != nil {
 						return nil, err
@@ -613,7 +615,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 				}
 
 				if len(individualRiskInstance.MostRelevantCommunicationLink) > 0 {
-					mostRelevantCommunicationLinkId = fmt.Sprintf("%v", individualRiskInstance.MostRelevantCommunicationLink)
+					mostRelevantCommunicationLinkId = individualRiskInstance.MostRelevantCommunicationLink
 					err := parsedModel.CheckCommunicationLinkExists(mostRelevantCommunicationLinkId, fmt.Sprintf("individual risk %q", title))
 					if err != nil {
 						return nil, err
@@ -621,7 +623,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 				}
 
 				if len(individualRiskInstance.MostRelevantTrustBoundary) > 0 {
-					mostRelevantTrustBoundaryId = fmt.Sprintf("%v", individualRiskInstance.MostRelevantTrustBoundary)
+					mostRelevantTrustBoundaryId = individualRiskInstance.MostRelevantTrustBoundary
 					err := parsedModel.CheckTrustBoundaryExists(mostRelevantTrustBoundaryId, fmt.Sprintf("individual risk %q", title))
 					if err != nil {
 						return nil, err
@@ -629,7 +631,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 				}
 
 				if len(individualRiskInstance.MostRelevantSharedRuntime) > 0 {
-					mostRelevantSharedRuntimeId = fmt.Sprintf("%v", individualRiskInstance.MostRelevantSharedRuntime)
+					mostRelevantSharedRuntimeId = individualRiskInstance.MostRelevantSharedRuntime
 					err := parsedModel.CheckSharedRuntimeExists(mostRelevantSharedRuntimeId, fmt.Sprintf("individual risk %q", title))
 					if err != nil {
 						return nil, err
@@ -644,7 +646,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 				if individualRiskInstance.DataBreachTechnicalAssets != nil {
 					dataBreachTechnicalAssetIDs = make([]string, len(individualRiskInstance.DataBreachTechnicalAssets))
 					for i, parsedReferencedAsset := range individualRiskInstance.DataBreachTechnicalAssets {
-						assetId := fmt.Sprintf("%v", parsedReferencedAsset)
+						assetId := parsedReferencedAsset
 						err := parsedModel.CheckTechnicalAssetExists(assetId, fmt.Sprintf("data breach technical assets of individual risk %q", title), false)
 						if err != nil {
 							return nil, err
@@ -675,9 +677,9 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 	// Risk Tracking ===============================================================================
 	parsedModel.RiskTracking = make(map[string]*types.RiskTracking)
 	for syntheticRiskId, riskTracking := range modelInput.RiskTracking {
-		justification := fmt.Sprintf("%v", riskTracking.Justification)
-		checkedBy := fmt.Sprintf("%v", riskTracking.CheckedBy)
-		ticket := fmt.Sprintf("%v", riskTracking.Ticket)
+		justification := riskTracking.Justification
+		checkedBy := riskTracking.CheckedBy
+		ticket := riskTracking.Ticket
 		var date time.Time
 		if len(riskTracking.Date) > 0 {
 			var parseError error
@@ -769,7 +771,9 @@ func createDataFlowId(sourceAssetId, title string) (string, error) {
 }
 
 func createSyntheticId(categoryId string,
-	mostRelevantDataAssetId, mostRelevantTechnicalAssetId, mostRelevantCommunicationLinkId, mostRelevantTrustBoundaryId, mostRelevantSharedRuntimeId string) string {
+	mostRelevantDataAssetId, mostRelevantTechnicalAssetId, mostRelevantCommunicationLinkId string,
+	mostRelevantTrustBoundaryId, mostRelevantSharedRuntimeId string,
+) string {
 	result := categoryId
 	if len(mostRelevantTechnicalAssetId) > 0 {
 		result += "@" + mostRelevantTechnicalAssetId
@@ -821,10 +825,5 @@ func lowerCaseAndTrim(tags []string) []string {
 }
 
 func contains(a []string, x string) bool {
-	for _, n := range a {
-		if x == n {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(a, x)
 }

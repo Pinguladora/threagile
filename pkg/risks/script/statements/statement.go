@@ -2,11 +2,11 @@ package statements
 
 import (
 	"fmt"
+
 	"github.com/threagile/threagile/pkg/risks/script/common"
 )
 
-type Statement struct {
-}
+type Statement struct{}
 
 func (what *Statement) Parse(name string, body any) (common.Statement, any, error) {
 	switch name {

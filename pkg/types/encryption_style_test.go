@@ -5,7 +5,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package types
 
 import (
-	"fmt"
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -41,7 +41,7 @@ func TestParseEncryptionStyle(t *testing.T) {
 		},
 		"unknown": {
 			input:         "unknown",
-			expectedError: fmt.Errorf("unknown encryption style value \"unknown\""),
+			expectedError: errors.New("unknown encryption style value \"unknown\""),
 		},
 	}
 

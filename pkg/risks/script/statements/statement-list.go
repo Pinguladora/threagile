@@ -1,7 +1,9 @@
 package statements
 
 import (
+	"errors"
 	"fmt"
+
 	"github.com/threagile/threagile/pkg/risks/script/common"
 )
 
@@ -17,7 +19,7 @@ func (what *StatementList) Parse(script any) (common.Statement, any, error) {
 	case map[string]any:
 		scriptMap := castScript
 		if len(scriptMap) != 1 {
-			return nil, script, fmt.Errorf("failed to parse statement-list: statements must have single identifier")
+			return nil, script, errors.New("failed to parse statement-list: statements must have single identifier")
 		}
 
 		for name, body := range scriptMap {

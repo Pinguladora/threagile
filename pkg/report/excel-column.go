@@ -1,8 +1,9 @@
 package report
 
 import (
-	"github.com/xuri/excelize/v2"
 	"strings"
+
+	"github.com/xuri/excelize/v2"
 )
 
 type ExcelColumns map[string]ExcelColumn

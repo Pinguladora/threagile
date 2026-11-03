@@ -1,7 +1,6 @@
 package macros
 
 import (
-	"fmt"
 	"sort"
 	"strings"
 
@@ -201,12 +200,14 @@ func (m *AddBuildPipeline) GetNextQuestion(model *types.Model) (nextQuestion Mac
 			ID:          "new-trust-boundary-type",
 			Title:       "Of which type shall the new trust boundary be?",
 			Description: "",
-			PossibleAnswers: []string{types.NetworkOnPrem.String(),
+			PossibleAnswers: []string{
+				types.NetworkOnPrem.String(),
 				types.NetworkDedicatedHoster.String(),
 				types.NetworkVirtualLAN.String(),
 				types.NetworkCloudProvider.String(),
 				types.NetworkCloudSecurityGroup.String(),
-				types.NetworkPolicyNamespaceIsolation.String()},
+				types.NetworkPolicyNamespaceIsolation.String(),
+			},
 			MultiSelect:   false,
 			DefaultAnswer: types.NetworkOnPrem.String(),
 		}, nil
@@ -272,7 +273,7 @@ func (m *AddBuildPipeline) Execute(modelInput *input.Model, model *types.Model) 
 }
 
 func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *types.Model, changeLogCollector *[]string, dryRun bool) (message string, validResult bool, err error) {
-	var serverSideTechAssets = make([]string, 0)
+	serverSideTechAssets := make([]string, 0)
 	// ################################################
 	modelInput.AddTagToModelInput(m.macroState["source-repository"][0], dryRun, changeLogCollector)
 	modelInput.AddTagToModelInput(m.macroState["build-pipeline"][0], dryRun, changeLogCollector)
@@ -301,7 +302,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 	owner := m.macroState["owner"][0]
 
 	if _, exists := parsedModel.DataAssets["Sourcecode"]; !exists {
-		//fmt.Println("Adding data asset:", "sourcecode") // ################################################
+		// fmt.Println("Adding data asset:", "sourcecode") // ################################################
 		dataAsset := input.DataAsset{
 			ID:              "sourcecode",
 			Description:     "Sourcecode to build the application components from",
@@ -323,7 +324,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 	}
 
 	if _, exists := parsedModel.DataAssets["Deployment"]; !exists {
-		//fmt.Println("Adding data asset:", "deployment") // ################################################
+		// fmt.Println("Adding data asset:", "deployment") // ################################################
 		dataAsset := input.DataAsset{
 			ID:              "deployment",
 			Description:     "Deployment unit being installed/shipped",
@@ -346,7 +347,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 
 	id := "development-client"
 	if _, exists := parsedModel.TechnicalAssets[id]; !exists {
-		//fmt.Println("Adding technical asset:", id) // ################################################
+		// fmt.Println("Adding technical asset:", id) // ################################################
 		encryption := types.NoneEncryption.String()
 		if strings.EqualFold(m.macroState["encryption"][0], "yes") {
 			encryption = types.Transparent.String()
@@ -490,7 +491,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 
 	id = sourceRepoID
 	if _, exists := parsedModel.TechnicalAssets[id]; !exists {
-		//fmt.Println("Adding technical asset:", id) // ################################################
+		// fmt.Println("Adding technical asset:", id) // ################################################
 		serverSideTechAssets = append(serverSideTechAssets, id)
 		encryption := types.NoneEncryption.String()
 		if strings.EqualFold(m.macroState["encryption"][0], "yes") {
@@ -533,7 +534,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 	if m.containerTechUsed {
 		id = containerRepoID
 		if _, exists := parsedModel.TechnicalAssets[id]; !exists {
-			//fmt.Println("Adding technical asset:", id) // ################################################
+			// fmt.Println("Adding technical asset:", id) // ################################################
 			serverSideTechAssets = append(serverSideTechAssets, id)
 			encryption := types.NoneEncryption.String()
 			if strings.EqualFold(m.macroState["encryption"][0], "yes") {
@@ -575,7 +576,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 
 		id = containerPlatformID
 		if _, exists := parsedModel.TechnicalAssets[id]; !exists {
-			//fmt.Println("Adding technical asset:", id) // ################################################
+			// fmt.Println("Adding technical asset:", id) // ################################################
 			serverSideTechAssets = append(serverSideTechAssets, id)
 			encryption := types.NoneEncryption.String()
 			if strings.EqualFold(m.macroState["encryption"][0], "yes") {
@@ -618,7 +619,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 
 	id = buildPipelineID
 	if _, exists := parsedModel.TechnicalAssets[id]; !exists {
-		//fmt.Println("Adding technical asset:", id) // ################################################
+		// fmt.Println("Adding technical asset:", id) // ################################################
 		serverSideTechAssets = append(serverSideTechAssets, id)
 		encryption := types.NoneEncryption.String()
 		if strings.EqualFold(m.macroState["encryption"][0], "yes") {
@@ -740,7 +741,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 		}
 		// The individual deployments
 		for _, deployTargetID := range m.macroState["deploy-targets"] { // add a connection to each deployment target
-			//fmt.Println("Adding deployment flow to:", deployTargetID)
+			// fmt.Println("Adding deployment flow to:", deployTargetID)
 			if m.containerTechUsed {
 				if !dryRun {
 					containerPlatform := modelInput.TechnicalAssets[m.macroState["container-platform"][0]+" Container Platform"]
@@ -819,12 +820,12 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 			assetsStored := make([]string, 0)
 			if modelInput.TechnicalAssets[targetAssetTitle].DataAssetsStored != nil {
 				for _, val := range modelInput.TechnicalAssets[targetAssetTitle].DataAssetsStored {
-					assetsStored = append(assetsStored, fmt.Sprintf("%v", val))
+					assetsStored = append(assetsStored, val)
 				}
 			}
 			mergedArrays := make([]string, 0)
 			for _, val := range assetsStored {
-				mergedArrays = append(mergedArrays, fmt.Sprintf("%v", val))
+				mergedArrays = append(mergedArrays, val)
 			}
 			mergedArrays = append(mergedArrays, "deployment")
 			if !dryRun {
@@ -870,7 +871,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 
 	id = artifactRegistryID
 	if _, exists := parsedModel.TechnicalAssets[id]; !exists {
-		//fmt.Println("Adding technical asset:", id) // ################################################
+		// fmt.Println("Adding technical asset:", id) // ################################################
 		serverSideTechAssets = append(serverSideTechAssets, id)
 		encryption := types.NoneEncryption.String()
 		if strings.EqualFold(m.macroState["encryption"][0], "yes") {
@@ -913,7 +914,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 	if m.codeInspectionUsed {
 		id = codeInspectionPlatformID
 		if _, exists := parsedModel.TechnicalAssets[id]; !exists {
-			//fmt.Println("Adding technical asset:", id) // ################################################
+			// fmt.Println("Adding technical asset:", id) // ################################################
 			serverSideTechAssets = append(serverSideTechAssets, id)
 			encryption := types.NoneEncryption.String()
 			if strings.EqualFold(m.macroState["encryption"][0], "yes") {
@@ -957,7 +958,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 	if m.withinTrustBoundary {
 		if m.createNewTrustBoundary {
 			trustBoundaryType := m.macroState["new-trust-boundary-type"][0]
-			//fmt.Println("Adding new trust boundary of type:", trustBoundaryType)
+			// fmt.Println("Adding new trust boundary of type:", trustBoundaryType)
 			title := "DevOps Network"
 			trustBoundary := input.TrustBoundary{
 				ID:                    "devops-network",
@@ -973,18 +974,18 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 			}
 		} else {
 			existingTrustBoundaryToAddTo := m.macroState["selected-trust-boundary"][0]
-			//fmt.Println("Adding to existing trust boundary:", existingTrustBoundaryToAddTo)
+			// fmt.Println("Adding to existing trust boundary:", existingTrustBoundaryToAddTo)
 			title := parsedModel.TrustBoundaries[existingTrustBoundaryToAddTo].Title
 			assetsInside := make([]string, 0)
 			if modelInput.TrustBoundaries[title].TechnicalAssetsInside != nil {
 				values := modelInput.TrustBoundaries[title].TechnicalAssetsInside
 				for _, val := range values {
-					assetsInside = append(assetsInside, fmt.Sprintf("%v", val))
+					assetsInside = append(assetsInside, val)
 				}
 			}
 			mergedArrays := make([]string, 0)
 			for _, val := range assetsInside {
-				mergedArrays = append(mergedArrays, fmt.Sprintf("%v", val))
+				mergedArrays = append(mergedArrays, val)
 			}
 			mergedArrays = append(mergedArrays, serverSideTechAssets...)
 			*changeLogCollector = append(*changeLogCollector, "filling existing trust boundary: "+existingTrustBoundaryToAddTo)
@@ -1019,5 +1020,5 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 		}
 	}
 
-	return "Changeset valid", true, nil
+	return changesetValid, true, nil
 }

@@ -3,6 +3,7 @@ package types
 import (
 	"embed"
 	"fmt"
+	"maps"
 	"os"
 	"path/filepath"
 
@@ -41,9 +42,7 @@ func (what TechnologyMap) LoadWithConfig(config technologyMapConfigReader, defau
 			return fmt.Errorf("error loading additional technologies from %q: %v", config.GetTechnologyFilename(), loadError)
 		}
 
-		for name, technology := range additionalTechnologies {
-			what[name] = technology
-		}
+		maps.Copy(what, additionalTechnologies)
 	}
 
 	return nil
@@ -84,7 +83,7 @@ func (what TechnologyMap) Save(filename string) error {
 		return fmt.Errorf("error marshalling technologies: %w", marshalError)
 	}
 
-	writeError := os.WriteFile(filename, data, 0600)
+	writeError := os.WriteFile(filename, data, 0o600)
 	if writeError != nil {
 		return fmt.Errorf("error writing %q: %w", filename, writeError)
 	}
@@ -158,9 +157,7 @@ func (what TechnologyMap) propagateAttributes(name string, attributes map[string
 		what.propagateAttributes(tech.Parent, attributes)
 	}
 
-	for key, value := range tech.Attributes {
-		attributes[key] = value
-	}
+	maps.Copy(attributes, tech.Attributes)
 }
 
 func TechnicalAssetTechnologyValues(cfg technologyMapConfigReader) []TypeEnum {

@@ -5,13 +5,11 @@ import (
 	"strconv"
 
 	"github.com/mpvl/unique"
-
 	"github.com/threagile/threagile/pkg/input"
 	"github.com/threagile/threagile/pkg/types"
 )
 
-type removeUnusedTagsMacro struct {
-}
+type removeUnusedTagsMacro struct{}
 
 func newRemoveUnusedTags() *removeUnusedTagsMacro {
 	return &removeUnusedTagsMacro{}
@@ -38,7 +36,7 @@ func (*removeUnusedTagsMacro) GoBack() (message string, validResult bool, err er
 }
 
 func (*removeUnusedTagsMacro) GetFinalChangeImpact(_ *input.Model, _ *types.Model) (changes []string, message string, validResult bool, err error) {
-	return []string{"remove unused tags from the model file"}, "Changeset valid", true, err
+	return []string{"remove unused tags from the model file"}, changesetValid, true, err
 }
 
 func (*removeUnusedTagsMacro) Execute(modelInput *input.Model, parsedModel *types.Model) (message string, validResult bool, err error) {

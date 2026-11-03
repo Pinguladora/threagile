@@ -1,7 +1,6 @@
 package macros
 
 import (
-	"fmt"
 	"sort"
 	"strings"
 
@@ -26,6 +25,7 @@ var storageTypes = []string{
 	"In-Memory (no persistent storage of secrets)",
 	"Service Registry", // TODO let user choose which technical asset the registry is (for comm link)
 }
+
 var authenticationTypes = []string{
 	"Certificate",
 	"Cloud Provider (relying on cloud provider instance authentication)",
@@ -139,12 +139,14 @@ func (m *AddVaultMacro) GetNextQuestion(parsedModel *types.Model) (nextQuestion 
 			ID:          "new-trust-boundary-type",
 			Title:       "Of which type shall the new trust boundary be?",
 			Description: "",
-			PossibleAnswers: []string{types.NetworkOnPrem.String(),
+			PossibleAnswers: []string{
+				types.NetworkOnPrem.String(),
 				types.NetworkDedicatedHoster.String(),
 				types.NetworkVirtualLAN.String(),
 				types.NetworkCloudProvider.String(),
 				types.NetworkCloudSecurityGroup.String(),
-				types.NetworkPolicyNamespaceIsolation.String()},
+				types.NetworkPolicyNamespaceIsolation.String(),
+			},
 			MultiSelect:   false,
 			DefaultAnswer: types.NetworkOnPrem.String(),
 		}, nil
@@ -191,7 +193,7 @@ func (m *AddVaultMacro) Execute(modelInput *input.Model, parsedModel *types.Mode
 func (m *AddVaultMacro) applyChange(modelInput *input.Model, parsedModel *types.Model, changeLogCollector *[]string, dryRun bool) (message string, validResult bool, err error) {
 	modelInput.AddTagToModelInput(m.macroState["vault-name"][0], dryRun, changeLogCollector)
 
-	var serverSideTechAssets = make([]string, 0)
+	serverSideTechAssets := make([]string, 0)
 
 	if _, exists := parsedModel.DataAssets["Configuration Secrets"]; !exists {
 		dataAsset := input.DataAsset{
@@ -327,12 +329,12 @@ func (m *AddVaultMacro) applyChange(modelInput *input.Model, parsedModel *types.
 			assetsProcessed := make([]string, 0)
 			if modelInput.TechnicalAssets[clientAssetTitle].DataAssetsProcessed != nil {
 				for _, val := range modelInput.TechnicalAssets[clientAssetTitle].DataAssetsProcessed {
-					assetsProcessed = append(assetsProcessed, fmt.Sprintf("%v", val))
+					assetsProcessed = append(assetsProcessed, val)
 				}
 			}
 			mergedArrays := make([]string, 0)
 			for _, val := range assetsProcessed {
-				mergedArrays = append(mergedArrays, fmt.Sprintf("%v", val))
+				mergedArrays = append(mergedArrays, val)
 			}
 			mergedArrays = append(mergedArrays, "configuration-secrets")
 			if !dryRun {
@@ -423,12 +425,12 @@ func (m *AddVaultMacro) applyChange(modelInput *input.Model, parsedModel *types.
 				if modelInput.TrustBoundaries[title].TrustBoundariesNested != nil {
 					values := modelInput.TrustBoundaries[title].TrustBoundariesNested
 					for _, val := range values {
-						boundariesNested = append(boundariesNested, fmt.Sprintf("%v", val))
+						boundariesNested = append(boundariesNested, val)
 					}
 				}
 				mergedArrays := make([]string, 0)
 				for _, val := range boundariesNested {
-					mergedArrays = append(mergedArrays, fmt.Sprintf("%v", val))
+					mergedArrays = append(mergedArrays, val)
 				}
 				mergedArrays = append(mergedArrays, vaultEnvID)
 				*changeLogCollector = append(*changeLogCollector, "filling existing trust boundary: "+existingTrustBoundaryToAddTo)
@@ -442,12 +444,12 @@ func (m *AddVaultMacro) applyChange(modelInput *input.Model, parsedModel *types.
 				if modelInput.TrustBoundaries[title].TechnicalAssetsInside != nil {
 					values := modelInput.TrustBoundaries[title].TechnicalAssetsInside
 					for _, val := range values {
-						assetsInside = append(assetsInside, fmt.Sprintf("%v", val))
+						assetsInside = append(assetsInside, val)
 					}
 				}
 				mergedArrays := make([]string, 0)
 				for _, val := range assetsInside {
-					mergedArrays = append(mergedArrays, fmt.Sprintf("%v", val))
+					mergedArrays = append(mergedArrays, val)
 				}
 				mergedArrays = append(mergedArrays, serverSideTechAssets...)
 				*changeLogCollector = append(*changeLogCollector, "filling existing trust boundary: "+existingTrustBoundaryToAddTo)
@@ -460,5 +462,5 @@ func (m *AddVaultMacro) applyChange(modelInput *input.Model, parsedModel *types.
 		}
 	}
 
-	return "Changeset valid", true, nil
+	return changesetValid, true, nil
 }

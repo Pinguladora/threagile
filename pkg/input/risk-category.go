@@ -6,23 +6,23 @@ import (
 )
 
 type RiskCategory struct {
-	ID                         string                    `yaml:"id,omitempty" json:"id,omitempty"`
-	Title                      string                    `json:"title,omitempty" yaml:"title,omitempty"`
-	Description                string                    `yaml:"description,omitempty" json:"description,omitempty"`
-	Impact                     string                    `yaml:"impact,omitempty" json:"impact,omitempty"`
-	ASVS                       string                    `yaml:"asvs,omitempty" json:"asvs,omitempty"`
-	CheatSheet                 string                    `yaml:"cheat_sheet,omitempty" json:"cheat_sheet,omitempty"`
-	Action                     string                    `yaml:"action,omitempty" json:"action,omitempty"`
-	Mitigation                 string                    `yaml:"mitigation,omitempty" json:"mitigation,omitempty"`
-	Check                      string                    `yaml:"check,omitempty" json:"check,omitempty"`
-	Function                   string                    `yaml:"function,omitempty" json:"function,omitempty"`
-	STRIDE                     string                    `yaml:"stride,omitempty" json:"stride,omitempty"`
-	DetectionLogic             string                    `yaml:"detection_logic,omitempty" json:"detection_logic,omitempty"`
-	RiskAssessment             string                    `yaml:"risk_assessment,omitempty" json:"risk_assessment,omitempty"`
-	FalsePositives             string                    `yaml:"false_positives,omitempty" json:"false_positives,omitempty"`
-	ModelFailurePossibleReason bool                      `yaml:"model_failure_possible_reason,omitempty" json:"model_failure_possible_reason,omitempty"`
-	CWE                        int                       `yaml:"cwe,omitempty" json:"cwe,omitempty"`
-	RisksIdentified            map[string]RiskIdentified `yaml:"risks_identified,omitempty" json:"risks_identified,omitempty"`
+	ID                         string                    `json:"id,omitempty"                            yaml:"id,omitempty"`
+	Title                      string                    `json:"title,omitempty"                         yaml:"title,omitempty"`
+	Description                string                    `json:"description,omitempty"                   yaml:"description,omitempty"`
+	Impact                     string                    `json:"impact,omitempty"                        yaml:"impact,omitempty"`
+	ASVS                       string                    `json:"asvs,omitempty"                          yaml:"asvs,omitempty"`
+	CheatSheet                 string                    `json:"cheat_sheet,omitempty"                   yaml:"cheat_sheet,omitempty"`
+	Action                     string                    `json:"action,omitempty"                        yaml:"action,omitempty"`
+	Mitigation                 string                    `json:"mitigation,omitempty"                    yaml:"mitigation,omitempty"`
+	Check                      string                    `json:"check,omitempty"                         yaml:"check,omitempty"`
+	Function                   string                    `json:"function,omitempty"                      yaml:"function,omitempty"`
+	STRIDE                     string                    `json:"stride,omitempty"                        yaml:"stride,omitempty"`
+	DetectionLogic             string                    `json:"detection_logic,omitempty"               yaml:"detection_logic,omitempty"`
+	RiskAssessment             string                    `json:"risk_assessment,omitempty"               yaml:"risk_assessment,omitempty"`
+	FalsePositives             string                    `json:"false_positives,omitempty"               yaml:"false_positives,omitempty"`
+	ModelFailurePossibleReason bool                      `json:"model_failure_possible_reason,omitempty" yaml:"model_failure_possible_reason,omitempty"`
+	CWE                        int                       `json:"cwe,omitempty"                           yaml:"cwe,omitempty"`
+	RisksIdentified            map[string]RiskIdentified `json:"risks_identified,omitempty"              yaml:"risks_identified,omitempty"`
 }
 
 type RiskCategories []*RiskCategory

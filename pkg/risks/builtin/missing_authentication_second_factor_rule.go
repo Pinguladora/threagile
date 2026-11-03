@@ -73,13 +73,14 @@ func (r *MissingAuthenticationSecondFactorRule) GenerateRisks(input *types.Model
 			}
 		}
 	}
-		return risks, nil
+	return risks, nil
 }
 
 func appendRisk(
-	input *types.Model, risks []*types.Risk, r *MissingAuthenticationSecondFactorRule, 
-	technicalAsset *types.TechnicalAsset, commLink *types.CommunicationLink, 
-	callersCommLink *types.CommunicationLink, title string) []*types.Risk {
+	input *types.Model, risks []*types.Risk, r *MissingAuthenticationSecondFactorRule,
+	technicalAsset *types.TechnicalAsset, commLink *types.CommunicationLink,
+	callersCommLink *types.CommunicationLink, title string,
+) []*types.Risk {
 	moreRisky :=
 		input.HighestCommunicationLinkConfidentiality(callersCommLink) >= types.Confidential ||
 			input.HighestCommunicationLinkIntegrity(callersCommLink) >= types.Critical

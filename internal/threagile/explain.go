@@ -1,7 +1,9 @@
 package threagile
 
 import (
+	"errors"
 	"fmt"
+
 	"github.com/spf13/cobra"
 	"github.com/threagile/threagile/pkg/macros"
 	"github.com/threagile/threagile/pkg/model"
@@ -64,7 +66,7 @@ func (what *Threagile) explainRisk(cmd *cobra.Command, args []string) error {
 	// todo: implement this
 
 	_ = result
-	return fmt.Errorf("not implemented yet")
+	return errors.New("not implemented yet")
 }
 
 func (what *Threagile) explainRules(cmd *cobra.Command, args []string) error {

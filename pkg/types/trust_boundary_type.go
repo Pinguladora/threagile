@@ -90,7 +90,7 @@ func (what *TrustBoundaryType) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (what TrustBoundaryType) MarshalYAML() (interface{}, error) {
+func (what TrustBoundaryType) MarshalYAML() (any, error) {
 	return what.String(), nil
 }
 

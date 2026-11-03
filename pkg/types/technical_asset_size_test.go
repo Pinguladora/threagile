@@ -5,7 +5,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package types
 
 import (
-	"fmt"
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -37,7 +37,7 @@ func TestParseTechnicalAssetSize(t *testing.T) {
 		},
 		"unknown": {
 			input:         "unknown",
-			expectedError: fmt.Errorf("unknown technical asset size value \"unknown\""),
+			expectedError: errors.New("unknown technical asset size value \"unknown\""),
 		},
 	}
 

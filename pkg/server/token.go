@@ -38,7 +38,7 @@ func (s *server) createKey(ginContext *gin.Context) {
 	defer s.globalLock.Unlock()
 
 	keyBytesArr := make([]byte, keySize)
-	n, err := rand.Read(keyBytesArr[:])
+	n, err := rand.Read(keyBytesArr)
 	if n != keySize || err != nil {
 		log.Println(err)
 		ginContext.JSON(http.StatusInternalServerError, gin.H{
@@ -46,7 +46,7 @@ func (s *server) createKey(ginContext *gin.Context) {
 		})
 		return
 	}
-	err = os.MkdirAll(s.folderNameFromKey(keyBytesArr), 0700)
+	err = os.MkdirAll(s.folderNameFromKey(keyBytesArr), 0o700)
 	if err != nil {
 		log.Println(err)
 		ginContext.JSON(http.StatusInternalServerError, gin.H{
@@ -55,7 +55,7 @@ func (s *server) createKey(ginContext *gin.Context) {
 		return
 	}
 	ginContext.JSON(http.StatusCreated, gin.H{
-		"key": base64.RawURLEncoding.EncodeToString(keyBytesArr[:]),
+		"key": base64.RawURLEncoding.EncodeToString(keyBytesArr),
 	})
 }
 
@@ -135,7 +135,7 @@ func (s *server) createToken(ginContext *gin.Context) {
 	}
 	// create a strong random 256 bit value (used to xor)
 	xorBytesArr := make([]byte, keySize)
-	n, err := rand.Read(xorBytesArr[:])
+	n, err := rand.Read(xorBytesArr)
 	if n != keySize || err != nil {
 		log.Println(err)
 		ginContext.JSON(http.StatusInternalServerError, gin.H{
@@ -154,7 +154,7 @@ func (s *server) createToken(ginContext *gin.Context) {
 	}
 	s.mapFolderNameToTokenHash[folderName] = tokenHash
 	ginContext.JSON(http.StatusCreated, gin.H{
-		"token": base64.RawURLEncoding.EncodeToString(token[:]),
+		"token": base64.RawURLEncoding.EncodeToString(token),
 	})
 }
 

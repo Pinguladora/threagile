@@ -53,10 +53,12 @@ func (what Criticality) AttackerAttractivenessForAsset() float64 {
 	// fibonacci starting at 5
 	return [...]float64{5, 8, 13, 21, 34}[what]
 }
+
 func (what Criticality) AttackerAttractivenessForProcessedOrStoredData() float64 {
 	// fibonacci starting at 3
 	return [...]float64{3, 5, 8, 13, 21}[what]
 }
+
 func (what Criticality) AttackerAttractivenessForInOutTransferredData() float64 {
 	// fibonacci starting at 2
 	return [...]float64{2, 3, 5, 8, 13}[what]
@@ -113,7 +115,7 @@ func (what *Criticality) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (what Criticality) MarshalYAML() (interface{}, error) {
+func (what Criticality) MarshalYAML() (any, error) {
 	return what.String(), nil
 }
 

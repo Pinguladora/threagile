@@ -5,8 +5,7 @@ import (
 	"github.com/threagile/threagile/pkg/types"
 )
 
-type PrettyPrintMacro struct {
-}
+type PrettyPrintMacro struct{}
 
 func NewPrettyPrint() *PrettyPrintMacro {
 	return &PrettyPrintMacro{}
@@ -33,7 +32,7 @@ func (*PrettyPrintMacro) GoBack() (message string, validResult bool, err error) 
 }
 
 func (*PrettyPrintMacro) GetFinalChangeImpact(_ *input.Model, _ *types.Model) (changes []string, message string, validResult bool, err error) {
-	return []string{"pretty-printing the model file"}, "Changeset valid", true, err
+	return []string{"pretty-printing the model file"}, changesetValid, true, err
 }
 
 func (*PrettyPrintMacro) Execute(_ *input.Model, _ *types.Model) (message string, validResult bool, err error) {

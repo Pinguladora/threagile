@@ -5,15 +5,15 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"maps"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
 
-	"gopkg.in/yaml.v3"
-
 	"github.com/threagile/threagile/pkg/report"
 	"github.com/threagile/threagile/pkg/types"
+	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
@@ -21,60 +21,60 @@ type Config struct {
 	ConfigSetter
 
 	BuildTimestampValue string `json:"BuildTimestamp,omitempty" yaml:"BuildTimestamp"`
-	VerboseValue        bool   `json:"Verbose,omitempty" yaml:"Verbose"`
-	InteractiveValue    bool   `json:"Interactive,omitempty" yaml:"Interactive"`
+	VerboseValue        bool   `json:"Verbose,omitempty"        yaml:"Verbose"`
+	InteractiveValue    bool   `json:"Interactive,omitempty"    yaml:"Interactive"`
 
-	AppFolderValue    string `json:"AppFolder,omitempty" yaml:"AppFolder"`
+	AppFolderValue    string `json:"AppFolder,omitempty"    yaml:"AppFolder"`
 	PluginFolderValue string `json:"PluginFolder,omitempty" yaml:"PluginFolder"`
-	DataFolderValue   string `json:"DataFolder,omitempty" yaml:"DataFolder"`
+	DataFolderValue   string `json:"DataFolder,omitempty"   yaml:"DataFolder"`
 	OutputFolderValue string `json:"OutputFolder,omitempty" yaml:"OutputFolder"`
 	ServerFolderValue string `json:"ServerFolder,omitempty" yaml:"ServerFolder"`
-	TempFolderValue   string `json:"TempFolder,omitempty" yaml:"TempFolder"`
-	KeyFolderValue    string `json:"KeyFolder,omitempty" yaml:"KeyFolder"`
+	TempFolderValue   string `json:"TempFolder,omitempty"   yaml:"TempFolder"`
+	KeyFolderValue    string `json:"KeyFolder,omitempty"    yaml:"KeyFolder"`
 
-	InputFileValue                   string `json:"InputFile,omitempty" yaml:"InputFile"`
-	ImportedInputFileValue           string `json:"ImportedInputFile,omitempty" yaml:"ImportedInputFile"`
-	DataFlowDiagramFilenamePNGValue  string `json:"DataFlowDiagramFilenamePNG,omitempty" yaml:"DataFlowDiagramFilenamePNG"`
+	InputFileValue                   string `json:"InputFile,omitempty"                   yaml:"InputFile"`
+	ImportedInputFileValue           string `json:"ImportedInputFile,omitempty"           yaml:"ImportedInputFile"`
+	DataFlowDiagramFilenamePNGValue  string `json:"DataFlowDiagramFilenamePNG,omitempty"  yaml:"DataFlowDiagramFilenamePNG"`
 	DataAssetDiagramFilenamePNGValue string `json:"DataAssetDiagramFilenamePNG,omitempty" yaml:"DataAssetDiagramFilenamePNG"`
-	DataFlowDiagramFilenameDOTValue  string `json:"DataFlowDiagramFilenameDOT,omitempty" yaml:"DataFlowDiagramFilenameDOT"`
+	DataFlowDiagramFilenameDOTValue  string `json:"DataFlowDiagramFilenameDOT,omitempty"  yaml:"DataFlowDiagramFilenameDOT"`
 	DataAssetDiagramFilenameDOTValue string `json:"DataAssetDiagramFilenameDOT,omitempty" yaml:"DataAssetDiagramFilenameDOT"`
-	ReportFilenameValue              string `json:"ReportFilename,omitempty" yaml:"ReportFilename"`
-	ExcelRisksFilenameValue          string `json:"ExcelRisksFilename,omitempty" yaml:"ExcelRisksFilename"`
-	ExcelTagsFilenameValue           string `json:"ExcelTagsFilename,omitempty" yaml:"ExcelTagsFilename"`
-	JsonRisksFilenameValue           string `json:"JsonRisksFilename,omitempty" yaml:"JsonRisksFilename"`
+	ReportFilenameValue              string `json:"ReportFilename,omitempty"              yaml:"ReportFilename"`
+	ExcelRisksFilenameValue          string `json:"ExcelRisksFilename,omitempty"          yaml:"ExcelRisksFilename"`
+	ExcelTagsFilenameValue           string `json:"ExcelTagsFilename,omitempty"           yaml:"ExcelTagsFilename"`
+	JsonRisksFilenameValue           string `json:"JsonRisksFilename,omitempty"           yaml:"JsonRisksFilename"`
 	JsonTechnicalAssetsFilenameValue string `json:"JsonTechnicalAssetsFilename,omitempty" yaml:"JsonTechnicalAssetsFilename"`
-	JsonStatsFilenameValue           string `json:"JsonStatsFilename,omitempty" yaml:"JsonStatsFilename"`
-	TemplateFilenameValue            string `json:"TemplateFilename,omitempty" yaml:"TemplateFilename"`
-	ReportLogoImagePathValue         string `json:"ReportLogoImagePath,omitempty" yaml:"ReportLogoImagePath"`
-	TechnologyFilenameValue          string `json:"TechnologyFilename,omitempty" yaml:"TechnologyFilename"`
-	HideEmptyChaptersValue           bool   `json:"HideEmptyChapters,omitempty" yaml:"HideEmptyChapters"`
+	JsonStatsFilenameValue           string `json:"JsonStatsFilename,omitempty"           yaml:"JsonStatsFilename"`
+	TemplateFilenameValue            string `json:"TemplateFilename,omitempty"            yaml:"TemplateFilename"`
+	ReportLogoImagePathValue         string `json:"ReportLogoImagePath,omitempty"         yaml:"ReportLogoImagePath"`
+	TechnologyFilenameValue          string `json:"TechnologyFilename,omitempty"          yaml:"TechnologyFilename"`
+	HideEmptyChaptersValue           bool   `json:"HideEmptyChapters,omitempty"           yaml:"HideEmptyChapters"`
 
-	RiskRulePluginsValue   []string        `json:"RiskRulePlugins,omitempty" yaml:"RiskRulePlugins"`
-	SkipRiskRulesValue     []string        `json:"SkipRiskRules,omitempty" yaml:"SkipRiskRules"`
+	RiskRulePluginsValue   []string        `json:"RiskRulePlugins,omitempty"   yaml:"RiskRulePlugins"`
+	SkipRiskRulesValue     []string        `json:"SkipRiskRules,omitempty"     yaml:"SkipRiskRules"`
 	ExecuteModelMacroValue string          `json:"ExecuteModelMacro,omitempty" yaml:"ExecuteModelMacro"`
-	RiskExcelValue         RiskExcelConfig `json:"RiskExcel" yaml:"RiskExcel"`
+	RiskExcelValue         RiskExcelConfig `json:"RiskExcel"                   yaml:"RiskExcel"`
 
-	ServerModeValue               bool `json:"ServerMode,omitempty" yaml:"ServerMode"`
-	ServerPortValue               int  `json:"ServerPort,omitempty" yaml:"ServerPort"`
-	DiagramDPIValue               int  `json:"DiagramDPI,omitempty" yaml:"DiagramDPI"`
-	GraphvizDPIValue              int  `json:"GraphvizDPI,omitempty" yaml:"GraphvizDPI"`
-	MaxGraphvizDPIValue           int  `json:"MaxGraphvizDPI,omitempty" yaml:"MaxGraphvizDPI"`
+	ServerModeValue               bool `json:"ServerMode,omitempty"               yaml:"ServerMode"`
+	ServerPortValue               int  `json:"ServerPort,omitempty"               yaml:"ServerPort"`
+	DiagramDPIValue               int  `json:"DiagramDPI,omitempty"               yaml:"DiagramDPI"`
+	GraphvizDPIValue              int  `json:"GraphvizDPI,omitempty"              yaml:"GraphvizDPI"`
+	MaxGraphvizDPIValue           int  `json:"MaxGraphvizDPI,omitempty"           yaml:"MaxGraphvizDPI"`
 	BackupHistoryFilesToKeepValue int  `json:"BackupHistoryFilesToKeep,omitempty" yaml:"BackupHistoryFilesToKeep"`
 
-	AddModelTitleValue              bool `json:"AddModelTitle,omitempty" yaml:"AddModelTitle"`
-	AddLegendValue                  bool `json:"AddLegend,omitempty" yaml:"AddLegend"`
-	KeepDiagramSourceFilesValue     bool `json:"KeepDiagramSourceFiles,omitempty" yaml:"KeepDiagramSourceFiles"`
+	AddModelTitleValue              bool `json:"AddModelTitle,omitempty"              yaml:"AddModelTitle"`
+	AddLegendValue                  bool `json:"AddLegend,omitempty"                  yaml:"AddLegend"`
+	KeepDiagramSourceFilesValue     bool `json:"KeepDiagramSourceFiles,omitempty"     yaml:"KeepDiagramSourceFiles"`
 	IgnoreOrphanedRiskTrackingValue bool `json:"IgnoreOrphanedRiskTracking,omitempty" yaml:"IgnoreOrphanedRiskTracking"`
 
-	SkipDataFlowDiagramValue     bool `json:"SkipDataFlowDiagram,omitempty" yaml:"SkipDataFlowDiagram"`
-	SkipDataAssetDiagramValue    bool `json:"SkipDataAssetDiagram,omitempty" yaml:"SkipDataAssetDiagram"`
-	SkipRisksJSONValue           bool `json:"SkipRisksJSON,omitempty" yaml:"SkipRisksJSON"`
+	SkipDataFlowDiagramValue     bool `json:"SkipDataFlowDiagram,omitempty"     yaml:"SkipDataFlowDiagram"`
+	SkipDataAssetDiagramValue    bool `json:"SkipDataAssetDiagram,omitempty"    yaml:"SkipDataAssetDiagram"`
+	SkipRisksJSONValue           bool `json:"SkipRisksJSON,omitempty"           yaml:"SkipRisksJSON"`
 	SkipTechnicalAssetsJSONValue bool `json:"SkipTechnicalAssetsJSON,omitempty" yaml:"SkipTechnicalAssetsJSON"`
-	SkipStatsJSONValue           bool `json:"SkipStatsJSON,omitempty" yaml:"SkipStatsJSON"`
-	SkipRisksExcelValue          bool `json:"SkipRisksExcel,omitempty" yaml:"SkipRisksExcel"`
-	SkipTagsExcelValue           bool `json:"SkipTagsExcel,omitempty" yaml:"SkipTagsExcel"`
-	SkipReportPDFValue           bool `json:"SkipReportPDF,omitempty" yaml:"SkipReportPDF"`
-	SkipReportADOCValue          bool `json:"SkipReportADOC,omitempty" yaml:"SkipReportADOC"`
+	SkipStatsJSONValue           bool `json:"SkipStatsJSON,omitempty"           yaml:"SkipStatsJSON"`
+	SkipRisksExcelValue          bool `json:"SkipRisksExcel,omitempty"          yaml:"SkipRisksExcel"`
+	SkipTagsExcelValue           bool `json:"SkipTagsExcel,omitempty"           yaml:"SkipTagsExcel"`
+	SkipReportPDFValue           bool `json:"SkipReportPDF,omitempty"           yaml:"SkipReportPDF"`
+	SkipReportADOCValue          bool `json:"SkipReportADOC,omitempty"          yaml:"SkipReportADOC"`
 
 	AttractivenessValue Attractiveness `json:"Attractiveness" yaml:"Attractiveness"`
 
@@ -279,13 +279,13 @@ func (c *Config) Load(configFilename string) error {
 
 	errorList := make([]error, 0)
 	c.TempFolderValue = c.CleanPath(c.TempFolderValue)
-	tempDirError := os.MkdirAll(c.TempFolderValue, 0700)
+	tempDirError := os.MkdirAll(c.TempFolderValue, 0o700)
 	if tempDirError != nil {
 		errorList = append(errorList, fmt.Errorf("failed to create temp dir %q: %w", c.TempFolderValue, tempDirError))
 	}
 
 	c.OutputFolderValue = c.CleanPath(c.OutputFolderValue)
-	outDirError := os.MkdirAll(c.OutputFolderValue, 0700)
+	outDirError := os.MkdirAll(c.OutputFolderValue, 0o700)
 	if outDirError != nil {
 		errorList = append(errorList, fmt.Errorf("failed to create output dir %q: %w", c.OutputFolderValue, outDirError))
 	}
@@ -332,7 +332,7 @@ func (c *Config) CheckServerFolder() error {
 			return serverDirError
 		}
 
-		keyDirError := os.MkdirAll(filepath.Join(c.ServerFolderValue, c.KeyFolderValue), 0700)
+		keyDirError := os.MkdirAll(filepath.Join(c.ServerFolderValue, c.KeyFolderValue), 0o700)
 		if keyDirError != nil {
 			return fmt.Errorf("failed to create key dir %q: %w", filepath.Join(c.ServerFolderValue, c.KeyFolderValue), keyDirError)
 		}
@@ -450,9 +450,7 @@ func (c *Config) Merge(config Config, values map[string]any) {
 						c.RiskExcelValue.WidthOfColumns = make(map[string]float64)
 					}
 
-					for name, value := range config.RiskExcelValue.WidthOfColumns {
-						c.RiskExcelValue.WidthOfColumns[name] = value
-					}
+					maps.Copy(c.RiskExcelValue.WidthOfColumns, config.RiskExcelValue.WidthOfColumns)
 
 				case strings.ToLower("ShrinkColumnsToFit"):
 					c.RiskExcelValue.ShrinkColumnsToFit = config.RiskExcelValue.ShrinkColumnsToFit
