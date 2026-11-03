@@ -2,6 +2,8 @@ package statements
 
 import (
 	"fmt"
+	"maps"
+	"slices"
 
 	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 	"github.com/Pinguladora/threagile/pkg/risks/script/expressions"
@@ -10,6 +12,7 @@ import (
 type AssignStatement struct {
 	literal string
 	items   map[string]common.Expression
+	names   []string // the assigned names in the order they are run
 }
 
 func (what *AssignStatement) Parse(script any) (common.Statement, any, error) {
@@ -39,12 +42,16 @@ func (what *AssignStatement) Parse(script any) (common.Statement, any, error) {
 }
 
 func (what *AssignStatement) parse(script map[string]any) (common.Statement, any, error) {
-	for key, value := range script {
-		expression, errorScript, parseError := new(expressions.ExpressionList).ParseAny(value)
+	// a list of assignments runs in list order, the keys of a single map in key order
+	for _, key := range slices.Sorted(maps.Keys(script)) {
+		expression, errorScript, parseError := new(expressions.ExpressionList).ParseAny(script[key])
 		if parseError != nil {
 			return nil, errorScript, fmt.Errorf("failed to parse %q of assign-statement: %w", key, parseError)
 		}
 
+		if _, exists := what.items[key]; !exists {
+			what.names = append(what.names, key)
+		}
 		what.items[key] = expression
 	}
 
@@ -56,8 +63,8 @@ func (what *AssignStatement) Run(scope *common.Scope) (string, error) {
 		return "", nil
 	}
 
-	for name, item := range what.items {
-		value, errorLiteral, evalError := item.EvalAny(scope)
+	for _, name := range what.names {
+		value, errorLiteral, evalError := what.items[name].EvalAny(scope)
 		if evalError != nil {
 			return errorLiteral, fmt.Errorf("failed to eval %q of assign-statement: %w", name, evalError)
 		}
