@@ -1,0 +1,193 @@
+digraph generatedModel { concentrate=true 
+	graph [
+		dpi=100
+		fontname="Verdana"
+		labelloc="c"
+		fontsize="20"
+		splines=false
+		rankdir="LR"
+		nodesep=1.0
+		ranksep=3.0
+        outputorder="nodesfirst"
+	];
+	node [
+		fontcolor="white"
+		fontname="Verdana"
+		fontsize="20"
+	];
+	edge [
+		shape="none"
+		fontname="Verdana"
+		fontsize="18"
+	];
+  4009840091 [ shape="box" style="filled" fillcolor="#444444"
+				label=<<b>Customer Contract Database</b>> penwidth="3.0" color="#444444" ];
+				
+  3084865311 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Marketing CMS</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  219064102 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Load Balancer</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  2943509451 [ shape="box" style="filled" fillcolor="#444444"
+				label=<<b>LDAP Auth Server</b>> penwidth="3.0" color="#444444" ];
+				
+  3672894744 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Jenkins Build Server</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  513618175 [ shape="box" style="filled" fillcolor="#444444"
+				label=<<b>Identity Provider</b>> penwidth="3.0" color="#444444" ];
+				
+  3786194998 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Git Repository</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  212448500 [ shape="box" style="filled" fillcolor="#7F7F7F"
+				label=<<b>External Development Client</b>> penwidth="3.0" color="#7F7F7F" ];
+				
+  2252878724 [ shape="box" style="filled" fillcolor="#A0281E"
+				label=<<b>Backoffice ERP System</b>> penwidth="3.0" color="#A0281E" ];
+				
+  2219774459 [ shape="box" style="filled" fillcolor="#7F7F7F"
+				label=<<b>Customer Web Client</b>> penwidth="3.0" color="#7F7F7F" ];
+				
+  3681547760 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Contract File Server</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  1531714662 [ shape="box" style="filled" fillcolor="#7F7F7F"
+				label=<<b>Backoffice Client</b>> penwidth="3.0" color="#7F7F7F" ];
+				
+  3582160343 [ shape="box" style="filled" fillcolor="#7F7F7F"
+				label=<<b>Backend Admin Client</b>> penwidth="3.0" color="#7F7F7F" ];
+				
+  828271551 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Apache Webserver</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  3990622318 [ label=<<b>Build Job Config</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  657093857 [ label=<<b>Client Application Code</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  534855584 [ label=<<b>Customer Accounts</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  1339176862 [ label=<<b>Customer Contract Summaries</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  376663495 [ label=<<b>Customer Contracts</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  551214591 [ label=<<b>Customer Operational Data</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  4018842585 [ label=<<b>Database Customizing and Dumps</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  2474665483 [ label=<<b>ERP Customizing Data</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  190286382 [ label=<<b>ERP Logs</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  997628187 [ label=<<b>Marketing Material</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  767348917 [ label=<<b>Server Application Code</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  735069164 [ label=<<b>Some Internal Business Data</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+
+534855584 -> 4009840091 [ color="blue" style="solid" ];
+
+551214591 -> 4009840091 [ color="blue" style="solid" ];
+
+735069164 -> 4009840091 [ color="blue" style="solid" ];
+
+4018842585 -> 4009840091 [ color="#666666" style="dashed" ];
+
+190286382 -> 4009840091 [ color="#666666" style="dashed" ];
+
+997628187 -> 3084865311 [ color="blue" style="solid" ];
+
+534855584 -> 3084865311 [ color="#666666" style="dashed" ];
+
+534855584 -> 219064102 [ color="#666666" style="dashed" ];
+
+551214591 -> 219064102 [ color="#666666" style="dashed" ];
+
+376663495 -> 219064102 [ color="#666666" style="dashed" ];
+
+735069164 -> 219064102 [ color="#666666" style="dashed" ];
+
+657093857 -> 219064102 [ color="#666666" style="dashed" ];
+
+997628187 -> 219064102 [ color="#666666" style="dashed" ];
+
+534855584 -> 2943509451 [ color="blue" style="solid" ];
+
+3990622318 -> 3672894744 [ color="blue" style="solid" ];
+
+657093857 -> 3672894744 [ color="blue" style="solid" ];
+
+767348917 -> 3672894744 [ color="blue" style="solid" ];
+
+997628187 -> 3672894744 [ color="blue" style="solid" ];
+
+534855584 -> 513618175 [ color="#666666" style="dashed" ];
+
+657093857 -> 3786194998 [ color="blue" style="solid" ];
+
+767348917 -> 3786194998 [ color="blue" style="solid" ];
+
+657093857 -> 212448500 [ color="blue" style="solid" ];
+
+767348917 -> 212448500 [ color="blue" style="solid" ];
+
+3990622318 -> 212448500 [ color="#666666" style="dashed" ];
+
+190286382 -> 2252878724 [ color="blue" style="solid" ];
+
+534855584 -> 2252878724 [ color="#666666" style="dashed" ];
+
+551214591 -> 2252878724 [ color="#666666" style="dashed" ];
+
+376663495 -> 2252878724 [ color="#666666" style="dashed" ];
+
+735069164 -> 2252878724 [ color="#666666" style="dashed" ];
+
+2474665483 -> 2252878724 [ color="#666666" style="dashed" ];
+
+534855584 -> 2219774459 [ color="#666666" style="dashed" ];
+
+551214591 -> 2219774459 [ color="#666666" style="dashed" ];
+
+376663495 -> 2219774459 [ color="#666666" style="dashed" ];
+
+657093857 -> 2219774459 [ color="#666666" style="dashed" ];
+
+997628187 -> 2219774459 [ color="#666666" style="dashed" ];
+
+376663495 -> 3681547760 [ color="blue" style="solid" ];
+
+1339176862 -> 3681547760 [ color="blue" style="solid" ];
+
+376663495 -> 1531714662 [ color="#666666" style="dashed" ];
+
+735069164 -> 1531714662 [ color="#666666" style="dashed" ];
+
+190286382 -> 1531714662 [ color="#666666" style="dashed" ];
+
+997628187 -> 1531714662 [ color="#666666" style="dashed" ];
+
+190286382 -> 3582160343 [ color="#666666" style="dashed" ];
+
+4018842585 -> 3582160343 [ color="#666666" style="dashed" ];
+
+534855584 -> 3582160343 [ color="#666666" style="dashed" ];
+
+551214591 -> 3582160343 [ color="#666666" style="dashed" ];
+
+2474665483 -> 3582160343 [ color="#666666" style="dashed" ];
+
+657093857 -> 828271551 [ color="blue" style="solid" ];
+
+767348917 -> 828271551 [ color="blue" style="solid" ];
+
+534855584 -> 828271551 [ color="#666666" style="dashed" ];
+
+551214591 -> 828271551 [ color="#666666" style="dashed" ];
+
+376663495 -> 828271551 [ color="#666666" style="dashed" ];
+
+735069164 -> 828271551 [ color="#666666" style="dashed" ];
+}

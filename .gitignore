@@ -9,6 +9,8 @@ tags.xlsx
 risks.json
 technical-assets.json
 stats.json
+# the golden files of the report tests carry the output file names above
+!/pkg/report/testdata/**
 .vscode
 .task
 
