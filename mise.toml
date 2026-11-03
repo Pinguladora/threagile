@@ -71,6 +71,11 @@ run = "goreleaser release --snapshot --clean --skip=sign,sbom"
 description = "Local snapshot build including the ko container image (skips signing, SBOM)"
 alias = "snapc"
 
+[tasks."snapshot:container"]
+run = "goreleaser release --snapshot --clean --skip=sign,sbom"
+description = "Local snapshot build including the ko container image (skips signing, SBOM)"
+alias = "snapc"
+
 [tasks."lint:go"]
 # Only findings introduced since the merge base with main fail the gate. The
 # inherited upstream code still carries ~2,200 findings (see `mise run debt`),
