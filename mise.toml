@@ -1,0 +1,151 @@
+[settings]
+experimental = true
+env_cache = true
+env_cache_ttl = "9h"
+minimum_release_age = "7d"
+pin = true
+lockfile = true
+locked = false
+prefer_offline = true
+disable_default_registry = true
+disable_backends = ["asdf", "vfox", "ubi"]
+lockfile_platforms = ["linux-x64", "linux-arm64", "linux-x64-musl", "macos-x64", "macos-arm64", "windows-x64"]
+# Decide task freshness by hashing source contents, not mtimes. A fresh checkout
+# resets mtimes, so mtime comparison would rebuild needlessly, while content
+# hashing skips when the bytes are equal.
+task.source_freshness_hash_contents = true
+
+[tools]
+# Tools shared by local dev and CI. Local-only tooling (linters, formatters, git
+# hooks) lives in mise.dev.toml and loads via .miserc's `dev` env, never in CI
+# (MISE_ENV=ci). A tool sits here when both local work and CI need it:
+# go/golangci-lint (Go work + CI), goreleaser/syft (local snapshot + release CI),
+# actionlint/zizmor (local hk hooks + the lint:gha CI job).
+cocogitto = "7.0.0"
+go = "1.27.1"
+# Built from source so it compiles against the pinned go. The prebuilt
+# golangci-lint releases are still built with go1.26 and panic on a `go 1.27`
+# go.mod. Switch back to the plain `golangci-lint` tool once upstream ships a
+# go1.27 build.
+"go:github.com/golangci/golangci-lint/v2/cmd/golangci-lint" = "v2.14.0"
+goreleaser = "2.18.2"
+syft = "1.52.0"
+actionlint = "1.7.12"
+zizmor = "1.30.1"
+
+[tasks."secret:scan"]
+run = "kingfisher scan . --no-validate --redact"
+description = "Scan codebase for secrets with Kingfisher"
+alias = "ss"
+
+[tasks."secret:validate"]
+run = "kingfisher scan . --redact"
+description = "Validate and revoke live secrets found by Kingfisher"
+alias = "sv"
+
+[tasks.bump]
+run = "cog bump --auto"
+description = "Calculate next version from conventional commits and tag"
+
+[tasks.lint]
+description = "Run all linting"
+depends = ["lint:*"]
+
+[tasks.build]
+run = "go build ./..."
+description = "Build all Go packages"
+alias = "b"
+
+[tasks.test]
+run = "go test ./..."
+description = "Run all Go tests"
+alias = "t"
+
+[tasks.snapshot]
+run = "goreleaser release --snapshot --clean --skip=sign,sbom,ko"
+description = "Local snapshot build with GoReleaser (skips signing, SBOM, and ko images)"
+alias = "snap"
+
+[tasks."snapshot:container"]
+run = "goreleaser release --snapshot --clean --skip=sign,sbom"
+description = "Local snapshot build including the ko container image (skips signing, SBOM)"
+alias = "snapc"
+
+[tasks."lint:go"]
+# Only findings introduced since the merge base with main fail the gate. The
+# inherited upstream code still carries ~2,200 findings (see `mise run debt`),
+# which are burned down in dedicated commits instead of blocking every change.
+run = "golangci-lint run ./... --fix --new-from-merge-base=main"
+description = "Lint Go code with autofix (findings new since main)"
+sources = ["**/*.go", ".golangci.yaml"]
+
+[tasks.debt]
+run = "golangci-lint run ./... --max-issues-per-linter=0 --max-same-issues=0 --show-stats"
+description = "Full golangci-lint report, including the findings inherited from upstream"
+
+[tasks."lint:gha"]
+# actionlint catches workflow syntax and expression errors; zizmor runs the
+# security static analysis. zizmor runs offline without a token (local) and does
+# the online audits when GITHUB_TOKEN is set (the lint-gha CI job passes it).
+run = [
+  "actionlint -color -shellcheck=",
+  "zizmor --config .github/zizmor.yml .github/workflows",
+]
+description = "Lint and security-audit the GitHub Actions workflows (actionlint + zizmor)"
+sources = [".github/workflows/**", ".github/zizmor.yml"]
+
+[tasks.fmt]
+run = "gofmt -w ."
+description = "Format all Go code"
+alias = "f"
+
+[tasks."fmt:check"]
+run = """
+files=$(gofmt -l .)
+if [ -n "$files" ]; then
+  echo "Not gofmt-clean, run 'mise run fmt':"
+  echo "$files"
+  exit 1
+fi
+"""
+description = "Fail if any Go file is not gofmt-clean"
+
+[tasks.vet]
+run = "go vet ./..."
+description = "Vet all packages"
+
+[tasks.tidy]
+run = "go mod tidy"
+description = "Tidy go.mod and go.sum"
+
+# Pre-commit gate. Run before every atomic commit.
+[tasks.check]
+description = "Pre-commit gate: format, vet, build, test, lint"
+depends = ["fmt:check", "vet", "build", "test", "lint"]
+
+# ---------------------------------------------------------------------------
+# Threat-model workflows. The analysed model defaults to the bundled example;
+# pass another with `mise run analyze path/to/threagile.yaml`.
+# ---------------------------------------------------------------------------
+
+[tasks.analyze]
+description = "Analyse a threat model and write every report into out/"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+MODEL="{{arg(i=0, name="model", default="demo/example/threagile.yaml")}}"
+mkdir -p out
+go run ./cmd/threagile analyze-model \
+  --model "${MODEL}" \
+  --output out \
+  --app-dir . \
+  --background report/template/background.pdf \
+  --ignore-orphaned-risk-tracking
+'''
+alias = "a"
+
+[tasks.serve]
+# --server-dir is where the static UI lives (server/static); the server also
+# writes its API keys under server/keys, which is gitignored.
+run = "go run ./cmd/threagile server --app-dir . --server-dir server --temp-dir out/tmp"
+description = "Run the threagile REST server and model editor on :8080"
