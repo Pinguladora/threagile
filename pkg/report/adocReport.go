@@ -32,6 +32,22 @@ type adocReport struct {
 	hideEmptyChapter bool
 }
 
+// writeFile is os.WriteFile with the permissions of os.Create, like copyFile.
+func writeFile(destination string, data []byte) error {
+	/* #nosec destination is not tainted (see caller restricting it to the desired report output folder) */
+	dst, err := os.Create(destination)
+	if err != nil {
+		return fmt.Errorf("unable to create %q: %w", destination, err)
+	}
+
+	_, writeErr := dst.Write(data)
+	if err = errors.Join(writeErr, dst.Close()); err != nil {
+		return fmt.Errorf("unable to write %q: %w", destination, err)
+	}
+
+	return nil
+}
+
 func copyFile(source string, destination string) error {
 	/* #nosec source is not tainted (see caller restricting it to files we created ourself or are legitimate to be copied) */
 	src, err := os.Open(source)
@@ -105,13 +121,17 @@ func (adoc adocReport) writeDefaultTheme(logoImagePath string) error {
 	}
 	adocLogoPath := ""
 	if logoImagePath != "" {
-		if _, err := os.Stat(logoImagePath); err == nil {
-			suffix := filepath.Ext(logoImagePath)
-			adocLogoPath = "logo" + suffix
+		logo, err := reportLogo(logoImagePath)
+		if err != nil {
+			return err
+		}
+
+		if logo != nil {
+			adocLogoPath = "logo" + filepath.Ext(logoImagePath)
 			logoDestPath := filepath.Join(adoc.targetDirectory, "theme", adocLogoPath)
-			err = copyFile(logoImagePath, logoDestPath)
+			err = writeFile(logoDestPath, logo)
 			if err != nil {
-				log.Fatal("Could not copy file: »" + logoImagePath + "« to »" + logoDestPath + "«: " + err.Error())
+				return err
 			}
 		} else {
 			log.Println("logo image path does not exist: " + logoImagePath)

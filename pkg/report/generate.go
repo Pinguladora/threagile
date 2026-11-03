@@ -217,9 +217,14 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 		// report PDF
 		progressReporter.Info("Writing report pdf")
 
+		templateFilename, err := backgroundTemplateFile(config.GetAppFolder(), config.GetTemplateFilename())
+		if err != nil {
+			return err
+		}
+
 		pdfReporter := newPdfReporter(riskRules)
 		err = pdfReporter.WriteReportPDF(filepath.Join(config.GetOutputFolder(), config.GetReportFilename()),
-			filepath.Join(config.GetAppFolder(), config.GetTemplateFilename()),
+			templateFilename,
 			filepath.Join(config.GetOutputFolder(), config.GetDataFlowDiagramFilenamePNG()),
 			filepath.Join(config.GetOutputFolder(), config.GetDataAssetDiagramFilenamePNG()),
 			config.GetInputFile(),

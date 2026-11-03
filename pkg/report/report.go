@@ -54,6 +54,8 @@ func (r *pdfReporter) initReport() {
 	r.tocLinkIdByAssetId = make(map[string]int)
 }
 
+// WriteReportPDF writes the PDF report. An empty templateFilename imports the
+// background embedded in the binary.
 func (r *pdfReporter) WriteReportPDF(reportFilename string,
 	templateFilename string,
 	dataFlowDiagramFilenamePNG string,
@@ -171,19 +173,17 @@ func (r *pdfReporter) addBreadcrumb(parsedModel *types.Model) {
 }
 
 func (r *pdfReporter) parseBackgroundTemplate(templateFilename string) {
-	/*
-		imageBox, err := rice.FindBox("template")
-		checkErr(err)
-		file, err := os.CreateTemp("", "background-*-.r.pdf")
-		checkErr(err)
-		defer os.Remove(file.Title())
-		backgroundBytes := imageBox.MustBytes("background.r.pdf")
-		err = os.WriteFile(file.Title(), backgroundBytes, 0644)
-		checkErr(err)
-	*/
-	r.coverTemplateId = gofpdi.ImportPage(r.pdf, templateFilename, 1, "/MediaBox")
-	r.contentTemplateId = gofpdi.ImportPage(r.pdf, templateFilename, 2, "/MediaBox")
-	r.diagramLegendTemplateId = gofpdi.ImportPage(r.pdf, templateFilename, 3, "/MediaBox")
+	importPage := func(pageno int) int {
+		if templateFilename == "" {
+			return gofpdi.ImportPageFromStream(r.pdf, embeddedBackground(), pageno, "/MediaBox")
+		}
+
+		return gofpdi.ImportPage(r.pdf, templateFilename, pageno, "/MediaBox")
+	}
+
+	r.coverTemplateId = importPage(1)
+	r.contentTemplateId = importPage(2)
+	r.diagramLegendTemplateId = importPage(3)
 }
 
 func (r *pdfReporter) createCover(parsedModel *types.Model) {
