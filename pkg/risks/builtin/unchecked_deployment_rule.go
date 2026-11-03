@@ -1,6 +1,9 @@
 package builtin
 
 import (
+	"maps"
+	"slices"
+
 	"github.com/Pinguladora/threagile/pkg/types"
 )
 
@@ -77,10 +80,7 @@ func (r *UncheckedDeploymentRule) createRisk(input *types.Model, technicalAsset 
 			}
 		}
 	}
-	dataBreachTechnicalAssetIDs := make([]string, 0)
-	for key := range uniqueDataBreachTechnicalAssetIDs {
-		dataBreachTechnicalAssetIDs = append(dataBreachTechnicalAssetIDs, key)
-	}
+	dataBreachTechnicalAssetIDs := slices.Sorted(maps.Keys(uniqueDataBreachTechnicalAssetIDs))
 	// create risk
 	risk := &types.Risk{
 		CategoryId:                   r.Category().ID,

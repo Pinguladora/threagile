@@ -1,6 +1,7 @@
 package builtin
 
 import (
+	"maps"
 	"slices"
 	"strings"
 
@@ -340,8 +341,9 @@ func isTaggedWithBaseTag(tags []string, baseTag string) bool {
 }
 
 func findMostSensitiveTechnicalAsset(input *types.Model, techAssets map[string]struct{}) *types.TechnicalAsset {
+	// MaxFunc returns the first of several equally sensitive assets, so collect them in id order
 	var candidates []*types.TechnicalAsset
-	for id := range techAssets {
+	for _, id := range slices.Sorted(maps.Keys(techAssets)) {
 		candidates = append(candidates, input.TechnicalAssets[id])
 	}
 

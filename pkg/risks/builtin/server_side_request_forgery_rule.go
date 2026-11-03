@@ -1,6 +1,9 @@
 package builtin
 
 import (
+	"maps"
+	"slices"
+
 	"github.com/Pinguladora/threagile/pkg/types"
 )
 
@@ -88,10 +91,7 @@ func (r *ServerSideRequestForgeryRule) createRisk(input *types.Model, technicalA
 	if impact == types.LowImpact && len(trustBoundaryId) > 0 && input.TrustBoundaries[input.GetTechnicalAssetTrustBoundaryId(technicalAsset)].Type.IsWithinCloud() {
 		impact = types.MediumImpact
 	}
-	dataBreachTechnicalAssetIDs := make([]string, 0)
-	for key := range uniqueDataBreachTechnicalAssetIDs {
-		dataBreachTechnicalAssetIDs = append(dataBreachTechnicalAssetIDs, key)
-	}
+	dataBreachTechnicalAssetIDs := slices.Sorted(maps.Keys(uniqueDataBreachTechnicalAssetIDs))
 	likelihood := types.Likely
 	if outgoingFlow.Usage == types.DevOps {
 		likelihood = types.Unlikely
