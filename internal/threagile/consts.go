@@ -8,7 +8,9 @@ const (
 	PluginDir = "/app"
 	DataDir   = "/data"
 	OutputDir = "."
-	ServerDir = "/app/server"
+	// ServerDir defaults to the data folder: the web UI is embedded in the binary,
+	// so the server folder only holds the server's data (API keys and models).
+	ServerDir = DataDir
 	KeyDir    = "keys"
 
 	DefaultServerPort = 8080
