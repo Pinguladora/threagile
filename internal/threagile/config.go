@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/fs"
 	"log"
 	"maps"
 	"os"
@@ -290,8 +291,10 @@ func (c *Config) Load(configFilename string) error {
 		errorList = append(errorList, fmt.Errorf("failed to create output dir %q: %w", c.OutputFolderValue, outDirError))
 	}
 
+	// The app folder is optional: the files threagile reads from it are embedded
+	// in the binary, and a copy found in the folder only overrides the embedded one.
 	c.AppFolderValue = c.CleanPath(c.AppFolderValue)
-	appDirError := c.checkDir(c.AppFolderValue, "app")
+	appDirError := c.checkOptionalDir(c.AppFolderValue, "app")
 	if appDirError != nil {
 		errorList = append(errorList, appDirError)
 	}
@@ -536,6 +539,16 @@ func (c *Config) checkDir(dir string, name string) error {
 	}
 
 	return nil
+}
+
+// checkOptionalDir is checkDir for a folder that may be missing.
+func (c *Config) checkOptionalDir(dir string, name string) error {
+	_, statError := os.Stat(dir)
+	if errors.Is(statError, fs.ErrNotExist) {
+		return nil
+	}
+
+	return c.checkDir(dir, name)
 }
 
 func (c *Config) ExpandPath(path string) string {
