@@ -39,9 +39,6 @@ Common tasks (`mise tasks` lists them all):
 Lint only fails on findings introduced since `main`; the code inherited from
 upstream still carries findings that are being burned down separately.
 
-Diagram rendering currently calls the Graphviz `dot` binary, so `analyze` needs
-Graphviz on your `PATH` (for example `mise exec conda:graphviz -- mise run analyze`).
-
 Main program is [threagile](./cmd/threagile/main.go).
 
 ### Development with Visual Studio Code

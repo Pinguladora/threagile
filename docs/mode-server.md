@@ -6,7 +6,7 @@ by default (unless you changed server values in [config](./config.md) or [flags]
 The server is using [gin](https://github.com/gin-gonic/gin) to serve HTTP connection and have few limitations:
 
 - do not support [includes](./includes.md)
-- single threaded - because of dependency on running graphviz as a process
+- renders one diagram at a time - the embedded Graphviz must not be entered concurrently
 
 ## Edit feature
 
