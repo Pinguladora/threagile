@@ -97,7 +97,11 @@ const (
 		" docker run --rm -it -v \"$(pwd)\":app/work threagile/threagile --model app/work/threagile.yaml --output app/work execute-model-macro add-build-pipeline"
 	ThirdPartyLicenses = " - golang (Google Go License): https://golang.org/LICENSE\n" +
 		" - go-yaml (MIT License): https://github.com/go-yaml/yaml/blob/v3/LICENSE\n" +
-		" - graphviz (CPL License): https://graphviz.gitlab.io/license/\n" +
+		" - graphviz (EPL License): https://graphviz.org/license/\n" +
+		" - go-graphviz (MIT License): https://github.com/goccy/go-graphviz/blob/master/LICENSE\n" +
+		" - wazero (Apache License): https://github.com/tetratelabs/wazero/blob/main/LICENSE\n" +
+		" - gg (MIT License): https://github.com/fogleman/gg/blob/master/LICENSE.md\n" +
+		" - DejaVu fonts (Bitstream Vera License): https://dejavu-fonts.github.io/License.html\n" +
 		" - gofpdf (MIT License): https://github.com/jung-kurt/gofpdf/blob/master/LICENSE\n" +
 		" - go-chart (MIT License): https://github.com/wcharczuk/go-chart/blob/master/LICENSE\n" +
 		" - excelize (BSD License): https://github.com/qax-os/excelize/blob/master/LICENSE\n" +
