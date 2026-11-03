@@ -2,6 +2,8 @@ package expressions
 
 import (
 	"fmt"
+	"maps"
+	"slices"
 
 	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 )
@@ -105,7 +107,8 @@ func (what *ContainsExpression) evalBool(scope *common.Scope, item common.Value,
 		return common.SomeBoolValue(false, nil), "", nil
 
 	case map[string]any:
-		for name, value := range castValue {
+		for _, name := range slices.Sorted(maps.Keys(castValue)) {
+			value := castValue[name]
 			compareValue, compareError := common.Compare(item, common.SomeValue(value, nil), what.as)
 			if compareError != nil {
 				return common.EmptyBoolValue(), what.Literal(), fmt.Errorf("failed to eval contains-expression: can't compare value to item %q: %w", name, compareError)

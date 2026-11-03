@@ -2,6 +2,8 @@ package statements
 
 import (
 	"fmt"
+	"maps"
+	"slices"
 
 	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 	"github.com/Pinguladora/threagile/pkg/risks/script/expressions"
@@ -128,7 +130,8 @@ func (what *LoopStatement) run(scope *common.Scope, value common.Value) (string,
 		}
 
 	case map[string]any:
-		for name, item := range castValue {
+		for _, name := range slices.Sorted(maps.Keys(castValue)) {
+			item := castValue[name]
 			if scope.HasReturned {
 				return "", nil
 			}

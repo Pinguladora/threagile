@@ -2,6 +2,8 @@ package property
 
 import (
 	"fmt"
+	"maps"
+	"slices"
 )
 
 type Value struct {
@@ -47,7 +49,8 @@ func (what *Value) Text() []string {
 			text = append(text, "not")
 		}
 
-		for name, item := range castValue {
+		for _, name := range slices.Sorted(maps.Keys(castValue)) {
+			item := castValue[name]
 			text = append(text, fmt.Sprintf("  %v: %v", name, item))
 		}
 
