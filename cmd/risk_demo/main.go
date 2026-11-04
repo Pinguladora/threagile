@@ -14,6 +14,9 @@ import (
 
 type customRiskRule string
 
+// customRiskRule implements the interface of the built-in risk rules.
+var _ types.RiskRule = customRiskRule("")
+
 func main() {
 	getInfo := flag.Bool("get-info", false, "get rule info")
 	generateRisks := flag.Bool("generate-risks", false, "generate risks")
@@ -93,7 +96,7 @@ func (r customRiskRule) SupportedTags() []string {
 }
 
 func (r customRiskRule) GenerateRisks(parsedModel *types.Model) ([]*types.Risk, error) {
-	generatedRisks := make([]*types.Risk, 0)
+	generatedRisks := make([]*types.Risk, 0, len(parsedModel.TechnicalAssets))
 	for _, techAsset := range parsedModel.TechnicalAssets {
 		generatedRisks = append(generatedRisks, createRisk(techAsset))
 	}

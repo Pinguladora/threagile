@@ -55,43 +55,53 @@ func main() {
 	}
 
 	for n, risk := range generatedRisks {
-		riskExplanation := risk.RiskExplanation
-		ratingExplanation := risk.RatingExplanation
-		risk.RiskExplanation = nil
-		risk.RatingExplanation = nil
-
-		for _, riskLine := range riskExplanation {
-			fmt.Println(riskLine)
-		}
-		fmt.Println("")
-
-		for _, ratingLine := range ratingExplanation {
-			fmt.Println(ratingLine)
-		}
-		fmt.Println("")
-
-		printedRisks, printError := yaml.Marshal(risk)
-		if printError != nil {
-			fmt.Printf("error printing risk #%d for %q: %v\n", n+1, newRule.Category().ID, printError)
+		if !printRisk(n, risk, newRule.Category().ID, parsedModel) {
 			return
 		}
+	}
+}
 
-		fmt.Printf("generated risk #%d for %q: \n%v\n", n+1, newRule.Category().ID, string(printedRisks))
+// printRisk prints the explanations, the YAML and the matching technical assets of the
+// n-th generated risk; it returns false if the risk could not be printed.
+func printRisk(n int, risk *types.Risk, categoryID string, parsedModel *types.Model) bool {
+	riskExplanation := risk.RiskExplanation
+	ratingExplanation := risk.RatingExplanation
+	risk.RiskExplanation = nil
+	risk.RatingExplanation = nil
 
-		assets := make([]*types.TechnicalAsset, 0)
-		for _, techAsset := range parsedModel.TechnicalAssets {
-			if strings.EqualFold(techAsset.Id, risk.MostRelevantTechnicalAssetId) {
-				assets = append(assets, techAsset)
-			}
-		}
+	for _, riskLine := range riskExplanation {
+		fmt.Println(riskLine)
+	}
+	fmt.Println("")
 
-		if len(assets) > 0 {
-			fmt.Printf("found %d asset(s) for risk #%d %q\n", len(assets), n+1, risk.SyntheticId)
-			for _, asset := range assets {
-				fmt.Printf("  - %v\n", asset.Title)
-			}
-		} else {
-			fmt.Printf("no assets found for risk #%d %q\n", n+1, risk.SyntheticId)
+	for _, ratingLine := range ratingExplanation {
+		fmt.Println(ratingLine)
+	}
+	fmt.Println("")
+
+	printedRisks, printError := yaml.Marshal(risk)
+	if printError != nil {
+		fmt.Printf("error printing risk #%d for %q: %v\n", n+1, categoryID, printError)
+		return false
+	}
+
+	fmt.Printf("generated risk #%d for %q: \n%v\n", n+1, categoryID, string(printedRisks))
+
+	assets := make([]*types.TechnicalAsset, 0)
+	for _, techAsset := range parsedModel.TechnicalAssets {
+		if strings.EqualFold(techAsset.Id, risk.MostRelevantTechnicalAssetId) {
+			assets = append(assets, techAsset)
 		}
 	}
+
+	if len(assets) > 0 {
+		fmt.Printf("found %d asset(s) for risk #%d %q\n", len(assets), n+1, risk.SyntheticId)
+		for _, asset := range assets {
+			fmt.Printf("  - %v\n", asset.Title)
+		}
+	} else {
+		fmt.Printf("no assets found for risk #%d %q\n", n+1, risk.SyntheticId)
+	}
+
+	return true
 }
