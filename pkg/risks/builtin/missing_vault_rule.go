@@ -14,16 +14,17 @@ func (*MissingVaultRule) Category() *types.RiskCategory {
 	return &types.RiskCategory{
 		ID:    "missing-vault",
 		Title: "Missing Vault (Secret Storage)",
-		Description: "In order to avoid the risk of secret leakage via config files (when attacked through vulnerabilities being able to " +
-			"read files like Path-Traversal and others), it is best practice to use a separate hardened process with proper authentication, " +
-			"authorization, and audit logging to access config secrets (like credentials, private keys, client certificates, etc.). " +
-			"This component is usually some kind of Vault.",
-		Impact: "If this risk is unmitigated, attackers might be able to easier steal config secrets (like credentials, private keys, client certificates, etc.) once " +
-			"a vulnerability to access files is present and exploited.",
-		ASVS:           "V6 - Stored Cryptography Verification Requirements",
-		CheatSheet:     "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
-		Action:         "Vault (Secret Storage)",
-		Mitigation:     "Consider using a Vault (Secret Storage) to securely store and access config secrets (like credentials, private keys, client certificates, etc.).",
+		Description: "In order to avoid the risk of secret leakage via config files (when attacked through vulnerabilities " +
+			"being able to read files like Path-Traversal and others), it is best practice to use a separate hardened process " +
+			"with proper authentication, authorization, and audit logging to access config secrets (like credentials, private " +
+			"keys, client certificates, etc.). This component is usually some kind of Vault.",
+		Impact: "If this risk is unmitigated, attackers might be able to easier steal config secrets (like credentials, " +
+			"private keys, client certificates, etc.) once a vulnerability to access files is present and exploited.",
+		ASVS:       "V6 - Stored Cryptography Verification Requirements",
+		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
+		Action:     "Vault (Secret Storage)",
+		Mitigation: "Consider using a Vault (Secret Storage) to securely store and access config secrets (like " +
+			"credentials, private keys, client certificates, etc.).",
 		Check:          "GetAttribute a Vault (Secret Storage) in place?",
 		Function:       types.Architecture,
 		STRIDE:         types.InformationDisclosure,
@@ -45,7 +46,8 @@ func (r *MissingVaultRule) GenerateRisks(input *types.Model) ([]*types.Risk, err
 	hasVault := false
 	var mostRelevantAsset *types.TechnicalAsset
 	impact := types.LowImpact
-	for _, id := range input.SortedTechnicalAssetIDs() { // use the sorted one to always get the same tech asset with the highest sensitivity as example asset
+	// use the sorted one to always get the same tech asset with the highest sensitivity as example asset
+	for _, id := range input.SortedTechnicalAssetIDs() {
 		techAsset := input.TechnicalAssets[id]
 		if techAsset.Technologies.GetAttribute(types.Vault) {
 			hasVault = true
@@ -64,7 +66,9 @@ func (r *MissingVaultRule) GenerateRisks(input *types.Model) ([]*types.Risk, err
 	return risks, nil
 }
 
-func (r *MissingVaultRule) createRisk(technicalAsset *types.TechnicalAsset, impact types.RiskExploitationImpact) *types.Risk {
+func (r *MissingVaultRule) createRisk(
+	technicalAsset *types.TechnicalAsset, impact types.RiskExploitationImpact,
+) *types.Risk {
 	title := "<b>Missing Vault (Secret Storage)</b> in the threat model"
 	id := "no-components"
 	if technicalAsset != nil {

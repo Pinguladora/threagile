@@ -15,20 +15,22 @@ func (*XmlExternalEntityRule) Category() *types.RiskCategory {
 		ID:          "xml-external-entity",
 		Title:       "XML External Entity (XXE)",
 		Description: "When a technical asset accepts data in XML format, XML External Entity (XXE) risks might arise.",
-		Impact: "If this risk is unmitigated, attackers might be able to read sensitive files (configuration data, key/credential files, deployment files, " +
-			"business data files, etc.) form the filesystem of affected components and/or access sensitive services or files " +
-			"of other components.",
+		Impact: "If this risk is unmitigated, attackers might be able to read sensitive files (configuration data, " +
+			"key/credential files, deployment files, business data files, etc.) form the filesystem of affected components " +
+			"and/or access sensitive services or files of other components.",
 		ASVS:       asvsConfiguration,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html",
 		Action:     "XML Parser Hardening",
-		Mitigation: "Apply hardening of all XML parser instances in order to stay safe from XML External Entity (XXE) vulnerabilities. " +
-			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+		Mitigation: "Apply hardening of all XML parser instances in order to stay safe from XML External Entity (XXE) " +
+			"vulnerabilities. When a third-party product is used instead of custom developed software, check if the product " +
+			"applies the proper mitigation and ensure a reasonable patch-level.",
 		Check:          checkCheatSheetAndASVS,
 		Function:       types.Development,
 		STRIDE:         types.InformationDisclosure,
 		DetectionLogic: "In-scope technical assets accepting XML data formats.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. " +
-			"Also for cloud-based environments the exploitation impact is at least medium, as cloud backend services can be attacked via SSRF (and XXE vulnerabilities are often also SSRF vulnerabilities).",
+		RiskAssessment: "The risk rating depends on the sensitivity of the technical asset itself and of the data assets " +
+			"processed. Also for cloud-based environments the exploitation impact is at least medium, as cloud backend " +
+			"services can be attacked via SSRF (and XXE vulnerabilities are often also SSRF vulnerabilities).",
 		FalsePositives: "Fully trusted (i.e. cryptographically signed or similar) XML data can be considered " +
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,

@@ -25,8 +25,8 @@ func (*MissingNetworkSegmentationRule) Category() *types.RiskCategory {
 		Description: "Highly sensitive assets and/or data stores residing in the same network segment than other " +
 			"lower sensitive assets (like webservers or content management systems etc.) should be better protected " +
 			"by a network segmentation trust-boundary.",
-		Impact: "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards " +
-			"more valuable targets, as they are not separated by network segmentation.",
+		Impact: "If this risk is unmitigated, attackers successfully attacking other components of the system might have " +
+			"an easy path towards more valuable targets, as they are not separated by network segmentation.",
 		ASVS:       asvsArchitecture,
 		CheatSheet: cheatSheetAttackSurfaceAnalysis,
 		Action:     actionNetworkSegmentation,
@@ -35,14 +35,17 @@ func (*MissingNetworkSegmentationRule) Category() *types.RiskCategory {
 		Function:   types.Operations,
 		STRIDE:     types.ElevationOfPrivilege,
 		DetectionLogic: "In-scope technical assets with high sensitivity and RAA values as well as data stores " +
-			"when surrounded by assets (without a network trust-boundary in-between) which are of type " + types.ClientSystem + ", " +
-			types.WebServer + ", " + types.WebApplication + ", " + types.CMS + ", " + types.WebServiceREST + ", " + types.WebServiceSOAP + ", " +
-			types.BuildPipeline + ", " + types.SourcecodeRepository + ", " + types.Monitoring + ", or similar and there is no direct connection between these " +
-			"(hence no requirement to be so close to each other).",
-		RiskAssessment: "Default is " + types.LowSeverity.String() + " risk. The risk is increased to " + types.MediumSeverity.String() + " when the asset missing the " +
-			"trust-boundary protection is rated as " + types.StrictlyConfidential.String() + " or " + types.MissionCritical.String() + ".",
-		FalsePositives: "When all assets within the network segmentation trust-boundary are hardened and protected to the same extend as if all were " +
-			"containing/processing highly sensitive data.",
+			"when surrounded by assets (without a network trust-boundary in-between) which are of type " +
+			types.ClientSystem + ", " + types.WebServer + ", " + types.WebApplication + ", " + types.CMS + ", " +
+			types.WebServiceREST + ", " + types.WebServiceSOAP + ", " + types.BuildPipeline + ", " +
+			types.SourcecodeRepository + ", " + types.Monitoring + ", or similar and there is no direct connection " +
+			"between these (hence no requirement to be so close to each other).",
+		RiskAssessment: "Default is " + types.LowSeverity.String() + " risk. The risk is increased to " +
+			types.MediumSeverity.String() + " when the asset missing the " +
+			"trust-boundary protection is rated as " + types.StrictlyConfidential.String() + " or " +
+			types.MissionCritical.String() + ".",
+		FalsePositives: "When all assets within the network segmentation trust-boundary are hardened and protected to the " +
+			"same extend as if all were containing/processing highly sensitive data.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweArchitecturalConcepts,
 	}
@@ -54,7 +57,8 @@ func (*MissingNetworkSegmentationRule) SupportedTags() []string {
 
 func (r *MissingNetworkSegmentationRule) GenerateRisks(input *types.Model) ([]*types.Risk, error) {
 	risks := make([]*types.Risk, 0)
-	// first create them in memory (see the link replacement below for nested trust boundaries) - otherwise in Go ranging over map is random order
+	// first create them in memory (see the link replacement below for nested trust boundaries) - otherwise in Go
+	// ranging over map is random order
 	// range over them in sorted (hence re-producible) way:
 	keys := make([]string, 0, len(input.TechnicalAssets))
 	for k := range input.TechnicalAssets {
@@ -125,8 +129,9 @@ func (r *MissingNetworkSegmentationRule) createRisk(techAsset *types.TechnicalAs
 		Severity:               types.CalculateSeverity(types.Unlikely, impact),
 		ExploitationLikelihood: types.Unlikely,
 		ExploitationImpact:     impact,
-		Title: "<b>Missing Network Segmentation</b> to further encapsulate and protect <b>" + techAsset.Title + "</b> against unrelated " +
-			"lower protected assets in the same network segment, which might be easier to compromise by attackers",
+		Title: "<b>Missing Network Segmentation</b> to further encapsulate and protect <b>" + techAsset.Title +
+			"</b> against unrelated lower protected assets in the same network segment, which might be easier to compromise " +
+			"by attackers",
 		MostRelevantTechnicalAssetId: techAsset.Id,
 		DataBreachProbability:        types.Improbable,
 		DataBreachTechnicalAssetIDs:  []string{techAsset.Id},

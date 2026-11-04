@@ -17,30 +17,31 @@ func (*CodeBackdooringRule) Category() *types.RiskCategory {
 	return &types.RiskCategory{
 		ID:    "code-backdooring",
 		Title: "Code Backdooring",
-		Description: "For each build pipeline component Code Backdooring risks might arise where attackers compromise the build pipeline " +
-			"in order to let backdoored artifacts be shipped into production. Aside from direct code backdooring this includes " +
-			"backdooring of dependencies and even of more lower-level build infrastructure, like backdooring compilers (similar to what the XcodeGhost malware did) or dependencies.",
+		Description: "For each build pipeline component Code Backdooring risks might arise where attackers compromise the " +
+			"build pipeline in order to let backdoored artifacts be shipped into production. Aside from direct code " +
+			"backdooring this includes backdooring of dependencies and even of more lower-level build infrastructure, like " +
+			"backdooring compilers (similar to what the XcodeGhost malware did) or dependencies.",
 		Impact: "If this risk remains unmitigated, attackers might be able to execute code on and completely takeover " +
 			"production environments.",
 		ASVS:       asvsMaliciousCode,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html",
 		Action:     actionBuildPipelineHardening,
-		Mitigation: "Reduce the attack surface of backdooring the build pipeline by not directly exposing the build pipeline " +
-			"components on the public internet and also not exposing it in front of unmanaged (out-of-scope) developer clients." +
-			"Also consider the use of code signing to prevent code modifications.",
+		Mitigation: "Reduce the attack surface of backdooring the build pipeline by not directly exposing the build " +
+			"pipeline components on the public internet and also not exposing it in front of unmanaged (out-of-scope) " +
+			"developer clients.Also consider the use of code signing to prevent code modifications.",
 		Check:    checkCheatSheetAndASVS,
 		Function: types.Operations,
 		STRIDE:   types.Tampering,
-		DetectionLogic: "In-scope development relevant technical assets which are either accessed by out-of-scope unmanaged " +
-			"developer clients and/or are directly accessed by any kind of internet-located (non-VPN) component or are themselves directly located " +
-			"on the internet.",
+		DetectionLogic: "In-scope development relevant technical assets which are either accessed by out-of-scope " +
+			"unmanaged developer clients and/or are directly accessed by any kind of internet-located (non-VPN) component or " +
+			"are themselves directly located on the internet.",
 		// The rating does not take the CIA rating of the deployment targets (and their data) into account yet.
-		RiskAssessment: "The risk rating depends on the confidentiality and integrity rating of the code being handled and deployed " +
-			"as well as the placement/calling of this technical asset on/from the internet.",
+		RiskAssessment: "The risk rating depends on the confidentiality and integrity rating of the code being handled and " +
+			"deployed as well as the placement/calling of this technical asset on/from the internet.",
 		FalsePositives: "When the build-pipeline and sourcecode-repo is not exposed to the internet and considered fully " +
-			"trusted (which implies that all accessing clients are also considered fully trusted in terms of their patch management " +
-			"and applied hardening, which must be equivalent to a managed developer client environment) this can be considered a false positive " +
-			"after individual review.",
+			"trusted (which implies that all accessing clients are also considered fully trusted in terms of their patch " +
+			"management and applied hardening, which must be equivalent to a managed developer client environment) this can " +
+			"be considered a false positive after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweHiddenFunctionality,
 	}
@@ -80,7 +81,8 @@ func (r *CodeBackdooringRule) createRisk(input *types.Model, technicalAsset *typ
 	impact := types.LowImpact
 	if !technicalAsset.Technologies.GetAttribute(types.CodeInspectionPlatform) {
 		impact = types.MediumImpact
-		if input.HighestProcessedConfidentiality(technicalAsset) >= types.Confidential || input.HighestProcessedIntegrity(technicalAsset) >= types.Critical {
+		if input.HighestProcessedConfidentiality(technicalAsset) >= types.Confidential ||
+			input.HighestProcessedIntegrity(technicalAsset) >= types.Critical {
 			impact = types.HighImpact
 		}
 	}

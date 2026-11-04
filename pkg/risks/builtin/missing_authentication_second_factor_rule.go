@@ -8,7 +8,9 @@ type MissingAuthenticationSecondFactorRule struct {
 	missingAuthenticationRule *MissingAuthenticationRule
 }
 
-func NewMissingAuthenticationSecondFactorRule(missingAuthenticationRule *MissingAuthenticationRule) *MissingAuthenticationSecondFactorRule {
+func NewMissingAuthenticationSecondFactorRule(
+	missingAuthenticationRule *MissingAuthenticationRule,
+) *MissingAuthenticationSecondFactorRule {
 	return &MissingAuthenticationSecondFactorRule{missingAuthenticationRule: missingAuthenticationRule}
 }
 
@@ -17,8 +19,10 @@ func (*MissingAuthenticationSecondFactorRule) Category() *types.RiskCategory {
 		ID:    "missing-authentication-second-factor",
 		Title: "Missing Two-Factor Authentication (2FA)",
 		Description: "Technical assets (especially multi-tenant systems) should authenticate incoming requests with " +
-			"two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.",
-		Impact:     "If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication.",
+			"two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of " +
+			"confidentiality, integrity, and availability) and is accessed by humans.",
+		Impact: "If this risk is unmitigated, attackers might be able to access or modify highly sensitive data " +
+			"without strong authentication.",
 		ASVS:       asvsAuthentication,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html",
 		Action:     "Authentication with Second Factor (2FA)",
@@ -27,11 +31,14 @@ func (*MissingAuthenticationSecondFactorRule) Category() *types.RiskCategory {
 		Check:    checkCheatSheetAndASVS,
 		Function: types.BusinessSide,
 		STRIDE:   types.ElevationOfPrivilege,
-		DetectionLogic: "In-scope technical assets (except " + types.LoadBalancer + ", " + types.ReverseProxy + ", " + types.WAF + ", " + types.IDS + ", and " + types.IPS + ") should authenticate incoming requests via two-factor authentication (2FA) " +
-			"when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user.",
+		DetectionLogic: "In-scope technical assets (except " + types.LoadBalancer + ", " + types.ReverseProxy + ", " +
+			types.WAF + ", " + types.IDS + ", and " + types.IPS +
+			") should authenticate incoming requests via two-factor authentication (2FA) when the asset processes or stores " +
+			"highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client " +
+			"used by a human user.",
 		RiskAssessment: types.MediumSeverity.String(),
-		FalsePositives: "Technical assets which do not process requests regarding functionality or data linked to end-users (customers) " +
-			"can be considered as false positives after individual review.",
+		FalsePositives: "Technical assets which do not process requests regarding functionality or data linked to " +
+			"end-users (customers) can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweSingleFactorAuthentication,
 	}
@@ -93,13 +100,17 @@ func appendRisk(
 		input.HighestCommunicationLinkConfidentiality(callersCommLink) >= types.Confidential ||
 			input.HighestCommunicationLinkIntegrity(callersCommLink) >= types.Critical
 	if moreRisky && callersCommLink.Authentication != types.TwoFactor {
-		risks = append(risks, r.missingAuthenticationRule.createRisk(input, technicalAsset, commLink, callersCommLink, title, types.MediumImpact, types.Unlikely, true, r.Category()))
+		risks = append(risks, r.missingAuthenticationRule.createRisk(
+			input, technicalAsset, commLink, callersCommLink, title, types.MediumImpact, types.Unlikely, true, r.Category(),
+		))
 	}
 
 	return risks
 }
 
-func (masf *MissingAuthenticationSecondFactorRule) skipAsset(technicalAsset *types.TechnicalAsset, input *types.Model) bool {
+func (masf *MissingAuthenticationSecondFactorRule) skipAsset(
+	technicalAsset *types.TechnicalAsset, input *types.Model,
+) bool {
 	if technicalAsset.OutOfScope ||
 		technicalAsset.Technologies.GetAttribute(types.IsTrafficForwarding) ||
 		technicalAsset.Technologies.GetAttribute(types.IsUnprotectedCommunicationsTolerated) {

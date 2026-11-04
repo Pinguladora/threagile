@@ -16,25 +16,25 @@ func (*MixedTargetsOnSharedRuntimeRule) Category() *types.RiskCategory {
 	return &types.RiskCategory{
 		ID:    "mixed-targets-on-shared-runtime",
 		Title: "Mixed Targets on Shared Runtime",
-		Description: "Different attacker targets (like frontend and backend/datastore components) should not be running on the same " +
-			"shared (underlying) runtime.",
-		Impact: "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards " +
-			"more valuable targets, as they are running on the same shared runtime.",
+		Description: "Different attacker targets (like frontend and backend/datastore components) should not be running on " +
+			"the same shared (underlying) runtime.",
+		Impact: "If this risk is unmitigated, attackers successfully attacking other components of the system might have " +
+			"an easy path towards more valuable targets, as they are running on the same shared runtime.",
 		ASVS:       asvsArchitecture,
 		CheatSheet: cheatSheetAttackSurfaceAnalysis,
 		Action:     "Runtime Separation",
-		Mitigation: "Use separate runtime environments for running different target components or apply similar separation styles to " +
-			"prevent load- or breach-related problems originating from one more attacker-facing asset impacts also the " +
-			"other more critical rated backend/datastore assets.",
+		Mitigation: "Use separate runtime environments for running different target components or apply similar separation " +
+			"styles to prevent load- or breach-related problems originating from one more attacker-facing asset impacts also " +
+			"the other more critical rated backend/datastore assets.",
 		Check:    checkCheatSheetAndASVS,
 		Function: types.Operations,
 		STRIDE:   types.ElevationOfPrivilege,
 		DetectionLogic: "Shared runtime running technical assets of different trust-boundaries is at risk. " +
 			"Also mixing backend/datastore with frontend components on the same shared runtime is considered a risk.",
-		RiskAssessment: "The risk rating (low or medium) depends on the confidentiality, integrity, and availability rating of " +
-			"the technical asset running on the shared runtime.",
-		FalsePositives: "When all assets running on the shared runtime are hardened and protected to the same extend as if all were " +
-			"containing/processing highly sensitive data.",
+		RiskAssessment: "The risk rating (low or medium) depends on the confidentiality, integrity, and availability " +
+			"rating of the technical asset running on the shared runtime.",
+		FalsePositives: "When all assets running on the shared runtime are hardened and protected to the same extend as if " +
+			"all were containing/processing highly sensitive data.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweArchitecturalConcepts,
 	}
@@ -83,7 +83,9 @@ func hasMixedTargets(input *types.Model, sharedRuntime *types.SharedRuntime) boo
 	return hasFrontend && hasBackend
 }
 
-func (r *MixedTargetsOnSharedRuntimeRule) createRisk(input *types.Model, sharedRuntime *types.SharedRuntime) *types.Risk {
+func (r *MixedTargetsOnSharedRuntimeRule) createRisk(
+	input *types.Model, sharedRuntime *types.SharedRuntime,
+) *types.Risk {
 	impact := types.LowImpact
 	if isMoreRisky(input, sharedRuntime) {
 		impact = types.MediumImpact
@@ -94,8 +96,8 @@ func (r *MixedTargetsOnSharedRuntimeRule) createRisk(input *types.Model, sharedR
 		ExploitationLikelihood: types.Unlikely,
 		ExploitationImpact:     impact,
 		// The title does not list the assets running on the shared HW yet.
-		Title: "<b>Mixed Targets on Shared Runtime</b> named <b>" + sharedRuntime.Title + "</b> might enable attackers moving from one less " +
-			"valuable target to a more valuable one",
+		Title: "<b>Mixed Targets on Shared Runtime</b> named <b>" + sharedRuntime.Title +
+			"</b> might enable attackers moving from one less valuable target to a more valuable one",
 		MostRelevantSharedRuntimeId: sharedRuntime.Id,
 		DataBreachProbability:       types.Improbable,
 		DataBreachTechnicalAssetIDs: sharedRuntime.TechnicalAssetsRunning,

@@ -14,22 +14,26 @@ func NewUnguardedDirectDatastoreAccessRule() *UnguardedDirectDatastoreAccessRule
 
 func (*UnguardedDirectDatastoreAccessRule) Category() *types.RiskCategory {
 	return &types.RiskCategory{
-		ID:          "unguarded-direct-datastore-access",
-		Title:       "Unguarded Direct Datastore Access",
-		Description: "Data stores accessed across trust boundaries must be guarded by some protecting service or application.",
-		Impact:      "If this risk is unmitigated, attackers might be able to directly attack sensitive data stores without any protecting components in-between.",
-		ASVS:        asvsArchitecture,
-		CheatSheet:  cheatSheetAttackSurfaceAnalysis,
-		Action:      "Encapsulation of Datastore",
-		Mitigation:  "Encapsulate the datastore access behind a guarding service or application.",
-		Check:       checkCheatSheetAndASVS,
-		Function:    types.Architecture,
-		STRIDE:      types.ElevationOfPrivilege,
+		ID:    "unguarded-direct-datastore-access",
+		Title: "Unguarded Direct Datastore Access",
+		Description: "Data stores accessed across trust boundaries must be guarded by some protecting service or " +
+			"application.",
+		Impact: "If this risk is unmitigated, attackers might be able to directly attack sensitive data stores " +
+			"without any protecting components in-between.",
+		ASVS:       asvsArchitecture,
+		CheatSheet: cheatSheetAttackSurfaceAnalysis,
+		Action:     "Encapsulation of Datastore",
+		Mitigation: "Encapsulate the datastore access behind a guarding service or application.",
+		Check:      checkCheatSheetAndASVS,
+		Function:   types.Architecture,
+		STRIDE:     types.ElevationOfPrivilege,
 		// A new rule "missing bastion host" could complement this one.
-		DetectionLogic: "In-scope technical assets of type " + types.Datastore.String() + " (except " + types.IdentityStoreLDAP + " when accessed from " + types.IdentityProvider + " and " + types.FileServer + " when accessed via file transfer protocols) with confidentiality rating " +
-			"of " + types.Confidential.String() + " (or higher) or with integrity rating of " + types.Critical.String() + " (or higher) " +
-			"which have incoming data-flows from assets outside across a network trust-boundary. DevOps config and " +
-			"deployment access is excluded from this risk.",
+		DetectionLogic: "In-scope technical assets of type " + types.Datastore.String() + " (except " +
+			types.IdentityStoreLDAP + " when accessed from " + types.IdentityProvider + " and " + types.FileServer +
+			" when accessed via file transfer protocols) with confidentiality rating of " + types.Confidential.String() +
+			" (or higher) or with integrity rating of " + types.Critical.String() +
+			" (or higher) which have incoming data-flows from assets outside across a network trust-boundary. DevOps config " +
+			"and deployment access is excluded from this risk.",
 		RiskAssessment: "The matching technical assets are at " + types.LowSeverity.String() + " risk. When either the " +
 			"confidentiality rating is " + types.StrictlyConfidential.String() + " or the integrity rating " +
 			"is " + types.MissionCritical.String() + ", the risk-rating is considered " + types.MediumSeverity.String() + ". " +
@@ -112,10 +116,14 @@ func isSharingSameParentTrustBoundary(input *types.Model, left, right *types.Tec
 
 func fileServerAccessViaFTP(technicalAsset *types.TechnicalAsset, incomingAccess *types.CommunicationLink) bool {
 	return technicalAsset.Technologies.GetAttribute(types.FileServer) &&
-		(incomingAccess.Protocol == types.FTP || incomingAccess.Protocol == types.FTPS || incomingAccess.Protocol == types.SFTP)
+		(incomingAccess.Protocol == types.FTP || incomingAccess.Protocol == types.FTPS ||
+			incomingAccess.Protocol == types.SFTP)
 }
 
-func (r *UnguardedDirectDatastoreAccessRule) createRisk(dataStore *types.TechnicalAsset, dataFlow *types.CommunicationLink, clientOutsideTrustBoundary *types.TechnicalAsset, moreRisky bool) *types.Risk {
+func (r *UnguardedDirectDatastoreAccessRule) createRisk(
+	dataStore *types.TechnicalAsset, dataFlow *types.CommunicationLink, clientOutsideTrustBoundary *types.TechnicalAsset,
+	moreRisky bool,
+) *types.Risk {
 	impact := types.LowImpact
 	if moreRisky || dataStore.RAA > 40 {
 		impact = types.MediumImpact

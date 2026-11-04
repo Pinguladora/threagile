@@ -15,21 +15,23 @@ func (*PushInsteadPullDeploymentRule) Category() *types.RiskCategory {
 		ID:    "push-instead-of-pull-deployment",
 		Title: "Push instead of Pull Deployment",
 		Description: "When comparing push-based vs. pull-based deployments from a security perspective, pull-based " +
-			"deployments improve the overall security of the deployment targets. Every exposed interface of a production system to accept a deployment " +
-			"increases the attack surface of the production system, thus a pull-based approach exposes less attack surface relevant " +
-			"interfaces.",
-		Impact: "If this risk is unmitigated, attackers might have more potential target vectors for attacks, as the overall attack surface is " +
-			"unnecessarily increased.",
+			"deployments improve the overall security of the deployment targets. Every exposed interface of a production " +
+			"system to accept a deployment increases the attack surface of the production system, thus a pull-based approach " +
+			"exposes less attack surface relevant interfaces.",
+		Impact: "If this risk is unmitigated, attackers might have more potential target vectors for attacks, as the " +
+			"overall attack surface is unnecessarily increased.",
 		ASVS:       asvsArchitecture,
 		CheatSheet: cheatSheetAttackSurfaceAnalysis,
 		Action:     actionBuildPipelineHardening,
-		Mitigation: "Try to prefer pull-based deployments (like GitOps scenarios offer) over push-based deployments to reduce the attack surface of the production system.",
-		Check:      checkCheatSheetAndASVS,
-		Function:   types.Architecture,
-		STRIDE:     types.Tampering,
-		DetectionLogic: "Models with build pipeline components accessing in-scope targets of deployment (in a non-readonly way) which " +
-			"are not build-related components themselves.",
-		RiskAssessment: "The risk rating depends on the highest sensitivity of the deployment targets running custom-developed parts.",
+		Mitigation: "Try to prefer pull-based deployments (like GitOps scenarios offer) over push-based deployments to " +
+			"reduce the attack surface of the production system.",
+		Check:    checkCheatSheetAndASVS,
+		Function: types.Architecture,
+		STRIDE:   types.Tampering,
+		DetectionLogic: "Models with build pipeline components accessing in-scope targets of deployment (in a non-readonly " +
+			"way) which are not build-related components themselves.",
+		RiskAssessment: "The risk rating depends on the highest sensitivity of the deployment targets running " +
+			"custom-developed parts.",
 		FalsePositives: "Communication links that are not deployment paths " +
 			"can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: true,
@@ -73,8 +75,12 @@ func (r *PushInsteadPullDeploymentRule) skipDeployment(
 	return targetAsset.Technologies.GetAttribute(types.IsDevelopmentRelevant) || targetAsset.Usage == types.DevOps
 }
 
-func (r *PushInsteadPullDeploymentRule) createRisk(buildPipeline *types.TechnicalAsset, deploymentTarget *types.TechnicalAsset, deploymentCommLink *types.CommunicationLink, impact types.RiskExploitationImpact) *types.Risk {
-	title := "<b>Push instead of Pull Deployment</b> at <b>" + deploymentTarget.Title + "</b> via build pipeline asset <b>" + buildPipeline.Title + "</b>"
+func (r *PushInsteadPullDeploymentRule) createRisk(
+	buildPipeline *types.TechnicalAsset, deploymentTarget *types.TechnicalAsset,
+	deploymentCommLink *types.CommunicationLink, impact types.RiskExploitationImpact,
+) *types.Risk {
+	title := "<b>Push instead of Pull Deployment</b> at <b>" + deploymentTarget.Title +
+		"</b> via build pipeline asset <b>" + buildPipeline.Title + "</b>"
 	risk := &types.Risk{
 		CategoryId:                      r.Category().ID,
 		Severity:                        types.CalculateSeverity(types.Unlikely, impact),

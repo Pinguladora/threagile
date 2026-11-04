@@ -14,17 +14,20 @@ func (*IncompleteModelRule) Category() *types.RiskCategory {
 	return &types.RiskCategory{
 		ID:    "incomplete-model",
 		Title: "Incomplete Model",
-		Description: "When the threat model contains unknown technologies or transfers data over unknown protocols, this is " +
-			"an indicator for an incomplete model.",
-		Impact:                     "If this risk is unmitigated, other risks might not be noticed as the model is incomplete.",
-		ASVS:                       asvsArchitecture,
-		CheatSheet:                 cheatSheetThreatModeling,
-		Action:                     "Threat Modeling Completeness",
-		Mitigation:                 "Try to find out what technology or protocol is used instead of specifying that it is unknown.",
-		Check:                      checkCheatSheetAndASVS,
-		Function:                   types.Architecture,
-		STRIDE:                     types.InformationDisclosure,
-		DetectionLogic:             "All technical assets and communication links with technology type or protocol type specified as unknown.",
+		Description: "When the threat model contains unknown technologies or transfers data over unknown protocols, this " +
+			"is an indicator for an incomplete model.",
+		Impact: "If this risk is unmitigated, other risks might not be noticed as the model is " +
+			"incomplete.",
+		ASVS:       asvsArchitecture,
+		CheatSheet: cheatSheetThreatModeling,
+		Action:     "Threat Modeling Completeness",
+		Mitigation: "Try to find out what technology or protocol is used instead of specifying that it is " +
+			"unknown.",
+		Check:    checkCheatSheetAndASVS,
+		Function: types.Architecture,
+		STRIDE:   types.InformationDisclosure,
+		DetectionLogic: "All technical assets and communication links with technology type or protocol type " +
+			"specified as unknown.",
 		RiskAssessment:             types.LowSeverity.String(),
 		FalsePositives:             falsePositivesIncompleteModel,
 		ModelFailurePossibleReason: true,
@@ -75,8 +78,11 @@ func (r *IncompleteModelRule) createRiskTechAsset(technicalAsset *types.Technica
 	return risk
 }
 
-func (r *IncompleteModelRule) createRiskCommLink(technicalAsset *types.TechnicalAsset, commLink *types.CommunicationLink) *types.Risk {
-	title := "<b>Unknown Protocol</b> specified for communication link <b>" + commLink.Title + "</b> at technical asset <b>" + technicalAsset.Title + "</b>"
+func (r *IncompleteModelRule) createRiskCommLink(
+	technicalAsset *types.TechnicalAsset, commLink *types.CommunicationLink,
+) *types.Risk {
+	title := "<b>Unknown Protocol</b> specified for communication link <b>" + commLink.Title +
+		"</b> at technical asset <b>" + technicalAsset.Title + "</b>"
 	risk := &types.Risk{
 		CategoryId:                      r.Category().ID,
 		Severity:                        types.CalculateSeverity(types.Unlikely, types.LowImpact),

@@ -18,21 +18,26 @@ func (*ServerSideRequestForgeryRule) Category() *types.RiskCategory {
 		ID:    "server-side-request-forgery",
 		Title: "Server-Side Request Forgery (SSRF)",
 		Description: "When a server system (i.e. not a client) is accessing other server systems via typical web protocols " +
-			"Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might arise. ",
-		Impact:     "If this risk is unmitigated, attackers might be able to access sensitive services or files of network-reachable components by modifying outgoing calls of affected components.",
+			"Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might " +
+			"arise. ",
+		Impact: "If this risk is unmitigated, attackers might be able to access sensitive services or files of " +
+			"network-reachable components by modifying outgoing calls of affected components.",
 		ASVS:       asvsFilesAndResources,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
 		Action:     "SSRF Prevention",
-		Mitigation: "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller " +
-			"controllable values. " +
-			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          checkCheatSheetAndASVS,
-		Function:       types.Development,
-		STRIDE:         types.InformationDisclosure,
-		DetectionLogic: "In-scope non-client systems accessing (using outgoing communication links) targets with either HTTP or HTTPS protocol.",
-		RiskAssessment: "The risk rating (low or medium) depends on the sensitivity of the data assets receivable via web protocols from " +
-			"targets within the same network trust-boundary as well on the sensitivity of the data assets receivable via web protocols from the target asset itself. " +
-			"Also for cloud-based environments the exploitation impact is at least medium, as cloud backend services can be attacked via SSRF.",
+		Mitigation: "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use " +
+			"a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable " +
+			"values. When a third-party product is used instead of custom developed software, check if the product applies " +
+			"the proper mitigation and ensure a reasonable patch-level.",
+		Check:    checkCheatSheetAndASVS,
+		Function: types.Development,
+		STRIDE:   types.InformationDisclosure,
+		DetectionLogic: "In-scope non-client systems accessing (using outgoing communication links) targets with either " +
+			"HTTP or HTTPS protocol.",
+		RiskAssessment: "The risk rating (low or medium) depends on the sensitivity of the data assets receivable via web " +
+			"protocols from targets within the same network trust-boundary as well on the sensitivity of the data assets " +
+			"receivable via web protocols from the target asset itself. Also for cloud-based environments the exploitation " +
+			"impact is at least medium, as cloud backend services can be attacked via SSRF.",
 		FalsePositives: "Servers not sending outgoing web requests can be considered " +
 			"as false positives after review.",
 		ModelFailurePossibleReason: false,
@@ -48,7 +53,8 @@ func (r *ServerSideRequestForgeryRule) GenerateRisks(input *types.Model) ([]*typ
 	risks := make([]*types.Risk, 0)
 	for _, id := range input.SortedTechnicalAssetIDs() {
 		technicalAsset := input.TechnicalAssets[id]
-		if technicalAsset.OutOfScope || technicalAsset.Technologies.GetAttribute(types.IsClient) || technicalAsset.Technologies.GetAttribute(types.LoadBalancer) {
+		if technicalAsset.OutOfScope || technicalAsset.Technologies.GetAttribute(types.IsClient) ||
+			technicalAsset.Technologies.GetAttribute(types.LoadBalancer) {
 			continue
 		}
 		for _, outgoingFlow := range technicalAsset.CommunicationLinks {
@@ -60,10 +66,12 @@ func (r *ServerSideRequestForgeryRule) GenerateRisks(input *types.Model) ([]*typ
 	return risks, nil
 }
 
-func (r *ServerSideRequestForgeryRule) createRisk(input *types.Model, technicalAsset *types.TechnicalAsset, outgoingFlow *types.CommunicationLink) *types.Risk {
+func (r *ServerSideRequestForgeryRule) createRisk(
+	input *types.Model, technicalAsset *types.TechnicalAsset, outgoingFlow *types.CommunicationLink,
+) *types.Risk {
 	target := input.TechnicalAssets[outgoingFlow.TargetId]
-	title := "<b>Server-Side Request Forgery (SSRF)</b> risk at <b>" + technicalAsset.Title + "</b> server-side web-requesting " +
-		"the target <b>" + target.Title + "</b> via <b>" + outgoingFlow.Title + "</b>"
+	title := "<b>Server-Side Request Forgery (SSRF)</b> risk at <b>" + technicalAsset.Title +
+		"</b> server-side web-requesting the target <b>" + target.Title + "</b> via <b>" + outgoingFlow.Title + "</b>"
 	impact := types.LowImpact
 	// check by the target itself (can be in another trust-boundary)
 	if input.HighestProcessedConfidentiality(target) == types.StrictlyConfidential {
@@ -77,7 +85,8 @@ func (r *ServerSideRequestForgeryRule) createRisk(input *types.Model, technicalA
 	}
 	// adjust for cloud-based special risks
 	trustBoundaryId := input.GetTechnicalAssetTrustBoundaryId(technicalAsset)
-	if impact == types.LowImpact && len(trustBoundaryId) > 0 && input.TrustBoundaries[input.GetTechnicalAssetTrustBoundaryId(technicalAsset)].Type.IsWithinCloud() {
+	if impact == types.LowImpact && len(trustBoundaryId) > 0 &&
+		input.TrustBoundaries[input.GetTechnicalAssetTrustBoundaryId(technicalAsset)].Type.IsWithinCloud() {
 		impact = types.MediumImpact
 	}
 	dataBreachTechnicalAssetIDs := slices.Sorted(maps.Keys(uniqueDataBreachTechnicalAssetIDs))

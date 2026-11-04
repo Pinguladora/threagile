@@ -17,7 +17,8 @@ func (*UnnecessaryTechnicalAssetRule) Category() *types.RiskCategory {
 		Description: "When a technical asset does not process any data assets, this is " +
 			"an indicator for an unnecessary technical asset (or for an incomplete model). " +
 			"This is also the case if the asset has no communication links (either outgoing or incoming).",
-		Impact:                     "If this risk is unmitigated, attackers might be able to target unnecessary technical assets.",
+		Impact: "If this risk is unmitigated, attackers might be able to target unnecessary technical " +
+			"assets.",
 		ASVS:                       asvsArchitecture,
 		CheatSheet:                 cheatSheetAttackSurfaceAnalysis,
 		Action:                     actionAttackSurfaceReduction,
@@ -42,7 +43,8 @@ func (r *UnnecessaryTechnicalAssetRule) GenerateRisks(input *types.Model) ([]*ty
 	for _, id := range input.SortedTechnicalAssetIDs() {
 		technicalAsset := input.TechnicalAssets[id]
 		if len(technicalAsset.DataAssetsProcessed) == 0 && len(technicalAsset.DataAssetsStored) == 0 ||
-			(len(technicalAsset.CommunicationLinks) == 0 && len(input.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id]) == 0) {
+			(len(technicalAsset.CommunicationLinks) == 0 &&
+				len(input.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id]) == 0) {
 			risks = append(risks, r.createRisk(technicalAsset))
 		}
 	}
