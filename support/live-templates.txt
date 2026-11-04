@@ -82,7 +82,7 @@ trust_boundaries:
 shared_runtimes:
 
 
-individual_risk_categories:
+custom_risk_categories:
 
 
 # NOTE:
@@ -211,8 +211,8 @@ Live template for a shared runtime:
 Live template for an individual risk category:
 ====================================================
 
-  $IndividualRiskCategoryName$:
-    id: $id$
+  - id: $id$
+    title: $IndividualRiskCategoryName$
     description: $END$
     impact:
     asvs:

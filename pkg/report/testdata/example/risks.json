@@ -555,6 +555,28 @@
     ]
   },
   {
+    "category": "something-strange",
+    "severity": "critical",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eExample Individual Risk\u003c/b\u003e at \u003cb\u003eDatabase\u003c/b\u003e",
+    "synthetic_id": "something-strange@sql-database",
+    "most_relevant_technical_asset": "sql-database",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "sql-database"
+    ]
+  },
+  {
+    "category": "something-strange",
+    "severity": "medium",
+    "exploitation_likelihood": "frequent",
+    "exploitation_impact": "very-high",
+    "title": "\u003cb\u003eExample Individual Risk\u003c/b\u003e at \u003cb\u003eContract Filesystem\u003c/b\u003e",
+    "synthetic_id": "something-strange@contract-file-server",
+    "most_relevant_technical_asset": "contract-file-server"
+  },
+  {
     "category": "sql-nosql-injection",
     "severity": "high",
     "exploitation_likelihood": "very-likely",

@@ -34,6 +34,11 @@ func (what *RiskCategory) Merge(other RiskCategory) error {
 		return fmt.Errorf("failed to merge id: %w", mergeError)
 	}
 
+	what.Title, mergeError = new(Strings).MergeSingleton(what.Title, other.Title)
+	if mergeError != nil {
+		return fmt.Errorf("failed to merge title: %w", mergeError)
+	}
+
 	what.Description, mergeError = new(Strings).MergeSingleton(what.Description, other.Description)
 	if mergeError != nil {
 		return fmt.Errorf("failed to merge description: %w", mergeError)
@@ -108,6 +113,29 @@ func (what *RiskCategory) Merge(other RiskCategory) error {
 	}
 
 	return nil
+}
+
+func (what *RiskCategory) MergeMap(first, second map[string]RiskCategory) (map[string]RiskCategory, error) {
+	if first == nil {
+		// first is nil for a section that is missing, or a key left without a value, in the model merged into
+		first = make(map[string]RiskCategory, len(second))
+	}
+
+	for mapKey, mapValue := range second {
+		mapItem, ok := first[mapKey]
+		if ok {
+			mergeError := mapItem.Merge(mapValue)
+			if mergeError != nil {
+				return first, fmt.Errorf("failed to merge risk category %q: %w", mapKey, mergeError)
+			}
+
+			first[mapKey] = mapItem
+		} else {
+			first[mapKey] = mapValue
+		}
+	}
+
+	return first, nil
 }
 
 func (what *RiskCategories) Add(items ...*RiskCategory) error {
