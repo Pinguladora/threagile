@@ -90,12 +90,62 @@ type reportConfigReader interface { //nolint:interfacebloat // a flat list of co
 	GetHideEmptyChapters() bool
 }
 
-func Generate(config reportConfigReader, readResult *model.ReadResult, commands *GenerateCommands, riskRules types.RiskRules, progressReporter progressReporter) error {
-	generateDataFlowDiagram := commands.DataFlowDiagram
-	generateDataAssetsDiagram := commands.DataAssetDiagram
-
+func Generate(config reportConfigReader, readResult *model.ReadResult, commands *GenerateCommands,
+	riskRules types.RiskRules, progressReporter progressReporter,
+) error {
 	_ = os.MkdirAll(filepath.Clean(config.GetOutputFolder()), 0o750)
 	_ = os.MkdirAll(filepath.Clean(config.GetTempFolder()), 0o700)
+
+	generateDataFlowDiagram, generateDataAssetsDiagram := diagramsToGenerate(config, commands, progressReporter)
+
+	diagramDPI := config.GetDiagramDPI()
+	if diagramDPI < config.GetMinGraphvizDPI() {
+		diagramDPI = config.GetMinGraphvizDPI()
+	} else if diagramDPI > config.GetMaxGraphvizDPI() {
+		diagramDPI = config.GetMaxGraphvizDPI()
+	}
+	// Data-flow Diagram rendering
+	if generateDataFlowDiagram {
+		writeDOT := func(filename string) (*os.File, error) {
+			return WriteDataFlowDiagramGraphvizDOT(readResult.ParsedModel, filename, diagramDPI,
+				config.GetAddModelTitle(), config.GetAddLegend(), progressReporter)
+		}
+		removeDOT, err := renderDiagram(config, "data flow", config.GetDataFlowDiagramFilenameDOT(),
+			config.GetDataFlowDiagramFilenamePNG(), writeDOT, GenerateDataFlowDiagramGraphvizImage, progressReporter)
+		defer removeDOT()
+		if err != nil {
+			return err
+		}
+	}
+	// Data Asset Diagram rendering
+	if generateDataAssetsDiagram {
+		writeDOT := func(filename string) (*os.File, error) {
+			return WriteDataAssetDiagramGraphvizDOT(readResult.ParsedModel, filename, diagramDPI, progressReporter)
+		}
+		removeDOT, err := renderDiagram(config, "data asset", config.GetDataAssetDiagramFilenameDOT(),
+			config.GetDataAssetDiagramFilenamePNG(), writeDOT, GenerateDataAssetDiagramGraphvizImage, progressReporter)
+		defer removeDOT()
+		if err != nil {
+			return err
+		}
+	}
+
+	if err := writeJSONOutputs(config, readResult, commands, progressReporter); err != nil {
+		return err
+	}
+	if err := writeExcelOutputs(config, readResult, commands, progressReporter); err != nil {
+		return err
+	}
+	return writeReports(config, readResult, commands, riskRules, diagramDPI, progressReporter)
+}
+
+// diagramsToGenerate returns whether to generate the data-flow and the data asset diagram: when
+// asked to, or when a PDF or AsciiDoc report needs a diagram that does not exist yet.
+func diagramsToGenerate(config reportConfigReader, commands *GenerateCommands,
+	progressReporter progressReporter,
+) (generateDataFlowDiagram bool, generateDataAssetsDiagram bool) {
+	generateDataFlowDiagram = commands.DataFlowDiagram
+	generateDataAssetsDiagram = commands.DataAssetDiagram
 
 	if commands.ReportPDF || commands.ReportADOC { // as the PDF report includes both diagrams
 		if !generateDataFlowDiagram {
@@ -113,62 +163,49 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 			}
 		}
 	}
+	return generateDataFlowDiagram, generateDataAssetsDiagram
+}
 
-	diagramDPI := config.GetDiagramDPI()
-	if diagramDPI < config.GetMinGraphvizDPI() {
-		diagramDPI = config.GetMinGraphvizDPI()
-	} else if diagramDPI > config.GetMaxGraphvizDPI() {
-		diagramDPI = config.GetMaxGraphvizDPI()
-	}
-	// Data-flow Diagram rendering
-	if generateDataFlowDiagram {
-		gvFile := filepath.Join(config.GetOutputFolder(), config.GetDataFlowDiagramFilenameDOT())
-		if !config.GetKeepDiagramSourceFiles() {
-			tmpFileGV, err := os.CreateTemp(config.GetTempFolder(), config.GetDataFlowDiagramFilenameDOT())
-			if err != nil {
-				return fmt.Errorf("unable to create a temporary data flow diagram file: %w", err)
-			}
-			gvFile = tmpFileGV.Name()
-			defer func() { _ = os.Remove(gvFile) }()
-		}
-		dotFile, err := WriteDataFlowDiagramGraphvizDOT(readResult.ParsedModel, gvFile, diagramDPI,
-			config.GetAddModelTitle(), config.GetAddLegend(), progressReporter)
+// renderDiagram writes the DOT source of a diagram and renders it to PNG, only warning when the
+// rendering fails. Unless the DOT source is to be kept, it goes into a temporary file, which the
+// returned function removes. The returned function is never nil.
+func renderDiagram(config reportConfigReader, name string, filenameDOT string, filenamePNG string,
+	writeDOT func(filename string) (*os.File, error),
+	renderPNG func(dotFile *os.File, targetDir string, filenamePNG string, progressReporter progressReporter) error,
+	progressReporter progressReporter,
+) (func(), error) {
+	removeDOT := func() {}
+	gvFile := filepath.Join(config.GetOutputFolder(), filenameDOT)
+	if !config.GetKeepDiagramSourceFiles() {
+		tmpFile, err := os.CreateTemp(config.GetTempFolder(), filenameDOT)
 		if err != nil {
-			return fmt.Errorf("error while generating data flow diagram: %w", err)
+			return removeDOT, fmt.Errorf("unable to create a temporary %s diagram file: %w", name, err)
 		}
+		gvFile = tmpFile.Name()
+		removeDOT = func() { _ = os.Remove(gvFile) }
+	}
+	dotFile, err := writeDOT(gvFile)
+	if err != nil {
+		return removeDOT, fmt.Errorf("error while generating %s diagram: %w", name, err)
+	}
 
-		err = GenerateDataFlowDiagramGraphvizImage(dotFile, config.GetOutputFolder(),
-			config.GetDataFlowDiagramFilenamePNG(), progressReporter)
-		if err != nil {
-			progressReporter.Warn(err)
-		}
+	err = renderPNG(dotFile, config.GetOutputFolder(), filenamePNG, progressReporter)
+	if err != nil {
+		progressReporter.Warn(err)
 	}
-	// Data Asset Diagram rendering
-	if generateDataAssetsDiagram {
-		gvFile := filepath.Join(config.GetOutputFolder(), config.GetDataAssetDiagramFilenameDOT())
-		if !config.GetKeepDiagramSourceFiles() {
-			tmpFile, err := os.CreateTemp(config.GetTempFolder(), config.GetDataAssetDiagramFilenameDOT())
-			if err != nil {
-				return fmt.Errorf("unable to create a temporary data asset diagram file: %w", err)
-			}
-			gvFile = tmpFile.Name()
-			defer func() { _ = os.Remove(gvFile) }()
-		}
-		dotFile, err := WriteDataAssetDiagramGraphvizDOT(readResult.ParsedModel, gvFile, diagramDPI, progressReporter)
-		if err != nil {
-			return fmt.Errorf("error while generating data asset diagram: %w", err)
-		}
-		err = GenerateDataAssetDiagramGraphvizImage(dotFile, config.GetOutputFolder(),
-			config.GetDataAssetDiagramFilenamePNG(), progressReporter)
-		if err != nil {
-			progressReporter.Warn(err)
-		}
-	}
+	return removeDOT, nil
+}
+
+// writeJSONOutputs writes the JSON outputs that are asked for.
+func writeJSONOutputs(config reportConfigReader, readResult *model.ReadResult, commands *GenerateCommands,
+	progressReporter progressReporter,
+) error {
+	outputFile := func(filename string) string { return filepath.Join(config.GetOutputFolder(), filename) }
 
 	// risks as risks json
 	if commands.RisksJSON {
 		progressReporter.Info("Writing risks json")
-		err := WriteRisksJSON(readResult.ParsedModel, filepath.Join(config.GetOutputFolder(), config.GetJsonRisksFilename()))
+		err := WriteRisksJSON(readResult.ParsedModel, outputFile(config.GetJsonRisksFilename()))
 		if err != nil {
 			return fmt.Errorf("error while writing risks json: %w", err)
 		}
@@ -177,8 +214,7 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 	// technical assets json
 	if commands.TechnicalAssetsJSON {
 		progressReporter.Info("Writing technical assets json")
-		err := WriteTechnicalAssetsJSON(readResult.ParsedModel,
-			filepath.Join(config.GetOutputFolder(), config.GetJsonTechnicalAssetsFilename()))
+		err := WriteTechnicalAssetsJSON(readResult.ParsedModel, outputFile(config.GetJsonTechnicalAssetsFilename()))
 		if err != nil {
 			return fmt.Errorf("error while writing technical assets json: %w", err)
 		}
@@ -187,7 +223,7 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 	// risks as risks json
 	if commands.StatsJSON {
 		progressReporter.Info("Writing stats json")
-		err := WriteStatsJSON(readResult.ParsedModel, filepath.Join(config.GetOutputFolder(), config.GetJsonStatsFilename()))
+		err := WriteStatsJSON(readResult.ParsedModel, outputFile(config.GetJsonStatsFilename()))
 		if err != nil {
 			return fmt.Errorf("error while writing stats json: %w", err)
 		}
@@ -196,17 +232,24 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 	// the model with its risks as an Open Threat Model
 	if commands.OTMJSON {
 		progressReporter.Info("Writing otm json")
-		err := WriteOTMJSON(readResult.ParsedModel, filepath.Join(config.GetOutputFolder(), config.GetJsonOTMFilename()))
+		err := WriteOTMJSON(readResult.ParsedModel, outputFile(config.GetJsonOTMFilename()))
 		if err != nil {
 			return fmt.Errorf("error while writing otm json: %w", err)
 		}
 	}
+	return nil
+}
+
+// writeExcelOutputs writes the Excel outputs that are asked for.
+func writeExcelOutputs(config reportConfigReader, readResult *model.ReadResult, commands *GenerateCommands,
+	progressReporter progressReporter,
+) error {
+	outputFile := func(filename string) string { return filepath.Join(config.GetOutputFolder(), filename) }
 
 	// risks Excel
 	if commands.RisksExcel {
 		progressReporter.Info("Writing risks excel")
-		err := WriteRisksExcelToFile(readResult.ParsedModel,
-			filepath.Join(config.GetOutputFolder(), config.GetExcelRisksFilename()), config)
+		err := WriteRisksExcelToFile(readResult.ParsedModel, outputFile(config.GetExcelRisksFilename()), config)
 		if err != nil {
 			return err
 		}
@@ -215,67 +258,27 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 	// tags Excel
 	if commands.TagsExcel {
 		progressReporter.Info("Writing tags excel")
-		err := WriteTagsExcelToFile(readResult.ParsedModel,
-			filepath.Join(config.GetOutputFolder(), config.GetExcelTagsFilename()), config)
+		err := WriteTagsExcelToFile(readResult.ParsedModel, outputFile(config.GetExcelTagsFilename()), config)
 		if err != nil {
 			return err
 		}
 	}
+	return nil
+}
 
+// writeReports writes the PDF, AsciiDoc and HTML reports that are asked for.
+func writeReports(config reportConfigReader, readResult *model.ReadResult, commands *GenerateCommands,
+	riskRules types.RiskRules, diagramDPI int, progressReporter progressReporter,
+) error {
 	if commands.ReportPDF {
-		modelHash, err := hashFile(config.GetInputFile())
-		if err != nil {
-			return err
-		}
-		// report PDF
-		progressReporter.Info("Writing report pdf")
-
-		templateFilename, err := backgroundTemplateFile(config.GetAppFolder(), config.GetTemplateFilename())
-		if err != nil {
-			return err
-		}
-
-		pdfReporter := newPdfReporter(riskRules)
-		err = pdfReporter.WriteReportPDF(filepath.Join(config.GetOutputFolder(), config.GetReportFilename()),
-			templateFilename,
-			filepath.Join(config.GetOutputFolder(), config.GetDataFlowDiagramFilenamePNG()),
-			filepath.Join(config.GetOutputFolder(), config.GetDataAssetDiagramFilenamePNG()),
-			config.GetInputFile(),
-			config.GetSkipRiskRules(),
-			config.GetBuildTimestamp(),
-			config.GetThreagileVersion(),
-			modelHash,
-			readResult.IntroTextRAA,
-			readResult.CustomRiskRules,
-			config.GetTempFolder(),
-			readResult.ParsedModel,
-			config.GetReportConfigurationHideChapters())
+		err := writeReportPDF(config, readResult, riskRules, progressReporter)
 		if err != nil {
 			return err
 		}
 	}
 
 	if commands.ReportADOC {
-		modelHash, err := hashFile(config.GetInputFile())
-		if err != nil {
-			return err
-		}
-
-		// report ADOC
-		progressReporter.Info("Writing report adoc")
-		adocReporter := NewAdocReport(config.GetOutputFolder(), riskRules, config.GetHideEmptyChapters())
-		err = adocReporter.WriteReport(readResult.ParsedModel,
-			filepath.Join(config.GetOutputFolder(), config.GetDataFlowDiagramFilenamePNG()),
-			filepath.Join(config.GetOutputFolder(), config.GetDataAssetDiagramFilenamePNG()),
-			config.GetInputFile(),
-			config.GetSkipRiskRules(),
-			config.GetBuildTimestamp(),
-			config.GetThreagileVersion(),
-			modelHash,
-			readResult.IntroTextRAA,
-			readResult.CustomRiskRules,
-			config.GetReportLogoImagePath(),
-			config.GetReportConfigurationHideChapters())
+		err := writeReportADOC(config, readResult, riskRules, progressReporter)
 		if err != nil {
 			return err
 		}
@@ -288,8 +291,66 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 			return err
 		}
 	}
-
 	return nil
+}
+
+// writeReportPDF writes the PDF report.
+func writeReportPDF(config reportConfigReader, readResult *model.ReadResult, riskRules types.RiskRules,
+	progressReporter progressReporter,
+) error {
+	modelHash, err := hashFile(config.GetInputFile())
+	if err != nil {
+		return err
+	}
+	// report PDF
+	progressReporter.Info("Writing report pdf")
+
+	templateFilename, err := backgroundTemplateFile(config.GetAppFolder(), config.GetTemplateFilename())
+	if err != nil {
+		return err
+	}
+
+	pdfReporter := newPdfReporter(riskRules)
+	return pdfReporter.WriteReportPDF(filepath.Join(config.GetOutputFolder(), config.GetReportFilename()),
+		templateFilename,
+		filepath.Join(config.GetOutputFolder(), config.GetDataFlowDiagramFilenamePNG()),
+		filepath.Join(config.GetOutputFolder(), config.GetDataAssetDiagramFilenamePNG()),
+		config.GetInputFile(),
+		config.GetSkipRiskRules(),
+		config.GetBuildTimestamp(),
+		config.GetThreagileVersion(),
+		modelHash,
+		readResult.IntroTextRAA,
+		readResult.CustomRiskRules,
+		config.GetTempFolder(),
+		readResult.ParsedModel,
+		config.GetReportConfigurationHideChapters())
+}
+
+// writeReportADOC writes the AsciiDoc report.
+func writeReportADOC(config reportConfigReader, readResult *model.ReadResult, riskRules types.RiskRules,
+	progressReporter progressReporter,
+) error {
+	modelHash, err := hashFile(config.GetInputFile())
+	if err != nil {
+		return err
+	}
+
+	// report ADOC
+	progressReporter.Info("Writing report adoc")
+	adocReporter := NewAdocReport(config.GetOutputFolder(), riskRules, config.GetHideEmptyChapters())
+	return adocReporter.WriteReport(readResult.ParsedModel,
+		filepath.Join(config.GetOutputFolder(), config.GetDataFlowDiagramFilenamePNG()),
+		filepath.Join(config.GetOutputFolder(), config.GetDataAssetDiagramFilenamePNG()),
+		config.GetInputFile(),
+		config.GetSkipRiskRules(),
+		config.GetBuildTimestamp(),
+		config.GetThreagileVersion(),
+		modelHash,
+		readResult.IntroTextRAA,
+		readResult.CustomRiskRules,
+		config.GetReportLogoImagePath(),
+		config.GetReportConfigurationHideChapters())
 }
 
 // writeReportHTML writes the HTML report. It renders the diagrams from DOT sources of its own, as
