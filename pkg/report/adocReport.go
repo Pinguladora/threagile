@@ -985,19 +985,21 @@ For a full high-resolution version of this diagram please refer to the PNG image
 	writeLine(f, "\nimage::"+diagramFilenamePNG+"[]")
 }
 
+// imageIsWiderThanHigh reports whether an image is much wider than high; an image it can't read is not.
 func imageIsWiderThanHigh(diagramFilenamePNG string) bool {
 	/* #nosec diagramFilenamePNG is not tainted (see caller restricting it to image files of model folder only) */
 	imagePath, err := os.Open(diagramFilenamePNG)
 	if err != nil {
-		log.Fatalln("error opening image file: %w", err)
+		log.Println("error opening image file:", err)
 		return false
 	}
 	defer func() { _ = imagePath.Close() }()
-	srcImage, _, _ := image.Decode(imagePath)
-	srcDimensions := srcImage.Bounds()
-	// wider than high?
-	muchWiderThanHigh := srcDimensions.Dx() > int(float64(srcDimensions.Dy())*1.25)
-	return muchWiderThanHigh
+	srcConfig, _, err := image.DecodeConfig(imagePath)
+	if err != nil {
+		log.Println("error reading image file:", err)
+		return false
+	}
+	return srcConfig.Width > int(float64(srcConfig.Height)*1.25)
 }
 
 func (adoc AdocReport) writeDataFlowDiagram(diagramFilenamePNG string) error {
