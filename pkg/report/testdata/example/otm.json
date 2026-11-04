@@ -1412,6 +1412,16 @@
       ],
       "threats": [
         {
+          "threat": "human-use-of-machine-identity",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "human-use-of-machine-identity-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "missing-authentication-second-factor",
           "state": "mitigated",
           "mitigations": [
@@ -1445,6 +1455,16 @@
       ],
       "threats": [
         {
+          "threat": "human-use-of-machine-identity",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "human-use-of-machine-identity-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "missing-authentication-second-factor",
           "state": "mitigated",
           "mitigations": [
@@ -1476,6 +1496,16 @@
         "customer-accounts"
       ],
       "threats": [
+        {
+          "threat": "human-use-of-machine-identity",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "human-use-of-machine-identity-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
         {
           "threat": "missing-authentication-second-factor",
           "state": "mitigated",
@@ -1730,6 +1760,16 @@
       ],
       "threats": [
         {
+          "threat": "human-use-of-machine-identity",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "human-use-of-machine-identity-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "missing-authentication-second-factor",
           "state": "mitigated",
           "mitigations": [
@@ -1772,6 +1812,16 @@
         "server-application-code"
       ],
       "threats": [
+        {
+          "threat": "human-use-of-machine-identity",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "human-use-of-machine-identity-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
         {
           "threat": "long-lived-credentials",
           "state": "exposed",
@@ -1824,6 +1874,16 @@
         "build-job-config"
       ],
       "threats": [
+        {
+          "threat": "human-use-of-machine-identity",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "human-use-of-machine-identity-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
         {
           "threat": "missing-authentication-second-factor",
           "state": "mitigated",
@@ -2198,6 +2258,29 @@
       "attributes": {
         "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "human-use-of-machine-identity",
+      "name": "Human Use of Machine Identity",
+      "description": "People who call a service with the account of a machine, like an administrator using the credentials of a service account or a client that ships with an API key of its own, act without an identity of theirs. The service cannot tell them apart, nor require a second factor or end their access when they leave, and the secret gets copied to wherever they work.",
+      "categories": [
+        "Repudiation",
+        "OWASP NHI10:2025 Human Use of NHI",
+        "OWASP ASI03:2026 Identity and Privilege Abuse"
+      ],
+      "cwes": [
+        "CWE-1390"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 75,
+        "impactComment": "If this risk is unmitigated, attackers might use a secret copied from a laptop, a script or a client to access the target, and nobody can tell who did what with it."
+      },
+      "attributes": {
+        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
     },
@@ -2763,6 +2846,15 @@
       "id": "dos-risky-access-across-trust-boundary-mitigation",
       "name": "Anti-DoS Measures",
       "description": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "human-use-of-machine-identity-mitigation",
+      "name": "Personal Identities for People",
+      "description": "Let people sign in with their own identity, through single sign-on with multi-factor authentication, and pass it on to the target, modelling the link with the identity \u003ci\u003eend-user\u003c/i\u003e. Where an administrator needs the permissions of a service, grant them for a limited time through a privileged access workflow that records who used them. Keep secrets of service accounts out of clients.",
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"

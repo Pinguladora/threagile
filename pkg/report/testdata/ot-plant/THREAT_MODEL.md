@@ -42,13 +42,13 @@ Threagile toolkit was used to model the architecture of "Water Treatment Plant" 
 
 Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.
 
-In total **42 initial risks** in **13 categories** have been identified during the threat modeling process:
+In total **43 initial risks** in **14 categories** have been identified during the threat modeling process:
 
 | Severity | Risks | Status | Risks |
 | --- | ---: | --- | ---: |
-| Critical | 0 | Unchecked | 41 |
+| Critical | 0 | Unchecked | 42 |
 | High | 0 | In Discussion | 0 |
-| Elevated | 23 | Accepted | 0 |
+| Elevated | 24 | Accepted | 0 |
 | Medium | 19 | In Progress | 1 |
 | Low | 0 | Mitigated | 0 |
 |  |  | False Positive | 0 |
@@ -57,11 +57,15 @@ The plant supplies the drinking water of the town; a failure of the dosing or of
 
 ## Impact Analysis of the Initial Risks
 
-The most prevalent impacts of the **42 initial risks** (distributed over **13 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **43 initial risks** (distributed over **14 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Direct IT/OT Communication](#direct-itot-communication): 1 Initial Risk, exploitation likelihood is _Likely_ with _High_ impact
 
     If this risk is unmitigated, attackers who compromise an IT asset might reach the industrial control system and change, stop or damage the physical process it controls.
+
+- **Elevated**: [Human Use of Machine Identity](#human-use-of-machine-identity): 1 Initial Risk, exploitation likelihood is _Likely_ with _High_ impact
+
+    If this risk is unmitigated, attackers might use a secret copied from a laptop, a script or a client to access the target, and nobody can tell who did what with it.
 
 - **Elevated**: [Insecure Control Protocol](#insecure-control-protocol): 6 Initial Risks, exploitation likelihood is _Likely_ with _Very High_ impact
 
@@ -135,27 +139,31 @@ The following table gives a high-level overview of the risk tracking status (inc
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Critical | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | High | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Elevated | 23 | 22 | 0 | 0 | 1 | 0 | 0 |
+| Elevated | 24 | 23 | 0 | 0 | 1 | 0 | 0 |
 | Medium | 19 | 19 | 0 | 0 | 0 | 0 | 0 |
 | Low | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
-After removal of risks with status _mitigated_ and _false positive_ the following **42 remain unmitigated**:
+After removal of risks with status _mitigated_ and _false positive_ the following **43 remain unmitigated**:
 
 | Severity | Unmitigated risks | To be checked by | Unmitigated risks |
 | --- | ---: | --- | ---: |
 | Critical | 0 | Business Side | 1 |
 | High | 0 | Architecture | 12 |
-| Elevated | 23 | Development | 5 |
-| Medium | 19 | Operations | 24 |
+| Elevated | 24 | Development | 5 |
+| Medium | 19 | Operations | 25 |
 | Low | 0 |  |  |
 
 ## Impact Analysis of the Remaining Risks
 
-The most prevalent impacts of the **42 remaining risks** (distributed over **13 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **43 remaining risks** (distributed over **14 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Direct IT/OT Communication](#direct-itot-communication): 1 Remaining Risk, exploitation likelihood is _Likely_ with _High_ impact
 
     If this risk is unmitigated, attackers who compromise an IT asset might reach the industrial control system and change, stop or damage the physical process it controls.
+
+- **Elevated**: [Human Use of Machine Identity](#human-use-of-machine-identity): 1 Remaining Risk, exploitation likelihood is _Likely_ with _High_ impact
+
+    If this risk is unmitigated, attackers might use a secret copied from a laptop, a script or a client to access the target, and nobody can tell who did what with it.
 
 - **Elevated**: [Insecure Control Protocol](#insecure-control-protocol): 6 Remaining Risks, exploitation likelihood is _Likely_ with _Very High_ impact
 
@@ -223,7 +231,7 @@ The most prevalent impacts of the **42 remaining risks** (distributed over **13 
 
 ## Risks by Severity
 
-All **42 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
+All **43 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
 
 ### Critical
 
@@ -239,11 +247,12 @@ _No risks._
 
 ### Elevated
 
-**23 risks**
+**24 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
 | Elevated | [**Direct IT/OT Communication** risk at **SCADA Server** with **Office Workstation**](#direct-itot-communication) | [Direct IT/OT Communication](#direct-itot-communication) | [SCADA Server](#scada-server), [Live Dashboard](#live-dashboard) | Unchecked |
+| Elevated | [**Human Use of Machine Identity** risk at **SCADA Server** by users of **Office Workstation** (service-account)](#human-use-of-machine-identity) | [Human Use of Machine Identity](#human-use-of-machine-identity) | [SCADA Server](#scada-server), [Live Dashboard](#live-dashboard) | Unchecked |
 | Elevated | [**Insecure Control Protocol** risk at **Chlorine Safety Controller** over **modbus** from **SCADA Server**](#insecure-control-protocol) | [Insecure Control Protocol](#insecure-control-protocol) | [Chlorine Safety Controller](#chlorine-safety-controller), [Safety Reset](#safety-reset) | Unchecked |
 | Elevated | [**Insecure Control Protocol** risk at **Chlorine Safety Controller** over **s7comm** from **Engineering Workstation**](#insecure-control-protocol) | [Insecure Control Protocol](#insecure-control-protocol) | [Chlorine Safety Controller](#chlorine-safety-controller), [Safety Programming](#safety-programming) | Unchecked |
 | Elevated | [**Insecure Control Protocol** risk at **Dosing PLC** over **modbus** from **SCADA Server**](#insecure-control-protocol) | [Insecure Control Protocol](#insecure-control-protocol) | [Dosing PLC](#dosing-plc), [Dosing Control](#dosing-control) | Unchecked |
@@ -501,7 +510,7 @@ This chapter lists what tags are used by which elements.
 
 ## STRIDE Classification of Identified Risks
 
-This chapter clusters and classifies the risks by STRIDE categories: in total **42 potential risks** have been identified during the threat modeling process.
+This chapter clusters and classifies the risks by STRIDE categories: in total **43 potential risks** have been identified during the threat modeling process.
 
 ### Spoofing
 
@@ -549,11 +558,13 @@ Tampering - Integrity
 
 ### Repudiation
 
-**0 risks**
+**1 risk**
 
 Repudiation - Non-repudiability
 
-_No risks were identified._
+- **Elevated**: [Human Use of Machine Identity](#human-use-of-machine-identity): 1/1 unmitigated Risk, exploitation likelihood is _Likely_ with _High_ impact
+
+    People who call a service with the account of a machine, like an administrator using the credentials of a service account or a client that ships with an API key of its own, act without an identity of theirs. The service cannot tell them apart, nor require a second factor or end their access when they leave, and the secret gets copied to wherever they work.
 
 ### Information Disclosure
 
@@ -611,7 +622,7 @@ Elevation of privilege - Authorization
 
 ## Assignment by Function
 
-This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **42 potential risks** have been identified during the threat modeling process.
+This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **43 potential risks** have been identified during the threat modeling process.
 
 ### Business Side
 
@@ -673,9 +684,13 @@ Development
 
 ### Operations
 
-**24 risks**
+**25 risks**
 
 Operations
+
+- **Elevated**: [Human Use of Machine Identity](#human-use-of-machine-identity): 1/1 unmitigated Risk, exploitation likelihood is _Likely_ with _High_ impact
+
+    Let people sign in with their own identity, through single sign-on with multi-factor authentication, and pass it on to the target, modelling the link with the identity _end-user_. Where an administrator needs the permissions of a service, grant them for a limited time through a privileged access workflow that records who used them. Keep secrets of service accounts out of clients.
 
 - **Elevated**: [Long-Lived Credentials](#long-lived-credentials): 3/3 unmitigated Risks, exploitation likelihood is _Likely_ with _High_ impact
 
@@ -834,7 +849,7 @@ This chapter lists custom questions that arose during the threat modeling proces
 
 ## Identified Risks by Vulnerability Category
 
-In total **42 potential risks** have been identified during the threat modeling process, distributed across **13 vulnerability categories**. The following sections describe each identified risk category and its risks.
+In total **43 potential risks** have been identified during the threat modeling process, distributed across **14 vulnerability categories**. The following sections describe each identified risk category and its risks.
 
 ### Direct IT/OT Communication
 
@@ -885,6 +900,56 @@ The risk **Direct IT/OT Communication** was found **1 time** in the analyzed arc
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Elevated | **Direct IT/OT Communication** risk at **SCADA Server** with **Office Workstation** | `direct-it-ot-communication@scada-server@office-workstation>live-dashboard` | Likely | High | [SCADA Server](#scada-server), [Live Dashboard](#live-dashboard) | Unchecked | _not tracked_ |
+
+### Human Use of Machine Identity
+
+**Elevated** · 1/1 unmitigated Risk · `human-use-of-machine-identity`
+
+| Property | Value |
+| --- | --- |
+| STRIDE | Repudiation |
+| CWE | [CWE 1390](https://cwe.mitre.org/data/definitions/1390.html) |
+| Function | Operations |
+| Action | Personal Identities for People |
+| ASVS chapter | V2 - Authentication Verification Requirements |
+| Cheat sheet | [Secrets_Management_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) |
+| References | OWASP NHI10:2025 Human Use of NHI; OWASP ASI03:2026 Identity and Privilege Abuse |
+
+**Description**
+
+People who call a service with the account of a machine, like an administrator using the credentials of a service account or a client that ships with an API key of its own, act without an identity of theirs. The service cannot tell them apart, nor require a second factor or end their access when they leave, and the secret gets copied to wherever they work.
+
+**Impact**
+
+If this risk is unmitigated, attackers might use a secret copied from a laptop, a script or a client to access the target, and nobody can tell who did what with it.
+
+**Detection Logic**
+
+In-scope technical assets processing or storing data rated at least as confidential or critical with an incoming communication link that is not process-local, from a caller used by humans, whose identity is _service-account_ or _workload_.
+
+**Risk Rating**
+
+The risk rating depends on the sensitivity of the data processed or stored by the target. The attack is likely, as secrets in the hands of people leak easily.
+
+**False Positives**
+
+Clients whose users sign in with their own identity first, which a service then exchanges for the narrowly scoped account of the client, can be considered as false positives after individual review.
+
+**Mitigation**
+
+Let people sign in with their own identity, through single sign-on with multi-factor authentication, and pass it on to the target, modelling the link with the identity _end-user_. Where an administrator needs the permissions of a service, grant them for a limited time through a privileged access workflow that records who used them. Keep secrets of service accounts out of clients.
+
+**Check**
+
+Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
+
+**Risk Findings**
+
+The risk **Human Use of Machine Identity** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+
+| Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Elevated | **Human Use of Machine Identity** risk at **SCADA Server** by users of **Office Workstation** (service-account) | `human-use-of-machine-identity@scada-server@office-workstation>live-dashboard` | Likely | High | [SCADA Server](#scada-server), [Live Dashboard](#live-dashboard) | Unchecked | _not tracked_ |
 
 ### Insecure Control Protocol
 
@@ -1508,7 +1573,7 @@ The risk **Server-Side Request Forgery (SSRF)** was found **2 times** in the ana
 
 ## Identified Risks by Technical Asset
 
-In total **42 potential risks** have been identified during the threat modeling process, distributed across **14 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
+In total **43 potential risks** have been identified during the threat modeling process, distributed across **14 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
 
 ### Chlorine Safety Controller
 
@@ -1931,13 +1996,14 @@ Runs the pumps of the remote pump station
 
 ### SCADA Server
 
-**Elevated** · 9/9 unmitigated Risks · `scada-server`
+**Elevated** · 10/10 unmitigated Risks · `scada-server`
 
 Supervises the treatment and sends the commands of the operators
 
 **Identified Risks of the Asset**
 
 - **Elevated**: [**Direct IT/OT Communication** risk at **SCADA Server** with **Office Workstation**](#direct-itot-communication) (Unchecked)
+- **Elevated**: [**Human Use of Machine Identity** risk at **SCADA Server** by users of **Office Workstation** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - **Elevated**: [**Unencrypted Communication** named **Dosing Control** between **SCADA Server** and **Dosing PLC**](#unencrypted-communication) (Unchecked)
 - **Elevated**: [**Unencrypted Communication** named **Pump Station Telemetry** between **SCADA Server** and **Pump Station RTU**](#unencrypted-communication) (Unchecked)
 - **Elevated**: [**Unencrypted Communication** named **Safety Reset** between **SCADA Server** and **Chlorine Safety Controller**](#unencrypted-communication) (Unchecked)
@@ -2204,11 +2270,11 @@ _The asset was defined as out-of-scope._
 
 ## Identified Data Breach Probabilities by Data Asset
 
-In total **42 potential risks** have been identified during the threat modeling process, distributed across **5 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
+In total **43 potential risks** have been identified during the threat modeling process, distributed across **5 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
 
 ### Historical Process Data
 
-**Probable** · 11/11 unmitigated Risks · `historical-process-data`
+**Probable** · 12/12 unmitigated Risks · `historical-process-data`
 
 Archived process values for reports and compliance
 
@@ -2231,12 +2297,13 @@ Archived process values for reports and compliance
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 11 remaining risks:
+This data asset has data breach potential because of 12 remaining risks:
 
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Office Workstation** against database **Historian Replica** via **Report Access**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Plant Historian** against database **Historian Replica** via **Replication**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **SCADA Server** against database **Plant Historian** via **Archiving**](#sqlnosql-injection) (Unchecked)
 - Possible, **Elevated**: [**Direct IT/OT Communication** risk at **SCADA Server** with **Office Workstation**](#direct-itot-communication) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **SCADA Server** by users of **Office Workstation** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - Possible, **Medium**: [**Long-Lived Credentials** risk at **Plant Historian** used by **SCADA Server** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-multi-factor-authentication-mfa) (Unchecked)
 - Possible, **Medium**: [**Server-Side Request Forgery (SSRF)** risk at **Plant Historian** server-side web-requesting the target **Historian Replica** via **Replication**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -2247,7 +2314,7 @@ This data asset has data breach potential because of 11 remaining risks:
 
 ### Process Values
 
-**Probable** · 26/26 unmitigated Risks · `process-values`
+**Probable** · 27/27 unmitigated Risks · `process-values`
 
 Measurements of flow, level, pressure and chlorine concentration
 
@@ -2270,10 +2337,11 @@ Measurements of flow, level, pressure and chlorine concentration
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 26 remaining risks:
+This data asset has data breach potential because of 27 remaining risks:
 
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **SCADA Server** against database **Plant Historian** via **Archiving**](#sqlnosql-injection) (Unchecked)
 - Possible, **Elevated**: [**Direct IT/OT Communication** risk at **SCADA Server** with **Office Workstation**](#direct-itot-communication) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **SCADA Server** by users of **Office Workstation** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - Possible, **Elevated**: [**Long-Lived Credentials** risk at **Filter PLC** used by **SCADA Server** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Medium**: [**Long-Lived Credentials** risk at **Plant Historian** used by **SCADA Server** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-multi-factor-authentication-mfa) (Unchecked)
@@ -2301,7 +2369,7 @@ This data asset has data breach potential because of 26 remaining risks:
 
 ### Control Commands
 
-**Possible** · 22/22 unmitigated Risks · `control-commands`
+**Possible** · 23/23 unmitigated Risks · `control-commands`
 
 Setpoints, start and stop commands and outputs to pumps and valves
 
@@ -2324,9 +2392,10 @@ Setpoints, start and stop commands and outputs to pumps and valves
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 22 remaining risks:
+This data asset has data breach potential because of 23 remaining risks:
 
 - Possible, **Elevated**: [**Direct IT/OT Communication** risk at **SCADA Server** with **Office Workstation**](#direct-itot-communication) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **SCADA Server** by users of **Office Workstation** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - Possible, **Elevated**: [**Long-Lived Credentials** risk at **Filter PLC** used by **SCADA Server** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-multi-factor-authentication-mfa) (Unchecked)
 - Possible, **Medium**: [**Server-Side Request Forgery (SSRF)** risk at **SCADA Server** server-side web-requesting the target **Plant Historian** via **Archiving**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -2910,7 +2979,7 @@ The vendor connects to the jump host over a VPN
 
 ## Risk Tracking
 
-**1 of 42 risks** are tracked in the model; the others are unchecked.
+**1 of 43 risks** are tracked in the model; the others are unchecked.
 
 | Risk | ID | Severity | Status | Date | Checked by | Ticket | Justification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -2932,6 +3001,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | --- | --- | --- | --- | --- | --- |
 | Accidental Secret Leak | `accidental-secret-leak` | Information Disclosure | Sourcecode repositories (including their histories) as well as artifact registries can accidentally contain secrets like checked-in or packaged-in passwords, API tokens, certificates, crypto keys, etc. | In-scope sourcecode repositories and artifact registries. | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. |
 | Code Backdooring | `code-backdooring` | Tampering | For each build pipeline component Code Backdooring risks might arise where attackers compromise the build pipeline in order to let backdoored artifacts be shipped into production. Aside from direct code backdooring this includes backdooring of dependencies and even of more lower-level build infrastructure, like backdooring compilers (similar to what the XcodeGhost malware did) or dependencies. | In-scope development relevant technical assets which are either accessed by out-of-scope unmanaged developer clients and/or are directly accessed by any kind of internet-located (non-VPN) component or are themselves directly located on the internet. | The risk rating depends on the confidentiality and integrity rating of the code being handled and deployed as well as the placement/calling of this technical asset on/from the internet. |
+| Confused Deputy Agent | `confused-deputy-agent` | Elevation of Privilege | An AI agent that acts for its users but reaches data and tools with an identity of its own, a service account or a workload, can do for any user what the agent may do for all of them. The targets check the agent, not the user, so whatever a user asks for, or a prompt injection makes the agent ask for, is allowed. | In-scope ai-agent technical assets that act for users, through an incoming communication link with the identity _end-user_ or from a caller used by humans (other than devops links), and reach a technical asset (other than an llm) processing or storing data rated at least as confidential or critical with the identity _service-account_ or _workload_, either directly or through the tools of an mcp-server technical asset. | The risk rating depends on the sensitivity of the most sensitive technical asset the agent reaches with its own identity. The attack is likely when the agent takes untrusted input, and unlikely otherwise. |
 | Container Base Image Backdooring | `container-baseimage-backdooring` | Tampering | When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors. | In-scope technical assets running as containers. | The risk rating depends on the sensitivity of the technical asset itself and of the data assets. |
 | Container Platform Escape | `container-platform-escape` | Elevation of Privilege | Container platforms are especially interesting targets for attackers as they host big parts of a containerized runtime infrastructure. When not configured and operated with security best practices in mind, attackers might exploit a vulnerability inside an container and escape towards the platform as highly privileged users. These scenarios might give attackers capabilities to attack every other container as owning the container platform (via container escape attacks) equals to owning every container. | In-scope container platforms. | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. |
 | Cross-Account Takeover | `cross-account-takeover` | Elevation of Privilege | Cloud accounts, subscriptions, projects and VPCs isolate workloads and tenants from each other. Access from one of them into another (account A to account B) is granted by cross-account roles, trust policies or resource policies, and a misconfigured grant (too broad principals or rights, or no condition on the calling account) breaks that isolation. | Communication links into in-scope technical assets from technical assets in another cloud account, i.e. where the innermost trust boundaries of type network-cloud-provider around the source and the target differ. | The risk rating depends on the sensitivity of the target technical asset itself and of the data assets it processes and stores. The likelihood rises when the source or the target is multi-tenant, as another tenant can then try to abuse the cross-account access. |
@@ -2941,6 +3011,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | DoS-risky Access Across Trust-Boundary | `dos-risky-access-across-trust-boundary` | Denial of Service | Assets accessed across trust boundaries with critical or mission-critical availability rating are more prone to Denial-of-Service (DoS) risks. | In-scope technical assets (excluding load-balancer) with availability rating of critical or higher which have incoming data-flows across a network trust-boundary (excluding devops usage). | Matching technical assets with availability rating of critical or higher are at low risk. When the availability rating is mission-critical and neither a VPN nor IP filter for the incoming data-flow nor redundancy for the asset is applied, the risk-rating is considered medium. |
 | Denial of Service by Encryption Key Deletion | `encryption-key-deletion` | Denial of Service | Data in cloud storage encrypted with a key from a cloud key management service (like AWS KMS, Azure Key Vault or Google Cloud KMS) can only be decrypted as long as the key exists. Deleting the key, by mistake or by an attacker with enough rights, makes the data permanently unusable. | In-scope encrypted cloud technical assets (residing in cloud trust boundaries or tagged with cloud provider tags) storing data assets, which are either tagged as encrypted with a key from a cloud key management service (aws:kms, azure:keyvault, gcp:kms on the asset, a trust boundary around it or its shared runtime) or communicate with a cloud vault or hsm asset. Key stores themselves are excluded. | The risk rating depends on the availability rating of the technical asset itself and of the data assets stored, as the deletion destroys the data but does not disclose it. |
 | Excessive Agency | `excessive-agency` | Elevation of Privilege | An AI agent decides on its own which tools to call and with which arguments. An agent that can change critical systems, directly or through the tools of an MCP server, without a human approving the change, does whatever a prompt injection, a hallucination or a misunderstanding makes it do. | In-scope ai-agent technical assets with a non-readonly communication link to a technical asset (other than an llm) processing or storing data rated at least as critical in integrity, either directly or through the tools of an mcp-server technical asset. Agents and links tagged with _human-in-the-loop_ are skipped. | The risk rating depends on the integrity rating of the technical asset the agent can change. The attack is likely when the agent takes untrusted input, and unlikely otherwise. |
+| Human Use of Machine Identity | `human-use-of-machine-identity` | Repudiation | People who call a service with the account of a machine, like an administrator using the credentials of a service account or a client that ships with an API key of its own, act without an identity of theirs. The service cannot tell them apart, nor require a second factor or end their access when they leave, and the secret gets copied to wherever they work. | In-scope technical assets processing or storing data rated at least as confidential or critical with an incoming communication link that is not process-local, from a caller used by humans, whose identity is _service-account_ or _workload_. | The risk rating depends on the sensitivity of the data processed or stored by the target. The attack is likely, as secrets in the hands of people leak easily. |
 | Incomplete Model | `incomplete-model` | Information Disclosure | When the threat model contains unknown technologies or transfers data over unknown protocols, this is an indicator for an incomplete model. | All technical assets and communication links with technology type or protocol type specified as unknown. | low |
 | Insecure Control Protocol | `insecure-control-protocol` | Tampering | Most industrial control protocols, like Modbus, DNP3, S7comm, EtherNet/IP or PROFINET, were designed for closed networks: a controller or field device executes every command it receives, without checking who sent it or whether it was changed on the way. Anyone who can send packets to it can write setpoints and outputs, stop it or download a new program. | In-scope controllers (plc, rtu, safety-controller) and field-device technical assets with an incoming non-readonly communication link over an industrial control protocol without a secure variant in use (all of them except modbus-security, dnp3-encrypted and opc-ua-encrypted). | The risk rating depends on the integrity and availability of the controlled process, and is the highest for safety controllers. The attack is very likely when the sender is on the internet, likely when it is an IT asset, reaches IT or calls across a network trust boundary, and unlikely otherwise. |
 | LDAP-Injection | `ldap-injection` | Tampering | When an LDAP server is accessed LDAP-Injection risks might arise. The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed. | In-scope clients accessing LDAP servers via typical LDAP access protocols. | The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed. |
@@ -2972,6 +3043,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Search-Query Injection | `search-query-injection` | Tampering | When a search engine server is accessed Search-Query Injection risks might arise. | In-scope clients accessing search engine servers via typical search access protocols. | The risk rating depends on the sensitivity of the search engine server itself and of the data assets processed. |
 | Server-Side Request Forgery (SSRF) | `server-side-request-forgery` | Information Disclosure | When a server system (i.e. not a client) is accessing other server systems via typical web protocols Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might arise. | In-scope non-client systems accessing (using outgoing communication links) targets with either HTTP or HTTPS protocol. | The risk rating (low or medium) depends on the sensitivity of the data assets receivable via web protocols from targets within the same network trust-boundary as well on the sensitivity of the data assets receivable via web protocols from the target asset itself. Also for cloud-based environments the exploitation impact is at least medium, as cloud backend services can be attacked via SSRF. |
 | Service Registry Poisoning | `service-registry-poisoning` | Spoofing | When a service registry used for discovery of trusted service endpoints Service Registry Poisoning risks might arise. | In-scope service registries. | The risk rating depends on the sensitivity of the technical assets accessing the service registry as well as the data assets processed. |
+| Shared Machine Account | `shared-machine-account` | Elevation of Privilege | Several technical assets that call others with one service account, API key or workload identity share all of its permissions: each can do what any of them needs, and the targets cannot tell them apart. | In-scope technical assets with a communication link naming an _account_ that communication links of other technical assets name as well, with the identity _service-account_ or _workload_. Links that name no account are skipped. | The risk rating depends on the sensitivity of the data processed or stored by the targets of all links of the account. The attack is likely when the callers are in different trust boundaries, so that the compromise of one crosses into others, and unlikely otherwise. |
 | SQL/NoSQL-Injection | `sql-nosql-injection` | Tampering | When a database is accessed via database access protocols SQL/NoSQL-Injection risks might arise. The risk rating depends on the sensitivity technical asset itself and of the data assets processed. | Database accessed via typical database access protocols by in-scope clients. | The risk rating depends on the sensitivity of the data stored inside the database. |
 | Unauthenticated MCP Server | `unauthenticated-mcp-server` | Spoofing | An MCP server, or another server exposing tools to AI agents, acts on the systems behind its tools with its own permissions. When it does not authenticate its callers, anyone who can reach it can call those tools, and it cannot tell one agent or user from another to limit what each may do. | In-scope mcp-server technical assets with an incoming communication link without authentication that is not process-local, whose tools (the outgoing communication links) reach technical assets processing or storing data rated at least as confidential or critical. | The risk rating depends on the sensitivity of the technical assets the tools reach. The attack is very likely when the caller is on the internet, likely when it takes untrusted input or sits across a network trust boundary, and unlikely otherwise. |
 | Unchecked Deployment | `unchecked-deployment` | Tampering | For each build-pipeline component Unchecked Deployment risks might arise when the build-pipeline does not include established DevSecOps best-practices. DevSecOps best-practices scan as part of CI/CD pipelines for vulnerabilities in source- or byte-code, dependencies, container layers, and dynamically against running test systems. There are several open-source and commercial tools existing in the categories DAST, SAST, and IAST. | All development-relevant technical assets. | The risk rating depends on the highest rating of the technical assets and data assets processed by deployment-receiving targets. |

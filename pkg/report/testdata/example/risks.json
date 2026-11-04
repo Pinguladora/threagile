@@ -214,6 +214,186 @@
     "tracking_checked_by": "John Doe"
   },
   {
+    "category": "human-use-of-machine-identity",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eHuman Use of Machine Identity\u003c/b\u003e risk at \u003cb\u003eBackoffice ERP System\u003c/b\u003e by users of \u003cb\u003eBackend Admin Client\u003c/b\u003e (service-account)",
+    "synthetic_id": "human-use-of-machine-identity@erp-system@backend-admin-client\u003eerp-web-access",
+    "most_relevant_technical_asset": "erp-system",
+    "most_relevant_communication_link": "backend-admin-client\u003eerp-web-access",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "erp-system"
+    ],
+    "plain_title": "Human Use of Machine Identity risk at Backoffice ERP System by users of Backend Admin Client (service-account)",
+    "category_title": "Human Use of Machine Identity",
+    "stride": "repudiation",
+    "function": "operations",
+    "cwe": 1390,
+    "references": [
+      "OWASP NHI10:2025 Human Use of NHI",
+      "OWASP ASI03:2026 Identity and Privilege Abuse"
+    ],
+    "action": "Personal Identities for People",
+    "mitigation": "Let people sign in with their own identity, through single sign-on with multi-factor authentication, and pass it on to the target, modelling the link with the identity \u003ci\u003eend-user\u003c/i\u003e. Where an administrator needs the permissions of a service, grant them for a limited time through a privileged access workflow that records who used them. Keep secrets of service accounts out of clients.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "most_relevant_communication_link_title": "ERP Web Access"
+  },
+  {
+    "category": "human-use-of-machine-identity",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eHuman Use of Machine Identity\u003c/b\u003e risk at \u003cb\u003eCustomer Contract Database\u003c/b\u003e by users of \u003cb\u003eBackend Admin Client\u003c/b\u003e (service-account)",
+    "synthetic_id": "human-use-of-machine-identity@sql-database@backend-admin-client\u003edb-update-access",
+    "most_relevant_technical_asset": "sql-database",
+    "most_relevant_communication_link": "backend-admin-client\u003edb-update-access",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "sql-database"
+    ],
+    "plain_title": "Human Use of Machine Identity risk at Customer Contract Database by users of Backend Admin Client (service-account)",
+    "category_title": "Human Use of Machine Identity",
+    "stride": "repudiation",
+    "function": "operations",
+    "cwe": 1390,
+    "references": [
+      "OWASP NHI10:2025 Human Use of NHI",
+      "OWASP ASI03:2026 Identity and Privilege Abuse"
+    ],
+    "action": "Personal Identities for People",
+    "mitigation": "Let people sign in with their own identity, through single sign-on with multi-factor authentication, and pass it on to the target, modelling the link with the identity \u003ci\u003eend-user\u003c/i\u003e. Where an administrator needs the permissions of a service, grant them for a limited time through a privileged access workflow that records who used them. Keep secrets of service accounts out of clients.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Customer Contract Database",
+    "most_relevant_technical_asset_raa": 100,
+    "most_relevant_communication_link_title": "DB Update Access"
+  },
+  {
+    "category": "human-use-of-machine-identity",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eHuman Use of Machine Identity\u003c/b\u003e risk at \u003cb\u003eGit Repository\u003c/b\u003e by users of \u003cb\u003eExternal Development Client\u003c/b\u003e (service-account)",
+    "synthetic_id": "human-use-of-machine-identity@git-repo@external-dev-client\u003egit-repo-code-write-access",
+    "most_relevant_technical_asset": "git-repo",
+    "most_relevant_communication_link": "external-dev-client\u003egit-repo-code-write-access",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "git-repo"
+    ],
+    "plain_title": "Human Use of Machine Identity risk at Git Repository by users of External Development Client (service-account)",
+    "category_title": "Human Use of Machine Identity",
+    "stride": "repudiation",
+    "function": "operations",
+    "cwe": 1390,
+    "references": [
+      "OWASP NHI10:2025 Human Use of NHI",
+      "OWASP ASI03:2026 Identity and Privilege Abuse"
+    ],
+    "action": "Personal Identities for People",
+    "mitigation": "Let people sign in with their own identity, through single sign-on with multi-factor authentication, and pass it on to the target, modelling the link with the identity \u003ci\u003eend-user\u003c/i\u003e. Where an administrator needs the permissions of a service, grant them for a limited time through a privileged access workflow that records who used them. Keep secrets of service accounts out of clients.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Git Repository",
+    "most_relevant_technical_asset_raa": 31.49087221095335,
+    "most_relevant_communication_link_title": "Git-Repo Code Write Access"
+  },
+  {
+    "category": "human-use-of-machine-identity",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eHuman Use of Machine Identity\u003c/b\u003e risk at \u003cb\u003eGit Repository\u003c/b\u003e by users of \u003cb\u003eExternal Development Client\u003c/b\u003e (service-account)",
+    "synthetic_id": "human-use-of-machine-identity@git-repo@external-dev-client\u003egit-repo-web-ui-access",
+    "most_relevant_technical_asset": "git-repo",
+    "most_relevant_communication_link": "external-dev-client\u003egit-repo-web-ui-access",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "git-repo"
+    ],
+    "plain_title": "Human Use of Machine Identity risk at Git Repository by users of External Development Client (service-account)",
+    "category_title": "Human Use of Machine Identity",
+    "stride": "repudiation",
+    "function": "operations",
+    "cwe": 1390,
+    "references": [
+      "OWASP NHI10:2025 Human Use of NHI",
+      "OWASP ASI03:2026 Identity and Privilege Abuse"
+    ],
+    "action": "Personal Identities for People",
+    "mitigation": "Let people sign in with their own identity, through single sign-on with multi-factor authentication, and pass it on to the target, modelling the link with the identity \u003ci\u003eend-user\u003c/i\u003e. Where an administrator needs the permissions of a service, grant them for a limited time through a privileged access workflow that records who used them. Keep secrets of service accounts out of clients.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Git Repository",
+    "most_relevant_technical_asset_raa": 31.49087221095335,
+    "most_relevant_communication_link_title": "Git-Repo Web-UI Access"
+  },
+  {
+    "category": "human-use-of-machine-identity",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eHuman Use of Machine Identity\u003c/b\u003e risk at \u003cb\u003eJenkins Build Server\u003c/b\u003e by users of \u003cb\u003eExternal Development Client\u003c/b\u003e (service-account)",
+    "synthetic_id": "human-use-of-machine-identity@jenkins-build-server@external-dev-client\u003ejenkins-web-ui-access",
+    "most_relevant_technical_asset": "jenkins-build-server",
+    "most_relevant_communication_link": "external-dev-client\u003ejenkins-web-ui-access",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "jenkins-build-server"
+    ],
+    "plain_title": "Human Use of Machine Identity risk at Jenkins Build Server by users of External Development Client (service-account)",
+    "category_title": "Human Use of Machine Identity",
+    "stride": "repudiation",
+    "function": "operations",
+    "cwe": 1390,
+    "references": [
+      "OWASP NHI10:2025 Human Use of NHI",
+      "OWASP ASI03:2026 Identity and Privilege Abuse"
+    ],
+    "action": "Personal Identities for People",
+    "mitigation": "Let people sign in with their own identity, through single sign-on with multi-factor authentication, and pass it on to the target, modelling the link with the identity \u003ci\u003eend-user\u003c/i\u003e. Where an administrator needs the permissions of a service, grant them for a limited time through a privileged access workflow that records who used them. Keep secrets of service accounts out of clients.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Jenkins Build Server",
+    "most_relevant_technical_asset_raa": 60.099849550227866,
+    "most_relevant_communication_link_title": "Jenkins Web-UI Access"
+  },
+  {
+    "category": "human-use-of-machine-identity",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eHuman Use of Machine Identity\u003c/b\u003e risk at \u003cb\u003eLDAP Auth Server\u003c/b\u003e by users of \u003cb\u003eBackend Admin Client\u003c/b\u003e (service-account)",
+    "synthetic_id": "human-use-of-machine-identity@ldap-auth-server@backend-admin-client\u003euser-management-access",
+    "most_relevant_technical_asset": "ldap-auth-server",
+    "most_relevant_communication_link": "backend-admin-client\u003euser-management-access",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "ldap-auth-server"
+    ],
+    "plain_title": "Human Use of Machine Identity risk at LDAP Auth Server by users of Backend Admin Client (service-account)",
+    "category_title": "Human Use of Machine Identity",
+    "stride": "repudiation",
+    "function": "operations",
+    "cwe": 1390,
+    "references": [
+      "OWASP NHI10:2025 Human Use of NHI",
+      "OWASP ASI03:2026 Identity and Privilege Abuse"
+    ],
+    "action": "Personal Identities for People",
+    "mitigation": "Let people sign in with their own identity, through single sign-on with multi-factor authentication, and pass it on to the target, modelling the link with the identity \u003ci\u003eend-user\u003c/i\u003e. Where an administrator needs the permissions of a service, grant them for a limited time through a privileged access workflow that records who used them. Keep secrets of service accounts out of clients.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "LDAP Auth Server",
+    "most_relevant_technical_asset_raa": 51.34381338742393,
+    "most_relevant_communication_link_title": "User Management Access"
+  },
+  {
     "category": "ldap-injection",
     "risk_status": "mitigated",
     "severity": "elevated",

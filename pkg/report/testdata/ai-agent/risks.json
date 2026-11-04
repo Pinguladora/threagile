@@ -1,5 +1,37 @@
 [
   {
+    "category": "confused-deputy-agent",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eConfused Deputy Agent\u003c/b\u003e risk at \u003cb\u003eSupport Agent\u003c/b\u003e reaching \u003cb\u003eKnowledge Index\u003c/b\u003e with its own identity",
+    "synthetic_id": "confused-deputy-agent@support-agent",
+    "most_relevant_technical_asset": "support-agent",
+    "most_relevant_communication_link": "support-agent\u003eretrieval",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "knowledge-index"
+    ],
+    "plain_title": "Confused Deputy Agent risk at Support Agent reaching Knowledge Index with its own identity",
+    "category_title": "Confused Deputy Agent",
+    "stride": "elevation-of-privilege",
+    "function": "architecture",
+    "cwe": 441,
+    "references": [
+      "OWASP ASI03:2026 Identity and Privilege Abuse",
+      "OWASP LLM06:2025 Excessive Agency",
+      "OWASP NHI9:2025 NHI Reuse",
+      "MAESTRO Layer 3: Agent Frameworks"
+    ],
+    "action": "Act with the Identity of the User",
+    "mitigation": "Let the agent call data and tools with the identity of the user it acts for, for example through OAuth 2.0 token exchange or on-behalf-of flows, scoped to the task, and model those links with the identity \u003ci\u003eend-user\u003c/i\u003e. Where the agent must use its own identity, authorize each call by the user in the agent and keep its own permissions to what every user may do.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Support Agent",
+    "most_relevant_technical_asset_raa": 87.3574144486692,
+    "most_relevant_communication_link_title": "Retrieval"
+  },
+  {
     "category": "container-baseimage-backdooring",
     "risk_status": "unchecked",
     "severity": "medium",

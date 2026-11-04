@@ -42,6 +42,7 @@ func builtInRiskRules() []types.RiskRule {
 // aiRiskRules are the rules of systems built on language models and agents.
 func aiRiskRules() []types.RiskRule {
 	return []types.RiskRule{
+		builtin.NewConfusedDeputyAgentRule(),
 		builtin.NewExcessiveAgencyRule(),
 		builtin.NewModelOutputDisclosureRule(),
 		builtin.NewModelSupplyChainRule(),
@@ -63,9 +64,11 @@ func otRiskRules() []types.RiskRule {
 // accessRiskRules are the rules on the credentials, identities and authorization of communication links.
 func accessRiskRules() []types.RiskRule {
 	return []types.RiskRule{
+		builtin.NewHumanUseOfMachineIdentityRule(),
 		builtin.NewLongLivedCredentialsRule(),
 		builtin.NewMissingObjectLevelAuthorizationRule(),
 		builtin.NewMissingPolicyDecisionPointRedundancyRule(),
+		builtin.NewSharedMachineAccountRule(),
 		builtin.NewUnprotectedAuthorizationDecisionsRule(),
 	}
 }
