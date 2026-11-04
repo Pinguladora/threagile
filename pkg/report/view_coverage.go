@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/Pinguladora/threagile/pkg/catalog"
+	"github.com/Pinguladora/threagile/pkg/types"
 )
 
 // viewCatalog is the coverage of a threat catalog: which risk rules checked each of its entries and the risks
@@ -21,6 +22,7 @@ type viewCatalogEntry struct {
 	ID          string
 	Title       string
 	Rules       []viewRef // the categories of the risk rules that checked it
+	RuleIDs     []string  // the ids of those categories, in the same order
 	Risks       int
 	StillAtRisk bool
 	Summary     string
@@ -28,13 +30,14 @@ type viewCatalogEntry struct {
 
 // catalogCoverageIntro introduces the coverage of the threat catalogs in the reports.
 const catalogCoverageIntro = "The risk rules reference the entries of threat catalogs. For each entry of the " +
-	"catalogs that the risks of this model fall into, the tables list the risk rules that checked it and the risks " +
+	"catalogs that the risks of this model fall into, the report lists the risk rules that checked it and the risks " +
 	"they found. An entry that no risk rule checks needs a review of its own."
 
-// Texts of the catalog entries without risks.
+// Texts of the catalog coverage.
 const (
-	textNoRisksFound = "no risks found"
-	textNotChecked   = "not checked by any risk rule"
+	textCatalogCoverage = "Threat Catalog Coverage"
+	textNoRisksFound    = "no risks found"
+	textNotChecked      = "not checked by any risk rule"
 )
 
 // viewCatalogs returns the coverage of the threat catalogs that the risks of the model fall into: catalogs that no
@@ -66,6 +69,31 @@ func viewCatalogs(rules []viewRiskRule, categories []viewCategory) []viewCatalog
 	return catalogs
 }
 
+// modelCatalogs is the coverage of the threat catalogs for the reports that build no report view, the PDF and
+// AsciiDoc reports.
+func modelCatalogs(parsedModel *types.Model, options ReportOptions) []viewCatalog {
+	risks := newViewRisks(parsedModel)
+	sorted := parsedModel.SortedRiskCategories()
+	categories := make([]viewCategory, 0, len(sorted))
+	for _, category := range sorted {
+		categories = append(categories, newViewCategory(category, risks.of(parsedModel.SortedRisksOfCategory(category))))
+	}
+	return viewCatalogs(viewRiskRules(parsedModel, options), categories)
+}
+
+// catalogEntryLine is an entry of the coverage as one line of text: the risk rules that checked it and what they
+// found.
+func catalogEntryLine(entry viewCatalogEntry) string {
+	rules := make([]string, 0, len(entry.Rules))
+	for _, rule := range entry.Rules {
+		rules = append(rules, rule.Title)
+	}
+	if len(rules) == 0 {
+		return entry.Summary
+	}
+	return strings.Join(rules, ", ") + ": " + entry.Summary
+}
+
 // newViewCatalogEntry is the coverage of the catalog entry by the risk rules that were not skipped and reference
 // it, each listed once, by title, and linked to its category when it found risks.
 func newViewCatalogEntry(
@@ -87,8 +115,9 @@ func newViewCatalogEntry(
 			stillAtRisk += countStillAtRisk(found.Risks)
 		}
 		result.Rules = append(result.Rules, ref)
+		result.RuleIDs = append(result.RuleIDs, category.ID)
 	}
-	slices.SortFunc(result.Rules, func(a, b viewRef) int { return strings.Compare(a.Title, b.Title) })
+	sortRulesByTitle(&result)
 	result.StillAtRisk = stillAtRisk > 0
 	switch {
 	case result.Risks > 0:
@@ -108,4 +137,18 @@ func countStillAtRisk(risks []*viewRisk) int {
 		}
 	}
 	return count
+}
+
+// sortRulesByTitle sorts the risk rules of the entry, and their ids with them, by title.
+func sortRulesByTitle(entry *viewCatalogEntry) {
+	order := make([]int, len(entry.Rules))
+	for index := range order {
+		order[index] = index
+	}
+	slices.SortStableFunc(order, func(a, b int) int { return strings.Compare(entry.Rules[a].Title, entry.Rules[b].Title) })
+	rules, ids := make([]viewRef, 0, len(order)), make([]string, 0, len(order))
+	for _, index := range order {
+		rules, ids = append(rules, entry.Rules[index]), append(ids, entry.RuleIDs[index])
+	}
+	entry.Rules, entry.RuleIDs = rules, ids
 }
