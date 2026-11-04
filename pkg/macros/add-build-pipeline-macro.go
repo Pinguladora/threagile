@@ -369,7 +369,7 @@ func (change *buildPipelineChange) initIDs() {
 
 // addDataAsset adds a data asset under its title unless the model has it already.
 func (change *buildPipelineChange) addDataAsset(title string, dataAsset input.DataAsset) {
-	if _, exists := change.parsedModel.DataAssets[title]; exists {
+	if _, exists := change.parsedModel.DataAssets[dataAsset.ID]; exists {
 		return
 	}
 	change.logChange("adding data asset: " + dataAsset.ID)
