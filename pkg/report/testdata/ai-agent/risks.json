@@ -332,35 +332,6 @@
     "most_relevant_communication_link_title": "Support Chat"
   },
   {
-    "category": "cross-site-request-forgery",
-    "risk_status": "unchecked",
-    "severity": "low",
-    "exploitation_likelihood": "unlikely",
-    "exploitation_impact": "low",
-    "title": "\u003cb\u003eCross-Site Request Forgery (CSRF)\u003c/b\u003e risk at \u003cb\u003eKnowledge CMS\u003c/b\u003e via \u003cb\u003eArticle Export\u003c/b\u003e from \u003cb\u003eIngestion Pipeline\u003c/b\u003e",
-    "synthetic_id": "cross-site-request-forgery@knowledge-cms@ingestion-pipeline\u003earticle-export",
-    "most_relevant_technical_asset": "knowledge-cms",
-    "most_relevant_communication_link": "ingestion-pipeline\u003earticle-export",
-    "data_breach_probability": "improbable",
-    "data_breach_technical_assets": [
-      "knowledge-cms"
-    ],
-    "plain_title": "Cross-Site Request Forgery (CSRF) risk at Knowledge CMS via Article Export from Ingestion Pipeline",
-    "category_title": "Cross-Site Request Forgery (CSRF)",
-    "stride": "spoofing",
-    "function": "development",
-    "cwe": 352,
-    "references": [
-      "OWASP A01:2025 Broken Access Control"
-    ],
-    "action": "CSRF Prevention",
-    "mitigation": "Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
-    "most_relevant_technical_asset_title": "Knowledge CMS",
-    "most_relevant_technical_asset_raa": 14.353612167300382,
-    "most_relevant_communication_link_title": "Article Export"
-  },
-  {
     "category": "cross-site-scripting",
     "risk_status": "unchecked",
     "severity": "elevated",

@@ -132,7 +132,8 @@ func TestCrossSiteRequestForgeryRuleGenerateRisksTechAssetWebApplicationIncoming
 				},
 			},
 			"user": {
-				Title: "user",
+				Title:               "user",
+				UsedAsClientByHuman: true,
 				Technologies: types.TechnologyList{
 					{
 						Name: "user",
@@ -177,7 +178,8 @@ func TestCrossSiteRequestForgeryRuleGenerateRisksTechAssetWebApplicationIncoming
 				},
 			},
 			"ci/cd": {
-				Title: "ci/cd",
+				Title:               "ci/cd",
+				UsedAsClientByHuman: true, // the web interface of a pipeline that an administrator uses
 				Technologies: types.TechnologyList{
 					{
 						Name: "ci/cd",
@@ -223,7 +225,8 @@ func TestCrossSiteRequestForgeryRuleGenerateRisksTechAssetWebApplicationIncoming
 				},
 			},
 			"user": {
-				Title: "user",
+				Title:               "user",
+				UsedAsClientByHuman: true,
 				Technologies: types.TechnologyList{
 					{
 						Name: "user",
@@ -275,7 +278,7 @@ func TestCrossSiteRequestForgeryRuleGenerateRisksLikelihoodByAuthentication(t *t
 						{Name: "web-app", Attributes: map[string]bool{types.IsWebApplication: true}},
 					},
 				},
-				"user": {Title: "user", Technologies: types.TechnologyList{{Name: "user"}}},
+				"user": {Title: "user", UsedAsClientByHuman: true, Technologies: types.TechnologyList{{Name: "user"}}},
 			},
 			IncomingTechnicalCommunicationLinksMappedByTargetId: map[string][]*types.CommunicationLink{
 				"web-app": {{
@@ -290,4 +293,43 @@ func TestCrossSiteRequestForgeryRuleGenerateRisksLikelihoodByAuthentication(t *t
 			assert.Equal(t, likelihood, risks[0].ExploitationLikelihood, authentication.String())
 		}
 	}
+}
+
+func TestCrossSiteRequestForgeryRuleGenerateRisksOnlyFromBrowsers(t *testing.T) {
+	webApplication := types.TechnologyList{{Name: "web-app", Attributes: map[string]bool{types.IsWebApplication: true}}}
+	forwarding := types.TechnologyList{{Name: "proxy", Attributes: map[string]bool{types.IsTrafficForwarding: true}}}
+	link := func(id, source, target string) *types.CommunicationLink {
+		return &types.CommunicationLink{Id: id, Title: id, Protocol: types.HTTPS, SourceId: source, TargetId: target}
+	}
+	model := &types.Model{
+		TechnicalAssets: map[string]*types.TechnicalAsset{
+			"web-app": {Id: "web-app", Title: "Web Application", Technologies: webApplication},
+			"browser": {
+				Id: "browser", Title: "Browser",
+				Technologies: types.TechnologyList{{Name: "browser", Attributes: map[string]bool{types.Browser: true}}},
+			},
+			"proxy":     {Id: "proxy", Title: "Proxy", Technologies: forwarding},
+			"loop":      {Id: "loop", Title: "Loop", Technologies: forwarding},
+			"batch-job": {Id: "batch-job", Title: "Batch Job", Technologies: types.TechnologyList{{Name: "batch"}}},
+		},
+		IncomingTechnicalCommunicationLinksMappedByTargetId: map[string][]*types.CommunicationLink{
+			"web-app": {
+				link("browser>direct", "browser", "web-app"),
+				link("proxy>forwarded", "proxy", "web-app"),
+				link("batch-job>import", "batch-job", "web-app"),
+				link("loop>looped", "loop", "web-app"),
+			},
+			"proxy": {link("browser>to-proxy", "browser", "proxy")},
+			"loop":  {link("loop>itself", "loop", "loop")}, // forwards only its own traffic
+		},
+	}
+
+	risks, err := NewCrossSiteRequestForgeryRule().GenerateRisks(model)
+
+	assert.NoError(t, err)
+	links := make([]string, 0, len(risks))
+	for _, risk := range risks {
+		links = append(links, risk.MostRelevantCommunicationLinkId)
+	}
+	assert.ElementsMatch(t, []string{"browser>direct", "proxy>forwarded"}, links)
 }

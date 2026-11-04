@@ -43,22 +43,22 @@ Threagile toolkit was used to model the architecture of "Some Example Applicatio
 
 Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.
 
-In total **93 initial risks** in **34 categories** have been identified during the threat modeling process:
+In total **91 initial risks** in **34 categories** have been identified during the threat modeling process:
 
 | Severity | Risks | Status | Risks |
 | --- | ---: | --- | ---: |
-| Critical | 1 | Unchecked | 64 |
+| Critical | 1 | Unchecked | 62 |
 | High | 2 | In Discussion | 0 |
 | Elevated | 36 | Accepted | 1 |
-| Medium | 46 | In Progress | 3 |
-| Low | 8 | Mitigated | 24 |
+| Medium | 45 | In Progress | 3 |
+| Low | 7 | Mitigated | 24 |
 |  |  | False Positive | 1 |
 
 Just some **more** custom summary possible here...
 
 ## Impact Analysis of the Initial Risks
 
-The most prevalent impacts of the **93 initial risks** (distributed over **34 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **91 initial risks** (distributed over **34 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Critical**: [Some Individual Risk Example](#some-individual-risk-example): 2 Initial Risks, exploitation likelihood is _Frequent_ with _Very High_ impact
 
@@ -148,7 +148,7 @@ The most prevalent impacts of the **93 initial risks** (distributed over **34 ri
 
     If this risk is unmitigated, attackers might be able to deeply persist in the target system by executing code in deployed containers.
 
-- **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 7 Initial Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
+- **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 5 Initial Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
 
     If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.
 
@@ -208,7 +208,7 @@ The most prevalent impacts of the **93 initial risks** (distributed over **34 ri
 
     If this risk is unmitigated, attackers might be able to access unencrypted data when successfully compromising sensitive components.
 
-- **Low**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 7 Initial Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
+- **Low**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 5 Initial Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
 
     If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.
 
@@ -229,22 +229,22 @@ The following table gives a high-level overview of the risk tracking status (inc
 | Critical | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
 | High | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
 | Elevated | 36 | 26 | 0 | 1 | 0 | 8 | 1 |
-| Medium | 46 | 30 | 0 | 0 | 0 | 16 | 0 |
-| Low | 8 | 5 | 0 | 0 | 3 | 0 | 0 |
+| Medium | 45 | 29 | 0 | 0 | 0 | 16 | 0 |
+| Low | 7 | 4 | 0 | 0 | 3 | 0 | 0 |
 
-After removal of risks with status _mitigated_ and _false positive_ the following **68 remain unmitigated**:
+After removal of risks with status _mitigated_ and _false positive_ the following **66 remain unmitigated**:
 
 | Severity | Unmitigated risks | To be checked by | Unmitigated risks |
 | --- | ---: | --- | ---: |
 | Critical | 1 | Business Side | 2 |
 | High | 2 | Architecture | 14 |
-| Elevated | 27 | Development | 17 |
-| Medium | 30 | Operations | 35 |
-| Low | 8 |  |  |
+| Elevated | 27 | Development | 15 |
+| Medium | 29 | Operations | 35 |
+| Low | 7 |  |  |
 
 ## Impact Analysis of the Remaining Risks
 
-The most prevalent impacts of the **68 remaining risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **66 remaining risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Critical**: [Some Individual Risk Example](#some-individual-risk-example): 2 Remaining Risks, exploitation likelihood is _Frequent_ with _Very High_ impact
 
@@ -322,7 +322,7 @@ The most prevalent impacts of the **68 remaining risks** (distributed over **29 
 
     If this risk is unmitigated, attackers might be able to deeply persist in the target system by executing code in deployed containers.
 
-- **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 7 Remaining Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
+- **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 5 Remaining Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
 
     If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.
 
@@ -374,7 +374,7 @@ The most prevalent impacts of the **68 remaining risks** (distributed over **29 
 
     If this risk is unmitigated, network attackers might be able to eavesdrop on unencrypted sensitive data sent between components.
 
-- **Low**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 7 Remaining Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
+- **Low**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 5 Remaining Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
 
     If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.
 
@@ -388,7 +388,7 @@ The most prevalent impacts of the **68 remaining risks** (distributed over **29 
 
 ## Risks by Severity
 
-All **93 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
+All **91 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
 
 ### Critical
 
@@ -452,7 +452,7 @@ All **93 risks** by severity, with their tracking status. Each risk links to its
 
 ### Medium
 
-**46 risks**
+**45 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
@@ -462,7 +462,6 @@ All **93 risks** by severity, with their tracking status. Each risk links to its
 | Medium | [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Apache Webserver](#apache-webserver) | Unchecked |
 | Medium | [**Container Base Image Backdooring** risk at **Marketing CMS**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Marketing CMS](#marketing-cms) | Unchecked |
 | Medium | [**Cross-Site Request Forgery (CSRF)** risk at **Apache Webserver** via **Web Application Traffic** from **Load Balancer**](#cross-site-request-forgery-csrf) | [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf) | [Apache Webserver](#apache-webserver), [Web Application Traffic](#web-application-traffic) | Unchecked |
-| Medium | [**Cross-Site Request Forgery (CSRF)** risk at **Identity Provider** via **Auth Credential Check Traffic** from **Apache Webserver**](#cross-site-request-forgery-csrf) | [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf) | [Identity Provider](#identity-provider), [Auth Credential Check Traffic](#auth-credential-check-traffic) | Unchecked |
 | Medium | [**Cross-Site Request Forgery (CSRF)** risk at **Marketing CMS** via **CMS Content Traffic** from **Load Balancer**](#cross-site-request-forgery-csrf) | [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf) | [Marketing CMS](#marketing-cms), [CMS Content Traffic](#cms-content-traffic) | Unchecked |
 | Medium | [**Long-Lived Credentials** risk at **Customer Contract Database** used by **Backoffice ERP System** (credentials)](#long-lived-credentials) | [Long-Lived Credentials](#long-lived-credentials) | [Customer Contract Database](#customer-contract-database), [Database Traffic](#database-traffic) | Unchecked |
 | Medium | [**Long-Lived Credentials** risk at **Identity Provider** used by **Apache Webserver** (credentials)](#long-lived-credentials) | [Long-Lived Credentials](#long-lived-credentials) | [Identity Provider](#identity-provider), [Auth Credential Check Traffic](#auth-credential-check-traffic) | Unchecked |
@@ -505,12 +504,11 @@ All **93 risks** by severity, with their tracking status. Each risk links to its
 
 ### Low
 
-**8 risks**
+**7 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
 | Low | [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Internal Access** from **Backoffice Client**](#cross-site-request-forgery-csrf) | [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf) | [Backoffice ERP System](#backoffice-erp-system), [ERP Internal Access](#erp-internal-access) | Unchecked |
-| Low | [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP System Traffic** from **Apache Webserver**](#cross-site-request-forgery-csrf) | [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf) | [Backoffice ERP System](#backoffice-erp-system), [ERP System Traffic](#erp-system-traffic) | Unchecked |
 | Low | [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Web Access** from **Backend Admin Client**](#cross-site-request-forgery-csrf) | [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf) | [Backoffice ERP System](#backoffice-erp-system), [ERP Web Access](#erp-web-access) | Unchecked |
 | Low | [**Cross-Site Request Forgery (CSRF)** risk at **Marketing CMS** via **Marketing CMS Editing** from **Backoffice Client**](#cross-site-request-forgery-csrf) | [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf) | [Marketing CMS](#marketing-cms), [Marketing CMS Editing](#marketing-cms-editing) | Unchecked |
 | Low | [**Denial-of-Service** risky access of **Backoffice ERP System** by **Apache Webserver** via **ERP System Traffic**](#dos-risky-access-across-trust-boundary) | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | [Backoffice ERP System](#backoffice-erp-system), [ERP System Traffic](#erp-system-traffic) | In Progress |
@@ -792,11 +790,11 @@ This chapter lists what tags are used by which elements.
 
 ## STRIDE Classification of Identified Risks
 
-This chapter clusters and classifies the risks by STRIDE categories: in total **93 potential risks** have been identified during the threat modeling process.
+This chapter clusters and classifies the risks by STRIDE categories: in total **91 potential risks** have been identified during the threat modeling process.
 
 ### Spoofing
 
-**14 risks**
+**12 risks**
 
 Spoofing - Authenticity
 
@@ -808,7 +806,7 @@ Spoofing - Authenticity
 
     When a technical asset accepts files, these input files should be strictly validated about filename and type.
 
-- **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 7/7 unmitigated Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
+- **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 5/5 unmitigated Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
 
     When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.
 
@@ -816,7 +814,7 @@ Spoofing - Authenticity
 
     Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it.
 
-- **Low**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 7/7 unmitigated Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
+- **Low**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 5/5 unmitigated Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
 
     When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.
 
@@ -992,7 +990,7 @@ Elevation of privilege - Authorization
 
 ## Assignment by Function
 
-This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **93 potential risks** have been identified during the threat modeling process.
+This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **91 potential risks** have been identified during the threat modeling process.
 
 ### Business Side
 
@@ -1052,7 +1050,7 @@ Architecture
 
 ### Development
 
-**20 risks**
+**18 risks**
 
 Development
 
@@ -1088,11 +1086,11 @@ Development
 
     Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
 
-- **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 7/7 unmitigated Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
+- **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 5/5 unmitigated Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
 
     Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
 
-- **Low**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 7/7 unmitigated Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
+- **Low**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 5/5 unmitigated Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
 
     Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
 
@@ -1344,7 +1342,7 @@ This chapter lists custom questions that arose during the threat modeling proces
 
 ## Identified Risks by Vulnerability Category
 
-In total **93 potential risks** have been identified during the threat modeling process, distributed across **34 vulnerability categories**. The following sections describe each identified risk category and its risks.
+In total **91 potential risks** have been identified during the threat modeling process, distributed across **34 vulnerability categories**. The following sections describe each identified risk category and its risks.
 
 ### Some Individual Risk Example
 
@@ -2341,7 +2339,7 @@ The risk **Container Base Image Backdooring** was found **2 times** in the analy
 
 ### Cross-Site Request Forgery (CSRF)
 
-**Medium** · 7/7 unmitigated Risks · `cross-site-request-forgery`
+**Medium** · 5/5 unmitigated Risks · `cross-site-request-forgery`
 
 | Property | Value |
 | --- | --- |
@@ -2363,7 +2361,7 @@ If this risk remains unmitigated, attackers might be able to trick logged-in vic
 
 **Detection Logic**
 
-In-scope web applications accessed via typical web access protocols.
+In-scope web applications accessed via typical web access protocols by a caller used by humans or a browser, directly or through technical assets forwarding the traffic, like load balancers, reverse proxies and WAFs. Requests of other callers, like a backend or a batch job, come from no browser a forged request could use, and are skipped.
 
 **Risk Rating**
 
@@ -2371,7 +2369,7 @@ The risk rating depends on the integrity rating of the data sent across the comm
 
 **False Positives**
 
-Web applications passing the authentication state via custom headers instead of cookies can eventually be false positives; model their links with a token authentication. Also when the web application is not accessed via a browser-like component (i.e not by a human user initiating the request that gets passed through all components until it reaches the web application) this can be considered a false positive.
+Web applications passing the authentication state via custom headers instead of cookies can eventually be false positives; model their links with a token authentication. Clients used by humans that are no browser and render no web content, like a command-line tool, can be considered as false positives after individual review.
 
 **Mitigation**
 
@@ -2383,15 +2381,13 @@ Are recommendations from the linked cheat sheet and referenced ASVS chapter appl
 
 **Risk Findings**
 
-The risk **Cross-Site Request Forgery (CSRF)** was found **7 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+The risk **Cross-Site Request Forgery (CSRF)** was found **5 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Medium | **Cross-Site Request Forgery (CSRF)** risk at **Apache Webserver** via **Web Application Traffic** from **Load Balancer** | `cross-site-request-forgery@apache-webserver@load-balancer>web-application-traffic` | Very Likely | Low | [Apache Webserver](#apache-webserver), [Web Application Traffic](#web-application-traffic) | Unchecked | _not tracked_ |
-| Medium | **Cross-Site Request Forgery (CSRF)** risk at **Identity Provider** via **Auth Credential Check Traffic** from **Apache Webserver** | `cross-site-request-forgery@identity-provider@apache-webserver>auth-credential-check-traffic` | Very Likely | Low | [Identity Provider](#identity-provider), [Auth Credential Check Traffic](#auth-credential-check-traffic) | Unchecked | _not tracked_ |
 | Medium | **Cross-Site Request Forgery (CSRF)** risk at **Marketing CMS** via **CMS Content Traffic** from **Load Balancer** | `cross-site-request-forgery@marketing-cms@load-balancer>cms-content-traffic` | Very Likely | Low | [Marketing CMS](#marketing-cms), [CMS Content Traffic](#cms-content-traffic) | Unchecked | _not tracked_ |
 | Low | **Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Internal Access** from **Backoffice Client** | `cross-site-request-forgery@erp-system@backoffice-client>erp-internal-access` | Unlikely | Low | [Backoffice ERP System](#backoffice-erp-system), [ERP Internal Access](#erp-internal-access) | Unchecked | _not tracked_ |
-| Low | **Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP System Traffic** from **Apache Webserver** | `cross-site-request-forgery@erp-system@apache-webserver>erp-system-traffic` | Unlikely | Low | [Backoffice ERP System](#backoffice-erp-system), [ERP System Traffic](#erp-system-traffic) | Unchecked | _not tracked_ |
 | Low | **Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Web Access** from **Backend Admin Client** | `cross-site-request-forgery@erp-system@backend-admin-client>erp-web-access` | Unlikely | Low | [Backoffice ERP System](#backoffice-erp-system), [ERP Web Access](#erp-web-access) | Unchecked | _not tracked_ |
 | Low | **Cross-Site Request Forgery (CSRF)** risk at **Marketing CMS** via **Marketing CMS Editing** from **Backoffice Client** | `cross-site-request-forgery@marketing-cms@backoffice-client>marketing-cms-editing` | Unlikely | Low | [Marketing CMS](#marketing-cms), [Marketing CMS Editing](#marketing-cms-editing) | Unchecked | _not tracked_ |
 
@@ -3126,7 +3122,7 @@ The risk **Unencrypted Technical Assets** was found **7 times** in the analyzed 
 
 ## Identified Risks by Technical Asset
 
-In total **93 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
+In total **91 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
 
 ### Customer Contract Database
 
@@ -3180,7 +3176,7 @@ The database behind the ERP system
 
 ### Backoffice ERP System
 
-**High** · 17/21 unmitigated Risks · `erp-system`
+**High** · 16/20 unmitigated Risks · `erp-system`
 
 ERP system
 
@@ -3203,7 +3199,6 @@ ERP system
 - **Medium**: [**Missing Multi-Factor Authentication** covering communication link **ERP Internal Access** from **Backoffice Client** to **Backoffice ERP System**](#missing-multi-factor-authentication-mfa) (Mitigated)
 - **Medium**: [**Missing Multi-Factor Authentication** covering communication link **ERP Web Access** from **Backend Admin Client** to **Backoffice ERP System**](#missing-multi-factor-authentication-mfa) (Mitigated)
 - **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Internal Access** from **Backoffice Client**](#cross-site-request-forgery-csrf) (Unchecked)
-- **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP System Traffic** from **Apache Webserver**](#cross-site-request-forgery-csrf) (Unchecked)
 - **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Web Access** from **Backend Admin Client**](#cross-site-request-forgery-csrf) (Unchecked)
 - **Low**: [**Denial-of-Service** risky access of **Backoffice ERP System** by **Apache Webserver** via **ERP System Traffic**](#dos-risky-access-across-trust-boundary) (In Progress)
 - **Low**: [**Denial-of-Service** risky access of **Backoffice ERP System** by **Backoffice Client** via **ERP Internal Access**](#dos-risky-access-across-trust-boundary) (In Progress)
@@ -3399,7 +3394,7 @@ Git repository server
 
 ### Identity Provider
 
-**Elevated** · 3/5 unmitigated Risks · `identity-provider`
+**Elevated** · 2/4 unmitigated Risks · `identity-provider`
 
 Identity provider server
 
@@ -3409,7 +3404,6 @@ Identity provider server
 - **Elevated**: [**LDAP-Injection** risk at **Identity Provider** against LDAP server **LDAP Auth Server** via **LDAP Credential Check Traffic**](#ldap-injection) (Mitigated)
 - **Elevated**: [**Missing Hardening** risk at **Identity Provider**](#missing-hardening) (Mitigated)
 - **Medium**: [**Long-Lived Credentials** risk at **Identity Provider** used by **Apache Webserver** (credentials)](#long-lived-credentials) (Unchecked)
-- **Medium**: [**Cross-Site Request Forgery (CSRF)** risk at **Identity Provider** via **Auth Credential Check Traffic** from **Apache Webserver**](#cross-site-request-forgery-csrf) (Unchecked)
 
 **Asset Information**
 
@@ -3825,7 +3819,7 @@ External developer client
 
 ## Identified Data Breach Probabilities by Data Asset
 
-In total **93 potential risks** have been identified during the threat modeling process, distributed across **12 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
+In total **91 potential risks** have been identified during the threat modeling process, distributed across **12 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
 
 ### Build Job Config
 
@@ -3919,7 +3913,7 @@ This data asset has data breach potential because of 28 remaining risks:
 
 ### Customer Accounts
 
-**Probable** · 48/66 unmitigated Risks · `customer-accounts`
+**Probable** · 46/64 unmitigated Risks · `customer-accounts`
 
 Customer Accounts (including transient credentials when entered for checking them)
 
@@ -3942,7 +3936,7 @@ Customer Accounts (including transient credentials when entered for checking the
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 48 remaining risks:
+This data asset has data breach potential because of 46 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -3979,9 +3973,7 @@ This data asset has data breach potential because of 48 remaining risks:
 - Possible, **Elevated**: [**Unencrypted Communication** named **Web Application Traffic** between **Load Balancer** and **Apache Webserver** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - Improbable, **Medium**: [**Cross-Site Request Forgery (CSRF)** risk at **Apache Webserver** via **Web Application Traffic** from **Load Balancer**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Internal Access** from **Backoffice Client**](#cross-site-request-forgery-csrf) (Unchecked)
-- Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP System Traffic** from **Apache Webserver**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Web Access** from **Backend Admin Client**](#cross-site-request-forgery-csrf) (Unchecked)
-- Improbable, **Medium**: [**Cross-Site Request Forgery (CSRF)** risk at **Identity Provider** via **Auth Credential Check Traffic** from **Apache Webserver**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Medium**: [**Cross-Site Request Forgery (CSRF)** risk at **Marketing CMS** via **CMS Content Traffic** from **Load Balancer**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Marketing CMS** via **Marketing CMS Editing** from **Backoffice Client**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Medium**: [**Missing End User Identity Propagation** over communication link **ERP System Traffic** from **Apache Webserver** to **Backoffice ERP System**](#missing-identity-propagation) (Unchecked)
@@ -4032,7 +4024,7 @@ This data asset has data breach potential because of 9 remaining risks:
 
 ### Customer Contracts
 
-**Probable** · 33/41 unmitigated Risks · `customer-contracts`
+**Probable** · 32/40 unmitigated Risks · `customer-contracts`
 
 Customer Contracts (PDF)
 
@@ -4055,7 +4047,7 @@ Customer Contracts (PDF)
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 33 remaining risks:
+This data asset has data breach potential because of 32 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -4082,7 +4074,6 @@ This data asset has data breach potential because of 33 remaining risks:
 - Possible, **Elevated**: [**Unencrypted Communication** named **Web Application Traffic** between **Load Balancer** and **Apache Webserver** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - Improbable, **Medium**: [**Cross-Site Request Forgery (CSRF)** risk at **Apache Webserver** via **Web Application Traffic** from **Load Balancer**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Internal Access** from **Backoffice Client**](#cross-site-request-forgery-csrf) (Unchecked)
-- Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP System Traffic** from **Apache Webserver**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Web Access** from **Backend Admin Client**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Medium**: [**Missing End User Identity Propagation** over communication link **ERP System Traffic** from **Apache Webserver** to **Backoffice ERP System**](#missing-identity-propagation) (Unchecked)
 - Improbable, **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Apache Webserver** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
@@ -4093,7 +4084,7 @@ This data asset has data breach potential because of 33 remaining risks:
 
 ### Customer Operational Data
 
-**Probable** · 35/45 unmitigated Risks · `customer-operational-data`
+**Probable** · 34/44 unmitigated Risks · `customer-operational-data`
 
 Customer Operational Data
 
@@ -4116,7 +4107,7 @@ Customer Operational Data
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 35 remaining risks:
+This data asset has data breach potential because of 34 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -4145,7 +4136,6 @@ This data asset has data breach potential because of 35 remaining risks:
 - Possible, **Elevated**: [**Unencrypted Communication** named **Web Application Traffic** between **Load Balancer** and **Apache Webserver** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - Improbable, **Medium**: [**Cross-Site Request Forgery (CSRF)** risk at **Apache Webserver** via **Web Application Traffic** from **Load Balancer**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Internal Access** from **Backoffice Client**](#cross-site-request-forgery-csrf) (Unchecked)
-- Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP System Traffic** from **Apache Webserver**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Web Access** from **Backend Admin Client**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Medium**: [**Missing End User Identity Propagation** over communication link **ERP System Traffic** from **Apache Webserver** to **Backoffice ERP System**](#missing-identity-propagation) (Unchecked)
 - Improbable, **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Apache Webserver** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
@@ -4195,7 +4185,7 @@ This data asset has data breach potential because of 11 remaining risks:
 
 ### ERP Customizing Data
 
-**Probable** · 13/17 unmitigated Risks · `erp-customizing`
+**Probable** · 12/16 unmitigated Risks · `erp-customizing`
 
 Data for customizing of the ERP system.
 
@@ -4218,7 +4208,7 @@ Data for customizing of the ERP system.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 13 remaining risks:
+This data asset has data breach potential because of 12 remaining risks:
 
 - Probable, **Elevated**: [**Missing Cloud Hardening (AWS)** risk at **Application Network**: _CIS Benchmark for AWS_](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **ERP DMZ**](#missing-cloud-hardening) (Unchecked)
@@ -4228,7 +4218,6 @@ This data asset has data breach potential because of 13 remaining risks:
 - Possible, **Elevated**: [**Cross-Site Scripting (XSS)** risk at **Backoffice ERP System**](#cross-site-scripting-xss) (Unchecked)
 - Possible, **Elevated**: [**Long-Lived Credentials** risk at **Backoffice ERP System** used by **Apache Webserver** (long-lived-token)](#long-lived-credentials) (Unchecked)
 - Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Internal Access** from **Backoffice Client**](#cross-site-request-forgery-csrf) (Unchecked)
-- Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP System Traffic** from **Apache Webserver**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Web Access** from **Backend Admin Client**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Medium**: [**Missing End User Identity Propagation** over communication link **ERP System Traffic** from **Apache Webserver** to **Backoffice ERP System**](#missing-identity-propagation) (Unchecked)
 - Improbable, **Medium**: [**Missing Web Application Firewall (WAF)** risk at **Backoffice ERP System**](#missing-web-application-firewall-waf) (Unchecked)
@@ -4236,7 +4225,7 @@ This data asset has data breach potential because of 13 remaining risks:
 
 ### ERP Logs
 
-**Probable** · 20/27 unmitigated Risks · `erp-logs`
+**Probable** · 19/26 unmitigated Risks · `erp-logs`
 
 Logs generated by the ERP system.
 
@@ -4259,7 +4248,7 @@ Logs generated by the ERP system.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 20 remaining risks:
+This data asset has data breach potential because of 19 remaining risks:
 
 - Probable, **Critical**: [**Example Individual Risk** at **Database**](#some-individual-risk-example) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening (AWS)** risk at **Application Network**: _CIS Benchmark for AWS_](#missing-cloud-hardening) (Unchecked)
@@ -4276,7 +4265,6 @@ This data asset has data breach potential because of 20 remaining risks:
 - Possible, **Elevated**: [**Shared Machine Account** risk at **Backoffice ERP System** sharing **erp-db-owner** with **Backend Admin Client**](#shared-machine-account) (Unchecked)
 - Possible, **Medium**: [**Unencrypted Communication** named **Database Traffic** between **Backoffice ERP System** and **Customer Contract Database** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Internal Access** from **Backoffice Client**](#cross-site-request-forgery-csrf) (Unchecked)
-- Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP System Traffic** from **Apache Webserver**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Web Access** from **Backend Admin Client**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Medium**: [**Missing End User Identity Propagation** over communication link **ERP System Traffic** from **Apache Webserver** to **Backoffice ERP System**](#missing-identity-propagation) (Unchecked)
 - Improbable, **Medium**: [**Missing Web Application Firewall (WAF)** risk at **Backoffice ERP System**](#missing-web-application-firewall-waf) (Unchecked)
@@ -4387,7 +4375,7 @@ This data asset has data breach potential because of 28 remaining risks:
 
 ### Some Internal Business Data
 
-**Probable** · 35/45 unmitigated Risks · `internal-business-data`
+**Probable** · 34/44 unmitigated Risks · `internal-business-data`
 
 Internal business data of the ERP system used unrelated to the customer-facing processes.
 
@@ -4410,7 +4398,7 @@ Internal business data of the ERP system used unrelated to the customer-facing p
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 35 remaining risks:
+This data asset has data breach potential because of 34 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -4439,7 +4427,6 @@ This data asset has data breach potential because of 35 remaining risks:
 - Possible, **Elevated**: [**Unencrypted Communication** named **Web Application Traffic** between **Load Balancer** and **Apache Webserver** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - Improbable, **Medium**: [**Cross-Site Request Forgery (CSRF)** risk at **Apache Webserver** via **Web Application Traffic** from **Load Balancer**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Internal Access** from **Backoffice Client**](#cross-site-request-forgery-csrf) (Unchecked)
-- Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP System Traffic** from **Apache Webserver**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Backoffice ERP System** via **ERP Web Access** from **Backend Admin Client**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Medium**: [**Missing End User Identity Propagation** over communication link **ERP System Traffic** from **Apache Webserver** to **Backoffice ERP System**](#missing-identity-propagation) (Unchecked)
 - Improbable, **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Apache Webserver** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
@@ -5003,7 +4990,7 @@ Link to the LDAP auth server
 
 ## Risk Tracking
 
-**29 of 93 risks** are tracked in the model; the others are unchecked.
+**29 of 91 risks** are tracked in the model; the others are unchecked.
 
 | Risk | ID | Severity | Status | Date | Checked by | Ticket | Justification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -5047,7 +5034,7 @@ The risk rules checked **10 of 10** entries of the [OWASP Top 10:2025](https://t
 
 | Entry | Risk rules | Risks |
 | --- | --- | --- |
-| `A01` Broken Access Control | Confused Deputy Agent, Cross-Account Takeover, [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf), [Missing Identity Propagation](#missing-identity-propagation), [Missing Object-Level Authorization](#missing-object-level-authorization), [Path-Traversal](#path-traversal), [Public Cloud Asset Access](#public-cloud-asset-access), [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 12/13 unmitigated Risks |
+| `A01` Broken Access Control | Confused Deputy Agent, Cross-Account Takeover, [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf), [Missing Identity Propagation](#missing-identity-propagation), [Missing Object-Level Authorization](#missing-object-level-authorization), [Path-Traversal](#path-traversal), [Public Cloud Asset Access](#public-cloud-asset-access), [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 10/11 unmitigated Risks |
 | `A02` Security Misconfiguration | Container Platform Escape, [Missing Cloud Hardening](#missing-cloud-hardening), [Missing Hardening](#missing-hardening), [Public Cloud Asset Access](#public-cloud-asset-access), [Publicly Shared Cloud Snapshot](#publicly-shared-cloud-snapshot), [XML External Entity (XXE)](#xml-external-entity-xxe) | 10/16 unmitigated Risks |
 | `A03` Software Supply Chain Failures | [Code Backdooring](#code-backdooring), [Container Base Image Backdooring](#container-base-image-backdooring), [Unchecked Deployment](#unchecked-deployment) | 7/7 unmitigated Risks |
 | `A04` Cryptographic Failures | [Unencrypted Communication](#unencrypted-communication), [Unencrypted Technical Assets](#unencrypted-technical-assets) | 4/11 unmitigated Risks |
@@ -5130,7 +5117,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Container Base Image Backdooring | `container-baseimage-backdooring` | Tampering | When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors. | In-scope technical assets running as containers. | The risk rating depends on the sensitivity of the technical asset itself and of the data assets. |
 | Container Platform Escape | `container-platform-escape` | Elevation of Privilege | Container platforms are especially interesting targets for attackers as they host big parts of a containerized runtime infrastructure. When not configured and operated with security best practices in mind, attackers might exploit a vulnerability inside an container and escape towards the platform as highly privileged users. These scenarios might give attackers capabilities to attack every other container as owning the container platform (via container escape attacks) equals to owning every container. | In-scope container platforms. | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. |
 | Cross-Account Takeover | `cross-account-takeover` | Elevation of Privilege | Cloud accounts, subscriptions, projects and VPCs isolate workloads and tenants from each other. Access from one of them into another (account A to account B) is granted by cross-account roles, trust policies or resource policies, and a misconfigured grant (too broad principals or rights, or no condition on the calling account) breaks that isolation. | Communication links into in-scope technical assets from technical assets in another cloud account, i.e. where the innermost trust boundaries of type network-cloud-provider around the source and the target differ. | The risk rating depends on the sensitivity of the target technical asset itself and of the data assets it processes and stores. The likelihood rises when the source or the target is multi-tenant, as another tenant can then try to abuse the cross-account access. |
-| Cross-Site Request Forgery (CSRF) | `cross-site-request-forgery` | Spoofing | When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise. | In-scope web applications accessed via typical web access protocols. | The risk rating depends on the integrity rating of the data sent across the communication link. The attack is very likely, likely for DevOps usage, and unlikely when the link is authenticated with a token (_token_, _short-lived-token_ or _long-lived-token_), which a browser does not send on its own like a cookie. |
+| Cross-Site Request Forgery (CSRF) | `cross-site-request-forgery` | Spoofing | When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise. | In-scope web applications accessed via typical web access protocols by a caller used by humans or a browser, directly or through technical assets forwarding the traffic, like load balancers, reverse proxies and WAFs. Requests of other callers, like a backend or a batch job, come from no browser a forged request could use, and are skipped. | The risk rating depends on the integrity rating of the data sent across the communication link. The attack is very likely, likely for DevOps usage, and unlikely when the link is authenticated with a token (_token_, _short-lived-token_ or _long-lived-token_), which a browser does not send on its own like a cookie. |
 | Cross-Site Scripting (XSS) | `cross-site-scripting` | Tampering | For each web application Cross-Site Scripting (XSS) risks might arise. In terms of the overall risk level take other applications running on the same domain into account as well. | In-scope web applications. | The risk rating depends on the sensitivity of the data processed in the web application. |
 | Direct IT/OT Communication | `direct-it-ot-communication` | Elevation of Privilege | Controllers, field devices, HMIs, SCADA servers and engineering workstations of an industrial control system belong into control zones that IT assets reach only through an industrial DMZ. A direct communication link between an IT asset and an asset of a control zone lets attackers who compromise the IT side, which is far more exposed, move straight into the control of the physical process. | In-scope OT technical assets (plc, rtu, safety-controller, field-device, hmi, scada-server, engineering-workstation) with a communication link, in either direction, with a technical asset that is neither an OT asset nor in the industrial DMZ (a historian or an asset tagged with _industrial-dmz_). | The risk rating depends on the integrity and availability of the OT asset, and is the highest for safety controllers. The attack is very likely when the other asset is on the internet, and likely otherwise. |
 | DoS-risky Access Across Trust-Boundary | `dos-risky-access-across-trust-boundary` | Denial of Service | Assets accessed across trust boundaries with critical or mission-critical availability rating are more prone to Denial-of-Service (DoS) risks. | In-scope technical assets (excluding load-balancer) with availability rating of critical or higher which have incoming data-flows across a network trust-boundary (excluding devops usage). | Matching technical assets with availability rating of critical or higher are at low risk. When the availability rating is mission-critical and neither a VPN nor IP filter for the incoming data-flow nor redundancy for the asset is applied, the risk-rating is considered medium. |

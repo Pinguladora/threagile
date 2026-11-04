@@ -1186,16 +1186,6 @@
       ],
       "threats": [
         {
-          "threat": "cross-site-request-forgery",
-          "state": "exposed",
-          "mitigations": [
-            {
-              "mitigation": "cross-site-request-forgery-mitigation",
-              "state": "recommended"
-            }
-          ]
-        },
-        {
           "threat": "server-side-request-forgery",
           "state": "exposed",
           "mitigations": [
