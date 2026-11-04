@@ -35,11 +35,7 @@ func parseIteration[T common.Expression](
 				return none, value, fmt.Errorf("failed to parse %q of %v: expected string, got %T", key, name, value)
 			}
 
-			if key == common.Item {
-				*item = text
-			} else {
-				*index = text
-			}
+			setIterationName(key, text, item, index)
 
 		default:
 			boolExpression, errorScript, expressionError := parseIterationExpression(name, script, key, value, *expression)
@@ -51,7 +47,20 @@ func parseIteration[T common.Expression](
 		}
 	}
 
+	if *in == nil {
+		return none, script, fmt.Errorf("failed to parse %v: missing %q", name, common.In)
+	}
+
 	return what, nil, nil
+}
+
+// setIterationName sets the name of the current item or of its index, as the key tells.
+func setIterationName(key string, text string, item *string, index *string) {
+	if key == common.Item {
+		*item = text
+	} else {
+		*index = text
+	}
 }
 
 // parseIterationExpression parses the bool expression of an iteration expression, which must not have one yet.
