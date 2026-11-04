@@ -5,7 +5,8 @@
 // Changes from the original:
 //   - edges are always stroked: the WASM bridge reports every edge spline as filled,
 //     which turned edges into filled wedges, and the same flag is unreliable for
-//     arrowheads and unfilled nodes, so filling is decided from the object instead;
+//     arrowheads and unfilled nodes, so filling is decided from the object instead
+//     (for an arrow, from the arrowhead or arrowtail attribute of the end it is at);
 //   - shapes are filled and then outlined, clusters included;
 //   - pen widths, dash patterns (those of the Graphviz cairo renderer, with butt
 //     caps) and font sizes scale with the output DPI;
@@ -21,6 +22,7 @@ import (
 	"context"
 	_ "embed"
 	"fmt"
+	"math"
 	"strings"
 	"sync"
 
@@ -88,6 +90,9 @@ type pngRenderer struct {
 	faces map[float64]font.Face
 	// nodeFilled is set once the current node's shape has been filled.
 	nodeFilled bool
+	// edgeStart and edgeEnd are the ends of the current edge's spline, in Graphviz
+	// coordinates: the tail arrow is drawn at the start, the head arrow at the end.
+	edgeStart, edgeEnd [2]float64
 }
 
 func (r *pngRenderer) BeginPage(_ context.Context, job *gvc.Job) error {
@@ -99,6 +104,11 @@ func (r *pngRenderer) BeginPage(_ context.Context, job *gvc.Job) error {
 
 func (r *pngRenderer) BeginNode(_ context.Context, _ *gvc.Job) error {
 	r.nodeFilled = false
+	return nil
+}
+
+func (r *pngRenderer) BeginEdge(_ context.Context, _ *gvc.Job) error {
+	r.edgeStart, r.edgeEnd = [2]float64{}, [2]float64{}
 	return nil
 }
 
@@ -142,18 +152,23 @@ func (r *pngRenderer) Ellipse(_ context.Context, job *gvc.Job, a []*gvc.PointFlo
 	cx, cy := r.point(job, a[0].X(), a[0].Y())
 	rx, ry := r.point(job, a[1].X()-a[0].X(), a[1].Y()-a[0].Y())
 	r.dc.DrawEllipse(cx, cy, rx, -ry)
-	r.draw(job, r.fills(job, filled))
+	r.draw(job, r.fills(job, filled, [2]float64{a[0].X(), a[0].Y()}))
 	return nil
 }
 
 func (r *pngRenderer) Polygon(_ context.Context, job *gvc.Job, a []*gvc.PointFloat, filled bool) error {
 	r.lines(job, a)
 	r.dc.ClosePath()
-	r.draw(job, r.fills(job, filled))
+	r.draw(job, r.fills(job, filled, centroid(a)))
 	return nil
 }
 
 func (r *pngRenderer) BezierCurve(_ context.Context, job *gvc.Job, a []*gvc.PointFloat, filled bool) error {
+	if job.Object().Type() == gvc.EdgeObjectType {
+		// Graphviz draws the spline before the arrows, which sit beyond its two ends.
+		r.edgeStart = [2]float64{a[0].X(), a[0].Y()}
+		r.edgeEnd = [2]float64{a[len(a)-1].X(), a[len(a)-1].Y()}
+	}
 	r.dc.MoveTo(r.point(job, a[0].X(), a[0].Y()))
 	for i := 1; i+2 < len(a); i += 3 {
 		x1, y1 := r.point(job, a[i].X(), a[i].Y())
@@ -161,7 +176,7 @@ func (r *pngRenderer) BezierCurve(_ context.Context, job *gvc.Job, a []*gvc.Poin
 		x3, y3 := r.point(job, a[i+2].X(), a[i+2].Y())
 		r.dc.CubicTo(x1, y1, x2, y2, x3, y3)
 	}
-	r.draw(job, filled && job.Object().Type() != gvc.EdgeObjectType && r.fills(job, filled))
+	r.draw(job, filled && job.Object().Type() != gvc.EdgeObjectType && r.fills(job, filled, [2]float64{}))
 	return nil
 }
 
@@ -171,8 +186,9 @@ func (r *pngRenderer) Polyline(_ context.Context, job *gvc.Job, a []*gvc.PointFl
 	return nil
 }
 
-// fills reports whether a closed shape is filled; see the note on the WASM bridge at the top.
-func (r *pngRenderer) fills(job *gvc.Job, filled bool) bool {
+// fills reports whether a closed shape centred at the given point is filled; see the note on
+// the WASM bridge at the top.
+func (r *pngRenderer) fills(job *gvc.Job, filled bool, centre [2]float64) bool {
 	obj := job.Object()
 	switch obj.Type() {
 	case gvc.NodeObjectType:
@@ -182,8 +198,13 @@ func (r *pngRenderer) fills(job *gvc.Job, filled bool) bool {
 		r.nodeFilled = true
 		return fill
 	case gvc.EdgeObjectType:
-		// Arrowheads; threagile draws edges with dir=forward, so only the head counts.
-		arrow := strings.TrimLeft(obj.Edge().GetStr("arrowhead"), "lr")
+		// An arrow: the one at the tail end of the edge (dir=both or back) is the arrowtail.
+		attribute := "arrowhead"
+		if math.Hypot(centre[0]-r.edgeStart[0], centre[1]-r.edgeStart[1]) <
+			math.Hypot(centre[0]-r.edgeEnd[0], centre[1]-r.edgeEnd[1]) {
+			attribute = "arrowtail"
+		}
+		arrow := strings.TrimLeft(obj.Edge().GetStr(attribute), "lr")
 		open := strings.HasPrefix(arrow, "o") && !strings.HasPrefix(arrow, "open")
 		return !open && arrow != "empty" && arrow != "invempty" && arrow != "ediamond"
 	default:
@@ -213,6 +234,17 @@ func (r *pngRenderer) draw(job *gvc.Job, fill bool) {
 		r.dc.SetDash()
 	}
 	r.dc.Stroke()
+}
+
+// centroid is the mean of the points, in Graphviz coordinates.
+func centroid(a []*gvc.PointFloat) [2]float64 {
+	var x, y float64
+	for _, p := range a {
+		x += p.X()
+		y += p.Y()
+	}
+	n := float64(len(a))
+	return [2]float64{x / n, y / n}
 }
 
 func (r *pngRenderer) lines(job *gvc.Job, a []*gvc.PointFloat) {
