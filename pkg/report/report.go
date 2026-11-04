@@ -530,16 +530,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 			if len(newRisksStr) != 1 {
 				suffix += "s"
 			}
-			switch identifiedDataBreachProbabilityStillAtRisk(parsedModel, dataAsset) {
-			case types.Probable:
-				colorHighRisk(r.pdf)
-			case types.Possible:
-				colorMediumRisk(r.pdf)
-			case types.Improbable:
-				colorLowRisk(r.pdf)
-			default:
-				r.pdfColorBlack()
-			}
+			r.pdfColorByDataBreachProbability(identifiedDataBreachProbabilityStillAtRisk(parsedModel, dataAsset))
 			if !isDataBreachPotentialStillAtRisk(parsedModel, dataAsset) {
 				r.pdfColorBlack()
 			}
@@ -3051,7 +3042,6 @@ func (r *pdfReporter) technicalAssetCommLinkData(parsedModel *types.Model, commL
 }
 
 func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
-	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
 	title := "Identified Data Breach Probabilities by Data Asset"
 	r.pdfColorBlack()
 	r.addHeadline(title, false)
@@ -3074,178 +3064,178 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 	r.pdf.SetFont("Helvetica", "", fontSizeBody)
 	r.currentChapterTitleBreadcrumb = title
 	for _, dataAsset := range sortedDataAssetsByDataBreachProbabilityAndTitle(parsedModel) {
-		if r.pdf.GetY() > 280 { // 280 as only small font previously (not 250)
-			r.pageBreak()
-			r.pdf.SetY(36)
-		} else {
-			html.Write(5, "<br><br><br>")
-		}
+		countStillAtRisk := r.dataAssetHeadline(parsedModel, dataAsset, html)
+		r.dataAssetAttributes(dataAsset)
+		r.dataAssetRelations(parsedModel, dataAsset)
+		r.dataAssetBreach(parsedModel, dataAsset, countStillAtRisk)
+	}
+}
+
+// dataAssetHeadline writes the headline and the description of a data asset, coloured by its data
+// breach probability. It returns the number of its data breach risks still at risk.
+func (r *pdfReporter) dataAssetHeadline(parsedModel *types.Model, dataAsset *types.DataAsset,
+	html gofpdf.HTMLBasicType,
+) int {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	if r.pdf.GetY() > 280 { // 280 as only small font previously (not 250)
+		r.pageBreak()
+		r.pdf.SetY(36)
+	} else {
+		html.Write(5, "<br><br><br>")
+	}
+	r.pdfColorBlack()
+	r.pdfColorByDataBreachProbability(identifiedDataBreachProbabilityStillAtRisk(parsedModel, dataAsset))
+	if !isDataBreachPotentialStillAtRisk(parsedModel, dataAsset) {
 		r.pdfColorBlack()
-		switch identifiedDataBreachProbabilityStillAtRisk(parsedModel, dataAsset) {
-		case types.Probable:
-			colorHighRisk(r.pdf)
-		case types.Possible:
-			colorMediumRisk(r.pdf)
-		case types.Improbable:
-			colorLowRisk(r.pdf)
-		default:
-			r.pdfColorBlack()
+	}
+	risksStr := parsedModel.IdentifiedDataBreachProbabilityRisks(dataAsset)
+	countStillAtRisk := len(types.ReduceToOnlyStillAtRisk(risksStr))
+	suffix := strconv.Itoa(countStillAtRisk) + " / " + strconv.Itoa(len(risksStr)) + " Risk"
+	if len(risksStr) != 1 {
+		suffix += "s"
+	}
+	title := uni(dataAsset.Title) + ": " + suffix
+	r.addHeadline(title, true)
+	r.defineLinkTarget("{data:" + dataAsset.Id + "}")
+	r.pdfColorBlack()
+	html.Write(5, uni(dataAsset.Description))
+	html.Write(5, "<br><br>")
+
+	return countStillAtRisk
+}
+
+// dataAssetAttributes writes the attributes and the rating of a data asset.
+func (r *pdfReporter) dataAssetAttributes(dataAsset *types.DataAsset) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	r.pdf.SetFont("Helvetica", "", fontSizeBody)
+	r.attributeRow("ID:", dataAsset.Id)
+	r.pageBreakBelow(265)
+	r.attributeRow("Usage:", dataAsset.Usage.String())
+	r.pageBreakBelow(265)
+	r.attributeRow("Quantity:", dataAsset.Quantity.String())
+	r.pageBreakBelow(265)
+	tagsUsedText := ""
+	sorted := dataAsset.Tags
+	sort.Strings(sorted)
+	for _, tag := range sorted {
+		if len(tagsUsedText) > 0 {
+			tagsUsedText += ", "
 		}
-		if !isDataBreachPotentialStillAtRisk(parsedModel, dataAsset) {
-			r.pdfColorBlack()
+		tagsUsedText += tag
+	}
+	r.attributeListRow("Tags:", tagsUsedText, textNone, uni)
+	r.pageBreakBelow(265)
+	r.attributeRow("Origin:", uni(dataAsset.Origin))
+	r.pageBreakBelow(265)
+	r.attributeRow("Owner:", uni(dataAsset.Owner))
+	r.pageBreakBelow(265)
+	r.ratingRow("Confidentiality:", dataAsset.Confidentiality)
+	r.pageBreakBelow(265)
+	r.ratingRow("Integrity:", dataAsset.Integrity)
+	r.pageBreakBelow(265)
+	r.ratingRow("Availability:", dataAsset.Availability)
+	r.pageBreakBelow(265)
+	r.attributeRow("CIA-Justification:", uni(dataAsset.JustificationCiaRating))
+}
+
+// dataAssetRelations writes the technical assets that process and store a data asset and the
+// communication links that transfer it.
+func (r *pdfReporter) dataAssetRelations(parsedModel *types.Model, dataAsset *types.DataAsset) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	r.pageBreakBelow(265)
+	processedByText := ""
+	for _, dataAsset := range parsedModel.ProcessedByTechnicalAssetsSorted(dataAsset) {
+		if len(processedByText) > 0 {
+			processedByText += ", "
 		}
-		risksStr := parsedModel.IdentifiedDataBreachProbabilityRisks(dataAsset)
-		countStillAtRisk := len(types.ReduceToOnlyStillAtRisk(risksStr))
-		suffix := strconv.Itoa(countStillAtRisk) + " / " + strconv.Itoa(len(risksStr)) + " Risk"
-		if len(risksStr) != 1 {
-			suffix += "s"
+		processedByText += dataAsset.Title // plain text, not linked to the technical asset detail chapter
+	}
+	r.attributeListRow("Processed by:", processedByText, textNone, uni)
+
+	r.pageBreakBelow(265)
+	storedByText := ""
+	for _, dataAsset := range parsedModel.StoredByTechnicalAssetsSorted(dataAsset) {
+		if len(storedByText) > 0 {
+			storedByText += ", "
 		}
-		title := uni(dataAsset.Title) + ": " + suffix
-		r.addHeadline(title, true)
-		r.defineLinkTarget("{data:" + dataAsset.Id + "}")
+		storedByText += dataAsset.Title // plain text, not linked to the technical asset detail chapter
+	}
+	r.attributeListRow("Stored by:", storedByText, textNone, uni)
+
+	r.pageBreakBelow(265)
+	sentViaText := ""
+	for _, commLink := range parsedModel.SentViaCommLinksSorted(dataAsset) {
+		if len(sentViaText) > 0 {
+			sentViaText += ", "
+		}
+		sentViaText += commLink.Title // plain text, not linked to the technical asset detail chapter
+	}
+	r.attributeListRow("Sent via:", sentViaText, textNone, uni)
+
+	r.pageBreakBelow(265)
+	receivedViaText := ""
+	for _, commLink := range parsedModel.ReceivedViaCommLinksSorted(dataAsset) {
+		if len(receivedViaText) > 0 {
+			receivedViaText += ", "
+		}
+		receivedViaText += commLink.Title // plain text, not linked to the technical asset detail chapter
+	}
+	r.attributeListRow("Received via:", receivedViaText, textNone, uni)
+}
+
+// dataAssetBreach writes the data breach probability of a data asset and the risks it derives from.
+func (r *pdfReporter) dataAssetBreach(parsedModel *types.Model, dataAsset *types.DataAsset, countStillAtRisk int) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	r.pdfColorGray()
+	r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
+	r.pdf.CellFormat(40, 6, "Data Breach:", "0", 0, "", false, 0, "")
+	r.pdfColorBlack()
+	r.pdf.SetFont("Helvetica", "B", fontSizeBody)
+	dataBreachProbability := identifiedDataBreachProbabilityStillAtRisk(parsedModel, dataAsset)
+	riskText := dataBreachProbability.String()
+	r.pdfColorByDataBreachProbability(dataBreachProbability)
+	if !isDataBreachPotentialStillAtRisk(parsedModel, dataAsset) {
 		r.pdfColorBlack()
-		html.Write(5, uni(dataAsset.Description))
-		html.Write(5, "<br><br>")
+		riskText = textNone
+	}
+	r.pdf.MultiCell(145, 6, riskText, "0", "0", false)
+	r.pdf.SetFont("Helvetica", "", fontSizeBody)
+	r.pageBreakBelow(265)
 
-		r.pdf.SetFont("Helvetica", "", fontSizeBody)
-		r.attributeRow("ID:", dataAsset.Id)
-		r.pageBreakBelow(265)
-		r.attributeRow("Usage:", dataAsset.Usage.String())
-		r.pageBreakBelow(265)
-		r.attributeRow("Quantity:", dataAsset.Quantity.String())
-		r.pageBreakBelow(265)
-		tagsUsedText := ""
-		sorted := dataAsset.Tags
-		sort.Strings(sorted)
-		for _, tag := range sorted {
-			if len(tagsUsedText) > 0 {
-				tagsUsedText += ", "
-			}
-			tagsUsedText += tag
-		}
-		r.attributeListRow("Tags:", tagsUsedText, textNone, uni)
-		r.pageBreakBelow(265)
-		r.attributeRow("Origin:", uni(dataAsset.Origin))
-		r.pageBreakBelow(265)
-		r.attributeRow("Owner:", uni(dataAsset.Owner))
-		r.pageBreakBelow(265)
-		r.ratingRow("Confidentiality:", dataAsset.Confidentiality)
-		r.pageBreakBelow(265)
-		r.ratingRow("Integrity:", dataAsset.Integrity)
-		r.pageBreakBelow(265)
-		r.ratingRow("Availability:", dataAsset.Availability)
-		r.pageBreakBelow(265)
-		r.attributeRow("CIA-Justification:", uni(dataAsset.JustificationCiaRating))
-
-		r.pageBreakBelow(265)
-		processedByText := ""
-		for _, dataAsset := range parsedModel.ProcessedByTechnicalAssetsSorted(dataAsset) {
-			if len(processedByText) > 0 {
-				processedByText += ", "
-			}
-			processedByText += dataAsset.Title // plain text, not linked to the technical asset detail chapter
-		}
-		r.attributeListRow("Processed by:", processedByText, textNone, uni)
-
-		r.pageBreakBelow(265)
-		storedByText := ""
-		for _, dataAsset := range parsedModel.StoredByTechnicalAssetsSorted(dataAsset) {
-			if len(storedByText) > 0 {
-				storedByText += ", "
-			}
-			storedByText += dataAsset.Title // plain text, not linked to the technical asset detail chapter
-		}
-		r.attributeListRow("Stored by:", storedByText, textNone, uni)
-
-		r.pageBreakBelow(265)
-		sentViaText := ""
-		for _, commLink := range parsedModel.SentViaCommLinksSorted(dataAsset) {
-			if len(sentViaText) > 0 {
-				sentViaText += ", "
-			}
-			sentViaText += commLink.Title // plain text, not linked to the technical asset detail chapter
-		}
-		r.attributeListRow("Sent via:", sentViaText, textNone, uni)
-
-		r.pageBreakBelow(265)
-		receivedViaText := ""
-		for _, commLink := range parsedModel.ReceivedViaCommLinksSorted(dataAsset) {
-			if len(receivedViaText) > 0 {
-				receivedViaText += ", "
-			}
-			receivedViaText += commLink.Title // plain text, not linked to the technical asset detail chapter
-		}
-		r.attributeListRow("Received via:", receivedViaText, textNone, uni)
-
+	// how can is this data asset be indirectly lost (i.e. why)
+	dataBreachRisksStillAtRisk := identifiedDataBreachProbabilityRisksStillAtRisk(parsedModel, dataAsset)
+	sortByDataBreachProbability(dataBreachRisksStillAtRisk)
+	r.pageBreakBelow(265)
+	r.pdfColorGray()
+	r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
+	r.pdf.CellFormat(40, 6, "Data Breach Risks:", "0", 0, "", false, 0, "")
+	if len(dataBreachRisksStillAtRisk) == 0 {
 		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Data Breach:", "0", 0, "", false, 0, "")
+		r.pdf.MultiCell(145, 6, "This data asset has no data breach potential.", "0", "0", false)
+	} else {
 		r.pdfColorBlack()
-		r.pdf.SetFont("Helvetica", "B", fontSizeBody)
-		dataBreachProbability := identifiedDataBreachProbabilityStillAtRisk(parsedModel, dataAsset)
-		riskText := dataBreachProbability.String()
-		switch dataBreachProbability {
-		case types.Probable:
-			colorHighRisk(r.pdf)
-		case types.Possible:
-			colorMediumRisk(r.pdf)
-		case types.Improbable:
-			colorLowRisk(r.pdf)
-		default:
-			r.pdfColorBlack()
+		riskRemainingStr := "risksStr"
+		if countStillAtRisk == 1 {
+			riskRemainingStr = textRiskLower
 		}
-		if !isDataBreachPotentialStillAtRisk(parsedModel, dataAsset) {
-			r.pdfColorBlack()
-			riskText = textNone
-		}
-		r.pdf.MultiCell(145, 6, riskText, "0", "0", false)
-		r.pdf.SetFont("Helvetica", "", fontSizeBody)
-		r.pageBreakBelow(265)
-
-		// how can is this data asset be indirectly lost (i.e. why)
-		dataBreachRisksStillAtRisk := identifiedDataBreachProbabilityRisksStillAtRisk(parsedModel, dataAsset)
-		sortByDataBreachProbability(dataBreachRisksStillAtRisk)
-		r.pageBreakBelow(265)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Data Breach Risks:", "0", 0, "", false, 0, "")
-		if len(dataBreachRisksStillAtRisk) == 0 {
-			r.pdfColorGray()
-			r.pdf.MultiCell(145, 6, "This data asset has no data breach potential.", "0", "0", false)
-		} else {
-			r.pdfColorBlack()
-			riskRemainingStr := "risksStr"
-			if countStillAtRisk == 1 {
-				riskRemainingStr = textRiskLower
+		r.pdf.MultiCell(145, 6, "This data asset has data breach potential because of "+
+			""+strconv.Itoa(countStillAtRisk)+" remaining "+riskRemainingStr+":", "0", "0", false)
+		for _, dataBreachRisk := range dataBreachRisksStillAtRisk {
+			// 280 as only small font here
+			r.pageBreakBelow(280)
+			r.pdfColorByDataBreachProbability(dataBreachRisk.DataBreachProbability)
+			if !dataBreachRisk.RiskStatus.IsStillAtRisk() {
+				r.pdfColorBlack()
 			}
-			r.pdf.MultiCell(145, 6, "This data asset has data breach potential because of "+
-				""+strconv.Itoa(countStillAtRisk)+" remaining "+riskRemainingStr+":", "0", "0", false)
-			for _, dataBreachRisk := range dataBreachRisksStillAtRisk {
-				// 280 as only small font here
-				r.pageBreakBelow(280)
-				switch dataBreachRisk.DataBreachProbability {
-				case types.Probable:
-					colorHighRisk(r.pdf)
-				case types.Possible:
-					colorMediumRisk(r.pdf)
-				case types.Improbable:
-					colorLowRisk(r.pdf)
-				default:
-					r.pdfColorBlack()
-				}
-				if !dataBreachRisk.RiskStatus.IsStillAtRisk() {
-					r.pdfColorBlack()
-				}
-				r.pdf.CellFormat(10, 6, "", "0", 0, "", false, 0, "")
-				posY := r.pdf.GetY()
-				r.pdf.SetFont("Helvetica", "", fontSizeVerySmall)
-				r.pdf.MultiCell(185, 5, dataBreachRisk.DataBreachProbability.Title()+": "+
-					uni(dataBreachRisk.SyntheticId), "0", "0", false)
-				r.pdf.SetFont("Helvetica", "", fontSizeBody)
-				r.pdf.Link(20, posY, 180, r.pdf.GetY()-posY, r.tocLinkIdByAssetId[dataBreachRisk.CategoryId])
-			}
-			r.pdfColorBlack()
+			r.pdf.CellFormat(10, 6, "", "0", 0, "", false, 0, "")
+			posY := r.pdf.GetY()
+			r.pdf.SetFont("Helvetica", "", fontSizeVerySmall)
+			r.pdf.MultiCell(185, 5, dataBreachRisk.DataBreachProbability.Title()+": "+
+				uni(dataBreachRisk.SyntheticId), "0", "0", false)
+			r.pdf.SetFont("Helvetica", "", fontSizeBody)
+			r.pdf.Link(20, posY, 180, r.pdf.GetY()-posY, r.tocLinkIdByAssetId[dataBreachRisk.CategoryId])
 		}
+		r.pdfColorBlack()
 	}
 }
 
@@ -3960,6 +3950,21 @@ func (r *pdfReporter) pdfColorOutOfScope() {
 func (r *pdfReporter) leftMargin() float64 {
 	left, _, _, _ := r.pdf.GetMargins() //nolint:dogsled // gofpdf has no getter for the left margin alone
 	return left
+}
+
+// pdfColorByDataBreachProbability sets the text colour of a data breach probability, black for
+// an unknown one.
+func (r *pdfReporter) pdfColorByDataBreachProbability(probability types.DataBreachProbability) {
+	switch probability {
+	case types.Probable:
+		colorHighRisk(r.pdf)
+	case types.Possible:
+		colorMediumRisk(r.pdf)
+	case types.Improbable:
+		colorLowRisk(r.pdf)
+	default:
+		r.pdfColorBlack()
+	}
 }
 
 // pdfColorBySeverity sets the text colour of a risk severity, black for an unknown one.
