@@ -1,0 +1,889 @@
+{
+  "chlorine-analyzer": {
+    "id": "chlorine-analyzer",
+    "title": "Chlorine Analyzer",
+    "description": "Measures the chlorine in the treated water",
+    "usage": "business",
+    "type": "process",
+    "size": "component",
+    "technologies": [
+      {
+        "name": "field-device",
+        "description": "A sensor, actuator or other field device of an industrial control system",
+        "aliases": [
+          "sensor",
+          "actuator",
+          "industrial-sensor",
+          "industrial-actuator",
+          "ied",
+          "intelligent-electronic-device",
+          "drive"
+        ],
+        "attributes": {
+          "field-device": true,
+          "no_storage_at_rest": true,
+          "operational_technology": true
+        }
+      }
+    ],
+    "machine": "physical",
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "internal",
+    "integrity": "mission-critical",
+    "availability": "mission-critical",
+    "justification_cia_rating": "The dosing depends on its readings",
+    "data_assets_processed": [
+      "process-values"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 19.831730769230766
+  },
+  "chlorine-gas-detector": {
+    "id": "chlorine-gas-detector",
+    "title": "Chlorine Gas Detector",
+    "description": "Detects chlorine gas in the dosing room",
+    "usage": "business",
+    "type": "process",
+    "size": "component",
+    "technologies": [
+      {
+        "name": "field-device",
+        "description": "A sensor, actuator or other field device of an industrial control system",
+        "aliases": [
+          "sensor",
+          "actuator",
+          "industrial-sensor",
+          "industrial-actuator",
+          "ied",
+          "intelligent-electronic-device",
+          "drive"
+        ],
+        "attributes": {
+          "field-device": true,
+          "no_storage_at_rest": true,
+          "operational_technology": true
+        }
+      }
+    ],
+    "machine": "physical",
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "internal",
+    "integrity": "mission-critical",
+    "availability": "mission-critical",
+    "justification_cia_rating": "The safety function depends on it",
+    "data_assets_processed": [
+      "process-values"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 19.831730769230766
+  },
+  "chlorine-safety-controller": {
+    "id": "chlorine-safety-controller",
+    "title": "Chlorine Safety Controller",
+    "description": "Closes the chlorine supply when a leak or an overdose is detected",
+    "usage": "business",
+    "type": "process",
+    "size": "component",
+    "technologies": [
+      {
+        "name": "safety-controller",
+        "description": "The controller of a safety instrumented system (SIS), which brings an industrial process into a safe state",
+        "aliases": [
+          "sis",
+          "safety-instrumented-system",
+          "safety-plc"
+        ],
+        "attributes": {
+          "industrial_controller": true,
+          "operational_technology": true,
+          "safety-controller": true
+        }
+      }
+    ],
+    "machine": "physical",
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "mission-critical",
+    "availability": "mission-critical",
+    "justification_cia_rating": "Protects the operators and the public",
+    "data_assets_processed": [
+      "process-values",
+      "safety-logic",
+      "control-commands"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "chlorine-safety-controller\u003eleak-detection",
+        "source_id": "chlorine-safety-controller",
+        "target_id": "chlorine-gas-detector",
+        "title": "Leak Detection",
+        "description": "Reads the chlorine gas detectors",
+        "protocol": "profinet",
+        "readonly": true,
+        "data_assets_received": [
+          "process-values"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 51.92307692307693
+  },
+  "dosing-plc": {
+    "id": "dosing-plc",
+    "title": "Dosing PLC",
+    "description": "Doses chlorine into the treated water",
+    "usage": "business",
+    "type": "process",
+    "size": "component",
+    "technologies": [
+      {
+        "name": "plc",
+        "description": "A programmable logic controller (PLC) controlling an industrial process",
+        "aliases": [
+          "programmable-logic-controller",
+          "pac",
+          "dcs-controller"
+        ],
+        "attributes": {
+          "industrial_controller": true,
+          "operational_technology": true,
+          "plc": true
+        }
+      }
+    ],
+    "machine": "physical",
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "mission-critical",
+    "availability": "mission-critical",
+    "justification_cia_rating": "Overdosing poisons the water",
+    "data_assets_processed": [
+      "process-values",
+      "control-commands",
+      "controller-programs"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "dosing-plc\u003echlorine-reading",
+        "source_id": "dosing-plc",
+        "target_id": "chlorine-analyzer",
+        "title": "Chlorine Reading",
+        "description": "Reads the chlorine concentration",
+        "protocol": "profinet",
+        "readonly": true,
+        "data_assets_received": [
+          "process-values"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      },
+      {
+        "id": "dosing-plc\u003edosing-pump-control",
+        "source_id": "dosing-plc",
+        "target_id": "dosing-pump",
+        "title": "Dosing Pump Control",
+        "description": "Sets the speed of the dosing pump",
+        "protocol": "profinet",
+        "data_assets_sent": [
+          "control-commands"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 59.254807692307686
+  },
+  "dosing-pump": {
+    "id": "dosing-pump",
+    "title": "Dosing Pump",
+    "description": "The pump dosing the chlorine",
+    "usage": "business",
+    "type": "process",
+    "size": "component",
+    "technologies": [
+      {
+        "name": "field-device",
+        "description": "A sensor, actuator or other field device of an industrial control system",
+        "aliases": [
+          "sensor",
+          "actuator",
+          "industrial-sensor",
+          "industrial-actuator",
+          "ied",
+          "intelligent-electronic-device",
+          "drive"
+        ],
+        "attributes": {
+          "field-device": true,
+          "no_storage_at_rest": true,
+          "operational_technology": true
+        }
+      }
+    ],
+    "machine": "physical",
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "internal",
+    "integrity": "mission-critical",
+    "availability": "mission-critical",
+    "justification_cia_rating": "Doses the chlorine",
+    "data_assets_processed": [
+      "control-commands"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 22.716346153846153
+  },
+  "engineering-workstation": {
+    "id": "engineering-workstation",
+    "title": "Engineering Workstation",
+    "description": "Programs the PLCs, the RTU and the safety controller",
+    "usage": "business",
+    "type": "process",
+    "size": "system",
+    "technologies": [
+      {
+        "name": "engineering-workstation",
+        "description": "An engineering workstation that programs and configures the controllers of an industrial control system",
+        "aliases": [
+          "ews",
+          "engineering-station"
+        ],
+        "attributes": {
+          "engineering-workstation": true,
+          "operational_technology": true
+        }
+      }
+    ],
+    "machine": "physical",
+    "used_as_client_by_human": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "mission-critical",
+    "availability": "important",
+    "justification_cia_rating": "Can change every controller",
+    "data_assets_processed": [
+      "controller-programs",
+      "safety-logic"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "engineering-workstation\u003edosing-programming",
+        "source_id": "engineering-workstation",
+        "target_id": "dosing-plc",
+        "title": "Dosing Programming",
+        "description": "Downloads and monitors the logic of the dosing PLC",
+        "protocol": "s7comm",
+        "data_assets_sent": [
+          "controller-programs"
+        ],
+        "data_assets_received": [
+          "controller-programs"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      },
+      {
+        "id": "engineering-workstation\u003esafety-programming",
+        "source_id": "engineering-workstation",
+        "target_id": "chlorine-safety-controller",
+        "title": "Safety Programming",
+        "description": "Downloads the safety logic",
+        "protocol": "s7comm",
+        "data_assets_sent": [
+          "safety-logic"
+        ],
+        "data_assets_received": [
+          "safety-logic"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 54.639731262327416
+  },
+  "filter-plc": {
+    "id": "filter-plc",
+    "title": "Filter PLC",
+    "description": "Runs the filters and their backwash",
+    "usage": "business",
+    "type": "process",
+    "size": "component",
+    "technologies": [
+      {
+        "name": "plc",
+        "description": "A programmable logic controller (PLC) controlling an industrial process",
+        "aliases": [
+          "programmable-logic-controller",
+          "pac",
+          "dcs-controller"
+        ],
+        "attributes": {
+          "industrial_controller": true,
+          "operational_technology": true,
+          "plc": true
+        }
+      }
+    ],
+    "machine": "physical",
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "mission-critical",
+    "availability": "mission-critical",
+    "justification_cia_rating": "Failing filters let contaminated water through",
+    "data_assets_processed": [
+      "process-values",
+      "control-commands",
+      "controller-programs"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 46.394230769230774
+  },
+  "historian-replica": {
+    "id": "historian-replica",
+    "title": "Historian Replica",
+    "description": "A copy of the plant historian for the corporate network",
+    "usage": "business",
+    "type": "datastore",
+    "size": "system",
+    "technologies": [
+      {
+        "name": "historian",
+        "description": "A historian storing the process data of an industrial control system",
+        "aliases": [
+          "process-historian",
+          "data-historian"
+        ],
+        "attributes": {
+          "historian": true,
+          "operational_technology": true
+        }
+      }
+    ],
+    "machine": "virtual",
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "internal",
+    "integrity": "important",
+    "availability": "important",
+    "justification_cia_rating": "Copy of the archive",
+    "data_assets_processed": [
+      "historical-process-data"
+    ],
+    "data_assets_stored": [
+      "historical-process-data"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 36.29807692307692
+  },
+  "jump-host": {
+    "id": "jump-host",
+    "title": "Jump Host",
+    "description": "The only way into the plant network for remote access",
+    "usage": "business",
+    "type": "process",
+    "size": "system",
+    "technologies": [
+      {
+        "name": "gateway",
+        "description": "A gateway connecting two systems or trust boundaries",
+        "attributes": {
+          "frontend_related": true,
+          "ftp_internet_access_ok": true,
+          "gateway": true,
+          "http_internet_access_ok": true,
+          "propagate_identity_to_outgoing_targets": true
+        }
+      }
+    ],
+    "machine": "virtual",
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "mission-critical",
+    "availability": "important",
+    "justification_cia_rating": "Gives access to the engineering workstation",
+    "tags": [
+      "industrial-dmz"
+    ],
+    "data_assets_processed": [
+      "controller-programs"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "jump-host\u003eremote-desktop",
+        "source_id": "jump-host",
+        "target_id": "engineering-workstation",
+        "title": "Remote Desktop",
+        "description": "Remote desktop session on the engineering workstation",
+        "protocol": "binary-encrypted",
+        "authentication": "credentials",
+        "authorization": "end-user-identity-propagation",
+        "data_assets_sent": [
+          "controller-programs"
+        ],
+        "data_assets_received": [
+          "controller-programs"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 32.9870099852071
+  },
+  "office-workstation": {
+    "id": "office-workstation",
+    "title": "Office Workstation",
+    "description": "The workstations of the plant management in the corporate network",
+    "usage": "business",
+    "type": "process",
+    "size": "system",
+    "technologies": [
+      {
+        "name": "desktop",
+        "description": "A desktop system (or laptop)",
+        "aliases": [
+          "desktop-system"
+        ],
+        "attributes": {
+          "client": true,
+          "desktop": true,
+          "frontend_related": true,
+          "less_protected_type": true,
+          "propagate_identity_to_outgoing_targets": true
+        }
+      }
+    ],
+    "machine": "physical",
+    "used_as_client_by_human": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "internal",
+    "integrity": "critical",
+    "availability": "mission-critical",
+    "justification_cia_rating": "Used for email and reports",
+    "data_assets_processed": [
+      "historical-process-data",
+      "process-values"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "office-workstation\u003elive-dashboard",
+        "source_id": "office-workstation",
+        "target_id": "scada-server",
+        "title": "Live Dashboard",
+        "description": "Shows the live values of the plant on a dashboard",
+        "protocol": "opc-ua",
+        "readonly": true,
+        "authentication": "credentials",
+        "authorization": "technical-user",
+        "data_assets_received": [
+          "process-values"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      },
+      {
+        "id": "office-workstation\u003ereport-access",
+        "source_id": "office-workstation",
+        "target_id": "historian-replica",
+        "title": "Report Access",
+        "description": "Reads the reports of the treatment",
+        "protocol": "https",
+        "readonly": true,
+        "authentication": "credentials",
+        "authorization": "technical-user",
+        "data_assets_received": [
+          "historical-process-data"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 36.658075998520715
+  },
+  "operator-hmi": {
+    "id": "operator-hmi",
+    "title": "Operator HMI",
+    "description": "The screens the operators run the plant with",
+    "usage": "business",
+    "type": "process",
+    "size": "system",
+    "technologies": [
+      {
+        "name": "hmi",
+        "description": "A human-machine interface that operators monitor and control an industrial process with",
+        "aliases": [
+          "human-machine-interface",
+          "operator-panel",
+          "operator-station"
+        ],
+        "attributes": {
+          "hmi": true,
+          "operational_technology": true
+        }
+      }
+    ],
+    "machine": "physical",
+    "used_as_client_by_human": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "internal",
+    "integrity": "mission-critical",
+    "availability": "mission-critical",
+    "justification_cia_rating": "Operators control the plant with it",
+    "data_assets_processed": [
+      "process-values",
+      "control-commands"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "operator-hmi\u003eoperation",
+        "source_id": "operator-hmi",
+        "target_id": "scada-server",
+        "title": "Operation",
+        "description": "Shows the process and sends the commands of the operators",
+        "protocol": "opc-ua-encrypted",
+        "authentication": "credentials",
+        "authorization": "end-user-identity-propagation",
+        "data_assets_sent": [
+          "control-commands"
+        ],
+        "data_assets_received": [
+          "process-values"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      },
+      {
+        "id": "operator-hmi\u003esafety-status",
+        "source_id": "operator-hmi",
+        "target_id": "chlorine-safety-controller",
+        "title": "Safety Status",
+        "description": "Shows the state of the safety function",
+        "protocol": "modbus",
+        "readonly": true,
+        "data_assets_received": [
+          "process-values"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 53.1569742357002
+  },
+  "plant-historian": {
+    "id": "plant-historian",
+    "title": "Plant Historian",
+    "description": "Archives the process values of the plant",
+    "usage": "business",
+    "type": "datastore",
+    "size": "system",
+    "technologies": [
+      {
+        "name": "historian",
+        "description": "A historian storing the process data of an industrial control system",
+        "aliases": [
+          "process-historian",
+          "data-historian"
+        ],
+        "attributes": {
+          "historian": true,
+          "operational_technology": true
+        }
+      }
+    ],
+    "machine": "virtual",
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "internal",
+    "integrity": "important",
+    "availability": "important",
+    "justification_cia_rating": "Archive of the process",
+    "data_assets_processed": [
+      "historical-process-data",
+      "process-values"
+    ],
+    "data_assets_stored": [
+      "historical-process-data"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "plant-historian\u003ereplication",
+        "source_id": "plant-historian",
+        "target_id": "historian-replica",
+        "title": "Replication",
+        "description": "Pushes new values to the replica in the DMZ",
+        "protocol": "https",
+        "authentication": "credentials",
+        "authorization": "technical-user",
+        "data_assets_sent": [
+          "historical-process-data"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 63.46153846153846
+  },
+  "pump-station-rtu": {
+    "id": "pump-station-rtu",
+    "title": "Pump Station RTU",
+    "description": "Runs the pumps of the remote pump station",
+    "usage": "business",
+    "type": "process",
+    "size": "component",
+    "technologies": [
+      {
+        "name": "rtu",
+        "description": "A remote terminal unit (RTU) controlling a remote site of an industrial process",
+        "aliases": [
+          "remote-terminal-unit"
+        ],
+        "attributes": {
+          "industrial_controller": true,
+          "operational_technology": true,
+          "rtu": true
+        }
+      }
+    ],
+    "machine": "physical",
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "internal",
+    "integrity": "mission-critical",
+    "availability": "mission-critical",
+    "justification_cia_rating": "Stopped pumps cut the water supply",
+    "data_assets_processed": [
+      "process-values",
+      "control-commands"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 32.8125
+  },
+  "scada-server": {
+    "id": "scada-server",
+    "title": "SCADA Server",
+    "description": "Supervises the treatment and sends the commands of the operators",
+    "usage": "business",
+    "type": "process",
+    "size": "system",
+    "technologies": [
+      {
+        "name": "scada-server",
+        "description": "A SCADA or DCS server supervising and controlling an industrial process",
+        "aliases": [
+          "scada",
+          "dcs-server",
+          "control-server",
+          "supervisory-controller"
+        ],
+        "attributes": {
+          "operational_technology": true,
+          "scada-server": true
+        }
+      }
+    ],
+    "machine": "virtual",
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "internal",
+    "integrity": "mission-critical",
+    "availability": "mission-critical",
+    "justification_cia_rating": "Controls the whole plant",
+    "data_assets_processed": [
+      "process-values",
+      "control-commands",
+      "historical-process-data"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "scada-server\u003earchiving",
+        "source_id": "scada-server",
+        "target_id": "plant-historian",
+        "title": "Archiving",
+        "description": "Stores the process values",
+        "protocol": "https",
+        "authentication": "credentials",
+        "authorization": "technical-user",
+        "data_assets_sent": [
+          "process-values",
+          "historical-process-data"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      },
+      {
+        "id": "scada-server\u003edosing-control",
+        "source_id": "scada-server",
+        "target_id": "dosing-plc",
+        "title": "Dosing Control",
+        "description": "Polls values and writes setpoints",
+        "protocol": "modbus",
+        "data_assets_sent": [
+          "control-commands"
+        ],
+        "data_assets_received": [
+          "process-values"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      },
+      {
+        "id": "scada-server\u003efilter-control",
+        "source_id": "scada-server",
+        "target_id": "filter-plc",
+        "title": "Filter Control",
+        "description": "Polls values and writes setpoints",
+        "protocol": "opc-ua-encrypted",
+        "authentication": "credentials",
+        "authorization": "technical-user",
+        "data_assets_sent": [
+          "control-commands"
+        ],
+        "data_assets_received": [
+          "process-values"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      },
+      {
+        "id": "scada-server\u003epump-station-telemetry",
+        "source_id": "scada-server",
+        "target_id": "pump-station-rtu",
+        "title": "Pump Station Telemetry",
+        "description": "Polls the remote pump station and starts and stops the pumps",
+        "protocol": "dnp3",
+        "data_assets_sent": [
+          "control-commands"
+        ],
+        "data_assets_received": [
+          "process-values"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      },
+      {
+        "id": "scada-server\u003esafety-reset",
+        "source_id": "scada-server",
+        "target_id": "chlorine-safety-controller",
+        "title": "Safety Reset",
+        "description": "Lets the operators reset a trip of the safety controller from the HMI",
+        "protocol": "modbus",
+        "data_assets_sent": [
+          "control-commands"
+        ],
+        "data_assets_received": [
+          "process-values"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 100
+  },
+  "vendor-laptop": {
+    "id": "vendor-laptop",
+    "title": "Vendor Laptop",
+    "description": "The laptops of the PLC vendor for remote support",
+    "usage": "business",
+    "type": "external-entity",
+    "size": "system",
+    "technologies": [
+      {
+        "name": "desktop",
+        "description": "A desktop system (or laptop)",
+        "aliases": [
+          "desktop-system"
+        ],
+        "attributes": {
+          "client": true,
+          "desktop": true,
+          "frontend_related": true,
+          "less_protected_type": true,
+          "propagate_identity_to_outgoing_targets": true
+        }
+      }
+    ],
+    "machine": "physical",
+    "internet": true,
+    "out_of_scope": true,
+    "used_as_client_by_human": true,
+    "encryption": "none",
+    "justification_out_of_scope": "Owned and managed by the vendor",
+    "owner": "PLC Vendor",
+    "confidentiality": "confidential",
+    "integrity": "mission-critical",
+    "availability": "important",
+    "justification_cia_rating": "Devices of the vendor",
+    "data_assets_processed": [
+      "controller-programs"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "vendor-laptop\u003eremote-support",
+        "source_id": "vendor-laptop",
+        "target_id": "jump-host",
+        "title": "Remote Support",
+        "description": "The vendor connects to the jump host over a VPN",
+        "protocol": "ssh",
+        "authentication": "two-factor",
+        "authorization": "end-user-identity-propagation",
+        "data_assets_sent": [
+          "controller-programs"
+        ],
+        "data_assets_received": [
+          "controller-programs"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 1
+  }
+}

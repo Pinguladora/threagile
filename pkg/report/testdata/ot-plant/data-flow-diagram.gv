@@ -1,0 +1,355 @@
+digraph generatedModel { concentrate=false 
+	graph [ 
+		labelloc=t
+		fontname="Verdana"
+		fontsize=40
+        outputorder="nodesfirst"
+		dpi=100
+		splines=ortho
+		rankdir="TB"
+
+		nodesep="2"
+		ranksep="2"
+	];
+	node [
+		fontname="Verdana"
+		fontsize="20"
+	];
+	edge [
+		shape="none"
+		fontname="Verdana"
+		fontsize="18"
+	];
+
+ subgraph cluster_space_boundary_for_layout_only_11526286872 {
+	graph [
+                                              dpi=100
+											  label=<<table border="0" cellborder="0" cellpadding="0" bgcolor="#FFFFFF55"><tr><td><b> </b></td></tr></table>>
+											  fontsize="21"
+											  style="invis"
+											  color="green"
+											  fontcolor="green"
+											  margin="50.0"
+											  penwidth="6.5"
+                                              outputorder="nodesfirst"
+											];
+ subgraph cluster_1526286872 {
+	graph [
+      dpi=100
+      label=<<table border="0" cellborder="0" cellpadding="0"><tr><td><b>Industrial DMZ</b> (network-virtual-lan)</td></tr></table>>
+      fontsize="21"
+      style="dashed"
+      color="#3A52C8"
+      bgcolor="#FAFAFA"
+      fontcolor="#3A52C8"
+      fontname="Verdana"
+      penwidth="4.500000"
+      forcelabels=true
+      outputorder="nodesfirst"
+	  margin="50.0"
+    ];
+398759625;
+1923229906;
+ }
+
+ }
+
+
+ subgraph cluster_space_boundary_for_layout_only_12938271982 {
+	graph [
+                                              dpi=100
+											  label=<<table border="0" cellborder="0" cellpadding="0" bgcolor="#FFFFFF55"><tr><td><b> </b></td></tr></table>>
+											  fontsize="21"
+											  style="invis"
+											  color="green"
+											  fontcolor="green"
+											  margin="50.0"
+											  penwidth="6.5"
+                                              outputorder="nodesfirst"
+											];
+ subgraph cluster_2938271982 {
+	graph [
+      dpi=100
+      label=<<table border="0" cellborder="0" cellpadding="0"><tr><td><b>Pump Station</b> (network-on-prem)</td></tr></table>>
+      fontsize="21"
+      style="dashed"
+      color="#3A52C8"
+      bgcolor="#FAFAFA"
+      fontcolor="#3A52C8"
+      fontname="Verdana"
+      penwidth="4.500000"
+      forcelabels=true
+      outputorder="nodesfirst"
+	  margin="50.0"
+    ];
+1240989438;
+ }
+
+ }
+
+
+ subgraph cluster_space_boundary_for_layout_only_13661756525 {
+	graph [
+                                              dpi=100
+											  label=<<table border="0" cellborder="0" cellpadding="0" bgcolor="#FFFFFF55"><tr><td><b> </b></td></tr></table>>
+											  fontsize="21"
+											  style="invis"
+											  color="green"
+											  fontcolor="green"
+											  margin="50.0"
+											  penwidth="6.5"
+                                              outputorder="nodesfirst"
+											];
+ subgraph cluster_3661756525 {
+	graph [
+      dpi=100
+      label=<<table border="0" cellborder="0" cellpadding="0"><tr><td><b>Plant Network</b> (network-on-prem)</td></tr></table>>
+      fontsize="21"
+      style="dashed"
+      color="#3A52C8"
+      bgcolor="#FAFAFA"
+      fontcolor="#3A52C8"
+      fontname="Verdana"
+      penwidth="5.500000"
+      forcelabels=true
+      outputorder="nodesfirst"
+	  margin="50.0"
+    ];
+ //nested:
+ subgraph cluster_space_boundary_for_layout_only_187369596 {
+	graph [
+                                              dpi=100
+											  label=<<table border="0" cellborder="0" cellpadding="0" bgcolor="#FFFFFF55"><tr><td><b> </b></td></tr></table>>
+											  fontsize="21"
+											  style="invis"
+											  color="green"
+											  fontcolor="green"
+											  margin="50.0"
+											  penwidth="6.5"
+                                              outputorder="nodesfirst"
+											];
+ subgraph cluster_87369596 {
+	graph [
+      dpi=100
+      label=<<table border="0" cellborder="0" cellpadding="0"><tr><td><b>Control LAN</b> (network-virtual-lan)</td></tr></table>>
+      fontsize="21"
+      style="dashed"
+      color="#3A52C8"
+      bgcolor="#F1F1F1"
+      fontcolor="#3A52C8"
+      fontname="Verdana"
+      penwidth="4.500000"
+      forcelabels=true
+      outputorder="nodesfirst"
+	  margin="50.0"
+    ];
+482054228;
+260334336;
+415269919;
+1332388151;
+2346311524;
+3748139475;
+ }
+
+ }
+
+
+ //nested:
+ subgraph cluster_space_boundary_for_layout_only_12353674352 {
+	graph [
+                                              dpi=100
+											  label=<<table border="0" cellborder="0" cellpadding="0" bgcolor="#FFFFFF55"><tr><td><b> </b></td></tr></table>>
+											  fontsize="21"
+											  style="invis"
+											  color="green"
+											  fontcolor="green"
+											  margin="50.0"
+											  penwidth="6.5"
+                                              outputorder="nodesfirst"
+											];
+ subgraph cluster_2353674352 {
+	graph [
+      dpi=100
+      label=<<table border="0" cellborder="0" cellpadding="0"><tr><td><b>Supervisory LAN</b> (network-virtual-lan)</td></tr></table>>
+      fontsize="21"
+      style="dashed"
+      color="#3A52C8"
+      bgcolor="#F1F1F1"
+      fontcolor="#3A52C8"
+      fontname="Verdana"
+      penwidth="4.500000"
+      forcelabels=true
+      outputorder="nodesfirst"
+	  margin="50.0"
+    ];
+3408973806;
+1896141282;
+2368814068;
+1471214163;
+ }
+
+ }
+
+
+ }
+
+ }
+
+
+ subgraph cluster_space_boundary_for_layout_only_13964886547 {
+	graph [
+                                              dpi=100
+											  label=<<table border="0" cellborder="0" cellpadding="0" bgcolor="#FFFFFF55"><tr><td><b> </b></td></tr></table>>
+											  fontsize="21"
+											  style="invis"
+											  color="green"
+											  fontcolor="green"
+											  margin="50.0"
+											  penwidth="6.5"
+                                              outputorder="nodesfirst"
+											];
+ subgraph cluster_3964886547 {
+	graph [
+      dpi=100
+      label=<<table border="0" cellborder="0" cellpadding="0"><tr><td><b>Corporate Network</b> (network-on-prem)</td></tr></table>>
+      fontsize="21"
+      style="dashed"
+      color="#3A52C8"
+      bgcolor="#FAFAFA"
+      fontcolor="#3A52C8"
+      fontname="Verdana"
+      penwidth="4.500000"
+      forcelabels=true
+      outputorder="nodesfirst"
+	  margin="50.0"
+    ];
+2616285623;
+ }
+
+ }
+
+  625200610 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">desktop</font><br/><font point-size="15" color="#666666">system</font></td></tr><tr><td><b><font color="#CC0000">Vendor Laptop</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: out of scope</font></td></tr></table>>
+shape=octagon style="dotted,filled" penwidth="3.000000" fillcolor="#bddfdf"
+peripheries=1
+color="#AF780E"
+  ]; 
+  1471214163 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">scada-server</font><br/><font point-size="15" color="#666666">system</font></td></tr><tr><td><b><font color="#CC0000">SCADA Server</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 100 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="2.000000" fillcolor="#E5E5E5"
+peripheries=1
+color="#000000"
+  ]; 
+  1240989438 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">rtu</font><br/><font point-size="15" color="#666666">component</font></td></tr><tr><td><b><font color="#CC0000">Pump Station RTU</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 33 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="2.000000" fillcolor="#c5c5c5"
+peripheries=1
+color="#000000"
+  ]; 
+  2368814068 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">historian</font><br/><font point-size="15" color="#666666">system</font></td></tr><tr><td><b><font color="#AF780E">Plant Historian</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 63 %</font></td></tr></table>>
+shape=cylinder style="solid,filled" penwidth="2.000000" fillcolor="#E5E5E5"
+peripheries=1
+color="#000000"
+  ]; 
+  1896141282 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">hmi</font><br/><font point-size="15" color="#666666">system</font></td></tr><tr><td><b><font color="#CC0000">Operator HMI</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 53 %</font></td></tr></table>>
+shape=octagon style="solid,filled" penwidth="2.000000" fillcolor="#c5c5c5"
+peripheries=1
+color="#000000"
+  ]; 
+  2616285623 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">desktop</font><br/><font point-size="15" color="#666666">system</font></td></tr><tr><td><b><font color="#AF780E">Office Workstation</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 37 %</font></td></tr></table>>
+shape=octagon style="solid,filled" penwidth="2.000000" fillcolor="#c5c5c5"
+peripheries=1
+color="#000000"
+  ]; 
+  1923229906 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">gateway</font><br/><font point-size="15" color="#666666">system</font></td></tr><tr><td><b><font color="#CC0000">Jump Host</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 33 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="3.000000" fillcolor="#E5E5E5"
+peripheries=1
+color="#AF780E"
+  ]; 
+  398759625 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">historian</font><br/><font point-size="15" color="#666666">system</font></td></tr><tr><td><b><font color="#000000">Historian Replica</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 36 %</font></td></tr></table>>
+shape=cylinder style="solid,filled" penwidth="2.000000" fillcolor="#E5E5E5"
+peripheries=1
+color="#000000"
+  ]; 
+  3748139475 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">plc</font><br/><font point-size="15" color="#666666">component</font></td></tr><tr><td><b><font color="#CC0000">Filter PLC</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 46 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="3.000000" fillcolor="#c5c5c5"
+peripheries=1
+color="#AF780E"
+  ]; 
+  3408973806 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">engineering-workstation</font><br/><font point-size="15" color="#666666">system</font></td></tr><tr><td><b><font color="#CC0000">Engineering Workstation</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 55 %</font></td></tr></table>>
+shape=octagon style="solid,filled" penwidth="3.000000" fillcolor="#c5c5c5"
+peripheries=1
+color="#AF780E"
+  ]; 
+  2346311524 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">field-device</font><br/><font point-size="15" color="#666666">component</font></td></tr><tr><td><b><font color="#CC0000">Dosing Pump</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 23 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="2.000000" fillcolor="#c5c5c5"
+peripheries=1
+color="#000000"
+  ]; 
+  1332388151 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">plc</font><br/><font point-size="15" color="#666666">component</font></td></tr><tr><td><b><font color="#CC0000">Dosing PLC</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 59 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="3.000000" fillcolor="#c5c5c5"
+peripheries=1
+color="#AF780E"
+  ]; 
+  415269919 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">safety-controller</font><br/><font point-size="15" color="#666666">component</font></td></tr><tr><td><b><font color="#CC0000">Chlorine Safety Controller</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 52 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="3.000000" fillcolor="#c5c5c5"
+peripheries=1
+color="#AF780E"
+  ]; 
+  260334336 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">field-device</font><br/><font point-size="15" color="#666666">component</font></td></tr><tr><td><b><font color="#CC0000">Chlorine Gas Detector</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 20 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="2.000000" fillcolor="#c5c5c5"
+peripheries=1
+color="#000000"
+  ]; 
+  482054228 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">field-device</font><br/><font point-size="15" color="#666666">component</font></td></tr><tr><td><b><font color="#CC0000">Chlorine Analyzer</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 20 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="2.000000" fillcolor="#c5c5c5"
+peripheries=1
+color="#000000"
+  ]; 
+
+  625200610 -> 1923229906 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ssh" fontcolor="#CC0000"  ];
+
+  1471214163 -> 2368814068 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="none" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
+
+  1471214163 -> 1332388151 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="modbus" fontcolor="#CC0000"  ];
+
+  1471214163 -> 3748139475 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="opc-ua-encrypted" fontcolor="#CC0000"  ];
+
+  1471214163 -> 1240989438 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="dnp3" fontcolor="#CC0000"  ];
+
+  1471214163 -> 415269919 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="modbus" fontcolor="#CC0000"  ];
+
+  2368814068 -> 398759625 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="none" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#444444"  ];
+
+  1896141282 -> 1471214163 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="opc-ua-encrypted" fontcolor="#CC0000"  ];
+
+  1896141282 -> 415269919 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="none" arrowhead="empty" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="modbus" fontcolor="#AF780E"  ];
+
+  2616285623 -> 1471214163 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="none" arrowhead="empty" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="opc-ua" fontcolor="#AF780E"  ];
+
+  2616285623 -> 398759625 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="none" arrowhead="empty" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#444444"  ];
+
+  1923229906 -> 3408973806 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="binary-encrypted" fontcolor="#CC0000"  ];
+
+  3408973806 -> 1332388151 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="s7comm" fontcolor="#CC0000"  ];
+
+  3408973806 -> 415269919 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="s7comm" fontcolor="#CC0000"  ];
+
+  1332388151 -> 482054228 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="none" arrowhead="empty" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="profinet" fontcolor="#AF780E"  ];
+
+  1332388151 -> 2346311524 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="none" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="profinet" fontcolor="#CC0000"  ];
+
+  415269919 -> 260334336 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="none" arrowhead="empty" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="profinet" fontcolor="#AF780E"  ];
+}

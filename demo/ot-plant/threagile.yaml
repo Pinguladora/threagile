@@ -1,0 +1,808 @@
+threagile_version: 1.0.0
+
+# A water treatment plant: a SCADA system with PLCs, a remote pump station and a chlorine safety system,
+# separated from the corporate network by an industrial DMZ. It shows the OT technologies (plc, rtu,
+# safety-controller, field-device, hmi, scada-server, historian and engineering-workstation), the industrial
+# control protocols and the risks the OT rules find for them.
+
+title: Water Treatment Plant
+
+date: 2026-11-04
+
+author:
+  name: John Doe
+  homepage: www.example.com
+
+management_summary_comment: >
+  The plant supplies the drinking water of the town; a failure of the dosing or of the safety function
+  endangers the public and the operators.
+
+business_criticality: mission-critical
+
+business_overview:
+  description: The plant treats raw water into drinking water and pumps it to the town around the clock.
+  images: []
+
+technical_overview:
+  description: >
+    A SCADA server supervises the dosing and filter PLCs and a remote pump station. A safety controller closes the
+    chlorine supply on a leak. The corporate network reaches the plant through an industrial DMZ with a jump host
+    and a replica of the historian.
+  images: []
+
+questions:
+  Can the controllers be switched to RUN mode with the key switch?: ""
+  Which remote access does the vendor need, and when?: ""
+
+abuse_cases:
+  Chlorine Overdose: >
+    As an attacker I want to raise the chlorine setpoint of the dosing PLC to poison the drinking water.
+  Supply Outage: >
+    As an attacker I want to stop the pumps of the pump station to cut the water supply of the town.
+  Safety Bypass: >
+    As an attacker I want to disable the safety controller first, so that a chlorine leak goes unnoticed.
+
+security_requirements:
+  Zones and Conduits: IT reaches the plant only through the industrial DMZ.
+  Safety Independence: The safety controller is changed only from a dedicated safety engineering workstation.
+
+tags_available:
+  - industrial-dmz
+
+data_assets:
+
+  Process Values:
+    id: process-values
+    description: Measurements of flow, level, pressure and chlorine concentration
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: internal
+    integrity: critical
+    availability: mission-critical
+    justification_cia_rating: Operators and controllers act on the readings, so wrong or missing values upset the treatment
+
+  Control Commands:
+    id: control-commands
+    description: Setpoints, start and stop commands and outputs to pumps and valves
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: internal
+    integrity: mission-critical
+    availability: mission-critical
+    justification_cia_rating: Wrong commands overdose chlorine or stop the water supply
+
+  Controller Programs:
+    id: controller-programs
+    description: The logic and configuration of the PLCs and the RTU
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: few
+    confidentiality: confidential
+    integrity: mission-critical
+    availability: important
+    justification_cia_rating: Whoever changes the logic controls the plant
+
+  Safety Logic:
+    id: safety-logic
+    description: The program of the chlorine safety controller
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: few
+    confidentiality: confidential
+    integrity: mission-critical
+    availability: important
+    justification_cia_rating: The safety function protects the operators and the public from chlorine releases
+
+  Historical Process Data:
+    id: historical-process-data
+    description: Archived process values for reports and compliance
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Needed for the regulatory reports
+
+technical_assets:
+
+  Vendor Laptop:
+    id: vendor-laptop
+    description: The laptops of the PLC vendor for remote support
+    type: external-entity
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: true
+    justification_out_of_scope: Owned and managed by the vendor
+    size: system
+    technology: desktop
+    tags: []
+    internet: true
+    machine: physical
+    encryption: none
+    owner: PLC Vendor
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Devices of the vendor
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [controller-programs]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Remote Support:
+        target: jump-host
+        description: The vendor connects to the jump host over a VPN
+        protocol: ssh
+        authentication: two-factor
+        authorization: end-user-identity-propagation
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [controller-programs]
+        data_assets_received: [controller-programs]
+
+  Office Workstation:
+    id: office-workstation
+    description: The workstations of the plant management in the corporate network
+    type: process
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: false
+    size: system
+    technology: desktop
+    tags: []
+    internet: false
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Used for email and reports
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [historical-process-data, process-values]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Report Access:
+        target: historian-replica
+        description: Reads the reports of the treatment
+        protocol: https
+        authentication: credentials
+        authorization: technical-user
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: []
+        data_assets_received: [historical-process-data]
+      Live Dashboard:
+        target: scada-server
+        description: Shows the live values of the plant on a dashboard
+        protocol: opc-ua
+        authentication: credentials
+        authorization: technical-user
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: []
+        data_assets_received: [process-values]
+
+  Jump Host:
+    id: jump-host
+    description: The only way into the plant network for remote access
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: system
+    technology: gateway
+    tags: [industrial-dmz]
+    internet: false
+    machine: virtual
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: critical
+    availability: important
+    justification_cia_rating: Gives access to the engineering workstation
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [controller-programs]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Remote Desktop:
+        target: engineering-workstation
+        description: Remote desktop session on the engineering workstation
+        protocol: binary-encrypted
+        authentication: credentials
+        authorization: end-user-identity-propagation
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [controller-programs]
+        data_assets_received: [controller-programs]
+
+  Historian Replica:
+    id: historian-replica
+    description: A copy of the plant historian for the corporate network
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: system
+    technology: historian
+    tags: []
+    internet: false
+    machine: virtual
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Copy of the archive
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: [historical-process-data]
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Plant Historian:
+    id: plant-historian
+    description: Archives the process values of the plant
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: system
+    technology: historian
+    tags: []
+    internet: false
+    machine: virtual
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Archive of the process
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: [historical-process-data]
+    data_formats_accepted: [json]
+    communication_links:
+      Replication:
+        target: historian-replica
+        description: Pushes new values to the replica in the DMZ
+        protocol: https
+        authentication: credentials
+        authorization: technical-user
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [historical-process-data]
+        data_assets_received: []
+
+  SCADA Server:
+    id: scada-server
+    description: Supervises the treatment and sends the commands of the operators
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: system
+    technology: scada-server
+    tags: []
+    internet: false
+    machine: virtual
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: mission-critical
+    availability: mission-critical
+    justification_cia_rating: Controls the whole plant
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [process-values, control-commands]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Dosing Control:
+        target: dosing-plc
+        description: Polls values and writes setpoints
+        protocol: modbus
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [control-commands]
+        data_assets_received: [process-values]
+      Filter Control:
+        target: filter-plc
+        description: Polls values and writes setpoints
+        protocol: opc-ua-encrypted
+        authentication: credentials
+        authorization: technical-user
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [control-commands]
+        data_assets_received: [process-values]
+      Pump Station Telemetry:
+        target: pump-station-rtu
+        description: Polls the remote pump station and starts and stops the pumps
+        protocol: dnp3
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [control-commands]
+        data_assets_received: [process-values]
+      Safety Reset:
+        target: chlorine-safety-controller
+        description: Lets the operators reset a trip of the safety controller from the HMI
+        protocol: modbus
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [control-commands]
+        data_assets_received: [process-values]
+      Archiving:
+        target: plant-historian
+        description: Stores the process values
+        protocol: https
+        authentication: credentials
+        authorization: technical-user
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [process-values, historical-process-data]
+        data_assets_received: []
+
+  Operator HMI:
+    id: operator-hmi
+    description: The screens the operators run the plant with
+    type: process
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: false
+    size: system
+    technology: hmi
+    tags: []
+    internet: false
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: mission-critical
+    availability: critical
+    justification_cia_rating: Operators control the plant with it
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [process-values, control-commands]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Operation:
+        target: scada-server
+        description: Shows the process and sends the commands of the operators
+        protocol: opc-ua-encrypted
+        authentication: credentials
+        authorization: end-user-identity-propagation
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [control-commands]
+        data_assets_received: [process-values]
+      Safety Status:
+        target: chlorine-safety-controller
+        description: Shows the state of the safety function
+        protocol: modbus
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: []
+        data_assets_received: [process-values]
+
+  Engineering Workstation:
+    id: engineering-workstation
+    description: Programs the PLCs, the RTU and the safety controller
+    type: process
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: false
+    size: system
+    technology: engineering-workstation
+    tags: []
+    internet: false
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: mission-critical
+    availability: important
+    justification_cia_rating: Can change every controller
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [controller-programs, safety-logic]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Dosing Programming:
+        target: dosing-plc
+        description: Downloads and monitors the logic of the dosing PLC
+        protocol: s7comm
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [controller-programs]
+        data_assets_received: [controller-programs]
+      Safety Programming:
+        target: chlorine-safety-controller
+        description: Downloads the safety logic
+        protocol: s7comm
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [safety-logic]
+        data_assets_received: [safety-logic]
+
+  Dosing PLC:
+    id: dosing-plc
+    description: Doses chlorine into the treated water
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: component
+    technology: plc
+    tags: []
+    internet: false
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: mission-critical
+    availability: mission-critical
+    justification_cia_rating: Overdosing poisons the water
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [process-values, control-commands, controller-programs]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Dosing Pump Control:
+        target: dosing-pump
+        description: Sets the speed of the dosing pump
+        protocol: profinet
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [control-commands]
+        data_assets_received: []
+      Chlorine Reading:
+        target: chlorine-analyzer
+        description: Reads the chlorine concentration
+        protocol: profinet
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: []
+        data_assets_received: [process-values]
+
+  Filter PLC:
+    id: filter-plc
+    description: Runs the filters and their backwash
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: component
+    technology: plc
+    tags: []
+    internet: false
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: mission-critical
+    availability: mission-critical
+    justification_cia_rating: Failing filters let contaminated water through
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [process-values, control-commands, controller-programs]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Pump Station RTU:
+    id: pump-station-rtu
+    description: Runs the pumps of the remote pump station
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: component
+    technology: rtu
+    tags: []
+    internet: false
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: mission-critical
+    availability: mission-critical
+    justification_cia_rating: Stopped pumps cut the water supply
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [process-values, control-commands]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Chlorine Safety Controller:
+    id: chlorine-safety-controller
+    description: Closes the chlorine supply when a leak or an overdose is detected
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: component
+    technology: safety-controller
+    tags: []
+    internet: false
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: mission-critical
+    availability: mission-critical
+    justification_cia_rating: Protects the operators and the public
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [process-values, safety-logic]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Leak Detection:
+        target: chlorine-gas-detector
+        description: Reads the chlorine gas detectors
+        protocol: profinet
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: []
+        data_assets_received: [process-values]
+
+  Dosing Pump:
+    id: dosing-pump
+    description: The pump dosing the chlorine
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: component
+    technology: field-device
+    tags: []
+    internet: false
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: mission-critical
+    availability: mission-critical
+    justification_cia_rating: Doses the chlorine
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [control-commands]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Chlorine Analyzer:
+    id: chlorine-analyzer
+    description: Measures the chlorine in the treated water
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: component
+    technology: field-device
+    tags: []
+    internet: false
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: mission-critical
+    availability: mission-critical
+    justification_cia_rating: The dosing depends on its readings
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [process-values]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Chlorine Gas Detector:
+    id: chlorine-gas-detector
+    description: Detects chlorine gas in the dosing room
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: component
+    technology: field-device
+    tags: []
+    internet: false
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: mission-critical
+    availability: mission-critical
+    justification_cia_rating: The safety function depends on it
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [process-values]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+trust_boundaries:
+
+  Corporate Network:
+    id: corporate-network
+    description: The office network of the utility
+    type: network-on-prem
+    tags: []
+    technical_assets_inside:
+      - office-workstation
+    trust_boundaries_nested: []
+
+  Industrial DMZ:
+    id: industrial-dmz
+    description: Between the corporate and the plant network, behind firewalls on both sides
+    type: network-virtual-lan
+    tags: []
+    technical_assets_inside:
+      - jump-host
+      - historian-replica
+    trust_boundaries_nested: []
+
+  Plant Network:
+    id: plant-network
+    description: The control system of the treatment plant
+    type: network-on-prem
+    tags: []
+    technical_assets_inside: []
+    trust_boundaries_nested:
+      - supervisory-lan
+      - control-lan
+
+  Supervisory LAN:
+    id: supervisory-lan
+    description: The SCADA server, the HMIs, the historian and the engineering workstation
+    type: network-virtual-lan
+    tags: []
+    technical_assets_inside:
+      - scada-server
+      - operator-hmi
+      - engineering-workstation
+      - plant-historian
+    trust_boundaries_nested: []
+
+  Control LAN:
+    id: control-lan
+    description: The controllers and their field devices
+    type: network-virtual-lan
+    tags: []
+    technical_assets_inside:
+      - dosing-plc
+      - filter-plc
+      - chlorine-safety-controller
+      - dosing-pump
+      - chlorine-analyzer
+      - chlorine-gas-detector
+    trust_boundaries_nested: []
+
+  Pump Station:
+    id: pump-station
+    description: The remote pump station, connected over a leased line
+    type: network-on-prem
+    tags: []
+    technical_assets_inside:
+      - pump-station-rtu
+    trust_boundaries_nested: []
+
+shared_runtimes: {}
+
+risk_tracking:
+
+  insecure-control-protocol@pump-station-rtu@scada-server>pump-station-telemetry:
+    status: in-progress
+    justification: Moving the pump station to DNP3 over TLS with the next RTU firmware
+    ticket: OT-17
+    date: 2026-11-04
+    checked_by: John Doe

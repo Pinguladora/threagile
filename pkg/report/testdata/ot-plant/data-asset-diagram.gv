@@ -1,0 +1,134 @@
+digraph generatedModel { concentrate=true 
+	graph [
+		dpi=100
+		fontname="Verdana"
+		labelloc="c"
+		fontsize="20"
+		splines=false
+		rankdir="LR"
+		nodesep=1.0
+		ranksep=3.0
+        outputorder="nodesfirst"
+	];
+	node [
+		fontcolor="white"
+		fontname="Verdana"
+		fontsize="20"
+	];
+	edge [
+		shape="none"
+		fontname="Verdana"
+		fontsize="18"
+	];
+  625200610 [ shape="box" style="filled" fillcolor="#7F7F7F"
+				label=<<b>Vendor Laptop</b>> penwidth="3.0" color="#7F7F7F" ];
+				
+  1471214163 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>SCADA Server</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  1240989438 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Pump Station RTU</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  2368814068 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Plant Historian</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  1896141282 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Operator HMI</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  2616285623 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Office Workstation</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  1923229906 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Jump Host</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  398759625 [ shape="box" style="filled" fillcolor="#444444"
+				label=<<b>Historian Replica</b>> penwidth="3.0" color="#444444" ];
+				
+  3748139475 [ shape="box" style="filled" fillcolor="#C87832"
+				label=<<b>Filter PLC</b>> penwidth="3.0" color="#C87832" ];
+				
+  3408973806 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Engineering Workstation</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  2346311524 [ shape="box" style="filled" fillcolor="#C87832"
+				label=<<b>Dosing Pump</b>> penwidth="3.0" color="#C87832" ];
+				
+  1332388151 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Dosing PLC</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  415269919 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Chlorine Safety Controller</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  260334336 [ shape="box" style="filled" fillcolor="#444444"
+				label=<<b>Chlorine Gas Detector</b>> penwidth="3.0" color="#444444" ];
+				
+  482054228 [ shape="box" style="filled" fillcolor="#444444"
+				label=<<b>Chlorine Analyzer</b>> penwidth="3.0" color="#444444" ];
+				
+  500826380 [ label=<<b>Historical Process Data</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  2788787019 [ label=<<b>Process Values</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  764417455 [ label=<<b>Control Commands</b>> penwidth="3.0" style="filled" fillcolor="#C87832" color="#C87832"
+  ]; 
+  3020515417 [ label=<<b>Controller Programs</b>> penwidth="3.0" style="filled" fillcolor="#C87832" color="#C87832"
+  ]; 
+  313058444 [ label=<<b>Safety Logic</b>> penwidth="3.0" style="filled" fillcolor="#C87832" color="#C87832"
+  ]; 
+
+3020515417 -> 625200610 [ color="#666666" style="dashed" ];
+
+2788787019 -> 1471214163 [ color="#666666" style="dashed" ];
+
+764417455 -> 1471214163 [ color="#666666" style="dashed" ];
+
+500826380 -> 1471214163 [ color="#666666" style="dashed" ];
+
+2788787019 -> 1240989438 [ color="#666666" style="dashed" ];
+
+764417455 -> 1240989438 [ color="#666666" style="dashed" ];
+
+500826380 -> 2368814068 [ color="blue" style="solid" ];
+
+2788787019 -> 2368814068 [ color="#666666" style="dashed" ];
+
+2788787019 -> 1896141282 [ color="#666666" style="dashed" ];
+
+764417455 -> 1896141282 [ color="#666666" style="dashed" ];
+
+500826380 -> 2616285623 [ color="#666666" style="dashed" ];
+
+2788787019 -> 2616285623 [ color="#666666" style="dashed" ];
+
+3020515417 -> 1923229906 [ color="#666666" style="dashed" ];
+
+500826380 -> 398759625 [ color="blue" style="solid" ];
+
+2788787019 -> 3748139475 [ color="#666666" style="dashed" ];
+
+764417455 -> 3748139475 [ color="#666666" style="dashed" ];
+
+3020515417 -> 3748139475 [ color="#666666" style="dashed" ];
+
+3020515417 -> 3408973806 [ color="#666666" style="dashed" ];
+
+313058444 -> 3408973806 [ color="#666666" style="dashed" ];
+
+764417455 -> 2346311524 [ color="#666666" style="dashed" ];
+
+2788787019 -> 1332388151 [ color="#666666" style="dashed" ];
+
+764417455 -> 1332388151 [ color="#666666" style="dashed" ];
+
+3020515417 -> 1332388151 [ color="#666666" style="dashed" ];
+
+2788787019 -> 415269919 [ color="#666666" style="dashed" ];
+
+313058444 -> 415269919 [ color="#666666" style="dashed" ];
+
+764417455 -> 415269919 [ color="#666666" style="dashed" ];
+
+2788787019 -> 260334336 [ color="#666666" style="dashed" ];
+
+2788787019 -> 482054228 [ color="#666666" style="dashed" ];
+}

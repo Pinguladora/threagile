@@ -34,7 +34,8 @@ type goldenModel struct {
 var (
 	exampleModel = goldenModel{file: "../../demo/example/threagile.yaml", dir: "testdata/example"}
 	aiAgentModel = goldenModel{file: "../../demo/ai-agent/threagile.yaml", dir: "testdata/ai-agent"}
-	goldenModels = []goldenModel{exampleModel, aiAgentModel}
+	otPlantModel = goldenModel{file: "../../demo/ot-plant/threagile.yaml", dir: "testdata/ot-plant"}
+	goldenModels = []goldenModel{exampleModel, aiAgentModel, otPlantModel}
 )
 
 const (
