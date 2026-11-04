@@ -138,40 +138,53 @@ func (what *Script) ParseScriptFromData(text []byte) (*Script, error) {
 
 func (what *Script) ParseScript(script map[string]any) (*Script, error) {
 	for key, value := range script {
-		switch strings.ToLower(key) {
-		case common.ID:
-			stringItem, ok := value.(map[string]any)
-			if !ok {
-				return nil, errors.New("ID expression is not a script (map[string]any)")
-			}
-
-			what.id = stringItem
-
-		case common.Data:
-			switch castValue := value.(type) {
-			case map[string]any:
-				what.data = castValue
-
-			default:
-				return what, fmt.Errorf("failed to parse %q: unexpected script type %T\nscript:\n%v", key, value, what.formatter.AddLineNumbers(value))
-			}
-
-		case common.Match:
-			item, errorScript, itemError := new(statements.MethodStatement).Parse(value)
-			if itemError != nil {
-				return what, fmt.Errorf("failed to parse %q: %v\nscript:\n%v", key, itemError, what.formatter.AddLineNumbers(errorScript))
-			}
-
-			what.match = item
-
-		case common.Utils:
-			item, errorScript, itemError := what.parseUtils(value)
-			if itemError != nil {
-				return what, fmt.Errorf("failed to parse %q: %v\nscript:\n%v", key, itemError, what.formatter.AddLineNumbers(errorScript))
-			}
-
-			what.utils = item
+		result, parseError := what.parseScriptSection(key, value)
+		if parseError != nil {
+			return result, parseError
 		}
+	}
+
+	return what, nil
+}
+
+// parseScriptSection parses a section of the script of a risk: its ID, data, match or utils.
+func (what *Script) parseScriptSection(key string, value any) (*Script, error) {
+	switch strings.ToLower(key) {
+	case common.ID:
+		stringItem, ok := value.(map[string]any)
+		if !ok {
+			return nil, errors.New("ID expression is not a script (map[string]any)")
+		}
+
+		what.id = stringItem
+
+	case common.Data:
+		switch castValue := value.(type) {
+		case map[string]any:
+			what.data = castValue
+
+		default:
+			return what, fmt.Errorf("failed to parse %q: unexpected script type %T\nscript:\n%v", key, value,
+				what.formatter.AddLineNumbers(value))
+		}
+
+	case common.Match:
+		item, errorScript, itemError := new(statements.MethodStatement).Parse(value)
+		if itemError != nil {
+			return what, fmt.Errorf("failed to parse %q: %v\nscript:\n%v", key, itemError,
+				what.formatter.AddLineNumbers(errorScript))
+		}
+
+		what.match = item
+
+	case common.Utils:
+		item, errorScript, itemError := what.parseUtils(value)
+		if itemError != nil {
+			return what, fmt.Errorf("failed to parse %q: %v\nscript:\n%v", key, itemError,
+				what.formatter.AddLineNumbers(errorScript))
+		}
+
+		what.utils = item
 	}
 
 	return what, nil
@@ -284,7 +297,9 @@ func (what *Script) matchRisk(outerScope *common.Scope, techAsset common.Value) 
 	return common.EmptyBoolValue(), "", nil
 }
 
-func (what *Script) generateRisk(outerScope *common.Scope, techAssetName string, techAsset common.Value, isMatchEvent *common.Event) (*types.Risk, string, error) {
+func (what *Script) generateRisk(
+	outerScope *common.Scope, techAssetName string, techAsset common.Value, isMatchEvent *common.Event,
+) (*types.Risk, string, error) {
 	if what.data == nil {
 		return nil, "", errors.New("no data template")
 	}
@@ -296,40 +311,14 @@ func (what *Script) generateRisk(outerScope *common.Scope, techAssetName string,
 
 	scope.Args = append(scope.Args, techAsset)
 
-	parameter, ok := what.data[common.Parameter]
-	if ok {
-		switch castParameter := parameter.(type) {
-		case string:
-			if len(scope.Args) != 1 {
-				return nil, common.ToLiteral(parameter), fmt.Errorf("expected single parameter, got %d", len(scope.Args))
-			}
-
-			if scope.Vars == nil {
-				scope.Vars = make(map[string]common.Value)
-			}
-
-			scope.Vars[castParameter] = scope.Args[0]
-
-		default:
-			return nil, common.ToLiteral(parameter), fmt.Errorf("unexpected parameter format %T", parameter)
-		}
+	errorParameterLiteral, parameterError := bindParameter(scope, what.data)
+	if parameterError != nil {
+		return nil, errorParameterLiteral, parameterError
 	}
 
-	riskMap := make(map[string]any)
-	fieldValues := make(map[string]common.Value)
-	for _, name := range slices.Sorted(maps.Keys(what.data)) {
-		expression, errorParseLiteral, parseError := new(expressions.ValueExpression).ParseValue(what.data[name])
-		if parseError != nil {
-			return nil, common.ToLiteral(errorParseLiteral), fmt.Errorf("failed to parse field value: %w", parseError)
-		}
-
-		newValue, errorEvalLiteral, evalError := expression.EvalAny(scope)
-		if evalError != nil {
-			return nil, errorEvalLiteral, fmt.Errorf("failed to eval field value: %w", evalError)
-		}
-
-		riskMap[name] = newValue.PlainValue()
-		fieldValues[name] = newValue
+	riskMap, fieldValues, errorFieldLiteral, fieldError := what.evalFields(scope)
+	if fieldError != nil {
+		return nil, errorFieldLiteral, fieldError
 	}
 
 	ratingExplanation := make([]string, 0)
@@ -340,19 +329,7 @@ func (what *Script) generateRisk(outerScope *common.Scope, techAssetName string,
 		}
 
 		text := fmt.Sprintf("'%v' is '%v'", field.title, newValue.PlainValue())
-		explanation := what.Explain([]*common.Event{newValue.Event()})
-		if len(explanation) > 0 {
-			ratingExplanation = append(ratingExplanation, text+" because")
-			for n, line := range explanation {
-				if n < len(explanation)-1 {
-					ratingExplanation = append(ratingExplanation, line+", and")
-				} else {
-					ratingExplanation = append(ratingExplanation, line)
-				}
-			}
-		} else {
-			ratingExplanation = append(ratingExplanation, text)
-		}
+		ratingExplanation = appendExplained(ratingExplanation, text, what.Explain([]*common.Event{newValue.Event()}))
 	}
 
 	riskData, marshalError := yaml.Marshal(riskMap)
@@ -371,27 +348,80 @@ func (what *Script) generateRisk(outerScope *common.Scope, techAssetName string,
 	riskExplanation := make([]string, 0)
 	text := fmt.Sprintf("Risk '%v' has been flagged for technical asset '%v'", scope.Category.Title, techAssetName)
 
-	var explanation []string
 	if isMatchEvent != nil {
-		explanation = what.Explain(isMatchEvent.Events)
-		if len(explanation) > 0 {
-			riskExplanation = append(riskExplanation, text+" because")
-			for n, line := range explanation {
-				if n < len(explanation)-1 {
-					riskExplanation = append(riskExplanation, line+", and")
-				} else {
-					riskExplanation = append(riskExplanation, line)
-				}
-			}
-		} else {
-			riskExplanation = append(riskExplanation, text)
-		}
+		riskExplanation = appendExplained(riskExplanation, text, what.Explain(isMatchEvent.Events))
 	}
 
 	risk.RiskExplanation = riskExplanation
 	risk.RatingExplanation = ratingExplanation
 
 	return &risk, "", nil
+}
+
+// bindParameter binds the technical asset, the single argument of the scope, to the name of the parameter of a
+// template (the data or the ID template of a risk), if it has one.
+func bindParameter(scope *common.Scope, template map[string]any) (string, error) {
+	parameter, ok := template[common.Parameter]
+	if !ok {
+		return "", nil
+	}
+
+	castParameter, isString := parameter.(string)
+	if !isString {
+		return common.ToLiteral(parameter), fmt.Errorf("unexpected parameter format %T", parameter)
+	}
+
+	if len(scope.Args) != 1 {
+		return common.ToLiteral(parameter), fmt.Errorf("expected single parameter, got %d", len(scope.Args))
+	}
+
+	if scope.Vars == nil {
+		scope.Vars = make(map[string]common.Value)
+	}
+
+	scope.Vars[castParameter] = scope.Args[0]
+
+	return "", nil
+}
+
+// evalFields evaluates the field values of the data template of a risk, in the order of their names.
+func (what *Script) evalFields(scope *common.Scope) (map[string]any, map[string]common.Value, string, error) {
+	riskMap := make(map[string]any)
+	fieldValues := make(map[string]common.Value)
+	for _, name := range slices.Sorted(maps.Keys(what.data)) {
+		expression, errorParseLiteral, parseError := new(expressions.ValueExpression).ParseValue(what.data[name])
+		if parseError != nil {
+			return nil, nil, common.ToLiteral(errorParseLiteral), fmt.Errorf("failed to parse field value: %w", parseError)
+		}
+
+		newValue, errorEvalLiteral, evalError := expression.EvalAny(scope)
+		if evalError != nil {
+			return nil, nil, errorEvalLiteral, fmt.Errorf("failed to eval field value: %w", evalError)
+		}
+
+		riskMap[name] = newValue.PlainValue()
+		fieldValues[name] = newValue
+	}
+
+	return riskMap, fieldValues, "", nil
+}
+
+// appendExplained appends the text to the lines, followed by its explanation if there is one.
+func appendExplained(lines []string, text string, explanation []string) []string {
+	if len(explanation) == 0 {
+		return append(lines, text)
+	}
+
+	lines = append(lines, text+" because")
+	for n, line := range explanation {
+		if n < len(explanation)-1 {
+			lines = append(lines, line+", and")
+		} else {
+			lines = append(lines, line)
+		}
+	}
+
+	return lines
 }
 
 func (what *Script) Explain(history []*common.Event) []string {
@@ -415,23 +445,9 @@ func (what *Script) getRiskID(outerScope *common.Scope, techAsset common.Value, 
 
 	scope.Args = append(scope.Args, techAsset)
 
-	parameter, parameterOk := what.id[common.Parameter]
-	if parameterOk {
-		switch castParameter := parameter.(type) {
-		case string:
-			if len(scope.Args) != 1 {
-				return "", common.ToLiteral(parameter), fmt.Errorf("expected single parameter, got %d", len(scope.Args))
-			}
-
-			if scope.Vars == nil {
-				scope.Vars = make(map[string]common.Value)
-			}
-
-			scope.Vars[castParameter] = scope.Args[0]
-
-		default:
-			return "", common.ToLiteral(parameter), fmt.Errorf("unexpected parameter format %T", parameter)
-		}
+	errorParameterLiteral, parameterError := bindParameter(scope, what.id)
+	if parameterError != nil {
+		return "", errorParameterLiteral, parameterError
 	}
 
 	riskData, marshalError := yaml.Marshal(risk)
