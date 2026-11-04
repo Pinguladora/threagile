@@ -64,7 +64,7 @@ func (r *CrossSiteRequestForgeryRule) GenerateRisks(parsedModel *types.Model) ([
 }
 
 func (csrf *CrossSiteRequestForgeryRule) skipAsset(technicalAsset *types.TechnicalAsset) bool {
-	return technicalAsset.OutOfScope || !technicalAsset.Technologies.GetAttribute(types.WebApplication)
+	return technicalAsset.OutOfScope || !technicalAsset.Technologies.GetAttribute(types.IsWebApplication)
 }
 
 func (r *CrossSiteRequestForgeryRule) createRisk(

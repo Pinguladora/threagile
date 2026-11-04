@@ -458,11 +458,31 @@
           ]
         },
         {
+          "threat": "cross-site-scripting",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "cross-site-scripting-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "missing-cloud-hardening",
           "state": "exposed",
           "mitigations": [
             {
               "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-waf",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-waf-mitigation",
               "state": "recommended"
             }
           ]
@@ -1165,6 +1185,16 @@
         "knowledge-articles"
       ],
       "threats": [
+        {
+          "threat": "cross-site-request-forgery",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "cross-site-request-forgery-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
         {
           "threat": "server-side-request-forgery",
           "state": "exposed",

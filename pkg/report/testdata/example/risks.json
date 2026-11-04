@@ -147,6 +147,317 @@
     "most_relevant_technical_asset_raa": 22.55383688062901
   },
   {
+    "category": "cross-site-request-forgery",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "very-likely",
+    "exploitation_impact": "low",
+    "title": "\u003cb\u003eCross-Site Request Forgery (CSRF)\u003c/b\u003e risk at \u003cb\u003eApache Webserver\u003c/b\u003e via \u003cb\u003eWeb Application Traffic\u003c/b\u003e from \u003cb\u003eLoad Balancer\u003c/b\u003e",
+    "synthetic_id": "cross-site-request-forgery@apache-webserver@load-balancer\u003eweb-application-traffic",
+    "most_relevant_technical_asset": "apache-webserver",
+    "most_relevant_communication_link": "load-balancer\u003eweb-application-traffic",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "apache-webserver"
+    ],
+    "plain_title": "Cross-Site Request Forgery (CSRF) risk at Apache Webserver via Web Application Traffic from Load Balancer",
+    "category_title": "Cross-Site Request Forgery (CSRF)",
+    "stride": "spoofing",
+    "function": "development",
+    "cwe": 352,
+    "references": [
+      "OWASP A01:2025 Broken Access Control"
+    ],
+    "action": "CSRF Prevention",
+    "mitigation": "Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Apache Webserver",
+    "most_relevant_technical_asset_raa": 60.6120919375654,
+    "most_relevant_communication_link_title": "Web Application Traffic"
+  },
+  {
+    "category": "cross-site-request-forgery",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "very-likely",
+    "exploitation_impact": "low",
+    "title": "\u003cb\u003eCross-Site Request Forgery (CSRF)\u003c/b\u003e risk at \u003cb\u003eBackoffice ERP System\u003c/b\u003e via \u003cb\u003eERP Internal Access\u003c/b\u003e from \u003cb\u003eBackoffice Client\u003c/b\u003e",
+    "synthetic_id": "cross-site-request-forgery@erp-system@backoffice-client\u003eerp-internal-access",
+    "most_relevant_technical_asset": "erp-system",
+    "most_relevant_communication_link": "backoffice-client\u003eerp-internal-access",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "erp-system"
+    ],
+    "plain_title": "Cross-Site Request Forgery (CSRF) risk at Backoffice ERP System via ERP Internal Access from Backoffice Client",
+    "category_title": "Cross-Site Request Forgery (CSRF)",
+    "stride": "spoofing",
+    "function": "development",
+    "cwe": 352,
+    "references": [
+      "OWASP A01:2025 Broken Access Control"
+    ],
+    "action": "CSRF Prevention",
+    "mitigation": "Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "most_relevant_communication_link_title": "ERP Internal Access"
+  },
+  {
+    "category": "cross-site-request-forgery",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "very-likely",
+    "exploitation_impact": "low",
+    "title": "\u003cb\u003eCross-Site Request Forgery (CSRF)\u003c/b\u003e risk at \u003cb\u003eBackoffice ERP System\u003c/b\u003e via \u003cb\u003eERP System Traffic\u003c/b\u003e from \u003cb\u003eApache Webserver\u003c/b\u003e",
+    "synthetic_id": "cross-site-request-forgery@erp-system@apache-webserver\u003eerp-system-traffic",
+    "most_relevant_technical_asset": "erp-system",
+    "most_relevant_communication_link": "apache-webserver\u003eerp-system-traffic",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "erp-system"
+    ],
+    "plain_title": "Cross-Site Request Forgery (CSRF) risk at Backoffice ERP System via ERP System Traffic from Apache Webserver",
+    "category_title": "Cross-Site Request Forgery (CSRF)",
+    "stride": "spoofing",
+    "function": "development",
+    "cwe": 352,
+    "references": [
+      "OWASP A01:2025 Broken Access Control"
+    ],
+    "action": "CSRF Prevention",
+    "mitigation": "Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "most_relevant_communication_link_title": "ERP System Traffic"
+  },
+  {
+    "category": "cross-site-request-forgery",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "very-likely",
+    "exploitation_impact": "low",
+    "title": "\u003cb\u003eCross-Site Request Forgery (CSRF)\u003c/b\u003e risk at \u003cb\u003eIdentity Provider\u003c/b\u003e via \u003cb\u003eAuth Credential Check Traffic\u003c/b\u003e from \u003cb\u003eApache Webserver\u003c/b\u003e",
+    "synthetic_id": "cross-site-request-forgery@identity-provider@apache-webserver\u003eauth-credential-check-traffic",
+    "most_relevant_technical_asset": "identity-provider",
+    "most_relevant_communication_link": "apache-webserver\u003eauth-credential-check-traffic",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "identity-provider"
+    ],
+    "plain_title": "Cross-Site Request Forgery (CSRF) risk at Identity Provider via Auth Credential Check Traffic from Apache Webserver",
+    "category_title": "Cross-Site Request Forgery (CSRF)",
+    "stride": "spoofing",
+    "function": "development",
+    "cwe": 352,
+    "references": [
+      "OWASP A01:2025 Broken Access Control"
+    ],
+    "action": "CSRF Prevention",
+    "mitigation": "Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Identity Provider",
+    "most_relevant_technical_asset_raa": 40.999362954246536,
+    "most_relevant_communication_link_title": "Auth Credential Check Traffic"
+  },
+  {
+    "category": "cross-site-request-forgery",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "very-likely",
+    "exploitation_impact": "low",
+    "title": "\u003cb\u003eCross-Site Request Forgery (CSRF)\u003c/b\u003e risk at \u003cb\u003eMarketing CMS\u003c/b\u003e via \u003cb\u003eCMS Content Traffic\u003c/b\u003e from \u003cb\u003eLoad Balancer\u003c/b\u003e",
+    "synthetic_id": "cross-site-request-forgery@marketing-cms@load-balancer\u003ecms-content-traffic",
+    "most_relevant_technical_asset": "marketing-cms",
+    "most_relevant_communication_link": "load-balancer\u003ecms-content-traffic",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "marketing-cms"
+    ],
+    "plain_title": "Cross-Site Request Forgery (CSRF) risk at Marketing CMS via CMS Content Traffic from Load Balancer",
+    "category_title": "Cross-Site Request Forgery (CSRF)",
+    "stride": "spoofing",
+    "function": "development",
+    "cwe": 352,
+    "references": [
+      "OWASP A01:2025 Broken Access Control"
+    ],
+    "action": "CSRF Prevention",
+    "mitigation": "Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Marketing CMS",
+    "most_relevant_technical_asset_raa": 22.55383688062901,
+    "most_relevant_communication_link_title": "CMS Content Traffic"
+  },
+  {
+    "category": "cross-site-request-forgery",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "very-likely",
+    "exploitation_impact": "low",
+    "title": "\u003cb\u003eCross-Site Request Forgery (CSRF)\u003c/b\u003e risk at \u003cb\u003eMarketing CMS\u003c/b\u003e via \u003cb\u003eMarketing CMS Editing\u003c/b\u003e from \u003cb\u003eBackoffice Client\u003c/b\u003e",
+    "synthetic_id": "cross-site-request-forgery@marketing-cms@backoffice-client\u003emarketing-cms-editing",
+    "most_relevant_technical_asset": "marketing-cms",
+    "most_relevant_communication_link": "backoffice-client\u003emarketing-cms-editing",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "marketing-cms"
+    ],
+    "plain_title": "Cross-Site Request Forgery (CSRF) risk at Marketing CMS via Marketing CMS Editing from Backoffice Client",
+    "category_title": "Cross-Site Request Forgery (CSRF)",
+    "stride": "spoofing",
+    "function": "development",
+    "cwe": 352,
+    "references": [
+      "OWASP A01:2025 Broken Access Control"
+    ],
+    "action": "CSRF Prevention",
+    "mitigation": "Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Marketing CMS",
+    "most_relevant_technical_asset_raa": 22.55383688062901,
+    "most_relevant_communication_link_title": "Marketing CMS Editing"
+  },
+  {
+    "category": "cross-site-request-forgery",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "low",
+    "title": "\u003cb\u003eCross-Site Request Forgery (CSRF)\u003c/b\u003e risk at \u003cb\u003eBackoffice ERP System\u003c/b\u003e via \u003cb\u003eERP Web Access\u003c/b\u003e from \u003cb\u003eBackend Admin Client\u003c/b\u003e",
+    "synthetic_id": "cross-site-request-forgery@erp-system@backend-admin-client\u003eerp-web-access",
+    "most_relevant_technical_asset": "erp-system",
+    "most_relevant_communication_link": "backend-admin-client\u003eerp-web-access",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "erp-system"
+    ],
+    "plain_title": "Cross-Site Request Forgery (CSRF) risk at Backoffice ERP System via ERP Web Access from Backend Admin Client",
+    "category_title": "Cross-Site Request Forgery (CSRF)",
+    "stride": "spoofing",
+    "function": "development",
+    "cwe": 352,
+    "references": [
+      "OWASP A01:2025 Broken Access Control"
+    ],
+    "action": "CSRF Prevention",
+    "mitigation": "Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "most_relevant_communication_link_title": "ERP Web Access"
+  },
+  {
+    "category": "cross-site-scripting",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eCross-Site Scripting (XSS)\u003c/b\u003e risk at \u003cb\u003eApache Webserver\u003c/b\u003e",
+    "synthetic_id": "cross-site-scripting@apache-webserver",
+    "most_relevant_technical_asset": "apache-webserver",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "apache-webserver"
+    ],
+    "plain_title": "Cross-Site Scripting (XSS) risk at Apache Webserver",
+    "category_title": "Cross-Site Scripting (XSS)",
+    "stride": "tampering",
+    "function": "development",
+    "cwe": 79,
+    "references": [
+      "OWASP A05:2025 Injection"
+    ],
+    "action": "XSS Prevention",
+    "mitigation": "Try to encode all values sent back to the browser and also handle DOM-manipulations in a safe way to avoid DOM-based XSS. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Apache Webserver",
+    "most_relevant_technical_asset_raa": 60.6120919375654
+  },
+  {
+    "category": "cross-site-scripting",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eCross-Site Scripting (XSS)\u003c/b\u003e risk at \u003cb\u003eBackoffice ERP System\u003c/b\u003e",
+    "synthetic_id": "cross-site-scripting@erp-system",
+    "most_relevant_technical_asset": "erp-system",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "erp-system"
+    ],
+    "plain_title": "Cross-Site Scripting (XSS) risk at Backoffice ERP System",
+    "category_title": "Cross-Site Scripting (XSS)",
+    "stride": "tampering",
+    "function": "development",
+    "cwe": 79,
+    "references": [
+      "OWASP A05:2025 Injection"
+    ],
+    "action": "XSS Prevention",
+    "mitigation": "Try to encode all values sent back to the browser and also handle DOM-manipulations in a safe way to avoid DOM-based XSS. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216
+  },
+  {
+    "category": "cross-site-scripting",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eCross-Site Scripting (XSS)\u003c/b\u003e risk at \u003cb\u003eIdentity Provider\u003c/b\u003e",
+    "synthetic_id": "cross-site-scripting@identity-provider",
+    "most_relevant_technical_asset": "identity-provider",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "identity-provider"
+    ],
+    "plain_title": "Cross-Site Scripting (XSS) risk at Identity Provider",
+    "category_title": "Cross-Site Scripting (XSS)",
+    "stride": "tampering",
+    "function": "development",
+    "cwe": 79,
+    "references": [
+      "OWASP A05:2025 Injection"
+    ],
+    "action": "XSS Prevention",
+    "mitigation": "Try to encode all values sent back to the browser and also handle DOM-manipulations in a safe way to avoid DOM-based XSS. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Identity Provider",
+    "most_relevant_technical_asset_raa": 40.999362954246536
+  },
+  {
+    "category": "cross-site-scripting",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eCross-Site Scripting (XSS)\u003c/b\u003e risk at \u003cb\u003eMarketing CMS\u003c/b\u003e",
+    "synthetic_id": "cross-site-scripting@marketing-cms",
+    "most_relevant_technical_asset": "marketing-cms",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "marketing-cms"
+    ],
+    "plain_title": "Cross-Site Scripting (XSS) risk at Marketing CMS",
+    "category_title": "Cross-Site Scripting (XSS)",
+    "stride": "tampering",
+    "function": "development",
+    "cwe": 79,
+    "references": [
+      "OWASP A05:2025 Injection"
+    ],
+    "action": "XSS Prevention",
+    "mitigation": "Try to encode all values sent back to the browser and also handle DOM-manipulations in a safe way to avoid DOM-based XSS. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Marketing CMS",
+    "most_relevant_technical_asset_raa": 22.55383688062901
+  },
+  {
     "category": "dos-risky-access-across-trust-boundary",
     "risk_status": "in-progress",
     "severity": "low",
@@ -1410,6 +1721,78 @@
     "check": "GetAttribute a Vault (Secret Storage) in place?",
     "most_relevant_technical_asset_title": "Backoffice ERP System",
     "most_relevant_technical_asset_raa": 62.062039616154216
+  },
+  {
+    "category": "missing-waf",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMissing Web Application Firewall (WAF)\u003c/b\u003e risk at \u003cb\u003eApache Webserver\u003c/b\u003e",
+    "synthetic_id": "missing-waf@apache-webserver",
+    "most_relevant_technical_asset": "apache-webserver",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "apache-webserver"
+    ],
+    "plain_title": "Missing Web Application Firewall (WAF) risk at Apache Webserver",
+    "category_title": "Missing Web Application Firewall (WAF)",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 1008,
+    "action": "Web Application Firewall (WAF)",
+    "mitigation": "Consider placing a Web Application Firewall (WAF) in front of the web-services and/or web-applications. For cloud environments many cloud providers offer pre-configured WAFs. Even reverse proxies can be enhances by a WAF component via ModSecurity plugins.",
+    "check": "GetAttribute a Web Application Firewall (WAF) in place?",
+    "most_relevant_technical_asset_title": "Apache Webserver",
+    "most_relevant_technical_asset_raa": 60.6120919375654
+  },
+  {
+    "category": "missing-waf",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMissing Web Application Firewall (WAF)\u003c/b\u003e risk at \u003cb\u003eBackoffice ERP System\u003c/b\u003e",
+    "synthetic_id": "missing-waf@erp-system",
+    "most_relevant_technical_asset": "erp-system",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "erp-system"
+    ],
+    "plain_title": "Missing Web Application Firewall (WAF) risk at Backoffice ERP System",
+    "category_title": "Missing Web Application Firewall (WAF)",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 1008,
+    "action": "Web Application Firewall (WAF)",
+    "mitigation": "Consider placing a Web Application Firewall (WAF) in front of the web-services and/or web-applications. For cloud environments many cloud providers offer pre-configured WAFs. Even reverse proxies can be enhances by a WAF component via ModSecurity plugins.",
+    "check": "GetAttribute a Web Application Firewall (WAF) in place?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216
+  },
+  {
+    "category": "missing-waf",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMissing Web Application Firewall (WAF)\u003c/b\u003e risk at \u003cb\u003eMarketing CMS\u003c/b\u003e",
+    "synthetic_id": "missing-waf@marketing-cms",
+    "most_relevant_technical_asset": "marketing-cms",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "marketing-cms"
+    ],
+    "plain_title": "Missing Web Application Firewall (WAF) risk at Marketing CMS",
+    "category_title": "Missing Web Application Firewall (WAF)",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 1008,
+    "action": "Web Application Firewall (WAF)",
+    "mitigation": "Consider placing a Web Application Firewall (WAF) in front of the web-services and/or web-applications. For cloud environments many cloud providers offer pre-configured WAFs. Even reverse proxies can be enhances by a WAF component via ModSecurity plugins.",
+    "check": "GetAttribute a Web Application Firewall (WAF) in place?",
+    "most_relevant_technical_asset_title": "Marketing CMS",
+    "most_relevant_technical_asset_raa": 22.55383688062901
   },
   {
     "category": "mixed-targets-on-shared-runtime",
