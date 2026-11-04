@@ -1,9 +1,13 @@
 package input
 
-import "fmt"
+import (
+	"fmt"
+	"slices"
+)
 
 type CommunicationLink struct {
 	Target                 string   `json:"target,omitempty"                   yaml:"target,omitempty"`
+	Via                    []string `json:"via,omitempty"                      yaml:"via,omitempty"`
 	Description            string   `json:"description,omitempty"              yaml:"description,omitempty"`
 	Protocol               string   `json:"protocol,omitempty"                 yaml:"protocol,omitempty"`
 	Authentication         string   `json:"authentication,omitempty"           yaml:"authentication,omitempty"`
@@ -24,6 +28,13 @@ func (what *CommunicationLink) Merge(other CommunicationLink) error {
 	what.Target, mergeError = new(Strings).MergeSingleton(what.Target, other.Target)
 	if mergeError != nil {
 		return fmt.Errorf("failed to merge target: %w", mergeError)
+	}
+
+	// the via list is a path in order, so it merges like a single value
+	if len(what.Via) == 0 {
+		what.Via = other.Via
+	} else if len(other.Via) > 0 && !slices.Equal(what.Via, other.Via) {
+		return fmt.Errorf("failed to merge via: conflicting values: %q versus %q", what.Via, other.Via)
 	}
 
 	what.Description, mergeError = new(Strings).MergeSingleton(what.Description, other.Description)

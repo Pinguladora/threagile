@@ -872,6 +872,17 @@
                   ],
                   "type": "string"
                 },
+                "via": {
+                  "description": "Ids of the technical assets the connection passes through on its way to the target, in order, such as a load balancer and a WAF; the link becomes one link per hop (source to the first of them, and so on to the target), each with the attributes of this link",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "uniqueItems": true
+                },
                 "vpn": {
                   "description": "VPN",
                   "type": "boolean"
