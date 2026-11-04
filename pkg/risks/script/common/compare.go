@@ -148,12 +148,8 @@ func IsSame(value *Property) bool {
 		return false
 	}
 
-	switch value.Property.(type) {
-	case *property.Equal:
-		return true
-	}
-
-	return false
+	_, ok := value.Property.(*property.Equal)
+	return ok
 }
 
 func IsGreater(value *Property) bool {
@@ -161,12 +157,8 @@ func IsGreater(value *Property) bool {
 		return false
 	}
 
-	switch value.Property.(type) {
-	case *property.Greater:
-		return true
-	}
-
-	return false
+	_, ok := value.Property.(*property.Greater)
+	return ok
 }
 
 func IsLess(value *Property) bool {
@@ -174,12 +166,8 @@ func IsLess(value *Property) bool {
 		return false
 	}
 
-	switch value.Property.(type) {
-	case *property.Less:
-		return true
-	}
-
-	return false
+	_, ok := value.Property.(*property.Less)
+	return ok
 }
 
 func ToString(value any) (*StringValue, error) {

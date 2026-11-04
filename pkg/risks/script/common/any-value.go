@@ -31,8 +31,7 @@ func (what AnyValue) Event() *Event {
 }
 
 func (what AnyValue) PlainValue() any {
-	switch castValue := what.value.(type) {
-	case Value:
+	if castValue, ok := what.value.(Value); ok {
 		return castValue.PlainValue()
 	}
 
