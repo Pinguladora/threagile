@@ -16,6 +16,7 @@ const (
 	textRisk       = "Risk"
 	textRisks      = "Risks"
 	textRiskLower  = "risk"
+	textRisksLower = "risks"
 	textCategories = "Categories"
 	textCategory   = "category"
 	textAsset      = "Asset"

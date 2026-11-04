@@ -1350,7 +1350,7 @@ func (r *pdfReporter) renderImpactAnalysis(parsedModel *types.Model, initialRisk
 
 	html := r.pdf.HTMLBasicNew()
 	var strBuilder strings.Builder
-	riskStr = "risks"
+	riskStr = textRisksLower
 	if count == 1 {
 		riskStr = textRiskLower
 	}
@@ -2392,7 +2392,7 @@ func (r *pdfReporter) technicalAssetRisks(parsedModel *types.Model, technicalAss
 			r.pdf.Ln(-1)
 			r.pdfColorGray()
 			r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-			r.pdf.CellFormat(185, 6, strconv.Itoa(len(risksStr))+" risksStr in total were identified", "0", 0, "", false, 0, "")
+			r.pdf.CellFormat(185, 6, strconv.Itoa(len(risksStr))+" risks in total were identified", "0", 0, "", false, 0, "")
 		*/
 		severityHeadlinesWritten := make(map[types.RiskSeverity]bool)
 		r.pdf.Ln(-1)
@@ -2405,7 +2405,7 @@ func (r *pdfReporter) technicalAssetRisks(parsedModel *types.Model, technicalAss
 		r.pdfColorGray()
 		r.pdf.SetFont("Helvetica", "", fontSizeBody)
 		r.pdf.SetLeftMargin(15)
-		text := "No risksStr were identified."
+		text := "No risks were identified."
 		if technicalAsset.OutOfScope {
 			text = "Asset was defined as out-of-scope."
 		}
@@ -2911,7 +2911,7 @@ func (r *pdfReporter) dataAssetBreach(parsedModel *types.Model, dataAsset *types
 		r.pdf.MultiCell(145, 6, "This data asset has no data breach potential.", "0", "0", false)
 	} else {
 		r.pdfColorBlack()
-		riskRemainingStr := "risksStr"
+		riskRemainingStr := textRisksLower
 		if countStillAtRisk == 1 {
 			riskRemainingStr = textRiskLower
 		}
