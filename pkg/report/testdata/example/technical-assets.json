@@ -3,6 +3,7 @@
     "id": "apache-webserver",
     "title": "Apache Webserver",
     "description": "Apache Webserver hosting the API code and client-side code",
+    "usage": "business",
     "type": "process",
     "size": "application",
     "technologies": [
@@ -21,6 +22,7 @@
     ],
     "machine": "container",
     "custom_developed_parts": true,
+    "encryption": "none",
     "owner": "Company ABC",
     "confidentiality": "strictly-confidential",
     "integrity": "mission-critical",
@@ -94,6 +96,7 @@
     "title": "Backend Admin Client",
     "description": "Backend admin client",
     "usage": "devops",
+    "type": "external-entity",
     "size": "component",
     "technologies": [
       {
@@ -111,8 +114,10 @@
         }
       }
     ],
+    "machine": "physical",
     "out_of_scope": true,
     "used_as_client_by_human": true,
+    "encryption": "none",
     "justification_out_of_scope": "Owned and managed by ops provider",
     "owner": "Company XYZ",
     "confidentiality": "strictly-confidential",
@@ -194,6 +199,8 @@
     "id": "backoffice-client",
     "title": "Backoffice Client",
     "description": "Backoffice client",
+    "usage": "business",
+    "type": "external-entity",
     "size": "component",
     "technologies": [
       {
@@ -211,8 +218,10 @@
         }
       }
     ],
+    "machine": "physical",
     "out_of_scope": true,
     "used_as_client_by_human": true,
+    "encryption": "none",
     "justification_out_of_scope": "Owned and managed by Company XYZ company",
     "owner": "Company XYZ",
     "confidentiality": "strictly-confidential",
@@ -275,6 +284,7 @@
     "id": "contract-file-server",
     "title": "Contract File Server",
     "description": "NFS Filesystem for storing the contract PDFs",
+    "usage": "business",
     "type": "datastore",
     "size": "component",
     "technologies": [
@@ -293,6 +303,7 @@
       }
     ],
     "machine": "virtual",
+    "encryption": "none",
     "owner": "Company ABC",
     "confidentiality": "confidential",
     "integrity": "critical",
@@ -319,6 +330,8 @@
     "id": "customer-client",
     "title": "Customer Web Client",
     "description": "Customer Web Client",
+    "usage": "business",
+    "type": "external-entity",
     "size": "component",
     "technologies": [
       {
@@ -336,9 +349,11 @@
         }
       }
     ],
+    "machine": "physical",
     "internet": true,
     "out_of_scope": true,
     "used_as_client_by_human": true,
+    "encryption": "none",
     "justification_out_of_scope": "Owned and managed by end-user customer",
     "owner": "Customer",
     "confidentiality": "strictly-confidential",
@@ -383,7 +398,9 @@
     "id": "erp-system",
     "title": "Backoffice ERP System",
     "description": "ERP system",
+    "usage": "business",
     "type": "process",
+    "size": "system",
     "technologies": [
       {
         "name": "erp",
@@ -404,6 +421,7 @@
     ],
     "machine": "virtual",
     "redundant": true,
+    "encryption": "none",
     "owner": "Company ABC",
     "confidentiality": "strictly-confidential",
     "integrity": "mission-critical",
@@ -475,6 +493,8 @@
     "title": "External Development Client",
     "description": "External developer client",
     "usage": "devops",
+    "type": "external-entity",
+    "size": "system",
     "technologies": [
       {
         "name": "devops-client",
@@ -489,10 +509,12 @@
         }
       }
     ],
+    "machine": "physical",
     "internet": true,
     "multi_tenant": true,
     "out_of_scope": true,
     "used_as_client_by_human": true,
+    "encryption": "none",
     "justification_out_of_scope": "Owned and managed by external developers",
     "owner": "External Developers",
     "confidentiality": "confidential",
@@ -585,6 +607,7 @@
     "description": "Git repository server",
     "usage": "devops",
     "type": "process",
+    "size": "system",
     "technologies": [
       {
         "name": "sourcecode-repository",
@@ -602,6 +625,7 @@
     ],
     "machine": "virtual",
     "multi_tenant": true,
+    "encryption": "none",
     "owner": "Company ABC",
     "confidentiality": "confidential",
     "integrity": "mission-critical",
@@ -628,6 +652,7 @@
     "id": "identity-provider",
     "title": "Identity Provider",
     "description": "Identity provider server",
+    "usage": "business",
     "type": "process",
     "size": "component",
     "technologies": [
@@ -648,6 +673,7 @@
       }
     ],
     "machine": "virtual",
+    "encryption": "none",
     "owner": "Company ABC",
     "confidentiality": "strictly-confidential",
     "integrity": "critical",
@@ -686,6 +712,7 @@
     "description": "Jenkins build-server",
     "usage": "devops",
     "type": "process",
+    "size": "system",
     "technologies": [
       {
         "name": "build-pipeline",
@@ -703,6 +730,7 @@
     ],
     "machine": "virtual",
     "multi_tenant": true,
+    "encryption": "none",
     "owner": "Company ABC",
     "confidentiality": "confidential",
     "integrity": "mission-critical",
@@ -787,6 +815,7 @@
     "id": "ldap-auth-server",
     "title": "LDAP Auth Server",
     "description": "LDAP authentication server",
+    "usage": "business",
     "type": "datastore",
     "size": "component",
     "technologies": [
@@ -801,6 +830,7 @@
         }
       }
     ],
+    "machine": "physical",
     "encryption": "transparent",
     "owner": "Company ABC",
     "confidentiality": "strictly-confidential",
@@ -822,6 +852,7 @@
     "id": "load-balancer",
     "title": "Load Balancer",
     "description": "Load Balancer (HA-Proxy)",
+    "usage": "business",
     "type": "process",
     "size": "component",
     "technologies": [
@@ -842,6 +873,8 @@
         }
       }
     ],
+    "machine": "physical",
+    "encryption": "none",
     "owner": "Company ABC",
     "confidentiality": "strictly-confidential",
     "integrity": "mission-critical",
@@ -899,6 +932,7 @@
     "id": "marketing-cms",
     "title": "Marketing CMS",
     "description": "CMS for the marketing content",
+    "usage": "business",
     "type": "process",
     "size": "application",
     "technologies": [
@@ -919,6 +953,7 @@
     ],
     "machine": "container",
     "custom_developed_parts": true,
+    "encryption": "none",
     "owner": "Company ABC",
     "confidentiality": "strictly-confidential",
     "integrity": "critical",
@@ -961,6 +996,7 @@
     "id": "sql-database",
     "title": "Customer Contract Database",
     "description": "The database behind the ERP system",
+    "usage": "business",
     "type": "datastore",
     "size": "component",
     "technologies": [
