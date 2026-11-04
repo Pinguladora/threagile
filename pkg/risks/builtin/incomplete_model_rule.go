@@ -55,7 +55,7 @@ func (r *IncompleteModelRule) GenerateRisks(input *types.Model) ([]*types.Risk, 
 	return risks, nil
 }
 
-func (im IncompleteModelRule) skipAsset(technicalAsset *types.TechnicalAsset) bool {
+func (im *IncompleteModelRule) skipAsset(technicalAsset *types.TechnicalAsset) bool {
 	return technicalAsset.OutOfScope
 }
 
