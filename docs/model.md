@@ -95,7 +95,9 @@ and warns about it. `two-factor` is read as `multi-factor`.
 `threagile migrate-model --model threagile.yaml` rewrites a model, and the files it includes, to the current
 fields. It changes only the lines it migrates, so comments and layout stay, and lists what to review by hand: the
 authorization of the migrated links, which it leaves `unknown`, and links authenticated with `token`, which may be
-`short-lived-token` or `long-lived-token`. Links written in flow style (`{ target: ..., authorization: ... }`) are
+`short-lived-token` or `long-lived-token`. It also lists the links of clients used by humans that move to
+`service-account`: `technical-user` often meant that people sign in with accounts of their own, which is
+`end-user`. Links written in flow style (`{ target: ..., authorization: ... }`) are
 listed to migrate by hand.
 
 ## Connections through proxies (`via`)

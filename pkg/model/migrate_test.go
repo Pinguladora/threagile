@@ -40,7 +40,12 @@ technical_assets:
 const legacyInclude = `technical_assets:
   Admin:
     id: admin
+    used_as_client_by_human: true
     communication_links:
+      Deployment:
+        target: shop
+        authentication: credentials
+        authorization: technical-user
       Administration:
         target: shop
         authentication: two-factor
@@ -92,19 +97,27 @@ technical_assets:
 	assert.Equal(t, `technical_assets:
   Admin:
     id: admin
+    used_as_client_by_human: true
     communication_links:
+      Deployment:
+        target: shop
+        authentication: credentials
+        identity: service-account
+        authorization: unknown
       Administration:
         target: shop
         authentication: multi-factor
         identity: none
         authorization: unknown`, string(included), "the include keeps its missing final newline")
 
-	assert.Len(t, migration.Changes, 4)
+	assert.Len(t, migration.Changes, 5)
 	assert.Equal(t, []string{
 		modelFile + `: technical asset "Shop" communication link "Events": authentication token, choose ` +
 			"short-lived-token or long-lived-token",
 		modelFile + `: technical asset "Shop" communication link "Inline": written in flow style, migrate it by hand`,
-		"set the authorization of the 3 links whose identity moved (none, authenticated-only, function-level or " +
+		includeFile + `: technical asset "Admin" communication link "Deployment": the caller is used by humans, set ` +
+			"the identity to end-user if they sign in with their own accounts",
+		"set the authorization of the 4 links whose identity moved (none, authenticated-only, function-level or " +
 			"object-level)",
 	}, migration.Notes)
 
