@@ -35,11 +35,15 @@ func (*SeedTagsMacro) GoBack() (message string, validResult bool, err error) {
 	return cannotGoBackFurther, false, nil
 }
 
-func (*SeedTagsMacro) GetFinalChangeImpact(_ *input.Model, _ *types.Model) (changes []string, message string, validResult bool, err error) {
+func (*SeedTagsMacro) GetFinalChangeImpact(
+	_ *input.Model, _ *types.Model,
+) (changes []string, message string, validResult bool, err error) {
 	return []string{"seed the model file with supported tags from all risk rules"}, changesetValid, true, err
 }
 
-func (*SeedTagsMacro) Execute(modelInput *input.Model, parsedModel *types.Model) (message string, validResult bool, err error) {
+func (*SeedTagsMacro) Execute(
+	modelInput *input.Model, parsedModel *types.Model,
+) (message string, validResult bool, err error) {
 	modelInput.TagsAvailable = parsedModel.TagsAvailable
 	for tag := range parsedModel.AllSupportedTags {
 		modelInput.TagsAvailable = append(modelInput.TagsAvailable, tag)

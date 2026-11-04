@@ -24,7 +24,9 @@ type Macros interface {
 	GetNextQuestion(model *types.Model) (nextQuestion MacroQuestion, err error)
 	ApplyAnswer(questionID string, answer ...string) (message string, validResult bool, err error)
 	GoBack() (message string, validResult bool, err error)
-	GetFinalChangeImpact(modelInput *input.Model, model *types.Model) (changes []string, message string, validResult bool, err error)
+	GetFinalChangeImpact(
+		modelInput *input.Model, model *types.Model,
+	) (changes []string, message string, validResult bool, err error)
 	Execute(modelInput *input.Model, model *types.Model) (message string, validResult bool, err error)
 }
 
