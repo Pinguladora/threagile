@@ -72,7 +72,8 @@ func (s *server) checkObjectCreationThrottler(ginContext *gin.Context, typeName 
 		for i := 0; i < len(s.createdObjectsThrottler[keyCheck]); i++ {
 			if s.createdObjectsThrottler[keyCheck][i] < cutoff {
 				// Remove the element at index i from slice (safe while looping using i as iterator)
-				s.createdObjectsThrottler[keyCheck] = append(s.createdObjectsThrottler[keyCheck][:i], s.createdObjectsThrottler[keyCheck][i+1:]...)
+				s.createdObjectsThrottler[keyCheck] = append(s.createdObjectsThrottler[keyCheck][:i],
+					s.createdObjectsThrottler[keyCheck][i+1:]...)
 				i-- // Since we just deleted a[i], we must redo that index
 			}
 		}
