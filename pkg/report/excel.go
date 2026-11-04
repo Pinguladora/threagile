@@ -314,7 +314,7 @@ func WriteTagsExcelToFile(parsedModel *types.Model, filename string, config repo
 	}
 
 	err = excel.SetCellStyle(sheetName, "A1", "A1", cellStyles.headCenterBold)
-	if len(sortedTagsAvailable) > 0 {
+	if err == nil && len(sortedTagsAvailable) > 0 {
 		err = excel.SetCellStyle(sheetName, "B1", lastColumn+"1", cellStyles.headCenter)
 	}
 	if err != nil {
