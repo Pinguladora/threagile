@@ -331,7 +331,8 @@ func (s *server) editModelAnalyze(ginContext *gin.Context) {
 		Verbose:       s.config.GetVerbose(),
 		SuppressError: true,
 	}
-	customRiskRules := model.LoadCustomRiskRules(s.config.GetPluginFolder(), s.config.GetRiskRulePlugins(), progressReporter)
+	customRiskRules := model.LoadCustomRiskRules(s.config.GetPluginFolder(), s.config.GetRiskRulePlugins(),
+		progressReporter)
 	builtinRiskRules := risks.GetBuiltInRiskRules()
 
 	result, err := model.AnalyzeModel(&modelInput, s.config, builtinRiskRules, customRiskRules, progressReporter)

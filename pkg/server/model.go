@@ -420,8 +420,9 @@ func (s *server) deleteDataAsset(ginContext *gin.Context) {
 				ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Data Asset Deletion")
 				if ok {
 					respondMessage(ginContext, http.StatusOK, "data asset deleted", gin.H{
-						"id":                 dataAsset.ID,
-						"references_deleted": referencesDeleted, // in order to signal to clients, that other model parts might've been deleted as well
+						"id": dataAsset.ID,
+						// in order to signal to clients, that other model parts might've been deleted as well
+						"references_deleted": referencesDeleted,
 					})
 				}
 				return
@@ -521,8 +522,10 @@ func (s *server) setDataAsset(ginContext *gin.Context) {
 				ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Data Asset Update")
 				if ok {
 					respondMessage(ginContext, http.StatusOK, "data asset updated", gin.H{
-						"id":         dataAssetInput.ID,
-						"id_changed": idChanged, // in order to signal to clients, that other model parts might've received updates as well and should be reloaded
+						"id": dataAssetInput.ID,
+						// in order to signal to clients, that other model parts might've received updates as well and
+						// should be reloaded
+						"id_changed": idChanged,
 					})
 				}
 				return
@@ -623,7 +626,9 @@ func (s *server) createNewDataAsset(ginContext *gin.Context) {
 	}
 }
 
-func (s *server) populateDataAsset(ginContext *gin.Context, payload payloadDataAsset) (dataAssetInput input.DataAsset, ok bool) {
+func (s *server) populateDataAsset(
+	ginContext *gin.Context, payload payloadDataAsset,
+) (dataAssetInput input.DataAsset, ok bool) {
 	usage, err := types.ParseUsage(payload.Usage)
 	if err != nil {
 		handleErrorInServiceCall(err, ginContext)
@@ -719,8 +724,10 @@ func (s *server) setSharedRuntime(ginContext *gin.Context) {
 				ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Shared Runtime Update")
 				if ok {
 					respondMessage(ginContext, http.StatusOK, "shared runtime updated", gin.H{
-						"id":         sharedRuntimeInput.ID,
-						"id_changed": idChanged, // in order to signal to clients, that other model parts might've received updates as well and should be reloaded
+						"id": sharedRuntimeInput.ID,
+						// in order to signal to clients, that other model parts might've received updates as well and
+						// should be reloaded
+						"id_changed": idChanged,
 					})
 				}
 				return
@@ -841,7 +848,9 @@ func checkTechnicalAssetsExisting(modelInput input.Model, techAssetIDs []string)
 	return true
 }
 
-func populateSharedRuntime(_ *gin.Context, payload payloadSharedRuntime) (sharedRuntimeInput input.SharedRuntime, ok bool) {
+func populateSharedRuntime(
+	_ *gin.Context, payload payloadSharedRuntime,
+) (sharedRuntimeInput input.SharedRuntime, ok bool) {
 	sharedRuntimeInput = input.SharedRuntime{
 		ID:                     payload.Id,
 		Description:            payload.Description,
@@ -870,8 +879,9 @@ func (s *server) deleteSharedRuntime(ginContext *gin.Context) {
 				ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Shared Runtime Deletion")
 				if ok {
 					respondMessage(ginContext, http.StatusOK, "shared runtime deleted", gin.H{
-						"id":                 sharedRuntime.ID,
-						"references_deleted": referencesDeleted, // in order to signal to clients, that other model parts might've been deleted as well
+						"id": sharedRuntime.ID,
+						// in order to signal to clients, that other model parts might've been deleted as well
+						"references_deleted": referencesDeleted,
 					})
 				}
 				return
@@ -894,7 +904,9 @@ func (s *server) getSharedRuntimes(ginContext *gin.Context) {
 	}
 }
 
-func (s *server) readModel(ginContext *gin.Context, modelUUID string, key []byte, folderNameOfKey string) (modelInputResult input.Model, yamlText string, ok bool) {
+func (s *server) readModel(
+	ginContext *gin.Context, modelUUID string, key []byte, folderNameOfKey string,
+) (modelInputResult input.Model, yamlText string, ok bool) {
 	modelFolder, ok := s.checkModelFolder(ginContext, modelUUID, folderNameOfKey)
 	if !ok {
 		return modelInputResult, yamlText, false
@@ -915,7 +927,7 @@ func (s *server) readModel(ginContext *gin.Context, modelUUID string, key []byte
 
 	nonce := fileBytes[0:nonceSize]
 	ciphertext := fileBytes[nonceSize:]
-	plaintext, err := aesGcm.Open(nil, nonce, ciphertext, nil) // #nosec G407 // false positive The nounce is read from file for decryption not encryption
+	plaintext, err := aesGcm.Open(nil, nonce, ciphertext, nil) // #nosec G407 // nonce read from the file to decrypt
 	if err != nil {
 		log.Println(err)
 		respondError(ginContext, http.StatusInternalServerError, "unable to open model")
@@ -955,7 +967,9 @@ func newModelCipher(key []byte) (cipher.AEAD, error) {
 	return aesGcm, nil
 }
 
-func (s *server) writeModel(ginContext *gin.Context, key []byte, folderNameOfKey string, modelInput *input.Model, changeReasonForHistory string) (ok bool) {
+func (s *server) writeModel(
+	ginContext *gin.Context, key []byte, folderNameOfKey string, modelInput *input.Model, changeReasonForHistory string,
+) (ok bool) {
 	modelFolder, ok := s.checkModelFolder(ginContext, ginContext.Param("model-id"), folderNameOfKey)
 	if ok {
 		modelInput.ThreagileVersion = s.config.GetThreagileVersion()
@@ -973,7 +987,9 @@ func (s *server) writeModel(ginContext *gin.Context, key []byte, folderNameOfKey
 	return false
 }
 
-func (s *server) checkModelFolder(ginContext *gin.Context, modelUUID string, folderNameOfKey string) (modelFolder string, ok bool) {
+func (s *server) checkModelFolder(
+	ginContext *gin.Context, modelUUID string, folderNameOfKey string,
+) (modelFolder string, ok bool) {
 	uuidParsed, err := uuid.Parse(modelUUID)
 	if err != nil {
 		respondError(ginContext, http.StatusNotFound, "model not found")
@@ -1021,14 +1037,17 @@ func (s *server) importModel(ginContext *gin.Context) {
 	s.lockFolder(folderNameOfKey)
 	defer s.unlockFolder(folderNameOfKey)
 
-	aUuid := ginContext.Param("model-id") // UUID is syntactically validated in readModel+checkModelFolder (next line) via uuid.Parse(modelUUID)
+	// UUID is syntactically validated in readModel+checkModelFolder (next line) via uuid.Parse(modelUUID)
+	aUuid := ginContext.Param("model-id")
 	_, _, ok = s.readModel(ginContext, aUuid, key, folderNameOfKey)
 	if ok {
-		// first analyze it simply by executing the full risk process (just discard the result) to ensure that everything would work
+		// first analyze it simply by executing the full risk process (just discard the result) to ensure that
+		// everything would work
 		yamlContent, ok := s.execute(ginContext, true)
 		if ok {
 			// if we're here, then no problem was raised, so ok to proceed
-			ok = s.writeModelYAML(ginContext, string(yamlContent), key, folderNameForModel(folderNameOfKey, aUuid), "Model Import", false)
+			ok = s.writeModelYAML(ginContext, string(yamlContent), key, folderNameForModel(folderNameOfKey, aUuid),
+				"Model Import", false)
 			if ok {
 				respondMessage(ginContext, http.StatusCreated, "model imported", nil)
 			}
@@ -1136,7 +1155,9 @@ func (s *server) unlockFolderAndAnswerPanic(ginContext *gin.Context, folderNameO
 	}
 }
 
-func (s *server) writeModelYAML(ginContext *gin.Context, yaml string, key []byte, modelFolder string, changeReasonForHistory string, skipBackup bool) (ok bool) {
+func (s *server) writeModelYAML(
+	ginContext *gin.Context, yaml string, key []byte, modelFolder string, changeReasonForHistory string, skipBackup bool,
+) (ok bool) {
 	if s.config.GetVerbose() {
 		fmt.Println("about to write " + strconv.Itoa(len(yaml)) + " bytes of yaml into model folder: " + modelFolder)
 	}
@@ -1165,7 +1186,7 @@ func (s *server) writeModelYAML(ginContext *gin.Context, yaml string, key []byte
 		respondError(ginContext, http.StatusInternalServerError, "unable to write model")
 		return false
 	}
-	ciphertext := aesGcm.Seal(nil, nonce, plaintext, nil) // #nosec G407 // The nounce is read from random so it shoul be random each run
+	ciphertext := aesGcm.Seal(nil, nonce, plaintext, nil) // #nosec G407 // the nonce is random for each write
 	if !skipBackup {
 		err = s.backupModelToHistory(modelFolder, changeReasonForHistory)
 		if err != nil {
