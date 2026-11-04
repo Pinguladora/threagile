@@ -334,8 +334,8 @@
   {
     "category": "cross-site-request-forgery",
     "risk_status": "unchecked",
-    "severity": "medium",
-    "exploitation_likelihood": "very-likely",
+    "severity": "low",
+    "exploitation_likelihood": "unlikely",
     "exploitation_impact": "low",
     "title": "\u003cb\u003eCross-Site Request Forgery (CSRF)\u003c/b\u003e risk at \u003cb\u003eKnowledge CMS\u003c/b\u003e via \u003cb\u003eArticle Export\u003c/b\u003e from \u003cb\u003eIngestion Pipeline\u003c/b\u003e",
     "synthetic_id": "cross-site-request-forgery@knowledge-cms@ingestion-pipeline\u003earticle-export",

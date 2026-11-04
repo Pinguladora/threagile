@@ -30,9 +30,12 @@ func (*CrossSiteRequestForgeryRule) Category() *types.RiskCategory {
 		Function:       types.Development,
 		STRIDE:         types.Spoofing,
 		DetectionLogic: "In-scope web applications accessed via typical web access protocols.",
-		RiskAssessment: "The risk rating depends on the integrity rating of the data sent across the communication link.",
+		RiskAssessment: "The risk rating depends on the integrity rating of the data sent across the communication link. " +
+			"The attack is very likely, likely for DevOps usage, and unlikely when the link is authenticated with a token " +
+			"(<i>" + types.Token.String() + "</i>, <i>" + types.ShortLivedToken.String() + "</i> or <i>" +
+			types.LongLivedToken.String() + "</i>), which a browser does not send on its own like a cookie.",
 		FalsePositives: "Web applications passing the authentication state via custom headers instead of cookies can " +
-			"eventually be false positives. Also when the web application " +
+			"eventually be false positives; model their links with a token authentication. Also when the web application " +
 			"is not accessed via a browser-like component (i.e not by a human user initiating the request that " +
 			"gets passed through all components until it reaches the web application) this can be considered a false positive.",
 		ModelFailurePossibleReason: false,
@@ -77,7 +80,7 @@ func (r *CrossSiteRequestForgeryRule) createRisk(
 	if parsedModel.HighestCommunicationLinkIntegrity(incomingFlow) == types.MissionCritical {
 		impact = types.MediumImpact
 	}
-	likelihood := r.likelihoodFromUsage(incomingFlow)
+	likelihood := r.likelihood(incomingFlow)
 	risk := &types.Risk{
 		CategoryId:                      r.Category().ID,
 		Severity:                        types.CalculateSeverity(likelihood, impact),
@@ -93,7 +96,14 @@ func (r *CrossSiteRequestForgeryRule) createRisk(
 	return risk
 }
 
-func (*CrossSiteRequestForgeryRule) likelihoodFromUsage(cl *types.CommunicationLink) types.RiskExploitationLikelihood {
+// likelihood rates a CSRF attack over the link: a browser sends cookies and client certificates along with a
+// forged request, but no token that the application passes in a header.
+func (*CrossSiteRequestForgeryRule) likelihood(cl *types.CommunicationLink) types.RiskExploitationLikelihood {
+	switch cl.Authentication {
+	case types.Token, types.ShortLivedToken, types.LongLivedToken:
+		return types.Unlikely
+	default:
+	}
 	if cl.Usage == types.DevOps {
 		return types.Likely
 	}
