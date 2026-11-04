@@ -276,6 +276,66 @@
   {
     "category": "long-lived-credentials",
     "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eLong-Lived Credentials\u003c/b\u003e risk at \u003cb\u003eBackoffice ERP System\u003c/b\u003e used by \u003cb\u003eApache Webserver\u003c/b\u003e (long-lived-token)",
+    "synthetic_id": "long-lived-credentials@erp-system@apache-webserver\u003eerp-system-traffic",
+    "most_relevant_technical_asset": "erp-system",
+    "most_relevant_communication_link": "apache-webserver\u003eerp-system-traffic",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "erp-system"
+    ],
+    "plain_title": "Long-Lived Credentials risk at Backoffice ERP System used by Apache Webserver (long-lived-token)",
+    "category_title": "Long-Lived Credentials",
+    "stride": "spoofing",
+    "function": "operations",
+    "cwe": 522,
+    "references": [
+      "OWASP NHI7:2025 Long-Lived Secrets",
+      "OWASP NHI2:2025 Secret Leakage"
+    ],
+    "action": "Short-Lived Credentials",
+    "mitigation": "Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity \u003ci\u003eworkload\u003c/i\u003e or the authentication \u003ci\u003eshort-lived-token\u003c/i\u003e. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "most_relevant_communication_link_title": "ERP System Traffic"
+  },
+  {
+    "category": "long-lived-credentials",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eLong-Lived Credentials\u003c/b\u003e risk at \u003cb\u003eGit Repository\u003c/b\u003e used by \u003cb\u003eExternal Development Client\u003c/b\u003e (long-lived-token)",
+    "synthetic_id": "long-lived-credentials@git-repo@external-dev-client\u003egit-repo-web-ui-access",
+    "most_relevant_technical_asset": "git-repo",
+    "most_relevant_communication_link": "external-dev-client\u003egit-repo-web-ui-access",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "git-repo"
+    ],
+    "plain_title": "Long-Lived Credentials risk at Git Repository used by External Development Client (long-lived-token)",
+    "category_title": "Long-Lived Credentials",
+    "stride": "spoofing",
+    "function": "operations",
+    "cwe": 522,
+    "references": [
+      "OWASP NHI7:2025 Long-Lived Secrets",
+      "OWASP NHI2:2025 Secret Leakage"
+    ],
+    "action": "Short-Lived Credentials",
+    "mitigation": "Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity \u003ci\u003eworkload\u003c/i\u003e or the authentication \u003ci\u003eshort-lived-token\u003c/i\u003e. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Git Repository",
+    "most_relevant_technical_asset_raa": 31.49087221095335,
+    "most_relevant_communication_link_title": "Git-Repo Web-UI Access"
+  },
+  {
+    "category": "long-lived-credentials",
+    "risk_status": "unchecked",
     "severity": "medium",
     "exploitation_likelihood": "unlikely",
     "exploitation_impact": "high",
@@ -1120,6 +1180,40 @@
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
     "most_relevant_technical_asset_title": "Jenkins Build Server",
     "most_relevant_technical_asset_raa": 60.099849550227866
+  },
+  {
+    "category": "missing-object-level-authorization",
+    "risk_status": "false-positive",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eMissing Object-Level Authorization\u003c/b\u003e risk at \u003cb\u003eMarketing CMS\u003c/b\u003e for \u003cb\u003eBackoffice Client\u003c/b\u003e (function-level)",
+    "synthetic_id": "missing-object-level-authorization@marketing-cms@backoffice-client\u003emarketing-cms-editing",
+    "most_relevant_technical_asset": "marketing-cms",
+    "most_relevant_communication_link": "backoffice-client\u003emarketing-cms-editing",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "marketing-cms"
+    ],
+    "plain_title": "Missing Object-Level Authorization risk at Marketing CMS for Backoffice Client (function-level)",
+    "category_title": "Missing Object-Level Authorization",
+    "stride": "elevation-of-privilege",
+    "function": "development",
+    "cwe": 639,
+    "references": [
+      "OWASP API1:2023 Broken Object Level Authorization",
+      "OWASP API5:2023 Broken Function Level Authorization"
+    ],
+    "action": "Object-Level Authorization",
+    "mitigation": "Check in every operation that the user of the request may access each object it names, by the identity of the user rather than an id the request carries, and deny by default, for example by asking a policy decision point with the user, the action and the object. Set the authorization of the link to \u003ci\u003eobject-level\u003c/i\u003e once this is in place.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Marketing CMS",
+    "most_relevant_technical_asset_raa": 22.55383688062901,
+    "most_relevant_communication_link_title": "Marketing CMS Editing",
+    "tracking_justification": "Every editor may edit all marketing content, so the CMS checks the editor role per function only",
+    "tracking_ticket": "XYZ-9012",
+    "tracking_date": "2026-11-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-vault",

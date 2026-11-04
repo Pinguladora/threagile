@@ -59,6 +59,7 @@
         "protocol": "https",
         "authentication": "credentials",
         "identity": "service-account",
+        "authorization": "function-level",
         "data_assets_sent": [
           "customer-accounts"
         ],
@@ -72,8 +73,9 @@
         "title": "ERP System Traffic",
         "description": "Link to the ERP system",
         "protocol": "https",
-        "authentication": "token",
+        "authentication": "long-lived-token",
         "identity": "service-account",
+        "authorization": "function-level",
         "data_assets_sent": [
           "customer-accounts",
           "customer-operational-data",
@@ -141,6 +143,7 @@
         "protocol": "ssh",
         "authentication": "client-certificate",
         "identity": "service-account",
+        "authorization": "function-level",
         "usage": "devops",
         "data_assets_sent": [
           "db-dumps"
@@ -161,8 +164,9 @@
         "title": "ERP Web Access",
         "description": "Link to the ERP system (Web)",
         "protocol": "https",
-        "authentication": "token",
+        "authentication": "short-lived-token",
         "identity": "service-account",
+        "authorization": "function-level",
         "usage": "devops",
         "data_assets_sent": [
           "erp-customizing"
@@ -182,6 +186,7 @@
         "protocol": "ldaps",
         "authentication": "credentials",
         "identity": "service-account",
+        "authorization": "function-level",
         "usage": "devops",
         "data_assets_sent": [
           "customer-accounts"
@@ -246,8 +251,9 @@
           "some-erp"
         ],
         "vpn": true,
-        "authentication": "token",
+        "authentication": "short-lived-token",
         "identity": "end-user",
+        "authorization": "object-level",
         "data_assets_sent": [
           "internal-business-data"
         ],
@@ -266,8 +272,9 @@
         "description": "Link to the CMS for editing content",
         "protocol": "https",
         "vpn": true,
-        "authentication": "token",
+        "authentication": "short-lived-token",
         "identity": "end-user",
+        "authorization": "function-level",
         "data_assets_sent": [
           "marketing-material"
         ],
@@ -377,6 +384,7 @@
         "protocol": "https",
         "authentication": "session-id",
         "identity": "end-user",
+        "authorization": "none",
         "data_assets_sent": [
           "customer-accounts",
           "customer-operational-data"
@@ -456,6 +464,7 @@
         "protocol": "jdbc",
         "authentication": "credentials",
         "identity": "service-account",
+        "authorization": "function-level",
         "data_assets_sent": [
           "customer-accounts",
           "customer-operational-data",
@@ -476,6 +485,7 @@
         "title": "NFS Filesystem Access",
         "description": "Link to the file system",
         "protocol": "nfs",
+        "authorization": "none",
         "data_assets_sent": [
           "customer-contracts"
         ],
@@ -546,6 +556,7 @@
         "protocol": "ssh",
         "authentication": "client-certificate",
         "identity": "service-account",
+        "authorization": "function-level",
         "usage": "devops",
         "data_assets_sent": [
           "client-application-code",
@@ -565,8 +576,9 @@
         "title": "Git-Repo Web-UI Access",
         "description": "Link to the Git repo",
         "protocol": "https",
-        "authentication": "token",
+        "authentication": "long-lived-token",
         "identity": "service-account",
+        "authorization": "function-level",
         "usage": "devops",
         "data_assets_sent": [
           "client-application-code",
@@ -588,6 +600,7 @@
         "protocol": "https",
         "authentication": "credentials",
         "identity": "service-account",
+        "authorization": "function-level",
         "usage": "devops",
         "data_assets_sent": [
           "build-job-config"
@@ -697,6 +710,7 @@
         "protocol": "ldaps",
         "authentication": "credentials",
         "identity": "service-account",
+        "authorization": "function-level",
         "data_assets_sent": [
           "customer-accounts"
         ],
@@ -766,6 +780,7 @@
         "protocol": "ssh",
         "authentication": "client-certificate",
         "identity": "service-account",
+        "authorization": "function-level",
         "usage": "devops",
         "data_assets_sent": [
           "client-application-code",
@@ -783,6 +798,7 @@
         "protocol": "ssh",
         "authentication": "client-certificate",
         "identity": "service-account",
+        "authorization": "function-level",
         "usage": "devops",
         "data_assets_sent": [
           "marketing-material"
@@ -800,6 +816,7 @@
         "readonly": true,
         "authentication": "client-certificate",
         "identity": "service-account",
+        "authorization": "function-level",
         "usage": "devops",
         "data_assets_received": [
           "client-application-code",
@@ -897,6 +914,7 @@
         "description": "Link to the CMS server",
         "protocol": "http",
         "readonly": true,
+        "authorization": "none",
         "data_assets_received": [
           "marketing-material"
         ],
@@ -912,6 +930,7 @@
         "protocol": "http",
         "authentication": "session-id",
         "identity": "end-user",
+        "authorization": "object-level",
         "data_assets_sent": [
           "customer-accounts",
           "customer-operational-data"
@@ -980,6 +999,7 @@
         "readonly": true,
         "authentication": "credentials",
         "identity": "service-account",
+        "authorization": "function-level",
         "data_assets_sent": [
           "customer-accounts"
         ],

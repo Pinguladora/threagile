@@ -1325,6 +1325,7 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_sent": "customer-accounts",
         "threagile:identity": "service-account",
         "threagile:protocol": "https",
@@ -1356,6 +1357,16 @@
           ]
         },
         {
+          "threat": "long-lived-credentials",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "long-lived-credentials-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "missing-identity-propagation",
           "state": "exposed",
           "mitigations": [
@@ -1377,7 +1388,8 @@
         }
       ],
       "attributes": {
-        "threagile:authentication": "token",
+        "threagile:authentication": "long-lived-token",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "customer-accounts,customer-operational-data,customer-contracts,internal-business-data",
         "threagile:data_assets_sent": "customer-accounts,customer-operational-data,internal-business-data",
         "threagile:identity": "service-account",
@@ -1412,6 +1424,7 @@
       ],
       "attributes": {
         "threagile:authentication": "client-certificate",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "db-dumps,erp-logs,customer-accounts,customer-operational-data",
         "threagile:data_assets_sent": "db-dumps",
         "threagile:identity": "service-account",
@@ -1443,7 +1456,8 @@
         }
       ],
       "attributes": {
-        "threagile:authentication": "token",
+        "threagile:authentication": "short-lived-token",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "erp-logs",
         "threagile:data_assets_sent": "erp-customizing",
         "threagile:identity": "service-account",
@@ -1475,6 +1489,7 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "customer-accounts",
         "threagile:data_assets_sent": "customer-accounts",
         "threagile:identity": "service-account",
@@ -1519,7 +1534,8 @@
         "some-erp"
       ],
       "attributes": {
-        "threagile:authentication": "token",
+        "threagile:authentication": "short-lived-token",
+        "threagile:authorization": "object-level",
         "threagile:data_assets_received": "customer-contracts,internal-business-data",
         "threagile:data_assets_sent": "internal-business-data",
         "threagile:identity": "end-user",
@@ -1548,10 +1564,21 @@
               "state": "required"
             }
           ]
+        },
+        {
+          "threat": "missing-object-level-authorization",
+          "state": "not-applicable",
+          "mitigations": [
+            {
+              "mitigation": "missing-object-level-authorization-mitigation",
+              "state": "not-applicable"
+            }
+          ]
         }
       ],
       "attributes": {
-        "threagile:authentication": "token",
+        "threagile:authentication": "short-lived-token",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "marketing-material",
         "threagile:data_assets_sent": "marketing-material",
         "threagile:identity": "end-user",
@@ -1576,6 +1603,7 @@
       ],
       "attributes": {
         "threagile:authentication": "session-id",
+        "threagile:authorization": "none",
         "threagile:data_assets_received": "customer-accounts,customer-operational-data,customer-contracts,client-application-code,marketing-material",
         "threagile:data_assets_sent": "customer-accounts,customer-operational-data",
         "threagile:identity": "end-user",
@@ -1629,6 +1657,7 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "customer-accounts,customer-operational-data,internal-business-data",
         "threagile:data_assets_sent": "customer-accounts,customer-operational-data,internal-business-data",
         "threagile:identity": "service-account",
@@ -1680,6 +1709,7 @@
       ],
       "attributes": {
         "threagile:authentication": "none",
+        "threagile:authorization": "none",
         "threagile:data_assets_received": "customer-contracts",
         "threagile:data_assets_sent": "customer-contracts",
         "threagile:identity": "none",
@@ -1722,6 +1752,7 @@
       ],
       "attributes": {
         "threagile:authentication": "client-certificate",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "client-application-code,server-application-code",
         "threagile:data_assets_sent": "client-application-code,server-application-code",
         "threagile:identity": "service-account",
@@ -1741,6 +1772,16 @@
         "server-application-code"
       ],
       "threats": [
+        {
+          "threat": "long-lived-credentials",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "long-lived-credentials-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
         {
           "threat": "missing-authentication-second-factor",
           "state": "mitigated",
@@ -1763,7 +1804,8 @@
         }
       ],
       "attributes": {
-        "threagile:authentication": "token",
+        "threagile:authentication": "long-lived-token",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "client-application-code,server-application-code",
         "threagile:data_assets_sent": "client-application-code,server-application-code",
         "threagile:identity": "service-account",
@@ -1805,6 +1847,7 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "build-job-config",
         "threagile:data_assets_sent": "build-job-config",
         "threagile:identity": "service-account",
@@ -1845,6 +1888,7 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_sent": "customer-accounts",
         "threagile:identity": "service-account",
         "threagile:protocol": "ldaps",
@@ -1875,6 +1919,7 @@
       ],
       "attributes": {
         "threagile:authentication": "client-certificate",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_sent": "client-application-code,server-application-code",
         "threagile:identity": "service-account",
         "threagile:protocol": "ssh",
@@ -1904,6 +1949,7 @@
       ],
       "attributes": {
         "threagile:authentication": "client-certificate",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_sent": "marketing-material",
         "threagile:identity": "service-account",
         "threagile:protocol": "ssh",
@@ -1922,6 +1968,7 @@
       ],
       "attributes": {
         "threagile:authentication": "client-certificate",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "client-application-code,server-application-code",
         "threagile:identity": "service-account",
         "threagile:protocol": "ssh",
@@ -1962,6 +2009,7 @@
       ],
       "attributes": {
         "threagile:authentication": "none",
+        "threagile:authorization": "none",
         "threagile:data_assets_received": "marketing-material",
         "threagile:identity": "none",
         "threagile:protocol": "http",
@@ -2006,6 +2054,7 @@
       ],
       "attributes": {
         "threagile:authentication": "session-id",
+        "threagile:authorization": "object-level",
         "threagile:data_assets_received": "customer-accounts,customer-operational-data,customer-contracts,client-application-code",
         "threagile:data_assets_sent": "customer-accounts,customer-operational-data",
         "threagile:identity": "end-user",
@@ -2057,6 +2106,7 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "customer-accounts",
         "threagile:data_assets_sent": "customer-accounts",
         "threagile:identity": "service-account",
@@ -2185,7 +2235,7 @@
         "CWE-522"
       ],
       "risk": {
-        "likelihood": 25,
+        "likelihood": 50,
         "impact": 75,
         "impactComment": "If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller."
       },
@@ -2340,6 +2390,29 @@
         "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "missing-object-level-authorization",
+      "name": "Missing Object-Level Authorization",
+      "description": "A service that acts for its users must check in each request that the user may access the object at hand, like the order or the account the request names. Checking only that the caller is logged in, or that its role may call the operation, lets any user read or change the objects of others by changing an id in the request (BOLA, also known as IDOR).",
+      "categories": [
+        "Elevation of Privilege",
+        "OWASP API1:2023 Broken Object Level Authorization",
+        "OWASP API5:2023 Broken Function Level Authorization"
+      ],
+      "cwes": [
+        "CWE-639"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 75,
+        "impactComment": "If this risk is unmitigated, attackers with any account might read or change the data of all other users."
+      },
+      "attributes": {
+        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+        "threagile:function": "development"
       }
     },
     {
@@ -2771,6 +2844,15 @@
       "id": "missing-network-segmentation-mitigation",
       "name": "Network Segmentation",
       "description": "Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-object-level-authorization-mitigation",
+      "name": "Object-Level Authorization",
+      "description": "Check in every operation that the user of the request may access each object it names, by the identity of the user rather than an id the request carries, and deny by default, for example by asking a policy decision point with the user, the action and the object. Set the authorization of the link to \u003ci\u003eobject-level\u003c/i\u003e once this is in place.",
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
