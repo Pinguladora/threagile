@@ -44,6 +44,8 @@ func aiRiskRules() []types.RiskRule {
 	return []types.RiskRule{
 		builtin.NewConfusedDeputyAgentRule(),
 		builtin.NewExcessiveAgencyRule(),
+		builtin.NewMissingAIGuardrailRule(),
+		builtin.NewMissingAIMonitoringRule(),
 		builtin.NewModelOutputDisclosureRule(),
 		builtin.NewModelSupplyChainRule(),
 		builtin.NewPromptInjectionRule(),
