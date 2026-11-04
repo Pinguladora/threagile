@@ -53,18 +53,18 @@ func copyFile(source string, destination string) error {
 	/* #nosec source is not tainted (see caller restricting it to files we created ourself or are legitimate to be copied) */
 	src, err := os.Open(source)
 	if err != nil {
-		return err
+		return fmt.Errorf("unable to open %q: %w", source, err)
 	}
 	defer func() { _ = src.Close() }()
 	/* #nosec destination is not tainted (see caller restricting it to the desired report output folder) */
 	dst, err := os.Create(destination)
 	if err != nil {
-		return err
+		return fmt.Errorf("unable to create %q: %w", destination, err)
 	}
 	defer func() { _ = dst.Close() }()
 	_, err = io.Copy(dst, src)
 	if err != nil {
-		return err
+		return fmt.Errorf("unable to copy %q to %q: %w", source, destination, err)
 	}
 	return nil
 }
@@ -117,13 +117,13 @@ func writeLine(file *os.File, line string) {
 func (adoc adocReport) writeDefaultTheme(logoImagePath string) error {
 	err := os.MkdirAll(filepath.Join(adoc.targetDirectory, "theme"), 0o750)
 	if err != nil {
-		return err
+		return fmt.Errorf("unable to create the theme folder: %w", err)
 	}
 	err = os.MkdirAll(adoc.imagesDir, 0o750)
 	if err != nil {
-		return err
+		return fmt.Errorf("unable to create %q: %w", adoc.imagesDir, err)
 	}
-	theme, err := os.Create(filepath.Join(adoc.targetDirectory, "theme", "pdf-theme.yml"))
+	theme, err := adoc.createFile(filepath.Join("theme", "pdf-theme.yml"))
 	defer func() { _ = theme.Close() }()
 	if err != nil {
 		return err
@@ -369,6 +369,16 @@ func (adoc adocReport) WriteReport(model *types.Model,
 	return nil
 }
 
+// createFile creates (or truncates) the named file in the target directory.
+func (adoc adocReport) createFile(filename string) (*os.File, error) {
+	/* #nosec filename is not tainted (see callers passing fixed chapter file names only) */
+	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	if err != nil {
+		return nil, fmt.Errorf("unable to create %q: %w", filename, err)
+	}
+	return f, nil
+}
+
 // initReport recreates the target directory and returns the newly created main file.
 func (adoc adocReport) initReport() (*os.File, error) {
 	_ = os.RemoveAll(adoc.targetDirectory)
@@ -407,7 +417,7 @@ func (adoc adocReport) writeTitleAndPreamble() {
 
 func (adoc adocReport) writeManagementSummery() error {
 	filename := "010_ManagementSummary.adoc"
-	ms, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	ms, err := adoc.createFile(filename)
 	defer func() { _ = ms.Close() }()
 	if err != nil {
 		return err
@@ -632,7 +642,7 @@ func (adoc adocReport) impactAnalysis(f *os.File, initialRisks bool) int {
 
 func (adoc adocReport) writeImpactInitialRisks() error {
 	filename := "020_ImpactIntialRisks.adoc"
-	ir, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	ir, err := adoc.createFile(filename)
 	defer func() { _ = ir.Close() }()
 	if err != nil {
 		return err
@@ -793,7 +803,7 @@ pie showData
 
 func (adoc adocReport) writeRiskMitigationStatus() error {
 	filename := "030_RiskMitigationStatus.adoc"
-	rms, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	rms, err := adoc.createFile(filename)
 	defer func() { _ = rms.Close() }()
 	if err != nil {
 		return err
@@ -833,7 +843,7 @@ func (adoc adocReport) assetRegister(f *os.File) {
 
 func (adoc adocReport) writeAssetRegister() error {
 	filename := "035_AssetRegister.adoc"
-	ar, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	ar, err := adoc.createFile(filename)
 	defer func() { _ = ar.Close() }()
 	if err != nil {
 		return err
@@ -847,7 +857,7 @@ func (adoc adocReport) writeAssetRegister() error {
 
 func (adoc adocReport) writeImpactRemainingRisks() error {
 	filename := "040_ImpactRemainingRisks.adoc"
-	irr, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	irr, err := adoc.createFile(filename)
 	defer func() { _ = irr.Close() }()
 	if err != nil {
 		return err
@@ -907,7 +917,7 @@ func (adoc adocReport) targetDescription(f *os.File, baseFolder string) {
 
 func (adoc adocReport) writeTargetDescription(baseFolder string) error {
 	filename := "050_TargetDescription.adoc"
-	td, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	td, err := adoc.createFile(filename)
 	defer func() { _ = td.Close() }()
 	if err != nil {
 		return err
@@ -947,7 +957,7 @@ func imageIsWiderThanHigh(diagramFilenamePNG string) bool {
 
 func (adoc adocReport) writeDataFlowDiagram(diagramFilenamePNG string) error {
 	filename := "060_DataFlowDiagram.adoc"
-	dfd, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	dfd, err := adoc.createFile(filename)
 	defer func() { _ = dfd.Close() }()
 	if err != nil {
 		return err
@@ -989,7 +999,7 @@ func (adoc adocReport) securityRequirements(f *os.File) int {
 
 func (adoc adocReport) writeSecurityRequirements() error {
 	filename := "070_SecurityRequirements.adoc"
-	sr, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	sr, err := adoc.createFile(filename)
 	defer func() { _ = sr.Close() }()
 	if err != nil {
 		return err
@@ -1022,7 +1032,7 @@ func (adoc adocReport) abuseCases(f *os.File) int {
 
 func (adoc adocReport) writeAbuseCases() error {
 	filename := "080_AbuseCases.adoc"
-	ac, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	ac, err := adoc.createFile(filename)
 	defer func() { _ = ac.Close() }()
 	if err != nil {
 		return err
@@ -1095,7 +1105,7 @@ func (adoc adocReport) tagListing(f *os.File) {
 
 func (adoc adocReport) writeTagListing() error {
 	filename := "090_TagListing.adoc"
-	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
 	if err != nil {
 		return err
@@ -1168,7 +1178,7 @@ func (adoc adocReport) stride(f *os.File) {
 
 func (adoc adocReport) writeSTRIDE() error {
 	filename := "100_STRIDE.adoc"
-	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
 	if err != nil {
 		return err
@@ -1229,7 +1239,7 @@ func (adoc adocReport) assignmentByFunction(f *os.File) {
 
 func (adoc adocReport) writeAssignmentByFunction() error {
 	filename := "110_AssignmentByFunction.adoc"
-	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
 	if err != nil {
 		return err
@@ -1285,7 +1295,7 @@ func (adoc adocReport) raa(f *os.File, introTextRAA string) {
 
 func (adoc adocReport) writeRAA(introTextRAA string) error {
 	filename := "120_RAA.adoc"
-	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
 	if err != nil {
 		return err
@@ -1311,7 +1321,7 @@ refer to the PNG image file alongside this report.`)
 
 func (adoc adocReport) writeDataRiskMapping(dataAssetDiagramFilenamePNG string) error {
 	filename := "130_DataRiskMapping.adoc"
-	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
 	if err != nil {
 		return err
@@ -1370,7 +1380,7 @@ Each one should be checked in the model whether it should better be included in 
 
 func (adoc adocReport) writeOutOfScopeAssets() error {
 	filename := "140_OutOfScopeAssets.adoc"
-	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
 	if err != nil {
 		return err
@@ -1417,7 +1427,7 @@ in the model against the architecture design:{fn-risk-findings}`)
 
 func (adoc adocReport) writeModelFailures() error {
 	filename := "150_ModelFailures.adoc"
-	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
 	if err != nil {
 		return err
@@ -1469,7 +1479,7 @@ func (adoc adocReport) questions(f *os.File) int {
 
 func (adoc adocReport) writeQuestions() error {
 	filename := "160_Questions.adoc"
-	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
 	if err != nil {
 		return err
@@ -1674,7 +1684,7 @@ func (adoc adocReport) riskCategories(f *os.File) {
 
 func (adoc adocReport) writeRiskCategories() error {
 	filename := "170_RiskCategories.adoc"
-	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
 	if err != nil {
 		return err
@@ -1890,7 +1900,7 @@ func (adoc adocReport) technicalAssets(f *os.File) {
 
 func (adoc adocReport) writeTechnicalAssets() error {
 	filename := "180_TechnicalAssets.adoc"
-	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
 	if err != nil {
 		return err
@@ -1990,7 +2000,7 @@ func (adoc adocReport) dataAssets(f *os.File) {
 
 func (adoc adocReport) writeDataAssets() error {
 	filename := "190_DataAssets.adoc"
-	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
 	if err != nil {
 		return err
@@ -2042,7 +2052,7 @@ func (adoc adocReport) trustBoundaries(f *os.File) {
 
 func (adoc adocReport) writeTrustBoundaries() error {
 	filename := "200_TrustBoundaries.adoc"
-	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
 	if err != nil {
 		return err
@@ -2084,7 +2094,7 @@ func (adoc adocReport) sharedRuntimes(f *os.File) {
 
 func (adoc adocReport) writeSharedRuntimes() error {
 	filename := "210_SharedRuntimes.adoc"
-	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
 	if err != nil {
 		return err
@@ -2183,7 +2193,7 @@ func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRi
 
 func (adoc adocReport) writeRiskRulesChecked(modelFilename string, skipRiskRules []string, buildTimestamp string, threagileVersion string, modelHash string, customRiskRules types.RiskRules) error {
 	filename := "220_RiskRulesChecked.adoc"
-	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
 	if err != nil {
 		return err
@@ -2242,7 +2252,7 @@ func (adoc adocReport) appendixRating(f *os.File) {
 
 func (adoc adocReport) writeAppendixRating() error {
 	filename := "400_AppendixRating.adoc"
-	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
 	if err != nil {
 		return err
@@ -2305,7 +2315,7 @@ func (adoc adocReport) disclaimer(f *os.File) {
 
 func (adoc adocReport) writeDisclaimer() error {
 	filename := "500_Disclaimer.adoc"
-	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
+	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
 	if err != nil {
 		return err
