@@ -25,7 +25,7 @@ func (what *Threagile) initPrint() *Threagile {
 			appDir, err := cmd.Flags().GetString(appDirFlagName)
 			if err != nil {
 				cmd.Printf("Unable to read app-dir flag: %v", err)
-				return err
+				return fmt.Errorf("unable to read app-dir flag: %w", err)
 			}
 
 			cmd.Println(Logo + "\n\n" + fmt.Sprintf(VersionText, what.buildTimestamp))
@@ -39,7 +39,7 @@ func (what *Threagile) initPrint() *Threagile {
 			content, err := threagile.License.ReadFile(filepath.Join(appDir, "LICENSE.txt"))
 			if err != nil {
 				cmd.Printf("Unable to read license file: %v", err)
-				return err
+				return fmt.Errorf("unable to read license file: %w", err)
 			}
 
 			cmd.Print(string(content))
