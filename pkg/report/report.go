@@ -3029,7 +3029,9 @@ func (r *pdfReporter) createSharedRuntimes(parsedModel *types.Model) {
 	}
 }
 
-func (r *pdfReporter) createRiskRulesChecked(parsedModel *types.Model, modelFilename string, skipRiskRules []string, buildTimestamp string, threagileVersion string, modelHash string, customRiskRules types.RiskRules) {
+func (r *pdfReporter) createRiskRulesChecked(parsedModel *types.Model, modelFilename string, skipRiskRules []string,
+	buildTimestamp string, threagileVersion string, modelHash string, customRiskRules types.RiskRules,
+) {
 	r.pdf.SetTextColor(0, 0, 0)
 	title := "Risk Rules Checked by Threagile"
 	r.addHeadline(title, false)
@@ -3060,6 +3062,14 @@ func (r *pdfReporter) createRiskRulesChecked(parsedModel *types.Model, modelFile
 	html.Write(5, strBuilder.String())
 	strBuilder.Reset()
 
+	r.checkedRiskRules(parsedModel, skipRiskRules, customRiskRules)
+}
+
+// checkedRiskRules writes the custom risk rules, the individual risk categories of the model and
+// the built-in risk rules, marking the skipped ones.
+func (r *pdfReporter) checkedRiskRules(parsedModel *types.Model, skipRiskRules []string,
+	customRiskRules types.RiskRules,
+) {
 	// The risk rules are listed explicitly here rather than discovered through the run system:
 	skipped := ""
 	r.pdf.Ln(-1)
@@ -3082,26 +3092,7 @@ func (r *pdfReporter) createRiskRulesChecked(parsedModel *types.Model, modelFile
 		r.pdf.CellFormat(190, 6, "Custom Risk Rule", "0", 0, "", false, 0, "")
 		r.pdf.Ln(-1)
 		r.pdf.SetFont("Helvetica", "", fontSizeBody)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(160, 6, customRule.Category().STRIDE.Title(), "0", "0", false)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(160, 6, firstParagraph(customRule.Category().Description), "0", "0", false)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(160, 6, customRule.Category().DetectionLogic, "0", "0", false)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(160, 6, customRule.Category().RiskAssessment, "0", "0", false)
+		r.riskRuleDetails(customRule.Category())
 	}
 
 	sort.Sort(types.ByRiskCategoryTitleSort(parsedModel.CustomRiskCategories))
@@ -3117,28 +3108,15 @@ func (r *pdfReporter) createRiskRulesChecked(parsedModel *types.Model, modelFile
 		r.pdf.CellFormat(190, 6, "Individual Risk category", "0", 0, "", false, 0, "")
 		r.pdf.Ln(-1)
 		r.pdf.SetFont("Helvetica", "", fontSizeBody)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(160, 6, individualRiskCategory.STRIDE.Title(), "0", "0", false)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(160, 6, firstParagraph(individualRiskCategory.Description), "0", "0", false)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(160, 6, individualRiskCategory.DetectionLogic, "0", "0", false)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(160, 6, individualRiskCategory.RiskAssessment, "0", "0", false)
+		r.riskRuleDetails(individualRiskCategory)
 	}
 
+	r.checkedBuiltInRiskRules(skipRiskRules)
+}
+
+// checkedBuiltInRiskRules writes the built-in risk rules, marking the skipped ones.
+func (r *pdfReporter) checkedBuiltInRiskRules(skipRiskRules []string) {
+	skipped := ""
 	for _, id := range slices.Sorted(maps.Keys(r.riskRules)) {
 		rule := r.riskRules[id]
 		r.pdf.Ln(-1)
@@ -3154,27 +3132,33 @@ func (r *pdfReporter) createRiskRulesChecked(parsedModel *types.Model, modelFile
 		r.pdf.CellFormat(190, 6, rule.Category().ID, "0", 0, "", false, 0, "")
 		r.pdf.Ln(-1)
 		r.pdf.SetFont("Helvetica", "", fontSizeBody)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(160, 6, rule.Category().STRIDE.Title(), "0", "0", false)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(160, 6, firstParagraph(rule.Category().Description), "0", "0", false)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(160, 6, rule.Category().DetectionLogic, "0", "0", false)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(160, 6, rule.Category().RiskAssessment, "0", "0", false)
+		r.riskRuleDetails(rule.Category())
 	}
+}
+
+// riskRuleDetails writes the STRIDE category, description, detection logic and rating of a risk
+// category.
+func (r *pdfReporter) riskRuleDetails(category *types.RiskCategory) {
+	r.pdfColorGray()
+	r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
+	r.pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
+	r.pdfColorBlack()
+	r.pdf.MultiCell(160, 6, category.STRIDE.Title(), "0", "0", false)
+	r.pdfColorGray()
+	r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
+	r.pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
+	r.pdfColorBlack()
+	r.pdf.MultiCell(160, 6, firstParagraph(category.Description), "0", "0", false)
+	r.pdfColorGray()
+	r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
+	r.pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
+	r.pdfColorBlack()
+	r.pdf.MultiCell(160, 6, category.DetectionLogic, "0", "0", false)
+	r.pdfColorGray()
+	r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
+	r.pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
+	r.pdfColorBlack()
+	r.pdf.MultiCell(160, 6, category.RiskAssessment, "0", "0", false)
 }
 
 func (r *pdfReporter) createTargetDescription(parsedModel *types.Model, baseFolder string) error {
