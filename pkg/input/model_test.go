@@ -116,3 +116,25 @@ func writeModelFile(t *testing.T, filename string, content string) {
 	require.NoError(t, os.MkdirAll(filepath.Dir(filename), 0o750))
 	require.NoError(t, os.WriteFile(filename, []byte(content), 0o600))
 }
+
+func TestLoadMergesTheTechnologiesOfIncludes(t *testing.T) {
+	dir := t.TempDir()
+	writeModelFile(t, filepath.Join(dir, "threagile.yaml"), `
+technical_assets:
+  Web Server:
+    id: web-server
+    technologies: [web-server]
+includes:
+  - more.yaml
+`)
+	writeModelFile(t, filepath.Join(dir, "more.yaml"), `
+technical_assets:
+  Web Server:
+    technologies: [waf, web-server]
+`)
+
+	model := new(Model).Defaults()
+	require.NoError(t, model.Load(filepath.Join(dir, "threagile.yaml")))
+
+	assert.ElementsMatch(t, []string{"web-server", "waf"}, model.TechnicalAssets["Web Server"].Technologies)
+}

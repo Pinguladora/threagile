@@ -56,7 +56,7 @@ func (what *TechnicalAsset) Merge(other TechnicalAsset) error {
 		return mergeError
 	}
 
-	what.Tags = new(Strings).MergeUniqueSlice(what.Tags, other.Tags)
+	what.mergeLists(other)
 
 	mergeFlag(&what.Internet, other.Internet)
 
@@ -78,10 +78,6 @@ func (what *TechnicalAsset) Merge(other TechnicalAsset) error {
 	mergeFlag(&what.Redundant, other.Redundant)
 	mergeFlag(&what.CustomDevelopedParts, other.CustomDevelopedParts)
 
-	what.DataAssetsProcessed = new(Strings).MergeUniqueSlice(what.DataAssetsProcessed, other.DataAssetsProcessed)
-	what.DataAssetsStored = new(Strings).MergeUniqueSlice(what.DataAssetsStored, other.DataAssetsStored)
-	what.DataFormatsAccepted = new(Strings).MergeUniqueSlice(what.DataFormatsAccepted, other.DataFormatsAccepted)
-
 	if what.DiagramTweakOrder == 0 {
 		what.DiagramTweakOrder = other.DiagramTweakOrder
 	}
@@ -93,6 +89,16 @@ func (what *TechnicalAsset) Merge(other TechnicalAsset) error {
 	}
 
 	return nil
+}
+
+// mergeLists adds the technologies, tags, data assets and data formats of another technical asset that it
+// doesn't have yet.
+func (what *TechnicalAsset) mergeLists(other TechnicalAsset) {
+	what.Technologies = new(Strings).MergeUniqueSlice(what.Technologies, other.Technologies)
+	what.Tags = new(Strings).MergeUniqueSlice(what.Tags, other.Tags)
+	what.DataAssetsProcessed = new(Strings).MergeUniqueSlice(what.DataAssetsProcessed, other.DataAssetsProcessed)
+	what.DataAssetsStored = new(Strings).MergeUniqueSlice(what.DataAssetsStored, other.DataAssetsStored)
+	what.DataFormatsAccepted = new(Strings).MergeUniqueSlice(what.DataFormatsAccepted, other.DataFormatsAccepted)
 }
 
 func (what *TechnicalAsset) MergeMap(
