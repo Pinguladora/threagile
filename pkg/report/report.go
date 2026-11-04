@@ -2607,7 +2607,6 @@ func (r *pdfReporter) writeRiskTrackingStatus(parsedModel *types.Model, risk *ty
 }
 
 func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
-	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
 	// category title
 	title := "Identified Risks by Technical Asset"
 	r.pdfColorBlack()
@@ -2634,435 +2633,421 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 	r.currentChapterTitleBreadcrumb = title
 	for _, technicalAsset := range sortedTechnicalAssetsByRiskSeverityAndTitle(parsedModel) {
 		risksStr := parsedModel.GeneratedRisks(technicalAsset)
-		countStillAtRisk := len(types.ReduceToOnlyStillAtRisk(risksStr))
-		suffix := strconv.Itoa(countStillAtRisk) + " / " + strconv.Itoa(len(risksStr)) + " Risk"
-		if len(risksStr) != 1 {
-			suffix += "s"
-		}
-		if technicalAsset.OutOfScope {
-			r.pdfColorOutOfScope()
-			suffix = textOutOfScope
-		} else {
-			r.pdfColorBySeverity(types.HighestSeverityStillAtRisk(risksStr))
-			if len(types.ReduceToOnlyStillAtRisk(risksStr)) == 0 {
-				r.pdfColorBlack()
-			}
-		}
+		r.technicalAssetHeadline(technicalAsset, risksStr)
+		r.technicalAssetRisks(parsedModel, technicalAsset, risksStr)
+		r.technicalAssetInformation(parsedModel, technicalAsset)
+		r.technicalAssetRating(technicalAsset)
+		r.technicalAssetCommLinks(parsedModel, technicalAsset.CommunicationLinksSorted(), outgoingCommLinkView)
+		r.technicalAssetCommLinks(parsedModel,
+			parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id], incomingCommLinkView)
+	}
+}
 
-		// asset title
-		title := technicalAsset.Title + ": " + suffix
-		r.addHeadline(uni(title), true)
-		r.pdfColorBlack()
-		r.defineLinkTarget("{" + technicalAsset.Id + "}")
-		r.currentChapterTitleBreadcrumb = title
-
-		// asset description
-		html := r.pdf.HTMLBasicNew()
-		var text strings.Builder
-		text.WriteString("<b>Description</b><br><br>")
-		text.WriteString(uni(technicalAsset.Description))
-		html.Write(5, text.String())
-		text.Reset()
-		r.pdf.SetTextColor(0, 0, 0)
-
-		// and more metadata of asset in tabular view
-		r.pdf.Ln(-1)
-		r.pdf.Ln(-1)
-		r.pdf.Ln(-1)
-		if r.pdf.GetY() > 260 { // 260 only for major titles (to avoid "Schusterjungen"), for the rest attributes 270
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdf.SetFont("Helvetica", "B", fontSizeBody)
-		r.pdfColorBlack()
-		r.pdf.CellFormat(190, 6, "Identified Risks of Asset", "0", 0, "", false, 0, "")
-		r.pdfColorGray()
-		oldLeft := r.leftMargin()
-		if len(risksStr) > 0 {
-			r.pdf.SetFont("Helvetica", "", fontSizeSmall)
-			html.Write(5, "Risk finding paragraphs are clickable and link to the corresponding chapter.")
-			r.pdf.SetFont("Helvetica", "", fontSizeBody)
-			r.pdf.SetLeftMargin(15)
-			/*
-				r.pdf.Ln(-1)
-				r.pdfColorGray()
-				r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-				r.pdf.CellFormat(185, 6, strconv.Itoa(len(risksStr))+" risksStr in total were identified", "0", 0, "", false, 0, "")
-			*/
-			headlineCriticalWritten, headlineHighWritten, headlineElevatedWritten, headlineMediumWritten,
-				headlineLowWritten := false, false, false, false, false
-			r.pdf.Ln(-1)
-			for _, risk := range risksStr {
-				text.WriteString("<br>")
-				html.Write(5, text.String())
-				text.Reset()
-				if r.pdf.GetY() > 250 { // 250 only for major titles (to avoid "Schusterjungen"), for the rest attributes 270
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
-				switch risk.Severity {
-				case types.CriticalSeverity:
-					colorCriticalRisk(r.pdf)
-					if !headlineCriticalWritten {
-						r.pdf.SetFont("Helvetica", "", fontSizeBody)
-						r.pdf.SetLeftMargin(oldLeft + 3)
-						html.Write(5, "<br><b><i>Critical Risk Severity</i></b><br><br>")
-						headlineCriticalWritten = true
-					}
-				case types.HighSeverity:
-					colorHighRisk(r.pdf)
-					if !headlineHighWritten {
-						r.pdf.SetFont("Helvetica", "", fontSizeBody)
-						r.pdf.SetLeftMargin(oldLeft + 3)
-						html.Write(5, "<br><b><i>High Risk Severity</i></b><br><br>")
-						headlineHighWritten = true
-					}
-				case types.ElevatedSeverity:
-					colorElevatedRisk(r.pdf)
-					if !headlineElevatedWritten {
-						r.pdf.SetFont("Helvetica", "", fontSizeBody)
-						r.pdf.SetLeftMargin(oldLeft + 3)
-						html.Write(5, "<br><b><i>Elevated Risk Severity</i></b><br><br>")
-						headlineElevatedWritten = true
-					}
-				case types.MediumSeverity:
-					colorMediumRisk(r.pdf)
-					if !headlineMediumWritten {
-						r.pdf.SetFont("Helvetica", "", fontSizeBody)
-						r.pdf.SetLeftMargin(oldLeft + 3)
-						html.Write(5, "<br><b><i>Medium Risk Severity</i></b><br><br>")
-						headlineMediumWritten = true
-					}
-				case types.LowSeverity:
-					colorLowRisk(r.pdf)
-					if !headlineLowWritten {
-						r.pdf.SetFont("Helvetica", "", fontSizeBody)
-						r.pdf.SetLeftMargin(oldLeft + 3)
-						html.Write(5, "<br><b><i>Low Risk Severity</i></b><br><br>")
-						headlineLowWritten = true
-					}
-				default:
-					r.pdfColorBlack()
-				}
-				if !risk.RiskStatus.IsStillAtRisk() {
-					r.pdfColorBlack()
-				}
-				posY := r.pdf.GetY()
-				r.pdf.SetLeftMargin(oldLeft + 10)
-				r.pdf.SetFont("Helvetica", "", fontSizeBody)
-				text.WriteString(uni(risk.Title) + ": Exploitation likelihood is <i>" + risk.ExploitationLikelihood.Title() +
-					"</i> with <i>" + risk.ExploitationImpact.Title() + "</i> impact.")
-				text.WriteString("<br>")
-				html.Write(5, text.String())
-				text.Reset()
-
-				r.pdf.SetFont("Helvetica", "", fontSizeVerySmall)
-				r.pdfColorGray()
-				r.pdf.MultiCell(215, 5, uni(risk.SyntheticId), "0", "0", false)
-				r.pdf.Link(20, posY, 180, r.pdf.GetY()-posY, r.tocLinkIdByAssetId[risk.CategoryId])
-				r.pdf.SetFont("Helvetica", "", fontSizeBody)
-				r.writeRiskTrackingStatus(parsedModel, risk)
-				r.pdf.SetLeftMargin(oldLeft)
-			}
-		} else {
-			r.pdf.Ln(-1)
-			r.pdf.Ln(-1)
-			r.pdfColorGray()
-			r.pdf.SetFont("Helvetica", "", fontSizeBody)
-			r.pdf.SetLeftMargin(15)
-			text := "No risksStr were identified."
-			if technicalAsset.OutOfScope {
-				text = "Asset was defined as out-of-scope."
-			}
-			html.Write(5, text)
-			r.pdf.Ln(-1)
-		}
-		r.pdf.SetLeftMargin(oldLeft)
-
-		r.pdf.Ln(-1)
-		r.pdf.Ln(4)
-		if r.pdf.GetY() > 260 { // 260 only for major titles (to avoid "Schusterjungen"), for the rest attributes 270
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorBlack()
-		r.pdf.SetFont("Helvetica", "B", fontSizeBody)
-		r.pdf.CellFormat(190, 6, "Asset Information", "0", 0, "", false, 0, "")
-		r.pdf.Ln(-1)
-		r.pdf.Ln(-1)
-		r.pdf.SetFont("Helvetica", "", fontSizeBody)
-		r.attributeRow("ID:", technicalAsset.Id)
-		r.pageBreakBelow(270)
-		r.attributeRow("Type:", technicalAsset.Type.String())
-		r.pageBreakBelow(270)
-		r.attributeRow("Usage:", technicalAsset.Usage.String())
-		r.pageBreakBelow(270)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "RAA:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		textRAA := fmt.Sprintf("%.0f", technicalAsset.RAA) + " %"
-		if technicalAsset.OutOfScope {
-			r.pdfColorGray()
-			textRAA = textOutOfScope
-		}
-		r.pdf.MultiCell(145, 6, textRAA, "0", "0", false)
-		r.pdfColorBlack()
-		r.pageBreakBelow(270)
-		r.attributeRow("Size:", technicalAsset.Size.String())
-		r.pageBreakBelow(270)
-		r.attributeRow("Technology:", technicalAsset.Technologies.String())
-		r.pageBreakBelow(270)
-		tagsUsedText := ""
-		sorted := technicalAsset.Tags
-		sort.Strings(sorted)
-		for _, tag := range sorted {
-			if len(tagsUsedText) > 0 {
-				tagsUsedText += ", "
-			}
-			tagsUsedText += tag
-		}
-		r.attributeListRow("Tags:", tagsUsedText, textNone, uni)
-		r.pageBreakBelow(270)
-		r.attributeRow("Internet:", strconv.FormatBool(technicalAsset.Internet))
-		r.pageBreakBelow(270)
-		r.attributeRow("Machine:", technicalAsset.Machine.String())
-		r.pageBreakBelow(270)
-		r.attributeRow("Encryption:", technicalAsset.Encryption.String())
-		r.pageBreakBelow(270)
-		r.attributeRow("Multi-Tenant:", strconv.FormatBool(technicalAsset.MultiTenant))
-		r.pageBreakBelow(270)
-		r.attributeRow("Redundant:", strconv.FormatBool(technicalAsset.Redundant))
-		r.pageBreakBelow(270)
-		r.attributeRow("Custom-Developed:", strconv.FormatBool(technicalAsset.CustomDevelopedParts))
-		r.pageBreakBelow(270)
-		r.attributeRow("Client by Human:", strconv.FormatBool(technicalAsset.UsedAsClientByHuman))
-		dataAssetsProcessedText := ""
-		for _, dataAsset := range parsedModel.DataAssetsProcessedSorted(technicalAsset) {
-			if len(dataAssetsProcessedText) > 0 {
-				dataAssetsProcessedText += ", "
-			}
-			dataAssetsProcessedText += dataAsset.Title
-		}
-		r.attributeListRow("Data Processed:", dataAssetsProcessedText, textNone, uni)
-
-		dataAssetsStoredText := ""
-		for _, dataAsset := range parsedModel.DataAssetsStoredSorted(technicalAsset) {
-			if len(dataAssetsStoredText) > 0 {
-				dataAssetsStoredText += ", "
-			}
-			dataAssetsStoredText += dataAsset.Title
-		}
-		r.attributeListRow("Data Stored:", dataAssetsStoredText, textNone, uni)
-
-		formatsAcceptedText := ""
-		for _, formatAccepted := range technicalAsset.DataFormatsAcceptedSorted() {
-			if len(formatsAcceptedText) > 0 {
-				formatsAcceptedText += ", "
-			}
-			formatsAcceptedText += formatAccepted.Title()
-		}
-		r.attributeListRow("Formats Accepted:", formatsAcceptedText, "none of the special data formats accepted",
-			identity)
-
-		r.pdf.Ln(-1)
-		r.pdf.Ln(4)
-		if r.pdf.GetY() > 260 { // 260 only for major titles (to avoid "Schusterjungen"), for the rest attributes 270
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorBlack()
-		r.pdf.SetFont("Helvetica", "B", fontSizeBody)
-		r.pdf.CellFormat(190, 6, "Asset Rating", "0", 0, "", false, 0, "")
-		r.pdf.Ln(-1)
-		r.pdf.Ln(-1)
-		r.pdf.SetFont("Helvetica", "", fontSizeBody)
-		r.attributeRow("Owner:", uni(technicalAsset.Owner))
-		r.pageBreakBelow(270)
-		r.ratingRow("Confidentiality:", technicalAsset.Confidentiality)
-		r.pageBreakBelow(270)
-		r.ratingRow("Integrity:", technicalAsset.Integrity)
-		r.pageBreakBelow(270)
-		r.ratingRow("Availability:", technicalAsset.Availability)
-		r.pageBreakBelow(270)
-		r.attributeRow("CIA-Justification:", uni(technicalAsset.JustificationCiaRating))
-
-		if technicalAsset.OutOfScope {
-			r.pdf.Ln(-1)
-			r.pdf.Ln(4)
-			r.pageBreakBelow(270)
+// technicalAssetHeadline writes the headline of a technical asset, coloured by the highest severity
+// of its risks still at risk.
+func (r *pdfReporter) technicalAssetHeadline(technicalAsset *types.TechnicalAsset, risksStr []*types.Risk) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	countStillAtRisk := len(types.ReduceToOnlyStillAtRisk(risksStr))
+	suffix := strconv.Itoa(countStillAtRisk) + " / " + strconv.Itoa(len(risksStr)) + " Risk"
+	if len(risksStr) != 1 {
+		suffix += "s"
+	}
+	if technicalAsset.OutOfScope {
+		r.pdfColorOutOfScope()
+		suffix = textOutOfScope
+	} else {
+		r.pdfColorBySeverity(types.HighestSeverityStillAtRisk(risksStr))
+		if len(types.ReduceToOnlyStillAtRisk(risksStr)) == 0 {
 			r.pdfColorBlack()
-			r.pdf.SetFont("Helvetica", "B", fontSizeBody)
-			r.pdf.CellFormat(190, 6, "Asset Out-of-Scope Justification", "0", 0, "", false, 0, "")
-			r.pdf.Ln(-1)
-			r.pdf.Ln(-1)
-			r.pdf.SetFont("Helvetica", "", fontSizeBody)
-			r.pdf.MultiCell(190, 6, uni(technicalAsset.JustificationOutOfScope), "0", "0", false)
-			r.pdf.Ln(-1)
-		}
-		r.pdf.Ln(-1)
-
-		if len(technicalAsset.CommunicationLinks) > 0 {
-			r.pdf.Ln(-1)
-			if r.pdf.GetY() > 260 { // 260 only for major titles (to avoid "Schusterjungen"), for the rest attributes 270
-				r.pageBreak()
-				r.pdf.SetY(36)
-			}
-			r.pdfColorBlack()
-			r.pdf.SetFont("Helvetica", "B", fontSizeBody)
-			r.pdf.CellFormat(190, 6, "Outgoing Communication Links: "+
-				strconv.Itoa(len(technicalAsset.CommunicationLinks)), "0", 0, "", false, 0, "")
-			r.pdf.SetFont("Helvetica", "", fontSizeSmall)
-			r.pdfColorGray()
-			html.Write(5, "Target technical asset names are clickable and link to the corresponding chapter.")
-			r.pdf.SetFont("Helvetica", "", fontSizeBody)
-			r.pdf.Ln(-1)
-			r.pdf.Ln(-1)
-			r.pdf.SetFont("Helvetica", "", fontSizeBody)
-			for _, outgoingCommLink := range technicalAsset.CommunicationLinksSorted() {
-				r.pageBreakBelow(270)
-				r.pdfColorBlack()
-				r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-				r.pdf.CellFormat(185, 6, uni(outgoingCommLink.Title)+" (outgoing)", "0", 0, "", false, 0, "")
-				r.pdf.Ln(-1)
-				r.pdfColorGray()
-				r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-				r.pdf.MultiCell(185, 6, uni(outgoingCommLink.Description), "0", "0", false)
-				r.pageBreakBelow(270)
-				r.pdf.Ln(-1)
-				r.pdfColorGray()
-				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
-				r.pdf.CellFormat(35, 6, "Target:", "0", 0, "", false, 0, "")
-				r.pdfColorBlack()
-				r.pdf.MultiCell(125, 6, uni(parsedModel.TechnicalAssets[outgoingCommLink.TargetId].Title), "0", "0", false)
-				r.pdf.Link(60, r.pdf.GetY()-5, 70, 5, r.tocLinkIdByAssetId[outgoingCommLink.TargetId])
-				r.pageBreakBelow(270)
-				r.linkAttributeRow("Protocol:", outgoingCommLink.Protocol.String())
-				r.pageBreakBelow(270)
-				r.linkAttributeRow("Encrypted:", strconv.FormatBool(outgoingCommLink.Protocol.IsEncrypted()))
-				r.pageBreakBelow(270)
-				r.linkAttributeRow("Authentication:", outgoingCommLink.Authentication.String())
-				r.pageBreakBelow(270)
-				r.linkAttributeRow("Authorization:", outgoingCommLink.Authorization.String())
-				r.pageBreakBelow(270)
-				r.linkAttributeRow("Read-Only:", strconv.FormatBool(outgoingCommLink.Readonly))
-				r.pageBreakBelow(270)
-				r.linkAttributeRow("Usage:", outgoingCommLink.Usage.String())
-				r.pageBreakBelow(270)
-				tagsUsedText := ""
-				sorted := outgoingCommLink.Tags
-				sort.Strings(sorted)
-				for _, tag := range sorted {
-					if len(tagsUsedText) > 0 {
-						tagsUsedText += ", "
-					}
-					tagsUsedText += tag
-				}
-				r.linkAttributeListRow("Tags:", uni(tagsUsedText))
-				r.pageBreakBelow(270)
-				r.linkAttributeRow("VPN:", strconv.FormatBool(outgoingCommLink.VPN))
-				r.pageBreakBelow(270)
-				r.linkAttributeRow("IP-Filtered:", strconv.FormatBool(outgoingCommLink.IpFiltered))
-				dataAssetsSentText := ""
-				for _, dataAsset := range parsedModel.DataAssetsSentSorted(outgoingCommLink) {
-					if len(dataAssetsSentText) > 0 {
-						dataAssetsSentText += ", "
-					}
-					dataAssetsSentText += dataAsset.Title
-				}
-				r.linkAttributeListRow("Data Sent:", uni(dataAssetsSentText))
-				dataAssetsReceivedText := ""
-				for _, dataAsset := range parsedModel.DataAssetsReceivedSorted(outgoingCommLink) {
-					if len(dataAssetsReceivedText) > 0 {
-						dataAssetsReceivedText += ", "
-					}
-					dataAssetsReceivedText += dataAsset.Title
-				}
-				r.linkAttributeListRow("Data Received:", uni(dataAssetsReceivedText))
-				r.pdf.Ln(-1)
-			}
-		}
-
-		incomingCommLinks := parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id]
-		if len(incomingCommLinks) > 0 {
-			r.pdf.Ln(-1)
-			if r.pdf.GetY() > 260 { // 260 only for major titles (to avoid "Schusterjungen"), for the rest attributes 270
-				r.pageBreak()
-				r.pdf.SetY(36)
-			}
-			r.pdfColorBlack()
-			r.pdf.SetFont("Helvetica", "B", fontSizeBody)
-			r.pdf.CellFormat(190, 6, "Incoming Communication Links: "+
-				strconv.Itoa(len(incomingCommLinks)), "0", 0, "", false, 0, "")
-			r.pdf.SetFont("Helvetica", "", fontSizeSmall)
-			r.pdfColorGray()
-			html.Write(5, "Source technical asset names are clickable and link to the corresponding chapter.")
-			r.pdf.SetFont("Helvetica", "", fontSizeBody)
-			r.pdf.Ln(-1)
-			r.pdf.Ln(-1)
-			r.pdf.SetFont("Helvetica", "", fontSizeBody)
-			for _, incomingCommLink := range incomingCommLinks {
-				r.pageBreakBelow(270)
-				r.pdfColorBlack()
-				r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-				r.pdf.CellFormat(185, 6, uni(incomingCommLink.Title)+" (incoming)", "0", 0, "", false, 0, "")
-				r.pdf.Ln(-1)
-				r.pdfColorGray()
-				r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-				r.pdf.MultiCell(185, 6, uni(incomingCommLink.Description), "0", "0", false)
-				r.pageBreakBelow(270)
-				r.pdf.Ln(-1)
-				r.linkAttributeRow("Source:", uni(parsedModel.TechnicalAssets[incomingCommLink.SourceId].Title))
-				r.pdf.Link(60, r.pdf.GetY()-5, 70, 5, r.tocLinkIdByAssetId[incomingCommLink.SourceId])
-				r.pageBreakBelow(270)
-				r.linkAttributeRow("Protocol:", incomingCommLink.Protocol.String())
-				r.pageBreakBelow(270)
-				r.linkAttributeRow("Encrypted:", strconv.FormatBool(incomingCommLink.Protocol.IsEncrypted()))
-				r.pageBreakBelow(270)
-				r.linkAttributeRow("Authentication:", incomingCommLink.Authentication.String())
-				r.pageBreakBelow(270)
-				r.linkAttributeRow("Authorization:", incomingCommLink.Authorization.String())
-				r.pageBreakBelow(270)
-				r.linkAttributeRow("Read-Only:", strconv.FormatBool(incomingCommLink.Readonly))
-				r.pageBreakBelow(270)
-				r.linkAttributeRow("Usage:", incomingCommLink.Usage.String())
-				r.pageBreakBelow(270)
-				tagsUsedText := ""
-				sorted := incomingCommLink.Tags
-				sort.Strings(sorted)
-				for _, tag := range sorted {
-					if len(tagsUsedText) > 0 {
-						tagsUsedText += ", "
-					}
-					tagsUsedText += tag
-				}
-				r.linkAttributeListRow("Tags:", uni(tagsUsedText))
-				r.pageBreakBelow(270)
-				r.linkAttributeRow("VPN:", strconv.FormatBool(incomingCommLink.VPN))
-				r.pageBreakBelow(270)
-				r.linkAttributeRow("IP-Filtered:", strconv.FormatBool(incomingCommLink.IpFiltered))
-				dataAssetsSentText := ""
-				// yep, here we reverse the sent/received direction, as it's the incoming stuff
-				for _, dataAsset := range parsedModel.DataAssetsSentSorted(incomingCommLink) {
-					if len(dataAssetsSentText) > 0 {
-						dataAssetsSentText += ", "
-					}
-					dataAssetsSentText += dataAsset.Title
-				}
-				r.linkAttributeListRow("Data Received:", uni(dataAssetsSentText))
-				dataAssetsReceivedText := ""
-				// yep, here we reverse the sent/received direction, as it's the incoming stuff
-				for _, dataAsset := range parsedModel.DataAssetsReceivedSorted(incomingCommLink) {
-					if len(dataAssetsReceivedText) > 0 {
-						dataAssetsReceivedText += ", "
-					}
-					dataAssetsReceivedText += dataAsset.Title
-				}
-				r.linkAttributeListRow("Data Sent:", uni(dataAssetsReceivedText))
-				r.pdf.Ln(-1)
-			}
 		}
 	}
+
+	// asset title
+	title := technicalAsset.Title + ": " + suffix
+	r.addHeadline(uni(title), true)
+	r.pdfColorBlack()
+	r.defineLinkTarget("{" + technicalAsset.Id + "}")
+	r.currentChapterTitleBreadcrumb = title
+}
+
+// technicalAssetRisks writes the description and the risks of a technical asset.
+func (r *pdfReporter) technicalAssetRisks(parsedModel *types.Model, technicalAsset *types.TechnicalAsset,
+	risksStr []*types.Risk,
+) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	// asset description
+	html := r.pdf.HTMLBasicNew()
+	var text strings.Builder
+	text.WriteString("<b>Description</b><br><br>")
+	text.WriteString(uni(technicalAsset.Description))
+	html.Write(5, text.String())
+	text.Reset()
+	r.pdf.SetTextColor(0, 0, 0)
+
+	// and more metadata of asset in tabular view
+	r.pdf.Ln(-1)
+	r.pdf.Ln(-1)
+	r.pdf.Ln(-1)
+	// 260 only for major titles (to avoid "Schusterjungen"), for the rest attributes 270
+	r.pageBreakBelow(260)
+	r.pdf.SetFont("Helvetica", "B", fontSizeBody)
+	r.pdfColorBlack()
+	r.pdf.CellFormat(190, 6, "Identified Risks of Asset", "0", 0, "", false, 0, "")
+	r.pdfColorGray()
+	oldLeft := r.leftMargin()
+	if len(risksStr) > 0 {
+		r.pdf.SetFont("Helvetica", "", fontSizeSmall)
+		html.Write(5, "Risk finding paragraphs are clickable and link to the corresponding chapter.")
+		r.pdf.SetFont("Helvetica", "", fontSizeBody)
+		r.pdf.SetLeftMargin(15)
+		/*
+			r.pdf.Ln(-1)
+			r.pdfColorGray()
+			r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
+			r.pdf.CellFormat(185, 6, strconv.Itoa(len(risksStr))+" risksStr in total were identified", "0", 0, "", false, 0, "")
+		*/
+		severityHeadlinesWritten := make(map[types.RiskSeverity]bool)
+		r.pdf.Ln(-1)
+		for _, risk := range risksStr {
+			r.technicalAssetRisk(parsedModel, risk, html, oldLeft, severityHeadlinesWritten)
+		}
+	} else {
+		r.pdf.Ln(-1)
+		r.pdf.Ln(-1)
+		r.pdfColorGray()
+		r.pdf.SetFont("Helvetica", "", fontSizeBody)
+		r.pdf.SetLeftMargin(15)
+		text := "No risksStr were identified."
+		if technicalAsset.OutOfScope {
+			text = "Asset was defined as out-of-scope."
+		}
+		html.Write(5, text)
+		r.pdf.Ln(-1)
+	}
+	r.pdf.SetLeftMargin(oldLeft)
+}
+
+// technicalAssetRisk writes a risk of a technical asset, under a headline for its severity
+// unless one was written already.
+func (r *pdfReporter) technicalAssetRisk(parsedModel *types.Model, risk *types.Risk, html gofpdf.HTMLBasicType,
+	oldLeft float64, severityHeadlinesWritten map[types.RiskSeverity]bool,
+) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	var text strings.Builder
+	text.WriteString("<br>")
+	html.Write(5, text.String())
+	text.Reset()
+	// 250 only for major titles (to avoid "Schusterjungen"), for the rest attributes 270
+	r.pageBreakBelow(250)
+	r.pdfColorBySeverity(risk.Severity)
+	switch risk.Severity {
+	case types.CriticalSeverity, types.HighSeverity, types.ElevatedSeverity, types.MediumSeverity,
+		types.LowSeverity:
+		if !severityHeadlinesWritten[risk.Severity] {
+			r.pdf.SetFont("Helvetica", "", fontSizeBody)
+			r.pdf.SetLeftMargin(oldLeft + 3)
+			html.Write(5, "<br><b><i>"+risk.Severity.Title()+" Risk Severity</i></b><br><br>")
+			severityHeadlinesWritten[risk.Severity] = true
+		}
+	}
+	if !risk.RiskStatus.IsStillAtRisk() {
+		r.pdfColorBlack()
+	}
+	posY := r.pdf.GetY()
+	r.pdf.SetLeftMargin(oldLeft + 10)
+	r.pdf.SetFont("Helvetica", "", fontSizeBody)
+	text.WriteString(uni(risk.Title) + ": Exploitation likelihood is <i>" + risk.ExploitationLikelihood.Title() +
+		"</i> with <i>" + risk.ExploitationImpact.Title() + "</i> impact.")
+	text.WriteString("<br>")
+	html.Write(5, text.String())
+	text.Reset()
+
+	r.pdf.SetFont("Helvetica", "", fontSizeVerySmall)
+	r.pdfColorGray()
+	r.pdf.MultiCell(215, 5, uni(risk.SyntheticId), "0", "0", false)
+	r.pdf.Link(20, posY, 180, r.pdf.GetY()-posY, r.tocLinkIdByAssetId[risk.CategoryId])
+	r.pdf.SetFont("Helvetica", "", fontSizeBody)
+	r.writeRiskTrackingStatus(parsedModel, risk)
+	r.pdf.SetLeftMargin(oldLeft)
+}
+
+// technicalAssetInformation writes the attributes of a technical asset.
+func (r *pdfReporter) technicalAssetInformation(parsedModel *types.Model, technicalAsset *types.TechnicalAsset) {
+	r.pdf.Ln(-1)
+	r.pdf.Ln(4)
+	// 260 only for major titles (to avoid "Schusterjungen"), for the rest attributes 270
+	r.pageBreakBelow(260)
+	r.pdfColorBlack()
+	r.pdf.SetFont("Helvetica", "B", fontSizeBody)
+	r.pdf.CellFormat(190, 6, "Asset Information", "0", 0, "", false, 0, "")
+	r.pdf.Ln(-1)
+	r.pdf.Ln(-1)
+	r.pdf.SetFont("Helvetica", "", fontSizeBody)
+	r.attributeRow("ID:", technicalAsset.Id)
+	r.pageBreakBelow(270)
+	r.attributeRow("Type:", technicalAsset.Type.String())
+	r.pageBreakBelow(270)
+	r.attributeRow("Usage:", technicalAsset.Usage.String())
+	r.pageBreakBelow(270)
+	r.pdfColorGray()
+	r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
+	r.pdf.CellFormat(40, 6, "RAA:", "0", 0, "", false, 0, "")
+	r.pdfColorBlack()
+	textRAA := fmt.Sprintf("%.0f", technicalAsset.RAA) + " %"
+	if technicalAsset.OutOfScope {
+		r.pdfColorGray()
+		textRAA = textOutOfScope
+	}
+	r.pdf.MultiCell(145, 6, textRAA, "0", "0", false)
+	r.pdfColorBlack()
+	r.pageBreakBelow(270)
+	r.attributeRow("Size:", technicalAsset.Size.String())
+	r.pageBreakBelow(270)
+	r.attributeRow("Technology:", technicalAsset.Technologies.String())
+	r.pageBreakBelow(270)
+	r.technicalAssetDeployment(parsedModel, technicalAsset)
+}
+
+// technicalAssetDeployment writes the tags of a technical asset and how it is deployed and used.
+func (r *pdfReporter) technicalAssetDeployment(parsedModel *types.Model, technicalAsset *types.TechnicalAsset) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	tagsUsedText := ""
+	sorted := technicalAsset.Tags
+	sort.Strings(sorted)
+	for _, tag := range sorted {
+		if len(tagsUsedText) > 0 {
+			tagsUsedText += ", "
+		}
+		tagsUsedText += tag
+	}
+	r.attributeListRow("Tags:", tagsUsedText, textNone, uni)
+	r.pageBreakBelow(270)
+	r.attributeRow("Internet:", strconv.FormatBool(technicalAsset.Internet))
+	r.pageBreakBelow(270)
+	r.attributeRow("Machine:", technicalAsset.Machine.String())
+	r.pageBreakBelow(270)
+	r.attributeRow("Encryption:", technicalAsset.Encryption.String())
+	r.pageBreakBelow(270)
+	r.attributeRow("Multi-Tenant:", strconv.FormatBool(technicalAsset.MultiTenant))
+	r.pageBreakBelow(270)
+	r.attributeRow("Redundant:", strconv.FormatBool(technicalAsset.Redundant))
+	r.pageBreakBelow(270)
+	r.attributeRow("Custom-Developed:", strconv.FormatBool(technicalAsset.CustomDevelopedParts))
+	r.pageBreakBelow(270)
+	r.attributeRow("Client by Human:", strconv.FormatBool(technicalAsset.UsedAsClientByHuman))
+	r.technicalAssetDataAttributes(parsedModel, technicalAsset)
+}
+
+// technicalAssetDataAttributes writes the data assets that a technical asset processes and stores,
+// and the data formats it accepts.
+func (r *pdfReporter) technicalAssetDataAttributes(parsedModel *types.Model, technicalAsset *types.TechnicalAsset) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	dataAssetsProcessedText := ""
+	for _, dataAsset := range parsedModel.DataAssetsProcessedSorted(technicalAsset) {
+		if len(dataAssetsProcessedText) > 0 {
+			dataAssetsProcessedText += ", "
+		}
+		dataAssetsProcessedText += dataAsset.Title
+	}
+	r.attributeListRow("Data Processed:", dataAssetsProcessedText, textNone, uni)
+
+	dataAssetsStoredText := ""
+	for _, dataAsset := range parsedModel.DataAssetsStoredSorted(technicalAsset) {
+		if len(dataAssetsStoredText) > 0 {
+			dataAssetsStoredText += ", "
+		}
+		dataAssetsStoredText += dataAsset.Title
+	}
+	r.attributeListRow("Data Stored:", dataAssetsStoredText, textNone, uni)
+
+	formatsAcceptedText := ""
+	for _, formatAccepted := range technicalAsset.DataFormatsAcceptedSorted() {
+		if len(formatsAcceptedText) > 0 {
+			formatsAcceptedText += ", "
+		}
+		formatsAcceptedText += formatAccepted.Title()
+	}
+	r.attributeListRow("Formats Accepted:", formatsAcceptedText, "none of the special data formats accepted",
+		identity)
+}
+
+// technicalAssetRating writes the rating of a technical asset and why it is out of scope, if it is.
+func (r *pdfReporter) technicalAssetRating(technicalAsset *types.TechnicalAsset) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	r.pdf.Ln(-1)
+	r.pdf.Ln(4)
+	// 260 only for major titles (to avoid "Schusterjungen"), for the rest attributes 270
+	r.pageBreakBelow(260)
+	r.pdfColorBlack()
+	r.pdf.SetFont("Helvetica", "B", fontSizeBody)
+	r.pdf.CellFormat(190, 6, "Asset Rating", "0", 0, "", false, 0, "")
+	r.pdf.Ln(-1)
+	r.pdf.Ln(-1)
+	r.pdf.SetFont("Helvetica", "", fontSizeBody)
+	r.attributeRow("Owner:", uni(technicalAsset.Owner))
+	r.pageBreakBelow(270)
+	r.ratingRow("Confidentiality:", technicalAsset.Confidentiality)
+	r.pageBreakBelow(270)
+	r.ratingRow("Integrity:", technicalAsset.Integrity)
+	r.pageBreakBelow(270)
+	r.ratingRow("Availability:", technicalAsset.Availability)
+	r.pageBreakBelow(270)
+	r.attributeRow("CIA-Justification:", uni(technicalAsset.JustificationCiaRating))
+
+	if technicalAsset.OutOfScope {
+		r.pdf.Ln(-1)
+		r.pdf.Ln(4)
+		r.pageBreakBelow(270)
+		r.pdfColorBlack()
+		r.pdf.SetFont("Helvetica", "B", fontSizeBody)
+		r.pdf.CellFormat(190, 6, "Asset Out-of-Scope Justification", "0", 0, "", false, 0, "")
+		r.pdf.Ln(-1)
+		r.pdf.Ln(-1)
+		r.pdf.SetFont("Helvetica", "", fontSizeBody)
+		r.pdf.MultiCell(190, 6, uni(technicalAsset.JustificationOutOfScope), "0", "0", false)
+		r.pdf.Ln(-1)
+	}
+	r.pdf.Ln(-1)
+}
+
+// commLinkView is how the PDF report shows the communication links of a technical asset in one
+// direction.
+type commLinkView struct {
+	heading       string
+	peerHint      string
+	direction     string
+	peerLabel     string
+	peerWidth     float64
+	peerId        func(*types.CommunicationLink) string
+	sentLabel     string
+	receivedLabel string
+}
+
+// outgoingCommLinkView shows the communication links that a technical asset initiates.
+var outgoingCommLinkView = commLinkView{
+	heading:       "Outgoing Communication Links: ",
+	peerHint:      "Target technical asset names are clickable and link to the corresponding chapter.",
+	direction:     "outgoing",
+	peerLabel:     "Target:",
+	peerWidth:     125,
+	peerId:        func(commLink *types.CommunicationLink) string { return commLink.TargetId },
+	sentLabel:     "Data Sent:",
+	receivedLabel: "Data Received:",
+}
+
+// incomingCommLinkView shows the communication links that target a technical asset. Their sent
+// and received data are labelled the other way round, as seen from the technical asset.
+var incomingCommLinkView = commLinkView{
+	heading:       "Incoming Communication Links: ",
+	peerHint:      "Source technical asset names are clickable and link to the corresponding chapter.",
+	direction:     "incoming",
+	peerLabel:     "Source:",
+	peerWidth:     140,
+	peerId:        func(commLink *types.CommunicationLink) string { return commLink.SourceId },
+	sentLabel:     "Data Received:",
+	receivedLabel: "Data Sent:",
+}
+
+// technicalAssetCommLinks writes the communication links of a technical asset in one direction.
+func (r *pdfReporter) technicalAssetCommLinks(parsedModel *types.Model, commLinks []*types.CommunicationLink,
+	view commLinkView,
+) {
+	html := r.pdf.HTMLBasicNew()
+	if len(commLinks) > 0 {
+		r.pdf.Ln(-1)
+		// 260 only for major titles (to avoid "Schusterjungen"), for the rest attributes 270
+		r.pageBreakBelow(260)
+		r.pdfColorBlack()
+		r.pdf.SetFont("Helvetica", "B", fontSizeBody)
+		r.pdf.CellFormat(190, 6, view.heading+
+			strconv.Itoa(len(commLinks)), "0", 0, "", false, 0, "")
+		r.pdf.SetFont("Helvetica", "", fontSizeSmall)
+		r.pdfColorGray()
+		html.Write(5, view.peerHint)
+		r.pdf.SetFont("Helvetica", "", fontSizeBody)
+		r.pdf.Ln(-1)
+		r.pdf.Ln(-1)
+		r.pdf.SetFont("Helvetica", "", fontSizeBody)
+		for _, commLink := range commLinks {
+			r.technicalAssetCommLink(parsedModel, commLink, view)
+		}
+	}
+}
+
+// technicalAssetCommLink writes the details of a communication link of a technical asset.
+func (r *pdfReporter) technicalAssetCommLink(parsedModel *types.Model, commLink *types.CommunicationLink,
+	view commLinkView,
+) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	r.pageBreakBelow(270)
+	r.pdfColorBlack()
+	r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
+	r.pdf.CellFormat(185, 6, uni(commLink.Title)+" ("+view.direction+")", "0", 0, "", false, 0, "")
+	r.pdf.Ln(-1)
+	r.pdfColorGray()
+	r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
+	r.pdf.MultiCell(185, 6, uni(commLink.Description), "0", "0", false)
+	r.pageBreakBelow(270)
+	r.pdf.Ln(-1)
+	r.pdfColorGray()
+	r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
+	r.pdf.CellFormat(35, 6, view.peerLabel, "0", 0, "", false, 0, "")
+	r.pdfColorBlack()
+	r.pdf.MultiCell(view.peerWidth, 6, uni(parsedModel.TechnicalAssets[view.peerId(commLink)].Title), "0", "0", false)
+	r.pdf.Link(60, r.pdf.GetY()-5, 70, 5, r.tocLinkIdByAssetId[view.peerId(commLink)])
+	r.pageBreakBelow(270)
+	r.linkAttributeRow("Protocol:", commLink.Protocol.String())
+	r.pageBreakBelow(270)
+	r.linkAttributeRow("Encrypted:", strconv.FormatBool(commLink.Protocol.IsEncrypted()))
+	r.pageBreakBelow(270)
+	r.linkAttributeRow("Authentication:", commLink.Authentication.String())
+	r.pageBreakBelow(270)
+	r.linkAttributeRow("Authorization:", commLink.Authorization.String())
+	r.pageBreakBelow(270)
+	r.linkAttributeRow("Read-Only:", strconv.FormatBool(commLink.Readonly))
+	r.pageBreakBelow(270)
+	r.linkAttributeRow("Usage:", commLink.Usage.String())
+	r.pageBreakBelow(270)
+	r.technicalAssetCommLinkData(parsedModel, commLink, view)
+}
+
+// technicalAssetCommLinkData writes the tags, the network protection and the data of a
+// communication link of a technical asset.
+func (r *pdfReporter) technicalAssetCommLinkData(parsedModel *types.Model, commLink *types.CommunicationLink,
+	view commLinkView,
+) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	tagsUsedText := ""
+	sorted := commLink.Tags
+	sort.Strings(sorted)
+	for _, tag := range sorted {
+		if len(tagsUsedText) > 0 {
+			tagsUsedText += ", "
+		}
+		tagsUsedText += tag
+	}
+	r.linkAttributeListRow("Tags:", uni(tagsUsedText))
+	r.pageBreakBelow(270)
+	r.linkAttributeRow("VPN:", strconv.FormatBool(commLink.VPN))
+	r.pageBreakBelow(270)
+	r.linkAttributeRow("IP-Filtered:", strconv.FormatBool(commLink.IpFiltered))
+	dataAssetsSentText := ""
+	for _, dataAsset := range parsedModel.DataAssetsSentSorted(commLink) {
+		if len(dataAssetsSentText) > 0 {
+			dataAssetsSentText += ", "
+		}
+		dataAssetsSentText += dataAsset.Title
+	}
+	r.linkAttributeListRow(view.sentLabel, uni(dataAssetsSentText))
+	dataAssetsReceivedText := ""
+	for _, dataAsset := range parsedModel.DataAssetsReceivedSorted(commLink) {
+		if len(dataAssetsReceivedText) > 0 {
+			dataAssetsReceivedText += ", "
+		}
+		dataAssetsReceivedText += dataAsset.Title
+	}
+	r.linkAttributeListRow(view.receivedLabel, uni(dataAssetsReceivedText))
+	r.pdf.Ln(-1)
 }
 
 func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
@@ -3236,10 +3221,8 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 			r.pdf.MultiCell(145, 6, "This data asset has data breach potential because of "+
 				""+strconv.Itoa(countStillAtRisk)+" remaining "+riskRemainingStr+":", "0", "0", false)
 			for _, dataBreachRisk := range dataBreachRisksStillAtRisk {
-				if r.pdf.GetY() > 280 { // 280 as only small font here
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				// 280 as only small font here
+				r.pageBreakBelow(280)
 				switch dataBreachRisk.DataBreachProbability {
 				case types.Probable:
 					colorHighRisk(r.pdf)
