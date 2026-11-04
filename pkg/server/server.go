@@ -170,13 +170,13 @@ func RunServer(config serverConfigReader, builtinRiskRules types.RiskRules) {
 	router.GET("/models/:model-id/overview", s.getOverview)
 	router.PUT("/models/:model-id/overview", s.setOverview)
 	// router.GET("/models/:model-id/questions", getQuestions)
-	//router.PUT("/models/:model-id/questions", setQuestions)
+	// router.PUT("/models/:model-id/questions", setQuestions)
 	router.GET("/models/:model-id/abuse-cases", s.getAbuseCases)
 	router.PUT("/models/:model-id/abuse-cases", s.setAbuseCases)
 	router.GET("/models/:model-id/security-requirements", s.getSecurityRequirements)
 	router.PUT("/models/:model-id/security-requirements", s.setSecurityRequirements)
 	// router.GET("/models/:model-id/tags", getTags)
-	//router.PUT("/models/:model-id/tags", setTags)
+	// router.PUT("/models/:model-id/tags", setTags)
 
 	router.GET("/models/:model-id/data-assets", s.getDataAssets)
 	router.POST("/models/:model-id/data-assets", s.createNewDataAsset)
@@ -323,7 +323,7 @@ func (s *server) addSupportedTags(input []byte) []byte {
 }
 
 func arrayOfStringValues(values []types.TypeEnum) []string {
-	result := make([]string, 0)
+	result := make([]string, 0, len(values))
 	for _, value := range values {
 		result = append(result, value.String())
 	}

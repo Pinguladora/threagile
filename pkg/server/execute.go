@@ -5,6 +5,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package server
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -231,16 +232,15 @@ func (s *server) doItViaRuntimeCall(modelFile string, outputDir string,
 		panic(nameError)
 	}
 
-	cmd = exec.Command(self, args...) // #nosec G204
+	// the analysis runs until it exits: nothing cancels it
+	cmd = exec.CommandContext(context.Background(), self, args...) // #nosec G204
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		panic(fmt.Errorf("%v", string(out)))
-	} else {
-		if s.config.GetVerbose() && len(out) > 0 {
-			fmt.Println("---")
-			fmt.Print(string(out))
-			fmt.Println("---")
-		}
+	} else if s.config.GetVerbose() && len(out) > 0 {
+		fmt.Println("---")
+		fmt.Print(string(out))
+		fmt.Println("---")
 	}
 }
 
