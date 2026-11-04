@@ -411,6 +411,9 @@ func (change *vaultChange) addClientAccess(clientID string, authentication strin
 	clientAssetTitle := change.parsedModel.TechnicalAssets[clientID].Title
 	if !change.dryRun {
 		client := change.modelInput.TechnicalAssets[clientAssetTitle]
+		if client.CommunicationLinks == nil {
+			client.CommunicationLinks = make(map[string]input.CommunicationLink)
+		}
 		client.CommunicationLinks["Vault Access ("+clientID+")"] = clientAccessCommLink
 		change.modelInput.TechnicalAssets[clientAssetTitle] = client
 	}
