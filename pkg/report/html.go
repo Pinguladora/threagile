@@ -16,22 +16,21 @@ import (
 
 // HTMLReportOptions are the inputs of the HTML report besides the model.
 type HTMLReportOptions struct {
-	ModelFilename    string
-	ModelHash        string
-	BuildTimestamp   string
-	ThreagileVersion string
-	IntroTextRAA     string
-	SkipRiskRules    []string
-	RiskRules        types.RiskRules
-	CustomRiskRules  types.RiskRules
-	HideChapters     map[ChaptersToShowHide]bool
-	// HideEmptyChapters leaves out the chapter of the remaining risks when there are none, as
-	// the AsciiDoc report does; the optional chapters of the model are left out when empty anyway.
-	HideEmptyChapters bool
+	ReportOptions
 	// DataFlowDiagramDOT and DataAssetDiagramDOT are the Graphviz sources of the diagrams, the
 	// same as for the PNG images. A diagram without a source is left out.
 	DataFlowDiagramDOT  []byte
 	DataAssetDiagramDOT []byte
+}
+
+// htmlPage is what the HTML report template shows: the report with the style sheet, its content
+// security policy and the diagrams.
+type htmlPage struct {
+	*reportView
+	CSS                   template.CSS
+	ContentSecurityPolicy string
+	DataFlowDiagram       template.HTML
+	DataAssetDiagram      template.HTML
 }
 
 var (
@@ -42,7 +41,7 @@ var (
 	htmlReportCSS string
 
 	htmlReportTemplate = template.Must(template.New("report.html.tmpl").
-				Funcs(template.FuncMap{"markup": basicMarkup, "yesNo": yesNo}).
+				Funcs(template.FuncMap{"markup": htmlMarkup, "yesNo": yesNo}).
 				ParseFS(htmlReportTemplateFiles, "templates/report.html.tmpl"))
 )
 
@@ -65,9 +64,13 @@ func WriteReportHTML(parsedModel *types.Model, filename string, options HTMLRepo
 func renderReportHTML(parsedModel *types.Model, options HTMLReportOptions,
 	progressReporter progressReporter,
 ) ([]byte, error) {
-	report := newHTMLReport(parsedModel, options)
-	report.DataFlowDiagram = htmlDiagram(options.DataFlowDiagramDOT, "Data-flow diagram", progressReporter)
-	report.DataAssetDiagram = htmlDiagram(options.DataAssetDiagramDOT, "Data mapping diagram", progressReporter)
+	report := htmlPage{
+		reportView:            newReportView(parsedModel, options.ReportOptions),
+		CSS:                   template.CSS(htmlReportCSS), // #nosec G203 -- the embedded style sheet
+		ContentSecurityPolicy: htmlContentSecurityPolicy(htmlReportCSS),
+		DataFlowDiagram:       htmlDiagram(options.DataFlowDiagramDOT, "Data-flow diagram", progressReporter),
+		DataAssetDiagram:      htmlDiagram(options.DataAssetDiagramDOT, "Data mapping diagram", progressReporter),
+	}
 
 	var page bytes.Buffer
 	if err := htmlReportTemplate.Execute(&page, report); err != nil {
