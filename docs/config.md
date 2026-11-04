@@ -19,6 +19,7 @@ All config keys are case insensitive.
 | `SkipRiskRules`                  | string (comma separated array) | The same as `-skip-risk-rules` or `--v` at [flags](./flags.md)       | see [flags](./flags.md) |
 | `IgnoreOrphanedRiskTracking`     | bool                           | The same as `-ignore-orphaned-risk-tracking` at [flags](./flags.md)  | see [flags](./flags.md) |
 | `TechnologyFilename`             | string (path to file)          | Allow to override file with [technologies file](./technologies.yaml) | ""                      |
+| `OTMFile`                        | string (path to file)          | The same as `-otm` at [flags](./flags.md), the [OTM](./otm.md) file to import | ""             |
 
 ## Analyze config keys
 

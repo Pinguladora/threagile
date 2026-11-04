@@ -37,6 +37,15 @@ This flags is used when application run in [analyze mode](./mode-analyze.md)
 | `-generate-report-adoc`           | bool                 | specify if adoc report with the analysis  shall be generated       | true                      |
 | `-fail-on`                        | string(severity)     | exit with status 2 when unchecked risks of this severity or higher remain, see [Failing CI on unchecked risks](./mode-analyze.md#failing-ci-on-unchecked-risks) | (off)                     |
 
+## Import flags
+
+These flags are used by the `import-otm` [command](./commands.md), which converts an [Open Threat Model (OTM)](./otm.md) file into a Threagile model
+
+| Flag      | Type                                | Description                                                                                       | Default Value |
+|-----------|-------------------------------------|---------------------------------------------------------------------------------------------------| --------------|
+| `-otm`    | string(path to file)                | path to the OTM file (JSON or YAML) to import                                                     | ""            |
+| `-output` | string(path to directory or file)   | the model file to write when it ends in `.yaml` or `.yml`, else the directory for `threagile.yaml`; an existing file is not overwritten | ""            |
+
 ## Server flags
 
 This flags is used when application run in [server mode](./mode-server.md)
