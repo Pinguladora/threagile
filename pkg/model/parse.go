@@ -20,7 +20,63 @@ type technologyMapConfigReader interface {
 	GetTechnologyFilename() string
 }
 
-func ParseModel(config technologyMapConfigReader, modelInput *input.Model, builtinRiskRules types.RiskRules, customRiskRules types.RiskRules) (*types.Model, error) {
+func ParseModel(
+	config technologyMapConfigReader, modelInput *input.Model,
+	builtinRiskRules types.RiskRules, customRiskRules types.RiskRules,
+) (*types.Model, error) {
+	technologies, err := loadTechnologies(config)
+	if err != nil {
+		return nil, err
+	}
+
+	parsedModel, err := newParsedModel(modelInput)
+	if err != nil {
+		return nil, err
+	}
+
+	err = parseDataAssets(parsedModel, modelInput)
+	if err != nil {
+		return nil, err
+	}
+
+	err = parseTechnicalAssets(parsedModel, modelInput, technologies)
+	if err != nil {
+		return nil, err
+	}
+
+	err = parseTrustBoundaries(parsedModel, modelInput)
+	if err != nil {
+		return nil, err
+	}
+
+	err = parseSharedRuntimes(parsedModel, modelInput)
+	if err != nil {
+		return nil, err
+	}
+
+	addRiskRuleCategories(parsedModel, builtinRiskRules, customRiskRules)
+
+	err = parseCustomRiskCategories(parsedModel, modelInput)
+	if err != nil {
+		return nil, err
+	}
+
+	err = parseRiskTracking(parsedModel, modelInput)
+	if err != nil {
+		return nil, err
+	}
+
+	err = checkCommunicationLinkTargets(parsedModel)
+	if err != nil {
+		return nil, err
+	}
+
+	// to debug the parsing, write modelInput and parsedModel out here as YAML and JSON
+
+	return parsedModel, nil
+}
+
+func loadTechnologies(config technologyMapConfigReader) (types.TechnologyMap, error) {
 	technologies := make(types.TechnologyMap)
 	technologiesLoadError := technologies.LoadWithConfig(config, "technologies.yaml")
 	if technologiesLoadError != nil {
@@ -28,7 +84,11 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 	}
 
 	technologies.PropagateAttributes()
+	return technologies, nil
+}
 
+// newParsedModel starts the parsed model with the overall attributes of the model and empty indexes.
+func newParsedModel(modelInput *input.Model) (*types.Model, error) {
 	businessCriticality, err := types.ParseCriticality(modelInput.BusinessCriticality)
 	if err != nil {
 		return nil, fmt.Errorf("unknown 'business_criticality' value of application: %v", modelInput.BusinessCriticality)
@@ -43,7 +103,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 		}
 	}
 
-	parsedModel := types.Model{
+	parsedModel := &types.Model{
 		ThreagileVersion:               modelInput.ThreagileVersion,
 		Title:                          modelInput.Title,
 		Author:                         convertAuthor(modelInput.Author),
@@ -81,338 +141,440 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 		parsedModel.DiagramTweakRanksep = 2
 	}
 
-	// Data Assets ===============================================================================
+	return parsedModel, nil
+}
+
+// ciaRating is the confidentiality, integrity and availability rating of an asset.
+type ciaRating struct {
+	confidentiality types.Confidentiality
+	integrity       types.Criticality
+	availability    types.Criticality
+}
+
+// parseCIA parses the confidentiality, integrity and availability of the asset that where names.
+func parseCIA(confidentiality, integrity, availability string, where string) (ciaRating, error) {
+	var rating ciaRating
+	var err error
+	rating.confidentiality, err = types.ParseConfidentiality(confidentiality)
+	if err != nil {
+		return rating, fmt.Errorf("unknown 'confidentiality' value of %v: %v", where, confidentiality)
+	}
+	rating.integrity, err = types.ParseCriticality(integrity)
+	if err != nil {
+		return rating, fmt.Errorf("unknown 'integrity' value of %v: %v", where, integrity)
+	}
+	rating.availability, err = types.ParseCriticality(availability)
+	if err != nil {
+		return rating, fmt.Errorf("unknown 'availability' value of %v: %v", where, availability)
+	}
+	return rating, nil
+}
+
+// Data Assets ===============================================================================
+
+func parseDataAssets(parsedModel *types.Model, modelInput *input.Model) error {
 	parsedModel.DataAssets = make(map[string]*types.DataAsset)
 	for _, title := range slices.Sorted(maps.Keys(modelInput.DataAssets)) {
-		asset := modelInput.DataAssets[title]
-		id := asset.ID
+		dataAsset, err := parseDataAsset(parsedModel, title, modelInput.DataAssets[title])
+		if err != nil {
+			return err
+		}
+		parsedModel.DataAssets[dataAsset.Id] = dataAsset
+	}
+	return nil
+}
 
-		usage, err := types.ParseUsage(asset.Usage)
-		if err != nil {
-			return nil, fmt.Errorf("unknown 'usage' value of data asset %q: %v", title, asset.Usage)
-		}
-		quantity, err := types.ParseQuantity(asset.Quantity)
-		if err != nil {
-			return nil, fmt.Errorf("unknown 'quantity' value of data asset %q: %v", title, asset.Quantity)
-		}
-		confidentiality, err := types.ParseConfidentiality(asset.Confidentiality)
-		if err != nil {
-			return nil, fmt.Errorf("unknown 'confidentiality' value of data asset %q: %v", title, asset.Confidentiality)
-		}
-		integrity, err := types.ParseCriticality(asset.Integrity)
-		if err != nil {
-			return nil, fmt.Errorf("unknown 'integrity' value of data asset %q: %v", title, asset.Integrity)
-		}
-		availability, err := types.ParseCriticality(asset.Availability)
-		if err != nil {
-			return nil, fmt.Errorf("unknown 'availability' value of data asset %q: %v", title, asset.Availability)
-		}
+func parseDataAsset(parsedModel *types.Model, title string, asset input.DataAsset) (*types.DataAsset, error) {
+	id := asset.ID
 
-		err = checkIdSyntax(id)
-		if err != nil {
-			return nil, err
-		}
-		if _, exists := parsedModel.DataAssets[id]; exists {
-			return nil, fmt.Errorf("duplicate id used: %v", id)
-		}
-		tags, err := parsedModel.CheckTags(lowerCaseAndTrim(asset.Tags), "data asset '"+title+"'")
-		if err != nil {
-			return nil, err
-		}
-		parsedModel.DataAssets[id] = &types.DataAsset{
-			Id:                     id,
-			Title:                  title,
-			Usage:                  usage,
-			Description:            withDefault(asset.Description, title),
-			Quantity:               quantity,
-			Tags:                   tags,
-			Origin:                 asset.Origin,
-			Owner:                  asset.Owner,
-			Confidentiality:        confidentiality,
-			Integrity:              integrity,
-			Availability:           availability,
-			JustificationCiaRating: asset.JustificationCiaRating,
-		}
+	usage, err := types.ParseUsage(asset.Usage)
+	if err != nil {
+		return nil, fmt.Errorf("unknown 'usage' value of data asset %q: %v", title, asset.Usage)
+	}
+	quantity, err := types.ParseQuantity(asset.Quantity)
+	if err != nil {
+		return nil, fmt.Errorf("unknown 'quantity' value of data asset %q: %v", title, asset.Quantity)
+	}
+	cia, err := parseCIA(asset.Confidentiality, asset.Integrity, asset.Availability,
+		fmt.Sprintf("data asset %q", title))
+	if err != nil {
+		return nil, err
 	}
 
-	// Technical Assets ===============================================================================
-	parsedModel.TechnicalAssets = make(map[string]*types.TechnicalAsset)
+	err = checkIdSyntax(id)
+	if err != nil {
+		return nil, err
+	}
+	if _, exists := parsedModel.DataAssets[id]; exists {
+		return nil, fmt.Errorf("duplicate id used: %v", id)
+	}
+	tags, err := parsedModel.CheckTags(lowerCaseAndTrim(asset.Tags), "data asset '"+title+"'")
+	if err != nil {
+		return nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+	}
+	return &types.DataAsset{
+		Id:                     id,
+		Title:                  title,
+		Usage:                  usage,
+		Description:            withDefault(asset.Description, title),
+		Quantity:               quantity,
+		Tags:                   tags,
+		Origin:                 asset.Origin,
+		Owner:                  asset.Owner,
+		Confidentiality:        cia.confidentiality,
+		Integrity:              cia.integrity,
+		Availability:           cia.availability,
+		JustificationCiaRating: asset.JustificationCiaRating,
+	}, nil
+}
+
+// Technical Assets ===============================================================================
+
+// technicalAssetParser carries what parsing the technical assets one after the other builds up.
+type technicalAssetParser struct {
+	parsedModel  *types.Model
+	technologies types.TechnologyMap
 	// the via lists of communication links refer to technical assets that may be parsed later
-	technicalAssetIds := make(map[string]bool, len(modelInput.TechnicalAssets))
-	for _, asset := range modelInput.TechnicalAssets {
-		technicalAssetIds[asset.ID] = true
-	}
+	technicalAssetIds map[string]bool
 	// hops of communication links through proxies, which the proxies own once they are parsed
-	proxyHops := make([]*types.CommunicationLink, 0)
-	hopOwners := make(map[string]bool)
+	proxyHops []*types.CommunicationLink
+	hopOwners map[string]bool
+}
+
+func parseTechnicalAssets(parsedModel *types.Model, modelInput *input.Model, technologies types.TechnologyMap) error {
+	parsedModel.TechnicalAssets = make(map[string]*types.TechnicalAsset)
+	parser := &technicalAssetParser{
+		parsedModel:       parsedModel,
+		technologies:      technologies,
+		technicalAssetIds: make(map[string]bool, len(modelInput.TechnicalAssets)),
+		proxyHops:         make([]*types.CommunicationLink, 0),
+		hopOwners:         make(map[string]bool),
+	}
+	for _, asset := range modelInput.TechnicalAssets {
+		parser.technicalAssetIds[asset.ID] = true
+	}
 	for _, title := range slices.Sorted(maps.Keys(modelInput.TechnicalAssets)) {
-		asset := modelInput.TechnicalAssets[title]
-		id := asset.ID
-
-		usage, err := types.ParseUsage(asset.Usage)
+		technicalAsset, err := parser.parseTechnicalAsset(title, modelInput.TechnicalAssets[title])
 		if err != nil {
-			return nil, fmt.Errorf("unknown 'usage' value of technical asset %q: %v", title, asset.Usage)
+			return err
 		}
-
-		dataAssetsStored := make([]string, 0)
-		if asset.DataAssetsStored != nil {
-			for _, parsedStoredAssets := range asset.DataAssetsStored {
-				referencedAsset := parsedStoredAssets
-				if contains(dataAssetsStored, referencedAsset) {
-					continue
-				}
-
-				err := parsedModel.CheckDataAssetTargetExists(referencedAsset, fmt.Sprintf("technical asset %q", title))
-				if err != nil {
-					return nil, err
-				}
-				dataAssetsStored = append(dataAssetsStored, referencedAsset)
-			}
-		}
-
-		dataAssetsProcessed := dataAssetsStored
-		if asset.DataAssetsProcessed != nil {
-			for _, parsedProcessedAsset := range asset.DataAssetsProcessed {
-				referencedAsset := parsedProcessedAsset
-				if contains(dataAssetsProcessed, referencedAsset) {
-					continue
-				}
-
-				err := parsedModel.CheckDataAssetTargetExists(referencedAsset, "technical asset '"+title+"'")
-				if err != nil {
-					return nil, err
-				}
-				dataAssetsProcessed = append(dataAssetsProcessed, referencedAsset)
-			}
-		}
-
-		technicalAssetType, err := types.ParseTechnicalAssetType(asset.Type)
-		if err != nil {
-			return nil, fmt.Errorf("unknown 'type' value of technical asset %q: %v", title, asset.Type)
-		}
-		technicalAssetSize, err := types.ParseTechnicalAssetSize(asset.Size)
-		if err != nil {
-			return nil, fmt.Errorf("unknown 'size' value of technical asset %q: %v", title, asset.Size)
-		}
-
-		technicalAssetTechnologies := make([]*types.Technology, 0)
-
-		allTechnologies := asset.Technologies
-		if asset.Technology != "" {
-			allTechnologies = append(allTechnologies, asset.Technology)
-		}
-		for _, technologyName := range allTechnologies {
-			technicalAssetTechnology := technologies.Get(technologyName)
-			if technicalAssetTechnology == nil {
-				return nil, fmt.Errorf("unknown 'technology' value of technical asset %q: %v", title, asset.Technology)
-			}
-
-			technicalAssetTechnologies = append(technicalAssetTechnologies, technicalAssetTechnology)
-		}
-
-		encryption, err := types.ParseEncryptionStyle(asset.Encryption)
-		if err != nil {
-			return nil, fmt.Errorf("unknown 'encryption' value of technical asset %q: %v", title, asset.Encryption)
-		}
-		technicalAssetMachine, err := types.ParseTechnicalAssetMachine(asset.Machine)
-		if err != nil {
-			return nil, fmt.Errorf("unknown 'machine' value of technical asset %q: %v", title, asset.Machine)
-		}
-		confidentiality, err := types.ParseConfidentiality(asset.Confidentiality)
-		if err != nil {
-			return nil, fmt.Errorf("unknown 'confidentiality' value of technical asset %q: %v", title, asset.Confidentiality)
-		}
-		integrity, err := types.ParseCriticality(asset.Integrity)
-		if err != nil {
-			return nil, fmt.Errorf("unknown 'integrity' value of technical asset %q: %v", title, asset.Integrity)
-		}
-		availability, err := types.ParseCriticality(asset.Availability)
-		if err != nil {
-			return nil, fmt.Errorf("unknown 'availability' value of technical asset %q: %v", title, asset.Availability)
-		}
-
-		dataFormatsAccepted := make([]types.DataFormat, 0)
-		if asset.DataFormatsAccepted != nil {
-			for _, dataFormatName := range asset.DataFormatsAccepted {
-				dataFormat, err := types.ParseDataFormat(dataFormatName)
-				if err != nil {
-					return nil, fmt.Errorf("unknown 'data_formats_accepted' value of technical asset %q: %v", title, dataFormatName)
-				}
-				dataFormatsAccepted = append(dataFormatsAccepted, dataFormat)
-			}
-		}
-
-		communicationLinks := make([]*types.CommunicationLink, 0)
-		if asset.CommunicationLinks != nil {
-			for _, commLinkTitle := range slices.Sorted(maps.Keys(asset.CommunicationLinks)) {
-				commLink := asset.CommunicationLinks[commLinkTitle]
-				weight := 1
-				var dataAssetsSent []string
-				var dataAssetsReceived []string
-
-				authentication, err := types.ParseAuthentication(commLink.Authentication)
-				if err != nil {
-					return nil, fmt.Errorf("unknown 'authentication' value of technical asset %q communication link %q: %v", title, commLinkTitle, commLink.Authentication)
-				}
-				authorization, err := types.ParseAuthorization(commLink.Authorization)
-				if err != nil {
-					return nil, fmt.Errorf("unknown 'authorization' value of technical asset %q communication link %q: %v", title, commLinkTitle, commLink.Authorization)
-				}
-				usage, err := types.ParseUsage(commLink.Usage)
-				if err != nil {
-					return nil, fmt.Errorf("unknown 'usage' value of technical asset %q communication link %q: %v", title, commLinkTitle, commLink.Usage)
-				}
-				protocol, err := types.ParseProtocol(commLink.Protocol)
-				if err != nil {
-					return nil, fmt.Errorf("unknown 'protocol' value of technical asset %q communication link %q: %v", title, commLinkTitle, commLink.Protocol)
-				}
-
-				if commLink.DataAssetsSent != nil {
-					for _, dataAssetSent := range commLink.DataAssetsSent {
-						referencedAsset := dataAssetSent
-						if !contains(dataAssetsSent, referencedAsset) {
-							err := parsedModel.CheckDataAssetTargetExists(referencedAsset, fmt.Sprintf("communication link %q of technical asset %q", commLinkTitle, title))
-							if err != nil {
-								return nil, err
-							}
-
-							dataAssetsSent = append(dataAssetsSent, referencedAsset)
-							if !contains(dataAssetsProcessed, referencedAsset) {
-								dataAssetsProcessed = append(dataAssetsProcessed, referencedAsset)
-							}
-						}
-					}
-				}
-
-				if commLink.DataAssetsReceived != nil {
-					for _, dataAssetReceived := range commLink.DataAssetsReceived {
-						referencedAsset := dataAssetReceived
-						if contains(dataAssetsReceived, referencedAsset) {
-							continue
-						}
-
-						err := parsedModel.CheckDataAssetTargetExists(referencedAsset, "communication link '"+commLinkTitle+"' of technical asset '"+title+"'")
-						if err != nil {
-							return nil, err
-						}
-						dataAssetsReceived = append(dataAssetsReceived, referencedAsset)
-
-						if !contains(dataAssetsProcessed, referencedAsset) {
-							dataAssetsProcessed = append(dataAssetsProcessed, referencedAsset)
-						}
-					}
-				}
-
-				if commLink.DiagramTweakWeight > 0 {
-					weight = commLink.DiagramTweakWeight
-				}
-
-				dataFlowTitle := commLinkTitle
-				commLinkId, err := createDataFlowId(id, dataFlowTitle)
-				if err != nil {
-					return nil, err
-				}
-				tags, err := parsedModel.CheckTags(lowerCaseAndTrim(commLink.Tags), "communication link '"+commLinkTitle+"' of technical asset '"+title+"'")
-				if err != nil {
-					return nil, err
-				}
-				link := &types.CommunicationLink{
-					Id:                     commLinkId,
-					SourceId:               id,
-					TargetId:               commLink.Target,
-					Title:                  dataFlowTitle,
-					Description:            withDefault(commLink.Description, dataFlowTitle),
-					Protocol:               protocol,
-					Authentication:         authentication,
-					Authorization:          authorization,
-					Usage:                  usage,
-					Tags:                   tags,
-					VPN:                    commLink.VPN,
-					IpFiltered:             commLink.IpFiltered,
-					Readonly:               commLink.Readonly,
-					DataAssetsSent:         dataAssetsSent,
-					DataAssetsReceived:     dataAssetsReceived,
-					DiagramTweakWeight:     weight,
-					DiagramTweakConstraint: !commLink.DiagramTweakConstraint,
-				}
-				if len(commLink.Via) > 0 {
-					where := fmt.Sprintf("communication link %q of technical asset %q", commLinkTitle, title)
-					hops, err := expandVia(link, commLink.Via, technicalAssetIds, where)
-					if err != nil {
-						return nil, err
-					}
-					link = hops[0]
-					proxyHops = append(proxyHops, hops[1:]...)
-					hopOwners[id] = true
-				}
-				communicationLinks = append(communicationLinks, link)
-				addCommunicationLink(&parsedModel, link)
-			}
-		}
-
-		err = checkIdSyntax(id)
-		if err != nil {
-			return nil, err
-		}
-		if _, exists := parsedModel.TechnicalAssets[id]; exists {
-			return nil, fmt.Errorf("duplicate id used: %v", id)
-		}
-		tags, err := parsedModel.CheckTags(lowerCaseAndTrim(asset.Tags), fmt.Sprintf("technical asset %q", title))
-		if err != nil {
-			return nil, err
-		}
-		parsedModel.TechnicalAssets[id] = &types.TechnicalAsset{
-			Id:                      id,
-			Usage:                   usage,
-			Title:                   title, // fmt.Sprintf("%v", asset["title"]),
-			Description:             withDefault(asset.Description, title),
-			Type:                    technicalAssetType,
-			Size:                    technicalAssetSize,
-			Technologies:            technicalAssetTechnologies,
-			Tags:                    tags,
-			Machine:                 technicalAssetMachine,
-			Internet:                asset.Internet,
-			Encryption:              encryption,
-			MultiTenant:             asset.MultiTenant,
-			Redundant:               asset.Redundant,
-			CustomDevelopedParts:    asset.CustomDevelopedParts,
-			UsedAsClientByHuman:     asset.UsedAsClientByHuman,
-			OutOfScope:              asset.OutOfScope,
-			JustificationOutOfScope: asset.JustificationOutOfScope,
-			Owner:                   asset.Owner,
-			Confidentiality:         confidentiality,
-			Integrity:               integrity,
-			Availability:            availability,
-			JustificationCiaRating:  asset.JustificationCiaRating,
-			DataAssetsProcessed:     dataAssetsProcessed,
-			DataAssetsStored:        dataAssetsStored,
-			DataFormatsAccepted:     dataFormatsAccepted,
-			CommunicationLinks:      communicationLinks,
-			DiagramTweakOrder:       asset.DiagramTweakOrder,
-		}
+		parsedModel.TechnicalAssets[technicalAsset.Id] = technicalAsset
 	}
 
-	// The hops after the first one belong to the proxies, as if they were modelled as their links
-	for _, hop := range proxyHops {
-		proxy := parsedModel.TechnicalAssets[hop.SourceId]
+	parser.addProxyHops()
+	raiseTechnicalAssetCIA(parsedModel)
+	return addDataAssetsProcessedByTargets(parsedModel)
+}
+
+func (parser *technicalAssetParser) parseTechnicalAsset(
+	title string, asset input.TechnicalAsset,
+) (*types.TechnicalAsset, error) {
+	technicalAsset := &types.TechnicalAsset{
+		Id:                      asset.ID,
+		Title:                   title, // fmt.Sprintf("%v", asset["title"]),
+		Description:             withDefault(asset.Description, title),
+		Internet:                asset.Internet,
+		MultiTenant:             asset.MultiTenant,
+		Redundant:               asset.Redundant,
+		CustomDevelopedParts:    asset.CustomDevelopedParts,
+		UsedAsClientByHuman:     asset.UsedAsClientByHuman,
+		OutOfScope:              asset.OutOfScope,
+		JustificationOutOfScope: asset.JustificationOutOfScope,
+		Owner:                   asset.Owner,
+		JustificationCiaRating:  asset.JustificationCiaRating,
+		DiagramTweakOrder:       asset.DiagramTweakOrder,
+	}
+
+	var err error
+	technicalAsset.Usage, err = types.ParseUsage(asset.Usage)
+	if err != nil {
+		return nil, fmt.Errorf("unknown 'usage' value of technical asset %q: %v", title, asset.Usage)
+	}
+
+	technicalAsset.DataAssetsStored, err = appendCheckedDataAssets(parser.parsedModel, make([]string, 0),
+		asset.DataAssetsStored, fmt.Sprintf("technical asset %q", title))
+	if err != nil {
+		return nil, err
+	}
+
+	technicalAsset.DataAssetsProcessed, err = appendCheckedDataAssets(parser.parsedModel, technicalAsset.DataAssetsStored,
+		asset.DataAssetsProcessed, "technical asset '"+title+"'")
+	if err != nil {
+		return nil, err
+	}
+
+	err = parser.parseTechnicalAssetAttributes(technicalAsset, title, asset)
+	if err != nil {
+		return nil, err
+	}
+
+	err = parser.parseCommunicationLinks(technicalAsset, title, asset)
+	if err != nil {
+		return nil, err
+	}
+
+	err = checkIdSyntax(technicalAsset.Id)
+	if err != nil {
+		return nil, err
+	}
+	if _, exists := parser.parsedModel.TechnicalAssets[technicalAsset.Id]; exists {
+		return nil, fmt.Errorf("duplicate id used: %v", technicalAsset.Id)
+	}
+	technicalAsset.Tags, err = parser.parsedModel.CheckTags(lowerCaseAndTrim(asset.Tags),
+		fmt.Sprintf("technical asset %q", title))
+	if err != nil {
+		return nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+	}
+	return technicalAsset, nil
+}
+
+// appendCheckedDataAssets appends the referenced data assets that the list does not have yet, after
+// checking that they exist.
+func appendCheckedDataAssets(
+	parsedModel *types.Model, list []string, references []string, where string,
+) ([]string, error) {
+	for _, referencedAsset := range references {
+		if contains(list, referencedAsset) {
+			continue
+		}
+
+		err := parsedModel.CheckDataAssetTargetExists(referencedAsset, where)
+		if err != nil {
+			return nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+		}
+		list = append(list, referencedAsset)
+	}
+	return list, nil
+}
+
+// parseTechnicalAssetAttributes parses the type, size, technologies, encryption, machine, CIA rating and
+// accepted data formats of a technical asset.
+func (parser *technicalAssetParser) parseTechnicalAssetAttributes(
+	technicalAsset *types.TechnicalAsset, title string, asset input.TechnicalAsset,
+) error {
+	var err error
+	technicalAsset.Type, err = types.ParseTechnicalAssetType(asset.Type)
+	if err != nil {
+		return fmt.Errorf("unknown 'type' value of technical asset %q: %v", title, asset.Type)
+	}
+	technicalAsset.Size, err = types.ParseTechnicalAssetSize(asset.Size)
+	if err != nil {
+		return fmt.Errorf("unknown 'size' value of technical asset %q: %v", title, asset.Size)
+	}
+
+	technicalAsset.Technologies, err = parser.parseTechnologies(title, asset)
+	if err != nil {
+		return err
+	}
+
+	technicalAsset.Encryption, err = types.ParseEncryptionStyle(asset.Encryption)
+	if err != nil {
+		return fmt.Errorf("unknown 'encryption' value of technical asset %q: %v", title, asset.Encryption)
+	}
+	technicalAsset.Machine, err = types.ParseTechnicalAssetMachine(asset.Machine)
+	if err != nil {
+		return fmt.Errorf("unknown 'machine' value of technical asset %q: %v", title, asset.Machine)
+	}
+	cia, err := parseCIA(asset.Confidentiality, asset.Integrity, asset.Availability,
+		fmt.Sprintf("technical asset %q", title))
+	if err != nil {
+		return err
+	}
+	technicalAsset.Confidentiality = cia.confidentiality
+	technicalAsset.Integrity = cia.integrity
+	technicalAsset.Availability = cia.availability
+
+	technicalAsset.DataFormatsAccepted, err = parseDataFormats(title, asset.DataFormatsAccepted)
+	return err
+}
+
+func (parser *technicalAssetParser) parseTechnologies(
+	title string, asset input.TechnicalAsset,
+) ([]*types.Technology, error) {
+	technicalAssetTechnologies := make([]*types.Technology, 0)
+
+	allTechnologies := asset.Technologies
+	if asset.Technology != "" {
+		allTechnologies = append(allTechnologies, asset.Technology)
+	}
+	for _, technologyName := range allTechnologies {
+		technicalAssetTechnology := parser.technologies.Get(technologyName)
+		if technicalAssetTechnology == nil {
+			return nil, fmt.Errorf("unknown 'technology' value of technical asset %q: %v", title, asset.Technology)
+		}
+
+		technicalAssetTechnologies = append(technicalAssetTechnologies, technicalAssetTechnology)
+	}
+	return technicalAssetTechnologies, nil
+}
+
+func parseDataFormats(title string, dataFormatNames []string) ([]types.DataFormat, error) {
+	dataFormatsAccepted := make([]types.DataFormat, 0)
+	for _, dataFormatName := range dataFormatNames {
+		dataFormat, err := types.ParseDataFormat(dataFormatName)
+		if err != nil {
+			return nil, fmt.Errorf("unknown 'data_formats_accepted' value of technical asset %q: %v", title, dataFormatName)
+		}
+		dataFormatsAccepted = append(dataFormatsAccepted, dataFormat)
+	}
+	return dataFormatsAccepted, nil
+}
+
+// parseCommunicationLinks parses the outgoing communication links of a technical asset, which processes
+// the data assets that its links send or receive.
+func (parser *technicalAssetParser) parseCommunicationLinks(
+	technicalAsset *types.TechnicalAsset, title string, asset input.TechnicalAsset,
+) error {
+	technicalAsset.CommunicationLinks = make([]*types.CommunicationLink, 0)
+	for _, commLinkTitle := range slices.Sorted(maps.Keys(asset.CommunicationLinks)) {
+		commLink := asset.CommunicationLinks[commLinkTitle]
+		link, err := parser.parseCommunicationLink(technicalAsset, title, commLinkTitle, commLink)
+		if err != nil {
+			return err
+		}
+		if len(commLink.Via) > 0 {
+			where := fmt.Sprintf("communication link %q of technical asset %q", commLinkTitle, title)
+			hops, err := expandVia(link, commLink.Via, parser.technicalAssetIds, where)
+			if err != nil {
+				return err
+			}
+			link = hops[0]
+			parser.proxyHops = append(parser.proxyHops, hops[1:]...)
+			parser.hopOwners[technicalAsset.Id] = true
+		}
+		technicalAsset.CommunicationLinks = append(technicalAsset.CommunicationLinks, link)
+		addCommunicationLink(parser.parsedModel, link)
+	}
+	return nil
+}
+
+func (parser *technicalAssetParser) parseCommunicationLink(
+	technicalAsset *types.TechnicalAsset, title string, commLinkTitle string, commLink input.CommunicationLink,
+) (*types.CommunicationLink, error) {
+	link, err := newCommunicationLink(technicalAsset.Id, title, commLinkTitle, commLink)
+	if err != nil {
+		return nil, err
+	}
+
+	link.DataAssetsSent, technicalAsset.DataAssetsProcessed, err = appendLinkDataAssets(parser.parsedModel, nil,
+		technicalAsset.DataAssetsProcessed, commLink.DataAssetsSent,
+		fmt.Sprintf("communication link %q of technical asset %q", commLinkTitle, title))
+	if err != nil {
+		return nil, err
+	}
+
+	link.DataAssetsReceived, technicalAsset.DataAssetsProcessed, err = appendLinkDataAssets(parser.parsedModel, nil,
+		technicalAsset.DataAssetsProcessed, commLink.DataAssetsReceived,
+		"communication link '"+commLinkTitle+"' of technical asset '"+title+"'")
+	if err != nil {
+		return nil, err
+	}
+
+	if commLink.DiagramTweakWeight > 0 {
+		link.DiagramTweakWeight = commLink.DiagramTweakWeight
+	}
+
+	link.Id = createDataFlowId(technicalAsset.Id, commLinkTitle)
+	link.Tags, err = parser.parsedModel.CheckTags(lowerCaseAndTrim(commLink.Tags),
+		"communication link '"+commLinkTitle+"' of technical asset '"+title+"'")
+	if err != nil {
+		return nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+	}
+	return link, nil
+}
+
+// newCommunicationLink starts a communication link of the source asset with its parsed protocol,
+// authentication, authorization and usage.
+func newCommunicationLink(
+	sourceId string, title string, commLinkTitle string, commLink input.CommunicationLink,
+) (*types.CommunicationLink, error) {
+	authentication, err := types.ParseAuthentication(commLink.Authentication)
+	if err != nil {
+		return nil, fmt.Errorf("unknown 'authentication' value of technical asset %q communication link %q: %v",
+			title, commLinkTitle, commLink.Authentication)
+	}
+	authorization, err := types.ParseAuthorization(commLink.Authorization)
+	if err != nil {
+		return nil, fmt.Errorf("unknown 'authorization' value of technical asset %q communication link %q: %v",
+			title, commLinkTitle, commLink.Authorization)
+	}
+	usage, err := types.ParseUsage(commLink.Usage)
+	if err != nil {
+		return nil, fmt.Errorf("unknown 'usage' value of technical asset %q communication link %q: %v",
+			title, commLinkTitle, commLink.Usage)
+	}
+	protocol, err := types.ParseProtocol(commLink.Protocol)
+	if err != nil {
+		return nil, fmt.Errorf("unknown 'protocol' value of technical asset %q communication link %q: %v",
+			title, commLinkTitle, commLink.Protocol)
+	}
+
+	return &types.CommunicationLink{
+		SourceId:               sourceId,
+		TargetId:               commLink.Target,
+		Title:                  commLinkTitle,
+		Description:            withDefault(commLink.Description, commLinkTitle),
+		Protocol:               protocol,
+		Authentication:         authentication,
+		Authorization:          authorization,
+		Usage:                  usage,
+		VPN:                    commLink.VPN,
+		IpFiltered:             commLink.IpFiltered,
+		Readonly:               commLink.Readonly,
+		DiagramTweakWeight:     1,
+		DiagramTweakConstraint: !commLink.DiagramTweakConstraint,
+	}, nil
+}
+
+// appendLinkDataAssets appends the data assets that a communication link sends or receives to the list,
+// once each and after checking that they exist, and adds them to the data assets that its source
+// processes.
+func appendLinkDataAssets(
+	parsedModel *types.Model, list []string, processed []string, references []string, where string,
+) ([]string, []string, error) {
+	for _, referencedAsset := range references {
+		if contains(list, referencedAsset) {
+			continue
+		}
+
+		err := parsedModel.CheckDataAssetTargetExists(referencedAsset, where)
+		if err != nil {
+			return nil, nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+		}
+		list = append(list, referencedAsset)
+
+		if !contains(processed, referencedAsset) {
+			processed = append(processed, referencedAsset)
+		}
+	}
+	return list, processed, nil
+}
+
+// addProxyHops gives the hops after the first one to the proxies, as if they were modelled as their links.
+func (parser *technicalAssetParser) addProxyHops() {
+	for _, hop := range parser.proxyHops {
+		proxy := parser.parsedModel.TechnicalAssets[hop.SourceId]
 		proxy.CommunicationLinks = append(proxy.CommunicationLinks, hop)
 		for _, dataAsset := range slices.Concat(hop.DataAssetsSent, hop.DataAssetsReceived) {
 			if !contains(proxy.DataAssetsProcessed, dataAsset) {
 				proxy.DataAssetsProcessed = append(proxy.DataAssetsProcessed, dataAsset)
 			}
 		}
-		addCommunicationLink(&parsedModel, hop)
-		hopOwners[proxy.Id] = true
+		addCommunicationLink(parser.parsedModel, hop)
+		parser.hopOwners[proxy.Id] = true
 	}
 	// keep the links of the assets with hops ordered by title, like those of every other asset
 	byTitle := func(a, b *types.CommunicationLink) int {
 		return cmp.Or(strings.Compare(a.Title, b.Title), strings.Compare(a.Id, b.Id))
 	}
-	for ownerId := range hopOwners {
-		slices.SortStableFunc(parsedModel.TechnicalAssets[ownerId].CommunicationLinks, byTitle)
+	for ownerId := range parser.hopOwners {
+		slices.SortStableFunc(parser.parsedModel.TechnicalAssets[ownerId].CommunicationLinks, byTitle)
 	}
+}
 
-	// If CIA is lower than that of its data assets, it is implicitly set to the highest CIA value of its data assets
+// raiseTechnicalAssetCIA raises the CIA rating of each technical asset that is lower than that of its data
+// assets to the highest CIA value of its data assets.
+func raiseTechnicalAssetCIA(parsedModel *types.Model) {
 	for id, techAsset := range parsedModel.TechnicalAssets {
 		dataAssetConfidentiality := parsedModel.HighestTechnicalAssetConfidentiality(techAsset)
 		if techAsset.Confidentiality < dataAssetConfidentiality {
@@ -431,8 +593,11 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 
 		parsedModel.TechnicalAssets[id] = techAsset
 	}
+}
 
-	// A target of a communication link implicitly processes all data assets that are sent to or received by that target
+// addDataAssetsProcessedByTargets makes the target of a communication link implicitly process all data
+// assets that are sent to or received by that target.
+func addDataAssetsProcessedByTargets(parsedModel *types.Model) error {
 	for _, id := range parsedModel.SortedTechnicalAssetIDs() {
 		techAsset := parsedModel.TechnicalAssets[id]
 		for _, commLink := range techAsset.CommunicationLinks {
@@ -441,7 +606,8 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 			}
 			targetTechAsset := parsedModel.TechnicalAssets[commLink.TargetId]
 			if targetTechAsset == nil {
-				return nil, fmt.Errorf("missing target technical asset %q for communication link: %q", commLink.TargetId, commLink.Title)
+				return fmt.Errorf("missing target technical asset %q for communication link: %q",
+					commLink.TargetId, commLink.Title)
 			}
 			dataAssetsProcessedByTarget := targetTechAsset.DataAssetsProcessed
 			for _, dataAssetSent := range commLink.DataAssetsSent {
@@ -458,116 +624,159 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 			parsedModel.TechnicalAssets[commLink.TargetId] = targetTechAsset
 		}
 	}
+	return nil
+}
 
-	// Trust Boundaries ===============================================================================
+// Trust Boundaries ===============================================================================
+
+func parseTrustBoundaries(parsedModel *types.Model, modelInput *input.Model) error {
 	checklistToAvoidAssetBeingModeledInMultipleTrustBoundaries := make(map[string]bool)
 	parsedModel.TrustBoundaries = make(map[string]*types.TrustBoundary)
 	for _, title := range slices.Sorted(maps.Keys(modelInput.TrustBoundaries)) {
-		boundary := modelInput.TrustBoundaries[title]
-		id := boundary.ID
-
-		technicalAssetsInside := make([]string, 0)
-		if boundary.TechnicalAssetsInside != nil {
-			parsedInsideAssets := boundary.TechnicalAssetsInside
-			technicalAssetsInside = make([]string, len(parsedInsideAssets))
-			for i, parsedInsideAsset := range parsedInsideAssets {
-				technicalAssetsInside[i] = strings.ToLower(parsedInsideAsset)
-				_, found := parsedModel.TechnicalAssets[technicalAssetsInside[i]]
-				if !found {
-					return nil, fmt.Errorf("missing referenced technical asset %q at trust boundary %q", technicalAssetsInside[i], title)
-				}
-				if checklistToAvoidAssetBeingModeledInMultipleTrustBoundaries[technicalAssetsInside[i]] {
-					return nil, fmt.Errorf("referenced technical asset %q at trust boundary %q is modeled in multiple trust boundaries", technicalAssetsInside[i], title)
-				}
-				checklistToAvoidAssetBeingModeledInMultipleTrustBoundaries[technicalAssetsInside[i]] = true
-				// fmt.Println("asset "+technicalAssetsInside[i]+" at i="+strconv.Itoa(i))
-			}
-		}
-
-		trustBoundariesNested := make([]string, 0)
-		if boundary.TrustBoundariesNested != nil {
-			parsedNestedBoundaries := boundary.TrustBoundariesNested
-			trustBoundariesNested = make([]string, len(parsedNestedBoundaries))
-			for i, parsedNestedBoundary := range parsedNestedBoundaries {
-				trustBoundariesNested[i] = parsedNestedBoundary
-			}
-		}
-
-		trustBoundaryType, err := types.ParseTrustBoundary(boundary.Type)
+		trustBoundary, err := parseTrustBoundary(parsedModel, title, modelInput.TrustBoundaries[title],
+			checklistToAvoidAssetBeingModeledInMultipleTrustBoundaries)
 		if err != nil {
-			return nil, fmt.Errorf("unknown 'type' of trust boundary %q: %v", title, boundary.Type)
+			return err
 		}
-		tags, err := parsedModel.CheckTags(lowerCaseAndTrim(boundary.Tags), fmt.Sprintf("trust boundary %q", title))
-		if err != nil {
-			return nil, err
-		}
-		trustBoundary := &types.TrustBoundary{
-			Id:                    id,
-			Title:                 title, // fmt.Sprintf("%v", boundary["title"]),
-			Description:           withDefault(boundary.Description, title),
-			Type:                  trustBoundaryType,
-			Tags:                  tags,
-			TechnicalAssetsInside: technicalAssetsInside,
-			TrustBoundariesNested: trustBoundariesNested,
-		}
-		err = checkIdSyntax(id)
-		if err != nil {
-			return nil, err
-		}
-		if _, exists := parsedModel.TrustBoundaries[id]; exists {
-			return nil, fmt.Errorf("duplicate id used: %v", id)
-		}
-		parsedModel.TrustBoundaries[id] = trustBoundary
+		parsedModel.TrustBoundaries[trustBoundary.Id] = trustBoundary
 		for _, technicalAsset := range trustBoundary.TechnicalAssetsInside {
 			parsedModel.DirectContainingTrustBoundaryMappedByTechnicalAssetId[technicalAsset] = trustBoundary
 			// fmt.Println("Asset "+technicalAsset+" is directly in trust boundary "+trustBoundary.ID)
 		}
 	}
-	err = parsedModel.CheckNestedTrustBoundariesExisting()
+	nestingError := parsedModel.CheckNestedTrustBoundariesExisting()
+	return nestingError //nolint:wrapcheck // the check names the model element; its message is what users see
+}
+
+func parseTrustBoundary(
+	parsedModel *types.Model, title string, boundary input.TrustBoundary, assetsInBoundaries map[string]bool,
+) (*types.TrustBoundary, error) {
+	id := boundary.ID
+
+	technicalAssetsInside, err := parseTechnicalAssetsInside(parsedModel, title, boundary.TechnicalAssetsInside,
+		assetsInBoundaries)
 	if err != nil {
 		return nil, err
 	}
 
-	// Shared Runtime ===============================================================================
-	parsedModel.SharedRuntimes = make(map[string]*types.SharedRuntime)
-	for _, title := range slices.Sorted(maps.Keys(modelInput.SharedRuntimes)) {
-		inputRuntime := modelInput.SharedRuntimes[title]
-		id := inputRuntime.ID
-
-		technicalAssetsRunning := make([]string, 0)
-		if inputRuntime.TechnicalAssetsRunning != nil {
-			parsedRunningAssets := inputRuntime.TechnicalAssetsRunning
-			technicalAssetsRunning = make([]string, len(parsedRunningAssets))
-			for i, parsedRunningAsset := range parsedRunningAssets {
-				assetId := parsedRunningAsset
-				err := parsedModel.CheckTechnicalAssetExists(assetId, "shared runtime '"+title+"'", false)
-				if err != nil {
-					return nil, err
-				}
-				technicalAssetsRunning[i] = assetId
-			}
-		}
-		tags, err := parsedModel.CheckTags(lowerCaseAndTrim(inputRuntime.Tags), "shared runtime '"+title+"'")
-		if err != nil {
-			return nil, err
-		}
-		sharedRuntime := &types.SharedRuntime{
-			Id:                     id,
-			Title:                  title, // fmt.Sprintf("%v", boundary["title"]),
-			Description:            withDefault(inputRuntime.Description, title),
-			Tags:                   tags,
-			TechnicalAssetsRunning: technicalAssetsRunning,
-		}
-		err = checkIdSyntax(id)
-		if err != nil {
-			return nil, err
-		}
-		if _, exists := parsedModel.SharedRuntimes[id]; exists {
-			return nil, fmt.Errorf("duplicate id used: %v", id)
-		}
-		parsedModel.SharedRuntimes[id] = sharedRuntime
+	trustBoundariesNested := make([]string, 0)
+	if boundary.TrustBoundariesNested != nil {
+		trustBoundariesNested = make([]string, len(boundary.TrustBoundariesNested))
+		copy(trustBoundariesNested, boundary.TrustBoundariesNested)
 	}
 
+	trustBoundaryType, err := types.ParseTrustBoundary(boundary.Type)
+	if err != nil {
+		return nil, fmt.Errorf("unknown 'type' of trust boundary %q: %v", title, boundary.Type)
+	}
+	tags, err := parsedModel.CheckTags(lowerCaseAndTrim(boundary.Tags), fmt.Sprintf("trust boundary %q", title))
+	if err != nil {
+		return nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+	}
+	trustBoundary := &types.TrustBoundary{
+		Id:                    id,
+		Title:                 title, // fmt.Sprintf("%v", boundary["title"]),
+		Description:           withDefault(boundary.Description, title),
+		Type:                  trustBoundaryType,
+		Tags:                  tags,
+		TechnicalAssetsInside: technicalAssetsInside,
+		TrustBoundariesNested: trustBoundariesNested,
+	}
+	err = checkIdSyntax(id)
+	if err != nil {
+		return nil, err
+	}
+	if _, exists := parsedModel.TrustBoundaries[id]; exists {
+		return nil, fmt.Errorf("duplicate id used: %v", id)
+	}
+	return trustBoundary, nil
+}
+
+// parseTechnicalAssetsInside checks the technical assets inside a trust boundary, which may not be inside
+// another trust boundary as well; assetsInBoundaries records the assets already inside one.
+func parseTechnicalAssetsInside(
+	parsedModel *types.Model, title string, parsedInsideAssets []string, assetsInBoundaries map[string]bool,
+) ([]string, error) {
+	technicalAssetsInside := make([]string, 0)
+	if parsedInsideAssets != nil {
+		technicalAssetsInside = make([]string, len(parsedInsideAssets))
+		for i, parsedInsideAsset := range parsedInsideAssets {
+			technicalAssetsInside[i] = strings.ToLower(parsedInsideAsset)
+			_, found := parsedModel.TechnicalAssets[technicalAssetsInside[i]]
+			if !found {
+				return nil, fmt.Errorf("missing referenced technical asset %q at trust boundary %q",
+					technicalAssetsInside[i], title)
+			}
+			if assetsInBoundaries[technicalAssetsInside[i]] {
+				return nil, fmt.Errorf("referenced technical asset %q at trust boundary %q is modeled in multiple trust boundaries",
+					technicalAssetsInside[i], title)
+			}
+			assetsInBoundaries[technicalAssetsInside[i]] = true
+			// fmt.Println("asset "+technicalAssetsInside[i]+" at i="+strconv.Itoa(i))
+		}
+	}
+	return technicalAssetsInside, nil
+}
+
+// Shared Runtime ===============================================================================
+
+func parseSharedRuntimes(parsedModel *types.Model, modelInput *input.Model) error {
+	parsedModel.SharedRuntimes = make(map[string]*types.SharedRuntime)
+	for _, title := range slices.Sorted(maps.Keys(modelInput.SharedRuntimes)) {
+		sharedRuntime, err := parseSharedRuntime(parsedModel, title, modelInput.SharedRuntimes[title])
+		if err != nil {
+			return err
+		}
+		parsedModel.SharedRuntimes[sharedRuntime.Id] = sharedRuntime
+	}
+	return nil
+}
+
+func parseSharedRuntime(
+	parsedModel *types.Model, title string, inputRuntime input.SharedRuntime,
+) (*types.SharedRuntime, error) {
+	id := inputRuntime.ID
+
+	technicalAssetsRunning := make([]string, 0)
+	if inputRuntime.TechnicalAssetsRunning != nil {
+		parsedRunningAssets := inputRuntime.TechnicalAssetsRunning
+		technicalAssetsRunning = make([]string, len(parsedRunningAssets))
+		for i, parsedRunningAsset := range parsedRunningAssets {
+			assetId := parsedRunningAsset
+			err := parsedModel.CheckTechnicalAssetExists(assetId, "shared runtime '"+title+"'", false)
+			if err != nil {
+				return nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+			}
+			technicalAssetsRunning[i] = assetId
+		}
+	}
+	tags, err := parsedModel.CheckTags(lowerCaseAndTrim(inputRuntime.Tags), "shared runtime '"+title+"'")
+	if err != nil {
+		return nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+	}
+	sharedRuntime := &types.SharedRuntime{
+		Id:                     id,
+		Title:                  title, // fmt.Sprintf("%v", boundary["title"]),
+		Description:            withDefault(inputRuntime.Description, title),
+		Tags:                   tags,
+		TechnicalAssetsRunning: technicalAssetsRunning,
+	}
+	err = checkIdSyntax(id)
+	if err != nil {
+		return nil, err
+	}
+	if _, exists := parsedModel.SharedRuntimes[id]; exists {
+		return nil, fmt.Errorf("duplicate id used: %v", id)
+	}
+	return sharedRuntime, nil
+}
+
+// Risk Categories ===============================================================================
+
+// addRiskRuleCategories adds the categories of the built-in and the custom risk rules, ordered by rule id.
+func addRiskRuleCategories(
+	parsedModel *types.Model, builtinRiskRules types.RiskRules, customRiskRules types.RiskRules,
+) {
 	for _, id := range slices.Sorted(maps.Keys(builtinRiskRules)) {
 		parsedModel.BuiltInRiskCategories = append(parsedModel.BuiltInRiskCategories, builtinRiskRules[id].Category())
 	}
@@ -575,151 +784,190 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 	for _, id := range slices.Sorted(maps.Keys(customRiskRules)) {
 		parsedModel.CustomRiskCategories = append(parsedModel.CustomRiskCategories, customRiskRules[id].Category())
 	}
+}
 
-	// Individual Risk Categories (just used as regular risk categories) ===============================================================================
+// Individual Risk Categories (just used as regular risk categories) ===============================================
+
+func parseCustomRiskCategories(parsedModel *types.Model, modelInput *input.Model) error {
 	for _, customRiskCategoryCategory := range modelInput.CustomRiskCategories {
-		function, err := types.ParseRiskFunction(customRiskCategoryCategory.Function)
+		err := parseCustomRiskCategory(parsedModel, customRiskCategoryCategory)
 		if err != nil {
-			return nil, fmt.Errorf("unknown 'function' value of individual risk category %q: %v", customRiskCategoryCategory.Title, customRiskCategoryCategory.Function)
-		}
-
-		stride, err := types.ParseSTRIDE(customRiskCategoryCategory.STRIDE)
-		if err != nil {
-			return nil, fmt.Errorf("unknown 'stride' value of individual risk category  %q: %v", customRiskCategoryCategory.Title, customRiskCategoryCategory.STRIDE)
-		}
-
-		cat := &types.RiskCategory{
-			ID:                         customRiskCategoryCategory.ID,
-			Title:                      withDefault(customRiskCategoryCategory.Title, customRiskCategoryCategory.ID),
-			Description:                customRiskCategoryCategory.Description,
-			Impact:                     customRiskCategoryCategory.Impact,
-			ASVS:                       customRiskCategoryCategory.ASVS,
-			CheatSheet:                 customRiskCategoryCategory.CheatSheet,
-			Action:                     customRiskCategoryCategory.Action,
-			Mitigation:                 customRiskCategoryCategory.Mitigation,
-			Check:                      customRiskCategoryCategory.Check,
-			DetectionLogic:             customRiskCategoryCategory.DetectionLogic,
-			RiskAssessment:             customRiskCategoryCategory.RiskAssessment,
-			FalsePositives:             customRiskCategoryCategory.FalsePositives,
-			Function:                   function,
-			STRIDE:                     stride,
-			ModelFailurePossibleReason: customRiskCategoryCategory.ModelFailurePossibleReason,
-			CWE:                        customRiskCategoryCategory.CWE,
-		}
-
-		// the reports name a category by its title, which the map key of individual_risk_categories
-		// used to be (threagile#130)
-		if cat.Description == "" {
-			cat.Description = cat.Title
-		}
-
-		err = checkIdSyntax(customRiskCategoryCategory.ID)
-		if err != nil {
-			return nil, err
-		}
-
-		if !parsedModel.CustomRiskCategories.Add(cat) {
-			return nil, fmt.Errorf("duplicate id used: %v", customRiskCategoryCategory.ID)
-		}
-
-		// NOW THE INDIVIDUAL RISK INSTANCES:
-		// individualRiskInstances := make([]model.Risk, 0)
-		if customRiskCategoryCategory.RisksIdentified != nil { // TODO: also add syntax checks of input YAML when linked asset is not found or when synthetic-id is already used...
-			for _, title := range slices.Sorted(maps.Keys(customRiskCategoryCategory.RisksIdentified)) {
-				individualRiskInstance := customRiskCategoryCategory.RisksIdentified[title]
-				var mostRelevantDataAssetId, mostRelevantTechnicalAssetId, mostRelevantCommunicationLinkId, mostRelevantTrustBoundaryId, mostRelevantSharedRuntimeId string
-				var dataBreachProbability types.DataBreachProbability
-				var dataBreachTechnicalAssetIDs []string
-				severity, err := types.ParseRiskSeverity(individualRiskInstance.Severity)
-				if err != nil {
-					return nil, fmt.Errorf("unknown 'severity' value of individual risk instance %q: %v", title, individualRiskInstance.Severity)
-				}
-				exploitationLikelihood, err := types.ParseRiskExploitationLikelihood(individualRiskInstance.ExploitationLikelihood)
-				if err != nil {
-					return nil, fmt.Errorf("unknown 'exploitation_likelihood' value of individual risk instance %q: %v", title, individualRiskInstance.ExploitationLikelihood)
-				}
-				exploitationImpact, err := types.ParseRiskExploitationImpact(individualRiskInstance.ExploitationImpact)
-				if err != nil {
-					return nil, fmt.Errorf("unknown 'exploitation_impact' value of individual risk instance %q: %v", title, individualRiskInstance.ExploitationImpact)
-				}
-
-				if len(individualRiskInstance.MostRelevantDataAsset) > 0 {
-					mostRelevantDataAssetId = individualRiskInstance.MostRelevantDataAsset
-					err := parsedModel.CheckDataAssetTargetExists(mostRelevantDataAssetId, fmt.Sprintf("individual risk %q", title))
-					if err != nil {
-						return nil, err
-					}
-				}
-
-				if len(individualRiskInstance.MostRelevantTechnicalAsset) > 0 {
-					mostRelevantTechnicalAssetId = individualRiskInstance.MostRelevantTechnicalAsset
-					err := parsedModel.CheckTechnicalAssetExists(mostRelevantTechnicalAssetId, fmt.Sprintf("individual risk %q", title), false)
-					if err != nil {
-						return nil, err
-					}
-				}
-
-				if len(individualRiskInstance.MostRelevantCommunicationLink) > 0 {
-					mostRelevantCommunicationLinkId = individualRiskInstance.MostRelevantCommunicationLink
-					err := parsedModel.CheckCommunicationLinkExists(mostRelevantCommunicationLinkId, fmt.Sprintf("individual risk %q", title))
-					if err != nil {
-						return nil, err
-					}
-				}
-
-				if len(individualRiskInstance.MostRelevantTrustBoundary) > 0 {
-					mostRelevantTrustBoundaryId = individualRiskInstance.MostRelevantTrustBoundary
-					err := parsedModel.CheckTrustBoundaryExists(mostRelevantTrustBoundaryId, fmt.Sprintf("individual risk %q", title))
-					if err != nil {
-						return nil, err
-					}
-				}
-
-				if len(individualRiskInstance.MostRelevantSharedRuntime) > 0 {
-					mostRelevantSharedRuntimeId = individualRiskInstance.MostRelevantSharedRuntime
-					err := parsedModel.CheckSharedRuntimeExists(mostRelevantSharedRuntimeId, fmt.Sprintf("individual risk %q", title))
-					if err != nil {
-						return nil, err
-					}
-				}
-
-				dataBreachProbability, err = types.ParseDataBreachProbability(individualRiskInstance.DataBreachProbability)
-				if err != nil {
-					return nil, fmt.Errorf("unknown 'data_breach_probability' value of individual risk instance %q: %v", title, individualRiskInstance.DataBreachProbability)
-				}
-
-				if individualRiskInstance.DataBreachTechnicalAssets != nil {
-					dataBreachTechnicalAssetIDs = make([]string, len(individualRiskInstance.DataBreachTechnicalAssets))
-					for i, parsedReferencedAsset := range individualRiskInstance.DataBreachTechnicalAssets {
-						assetId := parsedReferencedAsset
-						err := parsedModel.CheckTechnicalAssetExists(assetId, fmt.Sprintf("data breach technical assets of individual risk %q", title), false)
-						if err != nil {
-							return nil, err
-						}
-						dataBreachTechnicalAssetIDs[i] = assetId
-					}
-				}
-
-				parsedModel.GeneratedRisksByCategory[cat.ID] = append(parsedModel.GeneratedRisksByCategory[cat.ID], &types.Risk{
-					SyntheticId:                     createSyntheticId(cat.ID, mostRelevantDataAssetId, mostRelevantTechnicalAssetId, mostRelevantCommunicationLinkId, mostRelevantTrustBoundaryId, mostRelevantSharedRuntimeId),
-					Title:                           title,
-					CategoryId:                      cat.ID,
-					Severity:                        severity,
-					ExploitationLikelihood:          exploitationLikelihood,
-					ExploitationImpact:              exploitationImpact,
-					MostRelevantDataAssetId:         mostRelevantDataAssetId,
-					MostRelevantTechnicalAssetId:    mostRelevantTechnicalAssetId,
-					MostRelevantCommunicationLinkId: mostRelevantCommunicationLinkId,
-					MostRelevantTrustBoundaryId:     mostRelevantTrustBoundaryId,
-					MostRelevantSharedRuntimeId:     mostRelevantSharedRuntimeId,
-					DataBreachProbability:           dataBreachProbability,
-					DataBreachTechnicalAssetIDs:     dataBreachTechnicalAssetIDs,
-				})
-			}
+			return err
 		}
 	}
+	return nil
+}
 
-	// Risk Tracking ===============================================================================
+func parseCustomRiskCategory(parsedModel *types.Model, customRiskCategoryCategory *input.RiskCategory) error {
+	function, err := types.ParseRiskFunction(customRiskCategoryCategory.Function)
+	if err != nil {
+		return fmt.Errorf("unknown 'function' value of individual risk category %q: %v",
+			customRiskCategoryCategory.Title, customRiskCategoryCategory.Function)
+	}
+
+	stride, err := types.ParseSTRIDE(customRiskCategoryCategory.STRIDE)
+	if err != nil {
+		return fmt.Errorf("unknown 'stride' value of individual risk category  %q: %v",
+			customRiskCategoryCategory.Title, customRiskCategoryCategory.STRIDE)
+	}
+
+	cat := &types.RiskCategory{
+		ID:                         customRiskCategoryCategory.ID,
+		Title:                      withDefault(customRiskCategoryCategory.Title, customRiskCategoryCategory.ID),
+		Description:                customRiskCategoryCategory.Description,
+		Impact:                     customRiskCategoryCategory.Impact,
+		ASVS:                       customRiskCategoryCategory.ASVS,
+		CheatSheet:                 customRiskCategoryCategory.CheatSheet,
+		Action:                     customRiskCategoryCategory.Action,
+		Mitigation:                 customRiskCategoryCategory.Mitigation,
+		Check:                      customRiskCategoryCategory.Check,
+		DetectionLogic:             customRiskCategoryCategory.DetectionLogic,
+		RiskAssessment:             customRiskCategoryCategory.RiskAssessment,
+		FalsePositives:             customRiskCategoryCategory.FalsePositives,
+		Function:                   function,
+		STRIDE:                     stride,
+		ModelFailurePossibleReason: customRiskCategoryCategory.ModelFailurePossibleReason,
+		CWE:                        customRiskCategoryCategory.CWE,
+	}
+
+	// the reports name a category by its title, which the map key of individual_risk_categories
+	// used to be (threagile#130)
+	if cat.Description == "" {
+		cat.Description = cat.Title
+	}
+
+	err = checkIdSyntax(customRiskCategoryCategory.ID)
+	if err != nil {
+		return err
+	}
+
+	if !parsedModel.CustomRiskCategories.Add(cat) {
+		return fmt.Errorf("duplicate id used: %v", customRiskCategoryCategory.ID)
+	}
+
+	// NOW THE INDIVIDUAL RISK INSTANCES:
+	// individualRiskInstances := make([]model.Risk, 0)
+	// a synthetic id that another risk already uses is not reported yet
+	for _, title := range slices.Sorted(maps.Keys(customRiskCategoryCategory.RisksIdentified)) {
+		risk, err := parseIndividualRisk(parsedModel, cat.ID, title, customRiskCategoryCategory.RisksIdentified[title])
+		if err != nil {
+			return err
+		}
+		parsedModel.GeneratedRisksByCategory[cat.ID] = append(parsedModel.GeneratedRisksByCategory[cat.ID], risk)
+	}
+	return nil
+}
+
+func parseIndividualRisk(
+	parsedModel *types.Model, categoryId string, title string, individualRiskInstance input.RiskIdentified,
+) (*types.Risk, error) {
+	severity, err := types.ParseRiskSeverity(individualRiskInstance.Severity)
+	if err != nil {
+		return nil, fmt.Errorf("unknown 'severity' value of individual risk instance %q: %v",
+			title, individualRiskInstance.Severity)
+	}
+	exploitationLikelihood, err := types.ParseRiskExploitationLikelihood(individualRiskInstance.ExploitationLikelihood)
+	if err != nil {
+		return nil, fmt.Errorf("unknown 'exploitation_likelihood' value of individual risk instance %q: %v",
+			title, individualRiskInstance.ExploitationLikelihood)
+	}
+	exploitationImpact, err := types.ParseRiskExploitationImpact(individualRiskInstance.ExploitationImpact)
+	if err != nil {
+		return nil, fmt.Errorf("unknown 'exploitation_impact' value of individual risk instance %q: %v",
+			title, individualRiskInstance.ExploitationImpact)
+	}
+
+	err = checkIndividualRiskReferences(parsedModel, title, individualRiskInstance)
+	if err != nil {
+		return nil, err
+	}
+
+	dataBreachProbability, err := types.ParseDataBreachProbability(individualRiskInstance.DataBreachProbability)
+	if err != nil {
+		return nil, fmt.Errorf("unknown 'data_breach_probability' value of individual risk instance %q: %v",
+			title, individualRiskInstance.DataBreachProbability)
+	}
+
+	dataBreachTechnicalAssetIDs, err := parseDataBreachTechnicalAssets(parsedModel, title,
+		individualRiskInstance.DataBreachTechnicalAssets)
+	if err != nil {
+		return nil, err
+	}
+
+	mostRelevantDataAssetId := individualRiskInstance.MostRelevantDataAsset
+	mostRelevantTechnicalAssetId := individualRiskInstance.MostRelevantTechnicalAsset
+	mostRelevantCommunicationLinkId := individualRiskInstance.MostRelevantCommunicationLink
+	mostRelevantTrustBoundaryId := individualRiskInstance.MostRelevantTrustBoundary
+	mostRelevantSharedRuntimeId := individualRiskInstance.MostRelevantSharedRuntime
+	return &types.Risk{
+		SyntheticId: createSyntheticId(categoryId, mostRelevantDataAssetId, mostRelevantTechnicalAssetId,
+			mostRelevantCommunicationLinkId, mostRelevantTrustBoundaryId, mostRelevantSharedRuntimeId),
+		Title:                           title,
+		CategoryId:                      categoryId,
+		Severity:                        severity,
+		ExploitationLikelihood:          exploitationLikelihood,
+		ExploitationImpact:              exploitationImpact,
+		MostRelevantDataAssetId:         mostRelevantDataAssetId,
+		MostRelevantTechnicalAssetId:    mostRelevantTechnicalAssetId,
+		MostRelevantCommunicationLinkId: mostRelevantCommunicationLinkId,
+		MostRelevantTrustBoundaryId:     mostRelevantTrustBoundaryId,
+		MostRelevantSharedRuntimeId:     mostRelevantSharedRuntimeId,
+		DataBreachProbability:           dataBreachProbability,
+		DataBreachTechnicalAssetIDs:     dataBreachTechnicalAssetIDs,
+	}, nil
+}
+
+// checkIndividualRiskReferences checks that the most relevant elements an individual risk names exist.
+func checkIndividualRiskReferences(
+	parsedModel *types.Model, title string, individualRiskInstance input.RiskIdentified,
+) error {
+	checkTechnicalAssetExists := func(referencedAsset, where string) error {
+		return parsedModel.CheckTechnicalAssetExists(referencedAsset, where, false)
+	}
+	references := []struct {
+		id    string
+		check func(referencedId, where string) error
+	}{
+		{individualRiskInstance.MostRelevantDataAsset, parsedModel.CheckDataAssetTargetExists},
+		{individualRiskInstance.MostRelevantTechnicalAsset, checkTechnicalAssetExists},
+		{individualRiskInstance.MostRelevantCommunicationLink, parsedModel.CheckCommunicationLinkExists},
+		{individualRiskInstance.MostRelevantTrustBoundary, parsedModel.CheckTrustBoundaryExists},
+		{individualRiskInstance.MostRelevantSharedRuntime, parsedModel.CheckSharedRuntimeExists},
+	}
+	for _, reference := range references {
+		if len(reference.id) == 0 {
+			continue
+		}
+		err := reference.check(reference.id, fmt.Sprintf("individual risk %q", title))
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func parseDataBreachTechnicalAssets(
+	parsedModel *types.Model, title string, referencedAssets []string,
+) ([]string, error) {
+	var dataBreachTechnicalAssetIDs []string
+	if referencedAssets != nil {
+		dataBreachTechnicalAssetIDs = make([]string, len(referencedAssets))
+		for i, parsedReferencedAsset := range referencedAssets {
+			assetId := parsedReferencedAsset
+			err := parsedModel.CheckTechnicalAssetExists(assetId,
+				fmt.Sprintf("data breach technical assets of individual risk %q", title), false)
+			if err != nil {
+				return nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+			}
+			dataBreachTechnicalAssetIDs[i] = assetId
+		}
+	}
+	return dataBreachTechnicalAssetIDs, nil
+}
+
+// Risk Tracking ===============================================================================
+
+func parseRiskTracking(parsedModel *types.Model, modelInput *input.Model) error {
 	parsedModel.RiskTracking = make(map[string]*types.RiskTracking)
 	for syntheticRiskId, riskTracking := range modelInput.RiskTracking {
 		justification := riskTracking.Justification
@@ -730,13 +978,13 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 			var parseError error
 			date, parseError = time.Parse("2006-01-02", riskTracking.Date)
 			if parseError != nil {
-				return nil, fmt.Errorf("unable to parse 'date' of risk tracking %q: %v", syntheticRiskId, riskTracking.Date)
+				return fmt.Errorf("unable to parse 'date' of risk tracking %q: %v", syntheticRiskId, riskTracking.Date)
 			}
 		}
 
 		status, err := types.ParseRiskStatus(riskTracking.Status)
 		if err != nil {
-			return nil, fmt.Errorf("unknown 'status' value of risk tracking %q: %v", syntheticRiskId, riskTracking.Status)
+			return fmt.Errorf("unknown 'status' value of risk tracking %q: %v", syntheticRiskId, riskTracking.Status)
 		}
 
 		tracking := &types.RiskTracking{
@@ -750,38 +998,23 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 
 		parsedModel.RiskTracking[syntheticRiskId] = tracking
 	}
+	return nil
+}
 
-	// ====================== model consistency check (linking)
+// checkCommunicationLinkTargets checks the model for consistency: the target of every communication link
+// has to exist.
+func checkCommunicationLinkTargets(parsedModel *types.Model) error {
 	for _, id := range parsedModel.SortedTechnicalAssetIDs() {
 		technicalAsset := parsedModel.TechnicalAssets[id]
 		for _, commLink := range technicalAsset.CommunicationLinks {
-			err := parsedModel.CheckTechnicalAssetExists(commLink.TargetId, "communication link '"+commLink.Title+"' of technical asset '"+technicalAsset.Title+"'", false)
+			err := parsedModel.CheckTechnicalAssetExists(commLink.TargetId,
+				"communication link '"+commLink.Title+"' of technical asset '"+technicalAsset.Title+"'", false)
 			if err != nil {
-				return nil, err
+				return err //nolint:wrapcheck // the check names the model element; its message is what users see
 			}
 		}
 	}
-
-	/*
-		data, _ := json.MarshalIndent(parsedModel, "", "  ")
-		_ = os.WriteFile(filepath.Join("all.json"), data, 0644)
-	*/
-
-	/**
-	inYamlData, _ := yaml.Marshal(modelInput)
-	_ = os.WriteFile(filepath.Join("in.yaml"), inYamlData, 0644)
-
-	inJsonData, _ := json.MarshalIndent(modelInput, "", "  ")
-	_ = os.WriteFile(filepath.Join("in.json"), inJsonData, 0644)
-
-	outYamlData, _ := yaml.Marshal(parsedModel)
-	_ = os.WriteFile(filepath.Join("out.yaml"), outYamlData, 0644)
-
-	outJsonData, _ := json.MarshalIndent(parsedModel, "", "  ")
-	_ = os.WriteFile(filepath.Join("out.json"), outJsonData, 0644)
-	/**/
-
-	return &parsedModel, nil
+	return nil
 }
 
 func convertAuthor(author input.Author) *types.Author {
@@ -808,12 +1041,9 @@ func checkIdSyntax(id string) error {
 	return nil
 }
 
-func createDataFlowId(sourceAssetId, title string) (string, error) {
-	reg, err := regexp.Compile("[^A-Za-z0-9]+")
-	if err != nil {
-		return "", err
-	}
-	return sourceAssetId + ">" + strings.Trim(reg.ReplaceAllString(strings.ToLower(title), "-"), "- "), nil
+func createDataFlowId(sourceAssetId, title string) string {
+	reg := regexp.MustCompile("[^A-Za-z0-9]+")
+	return sourceAssetId + ">" + strings.Trim(reg.ReplaceAllString(strings.ToLower(title), "-"), "- ")
 }
 
 // addCommunicationLink tracks a link of a technical asset in the indexes of all links.
