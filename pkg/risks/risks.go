@@ -12,7 +12,30 @@ import (
 
 func GetBuiltInRiskRules() types.RiskRules {
 	rules := make(types.RiskRules)
-	for _, rule := range []types.RiskRule{
+	for _, rule := range builtInRiskRules() {
+		rules[rule.Category().ID] = rule
+	}
+
+	scriptRules, scriptError := GetScriptRiskRules()
+	if scriptError != nil {
+		fmt.Printf("error loading script risk rules: %v\n", scriptError)
+		return rules
+	}
+
+	for id, rule := range scriptRules {
+		builtinRule, ok := rules[id]
+		if ok && builtinRule != nil {
+			fmt.Printf("WARNING: script risk rule %q shadows built-in risk rule\n", id)
+		}
+
+		rules[id] = rule
+	}
+
+	return rules
+}
+
+func builtInRiskRules() []types.RiskRule {
+	return []types.RiskRule{
 		builtin.NewAccidentalSecretLeakRule(),
 		builtin.NewCodeBackdooringRule(),
 		builtin.NewContainerBaseImageBackdooringRule(),
@@ -59,26 +82,7 @@ func GetBuiltInRiskRules() types.RiskRules {
 		builtin.NewWrongCommunicationLinkContentRule(),
 		builtin.NewWrongTrustBoundaryContentRule(),
 		builtin.NewXmlExternalEntityRule(),
-	} {
-		rules[rule.Category().ID] = rule
 	}
-
-	scriptRules, scriptError := GetScriptRiskRules()
-	if scriptError != nil {
-		fmt.Printf("error loading script risk rules: %v\n", scriptError)
-		return rules
-	}
-
-	for id, rule := range scriptRules {
-		builtinRule, ok := rules[id]
-		if ok && builtinRule != nil {
-			fmt.Printf("WARNING: script risk rule %q shadows built-in risk rule\n", id)
-		}
-
-		rules[id] = rule
-	}
-
-	return rules
 }
 
 //go:embed scripts/*.yaml
