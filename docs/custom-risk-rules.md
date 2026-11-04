@@ -24,6 +24,7 @@ Fields to describe risk can be found below
 | `false_positives`              | string                          |             |
 | `model_failure_possible_reason`| bool                            |             |
 | `cwe`                          | int                             |             |
+| `references`                   | []string                        | Entries of other threat catalogs the risk matches, like `OWASP LLM01:2025 Prompt Injection` |
 | `category`                     | string                          |             |
 | `supported-tags`               | string                          |             |
 | `risk`                         | map[string]object               |             |

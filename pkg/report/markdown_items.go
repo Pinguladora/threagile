@@ -43,24 +43,7 @@ func (what *markdownWriter) riskCategory(category *viewCategory) {
 	}
 	what.paragraph(itemLine(category.Severity, category.Summary, category.Category.ID))
 
-	cwe, asvs, cheatSheet := textNotApplicable, markdownText(category.Category.ASVS), textNotApplicable
-	if category.CWELink != "" {
-		cwe = markdownLink("CWE "+strconv.Itoa(category.Category.CWE), markdownURL(category.CWELink))
-	}
-	if asvs == "" {
-		asvs = textNotApplicable
-	}
-	if category.CheatSheet.Anchor != "" {
-		cheatSheet = markdownLink(markdownText(category.CheatSheet.Title), markdownURL(category.CheatSheet.Anchor))
-	}
-	what.properties(
-		[]string{columnSTRIDE, markdownText(category.Category.STRIDE.Title())},
-		[]string{"CWE", cwe},
-		[]string{"Function", markdownText(category.Category.Function.Title())},
-		[]string{"Action", markdownText(category.Category.Action)},
-		[]string{"ASVS chapter", asvs},
-		[]string{"Cheat sheet", cheatSheet},
-	)
+	what.properties(categoryProperties(category)...)
 	what.labelled("Description", category.Description)
 	what.labelled("Impact", category.Impact)
 	what.labelled("Detection Logic", category.DetectionLogic)
@@ -92,6 +75,36 @@ func (what *markdownWriter) riskCategory(category *viewCategory) {
 		{columnStatus, false},
 		{"Tracking", false},
 	}, rows...)
+}
+
+// categoryProperties are the rows of the property table of a risk category.
+func categoryProperties(category *viewCategory) [][]string {
+	cwe, asvs, cheatSheet := textNotApplicable, markdownText(category.Category.ASVS), textNotApplicable
+	if category.CWELink != "" {
+		cwe = markdownLink("CWE "+strconv.Itoa(category.Category.CWE), markdownURL(category.CWELink))
+	}
+	if asvs == "" {
+		asvs = textNotApplicable
+	}
+	if category.CheatSheet.Anchor != "" {
+		cheatSheet = markdownLink(markdownText(category.CheatSheet.Title), markdownURL(category.CheatSheet.Anchor))
+	}
+	properties := [][]string{
+		{columnSTRIDE, markdownText(category.Category.STRIDE.Title())},
+		{"CWE", cwe},
+		{"Function", markdownText(category.Category.Function.Title())},
+		{"Action", markdownText(category.Category.Action)},
+		{"ASVS chapter", asvs},
+		{"Cheat sheet", cheatSheet},
+	}
+	if len(category.Category.References) > 0 {
+		references := make([]string, 0, len(category.Category.References))
+		for _, reference := range category.Category.References {
+			references = append(references, markdownText(reference))
+		}
+		properties = append(properties, []string{"References", strings.Join(references, "; ")})
+	}
+	return properties
 }
 
 func (what *markdownWriter) technicalAssets(view *reportView) {

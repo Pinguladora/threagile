@@ -2134,6 +2134,9 @@ func (r *pdfReporter) riskCategoryDetails(category *types.RiskCategory, html gof
 
 	cheatSheetLink := pdfCheatSheetLink(category.CheatSheet)
 	text.WriteString("<br>Cheat Sheet: " + cheatSheetLink)
+	if len(category.References) > 0 {
+		text.WriteString("<br>References: " + strings.Join(category.References, "; "))
+	}
 
 	text.WriteString("<br><br><br><b>Check</b><br><br>")
 	text.WriteString(category.Check)

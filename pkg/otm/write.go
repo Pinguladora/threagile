@@ -267,7 +267,7 @@ func newThreat(threat interchange.Threat) (Threat, Mitigation) {
 		ID:          threat.ID,
 		Name:        threat.Name,
 		Description: threat.Description,
-		Categories:  []string{threat.STRIDE.Title()},
+		Categories:  append([]string{threat.STRIDE.Title()}, threat.References...),
 		Risk: ThreatRisk{
 			Likelihood:    float64(threat.Likelihood.Weight() * scoreStep),
 			Impact:        float64(threat.Impact.Weight() * scoreStep),

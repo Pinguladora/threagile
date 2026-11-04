@@ -21,6 +21,7 @@ type riskJSON struct {
 	STRIDE                             types.STRIDE       `json:"stride"`
 	Function                           types.RiskFunction `json:"function"`
 	CWE                                int                `json:"cwe"`
+	References                         []string           `json:"references,omitempty"`
 	Action                             string             `json:"action"`
 	Mitigation                         string             `json:"mitigation"`
 	Check                              string             `json:"check"`
@@ -42,6 +43,7 @@ func newRiskJSON(parsedModel *types.Model, risk *types.Risk) riskJSON {
 		STRIDE:                             details.category.STRIDE,
 		Function:                           details.category.Function,
 		CWE:                                details.category.CWE,
+		References:                         details.category.References,
 		Action:                             details.category.Action,
 		Mitigation:                         details.category.Mitigation,
 		Check:                              details.category.Check,

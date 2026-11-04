@@ -828,6 +828,7 @@ func parseCustomRiskCategory(parsedModel *types.Model, customRiskCategoryCategor
 		STRIDE:                     stride,
 		ModelFailurePossibleReason: customRiskCategoryCategory.ModelFailurePossibleReason,
 		CWE:                        customRiskCategoryCategory.CWE,
+		References:                 customRiskCategoryCategory.References,
 	}
 
 	// the reports name a category by its title, which the map key of individual_risk_categories
