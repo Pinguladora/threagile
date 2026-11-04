@@ -162,7 +162,7 @@ technical_assets:
         protocol: https
         authentication: session-id
         identity: end-user
-        authorization: unknown
+        authorization: object-level
         tags: []
         vpn: false
         ip_filtered: false
@@ -200,9 +200,9 @@ technical_assets:
         target: support-agent
         description: Forwards the messages of a customer to the assistant
         protocol: https
-        authentication: token
+        authentication: short-lived-token
         identity: end-user
-        authorization: unknown
+        authorization: function-level
         tags: []
         vpn: false
         ip_filtered: false
@@ -240,9 +240,9 @@ technical_assets:
         target: hosted-llm
         description: Plans the next step and writes the answers
         protocol: https
-        authentication: credentials
+        authentication: long-lived-token
         identity: service-account
-        authorization: unknown
+        authorization: function-level
         tags: []
         vpn: false
         ip_filtered: false
@@ -254,9 +254,9 @@ technical_assets:
         target: guardrail-model
         description: Checks requests and answers for harmful content
         protocol: https
-        authentication: token
-        identity: service-account
-        authorization: unknown
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
         tags: []
         vpn: false
         ip_filtered: false
@@ -268,9 +268,9 @@ technical_assets:
         target: knowledge-index
         description: Retrieves the articles matching a question
         protocol: https
-        authentication: token
-        identity: service-account
-        authorization: unknown
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
         tags: []
         vpn: false
         ip_filtered: false
@@ -282,9 +282,9 @@ technical_assets:
         target: knowledge-index
         description: Stores summaries of resolved conversations as memory
         protocol: https
-        authentication: token
-        identity: service-account
-        authorization: unknown
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
         tags: []
         vpn: false
         ip_filtered: false
@@ -298,7 +298,7 @@ technical_assets:
         protocol: https
         authentication: none
         identity: none
-        authorization: unknown
+        authorization: none
         tags: []
         vpn: false
         ip_filtered: false
@@ -363,9 +363,9 @@ technical_assets:
         target: model-registry
         description: Loads the current model version at start
         protocol: https
-        authentication: token
-        identity: service-account
-        authorization: unknown
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
         tags: []
         vpn: false
         ip_filtered: false
@@ -455,9 +455,9 @@ technical_assets:
         target: knowledge-cms
         description: Reads the published articles
         protocol: https
-        authentication: token
-        identity: service-account
-        authorization: unknown
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
         tags: []
         vpn: false
         ip_filtered: false
@@ -469,9 +469,9 @@ technical_assets:
         target: knowledge-index
         description: Writes the embeddings of the articles
         protocol: https
-        authentication: token
-        identity: service-account
-        authorization: unknown
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
         tags: []
         vpn: false
         ip_filtered: false
@@ -535,9 +535,9 @@ technical_assets:
         target: order-service
         description: Looks up orders and issues refunds
         protocol: https
-        authentication: token
-        identity: service-account
-        authorization: unknown
+        authentication: short-lived-token
+        identity: end-user
+        authorization: function-level
         tags: []
         vpn: false
         ip_filtered: false
@@ -549,9 +549,9 @@ technical_assets:
         target: search-api
         description: Searches the web for product information
         protocol: https
-        authentication: credentials
+        authentication: long-lived-token
         identity: service-account
-        authorization: unknown
+        authorization: function-level
         tags: []
         vpn: false
         ip_filtered: false
@@ -618,7 +618,7 @@ technical_assets:
         protocol: jdbc-encrypted
         authentication: credentials
         identity: service-account
-        authorization: unknown
+        authorization: function-level
         tags: []
         vpn: false
         ip_filtered: false

@@ -1011,6 +1011,16 @@
           ]
         },
         {
+          "threat": "missing-object-level-authorization",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-object-level-authorization-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "prompt-injection",
           "state": "exposed",
           "mitigations": [
@@ -1032,7 +1042,8 @@
         }
       ],
       "attributes": {
-        "threagile:authentication": "token",
+        "threagile:authentication": "short-lived-token",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "chat-transcripts",
         "threagile:data_assets_sent": "chat-transcripts",
         "threagile:identity": "end-user",
@@ -1084,6 +1095,7 @@
       ],
       "attributes": {
         "threagile:authentication": "session-id",
+        "threagile:authorization": "object-level",
         "threagile:data_assets_received": "chat-transcripts",
         "threagile:data_assets_sent": "chat-transcripts",
         "threagile:identity": "end-user",
@@ -1113,9 +1125,10 @@
         }
       ],
       "attributes": {
-        "threagile:authentication": "token",
+        "threagile:authentication": "short-lived-token",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "model-weights",
-        "threagile:identity": "service-account",
+        "threagile:identity": "workload",
         "threagile:protocol": "https",
         "threagile:readonly": "true",
         "threagile:usage": "business"
@@ -1143,9 +1156,10 @@
         }
       ],
       "attributes": {
-        "threagile:authentication": "token",
+        "threagile:authentication": "short-lived-token",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "knowledge-articles",
-        "threagile:identity": "service-account",
+        "threagile:identity": "workload",
         "threagile:protocol": "https",
         "threagile:readonly": "true",
         "threagile:usage": "business"
@@ -1183,9 +1197,10 @@
         }
       ],
       "attributes": {
-        "threagile:authentication": "token",
+        "threagile:authentication": "short-lived-token",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_sent": "knowledge-articles",
-        "threagile:identity": "service-account",
+        "threagile:identity": "workload",
         "threagile:protocol": "https",
         "threagile:usage": "business"
       }
@@ -1225,6 +1240,7 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "order-data,customer-data",
         "threagile:data_assets_sent": "order-data",
         "threagile:identity": "service-account",
@@ -1256,7 +1272,8 @@
         }
       ],
       "attributes": {
-        "threagile:authentication": "credentials",
+        "threagile:authentication": "long-lived-token",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "chat-transcripts",
         "threagile:data_assets_sent": "chat-transcripts,customer-data",
         "threagile:identity": "service-account",
@@ -1296,9 +1313,10 @@
         }
       ],
       "attributes": {
-        "threagile:authentication": "token",
+        "threagile:authentication": "short-lived-token",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_sent": "chat-transcripts",
-        "threagile:identity": "service-account",
+        "threagile:identity": "workload",
         "threagile:protocol": "https",
         "threagile:usage": "business"
       }
@@ -1336,10 +1354,11 @@
         }
       ],
       "attributes": {
-        "threagile:authentication": "token",
+        "threagile:authentication": "short-lived-token",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "chat-transcripts",
         "threagile:data_assets_sent": "chat-transcripts",
-        "threagile:identity": "service-account",
+        "threagile:identity": "workload",
         "threagile:protocol": "https",
         "threagile:usage": "business"
       }
@@ -1376,9 +1395,10 @@
         }
       ],
       "attributes": {
-        "threagile:authentication": "token",
+        "threagile:authentication": "short-lived-token",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "knowledge-articles",
-        "threagile:identity": "service-account",
+        "threagile:identity": "workload",
         "threagile:protocol": "https",
         "threagile:readonly": "true",
         "threagile:usage": "business"
@@ -1439,6 +1459,7 @@
       ],
       "attributes": {
         "threagile:authentication": "none",
+        "threagile:authorization": "none",
         "threagile:data_assets_received": "order-data,customer-data",
         "threagile:data_assets_sent": "order-data",
         "threagile:identity": "none",
@@ -1469,6 +1490,16 @@
           ]
         },
         {
+          "threat": "missing-object-level-authorization",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-object-level-authorization-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "server-side-request-forgery",
           "state": "exposed",
           "mitigations": [
@@ -1480,10 +1511,11 @@
         }
       ],
       "attributes": {
-        "threagile:authentication": "token",
+        "threagile:authentication": "short-lived-token",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "order-data,customer-data",
         "threagile:data_assets_sent": "order-data",
-        "threagile:identity": "service-account",
+        "threagile:identity": "end-user",
         "threagile:protocol": "https",
         "threagile:usage": "business"
       }
@@ -1510,7 +1542,8 @@
         }
       ],
       "attributes": {
-        "threagile:authentication": "credentials",
+        "threagile:authentication": "long-lived-token",
+        "threagile:authorization": "function-level",
         "threagile:data_assets_received": "web-content",
         "threagile:identity": "service-account",
         "threagile:protocol": "https",
@@ -1797,6 +1830,29 @@
         "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "missing-object-level-authorization",
+      "name": "Missing Object-Level Authorization",
+      "description": "A service that acts for its users must check in each request that the user may access the object at hand, like the order or the account the request names. Checking only that the caller is logged in, or that its role may call the operation, lets any user read or change the objects of others by changing an id in the request (BOLA, also known as IDOR).",
+      "categories": [
+        "Elevation of Privilege",
+        "OWASP API1:2023 Broken Object Level Authorization",
+        "OWASP API5:2023 Broken Function Level Authorization"
+      ],
+      "cwes": [
+        "CWE-639"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers with any account might read or change the data of all other users."
+      },
+      "attributes": {
+        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+        "threagile:function": "development"
       }
     },
     {
@@ -2205,6 +2261,15 @@
       "id": "missing-network-segmentation-mitigation",
       "name": "Network Segmentation",
       "description": "Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-object-level-authorization-mitigation",
+      "name": "Object-Level Authorization",
+      "description": "Check in every operation that the user of the request may access each object it names, by the identity of the user rather than an id the request carries, and deny by default, for example by asking a policy decision point with the user, the action and the object. Set the authorization of the link to \u003ci\u003eobject-level\u003c/i\u003e once this is in place.",
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
