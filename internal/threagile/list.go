@@ -2,6 +2,8 @@ package threagile
 
 import (
 	"fmt"
+	"maps"
+	"slices"
 
 	"github.com/Pinguladora/threagile/pkg/macros"
 	"github.com/Pinguladora/threagile/pkg/model"
@@ -24,7 +26,8 @@ func (what *Threagile) initList() *Threagile {
 			cmd.Println("Custom risk rules:")
 			cmd.Println("----------------------")
 			customRiskRules := model.LoadCustomRiskRules(what.config.GetPluginFolder(), what.config.GetRiskRulePlugins(), DefaultProgressReporter{Verbose: what.config.GetVerbose()})
-			for id, customRule := range customRiskRules {
+			for _, id := range slices.Sorted(maps.Keys(customRiskRules)) {
+				customRule := customRiskRules[id]
 				cmd.Println(id, "-->", customRule.Category().Title, "--> with tags:", customRule.SupportedTags())
 			}
 			cmd.Println()
@@ -32,7 +35,9 @@ func (what *Threagile) initList() *Threagile {
 			cmd.Println("Built-in risk rules:")
 			cmd.Println("--------------------")
 			cmd.Println()
-			for _, rule := range risks.GetBuiltInRiskRules() {
+			builtInRiskRules := risks.GetBuiltInRiskRules()
+			for _, id := range slices.Sorted(maps.Keys(builtInRiskRules)) {
+				rule := builtInRiskRules[id]
 				cmd.Println(rule.Category().ID, "-->", rule.Category().Title, "--> with tags:", rule.SupportedTags())
 			}
 
@@ -79,8 +84,9 @@ func (what *Threagile) initList() *Threagile {
 			cmd.Println()
 			cmd.Println("The following types are available (can be extended for custom rules):")
 			cmd.Println()
-			for name, values := range types.GetBuiltinTypeValues(what.config) {
-				cmd.Println(fmt.Sprintf("  %v: %v", name, values))
+			typeValues := types.GetBuiltinTypeValues(what.config)
+			for _, name := range slices.Sorted(maps.Keys(typeValues)) {
+				cmd.Println(fmt.Sprintf("  %v: %v", name, typeValues[name]))
 			}
 		},
 	})
