@@ -41,17 +41,13 @@ func (s *server) createKey(ginContext *gin.Context) {
 	n, err := rand.Read(keyBytesArr)
 	if n != keySize || err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusInternalServerError, gin.H{
-			"error": "unable to create key",
-		})
+		respondError(ginContext, http.StatusInternalServerError, "unable to create key")
 		return
 	}
 	err = os.MkdirAll(s.folderNameFromKey(keyBytesArr), 0o700)
 	if err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusInternalServerError, gin.H{
-			"error": "unable to create key",
-		})
+		respondError(ginContext, http.StatusInternalServerError, "unable to create key")
 		return
 	}
 	ginContext.JSON(http.StatusCreated, gin.H{
@@ -102,9 +98,8 @@ func (s *server) checkObjectCreationThrottler(ginContext *gin.Context, typeName 
 		s.createdObjectsThrottler[keyHash] = append(s.createdObjectsThrottler[keyHash], now)
 		return true
 	}
-	ginContext.JSON(http.StatusTooManyRequests, gin.H{
-		"error": "object creation throttling exceeded (denial-of-service protection): please wait some time and try again",
-	})
+	respondError(ginContext, http.StatusTooManyRequests,
+		"object creation throttling exceeded (denial-of-service protection): please wait some time and try again")
 	return false
 }
 
@@ -118,14 +113,10 @@ func (s *server) deleteKey(ginContext *gin.Context) {
 	err := os.RemoveAll(folderName)
 	if err != nil {
 		log.Println("error during key delete: " + err.Error())
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "key not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "key not found")
 		return
 	}
-	ginContext.JSON(http.StatusOK, gin.H{
-		"message": "key deleted",
-	})
+	respondMessage(ginContext, http.StatusOK, "key deleted", nil)
 }
 
 func (s *server) createToken(ginContext *gin.Context) {
@@ -144,9 +135,7 @@ func (s *server) createToken(ginContext *gin.Context) {
 	n, err := rand.Read(xorBytesArr)
 	if n != keySize || err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusInternalServerError, gin.H{
-			"error": "unable to create token",
-		})
+		respondError(ginContext, http.StatusInternalServerError, "unable to create token")
 		return
 	}
 	now := time.Now().UnixNano()
@@ -171,9 +160,7 @@ type tokenHeader struct {
 func (s *server) deleteToken(ginContext *gin.Context) {
 	header := tokenHeader{}
 	if err := ginContext.ShouldBindHeader(&header); err != nil {
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "token not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "token not found")
 		return
 	}
 	token, err := base64.RawURLEncoding.DecodeString(strings.TrimSpace(header.Token))
@@ -181,26 +168,20 @@ func (s *server) deleteToken(ginContext *gin.Context) {
 		if err != nil {
 			log.Println(err)
 		}
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "token not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "token not found")
 		return
 	}
 	s.globalLock.Lock()
 	defer s.globalLock.Unlock()
 	s.deleteTokenHashFromMaps(hashSHA256(token))
-	ginContext.JSON(http.StatusOK, gin.H{
-		"message": "token deleted",
-	})
+	respondMessage(ginContext, http.StatusOK, "token deleted", nil)
 }
 
 func (s *server) checkKeyToFolderName(ginContext *gin.Context) (folderNameOfKey string, key []byte, ok bool) {
 	header := keyHeader{}
 	if err := ginContext.ShouldBindHeader(&header); err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "key not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "key not found")
 		return folderNameOfKey, key, false
 	}
 	key, err := base64.RawURLEncoding.DecodeString(strings.TrimSpace(header.Key))
@@ -208,17 +189,13 @@ func (s *server) checkKeyToFolderName(ginContext *gin.Context) (folderNameOfKey 
 		if err != nil {
 			log.Println(err)
 		}
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "key not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "key not found")
 		return folderNameOfKey, key, false
 	}
 	folderNameOfKey = s.folderNameFromKey(key)
 	if _, err := os.Stat(folderNameOfKey); os.IsNotExist(err) {
 		log.Println(err)
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "key not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "key not found")
 		return folderNameOfKey, key, false
 	}
 	return folderNameOfKey, key, true
@@ -228,9 +205,7 @@ func (s *server) checkTokenToFolderName(ginContext *gin.Context) (folderNameOfKe
 	header := tokenHeader{}
 	if err := ginContext.ShouldBindHeader(&header); err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "token not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "token not found")
 		return folderNameOfKey, key, false
 	}
 	token, err := base64.RawURLEncoding.DecodeString(strings.TrimSpace(header.Token))
@@ -238,9 +213,7 @@ func (s *server) checkTokenToFolderName(ginContext *gin.Context) (folderNameOfKe
 		if err != nil {
 			log.Println(err)
 		}
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "token not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "token not found")
 		return folderNameOfKey, key, false
 	}
 	s.globalLock.Lock()
@@ -253,17 +226,13 @@ func (s *server) checkTokenToFolderName(ginContext *gin.Context) (folderNameOfKe
 		folderNameOfKey := s.folderNameFromKey(key)
 		if _, err := os.Stat(folderNameOfKey); os.IsNotExist(err) {
 			log.Println(err)
-			ginContext.JSON(http.StatusNotFound, gin.H{
-				"error": "token not found",
-			})
+			respondError(ginContext, http.StatusNotFound, "token not found")
 			return folderNameOfKey, key, false
 		}
 		timeoutStruct.lastAccessedNanoTime = time.Now().UnixNano()
 		return folderNameOfKey, key, true
 	} else {
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "token not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "token not found")
 		return folderNameOfKey, key, false
 	}
 }

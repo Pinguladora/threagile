@@ -75,9 +75,7 @@ func (s *server) streamResponse(ginContext *gin.Context, responseType responseTy
 				log.Println(err)
 			}
 			log.Println(err)
-			ginContext.JSON(http.StatusBadRequest, gin.H{
-				"error": strings.TrimSpace(err.Error()),
-			})
+			respondError(ginContext, http.StatusBadRequest, strings.TrimSpace(err.Error()))
 			ok = false
 		}
 	}()
