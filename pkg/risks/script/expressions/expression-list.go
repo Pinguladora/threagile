@@ -109,14 +109,20 @@ func (what *ExpressionList) EvalAny(scope *common.Scope) (common.Value, string, 
 		return nil, "", nil
 
 	case 1:
-		return what.expressions[0].EvalAny(scope)
+		value, errorLiteral, evalError := what.expressions[0].EvalAny(scope)
+		if evalError != nil {
+			return value, errorLiteral, fmt.Errorf("error evaluating expression #1 of expression list: %w", evalError)
+		}
+
+		return value, errorLiteral, nil
 
 	default:
 		var values []common.Value
-		for _, expression := range what.expressions {
+		for index, expression := range what.expressions {
 			value, errorLiteral, statementError := expression.EvalAny(scope)
 			if statementError != nil {
-				return nil, errorLiteral, statementError
+				return nil, errorLiteral, fmt.Errorf("error evaluating expression #%v of expression list: %w", index+1,
+					statementError)
 			}
 
 			values = append(values, value)
