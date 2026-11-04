@@ -1,5 +1,207 @@
 {
   "$schema": "https://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "risk_category": {
+      "properties": {
+        "action": {
+          "description": "Action",
+          "type": "string"
+        },
+        "asvs": {
+          "description": "ASVS",
+          "type": "string"
+        },
+        "cheat_sheet": {
+          "description": "Cheat sheet",
+          "type": "string"
+        },
+        "check": {
+          "description": "Check",
+          "type": "string"
+        },
+        "cwe": {
+          "description": "CWE",
+          "type": "integer"
+        },
+        "description": {
+          "description": "Description",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "detection_logic": {
+          "description": "Detection logic",
+          "type": "string"
+        },
+        "false_positives": {
+          "description": "False positives",
+          "type": "string"
+        },
+        "function": {
+          "description": "Function",
+          "enum": [
+            "business-side",
+            "architecture",
+            "development",
+            "operations"
+          ],
+          "type": "string"
+        },
+        "id": {
+          "description": "ID",
+          "type": "string"
+        },
+        "impact": {
+          "description": "Impact",
+          "type": "string"
+        },
+        "mitigation": {
+          "description": "Mitigation",
+          "type": "string"
+        },
+        "model_failure_possible_reason": {
+          "description": "Model failure possible reason",
+          "type": "boolean"
+        },
+        "risk_assessment": {
+          "description": "Risk assessment",
+          "type": "string"
+        },
+        "risks_identified": {
+          "additionalProperties": {
+            "properties": {
+              "data_breach_probability": {
+                "description": "Data breach probability",
+                "enum": [
+                  "improbable",
+                  "possible",
+                  "probable"
+                ],
+                "type": "string"
+              },
+              "data_breach_technical_assets": {
+                "description": "Data breach technical assets",
+                "items": {
+                  "type": "string"
+                },
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "uniqueItems": true
+              },
+              "exploitation_impact": {
+                "description": "Exploitation impact",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high",
+                  "very-high"
+                ],
+                "type": "string"
+              },
+              "exploitation_likelihood": {
+                "description": "Exploitation likelihood",
+                "enum": [
+                  "unlikely",
+                  "likely",
+                  "very-likely",
+                  "frequent"
+                ],
+                "type": "string"
+              },
+              "most_relevant_communication_link": {
+                "description": "Most relevant communication link",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "most_relevant_data_asset": {
+                "description": "Most relevant data asset",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "most_relevant_shared_runtime": {
+                "description": "Most relevant shared runtime",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "most_relevant_technical_asset": {
+                "description": "Most relevant technical asset",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "most_relevant_trust_boundary": {
+                "description": "Most relevant trust boundary",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "severity": {
+                "description": "Severity",
+                "enum": [
+                  "low",
+                  "medium",
+                  "elevated",
+                  "high",
+                  "critical"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "description": "Risks identified",
+          "type": "object",
+          "uniqueItems": true
+        },
+        "stride": {
+          "description": "STRIDE",
+          "enum": [
+            "spoofing",
+            "tampering",
+            "repudiation",
+            "information-disclosure",
+            "denial-of-service",
+            "elevation-of-privilege"
+          ],
+          "type": "string"
+        },
+        "title": {
+          "description": "Title, the name of the risk category in the reports (defaults to the id)",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "impact",
+        "asvs",
+        "cheat_sheet",
+        "action",
+        "mitigation",
+        "check",
+        "function",
+        "stride",
+        "detection_logic",
+        "risk_assessment",
+        "false_positives",
+        "model_failure_possible_reason",
+        "cwe",
+        "risks_identified"
+      ],
+      "type": "object"
+    }
+  },
   "description": "Agile Threat Modeling",
   "id": "https://threagile.io/schema.json",
   "properties": {
@@ -124,6 +326,17 @@
           "name"
         ],
         "type": "object"
+      },
+      "type": [
+        "array",
+        "null"
+      ],
+      "uniqueItems": true
+    },
+    "custom_risk_categories": {
+      "description": "Custom risk categories, used for adding manually identified risks",
+      "items": {
+        "$ref": "#/definitions/risk_category"
       },
       "type": [
         "array",
@@ -330,202 +543,9 @@
     },
     "individual_risk_categories": {
       "additionalProperties": {
-        "properties": {
-          "action": {
-            "description": "Action",
-            "type": "string"
-          },
-          "asvs": {
-            "description": "ASVS",
-            "type": "string"
-          },
-          "cheat_sheet": {
-            "description": "Cheat sheet",
-            "type": "string"
-          },
-          "check": {
-            "description": "Check",
-            "type": "string"
-          },
-          "cwe": {
-            "description": "CWE",
-            "type": "integer"
-          },
-          "description": {
-            "description": "Description",
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "detection_logic": {
-            "description": "Detection logic",
-            "type": "string"
-          },
-          "false_positives": {
-            "description": "False positives",
-            "type": "string"
-          },
-          "function": {
-            "description": "Function",
-            "enum": [
-              "business-side",
-              "architecture",
-              "development",
-              "operations"
-            ],
-            "type": "string"
-          },
-          "id": {
-            "description": "ID",
-            "type": "string"
-          },
-          "impact": {
-            "description": "Impact",
-            "type": "string"
-          },
-          "mitigation": {
-            "description": "Mitigation",
-            "type": "string"
-          },
-          "model_failure_possible_reason": {
-            "description": "Model failure possible reason",
-            "type": "boolean"
-          },
-          "risk_assessment": {
-            "description": "Risk assessment",
-            "type": "string"
-          },
-          "risks_identified": {
-            "additionalProperties": {
-              "properties": {
-                "data_breach_probability": {
-                  "description": "Data breach probability",
-                  "enum": [
-                    "improbable",
-                    "possible",
-                    "probable"
-                  ],
-                  "type": "string"
-                },
-                "data_breach_technical_assets": {
-                  "description": "Data breach technical assets",
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": [
-                    "array",
-                    "null"
-                  ],
-                  "uniqueItems": true
-                },
-                "exploitation_impact": {
-                  "description": "Exploitation impact",
-                  "enum": [
-                    "low",
-                    "medium",
-                    "high",
-                    "very-high"
-                  ],
-                  "type": "string"
-                },
-                "exploitation_likelihood": {
-                  "description": "Exploitation likelihood",
-                  "enum": [
-                    "unlikely",
-                    "likely",
-                    "very-likely",
-                    "frequent"
-                  ],
-                  "type": "string"
-                },
-                "most_relevant_communication_link": {
-                  "description": "Most relevant communication link",
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "most_relevant_data_asset": {
-                  "description": "Most relevant data asset",
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "most_relevant_shared_runtime": {
-                  "description": "Most relevant shared runtime",
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "most_relevant_technical_asset": {
-                  "description": "Most relevant technical asset",
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "most_relevant_trust_boundary": {
-                  "description": "Most relevant trust boundary",
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "severity": {
-                  "description": "Severity",
-                  "enum": [
-                    "low",
-                    "medium",
-                    "elevated",
-                    "high",
-                    "critical"
-                  ],
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            },
-            "description": "Risks identified",
-            "type": "object",
-            "uniqueItems": true
-          },
-          "stride": {
-            "description": "STRIDE",
-            "enum": [
-              "spoofing",
-              "tampering",
-              "repudiation",
-              "information-disclosure",
-              "denial-of-service",
-              "elevation-of-privilege"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "description",
-          "impact",
-          "asvs",
-          "cheat_sheet",
-          "action",
-          "mitigation",
-          "check",
-          "function",
-          "stride",
-          "detection_logic",
-          "risk_assessment",
-          "false_positives",
-          "model_failure_possible_reason",
-          "cwe",
-          "risks_identified"
-        ],
-        "type": "object"
+        "$ref": "#/definitions/risk_category"
       },
-      "description": "Individual risk categories",
+      "description": "Deprecated, use custom_risk_categories instead: the custom risk categories keyed by their title",
       "type": [
         "object",
         "null"

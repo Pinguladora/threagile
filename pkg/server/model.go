@@ -74,7 +74,7 @@ data_assets: {}
 technical_assets: {}
 trust_boundaries: {}
 shared_runtimes: {}
-individual_risk_categories: {}
+custom_risk_categories: []
 risk_tracking: {}
 diagram_tweak_nodesep: ""
 diagram_tweak_ranksep: ""

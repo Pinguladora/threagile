@@ -98,6 +98,15 @@ func ReadAndAnalyzeModel(config configReader, builtinRiskRules types.RiskRules, 
 }
 
 func AnalyzeModel(modelInput *input.Model, config configReader, builtinRiskRules types.RiskRules, customRiskRules types.RiskRules, progressReporter types.ProgressReporter) (*ReadResult, error) {
+	converted, convertError := modelInput.ConvertIndividualRiskCategories()
+	if convertError != nil {
+		return nil, fmt.Errorf("unable to parse model yaml: %w", convertError)
+	}
+	if converted > 0 {
+		progressReporter.Warnf("individual_risk_categories is deprecated, use custom_risk_categories instead: "+
+			"a list of risk categories, each with its title in a title field (converted %d risk categories)", converted)
+	}
+
 	parsedModel, parseError := ParseModel(config, modelInput, builtinRiskRules, customRiskRules)
 	if parseError != nil {
 		return nil, fmt.Errorf("unable to parse model yaml: %w", parseError)

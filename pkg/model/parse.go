@@ -555,7 +555,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 
 		cat := &types.RiskCategory{
 			ID:                         customRiskCategoryCategory.ID,
-			Title:                      customRiskCategoryCategory.Title,
+			Title:                      withDefault(customRiskCategoryCategory.Title, customRiskCategoryCategory.ID),
 			Description:                customRiskCategoryCategory.Description,
 			Impact:                     customRiskCategoryCategory.Impact,
 			ASVS:                       customRiskCategoryCategory.ASVS,
@@ -572,8 +572,10 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 			CWE:                        customRiskCategoryCategory.CWE,
 		}
 
+		// the reports name a category by its title, which the map key of individual_risk_categories
+		// used to be (threagile#130)
 		if cat.Description == "" {
-			cat.Description = customRiskCategoryCategory.Title
+			cat.Description = cat.Title
 		}
 
 		err = checkIdSyntax(customRiskCategoryCategory.ID)

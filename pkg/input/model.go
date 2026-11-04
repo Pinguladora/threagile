@@ -6,6 +6,7 @@ package input
 
 import (
 	"fmt"
+	"maps"
 	"os"
 	"path/filepath"
 	"slices"
@@ -47,6 +48,10 @@ type Model struct { // TODO: Eventually remove this and directly use ParsedModel
 	DiagramTweakLayoutLeftToRight                 bool                      `json:"diagram_tweak_layout_left_to_right,omitempty"                 yaml:"diagram_tweak_layout_left_to_right,omitempty"`
 	DiagramTweakInvisibleConnectionsBetweenAssets []string                  `json:"diagram_tweak_invisible_connections_between_assets,omitempty" yaml:"diagram_tweak_invisible_connections_between_assets,omitempty"`
 	DiagramTweakSameRankAssets                    []string                  `json:"diagram_tweak_same_rank_assets,omitempty"                     yaml:"diagram_tweak_same_rank_assets,omitempty"`
+
+	// IndividualRiskCategories is the deprecated map of custom risk categories keyed by title that
+	// CustomRiskCategories replaced; see ConvertIndividualRiskCategories.
+	IndividualRiskCategories map[string]RiskCategory `json:"individual_risk_categories,omitempty" yaml:"individual_risk_categories,omitempty"`
 }
 
 func (model *Model) Defaults() *Model {
@@ -230,6 +235,13 @@ func (model *Model) Merge(dir string, includeFilename string) error {
 				return fmt.Errorf("failed to merge risk categories: %w", mergeError)
 			}
 
+		case strings.ToLower("individual_risk_categories"):
+			model.IndividualRiskCategories, mergeError = new(RiskCategory).MergeMap(model.IndividualRiskCategories,
+				includedModel.IndividualRiskCategories)
+			if mergeError != nil {
+				return fmt.Errorf("failed to merge individual risk categories: %w", mergeError)
+			}
+
 		case strings.ToLower("risk_tracking"):
 			model.RiskTracking, mergeError = new(RiskTracking).MergeMap(model.RiskTracking, includedModel.RiskTracking)
 			if mergeError != nil {
@@ -264,6 +276,29 @@ func (model *Model) Merge(dir string, includeFilename string) error {
 	}
 
 	return nil
+}
+
+// ConvertIndividualRiskCategories moves the risk categories of the deprecated
+// individual_risk_categories map into CustomRiskCategories, in title order, so that models written
+// before the rename keep their custom risks (threagile#130). A category without a title gets its
+// map key as title. It returns how many categories it moved.
+func (model *Model) ConvertIndividualRiskCategories() (int, error) {
+	titles := slices.Sorted(maps.Keys(model.IndividualRiskCategories))
+	for _, title := range titles {
+		category := model.IndividualRiskCategories[title]
+		if category.Title == "" {
+			category.Title = title
+		}
+
+		addError := model.CustomRiskCategories.Add(&category)
+		if addError != nil {
+			return 0, fmt.Errorf("failed to convert individual risk category %q: %w", title, addError)
+		}
+	}
+
+	model.IndividualRiskCategories = nil
+
+	return len(titles), nil
 }
 
 func (model *Model) AddTagToModelInput(tag string, dryRun bool, changes *[]string) {

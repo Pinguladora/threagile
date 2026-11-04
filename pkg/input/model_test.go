@@ -72,6 +72,33 @@ technical_assets:
 	assert.ElementsMatch(t, []string{"First Contributor", "Second Contributor"}, contributors)
 }
 
+func TestLoadMergesDeprecatedRiskCategoriesOfIncludes(t *testing.T) {
+	dir := t.TempDir()
+	writeModelFile(t, filepath.Join(dir, "threagile.yaml"), `
+individual_risk_categories:
+  First Category:
+    id: first
+includes:
+  - categories.yaml
+`)
+	writeModelFile(t, filepath.Join(dir, "categories.yaml"), `
+individual_risk_categories:
+  Second Category:
+    id: second
+`)
+
+	model := new(Model).Defaults()
+	require.NoError(t, model.Load(filepath.Join(dir, "threagile.yaml")))
+	assert.Len(t, model.IndividualRiskCategories, 2)
+
+	converted, err := model.ConvertIndividualRiskCategories()
+	require.NoError(t, err)
+	assert.Equal(t, 2, converted)
+	require.Len(t, model.CustomRiskCategories, 2)
+	assert.Equal(t, "First Category", model.CustomRiskCategories[0].Title)
+	assert.Equal(t, "second", model.CustomRiskCategories[1].ID)
+}
+
 func TestLoadReportsMissingIncludeAsError(t *testing.T) {
 	dir := t.TempDir()
 	writeModelFile(t, filepath.Join(dir, "threagile.yaml"), `
