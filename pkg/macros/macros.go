@@ -190,10 +190,11 @@ func selectValues(question MacroQuestion, reader *bufio.Reader) ([]string, error
 			continue
 		}
 		if val == 0 {
+			// in the order of the answers, not of the map
 			resultingMultiValueSelection := make([]string, 0)
-			for key, selected := range selectedValues {
-				if selected {
-					resultingMultiValueSelection = append(resultingMultiValueSelection, key)
+			for _, possibleAnswer := range question.PossibleAnswers {
+				if selectedValues[possibleAnswer] {
+					resultingMultiValueSelection = append(resultingMultiValueSelection, possibleAnswer)
 				}
 			}
 			return resultingMultiValueSelection, nil
