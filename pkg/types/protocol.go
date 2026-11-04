@@ -172,8 +172,8 @@ var ProtocolTypeDescription = [...]TypeDescription{
 func ParseProtocol(value string) (protocol Protocol, err error) {
 	value = strings.TrimSpace(value)
 	for _, candidate := range ProtocolValues() {
-		if candidate.String() == value {
-			return candidate.(Protocol), err
+		if parsed, ok := candidate.(Protocol); ok && parsed.String() == value {
+			return parsed, err
 		}
 	}
 	return protocol, fmt.Errorf("unable to parse into type: %v", value)

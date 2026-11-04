@@ -46,8 +46,8 @@ var StrideTypeDescription = [...]TypeDescription{
 func ParseSTRIDE(value string) (stride STRIDE, err error) {
 	value = strings.TrimSpace(value)
 	for _, candidate := range STRIDEValues() {
-		if candidate.String() == value {
-			return candidate.(STRIDE), err
+		if parsed, ok := candidate.(STRIDE); ok && parsed.String() == value {
+			return parsed, err
 		}
 	}
 	return stride, fmt.Errorf("unable to parse into type: %v", value)

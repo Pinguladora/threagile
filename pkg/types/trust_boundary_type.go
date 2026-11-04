@@ -45,8 +45,8 @@ var TrustBoundaryTypeDescription = [...]TypeDescription{
 func ParseTrustBoundary(value string) (trustBoundary TrustBoundaryType, err error) {
 	value = strings.TrimSpace(value)
 	for _, candidate := range TrustBoundaryTypeValues() {
-		if candidate.String() == value {
-			return candidate.(TrustBoundaryType), err
+		if parsed, ok := candidate.(TrustBoundaryType); ok && parsed.String() == value {
+			return parsed, err
 		}
 	}
 	return trustBoundary, fmt.Errorf("unable to parse into type: %v", value)

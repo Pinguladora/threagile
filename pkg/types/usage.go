@@ -29,8 +29,8 @@ func UsageValues() []TypeEnum {
 func ParseUsage(value string) (usage Usage, err error) {
 	value = strings.TrimSpace(value)
 	for _, candidate := range UsageValues() {
-		if candidate.String() == value {
-			return candidate.(Usage), err
+		if parsed, ok := candidate.(Usage); ok && parsed.String() == value {
+			return parsed, err
 		}
 	}
 	return usage, fmt.Errorf("unable to parse into type: %v", value)

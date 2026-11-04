@@ -46,8 +46,8 @@ var DataFormatTypeDescription = [...]TypeDescription{
 func ParseDataFormat(value string) (dataFormat DataFormat, err error) {
 	value = strings.TrimSpace(value)
 	for _, candidate := range DataFormatValues() {
-		if candidate.String() == value {
-			return candidate.(DataFormat), err
+		if parsed, ok := candidate.(DataFormat); ok && parsed.String() == value {
+			return parsed, err
 		}
 	}
 	return dataFormat, fmt.Errorf("unable to parse into type: %v", value)
