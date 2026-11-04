@@ -10,8 +10,9 @@ import (
 const (
 	checkCheatSheetAndASVS = "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
 
-	asvsAccessControl = "V4 - Access Control Verification Requirements"
-	asvsConfiguration = "V14 - Configuration Verification Requirements"
+	asvsAccessControl      = "V4 - Access Control Verification Requirements"
+	asvsStoredCryptography = "V6 - Stored Cryptography Verification Requirements"
+	asvsConfiguration      = "V14 - Configuration Verification Requirements"
 
 	cheatSheetSecureCloudArchitecture = "https://cheatsheetseries.owasp.org/cheatsheets/" +
 		"Secure_Cloud_Architecture_Cheat_Sheet.html"
