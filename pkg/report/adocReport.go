@@ -269,12 +269,13 @@ func (adoc AdocReport) WriteReport(model *types.Model,
 	customRiskRules types.RiskRules,
 	logoImagePath string,
 	hideChapters map[ChaptersToShowHide]bool,
-) error {
+) (err error) {
 	adoc.model = model
 	mainFile, err := adoc.initReport()
 	if err != nil {
 		return err
 	}
+	defer closeMainFile(mainFile, &err)
 	adoc.mainFile = mainFile
 	err = adoc.writeDefaultTheme(logoImagePath)
 	if err != nil {
@@ -377,6 +378,13 @@ func (adoc AdocReport) createFile(filename string) (*os.File, error) {
 }
 
 // initReport recreates the target directory and returns the newly created main file.
+// closeMainFile closes the main AsciiDoc file, and sets err to the error of that unless it is set already.
+func closeMainFile(mainFile *os.File, err *error) {
+	if closeErr := mainFile.Close(); closeErr != nil && *err == nil {
+		*err = fmt.Errorf("unable to write the main AsciiDoc file: %w", closeErr)
+	}
+}
+
 func (adoc AdocReport) initReport() (*os.File, error) {
 	_ = os.RemoveAll(adoc.targetDirectory)
 	err := os.MkdirAll(adoc.targetDirectory, 0o750)
