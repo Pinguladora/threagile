@@ -31,8 +31,11 @@ func CallBuiltIn(builtInName string, parameters ...Value) (Value, error) {
 	return caller(parameters)
 }
 
+// calculateSeverityParameters is the number of parameters of calculate_severity: the likelihood and the impact.
+const calculateSeverityParameters = 2
+
 func calculateSeverityFunc(parameters []Value) (Value, error) {
-	if len(parameters) != 2 {
+	if len(parameters) != calculateSeverityParameters {
 		return nil, fmt.Errorf("failed to calculate severity: expected 2 parameters, got %d", len(parameters))
 	}
 
