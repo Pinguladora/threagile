@@ -19,6 +19,12 @@ func (what *Threagile) initAnalyze() *Threagile {
 			commands := what.readCommands()
 			progressReporter := DefaultProgressReporter{Verbose: what.config.GetVerbose()}
 
+			// Validate the gate before the analysis, so a typo fails fast.
+			threshold, gateEnabled, err := parseRiskGate(what.config.GetFailOn())
+			if err != nil {
+				return err
+			}
+
 			r, err := model.ReadAndAnalyzeModel(what.config, risks.GetBuiltInRiskRules(), progressReporter)
 			if err != nil {
 				return fmt.Errorf("failed to read and analyze model: %w", err)
@@ -28,7 +34,21 @@ func (what *Threagile) initAnalyze() *Threagile {
 			if err != nil {
 				return fmt.Errorf("failed to generate reports: %w", err)
 			}
-			return nil
+
+			// The gate runs after the reports are written, so they are there to look at.
+			if !gateEnabled {
+				return nil
+			}
+
+			gateErr := checkRiskGate(r.ParsedModel, threshold)
+			if gateError, failed := riskGateFailure(gateErr); failed {
+				cmd.Printf("Risk gate failed, unchecked risks of severity %v or higher:\n", threshold)
+				for _, risk := range gateError.risks {
+					cmd.Printf("  %-8v %v\n", risk.Severity, risk.SyntheticId)
+				}
+			}
+
+			return gateErr
 		},
 		CompletionOptions: cobra.CompletionOptions{
 			DisableDefaultCmd: true,

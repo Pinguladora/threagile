@@ -53,6 +53,7 @@ type Config struct {
 	RiskRulePluginsValue   []string        `json:"RiskRulePlugins,omitempty"   yaml:"RiskRulePlugins"`
 	SkipRiskRulesValue     []string        `json:"SkipRiskRules,omitempty"     yaml:"SkipRiskRules"`
 	ExecuteModelMacroValue string          `json:"ExecuteModelMacro,omitempty" yaml:"ExecuteModelMacro"`
+	FailOnValue            string          `json:"FailOn,omitempty"            yaml:"FailOn"`
 	RiskExcelValue         RiskExcelConfig `json:"RiskExcel"                   yaml:"RiskExcel"`
 
 	ServerModeValue               bool `json:"ServerMode,omitempty"               yaml:"ServerMode"`
@@ -110,6 +111,7 @@ type ConfigGetter interface {
 	GetRiskRulePlugins() []string
 	GetSkipRiskRules() []string
 	GetExecuteModelMacro() string
+	GetFailOn() string
 	GetRiskExcelConfigHideColumns() []string
 	GetRiskExcelConfigSortByColumns() []string
 	GetRiskExcelConfigWidthOfColumns() map[string]float64
@@ -154,6 +156,7 @@ type ConfigSetter interface {
 	SetTemplateFilename(templateFilename string)
 	SetRiskRulePlugins(riskRulePlugins []string)
 	SetSkipRiskRules(skipRiskRules []string)
+	SetFailOn(failOn string)
 	SetServerMode(serverMode bool)
 	SetServerPort(serverPort int)
 	SetDiagramDPI(diagramDPI int)
@@ -193,6 +196,7 @@ func (c *Config) Defaults(buildTimestamp string) *Config {
 		RiskRulePluginsValue:   make([]string, 0),
 		SkipRiskRulesValue:     make([]string, 0),
 		ExecuteModelMacroValue: "",
+		FailOnValue:            "",
 		RiskExcelValue: RiskExcelConfig{
 			HideColumns:        make([]string, 0),
 			SortByColumns:      make([]string, 0),
@@ -433,6 +437,9 @@ func (c *Config) Merge(config Config, values map[string]any) {
 
 		case strings.ToLower("ExecuteModelMacro"):
 			c.ExecuteModelMacroValue = config.ExecuteModelMacroValue
+
+		case strings.ToLower("FailOn"):
+			c.FailOnValue = config.FailOnValue
 
 		case strings.ToLower("RiskExcel"):
 			configMap, mapOk := values[key].(map[string]any)
@@ -736,6 +743,14 @@ func (c *Config) GetSkipRiskRules() []string {
 
 func (c *Config) SetSkipRiskRules(skipRiskRules []string) {
 	c.SkipRiskRulesValue = skipRiskRules
+}
+
+func (c *Config) GetFailOn() string {
+	return c.FailOnValue
+}
+
+func (c *Config) SetFailOn(failOn string) {
+	c.FailOnValue = failOn
 }
 
 func (c *Config) GetExecuteModelMacro() string {
