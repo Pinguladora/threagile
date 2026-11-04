@@ -322,7 +322,7 @@ technical_assets:
         protocol: https # values: see help
         authentication: session-id # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: end-user # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: none # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -376,9 +376,9 @@ technical_assets:
         target: erp-system
         description: Link to the ERP system
         protocol: https # values: see help
-        authentication: token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        authentication: short-lived-token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: end-user # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: object-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
           - some-erp
         vpn: true
@@ -396,9 +396,9 @@ technical_assets:
         target: marketing-cms
         description: Link to the CMS for editing content
         protocol: https # values: see help
-        authentication: token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        authentication: short-lived-token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: end-user # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: true
         ip_filtered: false
@@ -445,9 +445,9 @@ technical_assets:
         target: erp-system
         description: Link to the ERP system (Web)
         protocol: https # values: see help
-        authentication: token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        authentication: short-lived-token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: service-account # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -465,7 +465,7 @@ technical_assets:
         protocol: ssh # values: see help
         authentication: client-certificate # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: service-account # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -486,7 +486,7 @@ technical_assets:
         protocol: ldaps # values: see help
         authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: service-account # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -541,7 +541,7 @@ technical_assets:
         protocol: http # values: see help
         authentication: session-id # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: end-user # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: object-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -563,7 +563,7 @@ technical_assets:
         protocol: http # values: see help
         authentication: none # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: none # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: none # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -621,9 +621,9 @@ technical_assets:
         target: erp-system
         description: Link to the ERP system
         protocol: https # values: see help
-        authentication: token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        authentication: long-lived-token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: service-account # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -646,7 +646,7 @@ technical_assets:
         protocol: https # values: see help
         authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: service-account # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -695,7 +695,7 @@ technical_assets:
         protocol: ldaps # values: see help
         authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: service-account # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -777,7 +777,7 @@ technical_assets:
         protocol: ldap # values: see help
         authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: service-account # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -836,7 +836,7 @@ technical_assets:
         protocol: jdbc # values: see help
         authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: service-account # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -858,7 +858,7 @@ technical_assets:
         protocol: nfs # values: see help
         authentication: none # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: none # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: none # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -986,7 +986,7 @@ technical_assets:
         protocol: ssh # values: see help
         authentication: client-certificate # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: service-account # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -1004,9 +1004,9 @@ technical_assets:
         target: git-repo
         description: Link to the Git repo
         protocol: https # values: see help
-        authentication: token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        authentication: long-lived-token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: service-account # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -1026,7 +1026,7 @@ technical_assets:
         protocol: https # values: see help
         authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: service-account # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -1126,7 +1126,7 @@ technical_assets:
         protocol: ssh # values: see help
         authentication: client-certificate # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: service-account # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -1144,7 +1144,7 @@ technical_assets:
         protocol: ssh # values: see help
         authentication: client-certificate # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: service-account # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -1160,7 +1160,7 @@ technical_assets:
         protocol: ssh # values: see help
         authentication: client-certificate # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: service-account # values: none, service-account, workload, end-user
-        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
+        authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -1335,6 +1335,13 @@ risk_tracking:
     justification: The hardening measures were implemented and checked
     ticket: XYZ-1234
     date: 2020-01-04
+    checked_by: John Doe
+
+  missing-object-level-authorization@marketing-cms@backoffice-client>marketing-cms-editing:
+    status: false-positive # values: unchecked, in-discussion, accepted, in-progress, mitigated, false-positive
+    justification: Every editor may edit all marketing content, so the CMS checks the editor role per function only
+    ticket: XYZ-9012
+    date: 2026-11-04
     checked_by: John Doe
 
   missing-authentication-second-factor@*@*@*: # wildcards "*" between the @ characters are possible
