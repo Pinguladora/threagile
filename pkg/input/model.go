@@ -6,7 +6,6 @@ package input
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"slices"
@@ -69,26 +68,33 @@ func (model *Model) Defaults() *Model {
 func (model *Model) Load(inputFilename string) error {
 	modelYaml, readError := os.ReadFile(filepath.Clean(inputFilename))
 	if readError != nil {
-		log.Fatal("Unable to read model file: ", readError)
+		return fmt.Errorf("unable to read model file: %w", readError)
 	}
 
 	unmarshalError := yaml.Unmarshal(modelYaml, &model)
 	if unmarshalError != nil {
-		log.Fatal("Unable to parse model yaml: ", unmarshalError)
+		return fmt.Errorf("unable to parse model yaml: %w", unmarshalError)
 	}
 
 	for _, includeFile := range model.Includes {
 		mergeError := model.Merge(filepath.Dir(inputFilename), includeFile)
 		if mergeError != nil {
-			log.Fatalf("Unable to merge model include %q: %v", includeFile, mergeError)
+			return fmt.Errorf("unable to merge model include %q: %w", includeFile, mergeError)
 		}
 	}
 
 	return nil
 }
 
+// Merge reads the model file includeFilename, relative to dir unless it is an absolute path, and
+// merges it (and the files it includes in turn, relative to its own folder) into model.
 func (model *Model) Merge(dir string, includeFilename string) error {
-	modelYaml, readError := os.ReadFile(filepath.Clean(filepath.Join(dir, includeFilename)))
+	includePath := includeFilename
+	if !filepath.IsAbs(includePath) {
+		includePath = filepath.Join(dir, includePath)
+	}
+
+	modelYaml, readError := os.ReadFile(filepath.Clean(includePath))
 	if readError != nil {
 		return fmt.Errorf("unable to read model file: %w", readError)
 	}
@@ -110,7 +116,7 @@ func (model *Model) Merge(dir string, includeFilename string) error {
 		switch strings.ToLower(item) {
 		case strings.ToLower("includes"):
 			for _, includeFile := range includedModel.Includes {
-				mergeError = model.Merge(filepath.Join(dir, filepath.Dir(includeFilename)), includeFile)
+				mergeError = model.Merge(filepath.Dir(includePath), includeFile)
 				if mergeError != nil {
 					return fmt.Errorf("failed to merge model include %q: %w", includeFile, mergeError)
 				}
@@ -135,7 +141,7 @@ func (model *Model) Merge(dir string, includeFilename string) error {
 			}
 
 		case strings.ToLower("contributors"):
-			model.Contributors, mergeError = new(Author).MergeList(append(model.Contributors, includedModel.Author))
+			model.Contributors, mergeError = new(Author).MergeList(append(model.Contributors, includedModel.Contributors...))
 			if mergeError != nil {
 				return fmt.Errorf("failed to merge contributors: %w", mergeError)
 			}

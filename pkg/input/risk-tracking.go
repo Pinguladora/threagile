@@ -41,6 +41,11 @@ func (what *RiskTracking) Merge(other RiskTracking) error {
 }
 
 func (what *RiskTracking) MergeMap(first map[string]RiskTracking, second map[string]RiskTracking) (map[string]RiskTracking, error) {
+	if first == nil {
+		// first is nil for a section that is missing, or a key left without a value, in the model merged into
+		first = make(map[string]RiskTracking, len(second))
+	}
+
 	for mapKey, mapValue := range second {
 		mapItem, ok := first[mapKey]
 		if ok {

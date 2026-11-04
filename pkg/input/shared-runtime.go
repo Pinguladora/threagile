@@ -29,6 +29,11 @@ func (what *SharedRuntime) Merge(other SharedRuntime) error {
 }
 
 func (what *SharedRuntime) MergeMap(first map[string]SharedRuntime, second map[string]SharedRuntime) (map[string]SharedRuntime, error) {
+	if first == nil {
+		// first is nil for a section that is missing, or a key left without a value, in the model merged into
+		first = make(map[string]SharedRuntime, len(second))
+	}
+
 	for mapKey, mapValue := range second {
 		mapItem, ok := first[mapKey]
 		if ok {
