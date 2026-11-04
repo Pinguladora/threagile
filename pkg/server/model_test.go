@@ -6,12 +6,14 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"sync"
 	"sync/atomic"
 	"testing"
 	"time"
 
+	"github.com/Pinguladora/threagile/pkg/input"
 	"github.com/gin-gonic/gin"
 )
 
@@ -181,5 +183,36 @@ func TestFolderLockIsExclusive(t *testing.T) {
 
 	if overlaps.Load() > 0 {
 		t.Errorf("%v times more than one request held the folder lock", overlaps.Load())
+	}
+}
+
+func TestRemoveDataAssetReferencesLeavesNoGaps(t *testing.T) {
+	modelInput := input.Model{TechnicalAssets: map[string]input.TechnicalAsset{
+		"Web Server": {
+			DataAssetsProcessed: []string{"customers", "orders", "customers"},
+			DataAssetsStored:    []string{"orders"},
+			CommunicationLinks: map[string]input.CommunicationLink{
+				"Database": {DataAssetsSent: []string{"customers", "orders"}, DataAssetsReceived: []string{"customers"}},
+			},
+		},
+	}}
+
+	if !removeDataAssetReferences(&modelInput, "customers") {
+		t.Error("no references reported as deleted")
+	}
+
+	asset := modelInput.TechnicalAssets["Web Server"]
+	link := asset.CommunicationLinks["Database"]
+	for name, got := range map[string][]string{
+		"processed": asset.DataAssetsProcessed,
+		"stored":    asset.DataAssetsStored,
+		"sent":      link.DataAssetsSent,
+	} {
+		if !slices.Equal(got, []string{"orders"}) {
+			t.Errorf("%v: %q, want [orders]", name, got)
+		}
+	}
+	if len(link.DataAssetsReceived) != 0 {
+		t.Errorf("received: %q, want none", link.DataAssetsReceived)
 	}
 }
