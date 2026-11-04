@@ -13,6 +13,8 @@ Also it is possible to identify in model `trust_boundaries` and `shared_runtime`
 
 That is the most important fields to build the model. You can find more by reading [example](../demo/example/threagile.yaml)
 
+The `author` of the model is shown on the reports, and further people who worked on it can be listed under `contributors` (each with `name`, `contact` and `homepage`, like the author); the PDF report lists them on its cover and the AsciiDoc report in its management summary.
+
 After model is ready next steps would be running the tool in [analyze mode](./mode-analyze.md) to identify risks by [risk rules algorithms](./risk-rules.md).
 This will generate a lot of useful reports which will overview the system in a different formats.
 

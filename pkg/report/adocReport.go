@@ -407,6 +407,9 @@ func (adoc adocReport) writeManagementSummery() error {
 	writeLine(ms, "= Management Summary")
 	writeLine(ms, "")
 	writeLine(ms, "Threagile toolkit was used to model the architecture of \""+adoc.model.Title+"\" and derive risks by analyzing the components and data flows.")
+	if contributors := contributorsLine(adoc.model); contributors != "" {
+		writeLine(ms, contributors+".")
+	}
 	writeLine(ms, "The risks identified during this analysis are shown in the following chapters.")
 	writeLine(ms, "Identified risks during threat modeling do not necessarily mean that the "+
 		"vulnerability associated with this risk actually exists: it is more to be seen as a list"+
