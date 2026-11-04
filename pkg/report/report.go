@@ -213,6 +213,7 @@ func (r *pdfReporter) parseBackgroundTemplate(templateFilename string) {
 func (r *pdfReporter) createCover(parsedModel *types.Model) {
 	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
 	r.pdf.AddPage()
+	r.pdf.Bookmark("Cover", 0, 0)
 	gofpdi.UseImportedTemplate(r.pdf, r.coverTemplateId, 0, 0, 0, 300)
 	r.pdf.SetFont("Helvetica", "B", 28)
 	r.pdf.SetTextColor(0, 0, 0)
@@ -239,6 +240,7 @@ func (r *pdfReporter) createCover(parsedModel *types.Model) {
 
 func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	r.pdf.AddPage()
+	r.pdf.Bookmark("Table of Contents", 0, 0)
 	r.currentChapterTitleBreadcrumb = "Table of Contents"
 	r.homeLink = r.addTocLink("{home}")
 	r.defineLinkTarget("{home}")
@@ -651,6 +653,7 @@ func (r *pdfReporter) addTocLink(alias string) int {
 
 func (r *pdfReporter) createDisclaimer(parsedModel *types.Model) {
 	r.pdf.AddPage()
+	r.pdf.Bookmark("Disclaimer", 0, 0)
 	r.currentChapterTitleBreadcrumb = "Disclaimer"
 	r.defineLinkTarget("{disclaimer}")
 	gofpdi.UseImportedTemplate(r.pdf, r.contentTemplateId, 0, 0, 0, 300)
@@ -3488,9 +3491,16 @@ func (r *pdfReporter) writeReportToFile(reportFilename string) error {
 	return nil
 }
 
+// addHeadline starts a chapter on a new page, and bookmarks it in the outline of the PDF: a small headline, of an
+// asset or a risk category for example, below the chapter it is in.
 func (r *pdfReporter) addHeadline(headline string, small bool) {
 	r.pdf.AddPage()
 	gofpdi.UseImportedTemplate(r.pdf, r.contentTemplateId, 0, 0, 0, 300)
+	bookmarkLevel := 0
+	if small {
+		bookmarkLevel = 1
+	}
+	r.pdf.Bookmark(headline, bookmarkLevel, 0)
 	fontSize := fontSizeHeadline
 	if small {
 		fontSize = fontSizeHeadlineSmall
