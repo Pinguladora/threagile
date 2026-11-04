@@ -1,9 +1,8 @@
-// TODO: consider moving to internal
-
 package model
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
@@ -11,6 +10,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// runner runs the plugin of a custom risk rule; it could move to an internal package.
 type runner struct {
 	Filename    string
 	Parameters  []string
@@ -26,7 +26,7 @@ func (p *runner) Load(filename string) (*runner, error) {
 
 	fileInfo, statError := os.Stat(filename)
 	if statError != nil {
-		return p, statError
+		return p, fmt.Errorf("error checking plugin file: %w", statError)
 	}
 
 	if !fileInfo.Mode().IsRegular() {
@@ -44,10 +44,11 @@ func (p *runner) Run(in any, out any, parameters ...string) error {
 		Out:        out,
 	}
 
-	plugin := exec.Command(p.Filename, p.Parameters...) // #nosec G204
+	// the plugin runs until it exits: nothing cancels it
+	plugin := exec.CommandContext(context.Background(), p.Filename, p.Parameters...) // #nosec G204
 	stdin, stdinError := plugin.StdinPipe()
 	if stdinError != nil {
-		return stdinError
+		return fmt.Errorf("error connecting input data: %w", stdinError)
 	}
 	defer func() { _ = stdin.Close() }()
 
@@ -59,7 +60,7 @@ func (p *runner) Run(in any, out any, parameters ...string) error {
 
 	startError := plugin.Start()
 	if startError != nil {
-		return startError
+		return fmt.Errorf("error starting plugin: %w", startError)
 	}
 
 	inData, inError := yaml.Marshal(p.In)
@@ -69,12 +70,12 @@ func (p *runner) Run(in any, out any, parameters ...string) error {
 
 	_, writeError := stdin.Write(inData)
 	if writeError != nil {
-		return writeError
+		return fmt.Errorf("error writing input data: %w", writeError)
 	}
 
 	inCloseError := stdin.Close()
 	if inCloseError != nil {
-		return inCloseError
+		return fmt.Errorf("error closing input data: %w", inCloseError)
 	}
 
 	waitError := plugin.Wait()
@@ -86,7 +87,7 @@ func (p *runner) Run(in any, out any, parameters ...string) error {
 	stdout := stdoutBuf.Bytes()
 	unmarshalError := yaml.Unmarshal(stdout, p.Out)
 	if unmarshalError != nil {
-		return unmarshalError
+		return fmt.Errorf("error decoding output data: %w", unmarshalError)
 	}
 
 	// _ = os.WriteFile(fmt.Sprintf("%v.yaml", rand.Int31()), stdout, 0644)
