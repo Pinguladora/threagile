@@ -215,6 +215,11 @@ func (r *pdfReporter) createCover(parsedModel *types.Model) {
 	r.pdf.Text(40.7, 153, uni(parsedModel.Author.Name))
 	r.pdf.SetFont("Helvetica", "", 10)
 	r.pdf.SetTextColor(80, 80, 80)
+	if contributors := contributorsLine(parsedModel); contributors != "" {
+		// Below the author, wrapped within the cover's text column.
+		r.pdf.SetXY(40, 156)
+		r.pdf.MultiCell(150, 5, uni(contributors), "", "L", false)
+	}
 	r.pdf.Text(8.6, 275, parsedModel.Author.Homepage)
 	r.pdf.SetFont("Helvetica", "", 12)
 	r.pdf.SetTextColor(0, 0, 0)
