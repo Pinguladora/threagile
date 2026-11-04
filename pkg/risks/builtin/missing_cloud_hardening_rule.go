@@ -24,19 +24,28 @@ func (*MissingCloudHardeningRule) Category() *types.RiskCategory {
 		ASVS:       asvsArchitecture,
 		CheatSheet: cheatSheetAttackSurfaceAnalysis,
 		Action:     "Cloud Hardening",
-		Mitigation: "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which " +
-			"depend on the cloud provider tags in the model). " +
-			"<br><br>For <b>Amazon Web Services (AWS)</b>: Follow the <i>CIS Benchmark for Amazon Web Services</i> (see also the automated checks of cloud audit tools like <i>\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", or \"Prowler AWS CIS Benchmark Tool\"</i>). " +
-			"<br>For EC2 and other servers running Amazon Linux, follow the <i>CIS Benchmark for Amazon Linux</i> and switch to IMDSv2. " +
-			"<br>For S3 buckets follow the <i>Security Best Practices for Amazon S3</i> at <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\">https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html</a> to avoid accidental leakage. " +
-			"<br>Also take a look at some of these tools: <a href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\">https://github.com/toniblyx/my-arsenal-of-aws-security-tools</a> " +
-			"<br><br>For <b>Microsoft Azure</b>: Follow the <i>CIS Benchmark for Microsoft Azure</i> (see also the automated checks of cloud audit tools like <i>\"CloudSploit\" or \"ScoutSuite\"</i>)." +
-			"<br><br>For <b>Google Cloud Platform</b>: Follow the <i>CIS Benchmark for Google Cloud Computing Platform</i> (see also the automated checks of cloud audit tools like <i>\"CloudSploit\" or \"ScoutSuite\"</i>). " +
-			"<br><br>For <b>Oracle Cloud Platform</b>: Follow the hardening best practices (see also the automated checks of cloud audit tools like <i>\"CloudSploit\"</i>).",
-		Check:          checkCheatSheetAndASVS,
-		Function:       types.Operations,
-		STRIDE:         types.Tampering,
-		DetectionLogic: "In-scope cloud components (either residing in cloud trust boundaries or more specifically tagged with cloud provider types).",
+		Mitigation: "Apply hardening of all cloud components and services, taking special care to follow the individual " +
+			"risk descriptions (which depend on the cloud provider tags in the model). " +
+			"<br><br>For <b>Amazon Web Services (AWS)</b>: Follow the <i>CIS Benchmark for Amazon Web Services</i> (see also " +
+			"the automated checks of cloud audit tools like <i>\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", " +
+			"or \"Prowler AWS CIS Benchmark Tool\"</i>). <br>For EC2 and other servers running Amazon Linux, follow the " +
+			"<i>CIS Benchmark for Amazon Linux</i> and switch to IMDSv2. <br>For S3 buckets follow the <i>Security Best " +
+			"Practices for Amazon S3</i> at <a " +
+			"href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\">" +
+			"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html</a> to avoid accidental leakage. " +
+			"<br>Also take a look at some of these tools: <a " +
+			"href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\">" +
+			"https://github.com/toniblyx/my-arsenal-of-aws-security-tools</a> <br><br>For <b>Microsoft Azure</b>: Follow the " +
+			"<i>CIS Benchmark for Microsoft Azure</i> (see also the automated checks of cloud audit tools like " +
+			"<i>\"CloudSploit\" or \"ScoutSuite\"</i>).<br><br>For <b>Google Cloud Platform</b>: Follow the <i>CIS Benchmark " +
+			"for Google Cloud Computing Platform</i> (see also the automated checks of cloud audit tools like " +
+			"<i>\"CloudSploit\" or \"ScoutSuite\"</i>). <br><br>For <b>Oracle Cloud Platform</b>: Follow the hardening best " +
+			"practices (see also the automated checks of cloud audit tools like <i>\"CloudSploit\"</i>).",
+		Check:    checkCheatSheetAndASVS,
+		Function: types.Operations,
+		STRIDE:   types.Tampering,
+		DetectionLogic: "In-scope cloud components (either residing in cloud trust boundaries or more specifically tagged " +
+			"with cloud provider types).",
 		RiskAssessment: ratingByAssetAndProcessedDataSensitivity,
 		FalsePositives: "Cloud components not running parts of the target architecture can be considered " +
 			"as false positives after individual review.",
@@ -179,7 +188,9 @@ func (r *MissingCloudHardeningRule) deduplicateUnspecifiedAssets(cloudAssets map
 	}
 }
 
-func (r *MissingCloudHardeningRule) generateSharedRuntimeRisks(input *types.Model, cloudAssets map[string]*CloudAssets, addedFlags map[string]*bool) []*types.Risk {
+func (r *MissingCloudHardeningRule) generateSharedRuntimeRisks(
+	input *types.Model, cloudAssets map[string]*CloudAssets, addedFlags map[string]*bool,
+) []*types.Risk {
 	risks := []*types.Risk{}
 	for _, cfg := range r.cloudConfigs(addedFlags) {
 		for id := range cloudAssets[cfg.Provider].SharedRuntimeIDs {
@@ -193,7 +204,9 @@ func (r *MissingCloudHardeningRule) generateSharedRuntimeRisks(input *types.Mode
 	return risks
 }
 
-func (r *MissingCloudHardeningRule) generateTrustBoundaryRisks(input *types.Model, cloudAssets map[string]*CloudAssets, addedFlags map[string]*bool) []*types.Risk {
+func (r *MissingCloudHardeningRule) generateTrustBoundaryRisks(
+	input *types.Model, cloudAssets map[string]*CloudAssets, addedFlags map[string]*bool,
+) []*types.Risk {
 	risks := []*types.Risk{}
 	for _, cfg := range r.cloudConfigs(addedFlags) {
 		for id := range cloudAssets[cfg.Provider].TrustBoundaryIDs {
@@ -207,7 +220,9 @@ func (r *MissingCloudHardeningRule) generateTrustBoundaryRisks(input *types.Mode
 	return risks
 }
 
-func (r *MissingCloudHardeningRule) addFallbackAssetRisks(input *types.Model, cloudAssets map[string]*CloudAssets, addedFlags map[string]*bool) []*types.Risk {
+func (r *MissingCloudHardeningRule) addFallbackAssetRisks(
+	input *types.Model, cloudAssets map[string]*CloudAssets, addedFlags map[string]*bool,
+) []*types.Risk {
 	risks := []*types.Risk{}
 	for _, cfg := range r.cloudConfigs(addedFlags) {
 		if !*cfg.AddedFlag {
@@ -377,7 +392,10 @@ func findMostSensitiveTechnicalAsset(input *types.Model, techAssets map[string]s
 	})
 }
 
-func (r *MissingCloudHardeningRule) createCloudHardeningRisk(id, title, prefix, details string, confidentiality types.Confidentiality, integrity types.Criticality, availability types.Criticality, relatedAssets []string) *types.Risk {
+func (r *MissingCloudHardeningRule) createCloudHardeningRisk(
+	id, title, prefix, details string, confidentiality types.Confidentiality, integrity types.Criticality,
+	availability types.Criticality, relatedAssets []string,
+) *types.Risk {
 	suffix := ""
 	if len(prefix) > 0 {
 		suffix = "@" + strings.ToLower(prefix)

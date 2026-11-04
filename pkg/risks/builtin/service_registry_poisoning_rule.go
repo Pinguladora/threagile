@@ -12,15 +12,17 @@ func NewServiceRegistryPoisoningRule() *ServiceRegistryPoisoningRule {
 
 func (*ServiceRegistryPoisoningRule) Category() *types.RiskCategory {
 	return &types.RiskCategory{
-		ID:          "service-registry-poisoning",
-		Title:       "Service Registry Poisoning",
-		Description: "When a service registry used for discovery of trusted service endpoints Service Registry Poisoning risks might arise.",
-		Impact: "If this risk remains unmitigated, attackers might be able to poison the service registry with malicious service endpoints or " +
-			"malicious lookup and config data leading to breach of sensitive data.",
-		ASVS:           asvsMaliciousCode,
-		CheatSheet:     "https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html",
-		Action:         "Service Registry Integrity Check",
-		Mitigation:     "Try to strengthen the access control of the service registry and apply cross-checks to detect maliciously poisoned lookup data.",
+		ID:    "service-registry-poisoning",
+		Title: "Service Registry Poisoning",
+		Description: "When a service registry used for discovery of trusted service endpoints Service Registry Poisoning " +
+			"risks might arise.",
+		Impact: "If this risk remains unmitigated, attackers might be able to poison the service registry with malicious " +
+			"service endpoints or malicious lookup and config data leading to breach of sensitive data.",
+		ASVS:       asvsMaliciousCode,
+		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html",
+		Action:     "Service Registry Integrity Check",
+		Mitigation: "Try to strengthen the access control of the service registry and apply cross-checks to detect " +
+			"maliciously poisoned lookup data.",
 		Check:          checkCheatSheetAndASVS,
 		Function:       types.Architecture,
 		STRIDE:         types.Spoofing,
@@ -50,7 +52,9 @@ func (r *ServiceRegistryPoisoningRule) GenerateRisks(input *types.Model) ([]*typ
 	return risks, nil
 }
 
-func (r *ServiceRegistryPoisoningRule) createRisk(input *types.Model, technicalAsset *types.TechnicalAsset, incomingFlows []*types.CommunicationLink) *types.Risk {
+func (r *ServiceRegistryPoisoningRule) createRisk(
+	input *types.Model, technicalAsset *types.TechnicalAsset, incomingFlows []*types.CommunicationLink,
+) *types.Risk {
 	title := "<b>Service Registry Poisoning</b> risk at <b>" + technicalAsset.Title + "</b>"
 	impact := types.LowImpact
 

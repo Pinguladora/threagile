@@ -28,11 +28,14 @@ func (*UnencryptedCommunicationRule) Category() *types.RiskCategory {
 		Function:   types.Operations,
 		STRIDE:     types.InformationDisclosure,
 		// The detection logic text could be more detailed.
-		DetectionLogic: "Unencrypted technical communication links of in-scope technical assets (excluding " + types.Monitoring + " traffic as well as " + types.LocalFileAccess.String() + ", " + types.InProcessLibraryCall.String() + " and " + types.InterProcessCommunication.String() + ") " +
+		DetectionLogic: "Unencrypted technical communication links of in-scope technical assets (excluding " +
+			types.Monitoring + " traffic as well as " + types.LocalFileAccess.String() + ", " +
+			types.InProcessLibraryCall.String() + " and " + types.InterProcessCommunication.String() + ") " +
 			"transferring sensitive data.",
 		RiskAssessment: "Depending on the confidentiality rating of the transferred data-assets either medium or high risk.",
-		FalsePositives: "When all sensitive data sent over the communication link is already fully encrypted on document or data level. " +
-			"Also intra-container/pod communication can be considered false positive when container orchestration platform handles encryption.",
+		FalsePositives: "When all sensitive data sent over the communication link is already fully encrypted on document " +
+			"or data level. Also intra-container/pod communication can be considered false positive when container " +
+			"orchestration platform handles encryption.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweCleartextTransmission,
 	}
@@ -84,13 +87,17 @@ func skipUnencryptedDataFlow(input *types.Model, dataFlow *types.CommunicationLi
 		targetAsset.Technologies.GetAttribute(types.IsUnprotectedCommunicationsTolerated)
 }
 
-func (r *UnencryptedCommunicationRule) createRisk(input *types.Model, technicalAsset *types.TechnicalAsset, dataFlow *types.CommunicationLink, highRisk bool, transferringAuthData bool) *types.Risk {
+func (r *UnencryptedCommunicationRule) createRisk(
+	input *types.Model, technicalAsset *types.TechnicalAsset, dataFlow *types.CommunicationLink, highRisk bool,
+	transferringAuthData bool,
+) *types.Risk {
 	impact := types.MediumImpact
 	if highRisk {
 		impact = types.HighImpact
 	}
 	target := input.TechnicalAssets[dataFlow.TargetId]
-	title := "<b>Unencrypted Communication</b> named <b>" + dataFlow.Title + "</b> between <b>" + technicalAsset.Title + "</b> and <b>" + target.Title + "</b>"
+	title := "<b>Unencrypted Communication</b> named <b>" + dataFlow.Title + "</b> between <b>" + technicalAsset.Title +
+		"</b> and <b>" + target.Title + "</b>"
 	if transferringAuthData {
 		title += " transferring authentication data (like credentials, token, session-id, etc.)"
 	}

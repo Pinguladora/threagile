@@ -16,12 +16,14 @@ func (*SqlNoSqlInjectionRule) Category() *types.RiskCategory {
 		Title: "SQL/NoSQL-Injection",
 		Description: "When a database is accessed via database access protocols SQL/NoSQL-Injection risks might arise. " +
 			"The risk rating depends on the sensitivity technical asset itself and of the data assets processed.",
-		Impact:     "If this risk is unmitigated, attackers might be able to modify SQL/NoSQL queries to steal and modify data and eventually further escalate towards a deeper system penetration via code executions.",
+		Impact: "If this risk is unmitigated, attackers might be able to modify SQL/NoSQL queries to steal and modify " +
+			"data and eventually further escalate towards a deeper system penetration via code executions.",
 		ASVS:       asvsValidation,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
 		Action:     "SQL/NoSQL-Injection Prevention",
 		Mitigation: "Try to use parameter binding to be safe from injection vulnerabilities. " +
-			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+			"When a third-party product is used instead of custom developed software, check if the product applies the proper " +
+			"mitigation and ensure a reasonable patch-level.",
 		Check:          checkCheatSheetAndASVS,
 		Function:       types.Development,
 		STRIDE:         types.Tampering,
@@ -60,12 +62,15 @@ func (r *SqlNoSqlInjectionRule) GenerateRisks(input *types.Model) ([]*types.Risk
 	return risks, nil
 }
 
-func (r *SqlNoSqlInjectionRule) createRisk(input *types.Model, technicalAsset *types.TechnicalAsset, incomingFlow *types.CommunicationLink) *types.Risk {
+func (r *SqlNoSqlInjectionRule) createRisk(
+	input *types.Model, technicalAsset *types.TechnicalAsset, incomingFlow *types.CommunicationLink,
+) *types.Risk {
 	caller := input.TechnicalAssets[incomingFlow.SourceId]
-	title := "<b>SQL/NoSQL-Injection</b> risk at <b>" + caller.Title + "</b> against database <b>" + technicalAsset.Title + "</b>" +
-		" via <b>" + incomingFlow.Title + "</b>"
+	title := "<b>SQL/NoSQL-Injection</b> risk at <b>" + caller.Title + "</b> against database <b>" + technicalAsset.Title +
+		"</b> via <b>" + incomingFlow.Title + "</b>"
 	impact := types.MediumImpact
-	if input.HighestProcessedConfidentiality(technicalAsset) == types.StrictlyConfidential || input.HighestProcessedIntegrity(technicalAsset) == types.MissionCritical {
+	if input.HighestProcessedConfidentiality(technicalAsset) == types.StrictlyConfidential ||
+		input.HighestProcessedIntegrity(technicalAsset) == types.MissionCritical {
 		impact = types.HighImpact
 	}
 	likelihood := types.VeryLikely

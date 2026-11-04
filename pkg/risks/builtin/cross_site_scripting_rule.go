@@ -16,13 +16,15 @@ func (*CrossSiteScriptingRule) Category() *types.RiskCategory {
 		Title: "Cross-Site Scripting (XSS)",
 		Description: "For each web application Cross-Site Scripting (XSS) risks might arise. In terms " +
 			"of the overall risk level take other applications running on the same domain into account as well.",
-		Impact:     "If this risk remains unmitigated, attackers might be able to access individual victim sessions and steal or modify user data.",
+		Impact: "If this risk remains unmitigated, attackers might be able to access individual victim sessions and " +
+			"steal or modify user data.",
 		ASVS:       asvsValidation,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
 		Action:     "XSS Prevention",
 		Mitigation: "Try to encode all values sent back to the browser and also handle DOM-manipulations in a safe way " +
 			"to avoid DOM-based XSS. " +
-			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+			"When a third-party product is used instead of custom developed software, check if the product applies the proper " +
+			"mitigation and ensure a reasonable patch-level.",
 		Check:          checkCheatSheetAndASVS,
 		Function:       types.Development,
 		STRIDE:         types.Tampering,
@@ -58,10 +60,13 @@ func (asl *CrossSiteScriptingRule) skipAsset(technicalAsset *types.TechnicalAsse
 	return technicalAsset.OutOfScope || !technicalAsset.Technologies.GetAttribute(types.WebApplication)
 }
 
-func (r *CrossSiteScriptingRule) createRisk(parsedModel *types.Model, technicalAsset *types.TechnicalAsset) *types.Risk {
+func (r *CrossSiteScriptingRule) createRisk(
+	parsedModel *types.Model, technicalAsset *types.TechnicalAsset,
+) *types.Risk {
 	title := "<b>Cross-Site Scripting (XSS)</b> risk at <b>" + technicalAsset.Title + "</b>"
 	impact := types.MediumImpact
-	if parsedModel.HighestProcessedConfidentiality(technicalAsset) == types.StrictlyConfidential || parsedModel.HighestProcessedIntegrity(technicalAsset) == types.MissionCritical {
+	if parsedModel.HighestProcessedConfidentiality(technicalAsset) == types.StrictlyConfidential ||
+		parsedModel.HighestProcessedIntegrity(technicalAsset) == types.MissionCritical {
 		impact = types.HighImpact
 	}
 	risk := &types.Risk{

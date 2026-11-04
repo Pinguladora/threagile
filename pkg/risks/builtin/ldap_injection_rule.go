@@ -16,20 +16,23 @@ func (*LdapInjectionRule) Category() *types.RiskCategory {
 		Title: "LDAP-Injection",
 		Description: "When an LDAP server is accessed LDAP-Injection risks might arise. " +
 			"The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed.",
-		Impact:     "If this risk remains unmitigated, attackers might be able to modify LDAP queries and access more data from the LDAP server than allowed.",
+		Impact: "If this risk remains unmitigated, attackers might be able to modify LDAP queries and access more data " +
+			"from the LDAP server than allowed.",
 		ASVS:       asvsValidation,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html",
 		Action:     "LDAP-Injection Prevention",
 		Mitigation: "Try to use libraries that properly encode LDAP meta characters in searches and queries to access " +
 			"the LDAP server in order to stay safe from LDAP-Injection vulnerabilities. " +
-			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+			"When a third-party product is used instead of custom developed software, check if the product applies the proper " +
+			"mitigation and ensure a reasonable patch-level.",
 		Check:          checkCheatSheetAndASVS,
 		Function:       types.Development,
 		STRIDE:         types.Tampering,
 		DetectionLogic: "In-scope clients accessing LDAP servers via typical LDAP access protocols.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed.",
-		FalsePositives: "LDAP server queries by search values not consisting of parts controllable by the caller can be considered " +
-			"as false positives after individual review.",
+		RiskAssessment: "The risk rating depends on the sensitivity of the LDAP server itself and of the data assets " +
+			"processed.",
+		FalsePositives: "LDAP server queries by search values not consisting of parts controllable by the caller can be " +
+			"considered as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweLDAPInjection,
 	}
@@ -66,9 +69,12 @@ func (li *LdapInjectionRule) skipAsset(input *types.Model, incomingFlow *types.C
 	return input.TechnicalAssets[incomingFlow.SourceId].OutOfScope
 }
 
-func (r *LdapInjectionRule) createRisk(input *types.Model, technicalAsset *types.TechnicalAsset, incomingFlow *types.CommunicationLink, likelihood types.RiskExploitationLikelihood) *types.Risk {
+func (r *LdapInjectionRule) createRisk(
+	input *types.Model, technicalAsset *types.TechnicalAsset, incomingFlow *types.CommunicationLink,
+	likelihood types.RiskExploitationLikelihood,
+) *types.Risk {
 	caller := input.TechnicalAssets[incomingFlow.SourceId]
-	title := "<b>LDAP-Injection</b> risk at <b>" + caller.Title + "</b> against LDAP server <b>" + technicalAsset.Title + "</b>" +
-		" via <b>" + incomingFlow.Title + "</b>"
+	title := "<b>LDAP-Injection</b> risk at <b>" + caller.Title + "</b> against LDAP server <b>" + technicalAsset.Title +
+		"</b> via <b>" + incomingFlow.Title + "</b>"
 	return newCallerAttackRisk(input, r.Category().ID, title, technicalAsset, incomingFlow, likelihood)
 }

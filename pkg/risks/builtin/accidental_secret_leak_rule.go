@@ -17,17 +17,18 @@ func (*AccidentalSecretLeakRule) Category() *types.RiskCategory {
 	return &types.RiskCategory{
 		ID:    "accidental-secret-leak",
 		Title: "Accidental Secret Leak",
-		Description: "Sourcecode repositories (including their histories) as well as artifact registries can accidentally contain secrets like " +
-			"checked-in or packaged-in passwords, API tokens, certificates, crypto keys, etc.",
-		Impact: "If this risk is unmitigated, attackers which have access to affected sourcecode repositories or artifact registries might " +
-			"find secrets accidentally checked-in.",
+		Description: "Sourcecode repositories (including their histories) as well as artifact registries can accidentally " +
+			"contain secrets like checked-in or packaged-in passwords, API tokens, certificates, crypto keys, etc.",
+		Impact: "If this risk is unmitigated, attackers which have access to affected sourcecode repositories or artifact " +
+			"registries might find secrets accidentally checked-in.",
 		ASVS:       asvsConfiguration,
 		CheatSheet: cheatSheetAttackSurfaceAnalysis,
 		Action:     actionBuildPipelineHardening,
-		Mitigation: "Establish measures preventing accidental check-in or package-in of secrets into sourcecode repositories " +
-			"and artifact registries. This starts by using good .gitignore and .dockerignore files, but does not stop there. " +
-			"See for example tools like <i>\"git-secrets\" or \"Talisman\"</i> to have check-in preventive measures for secrets. " +
-			"Consider also to regularly scan your repositories for secrets accidentally checked-in using scanning tools like <i>\"gitleaks\" or \"gitrob\"</i>.",
+		Mitigation: "Establish measures preventing accidental check-in or package-in of secrets into sourcecode " +
+			"repositories and artifact registries. This starts by using good .gitignore and .dockerignore files, but does not " +
+			"stop there. See for example tools like <i>\"git-secrets\" or \"Talisman\"</i> to have check-in preventive " +
+			"measures for secrets. Consider also to regularly scan your repositories for secrets accidentally checked-in " +
+			"using scanning tools like <i>\"gitleaks\" or \"gitrob\"</i>.",
 		Check:                      checkCheatSheetAndASVS,
 		Function:                   types.Operations,
 		STRIDE:                     types.InformationDisclosure,
@@ -67,7 +68,9 @@ func (asl *AccidentalSecretLeakRule) skipAsset(techAsset *types.TechnicalAsset) 
 	return techAsset.OutOfScope || !techAsset.Technologies.GetAttribute(types.MayContainSecrets)
 }
 
-func (r *AccidentalSecretLeakRule) createRisk(parsedModel *types.Model, technicalAsset *types.TechnicalAsset, prefix, details string) *types.Risk {
+func (r *AccidentalSecretLeakRule) createRisk(
+	parsedModel *types.Model, technicalAsset *types.TechnicalAsset, prefix, details string,
+) *types.Risk {
 	if len(prefix) > 0 {
 		prefix = " (" + prefix + ")"
 	}
@@ -122,7 +125,8 @@ func (r *AccidentalSecretLeakRule) ExplainRisk(parsedModel *types.Model, risk st
 	for _, id := range parsedModel.SortedTechnicalAssetIDs() {
 		techAsset := parsedModel.TechnicalAssets[id]
 		if strings.EqualFold(risk, categoryId+"@"+techAsset.Id) || strings.EqualFold(risk, categoryId+"@*") {
-			if !techAsset.OutOfScope && (techAsset.Technologies.GetAttribute(types.SourcecodeRepository) || techAsset.Technologies.GetAttribute(types.ArtifactRegistry)) {
+			if !techAsset.OutOfScope && (techAsset.Technologies.GetAttribute(types.SourcecodeRepository) ||
+				techAsset.Technologies.GetAttribute(types.ArtifactRegistry)) {
 				riskExplanation := r.explainRisk(parsedModel, techAsset)
 				if riskExplanation != nil {
 					if len(explanation) > 0 {
@@ -132,7 +136,10 @@ func (r *AccidentalSecretLeakRule) ExplainRisk(parsedModel *types.Model, risk st
 					explanation = append(explanation, []string{
 						fmt.Sprintf("technical asset %q", techAsset.Id),
 						fmt.Sprintf("  - out of scope: %v (=false)", techAsset.OutOfScope),
-						fmt.Sprintf("  - technology: %v (has either [%q, %q])", techAsset.Technologies.String(), types.SourcecodeRepository, types.ArtifactRegistry),
+						fmt.Sprintf(
+							"  - technology: %v (has either [%q, %q])", techAsset.Technologies.String(), types.SourcecodeRepository,
+							types.ArtifactRegistry,
+						),
 					}...)
 
 					if techAsset.IsTaggedWithAny("git") {

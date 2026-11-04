@@ -14,20 +14,21 @@ func (*MissingIdentityStoreRule) Category() *types.RiskCategory {
 	return &types.RiskCategory{
 		ID:    "missing-identity-store",
 		Title: "Missing Identity Store",
-		Description: "The modeled architecture does not contain an identity store, which might be the risk of a model missing " +
-			"critical assets (and thus not seeing their risks).",
-		Impact: "If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model in the identity provider/store " +
-			"that is currently missing in the model.",
-		ASVS:           asvsAuthentication,
-		CheatSheet:     "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
-		Action:         "Identity Store",
-		Mitigation:     "Include an identity store in the model if the application has a login.",
-		Check:          checkCheatSheetAndASVS,
-		Function:       types.Architecture,
-		STRIDE:         types.Spoofing,
-		DetectionLogic: "Models with authenticated data-flows authorized via end user identity missing an in-scope identity store.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the end user-identity authorized technical assets and " +
-			"their data assets processed.",
+		Description: "The modeled architecture does not contain an identity store, which might be the risk of a model " +
+			"missing critical assets (and thus not seeing their risks).",
+		Impact: "If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model in the " +
+			"identity provider/store that is currently missing in the model.",
+		ASVS:       asvsAuthentication,
+		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+		Action:     "Identity Store",
+		Mitigation: "Include an identity store in the model if the application has a login.",
+		Check:      checkCheatSheetAndASVS,
+		Function:   types.Architecture,
+		STRIDE:     types.Spoofing,
+		DetectionLogic: "Models with authenticated data-flows authorized via end user identity missing an in-scope " +
+			"identity store.",
+		RiskAssessment: "The risk rating depends on the sensitivity of the end user-identity authorized technical assets " +
+			"and their data assets processed.",
 		FalsePositives: "Models only offering data/services without any real authentication need " +
 			"can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: true,
@@ -51,9 +52,11 @@ func (r *MissingIdentityStoreRule) GenerateRisks(input *types.Model) ([]*types.R
 	riskIdentified := false
 	var mostRelevantAsset *types.TechnicalAsset
 	impact := types.LowImpact
-	for _, id := range input.SortedTechnicalAssetIDs() { // use the sorted one to always get the same tech asset with the highest sensitivity as example asset
+	// use the sorted one to always get the same tech asset with the highest sensitivity as example asset
+	for _, id := range input.SortedTechnicalAssetIDs() {
 		technicalAsset := input.TechnicalAssets[id]
-		for _, commLink := range technicalAsset.CommunicationLinksSorted() { // use the sorted one to always get the same tech asset with the highest sensitivity as example asset
+		// use the sorted one to always get the same tech asset with the highest sensitivity as example asset
+		for _, commLink := range technicalAsset.CommunicationLinksSorted() {
 			if commLink.Authorization != types.EndUserIdentityPropagation {
 				continue
 			}
@@ -80,8 +83,11 @@ func (r *MissingIdentityStoreRule) skipAsset(technicalAsset *types.TechnicalAsse
 	return !technicalAsset.OutOfScope && technicalAsset.Technologies.GetAttribute(types.IsIdentityStore)
 }
 
-func (r *MissingIdentityStoreRule) createRisk(technicalAsset *types.TechnicalAsset, impact types.RiskExploitationImpact) *types.Risk {
-	title := "<b>Missing Identity Store</b> in the threat model (referencing asset <b>" + technicalAsset.Title + "</b> as an example)"
+func (r *MissingIdentityStoreRule) createRisk(
+	technicalAsset *types.TechnicalAsset, impact types.RiskExploitationImpact,
+) *types.Risk {
+	title := "<b>Missing Identity Store</b> in the threat model (referencing asset <b>" + technicalAsset.Title +
+		"</b> as an example)"
 	risk := &types.Risk{
 		CategoryId:                   r.Category().ID,
 		Severity:                     types.CalculateSeverity(types.Unlikely, impact),

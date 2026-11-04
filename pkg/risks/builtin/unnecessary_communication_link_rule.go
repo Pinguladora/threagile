@@ -16,15 +16,17 @@ func (*UnnecessaryCommunicationLinkRule) Category() *types.RiskCategory {
 		Title: "Unnecessary Communication Link",
 		Description: "When a technical communication link does not send or receive any data assets, this is " +
 			"an indicator for an unnecessary communication link (or for an incomplete model).",
-		Impact:                     "If this risk is unmitigated, attackers might be able to target unnecessary communication links.",
-		ASVS:                       asvsArchitecture,
-		CheatSheet:                 cheatSheetAttackSurfaceAnalysis,
-		Action:                     actionAttackSurfaceReduction,
-		Mitigation:                 "Try to avoid using technical communication links that do not send or receive anything.",
-		Check:                      checkCheatSheetAndASVS,
-		Function:                   types.Architecture,
-		STRIDE:                     types.ElevationOfPrivilege,
-		DetectionLogic:             "In-scope technical assets' technical communication links not sending or receiving any data assets.",
+		Impact: "If this risk is unmitigated, attackers might be able to target unnecessary " +
+			"communication links.",
+		ASVS:       asvsArchitecture,
+		CheatSheet: cheatSheetAttackSurfaceAnalysis,
+		Action:     actionAttackSurfaceReduction,
+		Mitigation: "Try to avoid using technical communication links that do not send or receive anything.",
+		Check:      checkCheatSheetAndASVS,
+		Function:   types.Architecture,
+		STRIDE:     types.ElevationOfPrivilege,
+		DetectionLogic: "In-scope technical assets' technical communication links not sending or receiving any " +
+			"data assets.",
 		RiskAssessment:             types.LowSeverity.String(),
 		FalsePositives:             falsePositivesIncompleteModel,
 		ModelFailurePossibleReason: true,
@@ -53,8 +55,11 @@ func (r *UnnecessaryCommunicationLinkRule) GenerateRisks(input *types.Model) ([]
 	return risks, nil
 }
 
-func (r *UnnecessaryCommunicationLinkRule) createRisk(technicalAsset *types.TechnicalAsset, commLink *types.CommunicationLink) *types.Risk {
-	title := "<b>Unnecessary Communication Link</b> titled <b>" + commLink.Title + "</b> at technical asset <b>" + technicalAsset.Title + "</b>"
+func (r *UnnecessaryCommunicationLinkRule) createRisk(
+	technicalAsset *types.TechnicalAsset, commLink *types.CommunicationLink,
+) *types.Risk {
+	title := "<b>Unnecessary Communication Link</b> titled <b>" + commLink.Title + "</b> at technical asset <b>" +
+		technicalAsset.Title + "</b>"
 	risk := &types.Risk{
 		CategoryId:                      r.Category().ID,
 		Severity:                        types.CalculateSeverity(types.Unlikely, types.LowImpact),

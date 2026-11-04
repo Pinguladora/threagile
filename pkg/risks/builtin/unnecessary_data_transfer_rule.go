@@ -28,14 +28,15 @@ func (*UnnecessaryDataTransferRule) Category() *types.RiskCategory {
 		Check:    checkCheatSheetAndASVS,
 		Function: types.Architecture,
 		STRIDE:   types.ElevationOfPrivilege,
-		DetectionLogic: "In-scope technical assets sending or receiving sensitive data assets which are neither processed nor " +
-			"stored by the technical asset are flagged with this risk. The risk rating (low or medium) depends on the " +
-			"confidentiality, integrity, and availability rating of the technical asset. Monitoring data is exempted from this risk.",
-		RiskAssessment: "The risk assessment is depending on the confidentiality and integrity rating of the transferred data asset " +
-			"either " + types.LowSeverity.String() + " or " + types.MediumSeverity.String() + ".",
-		FalsePositives: "Technical assets missing the model entries of either processing or storing the mentioned data assets " +
-			"can be considered as false positives (incomplete models) after individual review. These should then be addressed by " +
-			"completing the model so that all necessary data assets are processed by the technical asset involved.",
+		DetectionLogic: "In-scope technical assets sending or receiving sensitive data assets which are neither processed " +
+			"nor stored by the technical asset are flagged with this risk. The risk rating (low or medium) depends on the " +
+			"confidentiality, integrity, and availability rating of the technical asset. Monitoring data is exempted from " +
+			"this risk.",
+		RiskAssessment: "The risk assessment is depending on the confidentiality and integrity rating of the transferred " +
+			"data asset either " + types.LowSeverity.String() + " or " + types.MediumSeverity.String() + ".",
+		FalsePositives: "Technical assets missing the model entries of either processing or storing the mentioned data " +
+			"assets can be considered as false positives (incomplete models) after individual review. These should then be " +
+			"addressed by completing the model so that all necessary data assets are processed by the technical asset involved.",
 		ModelFailurePossibleReason: true,
 		CWE:                        cweArchitecturalConcepts,
 	}
@@ -125,15 +126,19 @@ func isNewRisk(risks []*types.Risk, risk *types.Risk) bool {
 	return true
 }
 
-func (r *UnnecessaryDataTransferRule) createRisk(technicalAsset *types.TechnicalAsset, dataAssetTransferred *types.DataAsset, commPartnerAsset *types.TechnicalAsset) *types.Risk {
-	moreRisky := dataAssetTransferred.Confidentiality == types.StrictlyConfidential || dataAssetTransferred.Integrity == types.MissionCritical
+func (r *UnnecessaryDataTransferRule) createRisk(
+	technicalAsset *types.TechnicalAsset, dataAssetTransferred *types.DataAsset, commPartnerAsset *types.TechnicalAsset,
+) *types.Risk {
+	moreRisky := dataAssetTransferred.Confidentiality == types.StrictlyConfidential ||
+		dataAssetTransferred.Integrity == types.MissionCritical
 
 	impact := types.LowImpact
 	if moreRisky {
 		impact = types.MediumImpact
 	}
 
-	title := "<b>Unnecessary Data Transfer</b> of <b>" + dataAssetTransferred.Title + "</b> data at <b>" + technicalAsset.Title + "</b> " +
+	title := "<b>Unnecessary Data Transfer</b> of <b>" + dataAssetTransferred.Title + "</b> data at <b>" +
+		technicalAsset.Title + "</b> " +
 		"from/to <b>" + commPartnerAsset.Title + "</b>"
 	risk := &types.Risk{
 		CategoryId:                   r.Category().ID,
@@ -146,6 +151,7 @@ func (r *UnnecessaryDataTransferRule) createRisk(technicalAsset *types.Technical
 		DataBreachProbability:        types.Improbable,
 		DataBreachTechnicalAssetIDs:  []string{technicalAsset.Id},
 	}
-	risk.SyntheticId = risk.CategoryId + "@" + dataAssetTransferred.Id + "@" + technicalAsset.Id + "@" + commPartnerAsset.Id
+	risk.SyntheticId = risk.CategoryId + "@" + dataAssetTransferred.Id + "@" + technicalAsset.Id + "@" +
+		commPartnerAsset.Id
 	return risk
 }

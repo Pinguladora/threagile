@@ -18,8 +18,8 @@ func (*UnguardedAccessFromInternetRule) Category() *types.RiskCategory {
 		Title: "Unguarded Access From Internet",
 		Description: "Internet-exposed assets must be guarded by a protecting service, application, " +
 			"or reverse-proxy.",
-		Impact: "If this risk is unmitigated, attackers might be able to directly attack sensitive systems without any hardening components in-between " +
-			"due to them being directly exposed on the internet.",
+		Impact: "If this risk is unmitigated, attackers might be able to directly attack sensitive systems without any " +
+			"hardening components in-between due to them being directly exposed on the internet.",
 		ASVS:       asvsArchitecture,
 		CheatSheet: cheatSheetAttackSurfaceAnalysis,
 		Action:     "Encapsulation of Technical Asset",
@@ -30,9 +30,10 @@ func (*UnguardedAccessFromInternetRule) Category() *types.RiskCategory {
 		Function: types.Architecture,
 		STRIDE:   types.ElevationOfPrivilege,
 		DetectionLogic: "In-scope technical assets (excluding " + types.LoadBalancer + ") with confidentiality rating " +
-			"of " + types.Confidential.String() + " (or higher) or with integrity rating of " + types.Critical.String() + " (or higher) when " +
-			"accessed directly from the internet. All " +
-			types.WebServer + ", " + types.WebApplication + ", " + types.ReverseProxy + ", " + types.WAF + ", and " + types.Gateway + " assets are exempted from this risk when " +
+			"of " + types.Confidential.String() + " (or higher) or with integrity rating of " + types.Critical.String() +
+			" (or higher) when accessed directly from the internet. All " +
+			types.WebServer + ", " + types.WebApplication + ", " + types.ReverseProxy + ", " + types.WAF + ", and " +
+			types.Gateway + " assets are exempted from this risk when " +
 			"they do not consist of custom developed code and " +
 			"the data-flow only consists of HTTP or FTP protocols. Access from " + types.Monitoring + " systems " +
 			"as well as VPN-protected connections are exempted.",
@@ -40,7 +41,8 @@ func (*UnguardedAccessFromInternetRule) Category() *types.RiskCategory {
 			"confidentiality rating is " + types.StrictlyConfidential.String() + " or the integrity rating " +
 			"is " + types.MissionCritical.String() + ", the risk-rating is considered " + types.MediumSeverity.String() + ". " +
 			"For assets with RAA values higher than 40 % the risk-rating increases.",
-		FalsePositives:             "When other means of filtering client requests are applied equivalent of " + types.ReverseProxy + ", " + types.WAF + ", or " + types.Gateway + " components.",
+		FalsePositives: "When other means of filtering client requests are applied equivalent of " +
+			types.ReverseProxy + ", " + types.WAF + ", or " + types.Gateway + " components.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweTrustBoundaryViolation,
 	}
@@ -65,8 +67,11 @@ func (r *UnguardedAccessFromInternetRule) GenerateRisks(input *types.Model) ([]*
 				continue
 			}
 
-			highRisk := technicalAsset.Confidentiality == types.StrictlyConfidential || technicalAsset.Integrity == types.MissionCritical
-			risks = append(risks, r.createRisk(technicalAsset, incomingAccess, input.TechnicalAssets[incomingAccess.SourceId], highRisk))
+			highRisk := technicalAsset.Confidentiality == types.StrictlyConfidential ||
+				technicalAsset.Integrity == types.MissionCritical
+			risks = append(risks, r.createRisk(
+				technicalAsset, incomingAccess, input.TechnicalAssets[incomingAccess.SourceId], highRisk,
+			))
 		}
 	}
 	return risks, nil

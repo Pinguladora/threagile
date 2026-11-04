@@ -22,10 +22,11 @@ func (*WrongCommunicationLinkContentRule) Category() *types.RiskCategory {
 		Action:     "Model Consistency",
 		Mitigation: "Try to model the correct readonly flag and/or data sent/received of communication links. " +
 			"Also try to use  communication link types matching the target technology/machine types.",
-		Check:                      checkCheatSheetAndASVS,
-		Function:                   types.Architecture,
-		STRIDE:                     types.InformationDisclosure,
-		DetectionLogic:             "Communication links with inconsistent data assets being sent/received not matching their readonly flag or otherwise inconsistent protocols not matching the target technology type.",
+		Check:    checkCheatSheetAndASVS,
+		Function: types.Architecture,
+		STRIDE:   types.InformationDisclosure,
+		DetectionLogic: "Communication links with inconsistent data assets being sent/received not matching " +
+			"their readonly flag or otherwise inconsistent protocols not matching the target technology type.",
 		RiskAssessment:             types.LowSeverity.String(),
 		FalsePositives:             falsePositivesIncompleteModel,
 		ModelFailurePossibleReason: true,
@@ -95,7 +96,9 @@ func protocolMismatch(commLink *types.CommunicationLink, targetAsset *types.Tech
 	return ""
 }
 
-func (r *WrongCommunicationLinkContentRule) createRisk(technicalAsset *types.TechnicalAsset, commLink *types.CommunicationLink, reason string) *types.Risk {
+func (r *WrongCommunicationLinkContentRule) createRisk(
+	technicalAsset *types.TechnicalAsset, commLink *types.CommunicationLink, reason string,
+) *types.Risk {
 	title := "<b>Wrong Communication Link Content</b> " + reason + " at <b>" + technicalAsset.Title + "</b> " +
 		"regarding communication link <b>" + commLink.Title + "</b>"
 	risk := &types.Risk{

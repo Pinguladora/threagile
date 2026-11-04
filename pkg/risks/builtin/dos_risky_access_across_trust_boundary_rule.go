@@ -16,7 +16,8 @@ func (*DosRiskyAccessAcrossTrustBoundaryRule) Category() *types.RiskCategory {
 		Title: "DoS-risky Access Across Trust-Boundary",
 		Description: "Assets accessed across trust boundaries with critical or mission-critical availability rating " +
 			"are more prone to Denial-of-Service (DoS) risks.",
-		Impact:     "If this risk remains unmitigated, attackers might be able to disturb the availability of important parts of the system.",
+		Impact: "If this risk remains unmitigated, attackers might be able to disturb the availability of important " +
+			"parts of the system.",
 		ASVS:       asvsArchitecture,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html",
 		Action:     "Anti-DoS Measures",
@@ -89,12 +90,16 @@ func (r *DosRiskyAccessAcrossTrustBoundaryRule) potentiallyAddRisk(
 		return risks
 	}
 
-	highRisk := technicalAsset.Availability == types.MissionCritical && !incomingAccess.VPN && !incomingAccess.IpFiltered && !technicalAsset.Redundant
-	risks = append(risks, r.createRisk(technicalAsset, incomingAccess, linkId, hopBetween, input.TechnicalAssets[incomingAccess.SourceId], highRisk))
+	highRisk := technicalAsset.Availability == types.MissionCritical && !incomingAccess.VPN &&
+		!incomingAccess.IpFiltered && !technicalAsset.Redundant
+	risks = append(risks, r.createRisk(
+		technicalAsset, incomingAccess, linkId, hopBetween, input.TechnicalAssets[incomingAccess.SourceId], highRisk,
+	))
 	return risks
 }
 
-func (r *DosRiskyAccessAcrossTrustBoundaryRule) createRisk(techAsset *types.TechnicalAsset, dataFlow *types.CommunicationLink, linkId string, hopBetween string,
+func (r *DosRiskyAccessAcrossTrustBoundaryRule) createRisk(
+	techAsset *types.TechnicalAsset, dataFlow *types.CommunicationLink, linkId string, hopBetween string,
 	clientOutsideTrustBoundary *types.TechnicalAsset, moreRisky bool,
 ) *types.Risk {
 	impact := types.LowImpact
@@ -109,7 +114,8 @@ func (r *DosRiskyAccessAcrossTrustBoundaryRule) createRisk(techAsset *types.Tech
 		Severity:               types.CalculateSeverity(types.Unlikely, impact),
 		ExploitationLikelihood: types.Unlikely,
 		ExploitationImpact:     impact,
-		Title: "<b>Denial-of-Service</b> risky access of <b>" + techAsset.Title + "</b> by <b>" + clientOutsideTrustBoundary.Title +
+		Title: "<b>Denial-of-Service</b> risky access of <b>" + techAsset.Title + "</b> by <b>" +
+			clientOutsideTrustBoundary.Title +
 			"</b> via <b>" + dataFlow.Title + "</b>" + hopBetween,
 		MostRelevantTechnicalAssetId:    techAsset.Id,
 		MostRelevantCommunicationLinkId: dataFlow.Id,

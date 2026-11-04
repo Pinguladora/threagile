@@ -12,24 +12,29 @@ func NewMissingAuthenticationRule() *MissingAuthenticationRule {
 
 func (*MissingAuthenticationRule) Category() *types.RiskCategory {
 	return &types.RiskCategory{
-		ID:          "missing-authentication",
-		Title:       "Missing Authentication",
-		Description: "Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes sensitive data. ",
-		Impact:      "If this risk is unmitigated, attackers might be able to access or modify sensitive data in an unauthenticated way.",
-		ASVS:        asvsAuthentication,
-		CheatSheet:  "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
-		Action:      "Authentication of Incoming Requests",
+		ID:    "missing-authentication",
+		Title: "Missing Authentication",
+		Description: "Technical assets (especially multi-tenant systems) should authenticate incoming requests when the " +
+			"asset processes sensitive data. ",
+		Impact: "If this risk is unmitigated, attackers might be able to access or modify sensitive data in an " +
+			"unauthenticated way.",
+		ASVS:       asvsAuthentication,
+		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+		Action:     "Authentication of Incoming Requests",
 		Mitigation: "Apply an authentication method to the technical asset. To protect highly sensitive data consider " +
 			"the use of two-factor authentication for human users.",
 		Check:    checkCheatSheetAndASVS,
 		Function: types.Architecture,
 		STRIDE:   types.ElevationOfPrivilege,
-		DetectionLogic: "In-scope technical assets (except " + types.LoadBalancer + ", " + types.ReverseProxy + ", " + types.ServiceRegistry + ", " + types.WAF + ", " + types.IDS + ", and " + types.IPS + " and in-process calls) should authenticate incoming requests when the asset processes " +
-			"sensitive data. This is especially the case for all multi-tenant assets (there even non-sensitive ones).",
+		DetectionLogic: "In-scope technical assets (except " + types.LoadBalancer + ", " + types.ReverseProxy + ", " +
+			types.ServiceRegistry + ", " + types.WAF + ", " + types.IDS + ", and " + types.IPS +
+			" and in-process calls) should authenticate incoming requests when the asset processes sensitive data. This is " +
+			"especially the case for all multi-tenant assets (there even non-sensitive ones).",
 		RiskAssessment: "The risk rating (medium or high) " +
-			"depends on the sensitivity of the data sent across the communication link. Monitoring callers are exempted from this risk.",
-		FalsePositives: "Technical assets which do not process requests regarding functionality or data linked to end-users (customers) " +
-			"can be considered as false positives after individual review.",
+			"depends on the sensitivity of the data sent across the communication link. Monitoring callers are exempted from " +
+			"this risk.",
+		FalsePositives: "Technical assets which do not process requests regarding functionality or data linked to " +
+			"end-users (customers) can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweMissingAuthentication,
 	}
@@ -80,17 +85,23 @@ func isUnauthenticatedCallerTolerated(caller *types.TechnicalAsset) bool {
 	return caller.Technologies.GetAttribute(types.IsUnprotectedCommunicationsTolerated) || caller.Type == types.Datastore
 }
 
-func (r *MissingAuthenticationRule) calculateImpact(commLink *types.CommunicationLink, input *types.Model) types.RiskExploitationImpact {
-	if input.HighestCommunicationLinkConfidentiality(commLink) == types.StrictlyConfidential || input.HighestCommunicationLinkIntegrity(commLink) == types.MissionCritical {
+func (r *MissingAuthenticationRule) calculateImpact(
+	commLink *types.CommunicationLink, input *types.Model,
+) types.RiskExploitationImpact {
+	if input.HighestCommunicationLinkConfidentiality(commLink) == types.StrictlyConfidential ||
+		input.HighestCommunicationLinkIntegrity(commLink) == types.MissionCritical {
 		return types.HighImpact
 	}
-	if input.HighestCommunicationLinkConfidentiality(commLink) <= types.Internal && input.HighestCommunicationLinkIntegrity(commLink) == types.Operational {
+	if input.HighestCommunicationLinkConfidentiality(commLink) <= types.Internal &&
+		input.HighestCommunicationLinkIntegrity(commLink) == types.Operational {
 		return types.LowImpact
 	}
 	return types.MediumImpact
 }
 
-func (r *MissingAuthenticationRule) createRisk(input *types.Model, technicalAsset *types.TechnicalAsset, incomingAccess, incomingAccessOrigin *types.CommunicationLink, hopBetween string,
+func (r *MissingAuthenticationRule) createRisk(
+	input *types.Model, technicalAsset *types.TechnicalAsset,
+	incomingAccess, incomingAccessOrigin *types.CommunicationLink, hopBetween string,
 	impact types.RiskExploitationImpact, likelihood types.RiskExploitationLikelihood,
 	twoFactor bool, category *types.RiskCategory,
 ) *types.Risk {
@@ -106,14 +117,15 @@ func (r *MissingAuthenticationRule) createRisk(input *types.Model, technicalAsse
 		Severity:               types.CalculateSeverity(likelihood, impact),
 		ExploitationLikelihood: likelihood,
 		ExploitationImpact:     impact,
-		Title: "<b>Missing " + factorString + "Authentication</b> covering communication link <b>" + incomingAccess.Title + "</b> " +
-			"from <b>" + input.TechnicalAssets[incomingAccessOrigin.SourceId].Title + "</b> " + hopBetween +
+		Title: "<b>Missing " + factorString + "Authentication</b> covering communication link <b>" + incomingAccess.Title +
+			"</b> from <b>" + input.TechnicalAssets[incomingAccessOrigin.SourceId].Title + "</b> " + hopBetween +
 			"to <b>" + technicalAsset.Title + "</b>",
 		MostRelevantTechnicalAssetId:    technicalAsset.Id,
 		MostRelevantCommunicationLinkId: incomingAccess.Id,
 		DataBreachProbability:           types.Possible,
 		DataBreachTechnicalAssetIDs:     []string{technicalAsset.Id},
 	}
-	risk.SyntheticId = risk.CategoryId + "@" + incomingAccess.Id + "@" + input.TechnicalAssets[incomingAccess.SourceId].Id + "@" + technicalAsset.Id
+	risk.SyntheticId = risk.CategoryId + "@" + incomingAccess.Id + "@" +
+		input.TechnicalAssets[incomingAccess.SourceId].Id + "@" + technicalAsset.Id
 	return risk
 }

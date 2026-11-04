@@ -12,18 +12,20 @@ func NewCrossSiteRequestForgeryRule() *CrossSiteRequestForgeryRule {
 
 func (*CrossSiteRequestForgeryRule) Category() *types.RiskCategory {
 	return &types.RiskCategory{
-		ID:          "cross-site-request-forgery",
-		Title:       "Cross-Site Request Forgery (CSRF)",
-		Description: "When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.",
-		Impact: "If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application " +
-			"by visiting an attacker controlled web site.",
+		ID:    "cross-site-request-forgery",
+		Title: "Cross-Site Request Forgery (CSRF)",
+		Description: "When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might " +
+			"arise.",
+		Impact: "If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted " +
+			"actions within the web application by visiting an attacker controlled web site.",
 		ASVS:       "V4 - Access Control Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
 		Action:     "CSRF Prevention",
 		Mitigation: "Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). " +
 			"When your authentication scheme depends on cookies (like session or token cookies), consider marking them with " +
 			"the same-site flag. " +
-			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+			"When a third-party product is used instead of custom developed software, check if the product applies the proper " +
+			"mitigation and ensure a reasonable patch-level.",
 		Check:          checkCheatSheetAndASVS,
 		Function:       types.Development,
 		STRIDE:         types.Spoofing,
@@ -64,9 +66,12 @@ func (csrf *CrossSiteRequestForgeryRule) skipAsset(technicalAsset *types.Technic
 	return technicalAsset.OutOfScope || !technicalAsset.Technologies.GetAttribute(types.WebApplication)
 }
 
-func (r *CrossSiteRequestForgeryRule) createRisk(parsedModel *types.Model, technicalAsset *types.TechnicalAsset, incomingFlow *types.CommunicationLink) *types.Risk {
+func (r *CrossSiteRequestForgeryRule) createRisk(
+	parsedModel *types.Model, technicalAsset *types.TechnicalAsset, incomingFlow *types.CommunicationLink,
+) *types.Risk {
 	sourceAsset := parsedModel.TechnicalAssets[incomingFlow.SourceId]
-	title := "<b>Cross-Site Request Forgery (CSRF)</b> risk at <b>" + technicalAsset.Title + "</b> via <b>" + incomingFlow.Title + "</b> from <b>" + sourceAsset.Title + "</b>"
+	title := "<b>Cross-Site Request Forgery (CSRF)</b> risk at <b>" + technicalAsset.Title + "</b> via <b>" +
+		incomingFlow.Title + "</b> from <b>" + sourceAsset.Title + "</b>"
 	impact := types.LowImpact
 	if parsedModel.HighestCommunicationLinkIntegrity(incomingFlow) == types.MissionCritical {
 		impact = types.MediumImpact

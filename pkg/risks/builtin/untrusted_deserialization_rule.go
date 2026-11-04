@@ -18,16 +18,19 @@ func (*UntrustedDeserializationRule) Category() *types.RiskCategory {
 		Title: "Untrusted Deserialization",
 		Description: "When a technical asset accepts data in a specific serialized form (like Java or .NET serialization), " +
 			"Untrusted Deserialization risks might arise." +
-			"<br><br>See <a href=\"https://christian-schneider.net/JavaDeserializationSecurityFAQ.html\">https://christian-schneider.net/JavaDeserializationSecurityFAQ.html</a> " +
-			"for more details.",
-		Impact:     "If this risk is unmitigated, attackers might be able to execute code on target systems by exploiting untrusted deserialization endpoints.",
+			"<br><br>See <a " +
+			"href=\"https://christian-schneider.net/JavaDeserializationSecurityFAQ.html\">" +
+			"https://christian-schneider.net/JavaDeserializationSecurityFAQ.html</a> for more details.",
+		Impact: "If this risk is unmitigated, attackers might be able to execute code on target systems by exploiting " +
+			"untrusted deserialization endpoints.",
 		ASVS:       asvsValidation,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html",
 		Action:     "Prevention of Deserialization of Untrusted Data",
-		Mitigation: "Try to avoid the deserialization of untrusted data (even of data within the same trust-boundary as long as " +
-			"it is sent across a remote connection) in order to stay safe from Untrusted Deserialization vulnerabilities. " +
-			"Alternatively a strict whitelisting approach of the classes/types/values to deserialize might help as well. " +
-			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+		Mitigation: "Try to avoid the deserialization of untrusted data (even of data within the same trust-boundary as " +
+			"long as it is sent across a remote connection) in order to stay safe from Untrusted Deserialization " +
+			"vulnerabilities. Alternatively a strict whitelisting approach of the classes/types/values to deserialize might " +
+			"help as well. When a third-party product is used instead of custom developed software, check if the product " +
+			"applies the proper mitigation and ensure a reasonable patch-level.",
 		Check:          checkCheatSheetAndASVS,
 		Function:       types.Architecture,
 		STRIDE:         types.Tampering,
@@ -84,7 +87,9 @@ func checkIncomingSerializationProtocols(
 	return hasOne, acrossTrustBoundary, commLinkTitle
 }
 
-func (r *UntrustedDeserializationRule) createRisk(parsedModel *types.Model, technicalAsset *types.TechnicalAsset, acrossTrustBoundary bool, commLinkTitle string) *types.Risk {
+func (r *UntrustedDeserializationRule) createRisk(
+	parsedModel *types.Model, technicalAsset *types.TechnicalAsset, acrossTrustBoundary bool, commLinkTitle string,
+) *types.Risk {
 	title := "<b>Untrusted Deserialization</b> risk at <b>" + technicalAsset.Title + "</b>"
 	impact := types.HighImpact
 	likelihood := types.Likely

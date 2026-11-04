@@ -16,15 +16,16 @@ func (*WrongTrustBoundaryContentRule) Category() *types.RiskCategory {
 		Title: "Wrong Trust Boundary Content",
 		Description: "When a trust boundary of type " + types.NetworkPolicyNamespaceIsolation.String() + " contains " +
 			"non-container assets it is likely to be a model failure.",
-		Impact:                     "If this potential model error is not fixed, some risks might not be visible.",
-		ASVS:                       asvsArchitecture,
-		CheatSheet:                 cheatSheetThreatModeling,
-		Action:                     "Model Consistency",
-		Mitigation:                 "Try to model the correct types of trust boundaries and data assets.",
-		Check:                      checkCheatSheetAndASVS,
-		Function:                   types.Architecture,
-		STRIDE:                     types.ElevationOfPrivilege,
-		DetectionLogic:             "Trust boundaries which should only contain containers, but have different assets inside.",
+		Impact:     "If this potential model error is not fixed, some risks might not be visible.",
+		ASVS:       asvsArchitecture,
+		CheatSheet: cheatSheetThreatModeling,
+		Action:     "Model Consistency",
+		Mitigation: "Try to model the correct types of trust boundaries and data assets.",
+		Check:      checkCheatSheetAndASVS,
+		Function:   types.Architecture,
+		STRIDE:     types.ElevationOfPrivilege,
+		DetectionLogic: "Trust boundaries which should only contain containers, but have different assets " +
+			"inside.",
 		RiskAssessment:             types.LowSeverity.String(),
 		FalsePositives:             falsePositivesIncompleteModel,
 		ModelFailurePossibleReason: true,
@@ -52,7 +53,8 @@ func (r *WrongTrustBoundaryContentRule) GenerateRisks(input *types.Model) ([]*ty
 }
 
 func (r *WrongTrustBoundaryContentRule) createRisk(technicalAsset *types.TechnicalAsset) *types.Risk {
-	title := "<b>Wrong Trust Boundary Content</b> (non-container asset inside container trust boundary) at <b>" + technicalAsset.Title + "</b>"
+	title := "<b>Wrong Trust Boundary Content</b> (non-container asset inside container trust boundary) at <b>" +
+		technicalAsset.Title + "</b>"
 	risk := &types.Risk{
 		CategoryId:                   r.Category().ID,
 		Severity:                     types.CalculateSeverity(types.Unlikely, types.LowImpact),

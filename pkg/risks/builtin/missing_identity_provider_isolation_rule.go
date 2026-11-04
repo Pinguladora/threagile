@@ -14,24 +14,30 @@ func (*MissingIdentityProviderIsolationRule) Category() *types.RiskCategory {
 	return &types.RiskCategory{
 		ID:    "missing-identity-provider-isolation",
 		Title: "Missing Identity Provider Isolation",
-		Description: "Highly sensitive identity provider assets and their identity data stores should be isolated from other assets " +
-			"by their own network segmentation trust-boundary (" + types.ExecutionEnvironment.String() + " boundaries do not count as network isolation).",
-		Impact: "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards " +
-			"highly sensitive identity provider assets and their identity data stores, as they are not separated by network segmentation.",
+		Description: "Highly sensitive identity provider assets and their identity data stores should be isolated from " +
+			"other assets by their own network segmentation trust-boundary (" + types.ExecutionEnvironment.String() +
+			" boundaries do not count as network isolation).",
+		Impact: "If this risk is unmitigated, attackers successfully attacking other components of the system might have " +
+			"an easy path towards highly sensitive identity provider assets and their identity data stores, as they are not " +
+			"separated by network segmentation.",
 		ASVS:       asvsArchitecture,
 		CheatSheet: cheatSheetAttackSurfaceAnalysis,
 		Action:     actionNetworkSegmentation,
-		Mitigation: "Apply a network segmentation trust-boundary around the highly sensitive identity provider assets and their identity data stores.",
-		Check:      checkCheatSheetAndASVS,
-		Function:   types.Operations,
-		STRIDE:     types.ElevationOfPrivilege,
+		Mitigation: "Apply a network segmentation trust-boundary around the highly sensitive identity provider assets and " +
+			"their identity data stores.",
+		Check:    checkCheatSheetAndASVS,
+		Function: types.Operations,
+		STRIDE:   types.ElevationOfPrivilege,
 		DetectionLogic: "In-scope identity provider assets and their identity data stores " +
 			"when surrounded by other (not identity-related) assets (without a network trust-boundary in-between). " +
-			"This risk is especially prevalent when other non-identity related assets are within the same execution environment (i.e. same database or same application server).",
-		RiskAssessment: "Default is " + types.HighImpact.String() + " impact. The impact is increased to " + types.VeryHighImpact.String() + " when the asset missing the " +
-			"trust-boundary protection is rated as " + types.StrictlyConfidential.String() + " or " + types.MissionCritical.String() + ".",
-		FalsePositives: "When all assets within the network segmentation trust-boundary are hardened and protected to the same extend as if all were " +
-			"identity providers with data of highest sensitivity.",
+			"This risk is especially prevalent when other non-identity related assets are within the same execution " +
+			"environment (i.e. same database or same application server).",
+		RiskAssessment: "Default is " + types.HighImpact.String() + " impact. The impact is increased to " +
+			types.VeryHighImpact.String() + " when the asset missing the " +
+			"trust-boundary protection is rated as " + types.StrictlyConfidential.String() + " or " +
+			types.MissionCritical.String() + ".",
+		FalsePositives: "When all assets within the network segmentation trust-boundary are hardened and protected to the " +
+			"same extend as if all were identity providers with data of highest sensitivity.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweArchitecturalConcepts,
 	}
@@ -64,7 +70,9 @@ func (r *MissingIdentityProviderIsolationRule) GenerateRisks(input *types.Model)
 	return risks, nil
 }
 
-func (r *MissingIdentityProviderIsolationRule) createRisk(techAsset *types.TechnicalAsset, moreImpact bool, sameExecutionEnv bool) *types.Risk {
+func (r *MissingIdentityProviderIsolationRule) createRisk(
+	techAsset *types.TechnicalAsset, moreImpact bool, sameExecutionEnv bool,
+) *types.Risk {
 	impact := types.HighImpact
 	likelihood := types.Unlikely
 	others := "<b>in the same network segment</b>"
@@ -80,7 +88,8 @@ func (r *MissingIdentityProviderIsolationRule) createRisk(techAsset *types.Techn
 		Severity:               types.CalculateSeverity(likelihood, impact),
 		ExploitationLikelihood: likelihood,
 		ExploitationImpact:     impact,
-		Title: "<b>Missing Identity Provider Isolation</b> to further encapsulate and protect identity-related asset <b>" + techAsset.Title + "</b> against unrelated " +
+		Title: "<b>Missing Identity Provider Isolation</b> to further encapsulate and protect identity-related asset <b>" +
+			techAsset.Title + "</b> against unrelated " +
 			"lower protected assets " + others + ", which might be easier to compromise by attackers",
 		MostRelevantTechnicalAssetId: techAsset.Id,
 		DataBreachProbability:        types.Improbable,

@@ -15,23 +15,29 @@ func (*MissingVaultIsolationRule) Category() *types.RiskCategory {
 		ID:    "missing-vault-isolation",
 		Title: "Missing Vault Isolation",
 		Description: "Highly sensitive vault assets and their data stores should be isolated from other assets " +
-			"by their own network segmentation trust-boundary (" + types.ExecutionEnvironment.String() + " boundaries do not count as network isolation).",
-		Impact: "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards " +
-			"highly sensitive vault assets and their data stores, as they are not separated by network segmentation.",
+			"by their own network segmentation trust-boundary (" + types.ExecutionEnvironment.String() +
+			" boundaries do not count as network isolation).",
+		Impact: "If this risk is unmitigated, attackers successfully attacking other components of the system might have " +
+			"an easy path towards highly sensitive vault assets and their data stores, as they are not separated by network " +
+			"segmentation.",
 		ASVS:       asvsArchitecture,
 		CheatSheet: cheatSheetAttackSurfaceAnalysis,
 		Action:     actionNetworkSegmentation,
-		Mitigation: "Apply a network segmentation trust-boundary around the highly sensitive vault assets and their data stores.",
-		Check:      checkCheatSheetAndASVS,
-		Function:   types.Operations,
-		STRIDE:     types.ElevationOfPrivilege,
+		Mitigation: "Apply a network segmentation trust-boundary around the highly sensitive vault assets and their data " +
+			"stores.",
+		Check:    checkCheatSheetAndASVS,
+		Function: types.Operations,
+		STRIDE:   types.ElevationOfPrivilege,
 		DetectionLogic: "In-scope vault assets " +
 			"when surrounded by other (not vault-related) assets (without a network trust-boundary in-between). " +
-			"This risk is especially prevalent when other non-vault related assets are within the same execution environment (i.e. same database or same application server).",
-		RiskAssessment: "Default is " + types.MediumImpact.String() + " impact. The impact is increased to " + types.HighImpact.String() + " when the asset missing the " +
-			"trust-boundary protection is rated as " + types.StrictlyConfidential.String() + " or " + types.MissionCritical.String() + ".",
-		FalsePositives: "When all assets within the network segmentation trust-boundary are hardened and protected to the same extend as if all were " +
-			"vaults with data of highest sensitivity.",
+			"This risk is especially prevalent when other non-vault related assets are within the same execution environment " +
+			"(i.e. same database or same application server).",
+		RiskAssessment: "Default is " + types.MediumImpact.String() + " impact. The impact is increased to " +
+			types.HighImpact.String() + " when the asset missing the " +
+			"trust-boundary protection is rated as " + types.StrictlyConfidential.String() + " or " +
+			types.MissionCritical.String() + ".",
+		FalsePositives: "When all assets within the network segmentation trust-boundary are hardened and protected to the " +
+			"same extend as if all were vaults with data of highest sensitivity.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweArchitecturalConcepts,
 	}
@@ -67,7 +73,9 @@ func isVaultStorage(parsedModel *types.Model, vault *types.TechnicalAsset, stora
 	return storage.Type == types.Datastore && parsedModel.HasDirectConnection(vault, storage.Id)
 }
 
-func (r *MissingVaultIsolationRule) createRisk(techAsset *types.TechnicalAsset, moreImpact bool, sameExecutionEnv bool) *types.Risk {
+func (r *MissingVaultIsolationRule) createRisk(
+	techAsset *types.TechnicalAsset, moreImpact bool, sameExecutionEnv bool,
+) *types.Risk {
 	impact := types.MediumImpact
 	likelihood := types.Unlikely
 	others := "<b>in the same network segment</b>"
@@ -83,8 +91,8 @@ func (r *MissingVaultIsolationRule) createRisk(techAsset *types.TechnicalAsset, 
 		Severity:               types.CalculateSeverity(likelihood, impact),
 		ExploitationLikelihood: likelihood,
 		ExploitationImpact:     impact,
-		Title: "<b>Missing Vault Isolation</b> to further encapsulate and protect vault-related asset <b>" + techAsset.Title + "</b> against unrelated " +
-			"lower protected assets " + others + ", which might be easier to compromise by attackers",
+		Title: "<b>Missing Vault Isolation</b> to further encapsulate and protect vault-related asset <b>" + techAsset.Title +
+			"</b> against unrelated lower protected assets " + others + ", which might be easier to compromise by attackers",
 		MostRelevantTechnicalAssetId: techAsset.Id,
 		DataBreachProbability:        types.Improbable,
 		DataBreachTechnicalAssetIDs:  []string{techAsset.Id},

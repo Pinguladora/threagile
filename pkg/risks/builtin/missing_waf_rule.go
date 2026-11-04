@@ -14,22 +14,26 @@ func (*MissingWafRule) Category() *types.RiskCategory {
 	return &types.RiskCategory{
 		ID:    "missing-waf",
 		Title: "Missing Web Application Firewall (WAF)",
-		Description: "To have a first line of filtering defense, security architectures with web-services or web-applications should include a WAF in front of them. " +
-			"Even though a WAF is not a replacement for security (all components must be secure even without a WAF) it adds another layer of defense to the overall " +
-			"system by delaying some attacks and having easier attack alerting through it.",
-		Impact:     "If this risk is unmitigated, attackers might be able to apply standard attack pattern tests at great speed without any filtering.",
+		Description: "To have a first line of filtering defense, security architectures with web-services or " +
+			"web-applications should include a WAF in front of them. Even though a WAF is not a replacement for security (all " +
+			"components must be secure even without a WAF) it adds another layer of defense to the overall system by delaying " +
+			"some attacks and having easier attack alerting through it.",
+		Impact: "If this risk is unmitigated, attackers might be able to apply standard attack pattern tests at great " +
+			"speed without any filtering.",
 		ASVS:       asvsArchitecture,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Virtual_Patching_Cheat_Sheet.html",
 		Action:     "Web Application Firewall (WAF)",
-		Mitigation: "Consider placing a Web Application Firewall (WAF) in front of the web-services and/or web-applications. For cloud environments many cloud providers offer " +
-			"pre-configured WAFs. Even reverse proxies can be enhances by a WAF component via ModSecurity plugins.",
-		Check:          "GetAttribute a Web Application Firewall (WAF) in place?",
-		Function:       types.Operations,
-		STRIDE:         types.Tampering,
-		DetectionLogic: "In-scope web-services and/or web-applications accessed across a network trust boundary not having a Web Application Firewall (WAF) in front of them.",
+		Mitigation: "Consider placing a Web Application Firewall (WAF) in front of the web-services and/or " +
+			"web-applications. For cloud environments many cloud providers offer pre-configured WAFs. Even reverse proxies " +
+			"can be enhances by a WAF component via ModSecurity plugins.",
+		Check:    "GetAttribute a Web Application Firewall (WAF) in place?",
+		Function: types.Operations,
+		STRIDE:   types.Tampering,
+		DetectionLogic: "In-scope web-services and/or web-applications accessed across a network trust boundary not having " +
+			"a Web Application Firewall (WAF) in front of them.",
 		RiskAssessment: ratingByAssetAndProcessedDataSensitivity,
-		FalsePositives: "Targets only accessible via WAFs or reverse proxies containing a WAF component (like ModSecurity) can be considered " +
-			"as false positives after individual review.",
+		FalsePositives: "Targets only accessible via WAFs or reverse proxies containing a WAF component (like ModSecurity) " +
+			"can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweArchitecturalConcepts,
 	}

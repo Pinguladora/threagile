@@ -15,24 +15,31 @@ func (*SearchQueryInjectionRule) Category() *types.RiskCategory {
 		ID:    "search-query-injection",
 		Title: "Search-Query Injection",
 		Description: "When a search engine server is accessed Search-Query Injection risks might arise." +
-			"<br><br>See for example <a href=\"https://github.com/veracode-research/solr-injection\">https://github.com/veracode-research/solr-injection</a> and " +
-			"<a href=\"https://github.com/veracode-research/solr-injection/blob/master/slides/DEFCON-27-Michael-Stepankin-Apache-Solr-Injection.pdf\">https://github.com/veracode-research/solr-injection/blob/master/slides/DEFCON-27-Michael-Stepankin-Apache-Solr-Injection.pdf</a> " +
-			"for more details (here related to Solr, but in general showcasing the topic of search query injections).",
+			"<br><br>See for example <a " +
+			"href=\"https://github.com/veracode-research/solr-injection\">" +
+			"https://github.com/veracode-research/solr-injection</a> and <a " +
+			"href=\"https://github.com/veracode-research/solr-injection/blob/master/slides/" +
+			"DEFCON-27-Michael-Stepankin-Apache-Solr-Injection.pdf\">" +
+			"https://github.com/veracode-research/solr-injection/blob/master/slides/" +
+			"DEFCON-27-Michael-Stepankin-Apache-Solr-Injection.pdf</a> for more details (here related to Solr, but in " +
+			"general showcasing the topic of search query injections).",
 		Impact: "If this risk remains unmitigated, attackers might be able to read more data from the search index and " +
 			"eventually further escalate towards a deeper system penetration via code executions.",
 		ASVS:       asvsValidation,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Injection_Prevention_Cheat_Sheet.html",
 		Action:     "Search-Query Injection Prevention",
-		Mitigation: "Try to use libraries that properly encode search query meta characters in searches and don't expose the " +
-			"query unfiltered to the caller. " +
-			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+		Mitigation: "Try to use libraries that properly encode search query meta characters in searches and don't expose " +
+			"the query unfiltered to the caller. " +
+			"When a third-party product is used instead of custom developed software, check if the product applies the proper " +
+			"mitigation and ensure a reasonable patch-level.",
 		Check:          checkCheatSheetAndASVS,
 		Function:       types.Development,
 		STRIDE:         types.Tampering,
 		DetectionLogic: "In-scope clients accessing search engine servers via typical search access protocols.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the search engine server itself and of the data assets processed.",
-		FalsePositives: "Server engine queries by search values not consisting of parts controllable by the caller can be considered " +
-			"as false positives after individual review.",
+		RiskAssessment: "The risk rating depends on the sensitivity of the search engine server itself and of the data " +
+			"assets processed.",
+		FalsePositives: "Server engine queries by search values not consisting of parts controllable by the caller can be " +
+			"considered as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweInjection,
 	}
@@ -68,14 +75,20 @@ func (r *SearchQueryInjectionRule) GenerateRisks(input *types.Model) ([]*types.R
 	return risks, nil
 }
 
-func (r *SearchQueryInjectionRule) createRisk(input *types.Model, technicalAsset *types.TechnicalAsset, incomingFlow *types.CommunicationLink, likelihood types.RiskExploitationLikelihood) *types.Risk {
+func (r *SearchQueryInjectionRule) createRisk(
+	input *types.Model, technicalAsset *types.TechnicalAsset, incomingFlow *types.CommunicationLink,
+	likelihood types.RiskExploitationLikelihood,
+) *types.Risk {
 	caller := input.TechnicalAssets[incomingFlow.SourceId]
-	title := "<b>Search Query Injection</b> risk at <b>" + caller.Title + "</b> against search engine server <b>" + technicalAsset.Title + "</b>" +
+	title := "<b>Search Query Injection</b> risk at <b>" + caller.Title + "</b> against search engine server <b>" +
+		technicalAsset.Title + "</b>" +
 		" via <b>" + incomingFlow.Title + "</b>"
 	impact := types.MediumImpact
-	if input.HighestProcessedConfidentiality(technicalAsset) == types.StrictlyConfidential || input.HighestProcessedIntegrity(technicalAsset) == types.MissionCritical {
+	if input.HighestProcessedConfidentiality(technicalAsset) == types.StrictlyConfidential ||
+		input.HighestProcessedIntegrity(technicalAsset) == types.MissionCritical {
 		impact = types.HighImpact
-	} else if input.HighestProcessedConfidentiality(technicalAsset) <= types.Internal && input.HighestProcessedIntegrity(technicalAsset) == types.Operational {
+	} else if input.HighestProcessedConfidentiality(technicalAsset) <= types.Internal &&
+		input.HighestProcessedIntegrity(technicalAsset) == types.Operational {
 		impact = types.LowImpact
 	}
 	risk := &types.Risk{
