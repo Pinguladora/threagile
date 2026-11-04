@@ -90,13 +90,18 @@ func (r *MissingIdentityPropagationRule) skipAsset(technicalAsset *types.Technic
 	if !technicalAsset.Technologies.GetAttribute(types.IsUsuallyProcessingEndUserRequests) {
 		return true
 	}
-	if technicalAsset.MultiTenant && technicalAsset.Confidentiality < types.Restricted && technicalAsset.Integrity < types.Important && technicalAsset.Availability < types.Important {
-		return true
+	return hasRatingsBelowIdentityPropagationNeed(technicalAsset)
+}
+
+// hasRatingsBelowIdentityPropagationNeed tells whether all ratings of the technical asset are too low to need end
+// user identity propagation, with a lower bar for multi-tenant assets.
+func hasRatingsBelowIdentityPropagationNeed(technicalAsset *types.TechnicalAsset) bool {
+	if technicalAsset.MultiTenant {
+		return technicalAsset.Confidentiality < types.Restricted && technicalAsset.Integrity < types.Important &&
+			technicalAsset.Availability < types.Important
 	}
-	if !technicalAsset.MultiTenant && technicalAsset.Confidentiality < types.Confidential && technicalAsset.Integrity < types.Critical && technicalAsset.Availability < types.Critical {
-		return true
-	}
-	return false
+	return technicalAsset.Confidentiality < types.Confidential && technicalAsset.Integrity < types.Critical &&
+		technicalAsset.Availability < types.Critical
 }
 
 func (r *MissingIdentityPropagationRule) createRisk(input *types.Model, technicalAsset *types.TechnicalAsset, incomingAccess *types.CommunicationLink, moreRisky bool) *types.Risk {

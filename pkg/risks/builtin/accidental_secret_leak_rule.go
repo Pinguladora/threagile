@@ -148,65 +148,63 @@ func (r *AccidentalSecretLeakRule) ExplainRisk(parsedModel *types.Model, risk st
 	return explanation
 }
 
-func (r *AccidentalSecretLeakRule) explainRisk(parsedModel *types.Model, technicalAsset *types.TechnicalAsset) []string {
-	explanation := make([]string, 0)
-	impact := types.LowImpact
-	if parsedModel.HighestProcessedConfidentiality(technicalAsset) == types.StrictlyConfidential ||
-		parsedModel.HighestProcessedIntegrity(technicalAsset) == types.MissionCritical ||
-		parsedModel.HighestProcessedAvailability(technicalAsset) == types.MissionCritical {
-		impact = types.HighImpact
+func (r *AccidentalSecretLeakRule) explainRisk(
+	parsedModel *types.Model, technicalAsset *types.TechnicalAsset,
+) []string {
+	confidentiality := parsedModel.HighestProcessedConfidentiality(technicalAsset)
+	integrity := parsedModel.HighestProcessedIntegrity(technicalAsset)
+	availability := parsedModel.HighestProcessedAvailability(technicalAsset)
+	switch {
+	case confidentiality == types.StrictlyConfidential || integrity == types.MissionCritical ||
+		availability == types.MissionCritical:
+		return explainHighSecretLeakImpact(confidentiality, integrity, availability)
+	case confidentiality >= types.Confidential || integrity >= types.Critical || availability >= types.Critical:
+		return explainMediumSecretLeakImpact(confidentiality, integrity, availability)
+	default:
+		return []string{fmt.Sprintf("     - impact is %v (default)", types.LowImpact)}
+	}
+}
 
+func explainHighSecretLeakImpact(
+	confidentiality types.Confidentiality, integrity types.Criticality, availability types.Criticality,
+) []string {
+	explanation := []string{fmt.Sprintf("    - impact is %v because", types.HighImpact)}
+	if confidentiality == types.StrictlyConfidential {
 		explanation = append(explanation,
-			fmt.Sprintf("    - impact is %v because", impact),
-		)
-
-		if parsedModel.HighestProcessedConfidentiality(technicalAsset) == types.StrictlyConfidential {
-			explanation = append(explanation,
-				fmt.Sprintf("      => highest confidentiality: %v (==%v)", parsedModel.HighestProcessedConfidentiality(technicalAsset), types.StrictlyConfidential),
-			)
-		}
-
-		if parsedModel.HighestProcessedIntegrity(technicalAsset) == types.MissionCritical {
-			explanation = append(explanation,
-				fmt.Sprintf("      => highest integrity: %v (==%v)", parsedModel.HighestProcessedIntegrity(technicalAsset), types.MissionCritical),
-			)
-		}
-
-		if parsedModel.HighestProcessedAvailability(technicalAsset) == types.MissionCritical {
-			explanation = append(explanation,
-				fmt.Sprintf("      => highest availability: %v (==%v)", parsedModel.HighestProcessedAvailability(technicalAsset), types.MissionCritical),
-			)
-		}
-	} else if parsedModel.HighestProcessedConfidentiality(technicalAsset) >= types.Confidential ||
-		parsedModel.HighestProcessedIntegrity(technicalAsset) >= types.Critical ||
-		parsedModel.HighestProcessedAvailability(technicalAsset) >= types.Critical {
-		impact = types.MediumImpact
-		explanation = append(explanation,
-			fmt.Sprintf("    - impact is %v because", impact),
-		)
-
-		if parsedModel.HighestProcessedConfidentiality(technicalAsset) == types.StrictlyConfidential {
-			explanation = append(explanation,
-				fmt.Sprintf("     =>  highest confidentiality: %v (>=%v)", parsedModel.HighestProcessedConfidentiality(technicalAsset), types.Confidential),
-			)
-		}
-
-		if parsedModel.HighestProcessedIntegrity(technicalAsset) == types.MissionCritical {
-			explanation = append(explanation,
-				fmt.Sprintf("     =>  highest integrity: %v (==%v)", parsedModel.HighestProcessedIntegrity(technicalAsset), types.Critical),
-			)
-		}
-
-		if parsedModel.HighestProcessedAvailability(technicalAsset) == types.MissionCritical {
-			explanation = append(explanation,
-				fmt.Sprintf("     =>  highest availability: %v (==%v)", parsedModel.HighestProcessedAvailability(technicalAsset), types.Critical),
-			)
-		}
-	} else {
-		explanation = append(explanation,
-			fmt.Sprintf("     - impact is %v (default)", impact),
+			fmt.Sprintf("      => highest confidentiality: %v (==%v)", confidentiality, types.StrictlyConfidential),
 		)
 	}
+	if integrity == types.MissionCritical {
+		explanation = append(explanation,
+			fmt.Sprintf("      => highest integrity: %v (==%v)", integrity, types.MissionCritical),
+		)
+	}
+	if availability == types.MissionCritical {
+		explanation = append(explanation,
+			fmt.Sprintf("      => highest availability: %v (==%v)", availability, types.MissionCritical),
+		)
+	}
+	return explanation
+}
 
+func explainMediumSecretLeakImpact(
+	confidentiality types.Confidentiality, integrity types.Criticality, availability types.Criticality,
+) []string {
+	explanation := []string{fmt.Sprintf("    - impact is %v because", types.MediumImpact)}
+	if confidentiality == types.StrictlyConfidential {
+		explanation = append(explanation,
+			fmt.Sprintf("     =>  highest confidentiality: %v (>=%v)", confidentiality, types.Confidential),
+		)
+	}
+	if integrity == types.MissionCritical {
+		explanation = append(explanation,
+			fmt.Sprintf("     =>  highest integrity: %v (==%v)", integrity, types.Critical),
+		)
+	}
+	if availability == types.MissionCritical {
+		explanation = append(explanation,
+			fmt.Sprintf("     =>  highest availability: %v (==%v)", availability, types.Critical),
+		)
+	}
 	return explanation
 }

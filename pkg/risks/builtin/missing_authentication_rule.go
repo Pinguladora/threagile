@@ -43,14 +43,7 @@ func (r *MissingAuthenticationRule) GenerateRisks(input *types.Model) ([]*types.
 	risks := make([]*types.Risk, 0)
 	for _, id := range input.SortedTechnicalAssetIDs() {
 		technicalAsset := input.TechnicalAssets[id]
-		if technicalAsset.OutOfScope || technicalAsset.Technologies.GetAttribute(types.NoAuthenticationRequired) {
-			continue
-		}
-
-		if input.HighestProcessedConfidentiality(technicalAsset) < types.Confidential &&
-			input.HighestProcessedIntegrity(technicalAsset) < types.Critical &&
-			input.HighestProcessedAvailability(technicalAsset) < types.Critical &&
-			!technicalAsset.MultiTenant {
+		if r.skipAsset(input, technicalAsset) {
 			continue
 		}
 
@@ -58,16 +51,33 @@ func (r *MissingAuthenticationRule) GenerateRisks(input *types.Model) ([]*types.
 		commLinks := input.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id]
 		for _, commLink := range commLinks {
 			caller := input.TechnicalAssets[commLink.SourceId]
-			if caller.Technologies.GetAttribute(types.IsUnprotectedCommunicationsTolerated) || caller.Type == types.Datastore {
+			if isUnauthenticatedCallerTolerated(caller) {
 				continue
 			}
 			impact := r.calculateImpact(commLink, input)
 			if commLink.Authentication == types.NoneAuthentication && !commLink.Protocol.IsProcessLocal() {
-				risks = append(risks, r.createRisk(input, technicalAsset, commLink, commLink, "", impact, types.Likely, false, r.Category()))
+				risks = append(risks, r.createRisk(
+					input, technicalAsset, commLink, commLink, "", impact, types.Likely, false, r.Category(),
+				))
 			}
 		}
 	}
 	return risks, nil
+}
+
+func (r *MissingAuthenticationRule) skipAsset(input *types.Model, technicalAsset *types.TechnicalAsset) bool {
+	if technicalAsset.OutOfScope || technicalAsset.Technologies.GetAttribute(types.NoAuthenticationRequired) {
+		return true
+	}
+	return input.HighestProcessedConfidentiality(technicalAsset) < types.Confidential &&
+		input.HighestProcessedIntegrity(technicalAsset) < types.Critical &&
+		input.HighestProcessedAvailability(technicalAsset) < types.Critical &&
+		!technicalAsset.MultiTenant
+}
+
+// isUnauthenticatedCallerTolerated tells whether calls from the caller need no authentication.
+func isUnauthenticatedCallerTolerated(caller *types.TechnicalAsset) bool {
+	return caller.Technologies.GetAttribute(types.IsUnprotectedCommunicationsTolerated) || caller.Type == types.Datastore
 }
 
 func (r *MissingAuthenticationRule) calculateImpact(commLink *types.CommunicationLink, input *types.Model) types.RiskExploitationImpact {

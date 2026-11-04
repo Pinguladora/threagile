@@ -52,18 +52,7 @@ func (r *UnguardedDirectDatastoreAccessRule) GenerateRisks(input *types.Model) (
 			continue
 		}
 		for _, incomingAccess := range input.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id] {
-			sourceAsset := input.TechnicalAssets[incomingAccess.SourceId]
-			if technicalAsset.Technologies.GetAttribute(types.IsIdentityStore) && sourceAsset.Technologies.GetAttribute(types.IdentityProvider) {
-				continue
-			}
-			if technicalAsset.Confidentiality < types.Confidential && technicalAsset.Integrity < types.Critical {
-				continue
-			}
-			if incomingAccess.Usage == types.DevOps {
-				continue
-			}
-			if !isAcrossTrustBoundaryNetworkOnly(input, incomingAccess) || fileServerAccessViaFTP(technicalAsset, incomingAccess) ||
-				isSharingSameParentTrustBoundary(input, technicalAsset, sourceAsset) {
+			if skipDirectDatastoreAccess(input, technicalAsset, incomingAccess) {
 				continue
 			}
 
@@ -74,6 +63,25 @@ func (r *UnguardedDirectDatastoreAccessRule) GenerateRisks(input *types.Model) (
 		}
 	}
 	return risks, nil
+}
+
+func skipDirectDatastoreAccess(
+	input *types.Model, technicalAsset *types.TechnicalAsset, incomingAccess *types.CommunicationLink,
+) bool {
+	sourceAsset := input.TechnicalAssets[incomingAccess.SourceId]
+	if technicalAsset.Technologies.GetAttribute(types.IsIdentityStore) &&
+		sourceAsset.Technologies.GetAttribute(types.IdentityProvider) {
+		return true
+	}
+	if technicalAsset.Confidentiality < types.Confidential && technicalAsset.Integrity < types.Critical {
+		return true
+	}
+	if incomingAccess.Usage == types.DevOps {
+		return true
+	}
+	return !isAcrossTrustBoundaryNetworkOnly(input, incomingAccess) ||
+		fileServerAccessViaFTP(technicalAsset, incomingAccess) ||
+		isSharingSameParentTrustBoundary(input, technicalAsset, sourceAsset)
 }
 
 func isSharingSameParentTrustBoundary(input *types.Model, left, right *types.TechnicalAsset) bool {

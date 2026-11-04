@@ -59,44 +59,56 @@ func (r *MissingNetworkSegmentationRule) GenerateRisks(input *types.Model) ([]*t
 	sort.Strings(keys)
 	for _, key := range keys {
 		technicalAsset := input.TechnicalAssets[key]
-		if technicalAsset.OutOfScope {
-			continue
-		}
-
-		if !technicalAsset.Technologies.GetAttribute(types.IsNoNetworkSegmentationRequired) {
-			continue
-		}
-
-		if technicalAsset.RAA < float64(r.raaLimit) {
-			continue
-		}
-
-		if technicalAsset.Type != types.Datastore &&
-			technicalAsset.Confidentiality < types.Confidential &&
-			technicalAsset.Integrity < types.Critical &&
-			technicalAsset.Availability < types.Critical {
+		if r.skipAsset(technicalAsset) {
 			continue
 		}
 
 		// now check for any other same-network assets of certain types which have no direct connection
-		for _, sparringAssetCandidateId := range keys { // so inner loop again over all assets
-			if technicalAsset.Id == sparringAssetCandidateId {
-				continue
-			}
-
-			sparringAssetCandidate := input.TechnicalAssets[sparringAssetCandidateId]
-			if sparringAssetCandidate.Technologies.GetAttribute(types.IsLessProtectedType) &&
-				isSameTrustBoundaryNetworkOnly(input, technicalAsset, sparringAssetCandidateId) &&
-				!input.HasDirectConnection(technicalAsset, sparringAssetCandidateId) &&
-				!sparringAssetCandidate.Technologies.GetAttribute(types.IsCloseToHighValueTargetsTolerated) {
-				highRisk := technicalAsset.Confidentiality == types.StrictlyConfidential ||
-					technicalAsset.Integrity == types.MissionCritical || technicalAsset.Availability == types.MissionCritical
-				risks = append(risks, r.createRisk(technicalAsset, highRisk))
-				break
-			}
+		if hasUnconnectedLessProtectedNeighbour(input, technicalAsset, keys) {
+			highRisk := technicalAsset.Confidentiality == types.StrictlyConfidential ||
+				technicalAsset.Integrity == types.MissionCritical || technicalAsset.Availability == types.MissionCritical
+			risks = append(risks, r.createRisk(technicalAsset, highRisk))
 		}
 	}
 	return risks, nil
+}
+
+func (r *MissingNetworkSegmentationRule) skipAsset(technicalAsset *types.TechnicalAsset) bool {
+	if technicalAsset.OutOfScope {
+		return true
+	}
+
+	if !technicalAsset.Technologies.GetAttribute(types.IsNoNetworkSegmentationRequired) {
+		return true
+	}
+
+	if technicalAsset.RAA < float64(r.raaLimit) {
+		return true
+	}
+
+	return technicalAsset.Type != types.Datastore &&
+		technicalAsset.Confidentiality < types.Confidential &&
+		technicalAsset.Integrity < types.Critical &&
+		technicalAsset.Availability < types.Critical
+}
+
+func hasUnconnectedLessProtectedNeighbour(
+	input *types.Model, technicalAsset *types.TechnicalAsset, technicalAssetIDs []string,
+) bool {
+	for _, sparringAssetCandidateId := range technicalAssetIDs { // so inner loop again over all assets
+		if technicalAsset.Id == sparringAssetCandidateId {
+			continue
+		}
+
+		sparringAssetCandidate := input.TechnicalAssets[sparringAssetCandidateId]
+		if sparringAssetCandidate.Technologies.GetAttribute(types.IsLessProtectedType) &&
+			isSameTrustBoundaryNetworkOnly(input, technicalAsset, sparringAssetCandidateId) &&
+			!input.HasDirectConnection(technicalAsset, sparringAssetCandidateId) &&
+			!sparringAssetCandidate.Technologies.GetAttribute(types.IsCloseToHighValueTargetsTolerated) {
+			return true
+		}
+	}
+	return false
 }
 
 func (r *MissingNetworkSegmentationRule) createRisk(techAsset *types.TechnicalAsset, moreRisky bool) *types.Risk {

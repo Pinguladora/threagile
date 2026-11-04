@@ -1,6 +1,8 @@
 package builtin
 
 import (
+	"slices"
+
 	"github.com/Pinguladora/threagile/pkg/types"
 )
 
@@ -49,32 +51,37 @@ func (r *UntrustedDeserializationRule) GenerateRisks(input *types.Model) ([]*typ
 		if technicalAsset.OutOfScope {
 			continue
 		}
-		hasOne, acrossTrustBoundary := false, false
-		commLinkTitle := ""
-		for _, format := range technicalAsset.DataFormatsAccepted {
-			if format == types.Serialization {
-				hasOne = true
-			}
-		}
-		if technicalAsset.Technologies.GetAttribute(types.EJB) {
-			hasOne = true
-		}
+		acceptsSerialization := acceptsSerializedData(technicalAsset)
 		// check for any incoming IIOP and JRMP protocols
-		for _, commLink := range input.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id] {
-			if commLink.Protocol == types.IIOP || commLink.Protocol == types.IiopEncrypted ||
-				commLink.Protocol == types.JRMP || commLink.Protocol == types.JrmpEncrypted {
-				hasOne = true
-				if isAcrossTrustBoundaryNetworkOnly(input, commLink) {
-					acrossTrustBoundary = true
-					commLinkTitle = commLink.Title
-				}
-			}
-		}
-		if hasOne {
+		viaProtocol, acrossTrustBoundary, commLinkTitle := checkIncomingSerializationProtocols(input, technicalAsset)
+		if acceptsSerialization || viaProtocol {
 			risks = append(risks, r.createRisk(input, technicalAsset, acrossTrustBoundary, commLinkTitle))
 		}
 	}
 	return risks, nil
+}
+
+func acceptsSerializedData(technicalAsset *types.TechnicalAsset) bool {
+	return slices.Contains(technicalAsset.DataFormatsAccepted, types.Serialization) ||
+		technicalAsset.Technologies.GetAttribute(types.EJB)
+}
+
+// checkIncomingSerializationProtocols tells whether the technical asset is accessed via IIOP or JRMP, and whether
+// such an access crosses a trust boundary, with the title of the last communication link that does.
+func checkIncomingSerializationProtocols(
+	input *types.Model, technicalAsset *types.TechnicalAsset,
+) (hasOne bool, acrossTrustBoundary bool, commLinkTitle string) {
+	for _, commLink := range input.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id] {
+		if commLink.Protocol == types.IIOP || commLink.Protocol == types.IiopEncrypted ||
+			commLink.Protocol == types.JRMP || commLink.Protocol == types.JrmpEncrypted {
+			hasOne = true
+			if isAcrossTrustBoundaryNetworkOnly(input, commLink) {
+				acrossTrustBoundary = true
+				commLinkTitle = commLink.Title
+			}
+		}
+	}
+	return hasOne, acrossTrustBoundary, commLinkTitle
 }
 
 func (r *UntrustedDeserializationRule) createRisk(parsedModel *types.Model, technicalAsset *types.TechnicalAsset, acrossTrustBoundary bool, commLinkTitle string) *types.Risk {

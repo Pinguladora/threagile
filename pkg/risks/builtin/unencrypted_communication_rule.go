@@ -47,16 +47,7 @@ func (r *UnencryptedCommunicationRule) GenerateRisks(input *types.Model) ([]*typ
 	risks := make([]*types.Risk, 0)
 	for _, technicalAsset := range input.TechnicalAssets {
 		for _, dataFlow := range technicalAsset.CommunicationLinks {
-			sourceAsset := input.TechnicalAssets[dataFlow.SourceId]
-			targetAsset := input.TechnicalAssets[dataFlow.TargetId]
-			if sourceAsset.OutOfScope && targetAsset.OutOfScope {
-				continue
-			}
-			if dataFlow.Protocol.IsEncrypted() || dataFlow.Protocol.IsProcessLocal() {
-				continue
-			}
-			if sourceAsset.Technologies.GetAttribute(types.IsUnprotectedCommunicationsTolerated) ||
-				targetAsset.Technologies.GetAttribute(types.IsUnprotectedCommunicationsTolerated) {
+			if skipUnencryptedDataFlow(input, dataFlow) {
 				continue
 			}
 
@@ -77,6 +68,19 @@ func (r *UnencryptedCommunicationRule) GenerateRisks(input *types.Model) ([]*typ
 		}
 	}
 	return risks, nil
+}
+
+func skipUnencryptedDataFlow(input *types.Model, dataFlow *types.CommunicationLink) bool {
+	sourceAsset := input.TechnicalAssets[dataFlow.SourceId]
+	targetAsset := input.TechnicalAssets[dataFlow.TargetId]
+	if sourceAsset.OutOfScope && targetAsset.OutOfScope {
+		return true
+	}
+	if dataFlow.Protocol.IsEncrypted() || dataFlow.Protocol.IsProcessLocal() {
+		return true
+	}
+	return sourceAsset.Technologies.GetAttribute(types.IsUnprotectedCommunicationsTolerated) ||
+		targetAsset.Technologies.GetAttribute(types.IsUnprotectedCommunicationsTolerated)
 }
 
 func (r *UnencryptedCommunicationRule) createRisk(input *types.Model, technicalAsset *types.TechnicalAsset, dataFlow *types.CommunicationLink, highRisk bool, transferringAuthData bool) *types.Risk {

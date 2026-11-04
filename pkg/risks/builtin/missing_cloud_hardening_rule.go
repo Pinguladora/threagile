@@ -100,7 +100,30 @@ func (r *MissingCloudHardeningRule) GenerateRisks(input *types.Model) ([]*types.
 	return risks, nil
 }
 
-func (r *MissingCloudHardeningRule) collectCloudAssets(input *types.Model, cloudAssets map[string]*CloudAssets, techAssetIDsWithSubtagSpecificCloudRisks map[string]struct{}) {
+func (r *MissingCloudHardeningRule) collectCloudAssets(
+	input *types.Model, cloudAssets map[string]*CloudAssets, techAssetIDsWithSubtagSpecificCloudRisks map[string]struct{},
+) {
+	r.collectCloudTrustBoundaryAssets(input, cloudAssets, techAssetIDsWithSubtagSpecificCloudRisks)
+
+	for _, tA := range input.TechnicalAssetsTaggedWithAny(r.SupportedTags()...) {
+		addAccordingToBaseTag(tA, tA.Tags, techAssetIDsWithSubtagSpecificCloudRisks, cloudAssets)
+	}
+
+	r.collectTaggedTrustBoundaryAssets(input, cloudAssets, techAssetIDsWithSubtagSpecificCloudRisks)
+
+	for _, sR := range input.SharedRuntimes {
+		r.addSharedRuntimeAccordingToBaseTag(sR, cloudAssets)
+		for _, techAssetID := range sR.TechnicalAssetsRunning {
+			tA := input.TechnicalAssets[techAssetID]
+			addAccordingToBaseTag(tA, sR.Tags, techAssetIDsWithSubtagSpecificCloudRisks, cloudAssets)
+		}
+	}
+}
+
+// collectCloudTrustBoundaryAssets collects the cloud trust boundaries and the technical assets inside them.
+func (r *MissingCloudHardeningRule) collectCloudTrustBoundaryAssets(
+	input *types.Model, cloudAssets map[string]*CloudAssets, techAssetIDsWithSubtagSpecificCloudRisks map[string]struct{},
+) {
 	for _, trustBoundary := range input.TrustBoundaries {
 		if !trustBoundary.IsTaggedWithAny(r.SupportedTags()...) && !trustBoundary.Type.IsWithinCloud() {
 			continue
@@ -118,11 +141,13 @@ func (r *MissingCloudHardeningRule) collectCloudAssets(input *types.Model, cloud
 			}
 		}
 	}
+}
 
-	for _, tA := range input.TechnicalAssetsTaggedWithAny(r.SupportedTags()...) {
-		addAccordingToBaseTag(tA, tA.Tags, techAssetIDsWithSubtagSpecificCloudRisks, cloudAssets)
-	}
-
+// collectTaggedTrustBoundaryAssets collects the technical assets inside trust boundaries tagged with a cloud
+// provider, using the tags of the asset itself when it has some.
+func (r *MissingCloudHardeningRule) collectTaggedTrustBoundaryAssets(
+	input *types.Model, cloudAssets map[string]*CloudAssets, techAssetIDsWithSubtagSpecificCloudRisks map[string]struct{},
+) {
 	for _, tB := range input.TrustBoundariesTaggedWithAny(r.SupportedTags()...) {
 		for _, techAssetID := range input.RecursivelyAllTechnicalAssetIDsInside(tB) {
 			tA := input.TechnicalAssets[techAssetID]
@@ -131,14 +156,6 @@ func (r *MissingCloudHardeningRule) collectCloudAssets(input *types.Model, cloud
 				tagsToUse = tA.Tags
 			}
 			addAccordingToBaseTag(tA, tagsToUse, techAssetIDsWithSubtagSpecificCloudRisks, cloudAssets)
-		}
-	}
-
-	for _, sR := range input.SharedRuntimes {
-		r.addSharedRuntimeAccordingToBaseTag(sR, cloudAssets)
-		for _, techAssetID := range sR.TechnicalAssetsRunning {
-			tA := input.TechnicalAssets[techAssetID]
-			addAccordingToBaseTag(tA, sR.Tags, techAssetIDsWithSubtagSpecificCloudRisks, cloudAssets)
 		}
 	}
 }

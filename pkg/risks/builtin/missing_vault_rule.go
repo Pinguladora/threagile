@@ -51,16 +51,8 @@ func (r *MissingVaultRule) GenerateRisks(input *types.Model) ([]*types.Risk, err
 			hasVault = true
 			break
 		}
-		if input.HighestProcessedConfidentiality(techAsset) >= types.Confidential ||
-			input.HighestProcessedIntegrity(techAsset) >= types.Critical ||
-			input.HighestProcessedAvailability(techAsset) >= types.Critical {
-			impact = types.MediumImpact
-		}
-		if techAsset.Confidentiality >= types.Confidential ||
-			techAsset.Integrity >= types.Critical ||
-			techAsset.Availability >= types.Critical {
-			impact = types.MediumImpact
-		}
+		evaluateImpactFromHighestCIAValues(input, techAsset, &impact)
+		evaluateImpactFromTechnicalAssetCIAValues(techAsset, &impact)
 		// just for referencing the most interesting asset
 		if mostRelevantAsset == nil || techAsset.HighestSensitivityScore() > mostRelevantAsset.HighestSensitivityScore() {
 			mostRelevantAsset = techAsset

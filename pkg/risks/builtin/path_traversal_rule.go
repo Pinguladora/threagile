@@ -67,21 +67,5 @@ func (r *PathTraversalRule) createRisk(input *types.Model, technicalAsset *types
 	caller := input.TechnicalAssets[incomingFlow.SourceId]
 	title := "<b>Path-Traversal</b> risk at <b>" + caller.Title + "</b> against filesystem <b>" + technicalAsset.Title + "</b>" +
 		" via <b>" + incomingFlow.Title + "</b>"
-	impact := types.MediumImpact
-	if input.HighestProcessedConfidentiality(technicalAsset) == types.StrictlyConfidential || input.HighestProcessedIntegrity(technicalAsset) == types.MissionCritical {
-		impact = types.HighImpact
-	}
-	risk := &types.Risk{
-		CategoryId:                      r.Category().ID,
-		Severity:                        types.CalculateSeverity(likelihood, impact),
-		ExploitationLikelihood:          likelihood,
-		ExploitationImpact:              impact,
-		Title:                           title,
-		MostRelevantTechnicalAssetId:    caller.Id,
-		MostRelevantCommunicationLinkId: incomingFlow.Id,
-		DataBreachProbability:           types.Probable,
-		DataBreachTechnicalAssetIDs:     []string{technicalAsset.Id},
-	}
-	risk.SyntheticId = risk.CategoryId + "@" + caller.Id + "@" + technicalAsset.Id + "@" + incomingFlow.Id
-	return risk
+	return newCallerAttackRisk(input, r.Category().ID, title, technicalAsset, incomingFlow, likelihood)
 }

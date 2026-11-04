@@ -50,13 +50,7 @@ func (r *UnencryptedAssetRule) GenerateRisks(input *types.Model) ([]*types.Risk,
 		technicalAsset := input.TechnicalAssets[id]
 		highestStoredConfidentiality := input.HighestStoredConfidentiality(technicalAsset)
 		highestStoredIntegrity := input.HighestStoredIntegrity(technicalAsset)
-		if technicalAsset.OutOfScope || isEncryptionWaiver(technicalAsset) {
-			continue
-		}
-		if len(technicalAsset.DataAssetsStored) == 0 {
-			continue
-		}
-		if highestStoredConfidentiality < types.Confidential || highestStoredIntegrity < types.Critical {
+		if skipUnencryptedAsset(technicalAsset, highestStoredConfidentiality, highestStoredIntegrity) {
 			continue
 		}
 
@@ -76,6 +70,19 @@ func (r *UnencryptedAssetRule) GenerateRisks(input *types.Model) ([]*types.Risk,
 		}
 	}
 	return risks, nil
+}
+
+func skipUnencryptedAsset(
+	technicalAsset *types.TechnicalAsset, highestStoredConfidentiality types.Confidentiality,
+	highestStoredIntegrity types.Criticality,
+) bool {
+	if technicalAsset.OutOfScope || isEncryptionWaiver(technicalAsset) {
+		return true
+	}
+	if len(technicalAsset.DataAssetsStored) == 0 {
+		return true
+	}
+	return highestStoredConfidentiality < types.Confidential || highestStoredIntegrity < types.Critical
 }
 
 // Simple routing assets like 'Reverse Proxy' or 'Load Balancer' usually don't have their own storage and thus have no

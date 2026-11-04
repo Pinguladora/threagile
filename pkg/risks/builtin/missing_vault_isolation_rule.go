@@ -50,25 +50,12 @@ func (r *MissingVaultIsolationRule) GenerateRisks(input *types.Model) ([]*types.
 		moreImpact := technicalAsset.Confidentiality == types.StrictlyConfidential ||
 			technicalAsset.Integrity == types.MissionCritical ||
 			technicalAsset.Availability == types.MissionCritical
-		sameExecutionEnv := false
-		createRiskEntry := false
 		// now check for any other same-network assets of non-vault-related types
-		for sparringAssetCandidateId := range input.TechnicalAssets { // so inner loop again over all assets
-			if technicalAsset.Id == sparringAssetCandidateId {
-				continue
-			}
-			sparringAssetCandidate := input.TechnicalAssets[sparringAssetCandidateId]
-			if sparringAssetCandidate.Technologies.GetAttribute(types.Vault) || isVaultStorage(input, technicalAsset, sparringAssetCandidate) {
-				continue
-			}
-
-			if isSameExecutionEnvironment(input, technicalAsset, sparringAssetCandidateId) {
-				createRiskEntry = true
-				sameExecutionEnv = true
-			} else if isSameTrustBoundaryNetworkOnly(input, technicalAsset, sparringAssetCandidateId) {
-				createRiskEntry = true
-			}
-		}
+		createRiskEntry, sameExecutionEnv := findUnrelatedNeighbours(input, technicalAsset,
+			func(sparringAssetCandidate *types.TechnicalAsset) bool {
+				return sparringAssetCandidate.Technologies.GetAttribute(types.Vault) ||
+					isVaultStorage(input, technicalAsset, sparringAssetCandidate)
+			})
 		if createRiskEntry {
 			risks = append(risks, r.createRisk(technicalAsset, moreImpact, sameExecutionEnv))
 		}

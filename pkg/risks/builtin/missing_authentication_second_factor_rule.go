@@ -54,26 +54,34 @@ func (r *MissingAuthenticationSecondFactorRule) GenerateRisks(input *types.Model
 		commLinks := input.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id]
 		for _, commLink := range commLinks {
 			caller := input.TechnicalAssets[commLink.SourceId]
-			if caller.Technologies.GetAttribute(types.IsUnprotectedCommunicationsTolerated) || caller.Type == types.Datastore {
+			if isUnauthenticatedCallerTolerated(caller) {
 				continue
 			}
 			if caller.UsedAsClientByHuman {
 				risks = appendRisk(input, risks, r, technicalAsset, commLink, commLink, "")
 			} else if caller.Technologies.GetAttribute(types.IsTrafficForwarding) {
-				// Now try to walk a call chain up (1 hop only) to find a caller's caller used by human
-				callersCommLinks := input.IncomingTechnicalCommunicationLinksMappedByTargetId[caller.Id]
-				for _, callersCommLink := range callersCommLinks {
-					callersCaller := input.TechnicalAssets[callersCommLink.SourceId]
-					if callersCaller.Technologies.GetAttribute(types.IsUnprotectedCommunicationsTolerated) || callersCaller.Type == types.Datastore ||
-						!callersCaller.UsedAsClientByHuman {
-						continue
-					}
-					risks = appendRisk(input, risks, r, technicalAsset, commLink, callersCommLink, caller.Title)
-				}
+				risks = r.appendForwardedRisks(input, risks, technicalAsset, commLink, caller)
 			}
 		}
 	}
 	return risks, nil
+}
+
+// appendForwardedRisks walks the call chain up from a traffic forwarding caller (1 hop only) to find callers'
+// callers used by humans.
+func (r *MissingAuthenticationSecondFactorRule) appendForwardedRisks(
+	input *types.Model, risks []*types.Risk, technicalAsset *types.TechnicalAsset, commLink *types.CommunicationLink,
+	caller *types.TechnicalAsset,
+) []*types.Risk {
+	callersCommLinks := input.IncomingTechnicalCommunicationLinksMappedByTargetId[caller.Id]
+	for _, callersCommLink := range callersCommLinks {
+		callersCaller := input.TechnicalAssets[callersCommLink.SourceId]
+		if isUnauthenticatedCallerTolerated(callersCaller) || !callersCaller.UsedAsClientByHuman {
+			continue
+		}
+		risks = appendRisk(input, risks, r, technicalAsset, commLink, callersCommLink, caller.Title)
+	}
+	return risks
 }
 
 func appendRisk(
