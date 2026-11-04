@@ -849,7 +849,20 @@
                     "jrmp-encrypted",
                     "in-process-library-call",
                     "inter-process-communication",
-                    "container-spawning"
+                    "container-spawning",
+                    "modbus",
+                    "modbus-security",
+                    "dnp3",
+                    "dnp3-encrypted",
+                    "iec-104",
+                    "iec-61850",
+                    "s7comm",
+                    "ethernet-ip",
+                    "profinet",
+                    "bacnet",
+                    "opc-classic",
+                    "opc-ua",
+                    "opc-ua-encrypted"
                   ],
                   "type": "string"
                 },
@@ -1142,7 +1155,15 @@
                 "ai-agent",
                 "vector-database",
                 "mcp-server",
-                "model-registry"
+                "model-registry",
+                "engineering-workstation",
+                "field-device",
+                "historian",
+                "hmi",
+                "plc",
+                "rtu",
+                "safety-controller",
+                "scada-server"
               ],
               "type": "string"
             },
@@ -1216,7 +1237,15 @@
               "ai-agent",
               "vector-database",
               "mcp-server",
-              "model-registry"
+              "model-registry",
+              "engineering-workstation",
+              "field-device",
+              "historian",
+              "hmi",
+              "plc",
+              "rtu",
+              "safety-controller",
+              "scada-server"
             ],
             "type": "string"
           },

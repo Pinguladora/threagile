@@ -63,59 +63,28 @@ const (
 	InProcessLibraryCall
 	InterProcessCommunication
 	ContainerSpawning
+	Modbus
+	ModbusSecurity
+	DNP3
+	DNP3Encrypted
+	IEC104
+	IEC61850
+	S7Comm
+	EtherNetIP
+	PROFINET
+	BACnet
+	OPCClassic
+	OPCUA
+	OPCUAEncrypted
 )
 
+// ProtocolValues returns every protocol, in the order of ProtocolTypeDescription.
 func ProtocolValues() []TypeEnum {
-	return []TypeEnum{
-		UnknownProtocol,
-		HTTP,
-		HTTPS,
-		WS,
-		WSS,
-		ReverseProxyWebProtocol,
-		ReverseProxyWebProtocolEncrypted,
-		MQTT,
-		JDBC,
-		JdbcEncrypted,
-		ODBC,
-		OdbcEncrypted,
-		SqlAccessProtocol,
-		SqlAccessProtocolEncrypted,
-		NosqlAccessProtocol,
-		NosqlAccessProtocolEncrypted,
-		BINARY,
-		BinaryEncrypted,
-		TEXT,
-		TextEncrypted,
-		SSH,
-		SshTunnel,
-		SMTP,
-		SmtpEncrypted,
-		POP3,
-		Pop3Encrypted,
-		IMAP,
-		ImapEncrypted,
-		FTP,
-		FTPS,
-		SFTP,
-		SCP,
-		LDAP,
-		LDAPS,
-		JMS,
-		NFS,
-		SMB,
-		SmbEncrypted,
-		LocalFileAccess,
-		NRPE,
-		XMPP,
-		IIOP,
-		IiopEncrypted,
-		JRMP,
-		JrmpEncrypted,
-		InProcessLibraryCall,
-		InterProcessCommunication,
-		ContainerSpawning,
+	values := make([]TypeEnum, len(ProtocolTypeDescription))
+	for index := range ProtocolTypeDescription {
+		values[index] = Protocol(index)
 	}
+	return values
 }
 
 var ProtocolTypeDescription = [...]TypeDescription{
@@ -167,6 +136,19 @@ var ProtocolTypeDescription = [...]TypeDescription{
 	{"in-process-library-call", "Call to local library"},
 	{"inter-process-communication", "Communication between processes via system sockets or systems like dbus"},
 	{"container-spawning", "Spawn a container"},
+	{"modbus", "Modbus TCP or RTU, without authentication or encryption"},
+	{"modbus-security", "Modbus/TCP Security, Modbus over mutually authenticated TLS"},
+	{"dnp3", "DNP3, without Secure Authentication or TLS"},
+	{"dnp3-encrypted", "DNP3 over mutually authenticated TLS (IEC 62351-3)"},
+	{"iec-104", "IEC 60870-5-104 telecontrol protocol"},
+	{"iec-61850", "IEC 61850 substation protocols (MMS, GOOSE, Sampled Values)"},
+	{"s7comm", "Siemens S7 communication"},
+	{"ethernet-ip", "EtherNet/IP with CIP, without CIP Security"},
+	{"profinet", "PROFINET industrial Ethernet"},
+	{"bacnet", "BACnet building automation protocol, without BACnet Secure Connect"},
+	{"opc-classic", "OPC Classic (DA, HDA, A&E) over DCOM"},
+	{"opc-ua", "OPC UA without message security"},
+	{"opc-ua-encrypted", "OPC UA with the SignAndEncrypt message security mode"},
 }
 
 func ParseProtocol(value string) (protocol Protocol, err error) {
@@ -202,7 +184,8 @@ func (what Protocol) IsEncrypted() bool {
 	case HTTPS, WSS, JdbcEncrypted, OdbcEncrypted,
 		NosqlAccessProtocolEncrypted, SqlAccessProtocolEncrypted, BinaryEncrypted, TextEncrypted, SSH, SshTunnel,
 		FTPS, SFTP, SCP, LDAPS, ReverseProxyWebProtocolEncrypted,
-		IiopEncrypted, JrmpEncrypted, SmbEncrypted, SmtpEncrypted, Pop3Encrypted, ImapEncrypted:
+		IiopEncrypted, JrmpEncrypted, SmbEncrypted, SmtpEncrypted, Pop3Encrypted, ImapEncrypted,
+		ModbusSecurity, DNP3Encrypted, OPCUAEncrypted:
 		return true
 	default:
 		return false
@@ -222,6 +205,24 @@ func (what Protocol) IsPotentialDatabaseAccessProtocol() bool {
 func (what Protocol) IsPotentialLaxDatabaseAccessProtocol() bool {
 	// include HTTP for REST-based NoSQL-DBs as well as unknown binary
 	return what == HTTPS || what == HTTP || what == BINARY || what == BinaryEncrypted
+}
+
+// IsIndustrialControlProtocol reports whether the protocol is one that controllers and field devices of
+// industrial control systems take commands with.
+func (what Protocol) IsIndustrialControlProtocol() bool {
+	switch what {
+	case Modbus, ModbusSecurity, DNP3, DNP3Encrypted, IEC104, IEC61850, S7Comm, EtherNetIP, PROFINET, BACnet,
+		OPCClassic, OPCUA, OPCUAEncrypted:
+		return true
+	default:
+		return false
+	}
+}
+
+// IsInsecureIndustrialControlProtocol reports whether the protocol is an industrial control protocol that does
+// not authenticate who sends a command.
+func (what Protocol) IsInsecureIndustrialControlProtocol() bool {
+	return what.IsIndustrialControlProtocol() && !what.IsEncrypted()
 }
 
 func (what Protocol) IsPotentialWebAccessProtocol() bool {

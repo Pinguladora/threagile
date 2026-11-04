@@ -30,6 +30,8 @@ const (
 	IsDevelopmentRelevant                             = "development_relevant"
 	IsTrafficForwarding                               = "traffic_forwarding"
 	IsEmbeddedComponent                               = "embedded_component"
+	IsOperationalTechnology                           = "operational_technology"
+	IsIndustrialController                            = "industrial_controller"
 )
 
 type TechnologyList []*Technology

@@ -211,6 +211,58 @@ func TestParseProtocol(t *testing.T) {
 			input:    "container-spawning",
 			expected: ContainerSpawning,
 		},
+		"modbus": {
+			input:    "modbus",
+			expected: Modbus,
+		},
+		"modbus-security": {
+			input:    "modbus-security",
+			expected: ModbusSecurity,
+		},
+		"dnp3": {
+			input:    "dnp3",
+			expected: DNP3,
+		},
+		"dnp3-encrypted": {
+			input:    "dnp3-encrypted",
+			expected: DNP3Encrypted,
+		},
+		"iec-104": {
+			input:    "iec-104",
+			expected: IEC104,
+		},
+		"iec-61850": {
+			input:    "iec-61850",
+			expected: IEC61850,
+		},
+		"s7comm": {
+			input:    "s7comm",
+			expected: S7Comm,
+		},
+		"ethernet-ip": {
+			input:    "ethernet-ip",
+			expected: EtherNetIP,
+		},
+		"profinet": {
+			input:    "profinet",
+			expected: PROFINET,
+		},
+		"bacnet": {
+			input:    "bacnet",
+			expected: BACnet,
+		},
+		"opc-classic": {
+			input:    "opc-classic",
+			expected: OPCClassic,
+		},
+		"opc-ua": {
+			input:    "opc-ua",
+			expected: OPCUA,
+		},
+		"opc-ua-encrypted": {
+			input:    "opc-ua-encrypted",
+			expected: OPCUAEncrypted,
+		},
 		"unknown": {
 			input:         "unknown",
 			expectedError: errors.New("unable to parse into type: unknown"),
