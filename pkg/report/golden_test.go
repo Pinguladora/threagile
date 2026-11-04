@@ -43,6 +43,7 @@ var goldenFiles = []string{
 	"stats.json",
 	"otm.json",
 	"report.html",
+	"THREAT_MODEL.md",
 }
 
 // executionTimestamp matches the wall-clock time the AsciiDoc report records for the run.
@@ -94,7 +95,7 @@ func TestOutputsAreDeterministic(t *testing.T) {
 // to the output folder, with the execution timestamp of the AsciiDoc report normalised.
 func generateOutputs(t *testing.T) map[string][]byte {
 	t.Helper()
-	// the HTML report records when it was generated
+	// the HTML and Markdown reports record when they were generated
 	t.Setenv("SOURCE_DATE_EPOCH", "1700000000")
 	reporter := testReporter{t}
 	outputDir := t.TempDir()
@@ -140,6 +141,7 @@ func generateOutputs(t *testing.T) map[string][]byte {
 			DataFlowDiagramDOT:  readFile(t, filepath.Join(outputDir, config.GetDataFlowDiagramFilenameDOT())),
 			DataAssetDiagramDOT: readFile(t, filepath.Join(outputDir, config.GetDataAssetDiagramFilenameDOT())),
 		}, reporter))
+	require.NoError(t, report.WriteReportMarkdown(parsedModel, filepath.Join(outputDir, "THREAT_MODEL.md"), options))
 	require.NoError(t, report.WriteRisksExcelToFile(parsedModel, filepath.Join(outputDir, config.GetExcelRisksFilename()), config))
 	require.NoError(t, report.WriteTagsExcelToFile(parsedModel, filepath.Join(outputDir, config.GetExcelTagsFilename()), config))
 
