@@ -29,7 +29,8 @@ func (*MissingAuthenticationRule) Category() *types.RiskCategory {
 		DetectionLogic: "In-scope technical assets (except " + types.LoadBalancer + ", " + types.ReverseProxy + ", " +
 			types.ServiceRegistry + ", " + types.WAF + ", " + types.IDS + ", and " + types.IPS +
 			" and in-process calls) should authenticate incoming requests when the asset processes sensitive data. This is " +
-			"especially the case for all multi-tenant assets (there even non-sensitive ones).",
+			"especially the case for all multi-tenant assets (there even non-sensitive ones). Links over industrial " +
+			"control protocols that cannot authenticate are left to the insecure-control-protocol rule.",
 		RiskAssessment: "The risk rating (medium or high) " +
 			"depends on the sensitivity of the data sent across the communication link. Monitoring callers are exempted from " +
 			"this risk.",
@@ -60,7 +61,8 @@ func (r *MissingAuthenticationRule) GenerateRisks(input *types.Model) ([]*types.
 				continue
 			}
 			impact := r.calculateImpact(commLink, input)
-			if commLink.Authentication == types.NoneAuthentication && !commLink.Protocol.IsProcessLocal() {
+			if commLink.Authentication == types.NoneAuthentication && !commLink.Protocol.IsProcessLocal() &&
+				!commLink.Protocol.IsInsecureIndustrialControlProtocol() {
 				risks = append(risks, r.createRisk(
 					input, technicalAsset, commLink, commLink, "", impact, types.Likely, false, r.Category(),
 				))

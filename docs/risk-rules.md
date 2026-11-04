@@ -114,6 +114,35 @@ need an approval, with the `human-in-the-loop` tag, and add it to `tags_availabl
 [`demo/ai-agent/threagile.yaml`](../demo/ai-agent/threagile.yaml) models an AI
 support assistant with all five AI technologies; analyze it to see the AI rules at work.
 
+## OT rules
+
+The OT rules model the threats of industrial control systems. They use the technologies
+`plc`, `rtu`, `safety-controller`, `field-device`, `hmi`, `scada-server`, `historian`
+and `engineering-workstation`, and the industrial control protocols `modbus`, `dnp3`,
+`iec-104`, `iec-61850`, `s7comm`, `ethernet-ip`, `profinet`, `bacnet`, `opc-classic`
+and `opc-ua`, with the secure variants `modbus-security`, `dnp3-encrypted` and
+`opc-ua-encrypted`. Each OT rule lists the requirements of IEC 62443-3-3, the
+techniques of MITRE ATT&CK for ICS and the other standards it covers in its
+`references`.
+
+The rules follow the zones of the Purdue model. Every OT asset except a historian
+belongs into a *control zone*; IT assets, which are neither OT assets nor in the
+*industrial DMZ*, should reach the control zones only through the DMZ. A historian is in
+the DMZ; tag the other assets there, like a jump host, with `industrial-dmz` and add the
+tag to `tags_available`. An asset *reaches IT* when it is on the internet or has a
+communication link with an IT asset.
+
+| Rule (id) | Fires on | Tags | Rated by | References |
+|-----------|----------|------|----------|------------|
+| Direct IT/OT Communication (`direct-it-ot-communication`) | links, in either direction, between an asset of a control zone and an IT asset | `industrial-dmz` puts an asset into the DMZ | the integrity and availability of the OT asset, very high for safety controllers; very likely when the IT asset is on the internet | IEC 62443-3-3 SR 5.1 and SR 5.2, ATT&CK for ICS T0883 and T0886, NIST SP 800-82 |
+| Insecure Control Protocol (`insecure-control-protocol`) | non-readonly links into controllers and field devices over an industrial control protocol without its secure variant | none | the same; very likely from the internet, likely from an asset that is or reaches IT or across a network trust boundary | IEC 62443-3-3 SR 1.2 and SR 3.1, ATT&CK for ICS T0855 and T0830, NIST SP 800-82 |
+| Missing Safety System Independence (`missing-safety-system-independence`) | non-readonly links into a safety controller from anything but a dedicated safety engineering workstation, which changes no other controllers | none | very high impact; likelihood as above | IEC 61511, ATT&CK for ICS T0880 and T0843, IEC 62443-3-3 SR 5.1, NIST SP 800-82 |
+
+Industrial control protocols cannot carry the authentication that the
+`missing-authentication` and `missing-authentication-second-factor` rules ask for, so
+these rules skip links over the insecure ones and leave them to
+`insecure-control-protocol`. The `unencrypted-communication` rule still reports them.
+
 ## Risk ids of Push instead of Pull Deployment
 
 Push instead of Pull Deployment creates one risk per deployment target, with the id

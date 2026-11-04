@@ -35,7 +35,8 @@ func (*MissingAuthenticationSecondFactorRule) Category() *types.RiskCategory {
 			types.WAF + ", " + types.IDS + ", and " + types.IPS +
 			") should authenticate incoming requests via two-factor authentication (2FA) when the asset processes or stores " +
 			"highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client " +
-			"used by a human user.",
+			"used by a human user. Links over industrial control protocols that cannot authenticate are left to the " +
+			"insecure-control-protocol rule.",
 		RiskAssessment: types.MediumSeverity.String(),
 		FalsePositives: "Technical assets which do not process requests regarding functionality or data linked to " +
 			"end-users (customers) can be considered as false positives after individual review.",
@@ -61,7 +62,7 @@ func (r *MissingAuthenticationSecondFactorRule) GenerateRisks(input *types.Model
 		commLinks := input.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id]
 		for _, commLink := range commLinks {
 			caller := input.TechnicalAssets[commLink.SourceId]
-			if isUnauthenticatedCallerTolerated(caller) {
+			if isUnauthenticatedCallerTolerated(caller) || commLink.Protocol.IsInsecureIndustrialControlProtocol() {
 				continue
 			}
 			if caller.UsedAsClientByHuman {
