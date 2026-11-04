@@ -509,14 +509,14 @@ footer {
 <h2>Management Summary</h2>
 <p>Threagile toolkit was used to model the architecture of "Water Treatment Plant" and derive risks by analyzing the components and data flows. The risks identified during this analysis are shown in the following chapters. Identified risks during threat modeling do not necessarily mean that the vulnerability associated with this risk actually exists: it is more to be seen as a list of potential risks and threats, which should be individually reviewed and reduced by removing false positives. For the remaining risks it should be checked in the design and implementation of "Water Treatment Plant" whether the mitigation advices have been applied or not.</p>
 <p>Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.</p>
-<p>In total <strong>42 initial risks</strong> in <strong>13 categories</strong> have been identified during the threat modeling process:</p>
+<p>In total <strong>43 initial risks</strong> in <strong>14 categories</strong> have been identified during the threat modeling process:</p>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Severity</th><th scope="col" class="number">Risks</th><th scope="col">Status</th><th scope="col" class="number">Risks</th></tr></thead>
 <tbody>
-<tr><th scope="row"><span class="badge sev-critical">Critical</span></th><td class="number">0</td><th scope="row"><span class="badge status-unchecked">Unchecked</span></th><td class="number">41</td></tr>
+<tr><th scope="row"><span class="badge sev-critical">Critical</span></th><td class="number">0</td><th scope="row"><span class="badge status-unchecked">Unchecked</span></th><td class="number">42</td></tr>
 <tr><th scope="row"><span class="badge sev-high">High</span></th><td class="number">0</td><th scope="row"><span class="badge status-in-discussion">In Discussion</span></th><td class="number">0</td></tr>
-<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">23</td><th scope="row"><span class="badge status-accepted">Accepted</span></th><td class="number">0</td></tr>
+<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">24</td><th scope="row"><span class="badge status-accepted">Accepted</span></th><td class="number">0</td></tr>
 <tr><th scope="row"><span class="badge sev-medium">Medium</span></th><td class="number">19</td><th scope="row"><span class="badge status-in-progress">In Progress</span></th><td class="number">1</td></tr>
 <tr><th scope="row"><span class="badge sev-low">Low</span></th><td class="number">0</td><th scope="row"><span class="badge status-mitigated">Mitigated</span></th><td class="number">0</td></tr>
 <tr><td></td><td></td><th scope="row"><span class="badge status-false-positive">False Positive</span></th><td class="number">0</td></tr>
@@ -529,10 +529,12 @@ footer {
 
 <section class="chapter" id="initial-risks">
 <h2>Impact Analysis of the Initial Risks</h2>
-<p>The most prevalent impacts of the <strong>42 initial risks</strong> (distributed over <strong>13 risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
+<p>The most prevalent impacts of the <strong>43 initial risks</strong> (distributed over <strong>14 risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
 <dl class="entries">
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-direct-it-ot-communication">Direct IT/OT Communication</a>: <span class="summary">1 Initial Risk, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers who compromise an IT asset might reach the industrial control system and change, stop or damage the physical process it controls.</dd>
+<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-human-use-of-machine-identity">Human Use of Machine Identity</a>: <span class="summary">1 Initial Risk, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
+<dd>If this risk is unmitigated, attackers might use a secret copied from a laptop, a script or a client to access the target, and nobody can tell who did what with it.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-insecure-control-protocol">Insecure Control Protocol</a>: <span class="summary">6 Initial Risks, exploitation likelihood is <em>Likely</em> with <em>Very High</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers in the network might send commands that change, stop or damage the physical process, or alter the commands and readings exchanged with the controller.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-long-lived-credentials">Long-Lived Credentials</a>: <span class="summary">3 Initial Risks, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
@@ -579,24 +581,24 @@ footer {
 <td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect></svg></td></tr>
 <tr><th scope="row"><span class="badge sev-high">High</span></th><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td>
 <td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect></svg></td></tr>
-<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">23</td><td class="number">22</td><td class="number">0</td><td class="number">0</td><td class="number">1</td><td class="number">0</td><td class="number">0</td>
-<td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="95.65" height="10"></rect><rect class="status-in-progress" x="95.65" width="4.35" height="10"></rect></svg></td></tr>
+<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">24</td><td class="number">23</td><td class="number">0</td><td class="number">0</td><td class="number">1</td><td class="number">0</td><td class="number">0</td>
+<td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="95.83" height="10"></rect><rect class="status-in-progress" x="95.83" width="4.17" height="10"></rect></svg></td></tr>
 <tr><th scope="row"><span class="badge sev-medium">Medium</span></th><td class="number">19</td><td class="number">19</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td>
-<td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="82.61" height="10"></rect></svg></td></tr>
+<td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="79.17" height="10"></rect></svg></td></tr>
 <tr><th scope="row"><span class="badge sev-low">Low</span></th><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td>
 <td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect></svg></td></tr>
 </tbody>
 </table>
 </div>
-<p>After removal of risks with status <em>mitigated</em> and <em>false positive</em> the following <strong>42 remain unmitigated</strong>:</p>
+<p>After removal of risks with status <em>mitigated</em> and <em>false positive</em> the following <strong>43 remain unmitigated</strong>:</p>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Severity</th><th scope="col" class="number">Unmitigated risks</th><th scope="col">To be checked by</th><th scope="col" class="number">Unmitigated risks</th></tr></thead>
 <tbody>
 <tr><th scope="row"><span class="badge sev-critical">Critical</span></th><td class="number">0</td><th scope="row">Business Side</th><td class="number">1</td></tr>
 <tr><th scope="row"><span class="badge sev-high">High</span></th><td class="number">0</td><th scope="row">Architecture</th><td class="number">12</td></tr>
-<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">23</td><th scope="row">Development</th><td class="number">5</td></tr>
-<tr><th scope="row"><span class="badge sev-medium">Medium</span></th><td class="number">19</td><th scope="row">Operations</th><td class="number">24</td></tr>
+<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">24</td><th scope="row">Development</th><td class="number">5</td></tr>
+<tr><th scope="row"><span class="badge sev-medium">Medium</span></th><td class="number">19</td><th scope="row">Operations</th><td class="number">25</td></tr>
 <tr><th scope="row"><span class="badge sev-low">Low</span></th><td class="number">0</td><td></td><td></td></tr>
 </tbody>
 </table>
@@ -605,10 +607,12 @@ footer {
 
 <section class="chapter" id="remaining-risks">
 <h2>Impact Analysis of the Remaining Risks</h2>
-<p>The most prevalent impacts of the <strong>42 remaining risks</strong> (distributed over <strong>13 risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
+<p>The most prevalent impacts of the <strong>43 remaining risks</strong> (distributed over <strong>14 risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
 <dl class="entries">
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-direct-it-ot-communication">Direct IT/OT Communication</a>: <span class="summary">1 Remaining Risk, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers who compromise an IT asset might reach the industrial control system and change, stop or damage the physical process it controls.</dd>
+<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-human-use-of-machine-identity">Human Use of Machine Identity</a>: <span class="summary">1 Remaining Risk, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
+<dd>If this risk is unmitigated, attackers might use a secret copied from a laptop, a script or a client to access the target, and nobody can tell who did what with it.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-insecure-control-protocol">Insecure Control Protocol</a>: <span class="summary">6 Remaining Risks, exploitation likelihood is <em>Likely</em> with <em>Very High</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers in the network might send commands that change, stop or damage the physical process, or alter the commands and readings exchanged with the controller.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-long-lived-credentials">Long-Lived Credentials</a>: <span class="summary">3 Remaining Risks, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
@@ -646,17 +650,18 @@ footer {
 
 <section class="chapter" id="risks-by-severity">
 <h2>Risks by Severity</h2>
-<p>All <strong>42 risks</strong> by severity, with their tracking status. Each risk links to its details in the chapter of its category.</p>
+<p>All <strong>43 risks</strong> by severity, with their tracking status. Each risk links to its details in the chapter of its category.</p>
 <h3>Critical <span class="summary">0 risks</span></h3>
 <p class="muted">No risks.</p>
 <h3>High <span class="summary">0 risks</span></h3>
 <p class="muted">No risks.</p>
-<h3>Elevated <span class="summary">23 risks</span></h3>
+<h3>Elevated <span class="summary">24 risks</span></h3>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Severity</th><th scope="col">Risk</th><th scope="col">Category</th><th scope="col">Most relevant</th><th scope="col">Status</th></tr></thead>
 <tbody>
 <tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-direct-it-ot-communication_40scada-server_40office-workstation_3elive-dashboard"><b>Direct IT/OT Communication</b> risk at <b>SCADA Server</b> with <b>Office Workstation</b></a></td><td><a href="#category-direct-it-ot-communication">Direct IT/OT Communication</a></td><td><a href="#asset-scada-server">SCADA Server</a>, <a href="#link-office-workstation_3elive-dashboard">Live Dashboard</a></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
+<tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-human-use-of-machine-identity_40scada-server_40office-workstation_3elive-dashboard"><b>Human Use of Machine Identity</b> risk at <b>SCADA Server</b> by users of <b>Office Workstation</b> (service-account)</a></td><td><a href="#category-human-use-of-machine-identity">Human Use of Machine Identity</a></td><td><a href="#asset-scada-server">SCADA Server</a>, <a href="#link-office-workstation_3elive-dashboard">Live Dashboard</a></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
 <tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-insecure-control-protocol_40chlorine-safety-controller_40scada-server_3esafety-reset"><b>Insecure Control Protocol</b> risk at <b>Chlorine Safety Controller</b> over <b>modbus</b> from <b>SCADA Server</b></a></td><td><a href="#category-insecure-control-protocol">Insecure Control Protocol</a></td><td><a href="#asset-chlorine-safety-controller">Chlorine Safety Controller</a>, <a href="#link-scada-server_3esafety-reset">Safety Reset</a></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
 <tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-insecure-control-protocol_40chlorine-safety-controller_40engineering-workstation_3esafety-programming"><b>Insecure Control Protocol</b> risk at <b>Chlorine Safety Controller</b> over <b>s7comm</b> from <b>Engineering Workstation</b></a></td><td><a href="#category-insecure-control-protocol">Insecure Control Protocol</a></td><td><a href="#asset-chlorine-safety-controller">Chlorine Safety Controller</a>, <a href="#link-engineering-workstation_3esafety-programming">Safety Programming</a></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
 <tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-insecure-control-protocol_40dosing-plc_40scada-server_3edosing-control"><b>Insecure Control Protocol</b> risk at <b>Dosing PLC</b> over <b>modbus</b> from <b>SCADA Server</b></a></td><td><a href="#category-insecure-control-protocol">Insecure Control Protocol</a></td><td><a href="#asset-dosing-plc">Dosing PLC</a>, <a href="#link-scada-server_3edosing-control">Dosing Control</a></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
@@ -830,7 +835,7 @@ footer {
 
 <section class="chapter" id="stride">
 <h2>STRIDE Classification of Identified Risks</h2>
-<p>This chapter clusters and classifies the risks by STRIDE categories: in total <strong>42 potential risks</strong> have been identified during the threat modeling process.</p>
+<p>This chapter clusters and classifies the risks by STRIDE categories: in total <strong>43 potential risks</strong> have been identified during the threat modeling process.</p>
 <h3>Spoofing <span class="summary">4 risks</span></h3>
 <p class="muted">Spoofing - Authenticity</p>
 <dl class="entries">
@@ -855,9 +860,12 @@ footer {
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-missing-hardening">Missing Hardening</a>: <span class="summary">3/3 unmitigated Risks, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>Technical assets with a Relative Attacker Attractiveness (RAA) value of 55 % or higher should be explicitly hardened taking best practices and vendor hardening guides into account.</dd>
 </dl>
-<h3>Repudiation <span class="summary">0 risks</span></h3>
+<h3>Repudiation <span class="summary">1 risk</span></h3>
 <p class="muted">Repudiation - Non-repudiability</p>
-<p class="muted">No risks were identified.</p>
+<dl class="entries">
+<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-human-use-of-machine-identity">Human Use of Machine Identity</a>: <span class="summary">1/1 unmitigated Risk, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
+<dd>People who call a service with the account of a machine, like an administrator using the credentials of a service account or a client that ships with an API key of its own, act without an identity of theirs. The service cannot tell them apart, nor require a second factor or end their access when they leave, and the secret gets copied to wherever they work.</dd>
+</dl>
 <h3>Information Disclosure <span class="summary">13 risks</span></h3>
 <p class="muted">Information disclosure - Confidentiality</p>
 <dl class="entries">
@@ -892,7 +900,7 @@ footer {
 
 <section class="chapter" id="functions">
 <h2>Assignment by Function</h2>
-<p>This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total <strong>42 potential risks</strong> have been identified during the threat modeling process.</p>
+<p>This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total <strong>43 potential risks</strong> have been identified during the threat modeling process.</p>
 <h3>Business Side <span class="summary">1 risk</span></h3>
 <p class="muted">Business</p>
 <dl class="entries">
@@ -925,9 +933,11 @@ footer {
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-server-side-request-forgery">Server-Side Request Forgery (SSRF)</a>: <span class="summary">2/2 unmitigated Risks, exploitation likelihood is <em>Likely</em> with <em>Low</em> impact</span></dt>
 <dd>Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.</dd>
 </dl>
-<h3>Operations <span class="summary">24 risks</span></h3>
+<h3>Operations <span class="summary">25 risks</span></h3>
 <p class="muted">Operations</p>
 <dl class="entries">
+<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-human-use-of-machine-identity">Human Use of Machine Identity</a>: <span class="summary">1/1 unmitigated Risk, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
+<dd>Let people sign in with their own identity, through single sign-on with multi-factor authentication, and pass it on to the target, modelling the link with the identity <i>end-user</i>. Where an administrator needs the permissions of a service, grant them for a limited time through a privileged access workflow that records who used them. Keep secrets of service accounts out of clients.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-long-lived-credentials">Long-Lived Credentials</a>: <span class="summary">3/3 unmitigated Risks, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
 <dd>Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity <i>workload</i> or the authentication <i>short-lived-token</i>. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-hardening">Missing Hardening</a>: <span class="summary">3/3 unmitigated Risks, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
@@ -1024,7 +1034,7 @@ footer {
 
 <section class="chapter" id="risk-categories">
 <h2>Identified Risks by Vulnerability Category</h2>
-<p>In total <strong>42 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>13 vulnerability categories</strong>. The following sections describe each identified risk category and its risks.</p>
+<p>In total <strong>43 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>14 vulnerability categories</strong>. The following sections describe each identified risk category and its risks.</p>
 <section class="item" id="category-direct-it-ot-communication">
 <h3>Direct IT/OT Communication <span class="badge sev-elevated">Elevated</span> <span class="summary">1/1 unmitigated Risk</span></h3>
 <p class="id">direct-it-ot-communication</p>
@@ -1062,6 +1072,48 @@ footer {
 <thead><tr><th scope="col">Severity</th><th scope="col">Risk</th><th scope="col">Likelihood</th><th scope="col">Impact</th><th scope="col">Most relevant</th><th scope="col">Status</th><th scope="col">Tracking</th></tr></thead>
 <tbody>
 <tr id="risk-direct-it-ot-communication_40scada-server_40office-workstation_3elive-dashboard"><td><span class="badge sev-elevated">Elevated</span></td><td><b>Direct IT/OT Communication</b> risk at <b>SCADA Server</b> with <b>Office Workstation</b><br><span class="id">direct-it-ot-communication@scada-server@office-workstation&gt;live-dashboard</span></td><td>Likely</td><td>High</td><td><a href="#asset-scada-server">SCADA Server</a>, <a href="#link-office-workstation_3elive-dashboard">Live Dashboard</a></td><td><span class="badge status-unchecked">Unchecked</span></td>
+<td><span class="muted">not tracked</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="item" id="category-human-use-of-machine-identity">
+<h3>Human Use of Machine Identity <span class="badge sev-elevated">Elevated</span> <span class="summary">1/1 unmitigated Risk</span></h3>
+<p class="id">human-use-of-machine-identity</p>
+<div class="table-wrap">
+<table class="props">
+<tbody>
+<tr><th scope="row">STRIDE</th><td>Repudiation</td></tr>
+<tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/1390.html" rel="noopener noreferrer">CWE 1390</a></td></tr>
+<tr><th scope="row">Function</th><td>Operations</td></tr>
+<tr><th scope="row">Action</th><td>Personal Identities for People</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V2 - Authentication Verification Requirements</td></tr>
+<tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html" rel="noopener noreferrer">Secrets_Management_Cheat_Sheet</a></td></tr>
+<tr><th scope="row">References</th><td>OWASP NHI10:2025 Human Use of NHI; OWASP ASI03:2026 Identity and Privilege Abuse</td></tr>
+</tbody>
+</table>
+</div>
+<h4>Description</h4>
+<div class="text">People who call a service with the account of a machine, like an administrator using the credentials of a service account or a client that ships with an API key of its own, act without an identity of theirs. The service cannot tell them apart, nor require a second factor or end their access when they leave, and the secret gets copied to wherever they work.</div>
+<h4>Impact</h4>
+<div class="text">If this risk is unmitigated, attackers might use a secret copied from a laptop, a script or a client to access the target, and nobody can tell who did what with it.</div>
+<h4>Detection Logic</h4>
+<div class="text">In-scope technical assets processing or storing data rated at least as confidential or critical with an incoming communication link that is not process-local, from a caller used by humans, whose identity is <i>service-account</i> or <i>workload</i>.</div>
+<h4>Risk Rating</h4>
+<div class="text">The risk rating depends on the sensitivity of the data processed or stored by the target. The attack is likely, as secrets in the hands of people leak easily.</div>
+<h4>False Positives</h4>
+<div class="text">Clients whose users sign in with their own identity first, which a service then exchanges for the narrowly scoped account of the client, can be considered as false positives after individual review.</div>
+<h4>Mitigation</h4>
+<div class="text">Let people sign in with their own identity, through single sign-on with multi-factor authentication, and pass it on to the target, modelling the link with the identity <i>end-user</i>. Where an administrator needs the permissions of a service, grant them for a limited time through a privileged access workflow that records who used them. Keep secrets of service accounts out of clients.</div>
+<h4>Check</h4>
+<div class="text">Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?</div>
+<h4>Risk Findings</h4>
+<p>The risk <strong>Human Use of Machine Identity</strong> was found <strong>1 time</strong> in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Severity</th><th scope="col">Risk</th><th scope="col">Likelihood</th><th scope="col">Impact</th><th scope="col">Most relevant</th><th scope="col">Status</th><th scope="col">Tracking</th></tr></thead>
+<tbody>
+<tr id="risk-human-use-of-machine-identity_40scada-server_40office-workstation_3elive-dashboard"><td><span class="badge sev-elevated">Elevated</span></td><td><b>Human Use of Machine Identity</b> risk at <b>SCADA Server</b> by users of <b>Office Workstation</b> (service-account)<br><span class="id">human-use-of-machine-identity@scada-server@office-workstation&gt;live-dashboard</span></td><td>Likely</td><td>High</td><td><a href="#asset-scada-server">SCADA Server</a>, <a href="#link-office-workstation_3elive-dashboard">Live Dashboard</a></td><td><span class="badge status-unchecked">Unchecked</span></td>
 <td><span class="muted">not tracked</span></td></tr>
 </tbody>
 </table>
@@ -1624,7 +1676,7 @@ footer {
 
 <section class="chapter" id="technical-assets">
 <h2>Identified Risks by Technical Asset</h2>
-<p>In total <strong>42 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>14 in-scope technical assets</strong>. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.</p>
+<p>In total <strong>43 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>14 in-scope technical assets</strong>. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.</p>
 <section class="item" id="asset-chlorine-safety-controller">
 <h3>Chlorine Safety Controller <span class="badge sev-elevated">Elevated</span> <span class="summary">9/9 unmitigated Risks</span></h3>
 <p class="id">chlorine-safety-controller</p>
@@ -2072,12 +2124,13 @@ footer {
 </div>
 </section>
 <section class="item" id="asset-scada-server">
-<h3>SCADA Server <span class="badge sev-elevated">Elevated</span> <span class="summary">9/9 unmitigated Risks</span></h3>
+<h3>SCADA Server <span class="badge sev-elevated">Elevated</span> <span class="summary">10/10 unmitigated Risks</span></h3>
 <p class="id">scada-server</p>
 <div class="text">Supervises the treatment and sends the commands of the operators</div>
 <h4>Identified Risks of the Asset</h4>
 <ul>
 <li><span class="badge sev-elevated">Elevated</span> <a href="#risk-direct-it-ot-communication_40scada-server_40office-workstation_3elive-dashboard"><b>Direct IT/OT Communication</b> risk at <b>SCADA Server</b> with <b>Office Workstation</b></a> <span class="badge status-unchecked">Unchecked</span></li>
+<li><span class="badge sev-elevated">Elevated</span> <a href="#risk-human-use-of-machine-identity_40scada-server_40office-workstation_3elive-dashboard"><b>Human Use of Machine Identity</b> risk at <b>SCADA Server</b> by users of <b>Office Workstation</b> (service-account)</a> <span class="badge status-unchecked">Unchecked</span></li>
 <li><span class="badge sev-elevated">Elevated</span> <a href="#risk-unencrypted-communication_40scada-server_3edosing-control_40scada-server_40dosing-plc"><b>Unencrypted Communication</b> named <b>Dosing Control</b> between <b>SCADA Server</b> and <b>Dosing PLC</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li><span class="badge sev-elevated">Elevated</span> <a href="#risk-unencrypted-communication_40scada-server_3epump-station-telemetry_40scada-server_40pump-station-rtu"><b>Unencrypted Communication</b> named <b>Pump Station Telemetry</b> between <b>SCADA Server</b> and <b>Pump Station RTU</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li><span class="badge sev-elevated">Elevated</span> <a href="#risk-unencrypted-communication_40scada-server_3esafety-reset_40scada-server_40chlorine-safety-controller"><b>Unencrypted Communication</b> named <b>Safety Reset</b> between <b>SCADA Server</b> and <b>Chlorine Safety Controller</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -2358,9 +2411,9 @@ footer {
 
 <section class="chapter" id="data-assets">
 <h2>Identified Data Breach Probabilities by Data Asset</h2>
-<p>In total <strong>42 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>5 data assets</strong>. The following sections describe the derived data breach probabilities grouped by data asset.</p>
+<p>In total <strong>43 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>5 data assets</strong>. The following sections describe the derived data breach probabilities grouped by data asset.</p>
 <section class="item" id="data-asset-historical-process-data">
-<h3>Historical Process Data <span class="badge sev-high">Probable</span> <span class="summary">11/11 unmitigated Risks</span></h3>
+<h3>Historical Process Data <span class="badge sev-high">Probable</span> <span class="summary">12/12 unmitigated Risks</span></h3>
 <p class="id">historical-process-data</p>
 <div class="text">Archived process values for reports and compliance</div>
 <div class="table-wrap">
@@ -2384,12 +2437,13 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 11 remaining risks:</p>
+<p>This data asset has data breach potential because of 12 remaining risks:</p>
 <ul>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-sql-nosql-injection_40office-workstation_40historian-replica_40office-workstation_3ereport-access"><b>SQL/NoSQL-Injection</b> risk at <b>Office Workstation</b> against database <b>Historian Replica</b> via <b>Report Access</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-sql-nosql-injection_40plant-historian_40historian-replica_40plant-historian_3ereplication"><b>SQL/NoSQL-Injection</b> risk at <b>Plant Historian</b> against database <b>Historian Replica</b> via <b>Replication</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-sql-nosql-injection_40scada-server_40plant-historian_40scada-server_3earchiving"><b>SQL/NoSQL-Injection</b> risk at <b>SCADA Server</b> against database <b>Plant Historian</b> via <b>Archiving</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-direct-it-ot-communication_40scada-server_40office-workstation_3elive-dashboard"><b>Direct IT/OT Communication</b> risk at <b>SCADA Server</b> with <b>Office Workstation</b></a> <span class="badge status-unchecked">Unchecked</span></li>
+<li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-human-use-of-machine-identity_40scada-server_40office-workstation_3elive-dashboard"><b>Human Use of Machine Identity</b> risk at <b>SCADA Server</b> by users of <b>Office Workstation</b> (service-account)</a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-medium">Medium</span> <a href="#risk-long-lived-credentials_40plant-historian_40scada-server_3earchiving"><b>Long-Lived Credentials</b> risk at <b>Plant Historian</b> used by <b>SCADA Server</b> (credentials)</a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-medium">Medium</span> <a href="#risk-missing-authentication-second-factor_40operator-hmi_3eoperation_40operator-hmi_40scada-server"><b>Missing Multi-Factor Authentication</b> covering communication link <b>Operation</b> from <b>Operator HMI</b> to <b>SCADA Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-medium">Medium</span> <a href="#risk-server-side-request-forgery_40plant-historian_40historian-replica_40plant-historian_3ereplication"><b>Server-Side Request Forgery (SSRF)</b> risk at <b>Plant Historian</b> server-side web-requesting the target <b>Historian Replica</b> via <b>Replication</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -2400,7 +2454,7 @@ footer {
 </ul>
 </section>
 <section class="item" id="data-asset-process-values">
-<h3>Process Values <span class="badge sev-high">Probable</span> <span class="summary">26/26 unmitigated Risks</span></h3>
+<h3>Process Values <span class="badge sev-high">Probable</span> <span class="summary">27/27 unmitigated Risks</span></h3>
 <p class="id">process-values</p>
 <div class="text">Measurements of flow, level, pressure and chlorine concentration</div>
 <div class="table-wrap">
@@ -2424,10 +2478,11 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 26 remaining risks:</p>
+<p>This data asset has data breach potential because of 27 remaining risks:</p>
 <ul>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-sql-nosql-injection_40scada-server_40plant-historian_40scada-server_3earchiving"><b>SQL/NoSQL-Injection</b> risk at <b>SCADA Server</b> against database <b>Plant Historian</b> via <b>Archiving</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-direct-it-ot-communication_40scada-server_40office-workstation_3elive-dashboard"><b>Direct IT/OT Communication</b> risk at <b>SCADA Server</b> with <b>Office Workstation</b></a> <span class="badge status-unchecked">Unchecked</span></li>
+<li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-human-use-of-machine-identity_40scada-server_40office-workstation_3elive-dashboard"><b>Human Use of Machine Identity</b> risk at <b>SCADA Server</b> by users of <b>Office Workstation</b> (service-account)</a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-long-lived-credentials_40filter-plc_40scada-server_3efilter-control"><b>Long-Lived Credentials</b> risk at <b>Filter PLC</b> used by <b>SCADA Server</b> (credentials)</a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-medium">Medium</span> <a href="#risk-long-lived-credentials_40plant-historian_40scada-server_3earchiving"><b>Long-Lived Credentials</b> risk at <b>Plant Historian</b> used by <b>SCADA Server</b> (credentials)</a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-medium">Medium</span> <a href="#risk-missing-authentication-second-factor_40operator-hmi_3eoperation_40operator-hmi_40scada-server"><b>Missing Multi-Factor Authentication</b> covering communication link <b>Operation</b> from <b>Operator HMI</b> to <b>SCADA Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -2455,7 +2510,7 @@ footer {
 </ul>
 </section>
 <section class="item" id="data-asset-control-commands">
-<h3>Control Commands <span class="badge sev-medium">Possible</span> <span class="summary">22/22 unmitigated Risks</span></h3>
+<h3>Control Commands <span class="badge sev-medium">Possible</span> <span class="summary">23/23 unmitigated Risks</span></h3>
 <p class="id">control-commands</p>
 <div class="text">Setpoints, start and stop commands and outputs to pumps and valves</div>
 <div class="table-wrap">
@@ -2479,9 +2534,10 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 22 remaining risks:</p>
+<p>This data asset has data breach potential because of 23 remaining risks:</p>
 <ul>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-direct-it-ot-communication_40scada-server_40office-workstation_3elive-dashboard"><b>Direct IT/OT Communication</b> risk at <b>SCADA Server</b> with <b>Office Workstation</b></a> <span class="badge status-unchecked">Unchecked</span></li>
+<li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-human-use-of-machine-identity_40scada-server_40office-workstation_3elive-dashboard"><b>Human Use of Machine Identity</b> risk at <b>SCADA Server</b> by users of <b>Office Workstation</b> (service-account)</a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-long-lived-credentials_40filter-plc_40scada-server_3efilter-control"><b>Long-Lived Credentials</b> risk at <b>Filter PLC</b> used by <b>SCADA Server</b> (credentials)</a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-medium">Medium</span> <a href="#risk-missing-authentication-second-factor_40operator-hmi_3eoperation_40operator-hmi_40scada-server"><b>Missing Multi-Factor Authentication</b> covering communication link <b>Operation</b> from <b>Operator HMI</b> to <b>SCADA Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-medium">Medium</span> <a href="#risk-server-side-request-forgery_40scada-server_40plant-historian_40scada-server_3earchiving"><b>Server-Side Request Forgery (SSRF)</b> risk at <b>SCADA Server</b> server-side web-requesting the target <b>Plant Historian</b> via <b>Archiving</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -3119,7 +3175,7 @@ footer {
 
 <section class="chapter" id="risk-tracking">
 <h2>Risk Tracking</h2>
-<p><strong>1 of 42 risks</strong> are tracked in the model; the others are unchecked.</p>
+<p><strong>1 of 43 risks</strong> are tracked in the model; the others are unchecked.</p>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Risk</th><th scope="col">Severity</th><th scope="col">Status</th><th scope="col">Date</th><th scope="col">Checked by</th><th scope="col">Ticket</th><th scope="col">Justification</th></tr></thead>
@@ -3150,6 +3206,7 @@ footer {
 <tbody>
 <tr><th scope="row">Accidental Secret Leak<br><span class="id">accidental-secret-leak</span></th><td>Information Disclosure</td><td>Sourcecode repositories (including their histories) as well as artifact registries can accidentally contain secrets like checked-in or packaged-in passwords, API tokens, certificates, crypto keys, etc.</td><td>In-scope sourcecode repositories and artifact registries.</td><td>The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.</td></tr>
 <tr><th scope="row">Code Backdooring<br><span class="id">code-backdooring</span></th><td>Tampering</td><td>For each build pipeline component Code Backdooring risks might arise where attackers compromise the build pipeline in order to let backdoored artifacts be shipped into production. Aside from direct code backdooring this includes backdooring of dependencies and even of more lower-level build infrastructure, like backdooring compilers (similar to what the XcodeGhost malware did) or dependencies.</td><td>In-scope development relevant technical assets which are either accessed by out-of-scope unmanaged developer clients and/or are directly accessed by any kind of internet-located (non-VPN) component or are themselves directly located on the internet.</td><td>The risk rating depends on the confidentiality and integrity rating of the code being handled and deployed as well as the placement/calling of this technical asset on/from the internet.</td></tr>
+<tr><th scope="row">Confused Deputy Agent<br><span class="id">confused-deputy-agent</span></th><td>Elevation of Privilege</td><td>An AI agent that acts for its users but reaches data and tools with an identity of its own, a service account or a workload, can do for any user what the agent may do for all of them. The targets check the agent, not the user, so whatever a user asks for, or a prompt injection makes the agent ask for, is allowed.</td><td>In-scope ai-agent technical assets that act for users, through an incoming communication link with the identity <i>end-user</i> or from a caller used by humans (other than devops links), and reach a technical asset (other than an llm) processing or storing data rated at least as confidential or critical with the identity <i>service-account</i> or <i>workload</i>, either directly or through the tools of an mcp-server technical asset.</td><td>The risk rating depends on the sensitivity of the most sensitive technical asset the agent reaches with its own identity. The attack is likely when the agent takes untrusted input, and unlikely otherwise.</td></tr>
 <tr><th scope="row">Container Base Image Backdooring<br><span class="id">container-baseimage-backdooring</span></th><td>Tampering</td><td>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors.</td><td>In-scope technical assets running as containers.</td><td>The risk rating depends on the sensitivity of the technical asset itself and of the data assets.</td></tr>
 <tr><th scope="row">Container Platform Escape<br><span class="id">container-platform-escape</span></th><td>Elevation of Privilege</td><td>Container platforms are especially interesting targets for attackers as they host big parts of a containerized runtime infrastructure. When not configured and operated with security best practices in mind, attackers might exploit a vulnerability inside an container and escape towards the platform as highly privileged users. These scenarios might give attackers capabilities to attack every other container as owning the container platform (via container escape attacks) equals to owning every container.</td><td>In-scope container platforms.</td><td>The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.</td></tr>
 <tr><th scope="row">Cross-Account Takeover<br><span class="id">cross-account-takeover</span></th><td>Elevation of Privilege</td><td>Cloud accounts, subscriptions, projects and VPCs isolate workloads and tenants from each other. Access from one of them into another (account A to account B) is granted by cross-account roles, trust policies or resource policies, and a misconfigured grant (too broad principals or rights, or no condition on the calling account) breaks that isolation.</td><td>Communication links into in-scope technical assets from technical assets in another cloud account, i.e. where the innermost trust boundaries of type network-cloud-provider around the source and the target differ.</td><td>The risk rating depends on the sensitivity of the target technical asset itself and of the data assets it processes and stores. The likelihood rises when the source or the target is multi-tenant, as another tenant can then try to abuse the cross-account access.</td></tr>
@@ -3159,6 +3216,7 @@ footer {
 <tr><th scope="row">DoS-risky Access Across Trust-Boundary<br><span class="id">dos-risky-access-across-trust-boundary</span></th><td>Denial of Service</td><td>Assets accessed across trust boundaries with critical or mission-critical availability rating are more prone to Denial-of-Service (DoS) risks.</td><td>In-scope technical assets (excluding load-balancer) with availability rating of critical or higher which have incoming data-flows across a network trust-boundary (excluding devops usage).</td><td>Matching technical assets with availability rating of critical or higher are at low risk. When the availability rating is mission-critical and neither a VPN nor IP filter for the incoming data-flow nor redundancy for the asset is applied, the risk-rating is considered medium.</td></tr>
 <tr><th scope="row">Denial of Service by Encryption Key Deletion<br><span class="id">encryption-key-deletion</span></th><td>Denial of Service</td><td>Data in cloud storage encrypted with a key from a cloud key management service (like AWS KMS, Azure Key Vault or Google Cloud KMS) can only be decrypted as long as the key exists. Deleting the key, by mistake or by an attacker with enough rights, makes the data permanently unusable.</td><td>In-scope encrypted cloud technical assets (residing in cloud trust boundaries or tagged with cloud provider tags) storing data assets, which are either tagged as encrypted with a key from a cloud key management service (aws:kms, azure:keyvault, gcp:kms on the asset, a trust boundary around it or its shared runtime) or communicate with a cloud vault or hsm asset. Key stores themselves are excluded.</td><td>The risk rating depends on the availability rating of the technical asset itself and of the data assets stored, as the deletion destroys the data but does not disclose it.</td></tr>
 <tr><th scope="row">Excessive Agency<br><span class="id">excessive-agency</span></th><td>Elevation of Privilege</td><td>An AI agent decides on its own which tools to call and with which arguments. An agent that can change critical systems, directly or through the tools of an MCP server, without a human approving the change, does whatever a prompt injection, a hallucination or a misunderstanding makes it do.</td><td>In-scope ai-agent technical assets with a non-readonly communication link to a technical asset (other than an llm) processing or storing data rated at least as critical in integrity, either directly or through the tools of an mcp-server technical asset. Agents and links tagged with <i>human-in-the-loop</i> are skipped.</td><td>The risk rating depends on the integrity rating of the technical asset the agent can change. The attack is likely when the agent takes untrusted input, and unlikely otherwise.</td></tr>
+<tr><th scope="row">Human Use of Machine Identity<br><span class="id">human-use-of-machine-identity</span></th><td>Repudiation</td><td>People who call a service with the account of a machine, like an administrator using the credentials of a service account or a client that ships with an API key of its own, act without an identity of theirs. The service cannot tell them apart, nor require a second factor or end their access when they leave, and the secret gets copied to wherever they work.</td><td>In-scope technical assets processing or storing data rated at least as confidential or critical with an incoming communication link that is not process-local, from a caller used by humans, whose identity is <i>service-account</i> or <i>workload</i>.</td><td>The risk rating depends on the sensitivity of the data processed or stored by the target. The attack is likely, as secrets in the hands of people leak easily.</td></tr>
 <tr><th scope="row">Incomplete Model<br><span class="id">incomplete-model</span></th><td>Information Disclosure</td><td>When the threat model contains unknown technologies or transfers data over unknown protocols, this is an indicator for an incomplete model.</td><td>All technical assets and communication links with technology type or protocol type specified as unknown.</td><td>low</td></tr>
 <tr><th scope="row">Insecure Control Protocol<br><span class="id">insecure-control-protocol</span></th><td>Tampering</td><td>Most industrial control protocols, like Modbus, DNP3, S7comm, EtherNet/IP or PROFINET, were designed for closed networks: a controller or field device executes every command it receives, without checking who sent it or whether it was changed on the way. Anyone who can send packets to it can write setpoints and outputs, stop it or download a new program.</td><td>In-scope controllers (plc, rtu, safety-controller) and field-device technical assets with an incoming non-readonly communication link over an industrial control protocol without a secure variant in use (all of them except modbus-security, dnp3-encrypted and opc-ua-encrypted).</td><td>The risk rating depends on the integrity and availability of the controlled process, and is the highest for safety controllers. The attack is very likely when the sender is on the internet, likely when it is an IT asset, reaches IT or calls across a network trust boundary, and unlikely otherwise.</td></tr>
 <tr><th scope="row">LDAP-Injection<br><span class="id">ldap-injection</span></th><td>Tampering</td><td>When an LDAP server is accessed LDAP-Injection risks might arise. The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed.</td><td>In-scope clients accessing LDAP servers via typical LDAP access protocols.</td><td>The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed.</td></tr>
@@ -3190,6 +3248,7 @@ footer {
 <tr><th scope="row">Search-Query Injection<br><span class="id">search-query-injection</span></th><td>Tampering</td><td>When a search engine server is accessed Search-Query Injection risks might arise.</td><td>In-scope clients accessing search engine servers via typical search access protocols.</td><td>The risk rating depends on the sensitivity of the search engine server itself and of the data assets processed.</td></tr>
 <tr><th scope="row">Server-Side Request Forgery (SSRF)<br><span class="id">server-side-request-forgery</span></th><td>Information Disclosure</td><td>When a server system (i.e. not a client) is accessing other server systems via typical web protocols Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might arise. </td><td>In-scope non-client systems accessing (using outgoing communication links) targets with either HTTP or HTTPS protocol.</td><td>The risk rating (low or medium) depends on the sensitivity of the data assets receivable via web protocols from targets within the same network trust-boundary as well on the sensitivity of the data assets receivable via web protocols from the target asset itself. Also for cloud-based environments the exploitation impact is at least medium, as cloud backend services can be attacked via SSRF.</td></tr>
 <tr><th scope="row">Service Registry Poisoning<br><span class="id">service-registry-poisoning</span></th><td>Spoofing</td><td>When a service registry used for discovery of trusted service endpoints Service Registry Poisoning risks might arise.</td><td>In-scope service registries.</td><td>The risk rating depends on the sensitivity of the technical assets accessing the service registry as well as the data assets processed.</td></tr>
+<tr><th scope="row">Shared Machine Account<br><span class="id">shared-machine-account</span></th><td>Elevation of Privilege</td><td>Several technical assets that call others with one service account, API key or workload identity share all of its permissions: each can do what any of them needs, and the targets cannot tell them apart.</td><td>In-scope technical assets with a communication link naming an <i>account</i> that communication links of other technical assets name as well, with the identity <i>service-account</i> or <i>workload</i>. Links that name no account are skipped.</td><td>The risk rating depends on the sensitivity of the data processed or stored by the targets of all links of the account. The attack is likely when the callers are in different trust boundaries, so that the compromise of one crosses into others, and unlikely otherwise.</td></tr>
 <tr><th scope="row">SQL/NoSQL-Injection<br><span class="id">sql-nosql-injection</span></th><td>Tampering</td><td>When a database is accessed via database access protocols SQL/NoSQL-Injection risks might arise. The risk rating depends on the sensitivity technical asset itself and of the data assets processed.</td><td>Database accessed via typical database access protocols by in-scope clients.</td><td>The risk rating depends on the sensitivity of the data stored inside the database.</td></tr>
 <tr><th scope="row">Unauthenticated MCP Server<br><span class="id">unauthenticated-mcp-server</span></th><td>Spoofing</td><td>An MCP server, or another server exposing tools to AI agents, acts on the systems behind its tools with its own permissions. When it does not authenticate its callers, anyone who can reach it can call those tools, and it cannot tell one agent or user from another to limit what each may do.</td><td>In-scope mcp-server technical assets with an incoming communication link without authentication that is not process-local, whose tools (the outgoing communication links) reach technical assets processing or storing data rated at least as confidential or critical.</td><td>The risk rating depends on the sensitivity of the technical assets the tools reach. The attack is very likely when the caller is on the internet, likely when it takes untrusted input or sits across a network trust boundary, and unlikely otherwise.</td></tr>
 <tr><th scope="row">Unchecked Deployment<br><span class="id">unchecked-deployment</span></th><td>Tampering</td><td>For each build-pipeline component Unchecked Deployment risks might arise when the build-pipeline does not include established DevSecOps best-practices. DevSecOps best-practices scan as part of CI/CD pipelines for vulnerabilities in source- or byte-code, dependencies, container layers, and dynamically against running test systems. There are several open-source and commercial tools existing in the categories DAST, SAST, and IAST.</td><td>All development-relevant technical assets.</td><td>The risk rating depends on the highest rating of the technical assets and data assets processed by deployment-receiving targets.</td></tr>

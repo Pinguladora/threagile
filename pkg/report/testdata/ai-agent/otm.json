@@ -1374,6 +1374,16 @@
       ],
       "threats": [
         {
+          "threat": "confused-deputy-agent",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "confused-deputy-agent-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "server-side-request-forgery",
           "state": "exposed",
           "mitigations": [
@@ -1553,6 +1563,31 @@
     }
   ],
   "threats": [
+    {
+      "id": "confused-deputy-agent",
+      "name": "Confused Deputy Agent",
+      "description": "An AI agent that acts for its users but reaches data and tools with an identity of its own, a service account or a workload, can do for any user what the agent may do for all of them. The targets check the agent, not the user, so whatever a user asks for, or a prompt injection makes the agent ask for, is allowed.",
+      "categories": [
+        "Elevation of Privilege",
+        "OWASP ASI03:2026 Identity and Privilege Abuse",
+        "OWASP LLM06:2025 Excessive Agency",
+        "OWASP NHI9:2025 NHI Reuse",
+        "MAESTRO Layer 3: Agent Frameworks"
+      ],
+      "cwes": [
+        "CWE-441"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, users and attackers who steer the agent might read or change the data of other users through it."
+      },
+      "attributes": {
+        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+        "threagile:function": "architecture"
+      }
+    },
     {
       "id": "container-baseimage-backdooring",
       "name": "Container Base Image Backdooring",
@@ -2149,6 +2184,15 @@
     }
   ],
   "mitigations": [
+    {
+      "id": "confused-deputy-agent-mitigation",
+      "name": "Act with the Identity of the User",
+      "description": "Let the agent call data and tools with the identity of the user it acts for, for example through OAuth 2.0 token exchange or on-behalf-of flows, scoped to the task, and model those links with the identity \u003ci\u003eend-user\u003c/i\u003e. Where the agent must use its own identity, authorize each call by the user in the agent and keep its own permissions to what every user may do.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
     {
       "id": "container-baseimage-backdooring-mitigation",
       "name": "Container Infrastructure Hardening",

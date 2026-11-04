@@ -42,13 +42,13 @@ Threagile toolkit was used to model the architecture of "Some Example Applicatio
 
 Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.
 
-In total **77 initial risks** in **29 categories** have been identified during the threat modeling process:
+In total **83 initial risks** in **30 categories** have been identified during the threat modeling process:
 
 | Severity | Risks | Status | Risks |
 | --- | ---: | --- | ---: |
-| Critical | 1 | Unchecked | 48 |
+| Critical | 1 | Unchecked | 54 |
 | High | 2 | In Discussion | 0 |
-| Elevated | 30 | Accepted | 1 |
+| Elevated | 36 | Accepted | 1 |
 | Medium | 40 | In Progress | 3 |
 | Low | 4 | Mitigated | 24 |
 |  |  | False Positive | 1 |
@@ -57,7 +57,7 @@ Just some **more** custom summary possible here...
 
 ## Impact Analysis of the Initial Risks
 
-The most prevalent impacts of the **77 initial risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **83 initial risks** (distributed over **30 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Critical**: [Some Individual Risk Example](#some-individual-risk-example): 2 Initial Risks, exploitation likelihood is _Frequent_ with _Very High_ impact
 
@@ -70,6 +70,10 @@ The most prevalent impacts of the **77 initial risks** (distributed over **29 ri
 - **High**: [XML External Entity (XXE)](#xml-external-entity-xxe): 1 Initial Risk, exploitation likelihood is _Very Likely_ with _High_ impact
 
     If this risk is unmitigated, attackers might be able to read sensitive files (configuration data, key/credential files, deployment files, business data files, etc.) form the filesystem of affected components and/or access sensitive services or files of other components.
+
+- **Elevated**: [Human Use of Machine Identity](#human-use-of-machine-identity): 6 Initial Risks, exploitation likelihood is _Likely_ with _High_ impact
+
+    If this risk is unmitigated, attackers might use a secret copied from a laptop, a script or a client to access the target, and nobody can tell who did what with it.
 
 - **Elevated**: [LDAP-Injection](#ldap-injection): 2 Initial Risks, exploitation likelihood is _Likely_ with _High_ impact
 
@@ -203,23 +207,23 @@ The following table gives a high-level overview of the risk tracking status (inc
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Critical | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
 | High | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
-| Elevated | 30 | 20 | 0 | 1 | 0 | 8 | 1 |
+| Elevated | 36 | 26 | 0 | 1 | 0 | 8 | 1 |
 | Medium | 40 | 24 | 0 | 0 | 0 | 16 | 0 |
 | Low | 4 | 1 | 0 | 0 | 3 | 0 | 0 |
 
-After removal of risks with status _mitigated_ and _false positive_ the following **52 remain unmitigated**:
+After removal of risks with status _mitigated_ and _false positive_ the following **58 remain unmitigated**:
 
 | Severity | Unmitigated risks | To be checked by | Unmitigated risks |
 | --- | ---: | --- | ---: |
 | Critical | 1 | Business Side | 2 |
 | High | 2 | Architecture | 14 |
-| Elevated | 21 | Development | 6 |
-| Medium | 24 | Operations | 30 |
+| Elevated | 27 | Development | 6 |
+| Medium | 24 | Operations | 36 |
 | Low | 4 |  |  |
 
 ## Impact Analysis of the Remaining Risks
 
-The most prevalent impacts of the **52 remaining risks** (distributed over **24 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **58 remaining risks** (distributed over **25 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Critical**: [Some Individual Risk Example](#some-individual-risk-example): 2 Remaining Risks, exploitation likelihood is _Frequent_ with _Very High_ impact
 
@@ -232,6 +236,10 @@ The most prevalent impacts of the **52 remaining risks** (distributed over **24 
 - **High**: [XML External Entity (XXE)](#xml-external-entity-xxe): 1 Remaining Risk, exploitation likelihood is _Very Likely_ with _High_ impact
 
     If this risk is unmitigated, attackers might be able to read sensitive files (configuration data, key/credential files, deployment files, business data files, etc.) form the filesystem of affected components and/or access sensitive services or files of other components.
+
+- **Elevated**: [Human Use of Machine Identity](#human-use-of-machine-identity): 6 Remaining Risks, exploitation likelihood is _Likely_ with _High_ impact
+
+    If this risk is unmitigated, attackers might use a secret copied from a laptop, a script or a client to access the target, and nobody can tell who did what with it.
 
 - **Elevated**: [Long-Lived Credentials](#long-lived-credentials): 6 Remaining Risks, exploitation likelihood is _Likely_ with _High_ impact
 
@@ -339,7 +347,7 @@ The most prevalent impacts of the **52 remaining risks** (distributed over **24 
 
 ## Risks by Severity
 
-All **77 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
+All **83 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
 
 ### Critical
 
@@ -360,10 +368,16 @@ All **77 risks** by severity, with their tracking status. Each risk links to its
 
 ### Elevated
 
-**30 risks**
+**36 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
+| Elevated | [**Human Use of Machine Identity** risk at **Backoffice ERP System** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) | [Human Use of Machine Identity](#human-use-of-machine-identity) | [Backoffice ERP System](#backoffice-erp-system), [ERP Web Access](#erp-web-access) | Unchecked |
+| Elevated | [**Human Use of Machine Identity** risk at **Customer Contract Database** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) | [Human Use of Machine Identity](#human-use-of-machine-identity) | [Customer Contract Database](#customer-contract-database), [DB Update Access](#db-update-access) | Unchecked |
+| Elevated | [**Human Use of Machine Identity** risk at **Git Repository** by users of **External Development Client** (service-account)](#human-use-of-machine-identity) | [Human Use of Machine Identity](#human-use-of-machine-identity) | [Git Repository](#git-repository), [Git-Repo Code Write Access](#git-repo-code-write-access) | Unchecked |
+| Elevated | [**Human Use of Machine Identity** risk at **Git Repository** by users of **External Development Client** (service-account)](#human-use-of-machine-identity) | [Human Use of Machine Identity](#human-use-of-machine-identity) | [Git Repository](#git-repository), [Git-Repo Web-UI Access](#git-repo-web-ui-access) | Unchecked |
+| Elevated | [**Human Use of Machine Identity** risk at **Jenkins Build Server** by users of **External Development Client** (service-account)](#human-use-of-machine-identity) | [Human Use of Machine Identity](#human-use-of-machine-identity) | [Jenkins Build Server](#jenkins-build-server), [Jenkins Web-UI Access](#jenkins-web-ui-access) | Unchecked |
+| Elevated | [**Human Use of Machine Identity** risk at **LDAP Auth Server** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) | [Human Use of Machine Identity](#human-use-of-machine-identity) | [LDAP Auth Server](#ldap-auth-server), [User Management Access](#user-management-access) | Unchecked |
 | Elevated | [**LDAP-Injection** risk at **Identity Provider** against LDAP server **LDAP Auth Server** via **LDAP Credential Check Traffic**](#ldap-injection) | [LDAP-Injection](#ldap-injection) | [Identity Provider](#identity-provider), [LDAP Credential Check Traffic](#ldap-credential-check-traffic) | Mitigated |
 | Elevated | [**LDAP-Injection** risk at **Marketing CMS** against LDAP server **LDAP Auth Server** via **Auth Traffic**](#ldap-injection) | [LDAP-Injection](#ldap-injection) | [Marketing CMS](#marketing-cms), [Auth Traffic](#auth-traffic) | Mitigated |
 | Elevated | [**Long-Lived Credentials** risk at **Backoffice ERP System** used by **Apache Webserver** (long-lived-token)](#long-lived-credentials) | [Long-Lived Credentials](#long-lived-credentials) | [Backoffice ERP System](#backoffice-erp-system), [ERP System Traffic](#erp-system-traffic) | Unchecked |
@@ -557,6 +571,10 @@ Data-flow diagram of "Some Example Application". A box is an external entity, a 
 
     Jenkins build-server
 
+- [LDAP Auth Server](#ldap-auth-server)
+
+    LDAP authentication server
+
 - [Load Balancer](#load-balancer)
 
     Load Balancer (HA-Proxy)
@@ -568,10 +586,6 @@ Data-flow diagram of "Some Example Application". A box is an external entity, a 
 - [Identity Provider](#identity-provider)
 
     Identity provider server
-
-- [LDAP Auth Server](#ldap-auth-server)
-
-    LDAP authentication server
 
 - [Backend Admin Client](#backend-admin-client) (out of scope)
 
@@ -727,7 +741,7 @@ This chapter lists what tags are used by which elements.
 
 ## STRIDE Classification of Identified Risks
 
-This chapter clusters and classifies the risks by STRIDE categories: in total **77 potential risks** have been identified during the threat modeling process.
+This chapter clusters and classifies the risks by STRIDE categories: in total **83 potential risks** have been identified during the threat modeling process.
 
 ### Spoofing
 
@@ -799,13 +813,17 @@ Tampering - Integrity
 
 ### Repudiation
 
-**2 risks**
+**8 risks**
 
 Repudiation - Non-repudiability
 
 - **Critical**: [Some Individual Risk Example](#some-individual-risk-example): 2/2 unmitigated Risks, exploitation likelihood is _Frequent_ with _Very High_ impact
 
     Some text describing the risk category...
+
+- **Elevated**: [Human Use of Machine Identity](#human-use-of-machine-identity): 6/6 unmitigated Risks, exploitation likelihood is _Likely_ with _High_ impact
+
+    People who call a service with the account of a machine, like an administrator using the credentials of a service account or a client that ships with an API key of its own, act without an identity of theirs. The service cannot tell them apart, nor require a second factor or end their access when they leave, and the secret gets copied to wherever they work.
 
 - **Medium**: [Some Individual Risk Example](#some-individual-risk-example): 2/2 unmitigated Risks, exploitation likelihood is _Frequent_ with _Very High_ impact
 
@@ -903,7 +921,7 @@ Elevation of privilege - Authorization
 
 ## Assignment by Function
 
-This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **77 potential risks** have been identified during the threat modeling process.
+This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **83 potential risks** have been identified during the threat modeling process.
 
 ### Business Side
 
@@ -997,9 +1015,13 @@ Development
 
 ### Operations
 
-**43 risks**
+**49 risks**
 
 Operations
+
+- **Elevated**: [Human Use of Machine Identity](#human-use-of-machine-identity): 6/6 unmitigated Risks, exploitation likelihood is _Likely_ with _High_ impact
+
+    Let people sign in with their own identity, through single sign-on with multi-factor authentication, and pass it on to the target, modelling the link with the identity _end-user_. Where an administrator needs the permissions of a service, grant them for a limited time through a privileged access workflow that records who used them. Keep secrets of service accounts out of clients.
 
 - **Elevated**: [Long-Lived Credentials](#long-lived-credentials): 6/6 unmitigated Risks, exploitation likelihood is _Likely_ with _High_ impact
 
@@ -1087,7 +1109,7 @@ The following lists all technical assets sorted by their RAA value from highest 
 
     Jenkins build-server
 
-- [LDAP Auth Server](#ldap-auth-server): RAA 51 %, highest severity still at risk: **Medium**
+- [LDAP Auth Server](#ldap-auth-server): RAA 51 %, highest severity still at risk: **Elevated**
 
     LDAP authentication server
 
@@ -1231,7 +1253,7 @@ This chapter lists custom questions that arose during the threat modeling proces
 
 ## Identified Risks by Vulnerability Category
 
-In total **77 potential risks** have been identified during the threat modeling process, distributed across **29 vulnerability categories**. The following sections describe each identified risk category and its risks.
+In total **83 potential risks** have been identified during the threat modeling process, distributed across **30 vulnerability categories**. The following sections describe each identified risk category and its risks.
 
 ### Some Individual Risk Example
 
@@ -1380,6 +1402,61 @@ The risk **XML External Entity (XXE)** was found **1 time** in the analyzed arch
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | High | **XML External Entity (XXE)** risk at **Backoffice ERP System** | `xml-external-entity@erp-system` | Very Likely | High | [Backoffice ERP System](#backoffice-erp-system) | Unchecked | _not tracked_ |
+
+### Human Use of Machine Identity
+
+**Elevated** · 6/6 unmitigated Risks · `human-use-of-machine-identity`
+
+| Property | Value |
+| --- | --- |
+| STRIDE | Repudiation |
+| CWE | [CWE 1390](https://cwe.mitre.org/data/definitions/1390.html) |
+| Function | Operations |
+| Action | Personal Identities for People |
+| ASVS chapter | V2 - Authentication Verification Requirements |
+| Cheat sheet | [Secrets_Management_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) |
+| References | OWASP NHI10:2025 Human Use of NHI; OWASP ASI03:2026 Identity and Privilege Abuse |
+
+**Description**
+
+People who call a service with the account of a machine, like an administrator using the credentials of a service account or a client that ships with an API key of its own, act without an identity of theirs. The service cannot tell them apart, nor require a second factor or end their access when they leave, and the secret gets copied to wherever they work.
+
+**Impact**
+
+If this risk is unmitigated, attackers might use a secret copied from a laptop, a script or a client to access the target, and nobody can tell who did what with it.
+
+**Detection Logic**
+
+In-scope technical assets processing or storing data rated at least as confidential or critical with an incoming communication link that is not process-local, from a caller used by humans, whose identity is _service-account_ or _workload_.
+
+**Risk Rating**
+
+The risk rating depends on the sensitivity of the data processed or stored by the target. The attack is likely, as secrets in the hands of people leak easily.
+
+**False Positives**
+
+Clients whose users sign in with their own identity first, which a service then exchanges for the narrowly scoped account of the client, can be considered as false positives after individual review.
+
+**Mitigation**
+
+Let people sign in with their own identity, through single sign-on with multi-factor authentication, and pass it on to the target, modelling the link with the identity _end-user_. Where an administrator needs the permissions of a service, grant them for a limited time through a privileged access workflow that records who used them. Keep secrets of service accounts out of clients.
+
+**Check**
+
+Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
+
+**Risk Findings**
+
+The risk **Human Use of Machine Identity** was found **6 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+
+| Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Elevated | **Human Use of Machine Identity** risk at **Backoffice ERP System** by users of **Backend Admin Client** (service-account) | `human-use-of-machine-identity@erp-system@backend-admin-client>erp-web-access` | Likely | High | [Backoffice ERP System](#backoffice-erp-system), [ERP Web Access](#erp-web-access) | Unchecked | _not tracked_ |
+| Elevated | **Human Use of Machine Identity** risk at **Customer Contract Database** by users of **Backend Admin Client** (service-account) | `human-use-of-machine-identity@sql-database@backend-admin-client>db-update-access` | Likely | High | [Customer Contract Database](#customer-contract-database), [DB Update Access](#db-update-access) | Unchecked | _not tracked_ |
+| Elevated | **Human Use of Machine Identity** risk at **Git Repository** by users of **External Development Client** (service-account) | `human-use-of-machine-identity@git-repo@external-dev-client>git-repo-code-write-access` | Likely | High | [Git Repository](#git-repository), [Git-Repo Code Write Access](#git-repo-code-write-access) | Unchecked | _not tracked_ |
+| Elevated | **Human Use of Machine Identity** risk at **Git Repository** by users of **External Development Client** (service-account) | `human-use-of-machine-identity@git-repo@external-dev-client>git-repo-web-ui-access` | Likely | High | [Git Repository](#git-repository), [Git-Repo Web-UI Access](#git-repo-web-ui-access) | Unchecked | _not tracked_ |
+| Elevated | **Human Use of Machine Identity** risk at **Jenkins Build Server** by users of **External Development Client** (service-account) | `human-use-of-machine-identity@jenkins-build-server@external-dev-client>jenkins-web-ui-access` | Likely | High | [Jenkins Build Server](#jenkins-build-server), [Jenkins Web-UI Access](#jenkins-web-ui-access) | Unchecked | _not tracked_ |
+| Elevated | **Human Use of Machine Identity** risk at **LDAP Auth Server** by users of **Backend Admin Client** (service-account) | `human-use-of-machine-identity@ldap-auth-server@backend-admin-client>user-management-access` | Likely | High | [LDAP Auth Server](#ldap-auth-server), [User Management Access](#user-management-access) | Unchecked | _not tracked_ |
 
 ### Long-Lived Credentials
 
@@ -2728,11 +2805,11 @@ The risk **Unencrypted Technical Assets** was found **7 times** in the analyzed 
 
 ## Identified Risks by Technical Asset
 
-In total **77 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
+In total **83 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
 
 ### Customer Contract Database
 
-**Critical** · 3/6 unmitigated Risks · `sql-database`
+**Critical** · 4/7 unmitigated Risks · `sql-database`
 
 The database behind the ERP system
 
@@ -2740,6 +2817,7 @@ The database behind the ERP system
 
 - **Critical**: [**Example Individual Risk** at **Database**](#some-individual-risk-example) (Unchecked)
 - **Elevated**: [**Publicly Shared Cloud Snapshot** risk at **Customer Contract Database**](#publicly-shared-cloud-snapshot) (Unchecked)
+- **Elevated**: [**Human Use of Machine Identity** risk at **Customer Contract Database** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - **Elevated**: [**Missing Hardening** risk at **Customer Contract Database**](#missing-hardening) (Mitigated)
 - **Medium**: [**Long-Lived Credentials** risk at **Customer Contract Database** used by **Backoffice ERP System** (credentials)](#long-lived-credentials) (Unchecked)
 - **Medium**: [**Missing Multi-Factor Authentication** covering communication link **DB Update Access** from **Backend Admin Client** to **Customer Contract Database**](#missing-multi-factor-authentication-mfa) (Mitigated)
@@ -2781,7 +2859,7 @@ The database behind the ERP system
 
 ### Backoffice ERP System
 
-**High** · 11/15 unmitigated Risks · `erp-system`
+**High** · 12/16 unmitigated Risks · `erp-system`
 
 ERP system
 
@@ -2789,6 +2867,7 @@ ERP system
 
 - **High**: [**SQL/NoSQL-Injection** risk at **Backoffice ERP System** against database **Customer Contract Database** via **Database Traffic**](#sqlnosql-injection) (Unchecked)
 - **High**: [**XML External Entity (XXE)** risk at **Backoffice ERP System**](#xml-external-entity-xxe) (Unchecked)
+- **Elevated**: [**Human Use of Machine Identity** risk at **Backoffice ERP System** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - **Elevated**: [**Long-Lived Credentials** risk at **Backoffice ERP System** used by **Apache Webserver** (long-lived-token)](#long-lived-credentials) (Unchecked)
 - **Elevated**: [**Path-Traversal** risk at **Backoffice ERP System** against filesystem **Contract File Server** via **NFS Filesystem Access**](#path-traversal) (Unchecked)
 - **Elevated**: [**Untrusted Deserialization** risk at **Backoffice ERP System**](#untrusted-deserialization) (Accepted)
@@ -2939,12 +3018,14 @@ NFS Filesystem for storing the contract PDFs
 
 ### Git Repository
 
-**Elevated** · 6/9 unmitigated Risks · `git-repo`
+**Elevated** · 8/11 unmitigated Risks · `git-repo`
 
 Git repository server
 
 **Identified Risks of the Asset**
 
+- **Elevated**: [**Human Use of Machine Identity** risk at **Git Repository** by users of **External Development Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
+- **Elevated**: [**Human Use of Machine Identity** risk at **Git Repository** by users of **External Development Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - **Elevated**: [**Long-Lived Credentials** risk at **Git Repository** used by **External Development Client** (long-lived-token)](#long-lived-credentials) (Unchecked)
 - **Elevated**: [**Unguarded Access from Internet** of **Git Repository** by **External Development Client** via **Git-Repo Code Write Access**](#unguarded-access-from-internet) (Unchecked)
 - **Elevated**: [**Unguarded Access from Internet** of **Git Repository** by **External Development Client** via **Git-Repo Web-UI Access**](#unguarded-access-from-internet) (Unchecked)
@@ -2991,13 +3072,14 @@ Git repository server
 
 ### Jenkins Build Server
 
-**Elevated** · 5/8 unmitigated Risks · `jenkins-build-server`
+**Elevated** · 6/9 unmitigated Risks · `jenkins-build-server`
 
 Jenkins build-server
 
 **Identified Risks of the Asset**
 
 - **Elevated**: [**Untrusted Deserialization** risk at **Jenkins Build Server**](#untrusted-deserialization) (Unchecked)
+- **Elevated**: [**Human Use of Machine Identity** risk at **Jenkins Build Server** by users of **External Development Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - **Elevated**: [**Unguarded Access from Internet** of **Jenkins Build Server** by **External Development Client** via **Jenkins Web-UI Access**](#unguarded-access-from-internet) (Unchecked)
 - **Elevated**: [**Missing Hardening** risk at **Jenkins Build Server**](#missing-hardening) (Mitigated)
 - **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
@@ -3039,6 +3121,54 @@ Jenkins build-server
 | Integrity | mission-critical |
 | Availability | important |
 | CIA justification | The build pipeline might contain sensitive configuration values like backend credentials, certificates etc. and is therefore rated as confidential. The integrity and availability is rated as critical and important due to the risk of reputation damage and application update unavailability when the build pipeline is compromised. |
+
+### LDAP Auth Server
+
+**Elevated** · 3/5 unmitigated Risks · `ldap-auth-server`
+
+LDAP authentication server
+
+**Identified Risks of the Asset**
+
+- **Elevated**: [**Human Use of Machine Identity** risk at **LDAP Auth Server** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
+- **Elevated**: [**Missing Hardening** risk at **LDAP Auth Server**](#missing-hardening) (Mitigated)
+- **Medium**: [**Long-Lived Credentials** risk at **LDAP Auth Server** used by **Identity Provider** (credentials)](#long-lived-credentials) (Unchecked)
+- **Medium**: [**Long-Lived Credentials** risk at **LDAP Auth Server** used by **Marketing CMS** (credentials)](#long-lived-credentials) (Unchecked)
+- **Medium**: [**Missing Multi-Factor Authentication** covering communication link **User Management Access** from **Backend Admin Client** to **LDAP Auth Server**](#missing-multi-factor-authentication-mfa) (Mitigated)
+
+**Asset Information**
+
+| Property | Value |
+| --- | --- |
+| Type | datastore |
+| Usage | business |
+| RAA | 51 % |
+| Size | component |
+| Technology | identity-store-ldap |
+| Tags | linux |
+| Trust boundary | [Auth Handling Environment](#auth-handling-environment) |
+| Internet | no |
+| Machine | physical |
+| Encryption | transparent |
+| Multi-tenant | no |
+| Redundant | no |
+| Custom-developed | no |
+| Client used by a human | no |
+| Data formats accepted | none |
+| Data processed | [Customer Accounts](#customer-accounts) |
+| Data stored | [Customer Accounts](#customer-accounts) |
+| Outgoing communication links | none |
+| Incoming communication links | [Auth Traffic](#auth-traffic), [LDAP Credential Check Traffic](#ldap-credential-check-traffic), [User Management Access](#user-management-access) |
+
+**Asset Rating**
+
+| Property | Value |
+| --- | --- |
+| Owner | Company ABC |
+| Confidentiality | strictly-confidential |
+| Integrity | critical |
+| Availability | critical |
+| CIA justification | The auth data of the application |
 
 ### Load Balancer
 
@@ -3171,53 +3301,6 @@ Identity provider server
 | Data stored | none |
 | Outgoing communication links | [LDAP Credential Check Traffic](#ldap-credential-check-traffic) |
 | Incoming communication links | [Auth Credential Check Traffic](#auth-credential-check-traffic) |
-
-**Asset Rating**
-
-| Property | Value |
-| --- | --- |
-| Owner | Company ABC |
-| Confidentiality | strictly-confidential |
-| Integrity | critical |
-| Availability | critical |
-| CIA justification | The auth data of the application |
-
-### LDAP Auth Server
-
-**Medium** · 2/4 unmitigated Risks · `ldap-auth-server`
-
-LDAP authentication server
-
-**Identified Risks of the Asset**
-
-- **Elevated**: [**Missing Hardening** risk at **LDAP Auth Server**](#missing-hardening) (Mitigated)
-- **Medium**: [**Long-Lived Credentials** risk at **LDAP Auth Server** used by **Identity Provider** (credentials)](#long-lived-credentials) (Unchecked)
-- **Medium**: [**Long-Lived Credentials** risk at **LDAP Auth Server** used by **Marketing CMS** (credentials)](#long-lived-credentials) (Unchecked)
-- **Medium**: [**Missing Multi-Factor Authentication** covering communication link **User Management Access** from **Backend Admin Client** to **LDAP Auth Server**](#missing-multi-factor-authentication-mfa) (Mitigated)
-
-**Asset Information**
-
-| Property | Value |
-| --- | --- |
-| Type | datastore |
-| Usage | business |
-| RAA | 51 % |
-| Size | component |
-| Technology | identity-store-ldap |
-| Tags | linux |
-| Trust boundary | [Auth Handling Environment](#auth-handling-environment) |
-| Internet | no |
-| Machine | physical |
-| Encryption | transparent |
-| Multi-tenant | no |
-| Redundant | no |
-| Custom-developed | no |
-| Client used by a human | no |
-| Data formats accepted | none |
-| Data processed | [Customer Accounts](#customer-accounts) |
-| Data stored | [Customer Accounts](#customer-accounts) |
-| Outgoing communication links | none |
-| Incoming communication links | [Auth Traffic](#auth-traffic), [LDAP Credential Check Traffic](#ldap-credential-check-traffic), [User Management Access](#user-management-access) |
 
 **Asset Rating**
 
@@ -3411,11 +3494,11 @@ External developer client
 
 ## Identified Data Breach Probabilities by Data Asset
 
-In total **77 potential risks** have been identified during the threat modeling process, distributed across **12 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
+In total **83 potential risks** have been identified during the threat modeling process, distributed across **12 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
 
 ### Build Job Config
 
-**Probable** · 6/9 unmitigated Risks · `build-job-config`
+**Probable** · 7/10 unmitigated Risks · `build-job-config`
 
 Data for customizing of the build job system.
 
@@ -3438,10 +3521,11 @@ Data for customizing of the build job system.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 6 remaining risks:
+This data asset has data breach potential because of 7 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Elevated**: [**Untrusted Deserialization** risk at **Jenkins Build Server**](#untrusted-deserialization) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Jenkins Build Server** by users of **External Development Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - Possible, **Medium**: [**Unchecked Deployment** risk at **External Development Client**](#unchecked-deployment) (Unchecked)
 - Possible, **Medium**: [**Unchecked Deployment** risk at **Jenkins Build Server**](#unchecked-deployment) (Unchecked)
 - Possible, **Elevated**: [**Unguarded Access from Internet** of **Jenkins Build Server** by **External Development Client** via **Jenkins Web-UI Access**](#unguarded-access-from-internet) (Unchecked)
@@ -3449,7 +3533,7 @@ This data asset has data breach potential because of 6 remaining risks:
 
 ### Client Application Code
 
-**Probable** · 25/34 unmitigated Risks · `client-application-code`
+**Probable** · 28/37 unmitigated Risks · `client-application-code`
 
 Angular and other client-side code delivered by the application.
 
@@ -3472,7 +3556,7 @@ Angular and other client-side code delivered by the application.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 25 remaining risks:
+This data asset has data breach potential because of 28 remaining risks:
 
 - Probable, **Medium**: [**Accidental Secret Leak(Git)** risk at **Git Repository**: _Git Leak Prevention_](#accidental-secret-leak) (Unchecked)
 - Probable, **Medium**: [**Code Backdooring** risk at **Git Repository**](#code-backdooring) (Unchecked)
@@ -3485,6 +3569,9 @@ This data asset has data breach potential because of 25 remaining risks:
 - Probable, **Elevated**: [**Missing File Validation** risk at **Apache Webserver**](#missing-file-validation) (Unchecked)
 - Probable, **Elevated**: [**Publicly Shared Cloud Snapshot (AMI)** risk at **Apache Webserver**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **Elevated**: [**Untrusted Deserialization** risk at **Jenkins Build Server**](#untrusted-deserialization) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Git Repository** by users of **External Development Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Git Repository** by users of **External Development Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Jenkins Build Server** by users of **External Development Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - Possible, **Elevated**: [**Long-Lived Credentials** risk at **Git Repository** used by **External Development Client** (long-lived-token)](#long-lived-credentials) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Apache Webserver** server-side web-requesting the target **Backoffice ERP System** via **ERP System Traffic**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Apache Webserver** server-side web-requesting the target **Identity Provider** via **Auth Credential Check Traffic**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -3502,7 +3589,7 @@ This data asset has data breach potential because of 25 remaining risks:
 
 ### Customer Accounts
 
-**Probable** · 32/50 unmitigated Risks · `customer-accounts`
+**Probable** · 35/53 unmitigated Risks · `customer-accounts`
 
 Customer Accounts (including transient credentials when entered for checking them)
 
@@ -3525,7 +3612,7 @@ Customer Accounts (including transient credentials when entered for checking the
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 32 remaining risks:
+This data asset has data breach potential because of 35 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -3542,6 +3629,9 @@ This data asset has data breach potential because of 32 remaining risks:
 - Probable, **High**: [**SQL/NoSQL-Injection** risk at **Backoffice ERP System** against database **Customer Contract Database** via **Database Traffic**](#sqlnosql-injection) (Unchecked)
 - Probable, **High**: [**XML External Entity (XXE)** risk at **Backoffice ERP System**](#xml-external-entity-xxe) (Unchecked)
 - Probable, **Elevated**: [**Untrusted Deserialization** risk at **Backoffice ERP System**](#untrusted-deserialization) (Accepted)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Backoffice ERP System** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Customer Contract Database** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **LDAP Auth Server** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - Possible, **Elevated**: [**Long-Lived Credentials** risk at **Backoffice ERP System** used by **Apache Webserver** (long-lived-token)](#long-lived-credentials) (Unchecked)
 - Possible, **Medium**: [**Long-Lived Credentials** risk at **Customer Contract Database** used by **Backoffice ERP System** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Medium**: [**Long-Lived Credentials** risk at **Identity Provider** used by **Apache Webserver** (credentials)](#long-lived-credentials) (Unchecked)
@@ -3599,7 +3689,7 @@ This data asset has data breach potential because of 9 remaining risks:
 
 ### Customer Contracts
 
-**Probable** · 25/33 unmitigated Risks · `customer-contracts`
+**Probable** · 26/34 unmitigated Risks · `customer-contracts`
 
 Customer Contracts (PDF)
 
@@ -3622,7 +3712,7 @@ Customer Contracts (PDF)
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 25 remaining risks:
+This data asset has data breach potential because of 26 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -3638,6 +3728,7 @@ This data asset has data breach potential because of 25 remaining risks:
 - Probable, **Elevated**: [**Publicly Shared Cloud Snapshot (AMI)** risk at **Apache Webserver**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **High**: [**XML External Entity (XXE)** risk at **Backoffice ERP System**](#xml-external-entity-xxe) (Unchecked)
 - Probable, **Elevated**: [**Untrusted Deserialization** risk at **Backoffice ERP System**](#untrusted-deserialization) (Accepted)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Backoffice ERP System** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - Possible, **Elevated**: [**Long-Lived Credentials** risk at **Backoffice ERP System** used by **Apache Webserver** (long-lived-token)](#long-lived-credentials) (Unchecked)
 - Possible, **Elevated**: [**Missing Authentication** covering communication link **NFS Filesystem Access** from **Backoffice ERP System** to **Contract File Server**](#missing-authentication) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Apache Webserver** server-side web-requesting the target **Backoffice ERP System** via **ERP System Traffic**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -3652,7 +3743,7 @@ This data asset has data breach potential because of 25 remaining risks:
 
 ### Customer Operational Data
 
-**Probable** · 25/35 unmitigated Risks · `customer-operational-data`
+**Probable** · 27/37 unmitigated Risks · `customer-operational-data`
 
 Customer Operational Data
 
@@ -3675,7 +3766,7 @@ Customer Operational Data
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 25 remaining risks:
+This data asset has data breach potential because of 27 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -3691,6 +3782,8 @@ This data asset has data breach potential because of 25 remaining risks:
 - Probable, **High**: [**SQL/NoSQL-Injection** risk at **Backoffice ERP System** against database **Customer Contract Database** via **Database Traffic**](#sqlnosql-injection) (Unchecked)
 - Probable, **High**: [**XML External Entity (XXE)** risk at **Backoffice ERP System**](#xml-external-entity-xxe) (Unchecked)
 - Probable, **Elevated**: [**Untrusted Deserialization** risk at **Backoffice ERP System**](#untrusted-deserialization) (Accepted)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Backoffice ERP System** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Customer Contract Database** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - Possible, **Elevated**: [**Long-Lived Credentials** risk at **Backoffice ERP System** used by **Apache Webserver** (long-lived-token)](#long-lived-credentials) (Unchecked)
 - Possible, **Medium**: [**Long-Lived Credentials** risk at **Customer Contract Database** used by **Backoffice ERP System** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Apache Webserver** server-side web-requesting the target **Backoffice ERP System** via **ERP System Traffic**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -3705,7 +3798,7 @@ This data asset has data breach potential because of 25 remaining risks:
 
 ### Database Customizing and Dumps
 
-**Probable** · 9/12 unmitigated Risks · `db-dumps`
+**Probable** · 10/13 unmitigated Risks · `db-dumps`
 
 Data for customizing of the DB system, which might include full database dumps.
 
@@ -3728,7 +3821,7 @@ Data for customizing of the DB system, which might include full database dumps.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 9 remaining risks:
+This data asset has data breach potential because of 10 remaining risks:
 
 - Probable, **Critical**: [**Example Individual Risk** at **Database**](#some-individual-risk-example) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening (AWS)** risk at **Application Network**: _CIS Benchmark for AWS_](#missing-cloud-hardening) (Unchecked)
@@ -3736,13 +3829,14 @@ This data asset has data breach potential because of 9 remaining risks:
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **WebApp and Backoffice Virtualization**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Publicly Shared Cloud Snapshot** risk at **Customer Contract Database**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **High**: [**SQL/NoSQL-Injection** risk at **Backoffice ERP System** against database **Customer Contract Database** via **Database Traffic**](#sqlnosql-injection) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Customer Contract Database** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - Possible, **Medium**: [**Long-Lived Credentials** risk at **Customer Contract Database** used by **Backoffice ERP System** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Medium**: [**Unencrypted Communication** named **Database Traffic** between **Backoffice ERP System** and **Customer Contract Database** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - Improbable, **Medium**: [**Mixed Targets on Shared Runtime** named **WebApp and Backoffice Virtualization** might enable attackers moving from one less valuable target to a more valuable one](#mixed-targets-on-shared-runtime) (Unchecked)
 
 ### ERP Customizing Data
 
-**Probable** · 8/12 unmitigated Risks · `erp-customizing`
+**Probable** · 9/13 unmitigated Risks · `erp-customizing`
 
 Data for customizing of the ERP system.
 
@@ -3765,20 +3859,21 @@ Data for customizing of the ERP system.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 8 remaining risks:
+This data asset has data breach potential because of 9 remaining risks:
 
 - Probable, **Elevated**: [**Missing Cloud Hardening (AWS)** risk at **Application Network**: _CIS Benchmark for AWS_](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **ERP DMZ**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **WebApp and Backoffice Virtualization**](#missing-cloud-hardening) (Unchecked)
 - Probable, **High**: [**XML External Entity (XXE)** risk at **Backoffice ERP System**](#xml-external-entity-xxe) (Unchecked)
 - Probable, **Elevated**: [**Untrusted Deserialization** risk at **Backoffice ERP System**](#untrusted-deserialization) (Accepted)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Backoffice ERP System** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - Possible, **Elevated**: [**Long-Lived Credentials** risk at **Backoffice ERP System** used by **Apache Webserver** (long-lived-token)](#long-lived-credentials) (Unchecked)
 - Improbable, **Medium**: [**Missing End User Identity Propagation** over communication link **ERP System Traffic** from **Apache Webserver** to **Backoffice ERP System**](#missing-identity-propagation) (Unchecked)
 - Improbable, **Medium**: [**Mixed Targets on Shared Runtime** named **WebApp and Backoffice Virtualization** might enable attackers moving from one less valuable target to a more valuable one](#mixed-targets-on-shared-runtime) (Unchecked)
 
 ### ERP Logs
 
-**Probable** · 13/20 unmitigated Risks · `erp-logs`
+**Probable** · 15/22 unmitigated Risks · `erp-logs`
 
 Logs generated by the ERP system.
 
@@ -3801,7 +3896,7 @@ Logs generated by the ERP system.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 13 remaining risks:
+This data asset has data breach potential because of 15 remaining risks:
 
 - Probable, **Critical**: [**Example Individual Risk** at **Database**](#some-individual-risk-example) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening (AWS)** risk at **Application Network**: _CIS Benchmark for AWS_](#missing-cloud-hardening) (Unchecked)
@@ -3811,6 +3906,8 @@ This data asset has data breach potential because of 13 remaining risks:
 - Probable, **High**: [**SQL/NoSQL-Injection** risk at **Backoffice ERP System** against database **Customer Contract Database** via **Database Traffic**](#sqlnosql-injection) (Unchecked)
 - Probable, **High**: [**XML External Entity (XXE)** risk at **Backoffice ERP System**](#xml-external-entity-xxe) (Unchecked)
 - Probable, **Elevated**: [**Untrusted Deserialization** risk at **Backoffice ERP System**](#untrusted-deserialization) (Accepted)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Backoffice ERP System** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Customer Contract Database** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - Possible, **Elevated**: [**Long-Lived Credentials** risk at **Backoffice ERP System** used by **Apache Webserver** (long-lived-token)](#long-lived-credentials) (Unchecked)
 - Possible, **Medium**: [**Long-Lived Credentials** risk at **Customer Contract Database** used by **Backoffice ERP System** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Medium**: [**Unencrypted Communication** named **Database Traffic** between **Backoffice ERP System** and **Customer Contract Database** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
@@ -3819,7 +3916,7 @@ This data asset has data breach potential because of 13 remaining risks:
 
 ### Marketing Material
 
-**Probable** · 15/21 unmitigated Risks · `marketing-material`
+**Probable** · 16/22 unmitigated Risks · `marketing-material`
 
 Website and marketing data to inform potential customers and generate new leads.
 
@@ -3842,7 +3939,7 @@ Website and marketing data to inform potential customers and generate new leads.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 15 remaining risks:
+This data asset has data breach potential because of 16 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Marketing CMS**](#container-base-image-backdooring) (Unchecked)
@@ -3850,6 +3947,7 @@ This data asset has data breach potential because of 15 remaining risks:
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **Web DMZ**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **WebApp and Backoffice Virtualization**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Untrusted Deserialization** risk at **Jenkins Build Server**](#untrusted-deserialization) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Jenkins Build Server** by users of **External Development Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - Possible, **Elevated**: [**Missing Authentication** covering communication link **CMS Content Traffic** from **Load Balancer** to **Marketing CMS**](#missing-authentication) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Apache Webserver** server-side web-requesting the target **Backoffice ERP System** via **ERP System Traffic**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Apache Webserver** server-side web-requesting the target **Identity Provider** via **Auth Credential Check Traffic**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -3862,7 +3960,7 @@ This data asset has data breach potential because of 15 remaining risks:
 
 ### Server Application Code
 
-**Probable** · 25/34 unmitigated Risks · `server-application-code`
+**Probable** · 28/37 unmitigated Risks · `server-application-code`
 
 API and other server-side code of the application.
 
@@ -3885,7 +3983,7 @@ API and other server-side code of the application.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 25 remaining risks:
+This data asset has data breach potential because of 28 remaining risks:
 
 - Probable, **Medium**: [**Accidental Secret Leak(Git)** risk at **Git Repository**: _Git Leak Prevention_](#accidental-secret-leak) (Unchecked)
 - Probable, **Medium**: [**Code Backdooring** risk at **Git Repository**](#code-backdooring) (Unchecked)
@@ -3898,6 +3996,9 @@ This data asset has data breach potential because of 25 remaining risks:
 - Probable, **Elevated**: [**Missing File Validation** risk at **Apache Webserver**](#missing-file-validation) (Unchecked)
 - Probable, **Elevated**: [**Publicly Shared Cloud Snapshot (AMI)** risk at **Apache Webserver**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **Elevated**: [**Untrusted Deserialization** risk at **Jenkins Build Server**](#untrusted-deserialization) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Git Repository** by users of **External Development Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Git Repository** by users of **External Development Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Jenkins Build Server** by users of **External Development Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - Possible, **Elevated**: [**Long-Lived Credentials** risk at **Git Repository** used by **External Development Client** (long-lived-token)](#long-lived-credentials) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Apache Webserver** server-side web-requesting the target **Backoffice ERP System** via **ERP System Traffic**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Apache Webserver** server-side web-requesting the target **Identity Provider** via **Auth Credential Check Traffic**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -3915,7 +4016,7 @@ This data asset has data breach potential because of 25 remaining risks:
 
 ### Some Internal Business Data
 
-**Probable** · 25/35 unmitigated Risks · `internal-business-data`
+**Probable** · 27/37 unmitigated Risks · `internal-business-data`
 
 Internal business data of the ERP system used unrelated to the customer-facing processes.
 
@@ -3938,7 +4039,7 @@ Internal business data of the ERP system used unrelated to the customer-facing p
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 25 remaining risks:
+This data asset has data breach potential because of 27 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -3954,6 +4055,8 @@ This data asset has data breach potential because of 25 remaining risks:
 - Probable, **High**: [**SQL/NoSQL-Injection** risk at **Backoffice ERP System** against database **Customer Contract Database** via **Database Traffic**](#sqlnosql-injection) (Unchecked)
 - Probable, **High**: [**XML External Entity (XXE)** risk at **Backoffice ERP System**](#xml-external-entity-xxe) (Unchecked)
 - Probable, **Elevated**: [**Untrusted Deserialization** risk at **Backoffice ERP System**](#untrusted-deserialization) (Accepted)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Backoffice ERP System** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
+- Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Customer Contract Database** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - Possible, **Elevated**: [**Long-Lived Credentials** risk at **Backoffice ERP System** used by **Apache Webserver** (long-lived-token)](#long-lived-credentials) (Unchecked)
 - Possible, **Medium**: [**Long-Lived Credentials** risk at **Customer Contract Database** used by **Backoffice ERP System** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Apache Webserver** server-side web-requesting the target **Backoffice ERP System** via **ERP System Traffic**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -4521,7 +4624,7 @@ Link to the LDAP auth server
 
 ## Risk Tracking
 
-**29 of 77 risks** are tracked in the model; the others are unchecked.
+**29 of 83 risks** are tracked in the model; the others are unchecked.
 
 | Risk | ID | Severity | Status | Date | Checked by | Ticket | Justification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -4572,6 +4675,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Some Individual Risk Example (_Individual risk category_) | `something-strange` | Repudiation | Some text describing the risk category... | Some text describing the detection logic... | Some text describing the risk assessment... |
 | Accidental Secret Leak | `accidental-secret-leak` | Information Disclosure | Sourcecode repositories (including their histories) as well as artifact registries can accidentally contain secrets like checked-in or packaged-in passwords, API tokens, certificates, crypto keys, etc. | In-scope sourcecode repositories and artifact registries. | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. |
 | Code Backdooring | `code-backdooring` | Tampering | For each build pipeline component Code Backdooring risks might arise where attackers compromise the build pipeline in order to let backdoored artifacts be shipped into production. Aside from direct code backdooring this includes backdooring of dependencies and even of more lower-level build infrastructure, like backdooring compilers (similar to what the XcodeGhost malware did) or dependencies. | In-scope development relevant technical assets which are either accessed by out-of-scope unmanaged developer clients and/or are directly accessed by any kind of internet-located (non-VPN) component or are themselves directly located on the internet. | The risk rating depends on the confidentiality and integrity rating of the code being handled and deployed as well as the placement/calling of this technical asset on/from the internet. |
+| Confused Deputy Agent | `confused-deputy-agent` | Elevation of Privilege | An AI agent that acts for its users but reaches data and tools with an identity of its own, a service account or a workload, can do for any user what the agent may do for all of them. The targets check the agent, not the user, so whatever a user asks for, or a prompt injection makes the agent ask for, is allowed. | In-scope ai-agent technical assets that act for users, through an incoming communication link with the identity _end-user_ or from a caller used by humans (other than devops links), and reach a technical asset (other than an llm) processing or storing data rated at least as confidential or critical with the identity _service-account_ or _workload_, either directly or through the tools of an mcp-server technical asset. | The risk rating depends on the sensitivity of the most sensitive technical asset the agent reaches with its own identity. The attack is likely when the agent takes untrusted input, and unlikely otherwise. |
 | Container Base Image Backdooring | `container-baseimage-backdooring` | Tampering | When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors. | In-scope technical assets running as containers. | The risk rating depends on the sensitivity of the technical asset itself and of the data assets. |
 | Container Platform Escape | `container-platform-escape` | Elevation of Privilege | Container platforms are especially interesting targets for attackers as they host big parts of a containerized runtime infrastructure. When not configured and operated with security best practices in mind, attackers might exploit a vulnerability inside an container and escape towards the platform as highly privileged users. These scenarios might give attackers capabilities to attack every other container as owning the container platform (via container escape attacks) equals to owning every container. | In-scope container platforms. | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. |
 | Cross-Account Takeover | `cross-account-takeover` | Elevation of Privilege | Cloud accounts, subscriptions, projects and VPCs isolate workloads and tenants from each other. Access from one of them into another (account A to account B) is granted by cross-account roles, trust policies or resource policies, and a misconfigured grant (too broad principals or rights, or no condition on the calling account) breaks that isolation. | Communication links into in-scope technical assets from technical assets in another cloud account, i.e. where the innermost trust boundaries of type network-cloud-provider around the source and the target differ. | The risk rating depends on the sensitivity of the target technical asset itself and of the data assets it processes and stores. The likelihood rises when the source or the target is multi-tenant, as another tenant can then try to abuse the cross-account access. |
@@ -4581,6 +4685,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | DoS-risky Access Across Trust-Boundary | `dos-risky-access-across-trust-boundary` | Denial of Service | Assets accessed across trust boundaries with critical or mission-critical availability rating are more prone to Denial-of-Service (DoS) risks. | In-scope technical assets (excluding load-balancer) with availability rating of critical or higher which have incoming data-flows across a network trust-boundary (excluding devops usage). | Matching technical assets with availability rating of critical or higher are at low risk. When the availability rating is mission-critical and neither a VPN nor IP filter for the incoming data-flow nor redundancy for the asset is applied, the risk-rating is considered medium. |
 | Denial of Service by Encryption Key Deletion | `encryption-key-deletion` | Denial of Service | Data in cloud storage encrypted with a key from a cloud key management service (like AWS KMS, Azure Key Vault or Google Cloud KMS) can only be decrypted as long as the key exists. Deleting the key, by mistake or by an attacker with enough rights, makes the data permanently unusable. | In-scope encrypted cloud technical assets (residing in cloud trust boundaries or tagged with cloud provider tags) storing data assets, which are either tagged as encrypted with a key from a cloud key management service (aws:kms, azure:keyvault, gcp:kms on the asset, a trust boundary around it or its shared runtime) or communicate with a cloud vault or hsm asset. Key stores themselves are excluded. | The risk rating depends on the availability rating of the technical asset itself and of the data assets stored, as the deletion destroys the data but does not disclose it. |
 | Excessive Agency | `excessive-agency` | Elevation of Privilege | An AI agent decides on its own which tools to call and with which arguments. An agent that can change critical systems, directly or through the tools of an MCP server, without a human approving the change, does whatever a prompt injection, a hallucination or a misunderstanding makes it do. | In-scope ai-agent technical assets with a non-readonly communication link to a technical asset (other than an llm) processing or storing data rated at least as critical in integrity, either directly or through the tools of an mcp-server technical asset. Agents and links tagged with _human-in-the-loop_ are skipped. | The risk rating depends on the integrity rating of the technical asset the agent can change. The attack is likely when the agent takes untrusted input, and unlikely otherwise. |
+| Human Use of Machine Identity | `human-use-of-machine-identity` | Repudiation | People who call a service with the account of a machine, like an administrator using the credentials of a service account or a client that ships with an API key of its own, act without an identity of theirs. The service cannot tell them apart, nor require a second factor or end their access when they leave, and the secret gets copied to wherever they work. | In-scope technical assets processing or storing data rated at least as confidential or critical with an incoming communication link that is not process-local, from a caller used by humans, whose identity is _service-account_ or _workload_. | The risk rating depends on the sensitivity of the data processed or stored by the target. The attack is likely, as secrets in the hands of people leak easily. |
 | Incomplete Model | `incomplete-model` | Information Disclosure | When the threat model contains unknown technologies or transfers data over unknown protocols, this is an indicator for an incomplete model. | All technical assets and communication links with technology type or protocol type specified as unknown. | low |
 | Insecure Control Protocol | `insecure-control-protocol` | Tampering | Most industrial control protocols, like Modbus, DNP3, S7comm, EtherNet/IP or PROFINET, were designed for closed networks: a controller or field device executes every command it receives, without checking who sent it or whether it was changed on the way. Anyone who can send packets to it can write setpoints and outputs, stop it or download a new program. | In-scope controllers (plc, rtu, safety-controller) and field-device technical assets with an incoming non-readonly communication link over an industrial control protocol without a secure variant in use (all of them except modbus-security, dnp3-encrypted and opc-ua-encrypted). | The risk rating depends on the integrity and availability of the controlled process, and is the highest for safety controllers. The attack is very likely when the sender is on the internet, likely when it is an IT asset, reaches IT or calls across a network trust boundary, and unlikely otherwise. |
 | LDAP-Injection | `ldap-injection` | Tampering | When an LDAP server is accessed LDAP-Injection risks might arise. The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed. | In-scope clients accessing LDAP servers via typical LDAP access protocols. | The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed. |
@@ -4612,6 +4717,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Search-Query Injection | `search-query-injection` | Tampering | When a search engine server is accessed Search-Query Injection risks might arise. | In-scope clients accessing search engine servers via typical search access protocols. | The risk rating depends on the sensitivity of the search engine server itself and of the data assets processed. |
 | Server-Side Request Forgery (SSRF) | `server-side-request-forgery` | Information Disclosure | When a server system (i.e. not a client) is accessing other server systems via typical web protocols Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might arise. | In-scope non-client systems accessing (using outgoing communication links) targets with either HTTP or HTTPS protocol. | The risk rating (low or medium) depends on the sensitivity of the data assets receivable via web protocols from targets within the same network trust-boundary as well on the sensitivity of the data assets receivable via web protocols from the target asset itself. Also for cloud-based environments the exploitation impact is at least medium, as cloud backend services can be attacked via SSRF. |
 | Service Registry Poisoning | `service-registry-poisoning` | Spoofing | When a service registry used for discovery of trusted service endpoints Service Registry Poisoning risks might arise. | In-scope service registries. | The risk rating depends on the sensitivity of the technical assets accessing the service registry as well as the data assets processed. |
+| Shared Machine Account | `shared-machine-account` | Elevation of Privilege | Several technical assets that call others with one service account, API key or workload identity share all of its permissions: each can do what any of them needs, and the targets cannot tell them apart. | In-scope technical assets with a communication link naming an _account_ that communication links of other technical assets name as well, with the identity _service-account_ or _workload_. Links that name no account are skipped. | The risk rating depends on the sensitivity of the data processed or stored by the targets of all links of the account. The attack is likely when the callers are in different trust boundaries, so that the compromise of one crosses into others, and unlikely otherwise. |
 | SQL/NoSQL-Injection | `sql-nosql-injection` | Tampering | When a database is accessed via database access protocols SQL/NoSQL-Injection risks might arise. The risk rating depends on the sensitivity technical asset itself and of the data assets processed. | Database accessed via typical database access protocols by in-scope clients. | The risk rating depends on the sensitivity of the data stored inside the database. |
 | Unauthenticated MCP Server | `unauthenticated-mcp-server` | Spoofing | An MCP server, or another server exposing tools to AI agents, acts on the systems behind its tools with its own permissions. When it does not authenticate its callers, anyone who can reach it can call those tools, and it cannot tell one agent or user from another to limit what each may do. | In-scope mcp-server technical assets with an incoming communication link without authentication that is not process-local, whose tools (the outgoing communication links) reach technical assets processing or storing data rated at least as confidential or critical. | The risk rating depends on the sensitivity of the technical assets the tools reach. The attack is very likely when the caller is on the internet, likely when it takes untrusted input or sits across a network trust boundary, and unlikely otherwise. |
 | Unchecked Deployment | `unchecked-deployment` | Tampering | For each build-pipeline component Unchecked Deployment risks might arise when the build-pipeline does not include established DevSecOps best-practices. DevSecOps best-practices scan as part of CI/CD pipelines for vulnerabilities in source- or byte-code, dependencies, container layers, and dynamically against running test systems. There are several open-source and commercial tools existing in the categories DAST, SAST, and IAST. | All development-relevant technical assets. | The risk rating depends on the highest rating of the technical assets and data assets processed by deployment-receiving targets. |

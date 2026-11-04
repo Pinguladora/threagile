@@ -217,6 +217,36 @@
     "most_relevant_communication_link_title": "Live Dashboard"
   },
   {
+    "category": "human-use-of-machine-identity",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eHuman Use of Machine Identity\u003c/b\u003e risk at \u003cb\u003eSCADA Server\u003c/b\u003e by users of \u003cb\u003eOffice Workstation\u003c/b\u003e (service-account)",
+    "synthetic_id": "human-use-of-machine-identity@scada-server@office-workstation\u003elive-dashboard",
+    "most_relevant_technical_asset": "scada-server",
+    "most_relevant_communication_link": "office-workstation\u003elive-dashboard",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "scada-server"
+    ],
+    "plain_title": "Human Use of Machine Identity risk at SCADA Server by users of Office Workstation (service-account)",
+    "category_title": "Human Use of Machine Identity",
+    "stride": "repudiation",
+    "function": "operations",
+    "cwe": 1390,
+    "references": [
+      "OWASP NHI10:2025 Human Use of NHI",
+      "OWASP ASI03:2026 Identity and Privilege Abuse"
+    ],
+    "action": "Personal Identities for People",
+    "mitigation": "Let people sign in with their own identity, through single sign-on with multi-factor authentication, and pass it on to the target, modelling the link with the identity \u003ci\u003eend-user\u003c/i\u003e. Where an administrator needs the permissions of a service, grant them for a limited time through a privileged access workflow that records who used them. Keep secrets of service accounts out of clients.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "SCADA Server",
+    "most_relevant_technical_asset_raa": 100,
+    "most_relevant_communication_link_title": "Live Dashboard"
+  },
+  {
     "category": "insecure-control-protocol",
     "risk_status": "unchecked",
     "severity": "elevated",

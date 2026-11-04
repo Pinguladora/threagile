@@ -1,0 +1,626 @@
+threagile_version: 1.0.0
+
+# Exercises the rules on machine identities: what they find and what they skip.
+
+title: Machine Identity Rules
+
+date: 2026-11-04
+
+author:
+  name: John Doe
+
+business_criticality: critical
+
+business_overview:
+  description: Machine identity rules test
+  images: []
+
+technical_overview:
+  description: Machine identity rules test
+  images: []
+
+data_assets:
+
+  Orders:
+    id: orders
+    description: Orders
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Orders of the customers
+
+  Catalog:
+    id: catalog
+    description: Catalog
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Public product catalog
+
+technical_assets:
+
+
+  Admin Laptop:
+    id: admin-laptop
+    description: Admin Laptop
+    type: external-entity
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: true
+    justification_out_of_scope: External
+    size: service
+    technology: desktop
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders, catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      DB Admin:
+        target: orders-db
+        description: DB Admin
+        protocol: jdbc-encrypted
+        authentication: credentials
+        identity: service-account
+        account: orders-db-owner
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: devops
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Admin Console:
+        target: shop-api
+        description: Admin Console
+        protocol: https
+        authentication: short-lived-token
+        identity: end-user
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: devops
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Catalog Upload:
+        target: catalog-service
+        description: Catalog Upload
+        protocol: https
+        authentication: long-lived-token
+        identity: service-account
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: devops
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+
+  Shop API:
+    id: shop-api
+    description: Shop API
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: web-service-rest
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders, catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Order Storage:
+        target: orders-db
+        description: Order Storage
+        protocol: jdbc-encrypted
+        authentication: credentials
+        identity: service-account
+        account: orders-db-owner
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Catalog Read:
+        target: catalog-service
+        description: Catalog Read
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        account: catalog-reader
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+
+  Orders DB:
+    id: orders-db
+    description: Orders DB
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: database
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: [orders]
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Catalog Service:
+    id: catalog-service
+    description: Catalog Service
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: web-service-rest
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Report Job:
+    id: report-job
+    description: Report Job
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: batch-processing
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Report Read:
+        target: orders-db
+        description: Report Read
+        protocol: jdbc-encrypted
+        authentication: short-lived-token
+        identity: workload
+        account: report-role
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Analytics Job:
+    id: analytics-job
+    description: Analytics Job
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: batch-processing
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Analytics Read:
+        target: orders-db
+        description: Analytics Read
+        protocol: jdbc-encrypted
+        authentication: short-lived-token
+        identity: workload
+        account: report-role
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Chat UI:
+    id: chat-ui
+    description: Chat UI
+    type: external-entity
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: true
+    justification_out_of_scope: External
+    size: service
+    technology: browser
+    tags: []
+    internet: true
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Chat:
+        target: support-agent
+        description: Chat
+        protocol: https
+        authentication: short-lived-token
+        identity: end-user
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Delegated Chat:
+        target: delegating-agent
+        description: Delegated Chat
+        protocol: https
+        authentication: short-lived-token
+        identity: end-user
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Support Agent:
+    id: support-agent
+    description: Support Agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: ai-agent
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Completion:
+        target: model
+        description: Completion
+        protocol: https
+        authentication: long-lived-token
+        identity: service-account
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Order Tools:
+        target: order-tools
+        description: Order Tools
+        protocol: https
+        authentication: short-lived-token
+        identity: end-user
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Order Tools:
+    id: order-tools
+    description: Order Tools
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: mcp-server
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Tool Order Read:
+        target: orders-db
+        description: Tool Order Read
+        protocol: jdbc-encrypted
+        authentication: credentials
+        identity: service-account
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Model:
+    id: model
+    description: Model
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: llm
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Delegating Agent:
+    id: delegating-agent
+    description: Delegating Agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: ai-agent
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Delegated Order Read:
+        target: orders-db
+        description: Delegated Order Read
+        protocol: jdbc-encrypted
+        authentication: short-lived-token
+        identity: end-user
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Scheduler:
+    id: scheduler
+    description: Scheduler
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: scheduler
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Nightly Run:
+        target: batch-agent
+        description: Nightly Run
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Batch Agent:
+    id: batch-agent
+    description: Batch Agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: ai-agent
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Batch Order Read:
+        target: orders-db
+        description: Batch Order Read
+        protocol: jdbc-encrypted
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+trust_boundaries:
+
+  Office Network:
+    id: office-network
+    description: The office
+    type: network-on-prem
+    tags: []
+    technical_assets_inside: [admin-laptop]
+    trust_boundaries_nested: []
+
+  Shop Network:
+    id: shop-network
+    description: The shop
+    type: network-cloud-security-group
+    tags: []
+    technical_assets_inside: [shop-api, orders-db, catalog-service, report-job, analytics-job, support-agent, order-tools, model, delegating-agent, scheduler, batch-agent]
+    trust_boundaries_nested: []
+
+shared_runtimes: {}
