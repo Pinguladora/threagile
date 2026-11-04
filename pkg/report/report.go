@@ -1456,21 +1456,7 @@ func (r *pdfReporter) createModelFailures(parsedModel *types.Model) {
 		r.pdfColorGray()
 		html.Write(5, "<br><br>No potential model failures have been identified.")
 	} else {
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(modelFailuresByCategory, true, types.CriticalSeverity)),
-			types.CriticalSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(modelFailuresByCategory, true, types.HighSeverity)),
-			types.HighSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(modelFailuresByCategory, true, types.ElevatedSeverity)),
-			types.ElevatedSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(modelFailuresByCategory, true, types.MediumSeverity)),
-			types.MediumSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(modelFailuresByCategory, true, types.LowSeverity)),
-			types.LowSeverity, true, true, false, true)
+		r.addCategoriesBySeverity(parsedModel, modelFailuresByCategory, true)
 	}
 
 	r.pdf.SetDrawColor(0, 0, 0)
@@ -1669,6 +1655,43 @@ func (r *pdfReporter) addCategories(parsedModel *types.Model, riskCategories []*
 	}
 }
 
+// addCategoriesBySeverity writes the risk categories of the risks with each severity, from
+// critical to low.
+func (r *pdfReporter) addCategoriesBySeverity(parsedModel *types.Model, risksByCategory map[string][]*types.Risk,
+	describeDescription bool,
+) {
+	for _, severity := range []types.RiskSeverity{
+		types.CriticalSeverity, types.HighSeverity, types.ElevatedSeverity, types.MediumSeverity, types.LowSeverity,
+	} {
+		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksByCategory, true, severity)),
+			severity, true, true, false, describeDescription)
+	}
+}
+
+// riskCategoriesSection writes a section with a title and the risk categories of its risks by
+// severity, or n/a when it has no risks.
+func (r *pdfReporter) riskCategoriesSection(parsedModel *types.Model, html gofpdf.HTMLBasicType, title string,
+	risksByCategory map[string][]*types.Risk, oldLeft float64, describeDescription bool,
+) {
+	if r.pdf.GetY() > 250 {
+		r.pageBreak()
+		r.pdf.SetY(36)
+	} else {
+		html.Write(5, "<br><br><br>")
+	}
+	r.pdf.SetFont("Helvetica", "", fontSizeBody)
+	r.pdf.SetTextColor(0, 0, 0)
+	html.Write(5, "<b>"+title+"</b>")
+	r.pdf.SetLeftMargin(15)
+	if len(risksByCategory) == 0 {
+		r.pdf.SetTextColor(150, 150, 150)
+		html.Write(5, "<br><br>n/a")
+	} else {
+		r.addCategoriesBySeverity(parsedModel, risksByCategory, describeDescription)
+	}
+	r.pdf.SetLeftMargin(oldLeft)
+}
+
 // pdfColorByKnownSeverity sets the text colour of a risk severity, and leaves it for an unknown one.
 func (r *pdfReporter) pdfColorByKnownSeverity(severity types.RiskSeverity) {
 	switch severity {
@@ -1763,133 +1786,13 @@ func (r *pdfReporter) createAssignmentByFunction(parsedModel *types.Model) {
 
 	oldLeft := r.leftMargin()
 
-	if r.pdf.GetY() > 250 {
-		r.pageBreak()
-		r.pdf.SetY(36)
-	} else {
-		html.Write(5, "<br><br><br>")
-	}
-	r.pdf.SetFont("Helvetica", "", fontSizeBody)
-	r.pdf.SetTextColor(0, 0, 0)
-	html.Write(5, "<b>"+types.BusinessSide.Title()+"</b>")
-	r.pdf.SetLeftMargin(15)
-	if len(risksBusinessSideFunction) == 0 {
-		r.pdf.SetTextColor(150, 150, 150)
-		html.Write(5, "<br><br>n/a")
-	} else {
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksBusinessSideFunction, true, types.CriticalSeverity)),
-			types.CriticalSeverity, true, true, false, false)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksBusinessSideFunction, true, types.HighSeverity)),
-			types.HighSeverity, true, true, false, false)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksBusinessSideFunction, true, types.ElevatedSeverity)),
-			types.ElevatedSeverity, true, true, false, false)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksBusinessSideFunction, true, types.MediumSeverity)),
-			types.MediumSeverity, true, true, false, false)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksBusinessSideFunction, true, types.LowSeverity)),
-			types.LowSeverity, true, true, false, false)
-	}
-	r.pdf.SetLeftMargin(oldLeft)
+	r.riskCategoriesSection(parsedModel, html, types.BusinessSide.Title(), risksBusinessSideFunction, oldLeft, false)
 
-	if r.pdf.GetY() > 250 {
-		r.pageBreak()
-		r.pdf.SetY(36)
-	} else {
-		html.Write(5, "<br><br><br>")
-	}
-	r.pdf.SetFont("Helvetica", "", fontSizeBody)
-	r.pdf.SetTextColor(0, 0, 0)
-	html.Write(5, "<b>"+types.Architecture.Title()+"</b>")
-	r.pdf.SetLeftMargin(15)
-	if len(risksArchitectureFunction) == 0 {
-		r.pdf.SetTextColor(150, 150, 150)
-		html.Write(5, "<br><br>n/a")
-	} else {
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksArchitectureFunction, true, types.CriticalSeverity)),
-			types.CriticalSeverity, true, true, false, false)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksArchitectureFunction, true, types.HighSeverity)),
-			types.HighSeverity, true, true, false, false)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksArchitectureFunction, true, types.ElevatedSeverity)),
-			types.ElevatedSeverity, true, true, false, false)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksArchitectureFunction, true, types.MediumSeverity)),
-			types.MediumSeverity, true, true, false, false)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksArchitectureFunction, true, types.LowSeverity)),
-			types.LowSeverity, true, true, false, false)
-	}
-	r.pdf.SetLeftMargin(oldLeft)
+	r.riskCategoriesSection(parsedModel, html, types.Architecture.Title(), risksArchitectureFunction, oldLeft, false)
 
-	if r.pdf.GetY() > 250 {
-		r.pageBreak()
-		r.pdf.SetY(36)
-	} else {
-		html.Write(5, "<br><br><br>")
-	}
-	r.pdf.SetFont("Helvetica", "", fontSizeBody)
-	r.pdf.SetTextColor(0, 0, 0)
-	html.Write(5, "<b>"+types.Development.Title()+"</b>")
-	r.pdf.SetLeftMargin(15)
-	if len(risksDevelopmentFunction) == 0 {
-		r.pdf.SetTextColor(150, 150, 150)
-		html.Write(5, "<br><br>n/a")
-	} else {
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksDevelopmentFunction, true, types.CriticalSeverity)),
-			types.CriticalSeverity, true, true, false, false)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksDevelopmentFunction, true, types.HighSeverity)),
-			types.HighSeverity, true, true, false, false)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksDevelopmentFunction, true, types.ElevatedSeverity)),
-			types.ElevatedSeverity, true, true, false, false)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksDevelopmentFunction, true, types.MediumSeverity)),
-			types.MediumSeverity, true, true, false, false)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksDevelopmentFunction, true, types.LowSeverity)),
-			types.LowSeverity, true, true, false, false)
-	}
-	r.pdf.SetLeftMargin(oldLeft)
+	r.riskCategoriesSection(parsedModel, html, types.Development.Title(), risksDevelopmentFunction, oldLeft, false)
 
-	if r.pdf.GetY() > 250 {
-		r.pageBreak()
-		r.pdf.SetY(36)
-	} else {
-		html.Write(5, "<br><br><br>")
-	}
-	r.pdf.SetFont("Helvetica", "", fontSizeBody)
-	r.pdf.SetTextColor(0, 0, 0)
-	html.Write(5, "<b>"+types.Operations.Title()+"</b>")
-	r.pdf.SetLeftMargin(15)
-	if len(risksOperationFunction) == 0 {
-		r.pdf.SetTextColor(150, 150, 150)
-		html.Write(5, "<br><br>n/a")
-	} else {
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksOperationFunction, true, types.CriticalSeverity)),
-			types.CriticalSeverity, true, true, false, false)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksOperationFunction, true, types.HighSeverity)),
-			types.HighSeverity, true, true, false, false)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksOperationFunction, true, types.ElevatedSeverity)),
-			types.ElevatedSeverity, true, true, false, false)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksOperationFunction, true, types.MediumSeverity)),
-			types.MediumSeverity, true, true, false, false)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksOperationFunction, true, types.LowSeverity)),
-			types.LowSeverity, true, true, false, false)
-	}
-	r.pdf.SetLeftMargin(oldLeft)
+	r.riskCategoriesSection(parsedModel, html, types.Operations.Title(), risksOperationFunction, oldLeft, false)
 
 	r.pdf.SetDrawColor(0, 0, 0)
 	r.pdf.SetDashPattern([]float64{}, 0)
@@ -1940,197 +1843,19 @@ func (r *pdfReporter) createSTRIDE(parsedModel *types.Model) {
 
 	oldLeft := r.leftMargin()
 
-	if r.pdf.GetY() > 250 {
-		r.pageBreak()
-		r.pdf.SetY(36)
-	} else {
-		html.Write(5, "<br><br><br>")
-	}
-	r.pdf.SetFont("Helvetica", "", fontSizeBody)
-	r.pdf.SetTextColor(0, 0, 0)
-	html.Write(5, "<b>"+types.Spoofing.Title()+"</b>")
-	r.pdf.SetLeftMargin(15)
-	if len(risksSTRIDESpoofing) == 0 {
-		r.pdf.SetTextColor(150, 150, 150)
-		html.Write(5, "<br><br>n/a")
-	} else {
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDESpoofing, true, types.CriticalSeverity)),
-			types.CriticalSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDESpoofing, true, types.HighSeverity)),
-			types.HighSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDESpoofing, true, types.ElevatedSeverity)),
-			types.ElevatedSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDESpoofing, true, types.MediumSeverity)),
-			types.MediumSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDESpoofing, true, types.LowSeverity)),
-			types.LowSeverity, true, true, false, true)
-	}
-	r.pdf.SetLeftMargin(oldLeft)
+	r.riskCategoriesSection(parsedModel, html, types.Spoofing.Title(), risksSTRIDESpoofing, oldLeft, true)
 
-	if r.pdf.GetY() > 250 {
-		r.pageBreak()
-		r.pdf.SetY(36)
-	} else {
-		html.Write(5, "<br><br><br>")
-	}
-	r.pdf.SetFont("Helvetica", "", fontSizeBody)
-	r.pdf.SetTextColor(0, 0, 0)
-	html.Write(5, "<b>"+types.Tampering.Title()+"</b>")
-	r.pdf.SetLeftMargin(15)
-	if len(risksSTRIDETampering) == 0 {
-		r.pdf.SetTextColor(150, 150, 150)
-		html.Write(5, "<br><br>n/a")
-	} else {
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDETampering, true, types.CriticalSeverity)),
-			types.CriticalSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDETampering, true, types.HighSeverity)),
-			types.HighSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDETampering, true, types.ElevatedSeverity)),
-			types.ElevatedSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDETampering, true, types.MediumSeverity)),
-			types.MediumSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDETampering, true, types.LowSeverity)),
-			types.LowSeverity, true, true, false, true)
-	}
-	r.pdf.SetLeftMargin(oldLeft)
+	r.riskCategoriesSection(parsedModel, html, types.Tampering.Title(), risksSTRIDETampering, oldLeft, true)
 
-	if r.pdf.GetY() > 250 {
-		r.pageBreak()
-		r.pdf.SetY(36)
-	} else {
-		html.Write(5, "<br><br><br>")
-	}
-	r.pdf.SetFont("Helvetica", "", fontSizeBody)
-	r.pdf.SetTextColor(0, 0, 0)
-	html.Write(5, "<b>"+types.Repudiation.Title()+"</b>")
-	r.pdf.SetLeftMargin(15)
-	if len(risksSTRIDERepudiation) == 0 {
-		r.pdf.SetTextColor(150, 150, 150)
-		html.Write(5, "<br><br>n/a")
-	} else {
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDERepudiation, true, types.CriticalSeverity)),
-			types.CriticalSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDERepudiation, true, types.HighSeverity)),
-			types.HighSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDERepudiation, true, types.ElevatedSeverity)),
-			types.ElevatedSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDERepudiation, true, types.MediumSeverity)),
-			types.MediumSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDERepudiation, true, types.LowSeverity)),
-			types.LowSeverity, true, true, false, true)
-	}
-	r.pdf.SetLeftMargin(oldLeft)
+	r.riskCategoriesSection(parsedModel, html, types.Repudiation.Title(), risksSTRIDERepudiation, oldLeft, true)
 
-	if r.pdf.GetY() > 250 {
-		r.pageBreak()
-		r.pdf.SetY(36)
-	} else {
-		html.Write(5, "<br><br><br>")
-	}
-	r.pdf.SetFont("Helvetica", "", fontSizeBody)
-	r.pdf.SetTextColor(0, 0, 0)
-	html.Write(5, "<b>"+types.InformationDisclosure.Title()+"</b>")
-	r.pdf.SetLeftMargin(15)
-	if len(risksSTRIDEInformationDisclosure) == 0 {
-		r.pdf.SetTextColor(150, 150, 150)
-		html.Write(5, "<br><br>n/a")
-	} else {
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEInformationDisclosure, true, types.CriticalSeverity)),
-			types.CriticalSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEInformationDisclosure, true, types.HighSeverity)),
-			types.HighSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEInformationDisclosure, true, types.ElevatedSeverity)),
-			types.ElevatedSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEInformationDisclosure, true, types.MediumSeverity)),
-			types.MediumSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEInformationDisclosure, true, types.LowSeverity)),
-			types.LowSeverity, true, true, false, true)
-	}
-	r.pdf.SetLeftMargin(oldLeft)
+	r.riskCategoriesSection(parsedModel, html, types.InformationDisclosure.Title(), risksSTRIDEInformationDisclosure,
+		oldLeft, true)
 
-	if r.pdf.GetY() > 250 {
-		r.pageBreak()
-		r.pdf.SetY(36)
-	} else {
-		html.Write(5, "<br><br><br>")
-	}
-	r.pdf.SetFont("Helvetica", "", fontSizeBody)
-	r.pdf.SetTextColor(0, 0, 0)
-	html.Write(5, "<b>"+types.DenialOfService.Title()+"</b>")
-	r.pdf.SetLeftMargin(15)
-	if len(risksSTRIDEDenialOfService) == 0 {
-		r.pdf.SetTextColor(150, 150, 150)
-		html.Write(5, "<br><br>n/a")
-	} else {
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEDenialOfService, true, types.CriticalSeverity)),
-			types.CriticalSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEDenialOfService, true, types.HighSeverity)),
-			types.HighSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEDenialOfService, true, types.ElevatedSeverity)),
-			types.ElevatedSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEDenialOfService, true, types.MediumSeverity)),
-			types.MediumSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEDenialOfService, true, types.LowSeverity)),
-			types.LowSeverity, true, true, false, true)
-	}
-	r.pdf.SetLeftMargin(oldLeft)
+	r.riskCategoriesSection(parsedModel, html, types.DenialOfService.Title(), risksSTRIDEDenialOfService, oldLeft, true)
 
-	if r.pdf.GetY() > 250 {
-		r.pageBreak()
-		r.pdf.SetY(36)
-	} else {
-		html.Write(5, "<br><br><br>")
-	}
-	r.pdf.SetFont("Helvetica", "", fontSizeBody)
-	r.pdf.SetTextColor(0, 0, 0)
-	html.Write(5, "<b>"+types.ElevationOfPrivilege.Title()+"</b>")
-	r.pdf.SetLeftMargin(15)
-	if len(risksSTRIDEElevationOfPrivilege) == 0 {
-		r.pdf.SetTextColor(150, 150, 150)
-		html.Write(5, "<br><br>n/a")
-	} else {
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEElevationOfPrivilege, true, types.CriticalSeverity)),
-			types.CriticalSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEElevationOfPrivilege, true, types.HighSeverity)),
-			types.HighSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEElevationOfPrivilege, true, types.ElevatedSeverity)),
-			types.ElevatedSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEElevationOfPrivilege, true, types.MediumSeverity)),
-			types.MediumSeverity, true, true, false, true)
-		r.addCategories(parsedModel,
-			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEElevationOfPrivilege, true, types.LowSeverity)),
-			types.LowSeverity, true, true, false, true)
-	}
-	r.pdf.SetLeftMargin(oldLeft)
+	r.riskCategoriesSection(parsedModel, html, types.ElevationOfPrivilege.Title(), risksSTRIDEElevationOfPrivilege,
+		oldLeft, true)
 
 	r.pdf.SetDrawColor(0, 0, 0)
 	r.pdf.SetDashPattern([]float64{}, 0)
