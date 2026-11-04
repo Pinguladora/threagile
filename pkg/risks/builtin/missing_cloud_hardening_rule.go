@@ -368,13 +368,7 @@ func (r *MissingCloudHardeningRule) createCloudHardeningRisk(id, title, prefix, 
 		fullTitle += ": <u>" + details + "</u>"
 	}
 
-	impact := types.MediumImpact
-	if confidentiality >= types.Confidential || integrity >= types.Critical || availability >= types.Critical {
-		impact = types.HighImpact
-	}
-	if confidentiality == types.StrictlyConfidential || integrity == types.MissionCritical || availability == types.MissionCritical {
-		impact = types.VeryHighImpact
-	}
+	impact := cloudRiskImpact(confidentiality, integrity, availability)
 
 	risk := &types.Risk{
 		CategoryId:                  r.Category().ID,
