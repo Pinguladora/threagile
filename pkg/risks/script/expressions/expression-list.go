@@ -36,7 +36,7 @@ func (what *ExpressionList) ParseExpression(script map[string]any) (common.Expre
 			return nil, script, fmt.Errorf("failed to parse expression: unexpected keyword %q", key)
 		}
 
-		return newExpression().ParseAny(value) //nolint:wrapcheck // only dispatches to the expression of the keyword
+		return newExpression().ParseAny(value)
 	}
 
 	return what, nil, nil

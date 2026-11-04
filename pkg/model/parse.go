@@ -210,7 +210,7 @@ func parseDataAsset(parsedModel *types.Model, title string, asset input.DataAsse
 	}
 	tags, err := parsedModel.CheckTags(lowerCaseAndTrim(asset.Tags), "data asset '"+title+"'")
 	if err != nil {
-		return nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+		return nil, err
 	}
 	return &types.DataAsset{
 		Id:                     id,
@@ -323,7 +323,7 @@ func (parser *technicalAssetParser) parseTechnicalAsset(
 	technicalAsset.Tags, err = parser.parsedModel.CheckTags(lowerCaseAndTrim(asset.Tags),
 		fmt.Sprintf("technical asset %q", title))
 	if err != nil {
-		return nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+		return nil, err
 	}
 	return technicalAsset, nil
 }
@@ -340,7 +340,7 @@ func appendCheckedDataAssets(
 
 		err := parsedModel.CheckDataAssetTargetExists(referencedAsset, where)
 		if err != nil {
-			return nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+			return nil, err
 		}
 		list = append(list, referencedAsset)
 	}
@@ -478,7 +478,7 @@ func (parser *technicalAssetParser) parseCommunicationLink(
 	link.Tags, err = parser.parsedModel.CheckTags(lowerCaseAndTrim(commLink.Tags),
 		"communication link '"+commLinkTitle+"' of technical asset '"+title+"'")
 	if err != nil {
-		return nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+		return nil, err
 	}
 	return link, nil
 }
@@ -539,7 +539,7 @@ func appendLinkDataAssets(
 
 		err := parsedModel.CheckDataAssetTargetExists(referencedAsset, where)
 		if err != nil {
-			return nil, nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+			return nil, nil, err
 		}
 		list = append(list, referencedAsset)
 
@@ -645,7 +645,7 @@ func parseTrustBoundaries(parsedModel *types.Model, modelInput *input.Model) err
 		}
 	}
 	nestingError := parsedModel.CheckNestedTrustBoundariesExisting()
-	return nestingError //nolint:wrapcheck // the check names the model element; its message is what users see
+	return nestingError
 }
 
 func parseTrustBoundary(
@@ -671,7 +671,7 @@ func parseTrustBoundary(
 	}
 	tags, err := parsedModel.CheckTags(lowerCaseAndTrim(boundary.Tags), fmt.Sprintf("trust boundary %q", title))
 	if err != nil {
-		return nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+		return nil, err
 	}
 	trustBoundary := &types.TrustBoundary{
 		Id:                    id,
@@ -745,14 +745,14 @@ func parseSharedRuntime(
 			assetId := parsedRunningAsset
 			err := parsedModel.CheckTechnicalAssetExists(assetId, "shared runtime '"+title+"'", false)
 			if err != nil {
-				return nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+				return nil, err
 			}
 			technicalAssetsRunning[i] = assetId
 		}
 	}
 	tags, err := parsedModel.CheckTags(lowerCaseAndTrim(inputRuntime.Tags), "shared runtime '"+title+"'")
 	if err != nil {
-		return nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+		return nil, err
 	}
 	sharedRuntime := &types.SharedRuntime{
 		Id:                     id,
@@ -957,7 +957,7 @@ func parseDataBreachTechnicalAssets(
 			err := parsedModel.CheckTechnicalAssetExists(assetId,
 				fmt.Sprintf("data breach technical assets of individual risk %q", title), false)
 			if err != nil {
-				return nil, err //nolint:wrapcheck // the check names the model element; its message is what users see
+				return nil, err
 			}
 			dataBreachTechnicalAssetIDs[i] = assetId
 		}
@@ -1010,7 +1010,7 @@ func checkCommunicationLinkTargets(parsedModel *types.Model) error {
 			err := parsedModel.CheckTechnicalAssetExists(commLink.TargetId,
 				"communication link '"+commLink.Title+"' of technical asset '"+technicalAsset.Title+"'", false)
 			if err != nil {
-				return err //nolint:wrapcheck // the check names the model element; its message is what users see
+				return err
 			}
 		}
 	}

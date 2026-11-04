@@ -81,12 +81,12 @@ func evalComparison(
 	// the errors of the values pass on unwrapped, as in the other expressions: their literals tell where they failed
 	firstValue, errorItemLiteral, itemError := first.EvalAny(scope)
 	if itemError != nil {
-		return nil, errorItemLiteral, itemError //nolint:wrapcheck // see above
+		return nil, errorItemLiteral, itemError
 	}
 
 	secondValue, errorInLiteral, evalError := second.EvalAny(scope)
 	if evalError != nil {
-		return nil, errorInLiteral, evalError //nolint:wrapcheck // see above
+		return nil, errorInLiteral, evalError
 	}
 
 	compareValue, compareError := common.Compare(firstValue, secondValue, as)

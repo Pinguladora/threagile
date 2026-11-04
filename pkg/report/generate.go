@@ -46,7 +46,7 @@ func (c *GenerateCommands) Defaults() *GenerateCommands {
 }
 
 // reportConfigReader is the part of the configuration that the report writers read.
-type reportConfigReader interface { //nolint:interfacebloat // a flat list of config getters; splitting adds nothing
+type reportConfigReader interface {
 	GetBuildTimestamp() string
 	GetThreagileVersion() string
 
