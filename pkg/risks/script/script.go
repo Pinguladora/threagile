@@ -111,8 +111,7 @@ func (what *Script) ParseCategoryFromData(text []byte) (*Script, error) {
 
 func (what *Script) ParseCategory(script map[string]any) (*Script, error) {
 	for key, value := range script {
-		switch strings.ToLower(key) {
-		case common.Risk:
+		if strings.ToLower(key) == common.Risk {
 			switch castValue := value.(type) {
 			case map[string]any:
 				return what.ParseScript(castValue)
@@ -289,8 +288,7 @@ func (what *Script) matchRisk(outerScope *common.Scope, techAsset common.Value) 
 		return common.EmptyBoolValue(), "", nil
 	}
 
-	switch boolValue := scope.GetReturnValue().(type) {
-	case *common.BoolValue:
+	if boolValue, ok := scope.GetReturnValue().(*common.BoolValue); ok {
 		return boolValue, "", nil
 	}
 
