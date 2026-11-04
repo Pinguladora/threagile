@@ -131,7 +131,8 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 			gvFile = tmpFileGV.Name()
 			defer func() { _ = os.Remove(gvFile) }()
 		}
-		dotFile, err := WriteDataFlowDiagramGraphvizDOT(readResult.ParsedModel, gvFile, diagramDPI, config.GetAddModelTitle(), config.GetAddLegend(), progressReporter)
+		dotFile, err := WriteDataFlowDiagramGraphvizDOT(readResult.ParsedModel, gvFile, diagramDPI,
+			config.GetAddModelTitle(), config.GetAddLegend(), progressReporter)
 		if err != nil {
 			return fmt.Errorf("error while generating data flow diagram: %w", err)
 		}
@@ -176,7 +177,8 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 	// technical assets json
 	if commands.TechnicalAssetsJSON {
 		progressReporter.Info("Writing technical assets json")
-		err := WriteTechnicalAssetsJSON(readResult.ParsedModel, filepath.Join(config.GetOutputFolder(), config.GetJsonTechnicalAssetsFilename()))
+		err := WriteTechnicalAssetsJSON(readResult.ParsedModel,
+			filepath.Join(config.GetOutputFolder(), config.GetJsonTechnicalAssetsFilename()))
 		if err != nil {
 			return fmt.Errorf("error while writing technical assets json: %w", err)
 		}
@@ -203,7 +205,8 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 	// risks Excel
 	if commands.RisksExcel {
 		progressReporter.Info("Writing risks excel")
-		err := WriteRisksExcelToFile(readResult.ParsedModel, filepath.Join(config.GetOutputFolder(), config.GetExcelRisksFilename()), config)
+		err := WriteRisksExcelToFile(readResult.ParsedModel,
+			filepath.Join(config.GetOutputFolder(), config.GetExcelRisksFilename()), config)
 		if err != nil {
 			return err
 		}
@@ -212,7 +215,8 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 	// tags Excel
 	if commands.TagsExcel {
 		progressReporter.Info("Writing tags excel")
-		err := WriteTagsExcelToFile(readResult.ParsedModel, filepath.Join(config.GetOutputFolder(), config.GetExcelTagsFilename()), config)
+		err := WriteTagsExcelToFile(readResult.ParsedModel,
+			filepath.Join(config.GetOutputFolder(), config.GetExcelTagsFilename()), config)
 		if err != nil {
 			return err
 		}

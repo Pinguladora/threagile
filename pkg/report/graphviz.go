@@ -69,7 +69,8 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 		dotContent.WriteString("} \n")
 
 		dotContent.WriteString("subgraph cluster_fill_legend { \n")
-		dotContent.WriteString("  label=\"Shape fill legend (darker for physical machines, brighter for container and even more brighter for serverless\"; \n")
+		dotContent.WriteString("  label=\"Shape fill legend (darker for physical machines, brighter for container and even " +
+			"more brighter for serverless\"; \n")
 		dotContent.WriteString("  color=\"lightgrey\"; \n")
 		dotContent.WriteString("  style=\"dashed\"; \n")
 		dotContent.WriteString(makeLegendNode("invalid_item",
@@ -118,7 +119,8 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 		case "ortho":
 			// the default
 		default:
-			return nil, fmt.Errorf("unknown value for diagram_tweak_suppress_edge_labels (spline, polyline, ortho, curved, false): %s", parsedModel.DiagramTweakEdgeLayout)
+			return nil, fmt.Errorf("unknown value for diagram_tweak_suppress_edge_labels "+
+				"(spline, polyline, ortho, curved, false): %s", parsedModel.DiagramTweakEdgeLayout)
 		}
 	}
 	rankdir := "TB"
@@ -152,7 +154,8 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 
 	// Trust Boundaries ===============================================================================
 	subgraphSnippetsById := make(map[string]string)
-	// first create them in memory (see the link replacement below for nested trust boundaries) - otherwise in Go ranging over map is random order
+	// first create them in memory (see the link replacement below for nested trust boundaries) - otherwise in Go
+	// ranging over map is random order
 	// range over them in sorted (hence re-producible) way:
 	keys := make([]string, 0)
 	for k := range parsedModel.TrustBoundaries {
@@ -168,7 +171,8 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 				snippet.WriteString("\n subgraph cluster_space_boundary_for_layout_only_1" + hash(trustBoundary.Id) + " {\n")
 				snippet.WriteString(`	graph [
                                               dpi=` + strconv.Itoa(dpi) + `
-											  label=<<table border="0" cellborder="0" cellpadding="0" bgcolor="#FFFFFF55"><tr><td><b> </b></td></tr></table>>
+											  label=<<table border="0" cellborder="0" cellpadding="0" bgcolor="#FFFFFF55"><tr><td><b> ` +
+					`</b></td></tr></table>>
 											  fontsize="21"
 											  style="invis"
 											  color="green"
@@ -179,7 +183,8 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 											];`)
 			}
 			snippet.WriteString("\n subgraph cluster_" + hash(trustBoundary.Id) + " {\n")
-			color, fontColor, bgColor, style, fontname := rgbHexColorTwilight(), rgbHexColorTwilight() /*"#550E0C"*/, "#FAFAFA", "dashed", "Verdana"
+			color, fontColor, bgColor, style, fontname := rgbHexColorTwilight(), rgbHexColorTwilight() /*"#550E0C"*/, "#FAFAFA",
+				"dashed", "Verdana"
 			penWidth := 4.5
 			if len(trustBoundary.TrustBoundariesNested) > 0 {
 				penWidth = 5.5
@@ -258,7 +263,8 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 	}
 
 	// Technical Assets ===============================================================================
-	// first create them in memory (see the link replacement below for nested trust boundaries) - otherwise in Go ranging over map is random order
+	// first create them in memory (see the link replacement below for nested trust boundaries) - otherwise in Go
+	// ranging over map is random order
 	// range over them in sorted (hence re-producible) way:
 	// Convert map to slice of values:
 	var techAssets []*types.TechnicalAsset
@@ -271,7 +277,7 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 		dotContent.WriteString("\n")
 	}
 
-	// Data Flows (Technical Communication Links) ===============================================================================
+	// Data Flows (Technical Communication Links) =========================================================================
 	for _, technicalAsset := range techAssets {
 		for _, dataFlow := range technicalAsset.CommunicationLinks {
 			sourceId := technicalAsset.Id
@@ -290,9 +296,11 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 
 			dotContent.WriteString("\n")
 			dotContent.WriteString("  " + hash(sourceId) + " -> " + hash(targetId) +
-				` [` + arrowColor + ` ` + arrowStyle + tweaks + ` constraint=` + strconv.FormatBool(dataFlow.DiagramTweakConstraint) + ` `)
+				` [` + arrowColor + ` ` + arrowStyle + tweaks + ` constraint=` +
+				strconv.FormatBool(dataFlow.DiagramTweakConstraint) + ` `)
 			if !parsedModel.DiagramTweakSuppressEdgeLabels {
-				dotContent.WriteString(` xlabel="` + encode(dataFlow.Protocol.String()) + `" fontcolor="` + determineLabelColor(dataFlow, parsedModel) + `" `)
+				dotContent.WriteString(` xlabel="` + encode(dataFlow.Protocol.String()) + `" fontcolor="` +
+					determineLabelColor(dataFlow, parsedModel) + `" `)
 			}
 			dotContent.WriteString(" ];\n")
 		}
@@ -328,7 +336,11 @@ func makeLegendNode(id, title, compartmentBorder, labelColor, shape, borderLineS
 	shapeBorderColor string,
 ) string {
 	return "  " + id + ` [
-label=<<table border="0" cellborder="` + compartmentBorder + `" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="` + DarkBlue + `">list of technologies` + `</font><br/><font point-size="15" color="` + LightGray + `">technical asset size</font></td></tr><tr><td><b><font color="` + labelColor + `">` + encode(title) + `</font></b><br/></td></tr><tr><td>attacker attractiveness level</td></tr></table>>
+label=<<table border="0" cellborder="` + compartmentBorder +
+		`" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="` + DarkBlue + `">list of technologies` +
+		`</font><br/><font point-size="15" color="` + LightGray +
+		`">technical asset size</font></td></tr><tr><td><b><font color="` + labelColor + `">` + encode(title) +
+		`</font></b><br/></td></tr><tr><td>attacker attractiveness level</td></tr></table>>
 shape=` + shape + ` style="` + borderLineStyle + `,filled" penwidth="` + borderPenWidth +
 		`" fillcolor="` + shapeFillColor + `"
 peripheries=1
@@ -439,7 +451,9 @@ func determineArrowColor(cl *types.CommunicationLink, parsedModel *types.Model) 
 	// This duplicates the risk logic; the generated risks could determine the colour instead.
 	if len(cl.DataAssetsSent) == 0 && len(cl.DataAssetsReceived) == 0 ||
 		cl.Protocol == types.UnknownProtocol {
-		return Pink // pink, because it's strange when too many technical communication links transfer no data... some ok, but many in a diagram ist a sign of model forgery...
+		// pink, because it's strange when too many technical communication links transfer no data...
+		// some ok, but many in a diagram ist a sign of model forgery...
+		return Pink
 	}
 	switch {
 	case cl.Usage == types.DevOps:
@@ -496,7 +510,8 @@ func makeDiagramSameRankNodeTweaks(parsedModel *types.Model) (string, error) {
 						return "", fmt.Errorf("error while checking technical asset existence: %w", err)
 					}
 					if len(parsedModel.GetTechnicalAssetTrustBoundaryId(parsedModel.TechnicalAssets[id])) > 0 {
-						return "", fmt.Errorf("technical assets (referenced in same rank diagram tweak) are inside trust boundaries: %v", parsedModel.DiagramTweakSameRankAssets)
+						return "", fmt.Errorf("technical assets (referenced in same rank diagram tweak) "+
+							"are inside trust boundaries: %v", parsedModel.DiagramTweakSameRankAssets)
 					}
 					tweak += " " + hash(id) + "; "
 				}
@@ -648,7 +663,8 @@ func makeDataAssetNode(parsedModel *types.Model, dataAsset *types.DataAsset) str
 	if !isDataBreachPotentialStillAtRisk(parsedModel, dataAsset) {
 		color = Gray // since black is too dark here as fill color
 	}
-	return "  " + hash(dataAsset.Id) + ` [ label=<<b>` + encode(dataAsset.Title) + `</b>> penwidth="3.0" style="filled" fillcolor="` + color + `" color="` + color + "\"\n  ]; "
+	return "  " + hash(dataAsset.Id) + ` [ label=<<b>` + encode(dataAsset.Title) +
+		`</b>> penwidth="3.0" style="filled" fillcolor="` + color + `" color="` + color + "\"\n  ]; "
 }
 
 func makeTechAssetNode(parsedModel *types.Model, technicalAsset *types.TechnicalAsset, simplified bool) string {
@@ -706,7 +722,8 @@ func makeTechAssetNode(parsedModel *types.Model, technicalAsset *types.Technical
 	if technicalAsset.OutOfScope {
 		attackerAttractivenessLabel = "<font point-size=\"15\" color=\"#603112\">RAA: out of scope</font>"
 	} else {
-		attackerAttractivenessLabel = "<font point-size=\"15\" color=\"#603112\">RAA: " + fmt.Sprintf("%.0f", raa) + " %</font>"
+		attackerAttractivenessLabel = "<font point-size=\"15\" color=\"#603112\">RAA: " + fmt.Sprintf("%.0f", raa) +
+			" %</font>"
 	}
 
 	compartmentBorder := "0"
@@ -721,7 +738,9 @@ label=<<table border="0" cellborder="` + compartmentBorder +
 		`</font><br/><font point-size="15" color="` + LightGray + `">` + technicalAsset.Size.String() +
 		`</font></td></tr><tr><td><b><font color="` + determineTechnicalAssetLabelColor(technicalAsset, parsedModel) + `">` +
 		encode(title) + `</font></b><br/></td></tr><tr><td>` + attackerAttractivenessLabel + `</td></tr></table>>
-shape=` + shape + ` style="` + determineShapeBorderLineStyle(technicalAsset) + `,` + determineShapeStyle(technicalAsset) + `" penwidth="` + determineShapeBorderPenWidth(technicalAsset, parsedModel) + `" fillcolor="` + determineShapeFillColor(technicalAsset, parsedModel) + `"
+shape=` + shape + ` style="` + determineShapeBorderLineStyle(technicalAsset) + `,` +
+		determineShapeStyle(technicalAsset) + `" penwidth="` + determineShapeBorderPenWidth(technicalAsset, parsedModel) +
+		`" fillcolor="` + determineShapeFillColor(technicalAsset, parsedModel) + `"
 peripheries=` + strconv.Itoa(determineShapePeripheries(technicalAsset)) + `
 color="` + determineShapeBorderColor(technicalAsset, parsedModel) + "\"\n  ]; "
 }
