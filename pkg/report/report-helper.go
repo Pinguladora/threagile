@@ -98,7 +98,7 @@ func totalRiskCount(parsedModel *types.Model) int {
 }
 
 func sortedTechnicalAssetsByRAAAndTitle(parsedModel *types.Model) []*types.TechnicalAsset {
-	assets := make([]*types.TechnicalAsset, 0)
+	assets := make([]*types.TechnicalAsset, 0, len(parsedModel.TechnicalAssets))
 	for _, asset := range parsedModel.TechnicalAssets {
 		assets = append(assets, asset)
 	}
@@ -107,7 +107,7 @@ func sortedTechnicalAssetsByRAAAndTitle(parsedModel *types.Model) []*types.Techn
 }
 
 func sortedKeysOfQuestions(parsedModel *types.Model) []string {
-	keys := make([]string, 0)
+	keys := make([]string, 0, len(parsedModel.Questions))
 	for k := range parsedModel.Questions {
 		keys = append(keys, k)
 	}
@@ -128,7 +128,7 @@ func filteredBySeverity(parsedModel *types.Model, severity types.RiskSeverity) [
 }
 
 func sortedTechnicalAssetsByRiskSeverityAndTitle(parsedModel *types.Model) []*types.TechnicalAsset {
-	assets := make([]*types.TechnicalAsset, 0)
+	assets := make([]*types.TechnicalAsset, 0, len(parsedModel.TechnicalAssets))
 	for _, asset := range parsedModel.TechnicalAssets {
 		assets = append(assets, asset)
 	}

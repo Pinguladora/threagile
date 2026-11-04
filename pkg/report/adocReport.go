@@ -1693,7 +1693,7 @@ func joinedOrNoneString(strs []string, noneValue string) string {
 }
 
 func dataAssetListTitleJoinOrNone(assets []*types.DataAsset, noneValue string) string {
-	var dataAssetTitles []string
+	dataAssetTitles := make([]string, 0, len(assets))
 	for _, dataAsset := range assets {
 		dataAssetTitles = append(dataAssetTitles, dataAsset.Title)
 	}
@@ -1701,7 +1701,7 @@ func dataAssetListTitleJoinOrNone(assets []*types.DataAsset, noneValue string) s
 }
 
 func technicalAssetTitleOrNone(links []*types.TechnicalAsset, noneValue string) string {
-	var titles []string
+	titles := make([]string, 0, len(links))
 	for _, asset := range links {
 		titles = append(titles, asset.Title)
 	}
@@ -1709,7 +1709,7 @@ func technicalAssetTitleOrNone(links []*types.TechnicalAsset, noneValue string) 
 }
 
 func dataFormatTitleJoinOrNone(assets []types.DataFormat, noneValue string) string {
-	var dataAssetTitles []string
+	dataAssetTitles := make([]string, 0, len(assets))
 	for _, dataFormat := range assets {
 		dataAssetTitles = append(dataAssetTitles, dataFormat.Title())
 	}
@@ -1717,7 +1717,7 @@ func dataFormatTitleJoinOrNone(assets []types.DataFormat, noneValue string) stri
 }
 
 func communicationLinkTitleOrNone(links []*types.CommunicationLink, noneValue string) string {
-	var titles []string
+	titles := make([]string, 0, len(links))
 	for _, link := range links {
 		titles = append(titles, link.Title)
 	}
