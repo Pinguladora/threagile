@@ -52,7 +52,7 @@ func (r *MissingNetworkSegmentationRule) GenerateRisks(input *types.Model) ([]*t
 	risks := make([]*types.Risk, 0)
 	// first create them in memory (see the link replacement below for nested trust boundaries) - otherwise in Go ranging over map is random order
 	// range over them in sorted (hence re-producible) way:
-	keys := make([]string, 0)
+	keys := make([]string, 0, len(input.TechnicalAssets))
 	for k := range input.TechnicalAssets {
 		keys = append(keys, k)
 	}
