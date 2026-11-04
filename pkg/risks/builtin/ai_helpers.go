@@ -21,6 +21,8 @@ const (
 	owaspAgenticPrivilegeAbuse        = "OWASP ASI03:2026 Identity and Privilege Abuse"
 	owaspAgenticSupplyChain           = "OWASP ASI04:2026 Agentic Supply Chain Vulnerabilities"
 	owaspAgenticMemoryPoisoning       = "OWASP ASI06:2026 Memory and Context Poisoning"
+	owaspAgenticInterAgent            = "OWASP ASI07:2026 Insecure Inter-Agent Communication"
+	owaspAgenticCascadingFailures     = "OWASP ASI08:2026 Cascading Failures"
 	owaspAgenticRogueAgents           = "OWASP ASI10:2026 Rogue Agents"
 	maestroFoundationModels           = "MAESTRO Layer 1: Foundation Models"
 	maestroDataOperations             = "MAESTRO Layer 2: Data Operations"

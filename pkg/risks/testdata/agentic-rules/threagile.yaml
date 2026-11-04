@@ -1,0 +1,608 @@
+threagile_version: 1.0.0
+
+# Exercises the rules on agents working together: what they find and what they skip.
+
+title: Agentic Rules
+
+date: 2026-11-04
+
+author:
+  name: John Doe
+
+business_criticality: critical
+
+business_overview:
+  description: Agentic rules test
+  images: []
+
+technical_overview:
+  description: Agentic rules test
+  images: []
+
+data_assets:
+
+  Orders:
+    id: orders
+    description: Orders
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Orders of the customers
+
+  Tasks:
+    id: tasks
+    description: Tasks
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Task descriptions without customer data
+
+technical_assets:
+
+
+  Orchestrator:
+    id: orchestrator
+    description: Orchestrator
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Task A:
+        target: worker-a
+        description: Task A
+        protocol: https
+        authentication: none
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
+      Task B:
+        target: worker-b
+        description: Task B
+        protocol: http
+        authentication: long-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
+      Task C:
+        target: worker-c
+        description: Task C
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
+      Task D:
+        target: worker-d
+        description: Task D
+        protocol: https
+        authentication: none
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
+      Task E:
+        target: worker-e
+        description: Task E
+        protocol: in-process-library-call
+        authentication: none
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
+      Task F:
+        target: worker-f
+        description: Task F
+        protocol: https
+        authentication: none
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
+      Task G:
+        target: worker-g
+        description: Task G
+        protocol: https
+        authentication: none
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
+
+  Web App:
+    id: web-app
+    description: Web App
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [web-application]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      App Task:
+        target: worker-a
+        description: App Task
+        protocol: https
+        authentication: none
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
+
+  Worker A:
+    id: worker-a
+    description: Worker A
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Order Change A:
+        target: orders-db
+        description: Order Change A
+        protocol: jdbc-encrypted
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Worker B:
+    id: worker-b
+    description: Worker B
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Order Change B:
+        target: orders-db
+        description: Order Change B
+        protocol: jdbc-encrypted
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Worker C:
+    id: worker-c
+    description: Worker C
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Order Change C:
+        target: orders-db
+        description: Order Change C
+        protocol: jdbc-encrypted
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Worker D:
+    id: worker-d
+    description: Worker D
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Board Update D:
+        target: task-board
+        description: Board Update D
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
+
+  Worker E:
+    id: worker-e
+    description: Worker E
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Order Change E:
+        target: orders-db
+        description: Order Change E
+        protocol: jdbc-encrypted
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Worker G:
+    id: worker-g
+    description: Worker G
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Tool Use G:
+        target: order-tools
+        description: Tool Use G
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
+
+  Worker F:
+    id: worker-f
+    description: Worker F
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: true
+    justification_out_of_scope: External
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Order Change F:
+        target: orders-db
+        description: Order Change F
+        protocol: jdbc-encrypted
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Order Tools:
+    id: order-tools
+    description: Order Tools
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [mcp-server]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Tool Order Change:
+        target: orders-db
+        description: Tool Order Change
+        protocol: jdbc-encrypted
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
+
+  Task Board:
+    id: task-board
+    description: Task Board
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [web-application]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Orders DB:
+    id: orders-db
+    description: Orders DB
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [database]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: [orders]
+    data_formats_accepted: [json]
+    communication_links: {}
+
+trust_boundaries:
+
+  Agent Network:
+    id: agent-network
+    description: The orchestrating agent
+    type: network-cloud-security-group
+    tags: []
+    technical_assets_inside: [orchestrator, worker-b, worker-c, worker-d, worker-e, worker-f, worker-g, order-tools, web-app, task-board]
+    trust_boundaries_nested: []
+
+  Worker Network:
+    id: worker-network
+    description: The workers of other teams
+    type: network-cloud-security-group
+    tags: []
+    technical_assets_inside: [worker-a, orders-db]
+    trust_boundaries_nested: []
+
+shared_runtimes: {}
