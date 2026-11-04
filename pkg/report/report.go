@@ -2204,12 +2204,9 @@ func (r *pdfReporter) categoryRisk(parsedModel *types.Model, risk *types.Risk, h
 	text.Reset()
 }
 
-func (r *pdfReporter) writeRiskTrackingStatus(parsedModel *types.Model, risk *types.Risk) {
-	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
-	tracking := parsedModel.GetRiskTrackingWithDefault(risk)
-	r.pdfColorBlack()
-	r.pdf.CellFormat(10, 6, "", "0", 0, "", false, 0, "")
-	switch tracking.Status {
+// pdfColorByRiskStatus sets the text colour of a risk tracking status, black for an unknown one.
+func (r *pdfReporter) pdfColorByRiskStatus(status types.RiskStatus) {
+	switch status {
 	case types.Unchecked:
 		colorRiskStatusUnchecked(r.pdf)
 	case types.InDiscussion:
@@ -2225,6 +2222,14 @@ func (r *pdfReporter) writeRiskTrackingStatus(parsedModel *types.Model, risk *ty
 	default:
 		r.pdfColorBlack()
 	}
+}
+
+func (r *pdfReporter) writeRiskTrackingStatus(parsedModel *types.Model, risk *types.Risk) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	tracking := parsedModel.GetRiskTrackingWithDefault(risk)
+	r.pdfColorBlack()
+	r.pdf.CellFormat(10, 6, "", "0", 0, "", false, 0, "")
+	r.pdfColorByRiskStatus(tracking.Status)
 	r.pdf.SetFont("Helvetica", "", fontSizeSmall)
 	if tracking.Status == types.Unchecked {
 		r.pdf.SetFont("Helvetica", "B", fontSizeSmall)
@@ -2894,7 +2899,6 @@ func (r *pdfReporter) dataAssetBreach(parsedModel *types.Model, dataAsset *types
 }
 
 func (r *pdfReporter) createTrustBoundaries(parsedModel *types.Model) {
-	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
 	title := "Trust Boundaries"
 	r.pdfColorBlack()
 	r.addHeadline(title, false)
@@ -2908,69 +2912,84 @@ func (r *pdfReporter) createTrustBoundaries(parsedModel *types.Model) {
 		"modeled during the threat modeling process.")
 	r.currentChapterTitleBreadcrumb = title
 	for _, trustBoundary := range sortedTrustBoundariesByTitle(parsedModel) {
-		if r.pdf.GetY() > 250 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		} else {
-			html.Write(5, "<br><br><br>")
-		}
-		colorTwilight(r.pdf)
-		if !trustBoundary.Type.IsNetworkBoundary() {
-			r.pdfColorLightGray()
-		}
-		html.Write(5, "<b>"+uni(trustBoundary.Title)+"</b><br>")
-		r.defineLinkTarget("{boundary:" + trustBoundary.Id + "}")
-		html.Write(5, uni(trustBoundary.Description))
-		html.Write(5, "<br><br>")
-
-		r.pdf.SetFont("Helvetica", "", fontSizeBody)
-
-		r.attributeRow("ID:", trustBoundary.Id)
-
-		r.pageBreakBelow(265)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Type:", "0", 0, "", false, 0, "")
-		colorTwilight(r.pdf)
-		if !trustBoundary.Type.IsNetworkBoundary() {
-			r.pdfColorLightGray()
-		}
-		r.pdf.MultiCell(145, 6, trustBoundary.Type.String(), "0", "0", false)
-		r.pdfColorBlack()
-
-		r.pageBreakBelow(265)
-		tagsUsedText := ""
-		sorted := trustBoundary.Tags
-		sort.Strings(sorted)
-		for _, tag := range sorted {
-			if len(tagsUsedText) > 0 {
-				tagsUsedText += ", "
-			}
-			tagsUsedText += tag
-		}
-		r.attributeListRow("Tags:", tagsUsedText, textNone, uni)
-
-		r.pageBreakBelow(265)
-		assetsInsideText := ""
-		for _, assetKey := range trustBoundary.TechnicalAssetsInside {
-			if len(assetsInsideText) > 0 {
-				assetsInsideText += ", "
-			}
-			// plain text, not linked to the technical asset detail chapter
-			assetsInsideText += parsedModel.TechnicalAssets[assetKey].Title
-		}
-		r.attributeListRow("Assets inside:", assetsInsideText, textNone, uni)
-
-		r.pageBreakBelow(265)
-		boundariesNestedText := ""
-		for _, assetKey := range trustBoundary.TrustBoundariesNested {
-			if len(boundariesNestedText) > 0 {
-				boundariesNestedText += ", "
-			}
-			boundariesNestedText += parsedModel.TrustBoundaries[assetKey].Title
-		}
-		r.attributeListRow("Boundaries nested:", boundariesNestedText, textNone, uni)
+		r.trustBoundary(parsedModel, trustBoundary, html)
 	}
+}
+
+// trustBoundary writes the details of a trust boundary.
+func (r *pdfReporter) trustBoundary(parsedModel *types.Model, trustBoundary *types.TrustBoundary,
+	html gofpdf.HTMLBasicType,
+) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	if r.pdf.GetY() > 250 {
+		r.pageBreak()
+		r.pdf.SetY(36)
+	} else {
+		html.Write(5, "<br><br><br>")
+	}
+	colorTwilight(r.pdf)
+	if !trustBoundary.Type.IsNetworkBoundary() {
+		r.pdfColorLightGray()
+	}
+	html.Write(5, "<b>"+uni(trustBoundary.Title)+"</b><br>")
+	r.defineLinkTarget("{boundary:" + trustBoundary.Id + "}")
+	html.Write(5, uni(trustBoundary.Description))
+	html.Write(5, "<br><br>")
+
+	r.pdf.SetFont("Helvetica", "", fontSizeBody)
+
+	r.attributeRow("ID:", trustBoundary.Id)
+
+	r.pageBreakBelow(265)
+	r.pdfColorGray()
+	r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
+	r.pdf.CellFormat(40, 6, "Type:", "0", 0, "", false, 0, "")
+	colorTwilight(r.pdf)
+	if !trustBoundary.Type.IsNetworkBoundary() {
+		r.pdfColorLightGray()
+	}
+	r.pdf.MultiCell(145, 6, trustBoundary.Type.String(), "0", "0", false)
+	r.pdfColorBlack()
+
+	r.trustBoundaryContents(parsedModel, trustBoundary)
+}
+
+// trustBoundaryContents writes the tags of a trust boundary and the technical assets and trust
+// boundaries inside it.
+func (r *pdfReporter) trustBoundaryContents(parsedModel *types.Model, trustBoundary *types.TrustBoundary) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	r.pageBreakBelow(265)
+	tagsUsedText := ""
+	sorted := trustBoundary.Tags
+	sort.Strings(sorted)
+	for _, tag := range sorted {
+		if len(tagsUsedText) > 0 {
+			tagsUsedText += ", "
+		}
+		tagsUsedText += tag
+	}
+	r.attributeListRow("Tags:", tagsUsedText, textNone, uni)
+
+	r.pageBreakBelow(265)
+	assetsInsideText := ""
+	for _, assetKey := range trustBoundary.TechnicalAssetsInside {
+		if len(assetsInsideText) > 0 {
+			assetsInsideText += ", "
+		}
+		// plain text, not linked to the technical asset detail chapter
+		assetsInsideText += parsedModel.TechnicalAssets[assetKey].Title
+	}
+	r.attributeListRow("Assets inside:", assetsInsideText, textNone, uni)
+
+	r.pageBreakBelow(265)
+	boundariesNestedText := ""
+	for _, assetKey := range trustBoundary.TrustBoundariesNested {
+		if len(boundariesNestedText) > 0 {
+			boundariesNestedText += ", "
+		}
+		boundariesNestedText += parsedModel.TrustBoundaries[assetKey].Title
+	}
+	r.attributeListRow("Boundaries nested:", boundariesNestedText, textNone, uni)
 }
 
 func (r *pdfReporter) createSharedRuntimes(parsedModel *types.Model) {
