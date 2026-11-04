@@ -12,6 +12,7 @@ require (
 	github.com/mattn/go-shellwords v1.0.12
 	github.com/mpvl/unique v0.0.0-20150818121801-cbe035fff7de
 	github.com/shopspring/decimal v1.4.0
+	github.com/spf13/pflag v1.0.6
 	github.com/wcharczuk/go-chart v2.0.1+incompatible
 	github.com/xuri/excelize/v2 v2.9.0
 	github.com/yuin/goldmark v1.8.5
@@ -41,7 +42,6 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/richardlehane/mscfb v1.0.4 // indirect
 	github.com/richardlehane/msoleps v1.0.4 // indirect
-	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/tetratelabs/wazero v1.10.1 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	golang.org/x/sys v0.41.0 // indirect
