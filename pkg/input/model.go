@@ -118,18 +118,9 @@ func (model *Model) Merge(dir string, includeFilename string) error {
 		return fmt.Errorf("unable to parse model yaml: %w", unmarshalError)
 	}
 
-	for item := range fileStructure {
-		key := strings.ToLower(item)
-		if key == "includes" {
-			mergeError := model.mergeIncludes(filepath.Dir(includePath), includedModel.Includes)
-			if mergeError != nil {
-				return mergeError
-			}
-
-			continue
-		}
-
-		mergeSection, ok := modelSectionMergers[key]
+	// the sections of the file itself first, in a fixed order, then the files it includes
+	for _, item := range slices.Sorted(maps.Keys(fileStructure)) {
+		mergeSection, ok := modelSectionMergers[strings.ToLower(item)]
 		if !ok {
 			continue
 		}
@@ -140,7 +131,7 @@ func (model *Model) Merge(dir string, includeFilename string) error {
 		}
 	}
 
-	return nil
+	return model.mergeIncludes(filepath.Dir(includePath), includedModel.Includes)
 }
 
 // mergeIncludes merges the model files that an included model file includes in turn, relative to dir.

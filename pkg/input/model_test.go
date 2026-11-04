@@ -138,3 +138,27 @@ technical_assets:
 
 	assert.ElementsMatch(t, []string{"web-server", "waf"}, model.TechnicalAssets["Web Server"].Technologies)
 }
+
+// TestLoadMergesAFileBeforeItsIncludes checks that the text a file adds comes before the text of the files it
+// includes, whatever the order of its sections.
+func TestLoadMergesAFileBeforeItsIncludes(t *testing.T) {
+	dir := t.TempDir()
+	writeModelFile(t, filepath.Join(dir, "threagile.yaml"), `
+includes:
+  - part.yaml
+`)
+	writeModelFile(t, filepath.Join(dir, "part.yaml"), `
+includes:
+  - nested.yaml
+management_summary_comment: part
+`)
+	writeModelFile(t, filepath.Join(dir, "nested.yaml"), `
+management_summary_comment: nested
+`)
+
+	for range 20 {
+		model := new(Model).Defaults()
+		require.NoError(t, model.Load(filepath.Join(dir, "threagile.yaml")))
+		require.Equal(t, "part\n<br><br>\nnested", model.ManagementSummaryComment)
+	}
+}
