@@ -2,12 +2,9 @@ package statements
 
 import (
 	"fmt"
-	"maps"
-	"slices"
 
 	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 	"github.com/Pinguladora/threagile/pkg/risks/script/expressions"
-	"github.com/shopspring/decimal"
 )
 
 type LoopStatement struct {
@@ -87,69 +84,34 @@ func (what *LoopStatement) Run(scope *common.Scope) (string, error) {
 
 func (what *LoopStatement) run(scope *common.Scope, value common.Value) (string, error) {
 	switch castValue := value.Value().(type) {
-	case []any:
-		for index, item := range castValue {
+	case []any, []common.Value, map[string]any:
+		var errorLiteral string
+		var runError error
+		common.ForEachItem(castValue, func(item common.IterationItem) bool {
 			if scope.HasReturned {
-				return "", nil
+				return true
 			}
 
 			if len(what.index) > 0 {
-				scope.Set(what.index, common.SomeDecimalValue(decimal.NewFromInt(int64(index)), nil))
+				scope.Set(what.index, item.Index)
 			}
 
-			itemValue := scope.SetItem(common.SomeValue(item, value.Event()))
+			itemValue := scope.SetItem(common.SomeValue(item.Value, value.Event()))
 			if len(what.item) > 0 {
 				scope.Set(what.item, itemValue)
 			}
 
-			errorLiteral, runError := what.body.Run(scope)
-			if runError != nil {
-				return errorLiteral, fmt.Errorf("failed to run loop-statement for item #%d: %w", index+1, runError)
-			}
-		}
-
-	case []common.Value:
-		for index, item := range castValue {
-			if scope.HasReturned {
-				return "", nil
+			bodyLiteral, bodyError := what.body.Run(scope)
+			if bodyError != nil {
+				errorLiteral = bodyLiteral
+				runError = fmt.Errorf("failed to run loop-statement for item %v: %w", item.Label, bodyError)
+				return true
 			}
 
-			if len(what.index) > 0 {
-				scope.Set(what.index, common.SomeDecimalValue(decimal.NewFromInt(int64(index)), nil))
-			}
+			return false
+		})
 
-			itemValue := scope.SetItem(common.SomeValue(item.Value(), value.Event()))
-			if len(what.item) > 0 {
-				scope.Set(what.item, itemValue)
-			}
-
-			errorLiteral, runError := what.body.Run(scope)
-			if runError != nil {
-				return errorLiteral, fmt.Errorf("failed to run loop-statement for item #%d: %w", index+1, runError)
-			}
-		}
-
-	case map[string]any:
-		for _, name := range slices.Sorted(maps.Keys(castValue)) {
-			item := castValue[name]
-			if scope.HasReturned {
-				return "", nil
-			}
-
-			if len(what.index) > 0 {
-				scope.Set(what.index, common.SomeStringValue(name, nil))
-			}
-
-			itemValue := scope.SetItem(common.SomeValue(item, value.Event()))
-			if len(what.item) > 0 {
-				scope.Set(what.item, itemValue)
-			}
-
-			errorLiteral, runError := what.body.Run(scope)
-			if runError != nil {
-				return errorLiteral, fmt.Errorf("failed to run loop-statement for item %q: %w", name, runError)
-			}
-		}
+		return errorLiteral, runError
 
 	case common.Value:
 		return what.run(scope, common.SomeValue(castValue.Value(), value.Event()))
@@ -157,8 +119,6 @@ func (what *LoopStatement) run(scope *common.Scope, value common.Value) (string,
 	default:
 		return what.Literal(), fmt.Errorf("failed to run loop-statement: expected iterable type, got %T", value)
 	}
-
-	return "", nil
 }
 
 func (what *LoopStatement) Literal() string {
