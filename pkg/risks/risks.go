@@ -17,6 +17,7 @@ func GetBuiltInRiskRules() types.RiskRules {
 		builtin.NewCodeBackdooringRule(),
 		builtin.NewContainerBaseImageBackdooringRule(),
 		builtin.NewContainerPlatformEscapeRule(),
+		builtin.NewCrossAccountTakeoverRule(),
 		builtin.NewCrossSiteRequestForgeryRule(),
 		builtin.NewCrossSiteScriptingRule(),
 		builtin.NewDosRiskyAccessAcrossTrustBoundaryRule(),
