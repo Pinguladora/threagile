@@ -104,7 +104,7 @@ func (what RiskRules) LoadRiskRules() (RiskRules, error) {
 		newRule := new(script.RiskRule).Init()
 		loadError := newRule.Load(fileSystem, path, entry)
 		if loadError != nil {
-			return loadError
+			return fmt.Errorf("error loading risk rule script %q: %w", path, loadError)
 		}
 
 		if newRule.Category().ID == "" {
@@ -116,7 +116,7 @@ func (what RiskRules) LoadRiskRules() (RiskRules, error) {
 	})
 
 	if walkError != nil {
-		return nil, walkError
+		return nil, walkError //nolint:wrapcheck // WalkDir passes on the errors of the walk function, which wraps them
 	}
 
 	return what, nil
