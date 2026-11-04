@@ -20,6 +20,7 @@ type GenerateCommands struct {
 	RisksJSON           bool
 	TechnicalAssetsJSON bool
 	StatsJSON           bool
+	OTMJSON             bool
 	RisksExcel          bool
 	TagsExcel           bool
 	ReportPDF           bool
@@ -33,6 +34,7 @@ func (c *GenerateCommands) Defaults() *GenerateCommands {
 		RisksJSON:           true,
 		TechnicalAssetsJSON: true,
 		StatsJSON:           true,
+		OTMJSON:             true,
 		RisksExcel:          true,
 		TagsExcel:           true,
 		ReportPDF:           true,
@@ -60,6 +62,7 @@ type reportConfigReader interface {
 	GetJsonRisksFilename() string
 	GetJsonTechnicalAssetsFilename() string
 	GetJsonStatsFilename() string
+	GetJsonOTMFilename() string
 	GetTemplateFilename() string
 	GetReportLogoImagePath() string
 
@@ -181,6 +184,15 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 		err := WriteStatsJSON(readResult.ParsedModel, filepath.Join(config.GetOutputFolder(), config.GetJsonStatsFilename()))
 		if err != nil {
 			return fmt.Errorf("error while writing stats json: %w", err)
+		}
+	}
+
+	// the model with its risks as an Open Threat Model
+	if commands.OTMJSON {
+		progressReporter.Info("Writing otm json")
+		err := WriteOTMJSON(readResult.ParsedModel, filepath.Join(config.GetOutputFolder(), config.GetJsonOTMFilename()))
+		if err != nil {
+			return fmt.Errorf("error while writing otm json: %w", err)
 		}
 	}
 

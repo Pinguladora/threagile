@@ -1,0 +1,2700 @@
+{
+  "otmVersion": "0.2.0",
+  "project": {
+    "name": "Some Example Application",
+    "id": "some-example-application",
+    "owner": "John Doe",
+    "tags": [
+      "linux",
+      "apache",
+      "mysql",
+      "jboss",
+      "keycloak",
+      "jenkins",
+      "git",
+      "oracle",
+      "some-erp",
+      "vmware",
+      "aws",
+      "aws:ec2",
+      "aws:s3"
+    ],
+    "attributes": {
+      "threagile:business_criticality": "important",
+      "threagile:date": "2020-07-01"
+    }
+  },
+  "assets": [
+    {
+      "name": "Build Job Config",
+      "id": "build-job-config",
+      "description": "Data for customizing of the build job system.",
+      "risk": {
+        "confidentiality": 50,
+        "integrity": 75,
+        "availability": 25,
+        "comment": "Data for customizing of the build job system.\n"
+      },
+      "attributes": {
+        "threagile:origin": "Company XYZ",
+        "threagile:owner": "Company XYZ",
+        "threagile:quantity": "very-few",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "name": "Client Application Code",
+      "id": "client-application-code",
+      "description": "Angular and other client-side code delivered by the application.",
+      "risk": {
+        "confidentiality": 0,
+        "integrity": 75,
+        "availability": 50,
+        "comment": "The integrity of the public data is critical to avoid reputational damage and the availability is important on the long-term scale (but not critical) to keep the growth rate of the customer base steady.\n"
+      },
+      "attributes": {
+        "threagile:origin": "Company ABC",
+        "threagile:owner": "Company ABC",
+        "threagile:quantity": "very-few",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "name": "Customer Contract Summaries",
+      "id": "contract-summaries",
+      "description": "Customer Contract Summaries",
+      "risk": {
+        "confidentiality": 50,
+        "integrity": 25,
+        "availability": 25,
+        "comment": "Just some summaries.\n"
+      },
+      "attributes": {
+        "threagile:origin": "Customer",
+        "threagile:owner": "Company XYZ",
+        "threagile:quantity": "very-few",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "name": "Customer Accounts",
+      "id": "customer-accounts",
+      "description": "Customer Accounts (including transient credentials when entered for checking them)",
+      "risk": {
+        "confidentiality": 100,
+        "integrity": 75,
+        "availability": 75,
+        "comment": "Customer account data for using the portal are required to be available to offer the portal functionality.\n"
+      },
+      "attributes": {
+        "threagile:origin": "Customer",
+        "threagile:owner": "Company XYZ",
+        "threagile:quantity": "many",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "name": "Customer Contracts",
+      "id": "customer-contracts",
+      "description": "Customer Contracts (PDF)",
+      "risk": {
+        "confidentiality": 75,
+        "integrity": 75,
+        "availability": 25,
+        "comment": "Contract data might contain financial data as well as personally identifiable information (PII). The integrity and availability of contract data is required for clearing payment disputes.\n"
+      },
+      "attributes": {
+        "threagile:origin": "Customer",
+        "threagile:owner": "Company XYZ",
+        "threagile:quantity": "many",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "name": "Customer Operational Data",
+      "id": "customer-operational-data",
+      "description": "Customer Operational Data",
+      "risk": {
+        "confidentiality": 75,
+        "integrity": 75,
+        "availability": 75,
+        "comment": "Customer operational data for using the portal are required to be available to offer the portal functionality and are used in the backend transactions.\n"
+      },
+      "attributes": {
+        "threagile:origin": "Customer",
+        "threagile:owner": "Company XYZ",
+        "threagile:quantity": "many",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "name": "Database Customizing and Dumps",
+      "id": "db-dumps",
+      "description": "Data for customizing of the DB system, which might include full database dumps.",
+      "risk": {
+        "confidentiality": 100,
+        "integrity": 75,
+        "availability": 75,
+        "comment": "Data for customizing of the DB system, which might include full database dumps.\n"
+      },
+      "attributes": {
+        "threagile:origin": "Company XYZ",
+        "threagile:owner": "Company XYZ",
+        "threagile:quantity": "very-few",
+        "threagile:tags": "oracle",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "name": "ERP Customizing Data",
+      "id": "erp-customizing",
+      "description": "Data for customizing of the ERP system.",
+      "risk": {
+        "confidentiality": 75,
+        "integrity": 75,
+        "availability": 75,
+        "comment": "Data for customizing of the ERP system.\n"
+      },
+      "attributes": {
+        "threagile:origin": "Company XYZ",
+        "threagile:owner": "Company XYZ",
+        "threagile:quantity": "very-few",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "name": "ERP Logs",
+      "id": "erp-logs",
+      "description": "Logs generated by the ERP system.",
+      "risk": {
+        "confidentiality": 50,
+        "integrity": 0,
+        "availability": 0,
+        "comment": "Logs should not contain PII data and are only required for failure analysis, i.e. they are not considered as hard transactional logs.\n"
+      },
+      "attributes": {
+        "threagile:origin": "Company XYZ",
+        "threagile:owner": "Company XYZ",
+        "threagile:quantity": "many",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "name": "Some Internal Business Data",
+      "id": "internal-business-data",
+      "description": "Internal business data of the ERP system used unrelated to the customer-facing processes.",
+      "risk": {
+        "confidentiality": 100,
+        "integrity": 75,
+        "availability": 75,
+        "comment": "Data used and/or generated during unrelated other use cases of the ERP-system (when used also by Company XYZ for internal non-customer-portal-related stuff).\n"
+      },
+      "attributes": {
+        "threagile:origin": "Company XYZ",
+        "threagile:owner": "Company XYZ",
+        "threagile:quantity": "few",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "name": "Marketing Material",
+      "id": "marketing-material",
+      "description": "Website and marketing data to inform potential customers and generate new leads.",
+      "risk": {
+        "confidentiality": 0,
+        "integrity": 50,
+        "availability": 50,
+        "comment": "The integrity of the public data is critical to avoid reputational damage and the availability is important on the long-term scale (but not critical) to keep the growth rate of the customer base steady.\n"
+      },
+      "attributes": {
+        "threagile:origin": "Company ABC",
+        "threagile:owner": "Company ABC",
+        "threagile:quantity": "very-few",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "name": "Server Application Code",
+      "id": "server-application-code",
+      "description": "API and other server-side code of the application.",
+      "risk": {
+        "confidentiality": 25,
+        "integrity": 100,
+        "availability": 50,
+        "comment": "The integrity of the API code is critical to avoid reputational damage and the availability is important on the long-term scale (but not critical) to keep the growth rate of the customer base steady.\n"
+      },
+      "attributes": {
+        "threagile:origin": "Company ABC",
+        "threagile:owner": "Company ABC",
+        "threagile:quantity": "very-few",
+        "threagile:usage": "devops"
+      }
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "application-network",
+      "name": "Application Network",
+      "type": "network-cloud-provider",
+      "description": "Application Network",
+      "risk": {
+        "trustRating": 40
+      },
+      "attributes": {
+        "threagile:tags": "aws"
+      }
+    },
+    {
+      "id": "auth-env",
+      "name": "Auth Handling Environment",
+      "type": "execution-environment",
+      "description": "Auth Handling Environment",
+      "risk": {
+        "trustRating": 40
+      },
+      "parent": {
+        "trustZone": "application-network"
+      }
+    },
+    {
+      "id": "dev-network",
+      "name": "Dev Network",
+      "type": "network-on-prem",
+      "description": "Development Network",
+      "risk": {
+        "trustRating": 50
+      }
+    },
+    {
+      "id": "erp-dmz",
+      "name": "ERP DMZ",
+      "type": "network-cloud-security-group",
+      "description": "ERP DMZ",
+      "risk": {
+        "trustRating": 60
+      },
+      "parent": {
+        "trustZone": "application-network"
+      },
+      "attributes": {
+        "threagile:tags": "some-erp"
+      }
+    },
+    {
+      "id": "outside-trust-boundaries",
+      "name": "Outside of all trust boundaries",
+      "type": "untrusted",
+      "description": "The technical assets that are in no trust boundary of the threagile model.",
+      "risk": {
+        "trustRating": 0
+      }
+    },
+    {
+      "id": "web-dmz",
+      "name": "Web DMZ",
+      "type": "network-cloud-security-group",
+      "description": "Web DMZ",
+      "risk": {
+        "trustRating": 60
+      },
+      "parent": {
+        "trustZone": "application-network"
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "apache-webserver",
+      "name": "Apache Webserver",
+      "type": "web-server",
+      "description": "Apache Webserver hosting the API code and client-side code",
+      "parent": {
+        "trustZone": "web-dmz"
+      },
+      "assets": {
+        "processed": [
+          "client-application-code",
+          "customer-accounts",
+          "customer-contracts",
+          "customer-operational-data",
+          "internal-business-data",
+          "server-application-code"
+        ],
+        "stored": [
+          "client-application-code",
+          "server-application-code"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "container-baseimage-backdooring",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "container-baseimage-backdooring-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-file-validation",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-file-validation-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-hardening",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "missing-hardening-mitigation",
+              "state": "implemented"
+            }
+          ]
+        },
+        {
+          "threat": "mixed-targets-on-shared-runtime",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "mixed-targets-on-shared-runtime-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "unencrypted-asset",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "unencrypted-asset-mitigation",
+              "state": "implemented"
+            }
+          ]
+        }
+      ],
+      "tags": [
+        "linux",
+        "apache",
+        "aws:ec2"
+      ],
+      "attributes": {
+        "threagile:availability": "critical",
+        "threagile:confidentiality": "strictly-confidential",
+        "threagile:custom_developed_parts": "true",
+        "threagile:data_formats_accepted": "json,file",
+        "threagile:encryption": "none",
+        "threagile:integrity": "mission-critical",
+        "threagile:justification_cia_rating": "The correct configuration and reachability of the web server is mandatory for all customer usages of the portal.\n",
+        "threagile:machine": "container",
+        "threagile:owner": "Company ABC",
+        "threagile:size": "application",
+        "threagile:type": "process",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "backend-admin-client",
+      "name": "Backend Admin Client",
+      "type": "browser",
+      "description": "Backend admin client",
+      "parent": {
+        "trustZone": "dev-network"
+      },
+      "assets": {
+        "processed": [
+          "customer-accounts",
+          "customer-operational-data",
+          "db-dumps",
+          "erp-customizing",
+          "erp-logs"
+        ]
+      },
+      "attributes": {
+        "threagile:availability": "critical",
+        "threagile:confidentiality": "strictly-confidential",
+        "threagile:encryption": "none",
+        "threagile:integrity": "critical",
+        "threagile:justification_cia_rating": "The client used by Company XYZ to administer the system.\n",
+        "threagile:justification_out_of_scope": "Owned and managed by ops provider",
+        "threagile:machine": "physical",
+        "threagile:out_of_scope": "true",
+        "threagile:owner": "Company XYZ",
+        "threagile:size": "component",
+        "threagile:type": "external-entity",
+        "threagile:usage": "devops",
+        "threagile:used_as_client_by_human": "true"
+      }
+    },
+    {
+      "id": "backoffice-client",
+      "name": "Backoffice Client",
+      "type": "desktop",
+      "description": "Backoffice client",
+      "parent": {
+        "trustZone": "dev-network"
+      },
+      "assets": {
+        "processed": [
+          "customer-contracts",
+          "erp-logs",
+          "internal-business-data",
+          "marketing-material"
+        ]
+      },
+      "attributes": {
+        "threagile:availability": "critical",
+        "threagile:confidentiality": "strictly-confidential",
+        "threagile:encryption": "none",
+        "threagile:integrity": "critical",
+        "threagile:justification_cia_rating": "The client used by Company XYZ to administer and use the system.\n",
+        "threagile:justification_out_of_scope": "Owned and managed by Company XYZ company",
+        "threagile:machine": "physical",
+        "threagile:out_of_scope": "true",
+        "threagile:owner": "Company XYZ",
+        "threagile:size": "component",
+        "threagile:type": "external-entity",
+        "threagile:usage": "business",
+        "threagile:used_as_client_by_human": "true"
+      }
+    },
+    {
+      "id": "contract-file-server",
+      "name": "Contract File Server",
+      "type": "file-server",
+      "description": "NFS Filesystem for storing the contract PDFs",
+      "parent": {
+        "trustZone": "erp-dmz"
+      },
+      "assets": {
+        "processed": [
+          "contract-summaries",
+          "customer-contracts"
+        ],
+        "stored": [
+          "contract-summaries",
+          "customer-contracts"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "mixed-targets-on-shared-runtime",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "mixed-targets-on-shared-runtime-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "something-strange",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "something-strange-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "unencrypted-asset",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "unencrypted-asset-mitigation",
+              "state": "implemented"
+            }
+          ]
+        }
+      ],
+      "tags": [
+        "linux",
+        "aws:s3"
+      ],
+      "attributes": {
+        "threagile:availability": "important",
+        "threagile:confidentiality": "confidential",
+        "threagile:data_formats_accepted": "file",
+        "threagile:encryption": "none",
+        "threagile:integrity": "critical",
+        "threagile:justification_cia_rating": "Contract data might contain financial data as well as personally identifiable information (PII). The integrity and availability of contract data is required for clearing payment disputes. The filesystem is also required to be available for storing new contracts of freshly generated customers.\n",
+        "threagile:machine": "virtual",
+        "threagile:owner": "Company ABC",
+        "threagile:size": "component",
+        "threagile:type": "datastore",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "customer-client",
+      "name": "Customer Web Client",
+      "type": "browser",
+      "description": "Customer Web Client",
+      "parent": {
+        "trustZone": "outside-trust-boundaries"
+      },
+      "assets": {
+        "processed": [
+          "client-application-code",
+          "customer-accounts",
+          "customer-contracts",
+          "customer-operational-data",
+          "marketing-material"
+        ]
+      },
+      "attributes": {
+        "threagile:availability": "critical",
+        "threagile:confidentiality": "strictly-confidential",
+        "threagile:encryption": "none",
+        "threagile:integrity": "critical",
+        "threagile:internet": "true",
+        "threagile:justification_cia_rating": "The client used by the customer to access the system.\n",
+        "threagile:justification_out_of_scope": "Owned and managed by end-user customer",
+        "threagile:machine": "physical",
+        "threagile:out_of_scope": "true",
+        "threagile:owner": "Customer",
+        "threagile:size": "component",
+        "threagile:type": "external-entity",
+        "threagile:usage": "business",
+        "threagile:used_as_client_by_human": "true"
+      }
+    },
+    {
+      "id": "erp-system",
+      "name": "Backoffice ERP System",
+      "type": "erp",
+      "description": "ERP system",
+      "parent": {
+        "trustZone": "erp-dmz"
+      },
+      "assets": {
+        "processed": [
+          "customer-accounts",
+          "customer-contracts",
+          "customer-operational-data",
+          "erp-customizing",
+          "erp-logs",
+          "internal-business-data"
+        ],
+        "stored": [
+          "erp-logs"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-hardening",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "missing-hardening-mitigation",
+              "state": "implemented"
+            }
+          ]
+        },
+        {
+          "threat": "missing-vault",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-vault-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "mixed-targets-on-shared-runtime",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "mixed-targets-on-shared-runtime-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "unencrypted-asset",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "unencrypted-asset-mitigation",
+              "state": "implemented"
+            }
+          ]
+        },
+        {
+          "threat": "untrusted-deserialization",
+          "state": "accepted",
+          "mitigations": [
+            {
+              "mitigation": "untrusted-deserialization-mitigation",
+              "state": "rejected"
+            }
+          ]
+        },
+        {
+          "threat": "xml-external-entity",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "xml-external-entity-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "tags": [
+        "linux"
+      ],
+      "attributes": {
+        "threagile:availability": "mission-critical",
+        "threagile:confidentiality": "strictly-confidential",
+        "threagile:data_formats_accepted": "xml,file,serialization",
+        "threagile:encryption": "none",
+        "threagile:integrity": "mission-critical",
+        "threagile:justification_cia_rating": "The ERP system contains business-relevant sensitive data for the leasing processes and eventually also for other Company XYZ internal processes.\n",
+        "threagile:machine": "virtual",
+        "threagile:owner": "Company ABC",
+        "threagile:redundant": "true",
+        "threagile:size": "system",
+        "threagile:type": "process",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "external-dev-client",
+      "name": "External Development Client",
+      "type": "devops-client",
+      "description": "External developer client",
+      "parent": {
+        "trustZone": "outside-trust-boundaries"
+      },
+      "assets": {
+        "processed": [
+          "build-job-config",
+          "client-application-code",
+          "server-application-code"
+        ],
+        "stored": [
+          "client-application-code",
+          "server-application-code"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "unchecked-deployment",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "unchecked-deployment-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "tags": [
+        "linux"
+      ],
+      "attributes": {
+        "threagile:availability": "important",
+        "threagile:confidentiality": "confidential",
+        "threagile:data_formats_accepted": "file",
+        "threagile:encryption": "none",
+        "threagile:integrity": "mission-critical",
+        "threagile:internet": "true",
+        "threagile:justification_cia_rating": "The clients used by external developers to create parts of the application code.\n",
+        "threagile:justification_out_of_scope": "Owned and managed by external developers",
+        "threagile:machine": "physical",
+        "threagile:multi_tenant": "true",
+        "threagile:out_of_scope": "true",
+        "threagile:owner": "External Developers",
+        "threagile:size": "system",
+        "threagile:type": "external-entity",
+        "threagile:usage": "devops",
+        "threagile:used_as_client_by_human": "true"
+      }
+    },
+    {
+      "id": "git-repo",
+      "name": "Git Repository",
+      "type": "sourcecode-repository",
+      "description": "Git repository server",
+      "parent": {
+        "trustZone": "dev-network"
+      },
+      "assets": {
+        "processed": [
+          "client-application-code",
+          "server-application-code"
+        ],
+        "stored": [
+          "client-application-code",
+          "server-application-code"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "accidental-secret-leak",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "accidental-secret-leak-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "code-backdooring",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "code-backdooring-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "unchecked-deployment",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "unchecked-deployment-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "unencrypted-asset",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "unencrypted-asset-mitigation",
+              "state": "implemented"
+            }
+          ]
+        }
+      ],
+      "tags": [
+        "linux",
+        "git"
+      ],
+      "attributes": {
+        "threagile:availability": "important",
+        "threagile:confidentiality": "confidential",
+        "threagile:data_formats_accepted": "file",
+        "threagile:encryption": "none",
+        "threagile:integrity": "mission-critical",
+        "threagile:justification_cia_rating": "The code repo pipeline might contain sensitive configuration values like backend credentials, certificates etc. and is therefore rated as confidential.\n",
+        "threagile:machine": "virtual",
+        "threagile:multi_tenant": "true",
+        "threagile:owner": "Company ABC",
+        "threagile:size": "system",
+        "threagile:type": "process",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "id": "identity-provider",
+      "name": "Identity Provider",
+      "type": "identity-provider",
+      "description": "Identity provider server",
+      "parent": {
+        "trustZone": "auth-env"
+      },
+      "assets": {
+        "processed": [
+          "customer-accounts"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-hardening",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "missing-hardening-mitigation",
+              "state": "implemented"
+            }
+          ]
+        }
+      ],
+      "tags": [
+        "linux",
+        "jboss",
+        "keycloak"
+      ],
+      "attributes": {
+        "threagile:availability": "critical",
+        "threagile:confidentiality": "strictly-confidential",
+        "threagile:encryption": "none",
+        "threagile:integrity": "critical",
+        "threagile:justification_cia_rating": "The auth data of the application\n",
+        "threagile:machine": "virtual",
+        "threagile:owner": "Company ABC",
+        "threagile:size": "component",
+        "threagile:type": "process",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "jenkins-build-server",
+      "name": "Jenkins Build Server",
+      "type": "build-pipeline",
+      "description": "Jenkins build-server",
+      "parent": {
+        "trustZone": "dev-network"
+      },
+      "assets": {
+        "processed": [
+          "build-job-config",
+          "client-application-code",
+          "marketing-material",
+          "server-application-code"
+        ],
+        "stored": [
+          "build-job-config",
+          "client-application-code",
+          "marketing-material",
+          "server-application-code"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "code-backdooring",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "code-backdooring-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-hardening",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "missing-hardening-mitigation",
+              "state": "implemented"
+            }
+          ]
+        },
+        {
+          "threat": "unchecked-deployment",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "unchecked-deployment-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "unencrypted-asset",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "unencrypted-asset-mitigation",
+              "state": "implemented"
+            }
+          ]
+        },
+        {
+          "threat": "untrusted-deserialization",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "untrusted-deserialization-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "tags": [
+        "linux",
+        "jenkins"
+      ],
+      "attributes": {
+        "threagile:availability": "important",
+        "threagile:confidentiality": "confidential",
+        "threagile:data_formats_accepted": "file,serialization",
+        "threagile:encryption": "none",
+        "threagile:integrity": "mission-critical",
+        "threagile:justification_cia_rating": "The build pipeline might contain sensitive configuration values like backend credentials, certificates etc. and is therefore rated as confidential. The integrity and availability is rated as critical and important due to the risk of reputation damage and application update unavailability when the build pipeline is compromised.\n",
+        "threagile:machine": "virtual",
+        "threagile:multi_tenant": "true",
+        "threagile:owner": "Company ABC",
+        "threagile:size": "system",
+        "threagile:type": "process",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "id": "ldap-auth-server",
+      "name": "LDAP Auth Server",
+      "type": "identity-store-ldap",
+      "description": "LDAP authentication server",
+      "parent": {
+        "trustZone": "auth-env"
+      },
+      "assets": {
+        "processed": [
+          "customer-accounts"
+        ],
+        "stored": [
+          "customer-accounts"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-hardening",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "missing-hardening-mitigation",
+              "state": "implemented"
+            }
+          ]
+        }
+      ],
+      "tags": [
+        "linux"
+      ],
+      "attributes": {
+        "threagile:availability": "critical",
+        "threagile:confidentiality": "strictly-confidential",
+        "threagile:encryption": "transparent",
+        "threagile:integrity": "critical",
+        "threagile:justification_cia_rating": "The auth data of the application\n",
+        "threagile:machine": "physical",
+        "threagile:owner": "Company ABC",
+        "threagile:size": "component",
+        "threagile:type": "datastore",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "load-balancer",
+      "name": "Load Balancer",
+      "type": "load-balancer",
+      "description": "Load Balancer (HA-Proxy)",
+      "parent": {
+        "trustZone": "application-network"
+      },
+      "assets": {
+        "processed": [
+          "client-application-code",
+          "customer-accounts",
+          "customer-contracts",
+          "customer-operational-data",
+          "internal-business-data",
+          "marketing-material"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:availability": "mission-critical",
+        "threagile:confidentiality": "strictly-confidential",
+        "threagile:encryption": "none",
+        "threagile:integrity": "mission-critical",
+        "threagile:justification_cia_rating": "The correct configuration and reachability of the load balancer is mandatory for all customer and Company XYZ usages of the portal and ERP system.\n",
+        "threagile:machine": "physical",
+        "threagile:owner": "Company ABC",
+        "threagile:size": "component",
+        "threagile:type": "process",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "marketing-cms",
+      "name": "Marketing CMS",
+      "type": "cms",
+      "description": "CMS for the marketing content",
+      "parent": {
+        "trustZone": "web-dmz"
+      },
+      "assets": {
+        "processed": [
+          "customer-accounts",
+          "marketing-material"
+        ],
+        "stored": [
+          "marketing-material"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "container-baseimage-backdooring",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "container-baseimage-backdooring-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "mixed-targets-on-shared-runtime",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "mixed-targets-on-shared-runtime-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "unencrypted-asset",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "unencrypted-asset-mitigation",
+              "state": "implemented"
+            }
+          ]
+        }
+      ],
+      "tags": [
+        "linux"
+      ],
+      "attributes": {
+        "threagile:availability": "critical",
+        "threagile:confidentiality": "strictly-confidential",
+        "threagile:custom_developed_parts": "true",
+        "threagile:encryption": "none",
+        "threagile:integrity": "critical",
+        "threagile:justification_cia_rating": "The correct configuration and reachability of the web server is mandatory for all customer usages of the portal.\n",
+        "threagile:machine": "container",
+        "threagile:owner": "Company ABC",
+        "threagile:size": "application",
+        "threagile:type": "process",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "sql-database",
+      "name": "Customer Contract Database",
+      "type": "database",
+      "description": "The database behind the ERP system",
+      "parent": {
+        "trustZone": "erp-dmz"
+      },
+      "assets": {
+        "processed": [
+          "customer-accounts",
+          "customer-operational-data",
+          "db-dumps",
+          "erp-logs",
+          "internal-business-data"
+        ],
+        "stored": [
+          "customer-accounts",
+          "customer-operational-data",
+          "internal-business-data"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-hardening",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "missing-hardening-mitigation",
+              "state": "implemented"
+            }
+          ]
+        },
+        {
+          "threat": "mixed-targets-on-shared-runtime",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "mixed-targets-on-shared-runtime-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "something-strange",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "something-strange-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "unencrypted-asset",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "unencrypted-asset-mitigation",
+              "state": "implemented"
+            }
+          ]
+        }
+      ],
+      "tags": [
+        "linux",
+        "mysql"
+      ],
+      "attributes": {
+        "threagile:availability": "mission-critical",
+        "threagile:confidentiality": "strictly-confidential",
+        "threagile:encryption": "data-with-symmetric-shared-key",
+        "threagile:integrity": "mission-critical",
+        "threagile:justification_cia_rating": "The ERP system's database contains business-relevant sensitive data for the leasing processes and eventually also for other Company XYZ internal processes.\n",
+        "threagile:machine": "virtual",
+        "threagile:owner": "Company ABC",
+        "threagile:size": "component",
+        "threagile:type": "datastore",
+        "threagile:usage": "business"
+      }
+    }
+  ],
+  "dataflows": [
+    {
+      "id": "apache-webserver\u003eauth-credential-check-traffic",
+      "name": "Auth Credential Check Traffic",
+      "description": "Link to the identity provider server",
+      "source": "apache-webserver",
+      "destination": "identity-provider",
+      "assets": [
+        "customer-accounts"
+      ],
+      "threats": [
+        {
+          "threat": "server-side-request-forgery",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "server-side-request-forgery-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "credentials",
+        "threagile:authorization": "technical-user",
+        "threagile:data_assets_sent": "customer-accounts",
+        "threagile:protocol": "https",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "apache-webserver\u003eerp-system-traffic",
+      "name": "ERP System Traffic",
+      "description": "Link to the ERP system",
+      "bidirectional": true,
+      "source": "apache-webserver",
+      "destination": "erp-system",
+      "assets": [
+        "customer-accounts",
+        "customer-contracts",
+        "customer-operational-data",
+        "internal-business-data"
+      ],
+      "threats": [
+        {
+          "threat": "dos-risky-access-across-trust-boundary",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "dos-risky-access-across-trust-boundary-mitigation",
+              "state": "required"
+            }
+          ]
+        },
+        {
+          "threat": "missing-identity-propagation",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-identity-propagation-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "server-side-request-forgery",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "server-side-request-forgery-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "token",
+        "threagile:authorization": "technical-user",
+        "threagile:data_assets_received": "customer-accounts,customer-operational-data,customer-contracts,internal-business-data",
+        "threagile:data_assets_sent": "customer-accounts,customer-operational-data,internal-business-data",
+        "threagile:protocol": "https",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "backend-admin-client\u003edb-update-access",
+      "name": "DB Update Access",
+      "description": "Link to the database (JDBC tunneled via SSH)",
+      "bidirectional": true,
+      "source": "backend-admin-client",
+      "destination": "sql-database",
+      "assets": [
+        "customer-accounts",
+        "customer-operational-data",
+        "db-dumps",
+        "erp-logs"
+      ],
+      "threats": [
+        {
+          "threat": "missing-authentication-second-factor",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "missing-authentication-second-factor-mitigation",
+              "state": "implemented"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "client-certificate",
+        "threagile:authorization": "technical-user",
+        "threagile:data_assets_received": "db-dumps,erp-logs,customer-accounts,customer-operational-data",
+        "threagile:data_assets_sent": "db-dumps",
+        "threagile:protocol": "ssh",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "id": "backend-admin-client\u003eerp-web-access",
+      "name": "ERP Web Access",
+      "description": "Link to the ERP system (Web)",
+      "bidirectional": true,
+      "source": "backend-admin-client",
+      "destination": "erp-system",
+      "assets": [
+        "erp-customizing",
+        "erp-logs"
+      ],
+      "threats": [
+        {
+          "threat": "missing-authentication-second-factor",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "missing-authentication-second-factor-mitigation",
+              "state": "implemented"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "token",
+        "threagile:authorization": "technical-user",
+        "threagile:data_assets_received": "erp-logs",
+        "threagile:data_assets_sent": "erp-customizing",
+        "threagile:protocol": "https",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "id": "backend-admin-client\u003euser-management-access",
+      "name": "User Management Access",
+      "description": "Link to the LDAP auth server for managing users",
+      "bidirectional": true,
+      "source": "backend-admin-client",
+      "destination": "ldap-auth-server",
+      "assets": [
+        "customer-accounts"
+      ],
+      "threats": [
+        {
+          "threat": "missing-authentication-second-factor",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "missing-authentication-second-factor-mitigation",
+              "state": "implemented"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "credentials",
+        "threagile:authorization": "technical-user",
+        "threagile:data_assets_received": "customer-accounts",
+        "threagile:data_assets_sent": "customer-accounts",
+        "threagile:protocol": "ldaps",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "id": "backoffice-client\u003eerp-internal-access",
+      "name": "ERP Internal Access",
+      "description": "Link to the ERP system",
+      "bidirectional": true,
+      "source": "backoffice-client",
+      "destination": "erp-system",
+      "assets": [
+        "customer-contracts",
+        "internal-business-data"
+      ],
+      "threats": [
+        {
+          "threat": "dos-risky-access-across-trust-boundary",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "dos-risky-access-across-trust-boundary-mitigation",
+              "state": "required"
+            }
+          ]
+        },
+        {
+          "threat": "missing-authentication-second-factor",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "missing-authentication-second-factor-mitigation",
+              "state": "implemented"
+            }
+          ]
+        }
+      ],
+      "tags": [
+        "some-erp"
+      ],
+      "attributes": {
+        "threagile:authentication": "token",
+        "threagile:authorization": "end-user-identity-propagation",
+        "threagile:data_assets_received": "customer-contracts,internal-business-data",
+        "threagile:data_assets_sent": "internal-business-data",
+        "threagile:protocol": "https",
+        "threagile:usage": "business",
+        "threagile:vpn": "true"
+      }
+    },
+    {
+      "id": "backoffice-client\u003emarketing-cms-editing",
+      "name": "Marketing CMS Editing",
+      "description": "Link to the CMS for editing content",
+      "bidirectional": true,
+      "source": "backoffice-client",
+      "destination": "marketing-cms",
+      "assets": [
+        "marketing-material"
+      ],
+      "threats": [
+        {
+          "threat": "dos-risky-access-across-trust-boundary",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "dos-risky-access-across-trust-boundary-mitigation",
+              "state": "required"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "token",
+        "threagile:authorization": "end-user-identity-propagation",
+        "threagile:data_assets_received": "marketing-material",
+        "threagile:data_assets_sent": "marketing-material",
+        "threagile:protocol": "https",
+        "threagile:usage": "business",
+        "threagile:vpn": "true"
+      }
+    },
+    {
+      "id": "customer-client\u003ecustomer-traffic",
+      "name": "Customer Traffic",
+      "description": "Link to the load balancer",
+      "bidirectional": true,
+      "source": "customer-client",
+      "destination": "load-balancer",
+      "assets": [
+        "client-application-code",
+        "customer-accounts",
+        "customer-contracts",
+        "customer-operational-data",
+        "marketing-material"
+      ],
+      "attributes": {
+        "threagile:authentication": "session-id",
+        "threagile:authorization": "end-user-identity-propagation",
+        "threagile:data_assets_received": "customer-accounts,customer-operational-data,customer-contracts,client-application-code,marketing-material",
+        "threagile:data_assets_sent": "customer-accounts,customer-operational-data",
+        "threagile:protocol": "https",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "erp-system\u003edatabase-traffic",
+      "name": "Database Traffic",
+      "description": "Link to the DB system",
+      "bidirectional": true,
+      "source": "erp-system",
+      "destination": "sql-database",
+      "assets": [
+        "customer-accounts",
+        "customer-operational-data",
+        "internal-business-data"
+      ],
+      "threats": [
+        {
+          "threat": "sql-nosql-injection",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "sql-nosql-injection-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "unencrypted-communication",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "unencrypted-communication-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "credentials",
+        "threagile:authorization": "technical-user",
+        "threagile:data_assets_received": "customer-accounts,customer-operational-data,internal-business-data",
+        "threagile:data_assets_sent": "customer-accounts,customer-operational-data,internal-business-data",
+        "threagile:protocol": "jdbc",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "erp-system\u003enfs-filesystem-access",
+      "name": "NFS Filesystem Access",
+      "description": "Link to the file system",
+      "bidirectional": true,
+      "source": "erp-system",
+      "destination": "contract-file-server",
+      "assets": [
+        "customer-contracts"
+      ],
+      "threats": [
+        {
+          "threat": "missing-authentication",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-authentication-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "path-traversal",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "path-traversal-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "unencrypted-communication",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "unencrypted-communication-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "none",
+        "threagile:authorization": "none",
+        "threagile:data_assets_received": "customer-contracts",
+        "threagile:data_assets_sent": "customer-contracts",
+        "threagile:protocol": "nfs",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "external-dev-client\u003egit-repo-code-write-access",
+      "name": "Git-Repo Code Write Access",
+      "description": "Link to the Git repo",
+      "bidirectional": true,
+      "source": "external-dev-client",
+      "destination": "git-repo",
+      "assets": [
+        "client-application-code",
+        "server-application-code"
+      ],
+      "threats": [
+        {
+          "threat": "missing-authentication-second-factor",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "missing-authentication-second-factor-mitigation",
+              "state": "implemented"
+            }
+          ]
+        },
+        {
+          "threat": "unguarded-access-from-internet",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "unguarded-access-from-internet-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "client-certificate",
+        "threagile:authorization": "technical-user",
+        "threagile:data_assets_received": "client-application-code,server-application-code",
+        "threagile:data_assets_sent": "client-application-code,server-application-code",
+        "threagile:protocol": "ssh",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "id": "external-dev-client\u003egit-repo-web-ui-access",
+      "name": "Git-Repo Web-UI Access",
+      "description": "Link to the Git repo",
+      "bidirectional": true,
+      "source": "external-dev-client",
+      "destination": "git-repo",
+      "assets": [
+        "client-application-code",
+        "server-application-code"
+      ],
+      "threats": [
+        {
+          "threat": "missing-authentication-second-factor",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "missing-authentication-second-factor-mitigation",
+              "state": "implemented"
+            }
+          ]
+        },
+        {
+          "threat": "unguarded-access-from-internet",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "unguarded-access-from-internet-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "token",
+        "threagile:authorization": "technical-user",
+        "threagile:data_assets_received": "client-application-code,server-application-code",
+        "threagile:data_assets_sent": "client-application-code,server-application-code",
+        "threagile:protocol": "https",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "id": "external-dev-client\u003ejenkins-web-ui-access",
+      "name": "Jenkins Web-UI Access",
+      "description": "Link to the Jenkins build server",
+      "bidirectional": true,
+      "source": "external-dev-client",
+      "destination": "jenkins-build-server",
+      "assets": [
+        "build-job-config"
+      ],
+      "threats": [
+        {
+          "threat": "missing-authentication-second-factor",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "missing-authentication-second-factor-mitigation",
+              "state": "implemented"
+            }
+          ]
+        },
+        {
+          "threat": "unguarded-access-from-internet",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "unguarded-access-from-internet-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "credentials",
+        "threagile:authorization": "technical-user",
+        "threagile:data_assets_received": "build-job-config",
+        "threagile:data_assets_sent": "build-job-config",
+        "threagile:protocol": "https",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "id": "identity-provider\u003eldap-credential-check-traffic",
+      "name": "LDAP Credential Check Traffic",
+      "description": "Link to the LDAP server",
+      "source": "identity-provider",
+      "destination": "ldap-auth-server",
+      "assets": [
+        "customer-accounts"
+      ],
+      "threats": [
+        {
+          "threat": "ldap-injection",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "ldap-injection-mitigation",
+              "state": "implemented"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "credentials",
+        "threagile:authorization": "technical-user",
+        "threagile:data_assets_sent": "customer-accounts",
+        "threagile:protocol": "ldaps",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "jenkins-build-server\u003eapplication-deployment",
+      "name": "Application Deployment",
+      "description": "Link to the Apache webserver",
+      "source": "jenkins-build-server",
+      "destination": "apache-webserver",
+      "assets": [
+        "client-application-code",
+        "server-application-code"
+      ],
+      "threats": [
+        {
+          "threat": "push-instead-of-pull-deployment",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "push-instead-of-pull-deployment-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "client-certificate",
+        "threagile:authorization": "technical-user",
+        "threagile:data_assets_sent": "client-application-code,server-application-code",
+        "threagile:protocol": "ssh",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "id": "jenkins-build-server\u003ecms-updates",
+      "name": "CMS Updates",
+      "description": "Link to the CMS",
+      "source": "jenkins-build-server",
+      "destination": "marketing-cms",
+      "assets": [
+        "marketing-material"
+      ],
+      "threats": [
+        {
+          "threat": "push-instead-of-pull-deployment",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "push-instead-of-pull-deployment-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "client-certificate",
+        "threagile:authorization": "technical-user",
+        "threagile:data_assets_sent": "marketing-material",
+        "threagile:protocol": "ssh",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "id": "jenkins-build-server\u003egit-repo-code-read-access",
+      "name": "Git Repo Code Read Access",
+      "description": "Link to the Git repository server",
+      "source": "jenkins-build-server",
+      "destination": "git-repo",
+      "assets": [
+        "client-application-code",
+        "server-application-code"
+      ],
+      "attributes": {
+        "threagile:authentication": "client-certificate",
+        "threagile:authorization": "technical-user",
+        "threagile:data_assets_received": "client-application-code,server-application-code",
+        "threagile:protocol": "ssh",
+        "threagile:readonly": "true",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "id": "load-balancer\u003ecms-content-traffic",
+      "name": "CMS Content Traffic",
+      "description": "Link to the CMS server",
+      "source": "load-balancer",
+      "destination": "marketing-cms",
+      "assets": [
+        "marketing-material"
+      ],
+      "threats": [
+        {
+          "threat": "missing-authentication",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-authentication-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-authentication-second-factor",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "missing-authentication-second-factor-mitigation",
+              "state": "implemented"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "none",
+        "threagile:authorization": "none",
+        "threagile:data_assets_received": "marketing-material",
+        "threagile:protocol": "http",
+        "threagile:readonly": "true",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "load-balancer\u003eweb-application-traffic",
+      "name": "Web Application Traffic",
+      "description": "Link to the web server",
+      "bidirectional": true,
+      "source": "load-balancer",
+      "destination": "apache-webserver",
+      "assets": [
+        "client-application-code",
+        "customer-accounts",
+        "customer-contracts",
+        "customer-operational-data"
+      ],
+      "threats": [
+        {
+          "threat": "missing-authentication-second-factor",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "missing-authentication-second-factor-mitigation",
+              "state": "implemented"
+            }
+          ]
+        },
+        {
+          "threat": "unencrypted-communication",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "unencrypted-communication-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "session-id",
+        "threagile:authorization": "end-user-identity-propagation",
+        "threagile:data_assets_received": "customer-accounts,customer-operational-data,customer-contracts,client-application-code",
+        "threagile:data_assets_sent": "customer-accounts,customer-operational-data",
+        "threagile:protocol": "http",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "marketing-cms\u003eauth-traffic",
+      "name": "Auth Traffic",
+      "description": "Link to the LDAP auth server",
+      "bidirectional": true,
+      "source": "marketing-cms",
+      "destination": "ldap-auth-server",
+      "assets": [
+        "customer-accounts"
+      ],
+      "threats": [
+        {
+          "threat": "ldap-injection",
+          "state": "mitigated",
+          "mitigations": [
+            {
+              "mitigation": "ldap-injection-mitigation",
+              "state": "implemented"
+            }
+          ]
+        },
+        {
+          "threat": "unencrypted-communication",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "unencrypted-communication-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "credentials",
+        "threagile:authorization": "technical-user",
+        "threagile:data_assets_received": "customer-accounts",
+        "threagile:data_assets_sent": "customer-accounts",
+        "threagile:protocol": "ldap",
+        "threagile:readonly": "true",
+        "threagile:usage": "business"
+      }
+    }
+  ],
+  "threats": [
+    {
+      "id": "accidental-secret-leak",
+      "name": "Accidental Secret Leak",
+      "description": "Sourcecode repositories (including their histories) as well as artifact registries can accidentally contain secrets like checked-in or packaged-in passwords, API tokens, certificates, crypto keys, etc.",
+      "categories": [
+        "Information Disclosure"
+      ],
+      "cwes": [
+        "CWE-200"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 75,
+        "impactComment": "If this risk is unmitigated, attackers which have access to affected sourcecode repositories or artifact registries might find secrets accidentally checked-in."
+      },
+      "attributes": {
+        "threagile:asvs": "V14 - Configuration Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "code-backdooring",
+      "name": "Code Backdooring",
+      "description": "For each build pipeline component Code Backdooring risks might arise where attackers compromise the build pipeline in order to let backdoored artifacts be shipped into production. Aside from direct code backdooring this includes backdooring of dependencies and even of more lower-level build infrastructure, like backdooring compilers (similar to what the XcodeGhost malware did) or dependencies.",
+      "categories": [
+        "Tampering"
+      ],
+      "cwes": [
+        "CWE-912"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 75,
+        "impactComment": "If this risk remains unmitigated, attackers might be able to execute code on and completely takeover production environments."
+      },
+      "attributes": {
+        "threagile:asvs": "V10 - Malicious Code Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "container-baseimage-backdooring",
+      "name": "Container Base Image Backdooring",
+      "description": "When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors.\u003cbr\u003e\u003cbr\u003eSee for example: \u003ca href=\"https://techcrunch.com/2018/06/15/tainted-crypto-mining-containers-pulled-from-docker-hub/\"\u003ehttps://techcrunch.com/2018/06/15/tainted-crypto-mining-containers-pulled-from-docker-hub/\u003c/a\u003e",
+      "categories": [
+        "Tampering"
+      ],
+      "cwes": [
+        "CWE-912"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 75,
+        "impactComment": "If this risk is unmitigated, attackers might be able to deeply persist in the target system by executing code in deployed containers."
+      },
+      "attributes": {
+        "threagile:asvs": "V10 - Malicious Code Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "dos-risky-access-across-trust-boundary",
+      "name": "DoS-risky Access Across Trust-Boundary",
+      "description": "Assets accessed across trust boundaries with critical or mission-critical availability rating are more prone to Denial-of-Service (DoS) risks.",
+      "categories": [
+        "Denial of Service"
+      ],
+      "cwes": [
+        "CWE-400"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 25,
+        "impactComment": "If this risk remains unmitigated, attackers might be able to disturb the availability of important parts of the system."
+      },
+      "attributes": {
+        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "ldap-injection",
+      "name": "LDAP-Injection",
+      "description": "When an LDAP server is accessed LDAP-Injection risks might arise. The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed.",
+      "categories": [
+        "Tampering"
+      ],
+      "cwes": [
+        "CWE-90"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 75,
+        "impactComment": "If this risk remains unmitigated, attackers might be able to modify LDAP queries and access more data from the LDAP server than allowed."
+      },
+      "attributes": {
+        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html",
+        "threagile:function": "development"
+      }
+    },
+    {
+      "id": "missing-authentication",
+      "name": "Missing Authentication",
+      "description": "Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes sensitive data. ",
+      "categories": [
+        "Elevation of Privilege"
+      ],
+      "cwes": [
+        "CWE-306"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might be able to access or modify sensitive data in an unauthenticated way."
+      },
+      "attributes": {
+        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+        "threagile:function": "architecture"
+      }
+    },
+    {
+      "id": "missing-authentication-second-factor",
+      "name": "Missing Two-Factor Authentication (2FA)",
+      "description": "Technical assets (especially multi-tenant systems) should authenticate incoming requests with two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.",
+      "categories": [
+        "Elevation of Privilege"
+      ],
+      "cwes": [
+        "CWE-308"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication."
+      },
+      "attributes": {
+        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html",
+        "threagile:function": "business-side"
+      }
+    },
+    {
+      "id": "missing-cloud-hardening",
+      "name": "Missing Cloud Hardening",
+      "description": "Cloud components should be hardened according to the cloud vendor best practices. This affects their configuration, auditing, and further areas.",
+      "categories": [
+        "Tampering"
+      ],
+      "cwes": [
+        "CWE-1008"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 100,
+        "impactComment": "If this risk is unmitigated, attackers might access cloud components in an unintended way."
+      },
+      "attributes": {
+        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "missing-file-validation",
+      "name": "Missing File Validation",
+      "description": "When a technical asset accepts files, these input files should be strictly validated about filename and type.",
+      "categories": [
+        "Spoofing"
+      ],
+      "cwes": [
+        "CWE-434"
+      ],
+      "risk": {
+        "likelihood": 75,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might be able to provide malicious files to the application."
+      },
+      "attributes": {
+        "threagile:asvs": "V12 - File and Resources Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
+        "threagile:function": "development"
+      }
+    },
+    {
+      "id": "missing-hardening",
+      "name": "Missing Hardening",
+      "description": "Technical assets with a Relative Attacker Attractiveness (RAA) value of 55 % or higher should be explicitly hardened taking best practices and vendor hardening guides into account.",
+      "categories": [
+        "Tampering"
+      ],
+      "cwes": [
+        "CWE-16"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 50,
+        "impactComment": "If this risk remains unmitigated, attackers might be able to easier attack high-value targets."
+      },
+      "attributes": {
+        "threagile:asvs": "V14 - Configuration Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "missing-identity-propagation",
+      "name": "Missing Identity Propagation",
+      "description": "Technical assets (especially multi-tenant systems), which usually process data for end users should authorize every request based on the identity of the end user when the data flow is authenticated (i.e. non-public). For DevOps usages at least a technical-user authorization is required.",
+      "categories": [
+        "Elevation of Privilege"
+      ],
+      "cwes": [
+        "CWE-284"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might be able to access or modify foreign data after a successful compromise of a component within the system due to missing resource-based authorization checks."
+      },
+      "attributes": {
+        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html",
+        "threagile:function": "architecture"
+      }
+    },
+    {
+      "id": "missing-vault",
+      "name": "Missing Vault (Secret Storage)",
+      "description": "In order to avoid the risk of secret leakage via config files (when attacked through vulnerabilities being able to read files like Path-Traversal and others), it is best practice to use a separate hardened process with proper authentication, authorization, and audit logging to access config secrets (like credentials, private keys, client certificates, etc.). This component is usually some kind of Vault.",
+      "categories": [
+        "Information Disclosure"
+      ],
+      "cwes": [
+        "CWE-522"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might be able to easier steal config secrets (like credentials, private keys, client certificates, etc.) once a vulnerability to access files is present and exploited."
+      },
+      "attributes": {
+        "threagile:asvs": "V6 - Stored Cryptography Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
+        "threagile:function": "architecture"
+      }
+    },
+    {
+      "id": "mixed-targets-on-shared-runtime",
+      "name": "Mixed Targets on Shared Runtime",
+      "description": "Different attacker targets (like frontend and backend/datastore components) should not be running on the same shared (underlying) runtime.",
+      "categories": [
+        "Elevation of Privilege"
+      ],
+      "cwes": [
+        "CWE-1008"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards more valuable targets, as they are running on the same shared runtime."
+      },
+      "attributes": {
+        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "path-traversal",
+      "name": "Path-Traversal",
+      "description": "When a filesystem is accessed Path-Traversal or Local-File-Inclusion (LFI) risks might arise. The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.",
+      "categories": [
+        "Information Disclosure"
+      ],
+      "cwes": [
+        "CWE-22"
+      ],
+      "risk": {
+        "likelihood": 75,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might be able to read sensitive files (configuration data, key/credential files, deployment files, business data files, etc.) from the filesystem of affected components."
+      },
+      "attributes": {
+        "threagile:asvs": "V12 - File and Resources Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
+        "threagile:function": "development"
+      }
+    },
+    {
+      "id": "push-instead-of-pull-deployment",
+      "name": "Push instead of Pull Deployment",
+      "description": "When comparing push-based vs. pull-based deployments from a security perspective, pull-based deployments improve the overall security of the deployment targets. Every exposed interface of a production system to accept a deployment increases the attack surface of the production system, thus a pull-based approach exposes less attack surface relevant interfaces.",
+      "categories": [
+        "Tampering"
+      ],
+      "cwes": [
+        "CWE-1127"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might have more potential target vectors for attacks, as the overall attack surface is unnecessarily increased."
+      },
+      "attributes": {
+        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+        "threagile:function": "architecture"
+      }
+    },
+    {
+      "id": "server-side-request-forgery",
+      "name": "Server-Side Request Forgery (SSRF)",
+      "description": "When a server system (i.e. not a client) is accessing other server systems via typical web protocols Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might arise. ",
+      "categories": [
+        "Information Disclosure"
+      ],
+      "cwes": [
+        "CWE-918"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might be able to access sensitive services or files of network-reachable components by modifying outgoing calls of affected components."
+      },
+      "attributes": {
+        "threagile:asvs": "V12 - File and Resources Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
+        "threagile:function": "development"
+      }
+    },
+    {
+      "id": "something-strange",
+      "name": "Some Individual Risk Example",
+      "description": "Some text describing the risk category...",
+      "categories": [
+        "Repudiation"
+      ],
+      "cwes": [
+        "CWE-693"
+      ],
+      "risk": {
+        "likelihood": 100,
+        "impact": 100,
+        "impactComment": "Some text describing the impact..."
+      },
+      "attributes": {
+        "threagile:asvs": "V0 - Something Strange",
+        "threagile:cheat_sheet": "https://example.com",
+        "threagile:function": "business-side"
+      }
+    },
+    {
+      "id": "sql-nosql-injection",
+      "name": "SQL/NoSQL-Injection",
+      "description": "When a database is accessed via database access protocols SQL/NoSQL-Injection risks might arise. The risk rating depends on the sensitivity technical asset itself and of the data assets processed.",
+      "categories": [
+        "Tampering"
+      ],
+      "cwes": [
+        "CWE-89"
+      ],
+      "risk": {
+        "likelihood": 75,
+        "impact": 75,
+        "impactComment": "If this risk is unmitigated, attackers might be able to modify SQL/NoSQL queries to steal and modify data and eventually further escalate towards a deeper system penetration via code executions."
+      },
+      "attributes": {
+        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+        "threagile:function": "development"
+      }
+    },
+    {
+      "id": "unchecked-deployment",
+      "name": "Unchecked Deployment",
+      "description": "For each build-pipeline component Unchecked Deployment risks might arise when the build-pipeline does not include established DevSecOps best-practices. DevSecOps best-practices scan as part of CI/CD pipelines for vulnerabilities in source- or byte-code, dependencies, container layers, and dynamically against running test systems. There are several open-source and commercial tools existing in the categories DAST, SAST, and IAST.",
+      "categories": [
+        "Tampering"
+      ],
+      "cwes": [
+        "CWE-1127"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk remains unmitigated, vulnerabilities in custom-developed software or their dependencies might not be identified during continuous deployment cycles."
+      },
+      "attributes": {
+        "threagile:asvs": "V14 - Configuration Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html",
+        "threagile:function": "architecture"
+      }
+    },
+    {
+      "id": "unencrypted-asset",
+      "name": "Unencrypted Technical Assets",
+      "description": "Due to the confidentiality rating of the technical asset itself and/or the stored data assets this technical asset must be encrypted. The risk rating depends on the sensitivity technical asset itself and of the data assets stored.",
+      "categories": [
+        "Information Disclosure"
+      ],
+      "cwes": [
+        "CWE-311"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 75,
+        "impactComment": "If this risk is unmitigated, attackers might be able to access unencrypted data when successfully compromising sensitive components."
+      },
+      "attributes": {
+        "threagile:asvs": "V6 - Stored Cryptography Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "unencrypted-communication",
+      "name": "Unencrypted Communication",
+      "description": "Due to the confidentiality and/or integrity rating of the data assets transferred over the communication link this connection must be encrypted.",
+      "categories": [
+        "Information Disclosure"
+      ],
+      "cwes": [
+        "CWE-319"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 75,
+        "impactComment": "If this risk is unmitigated, network attackers might be able to eavesdrop on unencrypted sensitive data sent between components."
+      },
+      "attributes": {
+        "threagile:asvs": "V9 - Communication Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "unguarded-access-from-internet",
+      "name": "Unguarded Access From Internet",
+      "description": "Internet-exposed assets must be guarded by a protecting service, application, or reverse-proxy.",
+      "categories": [
+        "Elevation of Privilege"
+      ],
+      "cwes": [
+        "CWE-501"
+      ],
+      "risk": {
+        "likelihood": 75,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might be able to directly attack sensitive systems without any hardening components in-between due to them being directly exposed on the internet."
+      },
+      "attributes": {
+        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+        "threagile:function": "architecture"
+      }
+    },
+    {
+      "id": "untrusted-deserialization",
+      "name": "Untrusted Deserialization",
+      "description": "When a technical asset accepts data in a specific serialized form (like Java or .NET serialization), Untrusted Deserialization risks might arise.\u003cbr\u003e\u003cbr\u003eSee \u003ca href=\"https://christian-schneider.net/JavaDeserializationSecurityFAQ.html\"\u003ehttps://christian-schneider.net/JavaDeserializationSecurityFAQ.html\u003c/a\u003e for more details.",
+      "categories": [
+        "Tampering"
+      ],
+      "cwes": [
+        "CWE-502"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 100,
+        "impactComment": "If this risk is unmitigated, attackers might be able to execute code on target systems by exploiting untrusted deserialization endpoints."
+      },
+      "attributes": {
+        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html",
+        "threagile:function": "architecture"
+      }
+    },
+    {
+      "id": "xml-external-entity",
+      "name": "XML External Entity (XXE)",
+      "description": "When a technical asset accepts data in XML format, XML External Entity (XXE) risks might arise.",
+      "categories": [
+        "Information Disclosure"
+      ],
+      "cwes": [
+        "CWE-611"
+      ],
+      "risk": {
+        "likelihood": 75,
+        "impact": 75,
+        "impactComment": "If this risk is unmitigated, attackers might be able to read sensitive files (configuration data, key/credential files, deployment files, business data files, etc.) form the filesystem of affected components and/or access sensitive services or files of other components."
+      },
+      "attributes": {
+        "threagile:asvs": "V14 - Configuration Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html",
+        "threagile:function": "development"
+      }
+    }
+  ],
+  "mitigations": [
+    {
+      "id": "accidental-secret-leak-mitigation",
+      "name": "Build Pipeline Hardening",
+      "description": "Establish measures preventing accidental check-in or package-in of secrets into sourcecode repositories and artifact registries. This starts by using good .gitignore and .dockerignore files, but does not stop there. See for example tools like \u003ci\u003e\\\"git-secrets\\\"\u003c/i\u003e or \u003ci\u003e\\\"Talisman\\\"\u003c/i\u003e to have check-in preventive measures for secrets. Consider also to regularly scan your repositories for secrets accidentally checked-in using scanning tools like \u003ci\u003e\"gitleaks\"\u003c/i\u003e or \u003ci\u003e\"gitrob\"\u003c/i\u003e.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "code-backdooring-mitigation",
+      "name": "Build Pipeline Hardening",
+      "description": "Reduce the attack surface of backdooring the build pipeline by not directly exposing the build pipeline components on the public internet and also not exposing it in front of unmanaged (out-of-scope) developer clients.Also consider the use of code signing to prevent code modifications.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "container-baseimage-backdooring-mitigation",
+      "name": "Container Infrastructure Hardening",
+      "description": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?"
+      }
+    },
+    {
+      "id": "dos-risky-access-across-trust-boundary-mitigation",
+      "name": "Anti-DoS Measures",
+      "description": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "ldap-injection-mitigation",
+      "name": "LDAP-Injection Prevention",
+      "description": "Try to use libraries that properly encode LDAP meta characters in searches and queries to access the LDAP server in order to stay safe from LDAP-Injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-authentication-mitigation",
+      "name": "Authentication of Incoming Requests",
+      "description": "Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of two-factor authentication for human users.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-authentication-second-factor-mitigation",
+      "name": "Authentication with Second Factor (2FA)",
+      "description": "Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-cloud-hardening-mitigation",
+      "name": "Cloud Hardening",
+      "description": "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Amazon Web Services\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", or \"Prowler AWS CIS Benchmark Tool\"\u003c/i\u003e). \u003cbr\u003eFor EC2 and other servers running Amazon Linux, follow the \u003ci\u003eCIS Benchmark for Amazon Linux\u003c/i\u003e and switch to IMDSv2. \u003cbr\u003eFor S3 buckets follow the \u003ci\u003eSecurity Best Practices for Amazon S3\u003c/i\u003e at \u003ca href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\"\u003ehttps://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\u003c/a\u003e to avoid accidental leakage. \u003cbr\u003eAlso take a look at some of these tools: \u003ca href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\"\u003ehttps://github.com/toniblyx/my-arsenal-of-aws-security-tools\u003c/a\u003e \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eMicrosoft Azure\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Microsoft Azure\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e).\u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eGoogle Cloud Platform\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Google Cloud Computing Platform\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eOracle Cloud Platform\u003c/b\u003e: Follow the hardening best practices (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\"\u003c/i\u003e).",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-file-validation-mitigation",
+      "name": "File Validation",
+      "description": "Filter by file extension and discard (if feasible) the name provided. Whitelist the accepted file types and determine the mime-type on the server-side (for example via \"Apache Tika\" or similar checks). If the file is retrievable by end users and/or backoffice employees, consider performing scans for popular malware (if the files can be retrieved much later than they were uploaded, also apply a fresh malware scan during retrieval to scan with newer signatures of popular malware). Also enforce limits on maximum file size to avoid denial-of-service like scenarios.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-hardening-mitigation",
+      "name": "System Hardening",
+      "description": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-identity-propagation-mitigation",
+      "name": "Identity Propagation and Resource-based Authorization",
+      "description": "When processing requests for end users if possible authorize in the backend against the propagated identity of the end user. This can be achieved in passing JWTs or similar tokens and checking them in the backend services. For DevOps usages apply at least a technical-user authorization.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-vault-mitigation",
+      "name": "Vault (Secret Storage)",
+      "description": "Consider using a Vault (Secret Storage) to securely store and access config secrets (like credentials, private keys, client certificates, etc.).",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "GetAttribute a Vault (Secret Storage) in place?"
+      }
+    },
+    {
+      "id": "mixed-targets-on-shared-runtime-mitigation",
+      "name": "Runtime Separation",
+      "description": "Use separate runtime environments for running different target components or apply similar separation styles to prevent load- or breach-related problems originating from one more attacker-facing asset impacts also the other more critical rated backend/datastore assets.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "path-traversal-mitigation",
+      "name": "Path-Traversal Prevention",
+      "description": "Before accessing the file cross-check that it resides in the expected folder and is of the expected type and filename/suffix. Try to use a mapping if possible instead of directly accessing by a filename which is (partly or fully) provided by the caller. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "push-instead-of-pull-deployment-mitigation",
+      "name": "Build Pipeline Hardening",
+      "description": "Try to prefer pull-based deployments (like GitOps scenarios offer) over push-based deployments to reduce the attack surface of the production system.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "server-side-request-forgery-mitigation",
+      "name": "SSRF Prevention",
+      "description": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "something-strange-mitigation",
+      "name": "Some text describing the action...",
+      "description": "Some text describing the mitigation...",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Check if XYZ..."
+      }
+    },
+    {
+      "id": "sql-nosql-injection-mitigation",
+      "name": "SQL/NoSQL-Injection Prevention",
+      "description": "Try to use parameter binding to be safe from injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "unchecked-deployment-mitigation",
+      "name": "Build Pipeline Hardening",
+      "description": "Apply DevSecOps best-practices and use scanning tools to identify vulnerabilities in source- or byte-code,dependencies, container layers, and optionally also via dynamic scans against running test systems.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "unencrypted-asset-mitigation",
+      "name": "Encryption of Technical Asset",
+      "description": "Apply encryption to the technical asset.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "unencrypted-communication-mitigation",
+      "name": "Encryption of Communication Links",
+      "description": "Apply transport layer encryption to the communication link.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "unguarded-access-from-internet-mitigation",
+      "name": "Encapsulation of Technical Asset",
+      "description": "Encapsulate the asset behind a guarding service, application, or reverse-proxy. For admin maintenance a bastion-host should be used as a jump-server. For file transfer a store-and-forward-host should be used as an indirect file exchange platform.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "untrusted-deserialization-mitigation",
+      "name": "Prevention of Deserialization of Untrusted Data",
+      "description": "Try to avoid the deserialization of untrusted data (even of data within the same trust-boundary as long as it is sent across a remote connection) in order to stay safe from Untrusted Deserialization vulnerabilities. Alternatively a strict whitelisting approach of the classes/types/values to deserialize might help as well. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "xml-external-entity-mitigation",
+      "name": "XML Parser Hardening",
+      "description": "Apply hardening of all XML parser instances in order to stay safe from XML External Entity (XXE) vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    }
+  ]
+}

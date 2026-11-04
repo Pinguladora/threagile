@@ -29,6 +29,8 @@ This flags is used when application run in [analyze mode](./mode-analyze.md)
 | `-generate-risks-json`            | bool                 | specify if JSON with risks shall be generated                      | true                      |
 | `-generate-technical-assets-json` | bool                 | specify if JSON with technical assets shall be generated           | true                      |
 | `-generate-stats-json`            | bool                 | specify if JSON with risk statistic shall be generated             | true                      |
+| `-otm-json`                       | string(path to file) | file name of the [Open Threat Model (OTM)](./otm.md) JSON with the model and its risks | otm.json                  |
+| `-skip-otm-json`                  | bool                 | skip generating the [Open Threat Model (OTM)](./otm.md) JSON        | false                     |
 | `-generate-risks-excel`           | bool                 | specify if Excel with risks shall be generated                     | true                      |
 | `-generate-tags-excel`            | bool                 | specify if Excel with tags shall be generated                      | true                      |
 | `-generate-report-pdf`            | bool                 | specify if PDF with the analyse report shall be generated          | true                      |

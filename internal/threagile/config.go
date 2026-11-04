@@ -45,6 +45,7 @@ type Config struct {
 	JsonRisksFilenameValue           string `json:"JsonRisksFilename,omitempty"           yaml:"JsonRisksFilename"`
 	JsonTechnicalAssetsFilenameValue string `json:"JsonTechnicalAssetsFilename,omitempty" yaml:"JsonTechnicalAssetsFilename"`
 	JsonStatsFilenameValue           string `json:"JsonStatsFilename,omitempty"           yaml:"JsonStatsFilename"`
+	JsonOTMFilenameValue             string `json:"JsonOTMFilename,omitempty"             yaml:"JsonOTMFilename"`
 	TemplateFilenameValue            string `json:"TemplateFilename,omitempty"            yaml:"TemplateFilename"`
 	ReportLogoImagePathValue         string `json:"ReportLogoImagePath,omitempty"         yaml:"ReportLogoImagePath"`
 	TechnologyFilenameValue          string `json:"TechnologyFilename,omitempty"          yaml:"TechnologyFilename"`
@@ -73,6 +74,7 @@ type Config struct {
 	SkipRisksJSONValue           bool `json:"SkipRisksJSON,omitempty"           yaml:"SkipRisksJSON"`
 	SkipTechnicalAssetsJSONValue bool `json:"SkipTechnicalAssetsJSON,omitempty" yaml:"SkipTechnicalAssetsJSON"`
 	SkipStatsJSONValue           bool `json:"SkipStatsJSON,omitempty"           yaml:"SkipStatsJSON"`
+	SkipOTMJSONValue             bool `json:"SkipOTMJSON,omitempty"             yaml:"SkipOTMJSON"`
 	SkipRisksExcelValue          bool `json:"SkipRisksExcel,omitempty"          yaml:"SkipRisksExcel"`
 	SkipTagsExcelValue           bool `json:"SkipTagsExcel,omitempty"           yaml:"SkipTagsExcel"`
 	SkipReportPDFValue           bool `json:"SkipReportPDF,omitempty"           yaml:"SkipReportPDF"`
@@ -106,6 +108,7 @@ type ConfigGetter interface {
 	GetJsonRisksFilename() string
 	GetJsonTechnicalAssetsFilename() string
 	GetJsonStatsFilename() string
+	GetJsonOTMFilename() string
 	GetReportLogoImagePath() string
 	GetTemplateFilename() string
 	GetRiskRulePlugins() []string
@@ -134,6 +137,7 @@ type ConfigGetter interface {
 	GetSkipRisksJSON() bool
 	GetSkipTechnicalAssetsJSON() bool
 	GetSkipStatsJSON() bool
+	GetSkipOTMJSON() bool
 	GetSkipRisksExcel() bool
 	GetSkipTagsExcel() bool
 	GetSkipReportPDF() bool
@@ -188,6 +192,7 @@ func (c *Config) Defaults(buildTimestamp string) *Config {
 		JsonRisksFilenameValue:           JsonRisksFilename,
 		JsonTechnicalAssetsFilenameValue: JsonTechnicalAssetsFilename,
 		JsonStatsFilenameValue:           JsonStatsFilename,
+		JsonOTMFilenameValue:             JsonOTMFilename,
 		TemplateFilenameValue:            TemplateFilename,
 		ReportLogoImagePathValue:         ReportLogoImagePath,
 		TechnologyFilenameValue:          "",
@@ -416,6 +421,12 @@ func (c *Config) Merge(config Config, values map[string]any) {
 
 		case strings.ToLower("JsonStatsFilename"):
 			c.JsonStatsFilenameValue = config.JsonStatsFilenameValue
+
+		case strings.ToLower("JsonOTMFilename"):
+			c.JsonOTMFilenameValue = config.JsonOTMFilenameValue
+
+		case strings.ToLower("SkipOTMJSON"):
+			c.SkipOTMJSONValue = config.SkipOTMJSONValue
 
 		case strings.ToLower("TemplateFilename"):
 			c.TemplateFilenameValue = config.TemplateFilenameValue
@@ -717,6 +728,10 @@ func (c *Config) GetJsonStatsFilename() string {
 	return c.JsonStatsFilenameValue
 }
 
+func (c *Config) GetJsonOTMFilename() string {
+	return c.JsonOTMFilenameValue
+}
+
 func (c *Config) GetReportLogoImagePath() string {
 	return c.ReportLogoImagePathValue
 }
@@ -859,6 +874,10 @@ func (c *Config) GetSkipTechnicalAssetsJSON() bool {
 
 func (c *Config) GetSkipStatsJSON() bool {
 	return c.SkipStatsJSONValue
+}
+
+func (c *Config) GetSkipOTMJSON() bool {
+	return c.SkipOTMJSONValue
 }
 
 func (c *Config) GetSkipRisksExcel() bool {

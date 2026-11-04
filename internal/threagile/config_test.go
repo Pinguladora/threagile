@@ -49,3 +49,38 @@ func writeConfig(t *testing.T, appFolder string) string {
 
 	return configFile
 }
+
+func TestLoadReadsTheOTMOutputKeys(t *testing.T) {
+	configFile := writeConfig(t, t.TempDir())
+	data, err := os.ReadFile(filepath.Clean(configFile))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var values map[string]any
+	if err := json.Unmarshal(data, &values); err != nil {
+		t.Fatal(err)
+	}
+	values["JsonOTMFilename"] = "model.otm.json"
+	values["SkipOTMJSON"] = true
+
+	data, err = json.Marshal(values)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(configFile, data, 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	config := new(Config).Defaults("")
+	if config.GetJsonOTMFilename() != JsonOTMFilename || config.GetSkipOTMJSON() {
+		t.Fatalf("defaults are %q and %v, want %q and false", config.GetJsonOTMFilename(), config.GetSkipOTMJSON(), JsonOTMFilename)
+	}
+
+	if err := config.Load(configFile); err != nil {
+		t.Fatal(err)
+	}
+	if config.GetJsonOTMFilename() != "model.otm.json" || !config.GetSkipOTMJSON() {
+		t.Errorf("got %q and %v, want the values of the config file", config.GetJsonOTMFilename(), config.GetSkipOTMJSON())
+	}
+}
