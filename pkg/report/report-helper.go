@@ -76,7 +76,9 @@ func reduceToRiskStatus(risks []*types.Risk, status types.RiskStatus) []*types.R
 	return filteredRisks
 }
 
-func reduceToFunctionRisk(parsedModel *types.Model, risksByCategory map[string][]*types.Risk, function types.RiskFunction) map[string][]*types.Risk {
+func reduceToFunctionRisk(parsedModel *types.Model, risksByCategory map[string][]*types.Risk,
+	function types.RiskFunction,
+) map[string][]*types.Risk {
 	result := make(map[string][]*types.Risk)
 	for categoryId, risks := range risksByCategory {
 		for _, risk := range risks {
@@ -89,7 +91,9 @@ func reduceToFunctionRisk(parsedModel *types.Model, risksByCategory map[string][
 	return result
 }
 
-func reduceToSTRIDERisk(parsedModel *types.Model, risksByCategory map[string][]*types.Risk, stride types.STRIDE) map[string][]*types.Risk {
+func reduceToSTRIDERisk(parsedModel *types.Model, risksByCategory map[string][]*types.Risk,
+	stride types.STRIDE,
+) map[string][]*types.Risk {
 	result := make(map[string][]*types.Risk)
 	for categoryId, risks := range risksByCategory {
 		for _, risk := range risks {
@@ -166,7 +170,9 @@ func filteredByStillAtRisk(parsedModel *types.Model) []*types.Risk {
 	return filteredRisks
 }
 
-func identifiedDataBreachProbabilityStillAtRisk(parsedModel *types.Model, dataAsset *types.DataAsset) types.DataBreachProbability {
+func identifiedDataBreachProbabilityStillAtRisk(parsedModel *types.Model,
+	dataAsset *types.DataAsset,
+) types.DataBreachProbability {
 	highestProbability := types.Improbable
 	for _, risk := range filteredByStillAtRisk(parsedModel) {
 		for _, techAsset := range risk.DataBreachTechnicalAssetIDs {

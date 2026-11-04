@@ -47,7 +47,8 @@ func WriteRisksExcelToFile(parsedModel *types.Model, filename string, config rep
 
 	orientation := "landscape"
 	size := 9 // A4
-	setPageLayoutError := excel.SetPageLayout(sheetName, &excelize.PageLayoutOptions{Orientation: &orientation, Size: &size})
+	setPageLayoutError := excel.SetPageLayout(sheetName,
+		&excelize.PageLayoutOptions{Orientation: &orientation, Size: &size})
 	if setPageLayoutError != nil {
 		return fmt.Errorf("unable to set page layout: %w", setPageLayoutError)
 	}
@@ -326,31 +327,36 @@ func WriteTagsExcelToFile(parsedModel *types.Model, filename string, config repo
 	excelRow++ // as we have a header line
 	if len(sortedTagsAvailable) > 0 {
 		for _, techAsset := range sortedTechnicalAssetsByTitle(parsedModel) {
-			err := writeRow(excel, &excelRow, sheetName, lastColumn, cellStyles.blackLeftBold, cellStyles.blackCenter, sortedTagsAvailable, techAsset.Title, techAsset.Tags)
+			err := writeRow(excel, &excelRow, sheetName, lastColumn, cellStyles.blackLeftBold, cellStyles.blackCenter,
+				sortedTagsAvailable, techAsset.Title, techAsset.Tags)
 			if err != nil {
 				return fmt.Errorf("unable to write row: %w", err)
 			}
 			for _, commLink := range techAsset.CommunicationLinksSorted() {
-				err := writeRow(excel, &excelRow, sheetName, lastColumn, cellStyles.blackLeftBold, cellStyles.blackCenter, sortedTagsAvailable, commLink.Title, commLink.Tags)
+				err := writeRow(excel, &excelRow, sheetName, lastColumn, cellStyles.blackLeftBold, cellStyles.blackCenter,
+					sortedTagsAvailable, commLink.Title, commLink.Tags)
 				if err != nil {
 					return fmt.Errorf("unable to write row: %w", err)
 				}
 			}
 		}
 		for _, dataAsset := range sortedDataAssetsByTitle(parsedModel) {
-			err := writeRow(excel, &excelRow, sheetName, lastColumn, cellStyles.blackLeftBold, cellStyles.blackCenter, sortedTagsAvailable, dataAsset.Title, dataAsset.Tags)
+			err := writeRow(excel, &excelRow, sheetName, lastColumn, cellStyles.blackLeftBold, cellStyles.blackCenter,
+				sortedTagsAvailable, dataAsset.Title, dataAsset.Tags)
 			if err != nil {
 				return fmt.Errorf("unable to write row: %w", err)
 			}
 		}
 		for _, trustBoundary := range sortedTrustBoundariesByTitle(parsedModel) {
-			err := writeRow(excel, &excelRow, sheetName, lastColumn, cellStyles.blackLeftBold, cellStyles.blackCenter, sortedTagsAvailable, trustBoundary.Title, trustBoundary.Tags)
+			err := writeRow(excel, &excelRow, sheetName, lastColumn, cellStyles.blackLeftBold, cellStyles.blackCenter,
+				sortedTagsAvailable, trustBoundary.Title, trustBoundary.Tags)
 			if err != nil {
 				return fmt.Errorf("unable to write row: %w", err)
 			}
 		}
 		for _, sharedRuntime := range sortedSharedRuntimesByTitle(parsedModel) {
-			err := writeRow(excel, &excelRow, sheetName, lastColumn, cellStyles.blackLeftBold, cellStyles.blackCenter, sortedTagsAvailable, sharedRuntime.Title, sharedRuntime.Tags)
+			err := writeRow(excel, &excelRow, sheetName, lastColumn, cellStyles.blackLeftBold, cellStyles.blackCenter,
+				sortedTagsAvailable, sharedRuntime.Title, sharedRuntime.Tags)
 			if err != nil {
 				return fmt.Errorf("unable to write row: %w", err)
 			}
@@ -414,7 +420,8 @@ func writeRow(excel *excelize.File, excelRow *int, sheetName string, _ string, s
 
 	lastCellName, lastCoordinatesToCellNameError := excelize.CoordinatesToCellName(len(sortedTags)+2, *excelRow)
 	if lastCoordinatesToCellNameError != nil {
-		return fmt.Errorf("failed to get cell coordinates from [%d, %d]: %w", len(sortedTags)+2, *excelRow, lastCoordinatesToCellNameError)
+		return fmt.Errorf("failed to get cell coordinates from [%d, %d]: %w",
+			len(sortedTags)+2, *excelRow, lastCoordinatesToCellNameError)
 	}
 
 	err = excel.SetCellStyle(sheetName, secondCellName, lastCellName, styleBlackCenter)

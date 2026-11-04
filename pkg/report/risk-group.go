@@ -85,14 +85,17 @@ func (what *RiskGroup) Write(excel *excelize.File, sheetName string, cellStyles 
 	return writeError
 }
 
-func (what *RiskGroup) writeGroup(excel *excelize.File, sheetName string, cellStyles *ExcelStyles, excelRow int) (int, error) {
+func (what *RiskGroup) writeGroup(excel *excelize.File, sheetName string, cellStyles *ExcelStyles,
+	excelRow int,
+) (int, error) {
 	for _, risk := range what.Items {
 		excelRow++
 
 		for columnIndex, column := range risk.Columns {
 			cellName, coordinatesToCellNameError := excelize.CoordinatesToCellName(columnIndex+1, excelRow+1)
 			if coordinatesToCellNameError != nil {
-				return excelRow, fmt.Errorf("failed to get cell coordinates from [%d, %d]: %w", columnIndex+1, excelRow+1, coordinatesToCellNameError)
+				return excelRow, fmt.Errorf("failed to get cell coordinates from [%d, %d]: %w",
+					columnIndex+1, excelRow+1, coordinatesToCellNameError)
 			}
 
 			setCellValueError := excel.SetCellValue(sheetName, cellName, column)
@@ -105,7 +108,8 @@ func (what *RiskGroup) writeGroup(excel *excelize.File, sheetName string, cellSt
 				return excelRow, fmt.Errorf("failed to get cell coordinates from column [%d]: %w", columnIndex+1, columnNameError)
 			}
 
-			setCellStyleError := excel.SetCellStyle(sheetName, cellName, cellName, cellStyles.Get(columnName, risk.Status, risk.Severity))
+			setCellStyleError := excel.SetCellStyle(sheetName, cellName, cellName,
+				cellStyles.Get(columnName, risk.Status, risk.Severity))
 			if setCellStyleError != nil {
 				return excelRow, fmt.Errorf("failed to set cell style: %w", setCellStyleError)
 			}
