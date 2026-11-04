@@ -367,7 +367,7 @@ func (what *ValueExpression) resolveMethodCall(scope *common.Scope, reString str
 	name := strings.ToLower(match[1])
 	args := make([]common.Value, 0)
 	if len(strings.TrimSpace(match[2])) > 0 {
-		// todo: better arg parsing for '{var1}, {var2}'
+		// The arguments are simply split at the commas; arguments like '{var1}, {var2}' could use a better parser.
 		for arg := range strings.SplitSeq(match[2], ",") {
 			val, errorLiteral, evalError := what.evalStringReference(scope, common.SomeStringValue(strings.TrimSpace(arg), value.Event()))
 			if evalError != nil {
