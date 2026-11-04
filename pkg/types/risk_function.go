@@ -40,8 +40,8 @@ var RiskFunctionTypeDescription = [...]TypeDescription{
 func ParseRiskFunction(value string) (riskFunction RiskFunction, err error) {
 	value = strings.TrimSpace(value)
 	for _, candidate := range RiskFunctionValues() {
-		if candidate.String() == value {
-			return candidate.(RiskFunction), err
+		if parsed, ok := candidate.(RiskFunction); ok && parsed.String() == value {
+			return parsed, err
 		}
 	}
 	return riskFunction, fmt.Errorf("unable to parse into type: %v", value)

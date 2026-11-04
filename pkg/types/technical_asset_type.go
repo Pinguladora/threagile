@@ -46,8 +46,8 @@ func (what TechnicalAssetType) Explain() string {
 func ParseTechnicalAssetType(value string) (technicalAssetType TechnicalAssetType, err error) {
 	value = strings.TrimSpace(value)
 	for _, candidate := range TechnicalAssetTypeValues() {
-		if candidate.String() == value {
-			return candidate.(TechnicalAssetType), err
+		if parsed, ok := candidate.(TechnicalAssetType); ok && parsed.String() == value {
+			return parsed, err
 		}
 	}
 	return technicalAssetType, fmt.Errorf("unable to parse into type: %v", value)

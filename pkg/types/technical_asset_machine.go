@@ -40,8 +40,8 @@ var TechnicalAssetMachineTypeDescription = [...]TypeDescription{
 func ParseTechnicalAssetMachine(value string) (technicalAssetMachine TechnicalAssetMachine, err error) {
 	value = strings.TrimSpace(value)
 	for _, candidate := range TechnicalAssetMachineValues() {
-		if candidate.String() == value {
-			return candidate.(TechnicalAssetMachine), err
+		if parsed, ok := candidate.(TechnicalAssetMachine); ok && parsed.String() == value {
+			return parsed, err
 		}
 	}
 	return technicalAssetMachine, fmt.Errorf("unable to parse into type: %v", value)
