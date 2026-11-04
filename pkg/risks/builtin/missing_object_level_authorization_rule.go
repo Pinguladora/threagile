@@ -30,12 +30,14 @@ func (*MissingObjectLevelAuthorizationRule) Category() *types.RiskCategory {
 		Check:    checkCheatSheetAndASVS,
 		Function: types.Development,
 		STRIDE:   types.ElevationOfPrivilege,
-		DetectionLogic: "In-scope technical assets other than datastores, processing or storing data rated at least as " +
+		DetectionLogic: "In-scope technical assets other than datastores and assets that forward requests without " +
+			"authenticating them (like load balancers and reverse proxies), processing or storing data rated at least as " +
 			types.Confidential.String() + " or " + types.Critical.String() + ", with an incoming communication link " +
 			"whose authorization is <i>" + types.NoneAuthorization.String() + "</i>, <i>" +
 			types.AuthenticatedOnly.String() + "</i> or <i>" + types.FunctionLevel.String() + "</i>, and whose " +
-			"identity is <i>" + types.EndUser.String() + "</i> or whose caller is used by humans. Links whose " +
-			"authorization is <i>" + types.UnknownAuthorization.String() + "</i> are skipped.",
+			"identity is <i>" + types.EndUser.String() + "</i> or whose caller is used by humans. DevOps links, which " +
+			"administrators use by role, and links whose authorization is <i>" + types.UnknownAuthorization.String() +
+			"</i> are skipped.",
 		RiskAssessment: "The risk rating depends on the sensitivity of the data processed or stored by the target, one " +
 			"step higher when the link has no function-level authorization either. The attack is very likely when the " +
 			"caller is on the internet, and likely otherwise.",
@@ -56,7 +58,8 @@ func (*MissingObjectLevelAuthorizationRule) SupportedTags() []string {
 func (r *MissingObjectLevelAuthorizationRule) GenerateRisks(input *types.Model) ([]*types.Risk, error) {
 	risks := make([]*types.Risk, 0)
 	for _, target := range input.InScopeTechnicalAssets() {
-		if target.Type == types.Datastore || !isSensitive(input, target) {
+		if target.Type == types.Datastore || target.Technologies.GetAttribute(types.NoAuthenticationRequired) ||
+			!isSensitive(input, target) {
 			continue
 		}
 		for _, link := range sortedIncomingLinks(input, target) {
@@ -69,10 +72,10 @@ func (r *MissingObjectLevelAuthorizationRule) GenerateRisks(input *types.Model) 
 	return risks, nil
 }
 
-// actsForUsers reports whether the link carries requests of users: it propagates their identity, or comes from a
-// client that humans use.
+// actsForUsers reports whether the link carries the business requests of users: it propagates their identity, or
+// comes from a client that humans use. Administrators work through devops links, by role.
 func actsForUsers(link *types.CommunicationLink, caller *types.TechnicalAsset) bool {
-	return link.Identity == types.EndUser || caller.UsedAsClientByHuman
+	return link.Usage != types.DevOps && (link.Identity == types.EndUser || caller.UsedAsClientByHuman)
 }
 
 // isCoarserThanObjectLevel reports whether the authorization is known and does not check access per object.
