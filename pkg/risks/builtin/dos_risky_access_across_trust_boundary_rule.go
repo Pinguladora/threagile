@@ -17,13 +17,13 @@ func (*DosRiskyAccessAcrossTrustBoundaryRule) Category() *types.RiskCategory {
 		Description: "Assets accessed across trust boundaries with critical or mission-critical availability rating " +
 			"are more prone to Denial-of-Service (DoS) risks.",
 		Impact:     "If this risk remains unmitigated, attackers might be able to disturb the availability of important parts of the system.",
-		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
+		ASVS:       asvsArchitecture,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html",
 		Action:     "Anti-DoS Measures",
 		Mitigation: "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. " +
 			"Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. " +
 			"Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
-		Check:    "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:    checkCheatSheetAndASVS,
 		Function: types.Operations,
 		STRIDE:   types.DenialOfService,
 		DetectionLogic: "In-scope technical assets (excluding " + types.LoadBalancer + ") with " +

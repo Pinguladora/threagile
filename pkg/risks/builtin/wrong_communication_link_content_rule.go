@@ -17,17 +17,17 @@ func (*WrongCommunicationLinkContentRule) Category() *types.RiskCategory {
 		Description: "When a communication link is defined as readonly, but does not receive any data asset, " +
 			"or when it is defined as not readonly, but does not send any data asset, it is likely to be a model failure.",
 		Impact:     "If this potential model error is not fixed, some risks might not be visible.",
-		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
-		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html",
+		ASVS:       asvsArchitecture,
+		CheatSheet: cheatSheetThreatModeling,
 		Action:     "Model Consistency",
 		Mitigation: "Try to model the correct readonly flag and/or data sent/received of communication links. " +
 			"Also try to use  communication link types matching the target technology/machine types.",
-		Check:                      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:                      checkCheatSheetAndASVS,
 		Function:                   types.Architecture,
 		STRIDE:                     types.InformationDisclosure,
 		DetectionLogic:             "Communication links with inconsistent data assets being sent/received not matching their readonly flag or otherwise inconsistent protocols not matching the target technology type.",
 		RiskAssessment:             types.LowSeverity.String(),
-		FalsePositives:             "Usually no false positives as this looks like an incomplete model.",
+		FalsePositives:             falsePositivesIncompleteModel,
 		ModelFailurePossibleReason: true,
 		CWE:                        1008,
 	}

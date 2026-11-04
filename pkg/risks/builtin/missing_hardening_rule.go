@@ -22,12 +22,12 @@ func (r *MissingHardeningRule) Category() *types.RiskCategory {
 		Description: "Technical assets with a Relative Attacker Attractiveness (RAA) value of " + strconv.Itoa(r.raaLimit) + " % or higher should be " +
 			"explicitly hardened taking best practices and vendor hardening guides into account.",
 		Impact:     "If this risk remains unmitigated, attackers might be able to easier attack high-value targets.",
-		ASVS:       "V14 - Configuration Verification Requirements",
-		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+		ASVS:       asvsConfiguration,
+		CheatSheet: cheatSheetAttackSurfaceAnalysis,
 		Action:     "System Hardening",
 		Mitigation: "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor " +
 			"recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
-		Check:    "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:    checkCheatSheetAndASVS,
 		Function: types.Operations,
 		STRIDE:   types.Tampering,
 		DetectionLogic: "In-scope technical assets with RAA values of " + strconv.Itoa(r.raaLimit) + " % or higher. " +

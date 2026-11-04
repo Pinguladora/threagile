@@ -21,7 +21,7 @@ func (*ContainerPlatformEscapeRule) Category() *types.RiskCategory {
 		Impact: "If this risk is unmitigated, attackers which have successfully compromised a container (via other vulnerabilities) " +
 			"might be able to deeply persist in the target system by executing code in many deployed containers " +
 			"and the container platform itself.",
-		ASVS:       "V14 - Configuration Verification Requirements",
+		ASVS:       asvsConfiguration,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html",
 		Action:     "Container Infrastructure Hardening",
 		Mitigation: "Apply hardening of all container infrastructures. " +
@@ -34,7 +34,7 @@ func (*ContainerPlatformEscapeRule) Category() *types.RiskCategory {
 		Function:       types.Operations,
 		STRIDE:         types.ElevationOfPrivilege,
 		DetectionLogic: "In-scope container platforms.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.",
+		RiskAssessment: ratingByAssetAndProcessedDataSensitivity,
 		FalsePositives: "Container platforms not running parts of the target architecture can be considered " +
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,

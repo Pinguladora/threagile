@@ -18,7 +18,7 @@ func (*MissingWafRule) Category() *types.RiskCategory {
 			"Even though a WAF is not a replacement for security (all components must be secure even without a WAF) it adds another layer of defense to the overall " +
 			"system by delaying some attacks and having easier attack alerting through it.",
 		Impact:     "If this risk is unmitigated, attackers might be able to apply standard attack pattern tests at great speed without any filtering.",
-		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
+		ASVS:       asvsArchitecture,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Virtual_Patching_Cheat_Sheet.html",
 		Action:     "Web Application Firewall (WAF)",
 		Mitigation: "Consider placing a Web Application Firewall (WAF) in front of the web-services and/or web-applications. For cloud environments many cloud providers offer " +
@@ -27,7 +27,7 @@ func (*MissingWafRule) Category() *types.RiskCategory {
 		Function:       types.Operations,
 		STRIDE:         types.Tampering,
 		DetectionLogic: "In-scope web-services and/or web-applications accessed across a network trust boundary not having a Web Application Firewall (WAF) in front of them.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.",
+		RiskAssessment: ratingByAssetAndProcessedDataSensitivity,
 		FalsePositives: "Targets only accessible via WAFs or reverse proxies containing a WAF component (like ModSecurity) can be considered " +
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,

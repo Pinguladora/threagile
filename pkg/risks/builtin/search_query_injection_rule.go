@@ -20,13 +20,13 @@ func (*SearchQueryInjectionRule) Category() *types.RiskCategory {
 			"for more details (here related to Solr, but in general showcasing the topic of search query injections).",
 		Impact: "If this risk remains unmitigated, attackers might be able to read more data from the search index and " +
 			"eventually further escalate towards a deeper system penetration via code executions.",
-		ASVS:       "V5 - Validation, Sanitization and Encoding Verification Requirements",
+		ASVS:       asvsValidation,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Injection_Prevention_Cheat_Sheet.html",
 		Action:     "Search-Query Injection Prevention",
 		Mitigation: "Try to use libraries that properly encode search query meta characters in searches and don't expose the " +
 			"query unfiltered to the caller. " +
 			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:          checkCheatSheetAndASVS,
 		Function:       types.Development,
 		STRIDE:         types.Tampering,
 		DetectionLogic: "In-scope clients accessing search engine servers via typical search access protocols.",

@@ -20,17 +20,17 @@ func (*UnnecessaryDataAssetRule) Category() *types.RiskCategory {
 			"communication links, this is an indicator for an unnecessary data asset (or for an incomplete model).",
 		Impact: "If this risk is unmitigated, attackers might be able to access unnecessary data assets using " +
 			"other vulnerabilities.",
-		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
-		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
-		Action:     "Attack Surface Reduction",
+		ASVS:       asvsArchitecture,
+		CheatSheet: cheatSheetAttackSurfaceAnalysis,
+		Action:     actionAttackSurfaceReduction,
 		Mitigation: "Try to avoid having data assets that are not required/used.",
-		Check:      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:      checkCheatSheetAndASVS,
 		Function:   types.Architecture,
 		STRIDE:     types.ElevationOfPrivilege,
 		DetectionLogic: "Modelled data assets not processed by any data assets and also not transferred by any " +
 			"communication links.",
 		RiskAssessment:             types.LowSeverity.String(),
-		FalsePositives:             "Usually no false positives as this looks like an incomplete model.",
+		FalsePositives:             falsePositivesIncompleteModel,
 		ModelFailurePossibleReason: true,
 		CWE:                        1008,
 	}

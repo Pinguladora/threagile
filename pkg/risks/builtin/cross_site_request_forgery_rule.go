@@ -24,7 +24,7 @@ func (*CrossSiteRequestForgeryRule) Category() *types.RiskCategory {
 			"When your authentication scheme depends on cookies (like session or token cookies), consider marking them with " +
 			"the same-site flag. " +
 			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:          checkCheatSheetAndASVS,
 		Function:       types.Development,
 		STRIDE:         types.Spoofing,
 		DetectionLogic: "In-scope web applications accessed via typical web access protocols.",

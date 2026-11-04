@@ -23,11 +23,11 @@ func (*MissingNetworkSegmentationRule) Category() *types.RiskCategory {
 			"by a network segmentation trust-boundary.",
 		Impact: "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards " +
 			"more valuable targets, as they are not separated by network segmentation.",
-		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
-		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
-		Action:     "Network Segmentation",
+		ASVS:       asvsArchitecture,
+		CheatSheet: cheatSheetAttackSurfaceAnalysis,
+		Action:     actionNetworkSegmentation,
 		Mitigation: "Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.",
-		Check:      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:      checkCheatSheetAndASVS,
 		Function:   types.Operations,
 		STRIDE:     types.ElevationOfPrivilege,
 		DetectionLogic: "In-scope technical assets with high sensitivity and RAA values as well as data stores " +

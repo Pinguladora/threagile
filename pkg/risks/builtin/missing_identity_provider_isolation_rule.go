@@ -18,11 +18,11 @@ func (*MissingIdentityProviderIsolationRule) Category() *types.RiskCategory {
 			"by their own network segmentation trust-boundary (" + types.ExecutionEnvironment.String() + " boundaries do not count as network isolation).",
 		Impact: "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards " +
 			"highly sensitive identity provider assets and their identity data stores, as they are not separated by network segmentation.",
-		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
-		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
-		Action:     "Network Segmentation",
+		ASVS:       asvsArchitecture,
+		CheatSheet: cheatSheetAttackSurfaceAnalysis,
+		Action:     actionNetworkSegmentation,
 		Mitigation: "Apply a network segmentation trust-boundary around the highly sensitive identity provider assets and their identity data stores.",
-		Check:      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:      checkCheatSheetAndASVS,
 		Function:   types.Operations,
 		STRIDE:     types.ElevationOfPrivilege,
 		DetectionLogic: "In-scope identity provider assets and their identity data stores " +

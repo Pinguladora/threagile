@@ -20,11 +20,11 @@ func (*MissingBuildInfrastructureRule) Category() *types.RiskCategory {
 			"and built needs to be part of the model.",
 		Impact: "If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model due to " +
 			"critical build infrastructure components missing in the model.",
-		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
-		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
-		Action:     "Build Pipeline Hardening",
+		ASVS:       asvsArchitecture,
+		CheatSheet: cheatSheetAttackSurfaceAnalysis,
+		Action:     actionBuildPipelineHardening,
 		Mitigation: "Include the build infrastructure in the model.",
-		Check:      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:      checkCheatSheetAndASVS,
 		Function:   types.Architecture,
 		STRIDE:     types.Tampering,
 		DetectionLogic: "Models with in-scope custom-developed parts missing in-scope development (code creation) and build infrastructure " +

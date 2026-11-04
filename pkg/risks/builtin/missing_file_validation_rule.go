@@ -16,7 +16,7 @@ func (*MissingFileValidationRule) Category() *types.RiskCategory {
 		Title:       "Missing File Validation",
 		Description: "When a technical asset accepts files, these input files should be strictly validated about filename and type.",
 		Impact:      "If this risk is unmitigated, attackers might be able to provide malicious files to the application.",
-		ASVS:        "V12 - File and Resources Verification Requirements",
+		ASVS:        asvsFilesAndResources,
 		CheatSheet:  "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
 		Action:      "File Validation",
 		Mitigation: "Filter by file extension and discard (if feasible) the name provided. Whitelist the accepted file types " +
@@ -24,11 +24,11 @@ func (*MissingFileValidationRule) Category() *types.RiskCategory {
 			"end users and/or backoffice employees, consider performing scans for popular malware (if the files can be retrieved much later than they " +
 			"were uploaded, also apply a fresh malware scan during retrieval to scan with newer signatures of popular malware). Also enforce " +
 			"limits on maximum file size to avoid denial-of-service like scenarios.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:          checkCheatSheetAndASVS,
 		Function:       types.Development,
 		STRIDE:         types.Spoofing,
 		DetectionLogic: "In-scope technical assets with custom-developed code accepting file data formats.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.",
+		RiskAssessment: ratingByAssetAndProcessedDataSensitivity,
 		FalsePositives: "Fully trusted (i.e. cryptographically signed or similar) files can be considered " +
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,

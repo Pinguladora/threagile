@@ -17,11 +17,11 @@ func (*ServiceRegistryPoisoningRule) Category() *types.RiskCategory {
 		Description: "When a service registry used for discovery of trusted service endpoints Service Registry Poisoning risks might arise.",
 		Impact: "If this risk remains unmitigated, attackers might be able to poison the service registry with malicious service endpoints or " +
 			"malicious lookup and config data leading to breach of sensitive data.",
-		ASVS:           "V10 - Malicious Code Verification Requirements",
+		ASVS:           asvsMaliciousCode,
 		CheatSheet:     "https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html",
 		Action:         "Service Registry Integrity Check",
 		Mitigation:     "Try to strengthen the access control of the service registry and apply cross-checks to detect maliciously poisoned lookup data.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:          checkCheatSheetAndASVS,
 		Function:       types.Architecture,
 		STRIDE:         types.Spoofing,
 		DetectionLogic: "In-scope service registries.",

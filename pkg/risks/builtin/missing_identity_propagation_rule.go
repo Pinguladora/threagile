@@ -25,7 +25,7 @@ func (*MissingIdentityPropagationRule) Category() *types.RiskCategory {
 		Mitigation: "When processing requests for end users if possible authorize in the backend against the propagated " +
 			"identity of the end user. This can be achieved in passing JWTs or similar tokens and checking them in the backend " +
 			"services. For DevOps usages apply at least a technical-user authorization.",
-		Check:    "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:    checkCheatSheetAndASVS,
 		Function: types.Architecture,
 		STRIDE:   types.ElevationOfPrivilege,
 		DetectionLogic: "In-scope service-like technical assets which usually process data based on end user requests, if authenticated " +

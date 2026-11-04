@@ -19,18 +19,18 @@ func (*UntrustedDeserializationRule) Category() *types.RiskCategory {
 			"<br><br>See <a href=\"https://christian-schneider.net/JavaDeserializationSecurityFAQ.html\">https://christian-schneider.net/JavaDeserializationSecurityFAQ.html</a> " +
 			"for more details.",
 		Impact:     "If this risk is unmitigated, attackers might be able to execute code on target systems by exploiting untrusted deserialization endpoints.",
-		ASVS:       "V5 - Validation, Sanitization and Encoding Verification Requirements",
+		ASVS:       asvsValidation,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html",
 		Action:     "Prevention of Deserialization of Untrusted Data",
 		Mitigation: "Try to avoid the deserialization of untrusted data (even of data within the same trust-boundary as long as " +
 			"it is sent across a remote connection) in order to stay safe from Untrusted Deserialization vulnerabilities. " +
 			"Alternatively a strict whitelisting approach of the classes/types/values to deserialize might help as well. " +
 			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:          checkCheatSheetAndASVS,
 		Function:       types.Architecture,
 		STRIDE:         types.Tampering,
 		DetectionLogic: "In-scope technical assets accepting serialization data formats (including EJB and RMI protocols).",
-		RiskAssessment: "The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.",
+		RiskAssessment: ratingByAssetAndProcessedDataSensitivity,
 		FalsePositives: "Fully trusted (i.e. cryptographically signed or similar) data deserialized can be considered " +
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,

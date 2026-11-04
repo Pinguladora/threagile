@@ -20,13 +20,13 @@ func (*ServerSideRequestForgeryRule) Category() *types.RiskCategory {
 		Description: "When a server system (i.e. not a client) is accessing other server systems via typical web protocols " +
 			"Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might arise. ",
 		Impact:     "If this risk is unmitigated, attackers might be able to access sensitive services or files of network-reachable components by modifying outgoing calls of affected components.",
-		ASVS:       "V12 - File and Resources Verification Requirements",
+		ASVS:       asvsFilesAndResources,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
 		Action:     "SSRF Prevention",
 		Mitigation: "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller " +
 			"controllable values. " +
 			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:          checkCheatSheetAndASVS,
 		Function:       types.Development,
 		STRIDE:         types.InformationDisclosure,
 		DetectionLogic: "In-scope non-client systems accessing (using outgoing communication links) targets with either HTTP or HTTPS protocol.",
