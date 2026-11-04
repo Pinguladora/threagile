@@ -25,6 +25,7 @@ type GenerateCommands struct {
 	TagsExcel           bool
 	ReportPDF           bool
 	ReportADOC          bool
+	ReportHTML          bool
 }
 
 func (c *GenerateCommands) Defaults() *GenerateCommands {
@@ -39,6 +40,7 @@ func (c *GenerateCommands) Defaults() *GenerateCommands {
 		TagsExcel:           true,
 		ReportPDF:           true,
 		ReportADOC:          true,
+		ReportHTML:          true,
 	}
 	return c
 }
@@ -63,6 +65,7 @@ type reportConfigReader interface {
 	GetJsonTechnicalAssetsFilename() string
 	GetJsonStatsFilename() string
 	GetJsonOTMFilename() string
+	GetReportHTMLFilename() string
 	GetTemplateFilename() string
 	GetReportLogoImagePath() string
 
@@ -287,7 +290,90 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 		}
 	}
 
+	if commands.ReportHTML {
+		progressReporter.Info("Writing report html")
+		err := writeReportHTML(config, readResult, riskRules, diagramDPI, progressReporter)
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
+}
+
+// writeReportHTML writes the HTML report. It renders the diagrams from DOT sources of its own, as
+// the diagram outputs may be skipped, but the same as theirs.
+func writeReportHTML(config reportConfigReader, readResult *model.ReadResult, riskRules types.RiskRules, diagramDPI int,
+	progressReporter progressReporter,
+) error {
+	modelHash, err := hashFile(config.GetInputFile())
+	if err != nil {
+		return err
+	}
+	writeDataFlowDOT := func(filename string) (*os.File, error) {
+		return WriteDataFlowDiagramGraphvizDOT(readResult.ParsedModel, filename, diagramDPI,
+			config.GetAddModelTitle(), config.GetAddLegend(), progressReporter)
+	}
+	dataFlowDOT, err := diagramDOT(config.GetTempFolder(), config.GetDataFlowDiagramFilenameDOT(), writeDataFlowDOT)
+	if err != nil {
+		return fmt.Errorf("error while generating data flow diagram: %w", err)
+	}
+	writeDataAssetDOT := func(filename string) (*os.File, error) {
+		return WriteDataAssetDiagramGraphvizDOT(readResult.ParsedModel, filename, diagramDPI, progressReporter)
+	}
+	dataAssetDOT, err := diagramDOT(config.GetTempFolder(), config.GetDataAssetDiagramFilenameDOT(), writeDataAssetDOT)
+	if err != nil {
+		return fmt.Errorf("error while generating data asset diagram: %w", err)
+	}
+
+	return WriteReportHTML(readResult.ParsedModel, filepath.Join(config.GetOutputFolder(), config.GetReportHTMLFilename()),
+		HTMLReportOptions{
+			ModelFilename:       config.GetInputFile(),
+			ModelHash:           modelHash,
+			BuildTimestamp:      config.GetBuildTimestamp(),
+			ThreagileVersion:    config.GetThreagileVersion(),
+			IntroTextRAA:        readResult.IntroTextRAA,
+			SkipRiskRules:       config.GetSkipRiskRules(),
+			RiskRules:           riskRules,
+			CustomRiskRules:     readResult.CustomRiskRules,
+			HideChapters:        config.GetReportConfigurationHideChapters(),
+			HideEmptyChapters:   config.GetHideEmptyChapters(),
+			DataFlowDiagramDOT:  dataFlowDOT,
+			DataAssetDiagramDOT: dataAssetDOT,
+		}, progressReporter)
+}
+
+// diagramDOT writes the DOT source of a diagram into a temporary file and returns it.
+func diagramDOT(tempFolder, name string, write func(filename string) (*os.File, error)) ([]byte, error) {
+	file, err := os.CreateTemp(tempFolder, name)
+	if err != nil {
+		return nil, fmt.Errorf("error creating a temporary file: %w", err)
+	}
+	_ = file.Close()
+	defer func() { _ = os.Remove(file.Name()) }()
+
+	if _, err := write(file.Name()); err != nil {
+		return nil, err
+	}
+	dot, err := os.ReadFile(file.Name())
+	if err != nil {
+		return nil, fmt.Errorf("error reading %s: %w", file.Name(), err)
+	}
+	return dot, nil
+}
+
+// hashFile is the SHA-256 hash of a file in hex, as the reports show it for the model.
+func hashFile(filename string) (string, error) {
+	file, err := os.Open(filepath.Clean(filename))
+	if err != nil {
+		return "", fmt.Errorf("error opening %s: %w", filename, err)
+	}
+	defer func() { _ = file.Close() }()
+	hasher := sha256.New()
+	if _, err := io.Copy(hasher, file); err != nil {
+		return "", fmt.Errorf("error reading %s: %w", filename, err)
+	}
+	return hex.EncodeToString(hasher.Sum(nil)), nil
 }
 
 type progressReporter interface {

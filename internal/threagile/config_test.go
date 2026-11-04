@@ -89,6 +89,7 @@ func TestLoadReadsTheSkipKeys(t *testing.T) {
 	keys := []string{
 		"SkipDataFlowDiagram", "SkipDataAssetDiagram", "SkipRisksJSON", "SkipTechnicalAssetsJSON",
 		"SkipStatsJSON", "SkipOTMJSON", "SkipRisksExcel", "SkipTagsExcel", "SkipReportPDF", "SkipReportADOC",
+		"SkipReportHTML",
 	}
 	values := map[string]any{
 		"PluginFolder": t.TempDir(),
@@ -125,10 +126,40 @@ func TestLoadReadsTheSkipKeys(t *testing.T) {
 		"SkipTagsExcel":           config.GetSkipTagsExcel(),
 		"SkipReportPDF":           config.GetSkipReportPDF(),
 		"SkipReportADOC":          config.GetSkipReportADOC(),
+		"SkipReportHTML":          config.GetSkipReportHTML(),
 	}
 	for _, key := range keys {
 		if !got[key] {
 			t.Errorf("%s from the config file was ignored", key)
 		}
+	}
+}
+
+func TestLoadReadsTheHTMLReportFilename(t *testing.T) {
+	values := map[string]any{
+		"PluginFolder":       t.TempDir(),
+		"DataFolder":         t.TempDir(),
+		"OutputFolder":       t.TempDir(),
+		"TempFolder":         t.TempDir(),
+		"ReportHTMLFilename": "threat-model.html",
+	}
+	data, err := json.Marshal(values)
+	if err != nil {
+		t.Fatal(err)
+	}
+	configFile := filepath.Join(t.TempDir(), "config.json")
+	if err := os.WriteFile(configFile, data, 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	config := new(Config).Defaults("")
+	if config.GetReportHTMLFilename() != ReportHTMLFilename || config.GetSkipReportHTML() {
+		t.Fatalf("defaults are %q and %v, want %q and false", config.GetReportHTMLFilename(), config.GetSkipReportHTML(), ReportHTMLFilename)
+	}
+	if err := config.Load(configFile); err != nil {
+		t.Fatal(err)
+	}
+	if config.GetReportHTMLFilename() != "threat-model.html" {
+		t.Errorf("got %q, want the file name of the config file", config.GetReportHTMLFilename())
 	}
 }

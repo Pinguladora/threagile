@@ -49,7 +49,10 @@ func TestReportsOfMinimalModels(t *testing.T) {
 
 			require.NoError(t, report.Generate(config, result, new(report.GenerateCommands).Defaults(), risks.GetBuiltInRiskRules(), reporter))
 
-			for _, output := range []string{config.GetReportFilename(), config.GetDataFlowDiagramFilenamePNG(), config.GetDataAssetDiagramFilenamePNG()} {
+			for _, output := range []string{
+				config.GetReportFilename(), config.GetReportHTMLFilename(),
+				config.GetDataFlowDiagramFilenamePNG(), config.GetDataAssetDiagramFilenamePNG(),
+			} {
 				info, statError := os.Stat(filepath.Join(outputDir, output))
 				require.NoError(t, statError, output)
 				assert.Positive(t, info.Size(), output)

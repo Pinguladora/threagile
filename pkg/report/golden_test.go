@@ -122,7 +122,7 @@ func generateOutputs(t *testing.T) map[string][]byte {
 	require.NoError(t, report.WriteTechnicalAssetsJSON(parsedModel, filepath.Join(outputDir, config.GetJsonTechnicalAssetsFilename())))
 	require.NoError(t, report.WriteStatsJSON(parsedModel, filepath.Join(outputDir, config.GetJsonStatsFilename())))
 	require.NoError(t, report.WriteOTMJSON(parsedModel, filepath.Join(outputDir, config.GetJsonOTMFilename())))
-	require.NoError(t, report.WriteReportHTML(parsedModel, filepath.Join(outputDir, "report.html"),
+	require.NoError(t, report.WriteReportHTML(parsedModel, filepath.Join(outputDir, config.GetReportHTMLFilename()),
 		report.HTMLReportOptions{
 			ModelFilename:       config.GetInputFile(),
 			ModelHash:           "test-model-hash",
