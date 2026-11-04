@@ -37,7 +37,9 @@ func (what *TrustBoundary) Merge(other TrustBoundary) error {
 	return nil
 }
 
-func (what *TrustBoundary) MergeMap(first map[string]TrustBoundary, second map[string]TrustBoundary) (map[string]TrustBoundary, error) {
+func (what *TrustBoundary) MergeMap(
+	first map[string]TrustBoundary, second map[string]TrustBoundary,
+) (map[string]TrustBoundary, error) {
 	if first == nil {
 		// first is nil for a section that is missing, or a key left without a value, in the model merged into
 		first = make(map[string]TrustBoundary, len(second))
