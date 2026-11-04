@@ -1991,54 +1991,52 @@ func (adoc adocReport) dataAssets(f *os.File) {
 		"grouped by data asset.")
 	writeLine(f, "")
 	for _, dataAsset := range sortedDataAssetsByDataBreachProbabilityAndTitle(adoc.model) {
-		dataBreachProbability := identifiedDataBreachProbabilityStillAtRisk(adoc.model, dataAsset)
-		colorPrefix, colorSuffix := colorPrefixByDataBreachProbability(dataBreachProbability, false)
-		if !isDataBreachPotentialStillAtRisk(adoc.model, dataAsset) {
-			colorPrefix = ""
-			colorSuffix = ""
-		}
-		risksStr := adoc.model.IdentifiedDataBreachProbabilityRisks(dataAsset)
-		countStillAtRisk := len(types.ReduceToOnlyStillAtRisk(risksStr))
-		suffix := riskSuffix(countStillAtRisk, len(risksStr))
-		writeLine(f, "<<<")
-		writeLine(f, "[[dataAsset:"+dataAsset.Id+"]]")
-		writeLine(f, "== "+colorPrefix+dataAsset.Title+": "+suffix+colorSuffix)
-		writeLine(f, fixBasicHtml(dataAsset.Description)+"\n\n")
+		adoc.writeDataAsset(f, dataAsset)
+	}
+}
 
-		tagsUsedText := joinedOrNoneString(dataAsset.Tags, "")
-		processedByText := technicalAssetTitleOrNone(adoc.model.ProcessedByTechnicalAssetsSorted(dataAsset), "")
-		storedByText := technicalAssetTitleOrNone(adoc.model.StoredByTechnicalAssetsSorted(dataAsset), "")
-		sentViaText := communicationLinkTitleOrNone(adoc.model.SentViaCommLinksSorted(dataAsset), "")
-		receivedViaText := communicationLinkTitleOrNone(adoc.model.ReceivedViaCommLinksSorted(dataAsset), "")
-		dataBreachRisksStillAtRisk := identifiedDataBreachProbabilityRisksStillAtRisk(adoc.model, dataAsset)
-		sortByDataBreachProbability(dataBreachRisksStillAtRisk)
-		dataBreachText := "This data asset has no data breach potential."
-		if len(dataBreachRisksStillAtRisk) > 0 {
-			riskRemainingStr := textRiskLower
-			if countStillAtRisk > 1 {
-				riskRemainingStr += "s"
-			}
-			dataBreachText = "This data asset has data breach potential because of " +
-				"" + strconv.Itoa(countStillAtRisk) + " remaining " + riskRemainingStr + ":"
-		}
+// writeDataAsset writes the details of a data asset with its data breach probability.
+func (adoc adocReport) writeDataAsset(f *os.File, dataAsset *types.DataAsset) {
+	dataBreachProbability := identifiedDataBreachProbabilityStillAtRisk(adoc.model, dataAsset)
+	colorPrefix, colorSuffix := colorPrefixByDataBreachProbability(dataBreachProbability, false)
+	if !isDataBreachPotentialStillAtRisk(adoc.model, dataAsset) {
+		colorPrefix = ""
+		colorSuffix = ""
+	}
+	risksStr := adoc.model.IdentifiedDataBreachProbabilityRisks(dataAsset)
+	countStillAtRisk := len(types.ReduceToOnlyStillAtRisk(risksStr))
+	suffix := riskSuffix(countStillAtRisk, len(risksStr))
+	writeLine(f, "<<<")
+	writeLine(f, "[[dataAsset:"+dataAsset.Id+"]]")
+	writeLine(f, "== "+colorPrefix+dataAsset.Title+": "+suffix+colorSuffix)
+	writeLine(f, fixBasicHtml(dataAsset.Description)+"\n\n")
 
-		riskText := dataBreachProbability.String()
-		if !isDataBreachPotentialStillAtRisk(adoc.model, dataAsset) {
-			colorPrefix = ""
-			colorSuffix = ""
-			riskText = textNone
-		}
+	tagsUsedText := joinedOrNoneString(dataAsset.Tags, "")
+	processedByText := technicalAssetTitleOrNone(adoc.model.ProcessedByTechnicalAssetsSorted(dataAsset), "")
+	storedByText := technicalAssetTitleOrNone(adoc.model.StoredByTechnicalAssetsSorted(dataAsset), "")
+	sentViaText := communicationLinkTitleOrNone(adoc.model.SentViaCommLinksSorted(dataAsset), "")
+	receivedViaText := communicationLinkTitleOrNone(adoc.model.ReceivedViaCommLinksSorted(dataAsset), "")
+	dataBreachRisksStillAtRisk := identifiedDataBreachProbabilityRisksStillAtRisk(adoc.model, dataAsset)
+	sortByDataBreachProbability(dataBreachRisksStillAtRisk)
+	dataBreachText := dataBreachPotentialText(countStillAtRisk, len(dataBreachRisksStillAtRisk))
 
-		writeLine(f, `
+	riskText := dataBreachProbability.String()
+	if !isDataBreachPotentialStillAtRisk(adoc.model, dataAsset) {
+		colorPrefix = ""
+		colorSuffix = ""
+		riskText = textNone
+	}
+
+	writeLine(f, `
 [cols="h,1,h,1",frame=none,grid=none]
 |===
 | ID:                3+| `+dataAsset.Id+`
 | Usage:               | `+dataAsset.Usage.String()+`| Quantity:          | `+dataAsset.Quantity.String()+`
 | Tags:                | `+tagsUsedText+`| Origin:            | `+dataAsset.Origin+`
 | Owner:               | `+dataAsset.Owner+`| Confidentiality:   | `+dataAsset.Confidentiality.String()+
-			`<<ref-confidentiality-values,*>>
+		`<<ref-confidentiality-values,*>>
 | Integrity:           | `+dataAsset.Integrity.String()+`<<ref-criticality-values,*>>| Availability:      | `+
-			dataAsset.Availability.String()+`<<ref-criticality-values,*>>
+		dataAsset.Availability.String()+`<<ref-criticality-values,*>>
 | CIA-Justification: 3+| `+dataAsset.JustificationCiaRating+`
 | Processed by:      3+| `+processedByText+`
 | Stored by:         3+| `+storedByText+`
@@ -2046,21 +2044,39 @@ func (adoc adocReport) dataAssets(f *os.File) {
 | Data Breach:       3+| `+colorPrefix+riskText+colorSuffix+`
 | Data Breach Risks: 3+| `+dataBreachText)
 
-		if len(dataBreachRisksStillAtRisk) > 0 {
-			for _, dataBreachRisk := range dataBreachRisksStillAtRisk {
-				colorPrefix, colorSuffix := colorPrefixByDataBreachProbability(dataBreachRisk.DataBreachProbability, true)
-				if !dataBreachRisk.RiskStatus.IsStillAtRisk() {
-					colorPrefix = ""
-				}
-
-				txt := dataBreachRisk.DataBreachProbability.Title() + ": " + dataBreachRisk.SyntheticId
-				writeLine(f, "|                    2+| <<"+dataBreachRisk.CategoryId+","+colorPrefix+txt+colorSuffix+">>")
-			}
-		}
-
-		writeLine(f, `
+	writeDataBreachRiskRows(f, dataBreachRisksStillAtRisk)
+	writeLine(f, `
 |===
 `)
+}
+
+// dataBreachPotentialText returns the sentence that introduces the data breach risks of a data
+// asset still at risk.
+func dataBreachPotentialText(countStillAtRisk int, countDataBreachRisksStillAtRisk int) string {
+	dataBreachText := "This data asset has no data breach potential."
+	if countDataBreachRisksStillAtRisk > 0 {
+		riskRemainingStr := textRiskLower
+		if countStillAtRisk > 1 {
+			riskRemainingStr += "s"
+		}
+		dataBreachText = "This data asset has data breach potential because of " +
+			"" + strconv.Itoa(countStillAtRisk) + " remaining " + riskRemainingStr + ":"
+	}
+	return dataBreachText
+}
+
+// writeDataBreachRiskRows writes a table row linking each data breach risk.
+func writeDataBreachRiskRows(f *os.File, dataBreachRisksStillAtRisk []*types.Risk) {
+	if len(dataBreachRisksStillAtRisk) > 0 {
+		for _, dataBreachRisk := range dataBreachRisksStillAtRisk {
+			colorPrefix, colorSuffix := colorPrefixByDataBreachProbability(dataBreachRisk.DataBreachProbability, true)
+			if !dataBreachRisk.RiskStatus.IsStillAtRisk() {
+				colorPrefix = ""
+			}
+
+			txt := dataBreachRisk.DataBreachProbability.Title() + ": " + dataBreachRisk.SyntheticId
+			writeLine(f, "|                    2+| <<"+dataBreachRisk.CategoryId+","+colorPrefix+txt+colorSuffix+">>")
+		}
 	}
 }
 
