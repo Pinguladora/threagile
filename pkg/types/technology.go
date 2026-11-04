@@ -5,6 +5,7 @@ import "strings"
 const (
 	AI                     = "ai"
 	AIAgent                = "ai-agent"
+	AIGuardrail            = "ai-guardrail"
 	ApplicationServer      = "application-server"
 	ArtifactRegistry       = "artifact-registry"
 	LLM                    = "llm"

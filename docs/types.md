@@ -280,6 +280,7 @@ Used by `technologies` of technical assets.
 |-------|---------|-------------|
 | `ai` | `artificial-intelligence`, `machine-learning`, `deep-learning`, `neural-network`, `ml`, `dl` | An Artificial Intelligence service |
 | `ai-agent` | `agent`, `agentic-ai`, `llm-agent`, `autonomous-agent` | An AI agent that plans with a language model and acts through tools |
+| `ai-guardrail` | `guardrail`, `llm-guardrail`, `ai-firewall`, `llm-firewall`, `prompt-guard`, `llama-guard`, `nemo-guardrails`, `guardrails-ai`, `bedrock-guardrails`, `azure-content-safety` | A guardrail that screens the input and output of language models and AI agents for prompt injection, jailbreaks and data that must not pass, as a service in their path or as a library inside them |
 | `application-server` | `app-server` | An application server (Apache Tomcat, ...) |
 | `artifact-registry` |  | A registry to store build artifacts |
 | `batch-processing` |  | A set of tools automatically processing data |
