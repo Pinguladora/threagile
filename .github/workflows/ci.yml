@@ -39,10 +39,6 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-          # Full history so golangci-lint can find the merge base with main and
-          # report only the findings a change introduces (see ci:lint).
-          fetch-depth: 0
-          filter: "blob:none"
       - name: Set up mise
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
       - name: Cache the Go build and module cache

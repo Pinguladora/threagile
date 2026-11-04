@@ -72,16 +72,9 @@ description = "Local snapshot build including the ko container image (skips sign
 alias = "snapc"
 
 [tasks."lint:go"]
-# Only findings introduced since the merge base with main fail the gate. The
-# inherited upstream code still carries ~2,200 findings (see `mise run debt`),
-# which are burned down in dedicated commits instead of blocking every change.
-run = "golangci-lint run ./... --fix --new-from-merge-base=main"
-description = "Lint Go code with autofix (findings new since main)"
+run = "golangci-lint run ./... --fix"
+description = "Lint Go code with autofix"
 sources = ["**/*.go", ".golangci.yaml"]
-
-[tasks.debt]
-run = "golangci-lint run ./... --max-issues-per-linter=0 --max-same-issues=0 --show-stats"
-description = "Full golangci-lint report, including the findings inherited from upstream"
 
 [tasks."lint:gha"]
 # actionlint catches workflow syntax and expression errors; zizmor runs the
