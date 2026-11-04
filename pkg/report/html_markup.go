@@ -20,6 +20,11 @@ type basicMarkupElement struct {
 	open string // the start tag, "" for a link that is left out as its URL is not http(s)
 }
 
+// htmlMarkup is markup text of the report view in HTML.
+func htmlMarkup(text markupText) template.HTML {
+	return basicMarkup(string(text))
+}
+
 // basicMarkup turns text from the model, which is untrusted, into HTML: <b>, <i>, <u> and <br>
 // become those elements, and <a href="..."> a link when the URL is http or https. Everything
 // else is escaped, and elements are closed (and nested) properly, even where the text does not.

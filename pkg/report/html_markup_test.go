@@ -71,10 +71,10 @@ func TestAuthorHomepage(t *testing.T) {
 	assert.Empty(t, authorHomepage(""))
 }
 
-func TestHTMLAnchor(t *testing.T) {
-	assert.Equal(t, "asset-some-asset-1", htmlAnchor("asset", "some-asset-1"))
-	assert.Equal(t, "risk-a_40b_3ec_20_22_3c_5f", htmlAnchor("risk", `a@b>c "<_`))
-	assert.NotEqual(t, htmlAnchor("risk", "a_40"), htmlAnchor("risk", "a@"))
+func TestViewAnchor(t *testing.T) {
+	assert.Equal(t, "asset-some-asset-1", viewAnchor("asset", "some-asset-1"))
+	assert.Equal(t, "risk-a_40b_3ec_20_22_3c_5f", viewAnchor("risk", `a@b>c "<_`))
+	assert.NotEqual(t, viewAnchor("risk", "a_40"), viewAnchor("risk", "a@"))
 }
 
 func TestHTMLContentSecurityPolicy(t *testing.T) {

@@ -380,19 +380,28 @@ func writeReportHTML(config reportConfigReader, readResult *model.ReadResult, ri
 
 	return WriteReportHTML(readResult.ParsedModel, filepath.Join(config.GetOutputFolder(), config.GetReportHTMLFilename()),
 		HTMLReportOptions{
-			ModelFilename:       config.GetInputFile(),
-			ModelHash:           modelHash,
-			BuildTimestamp:      config.GetBuildTimestamp(),
-			ThreagileVersion:    config.GetThreagileVersion(),
-			IntroTextRAA:        readResult.IntroTextRAA,
-			SkipRiskRules:       config.GetSkipRiskRules(),
-			RiskRules:           riskRules,
-			CustomRiskRules:     readResult.CustomRiskRules,
-			HideChapters:        config.GetReportConfigurationHideChapters(),
-			HideEmptyChapters:   config.GetHideEmptyChapters(),
+			ReportOptions:       reportOptions(config, readResult, riskRules, modelHash),
 			DataFlowDiagramDOT:  dataFlowDOT,
 			DataAssetDiagramDOT: dataAssetDOT,
 		}, progressReporter)
+}
+
+// reportOptions are the inputs of the HTML and Markdown reports besides the model.
+func reportOptions(config reportConfigReader, readResult *model.ReadResult, riskRules types.RiskRules,
+	modelHash string,
+) ReportOptions {
+	return ReportOptions{
+		ModelFilename:     config.GetInputFile(),
+		ModelHash:         modelHash,
+		BuildTimestamp:    config.GetBuildTimestamp(),
+		ThreagileVersion:  config.GetThreagileVersion(),
+		IntroTextRAA:      readResult.IntroTextRAA,
+		SkipRiskRules:     config.GetSkipRiskRules(),
+		RiskRules:         riskRules,
+		CustomRiskRules:   readResult.CustomRiskRules,
+		HideChapters:      config.GetReportConfigurationHideChapters(),
+		HideEmptyChapters: config.GetHideEmptyChapters(),
+	}
 }
 
 // diagramDOT writes the DOT source of a diagram into a temporary file and returns it.

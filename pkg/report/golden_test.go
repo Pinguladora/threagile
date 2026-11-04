@@ -122,18 +122,21 @@ func generateOutputs(t *testing.T) map[string][]byte {
 	require.NoError(t, report.WriteTechnicalAssetsJSON(parsedModel, filepath.Join(outputDir, config.GetJsonTechnicalAssetsFilename())))
 	require.NoError(t, report.WriteStatsJSON(parsedModel, filepath.Join(outputDir, config.GetJsonStatsFilename())))
 	require.NoError(t, report.WriteOTMJSON(parsedModel, filepath.Join(outputDir, config.GetJsonOTMFilename())))
+	options := report.ReportOptions{
+		ModelFilename:     config.GetInputFile(),
+		ModelHash:         "test-model-hash",
+		BuildTimestamp:    "test-build-timestamp",
+		ThreagileVersion:  "test-version",
+		IntroTextRAA:      result.IntroTextRAA,
+		SkipRiskRules:     config.GetSkipRiskRules(),
+		RiskRules:         risks.GetBuiltInRiskRules(),
+		CustomRiskRules:   result.CustomRiskRules,
+		HideChapters:      config.GetReportConfigurationHideChapters(),
+		HideEmptyChapters: config.GetHideEmptyChapters(),
+	}
 	require.NoError(t, report.WriteReportHTML(parsedModel, filepath.Join(outputDir, config.GetReportHTMLFilename()),
 		report.HTMLReportOptions{
-			ModelFilename:       config.GetInputFile(),
-			ModelHash:           "test-model-hash",
-			BuildTimestamp:      "test-build-timestamp",
-			ThreagileVersion:    "test-version",
-			IntroTextRAA:        result.IntroTextRAA,
-			SkipRiskRules:       config.GetSkipRiskRules(),
-			RiskRules:           risks.GetBuiltInRiskRules(),
-			CustomRiskRules:     result.CustomRiskRules,
-			HideChapters:        config.GetReportConfigurationHideChapters(),
-			HideEmptyChapters:   config.GetHideEmptyChapters(),
+			ReportOptions:       options,
 			DataFlowDiagramDOT:  readFile(t, filepath.Join(outputDir, config.GetDataFlowDiagramFilenameDOT())),
 			DataAssetDiagramDOT: readFile(t, filepath.Join(outputDir, config.GetDataAssetDiagramFilenameDOT())),
 		}, reporter))

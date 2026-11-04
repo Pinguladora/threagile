@@ -191,14 +191,15 @@ func TestHTMLReportOfAHostileModelIsInert(t *testing.T) {
 	reporter := testReporter{t}
 	outputDir := t.TempDir()
 
-	options.DataFlowDiagramDOT = writeDOT(t, func(filename string) (*os.File, error) {
+	htmlOptions := report.HTMLReportOptions{ReportOptions: options}
+	htmlOptions.DataFlowDiagramDOT = writeDOT(t, func(filename string) (*os.File, error) {
 		return report.WriteDataFlowDiagramGraphvizDOT(parsedModel, filename, 96, true, true, reporter)
 	})
-	options.DataAssetDiagramDOT = writeDOT(t, func(filename string) (*os.File, error) {
+	htmlOptions.DataAssetDiagramDOT = writeDOT(t, func(filename string) (*os.File, error) {
 		return report.WriteDataAssetDiagramGraphvizDOT(parsedModel, filename, 96, reporter)
 	})
 	filename := filepath.Join(outputDir, "report.html")
-	require.NoError(t, report.WriteReportHTML(parsedModel, filename, options, reporter))
+	require.NoError(t, report.WriteReportHTML(parsedModel, filename, htmlOptions, reporter))
 	page, err := os.ReadFile(filepath.Clean(filename))
 	require.NoError(t, err)
 
@@ -291,7 +292,7 @@ func attributeOf(node *html.Node, key string) string {
 	return ""
 }
 
-func analyzeHostileModel(t *testing.T) (*types.Model, report.HTMLReportOptions) {
+func analyzeHostileModel(t *testing.T) (*types.Model, report.ReportOptions) {
 	t.Helper()
 	quote := func(text string) string {
 		quoted, err := json.Marshal(text) // a JSON string is a YAML string as well
@@ -333,7 +334,7 @@ func analyzeHostileModel(t *testing.T) (*types.Model, report.HTMLReportOptions) 
 		Ticket: "Ticket " + hostile, CheckedBy: "Checker " + hostile,
 	}
 
-	return parsedModel, report.HTMLReportOptions{
+	return parsedModel, report.ReportOptions{
 		ModelFilename:    "Model " + hostile,
 		ModelHash:        "Hash " + hostile,
 		BuildTimestamp:   "Build " + hostile,
