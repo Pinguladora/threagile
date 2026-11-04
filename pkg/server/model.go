@@ -1213,23 +1213,23 @@ func (s *server) backupModelToHistory(modelFolder string, changeReasonForHistory
 	if _, err := os.Stat(historyFolder); os.IsNotExist(err) {
 		err = os.Mkdir(historyFolder, 0o700)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to create history folder: %w", err)
 		}
 	}
 	inputFile := filepath.Join(cleanModelFolder, filepath.Base(s.config.GetInputFile()))
 	inputModel, err := os.ReadFile(filepath.Clean(inputFile))
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to read model to back up: %w", err)
 	}
 	historyFile := filepath.Join(historyFolder, time.Now().Format("2006-01-02 15:04:05")+" "+safeReason+".backup")
 	err = os.WriteFile(historyFile, inputModel, 0o400) // #nosec G703
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to write model backup: %w", err)
 	}
 	// now delete any old files if over limit to keep
 	files, err := os.ReadDir(filepath.Clean(historyFolder))
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to list model backups: %w", err)
 	}
 	if len(files) > s.config.GetBackupHistoryFilesToKeep() {
 		requiredToDelete := len(files) - s.config.GetBackupHistoryFilesToKeep()
@@ -1243,7 +1243,7 @@ func (s *server) backupModelToHistory(modelFolder string, changeReasonForHistory
 			}
 			err = os.Remove(filepath.Clean(filepath.Join(historyFolder, file.Name())))
 			if err != nil {
-				return err
+				return fmt.Errorf("failed to remove old model backup: %w", err)
 			}
 			if requiredToDelete <= 0 {
 				break
