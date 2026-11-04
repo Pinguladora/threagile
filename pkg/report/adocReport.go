@@ -1090,47 +1090,8 @@ func (adoc adocReport) tagListing(f *os.File) {
 	sorted := adoc.model.TagsAvailable
 	sort.Strings(sorted)
 	for _, tag := range sorted {
-		description := "" // could hold a separation text to distinguish technical assets, data assets etc.
-		for _, techAsset := range sortedTechnicalAssetsByTitle(adoc.model) {
-			if contains(techAsset.Tags, tag) {
-				if len(description) > 0 {
-					description += ", "
-				}
-				description += techAsset.Title
-			}
-			for _, commLink := range techAsset.CommunicationLinksSorted() {
-				if contains(commLink.Tags, tag) {
-					if len(description) > 0 {
-						description += ", "
-					}
-					description += commLink.Title
-				}
-			}
-		}
-		for _, dataAsset := range sortedDataAssetsByTitle(adoc.model) {
-			if contains(dataAsset.Tags, tag) {
-				if len(description) > 0 {
-					description += ", "
-				}
-				description += dataAsset.Title
-			}
-		}
-		for _, trustBoundary := range sortedTrustBoundariesByTitle(adoc.model) {
-			if contains(trustBoundary.Tags, tag) {
-				if len(description) > 0 {
-					description += ", "
-				}
-				description += trustBoundary.Title
-			}
-		}
-		for _, sharedRuntime := range sortedSharedRuntimesByTitle(adoc.model) {
-			if contains(sharedRuntime.Tags, tag) {
-				if len(description) > 0 {
-					description += ", "
-				}
-				description += sharedRuntime.Title
-			}
-		}
+		// could hold a separation text to distinguish technical assets, data assets etc.
+		description := taggedTitles(adoc.model, tag)
 		if len(description) > 0 {
 			writeLine(f, tag+"::")
 			writeLine(f, "  "+description)
@@ -1546,26 +1507,30 @@ func (adoc adocReport) writeQuestions() error {
 	return nil
 }
 
+// riskStatusRole returns the theme role that colours a risk tracking status.
+func riskStatusRole(status types.RiskStatus) string {
+	switch status {
+	case types.Unchecked:
+		return "RiskStatusUnchecked"
+	case types.InDiscussion:
+		return "RiskStatusInDiscussion"
+	case types.Accepted:
+		return "RiskStatusAccepted"
+	case types.InProgress:
+		return "RiskStatusInProgress"
+	case types.Mitigated:
+		return "RiskStatusMitigated"
+	case types.FalsePositive:
+		return "RiskStatusFalsePositive"
+	default:
+		return ""
+	}
+}
+
 func (adoc adocReport) riskTrackingStatus(f *os.File, risk *types.Risk) {
 	tracking := adoc.model.GetRiskTrackingWithDefault(risk)
 
-	colorName := ""
-	switch tracking.Status {
-	case types.Unchecked:
-		colorName = "RiskStatusUnchecked"
-	case types.InDiscussion:
-		colorName = "RiskStatusInDiscussion"
-	case types.Accepted:
-		colorName = "RiskStatusAccepted"
-	case types.InProgress:
-		colorName = "RiskStatusInProgress"
-	case types.Mitigated:
-		colorName = "RiskStatusMitigated"
-	case types.FalsePositive:
-		colorName = "RiskStatusFalsePositive"
-	default:
-		colorName = ""
-	}
+	colorName := riskStatusRole(tracking.Status)
 	bold := ""
 	if tracking.Status == types.Unchecked {
 		bold = "*"
