@@ -3234,70 +3234,7 @@ func (r *pdfReporter) createTargetDescription(parsedModel *types.Model, baseFold
 	html.Write(5, intro.String())
 	criticality := parsedModel.BusinessCriticality
 	intro.Reset()
-	r.pdfColorGray()
-	intro.WriteString("(  ")
-	if criticality == types.Archive {
-		html.Write(5, intro.String())
-		intro.Reset()
-		r.pdfColorBlack()
-		intro.WriteString("<b><u>" + strings.ToUpper(types.Archive.String()) + "</u></b>")
-		html.Write(5, intro.String())
-		intro.Reset()
-		r.pdfColorGray()
-	} else {
-		intro.WriteString(types.Archive.String())
-	}
-	intro.WriteString("  |  ")
-	if criticality == types.Operational {
-		html.Write(5, intro.String())
-		intro.Reset()
-		r.pdfColorBlack()
-		intro.WriteString("<b><u>" + strings.ToUpper(types.Operational.String()) + "</u></b>")
-		html.Write(5, intro.String())
-		intro.Reset()
-		r.pdfColorGray()
-	} else {
-		intro.WriteString(types.Operational.String())
-	}
-	intro.WriteString("  |  ")
-	if criticality == types.Important {
-		html.Write(5, intro.String())
-		intro.Reset()
-		r.pdfColorBlack()
-		intro.WriteString("<b><u>" + strings.ToUpper(types.Important.String()) + "</u></b>")
-		html.Write(5, intro.String())
-		intro.Reset()
-		r.pdfColorGray()
-	} else {
-		intro.WriteString(types.Important.String())
-	}
-	intro.WriteString("  |  ")
-	if criticality == types.Critical {
-		html.Write(5, intro.String())
-		intro.Reset()
-		r.pdfColorBlack()
-		intro.WriteString("<b><u>" + strings.ToUpper(types.Critical.String()) + "</u></b>")
-		html.Write(5, intro.String())
-		intro.Reset()
-		r.pdfColorGray()
-	} else {
-		intro.WriteString(types.Critical.String())
-	}
-	intro.WriteString("  |  ")
-	if criticality == types.MissionCritical {
-		html.Write(5, intro.String())
-		intro.Reset()
-		r.pdfColorBlack()
-		intro.WriteString("<b><u>" + strings.ToUpper(types.MissionCritical.String()) + "</u></b>")
-		html.Write(5, intro.String())
-		intro.Reset()
-		r.pdfColorGray()
-	} else {
-		intro.WriteString(types.MissionCritical.String())
-	}
-	intro.WriteString("  )")
-	html.Write(5, intro.String())
-	intro.Reset()
+	r.businessCriticalityScale(criticality, html)
 	r.pdfColorBlack()
 
 	intro.WriteString("<br><br><br><b>Business Overview</b><br><br>")
@@ -3318,6 +3255,34 @@ func (r *pdfReporter) createTargetDescription(parsedModel *types.Model, baseFold
 		return fmt.Errorf("error adding custom images: %w", err)
 	}
 	return nil
+}
+
+// businessCriticalityScale writes the scale of business criticalities with the one of the model
+// highlighted.
+func (r *pdfReporter) businessCriticalityScale(criticality types.Criticality, html gofpdf.HTMLBasicType) {
+	var intro strings.Builder
+	r.pdfColorGray()
+	intro.WriteString("(  ")
+	for i, value := range []types.Criticality{
+		types.Archive, types.Operational, types.Important, types.Critical, types.MissionCritical,
+	} {
+		if i > 0 {
+			intro.WriteString("  |  ")
+		}
+		if criticality == value {
+			html.Write(5, intro.String())
+			intro.Reset()
+			r.pdfColorBlack()
+			intro.WriteString("<b><u>" + strings.ToUpper(value.String()) + "</u></b>")
+			html.Write(5, intro.String())
+			intro.Reset()
+			r.pdfColorGray()
+		} else {
+			intro.WriteString(value.String())
+		}
+	}
+	intro.WriteString("  )")
+	html.Write(5, intro.String())
 }
 
 func (r *pdfReporter) addCustomImages(customImages []map[string]string, baseFolder string,
