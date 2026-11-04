@@ -974,6 +974,37 @@ func (r *pdfReporter) createManagementSummary(parsedModel *types.Model, tempFold
 	return nil
 }
 
+// riskStatusStackedBar returns the bar of the risk tracking status chart for the risks of one
+// severity, stacked by risk status.
+func riskStatusStackedBar(severity types.RiskSeverity, risks []*types.Risk) chart.StackedBar {
+	statuses := []struct {
+		status types.RiskStatus
+		color  string
+	}{
+		{types.Unchecked, RgbHexColorRiskStatusUnchecked()},
+		{types.InDiscussion, rgbHexColorRiskStatusInDiscussion()},
+		{types.Accepted, rgbHexColorRiskStatusAccepted()},
+		{types.InProgress, rgbHexColorRiskStatusInProgress()},
+		{types.Mitigated, rgbHexColorRiskStatusMitigated()},
+		{types.FalsePositive, rgbHexColorRiskStatusFalsePositive()},
+	}
+	values := make([]chart.Value, 0, len(statuses))
+	for _, status := range statuses {
+		values = append(values, chart.Value{
+			Value: float64(len(reduceToRiskStatus(risks, status.status))), Label: status.status.Title(),
+			Style: chart.Style{
+				FillColor:   makeColor(status.color).WithAlpha(98),
+				StrokeColor: drawing.ColorFromHex("999"),
+			},
+		})
+	}
+	return chart.StackedBar{
+		Name:   severity.Title(),
+		Width:  130,
+		Values: values,
+	}
+}
+
 func (r *pdfReporter) createRiskMitigationStatus(parsedModel *types.Model, tempFolder string) error {
 	r.pdf.SetTextColor(0, 0, 0)
 	stillAtRisk := filteredByStillAtRisk(parsedModel)
@@ -1006,246 +1037,11 @@ func (r *pdfReporter) createRiskMitigationStatus(parsedModel *types.Model, tempF
 		XAxis: chart.Style{Show: false, FontSize: 26, TextVerticalAlign: chart.TextVerticalAlignBottom},
 		YAxis: chart.Style{Show: true, FontSize: 26, TextVerticalAlign: chart.TextVerticalAlignBottom},
 		Bars: []chart.StackedBar{
-			{
-				Name:  types.LowSeverity.Title(),
-				Width: 130,
-				Values: []chart.Value{
-					{
-						Value: float64(len(reduceToRiskStatus(risksLow, types.Unchecked))), Label: types.Unchecked.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(RgbHexColorRiskStatusUnchecked()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksLow, types.InDiscussion))), Label: types.InDiscussion.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusInDiscussion()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksLow, types.Accepted))), Label: types.Accepted.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusAccepted()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksLow, types.InProgress))), Label: types.InProgress.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusInProgress()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksLow, types.Mitigated))), Label: types.Mitigated.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusMitigated()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksLow, types.FalsePositive))), Label: types.FalsePositive.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusFalsePositive()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-				},
-			},
-			{
-				Name:  types.MediumSeverity.Title(),
-				Width: 130,
-				Values: []chart.Value{
-					{
-						Value: float64(len(reduceToRiskStatus(risksMedium, types.Unchecked))), Label: types.Unchecked.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(RgbHexColorRiskStatusUnchecked()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksMedium, types.InDiscussion))), Label: types.InDiscussion.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusInDiscussion()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksMedium, types.Accepted))), Label: types.Accepted.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusAccepted()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksMedium, types.InProgress))), Label: types.InProgress.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusInProgress()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksMedium, types.Mitigated))), Label: types.Mitigated.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusMitigated()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksMedium, types.FalsePositive))), Label: types.FalsePositive.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusFalsePositive()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-				},
-			},
-			{
-				Name:  types.ElevatedSeverity.Title(),
-				Width: 130,
-				Values: []chart.Value{
-					{
-						Value: float64(len(reduceToRiskStatus(risksElevated, types.Unchecked))), Label: types.Unchecked.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(RgbHexColorRiskStatusUnchecked()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksElevated, types.InDiscussion))), Label: types.InDiscussion.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusInDiscussion()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksElevated, types.Accepted))), Label: types.Accepted.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusAccepted()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksElevated, types.InProgress))), Label: types.InProgress.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusInProgress()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksElevated, types.Mitigated))), Label: types.Mitigated.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusMitigated()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksElevated, types.FalsePositive))), Label: types.FalsePositive.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusFalsePositive()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-				},
-			},
-			{
-				Name:  types.HighSeverity.Title(),
-				Width: 130,
-				Values: []chart.Value{
-					{
-						Value: float64(len(reduceToRiskStatus(risksHigh, types.Unchecked))), Label: types.Unchecked.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(RgbHexColorRiskStatusUnchecked()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksHigh, types.InDiscussion))), Label: types.InDiscussion.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusInDiscussion()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksHigh, types.Accepted))), Label: types.Accepted.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusAccepted()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksHigh, types.InProgress))), Label: types.InProgress.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusInProgress()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksHigh, types.Mitigated))), Label: types.Mitigated.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusMitigated()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksHigh, types.FalsePositive))), Label: types.FalsePositive.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusFalsePositive()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-				},
-			},
-			{
-				Name:  types.CriticalSeverity.Title(),
-				Width: 130,
-				Values: []chart.Value{
-					{
-						Value: float64(len(reduceToRiskStatus(risksCritical, types.Unchecked))), Label: types.Unchecked.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(RgbHexColorRiskStatusUnchecked()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksCritical, types.InDiscussion))), Label: types.InDiscussion.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusInDiscussion()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksCritical, types.Accepted))), Label: types.Accepted.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusAccepted()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksCritical, types.InProgress))), Label: types.InProgress.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusInProgress()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksCritical, types.Mitigated))), Label: types.Mitigated.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusMitigated()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-					{
-						Value: float64(len(reduceToRiskStatus(risksCritical, types.FalsePositive))), Label: types.FalsePositive.Title(),
-						Style: chart.Style{
-							FillColor:   makeColor(rgbHexColorRiskStatusFalsePositive()).WithAlpha(98),
-							StrokeColor: drawing.ColorFromHex("999"),
-						},
-					},
-				},
-			},
+			riskStatusStackedBar(types.LowSeverity, risksLow),
+			riskStatusStackedBar(types.MediumSeverity, risksMedium),
+			riskStatusStackedBar(types.ElevatedSeverity, risksElevated),
+			riskStatusStackedBar(types.HighSeverity, risksHigh),
+			riskStatusStackedBar(types.CriticalSeverity, risksCritical),
 		},
 	}
 
