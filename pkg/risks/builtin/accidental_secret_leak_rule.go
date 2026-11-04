@@ -35,7 +35,7 @@ func (*AccidentalSecretLeakRule) Category() *types.RiskCategory {
 		RiskAssessment:             ratingByAssetAndProcessedDataSensitivity,
 		FalsePositives:             "Usually no false positives.",
 		ModelFailurePossibleReason: false,
-		CWE:                        200,
+		CWE:                        cweSensitiveInformationExposure,
 	}
 }
 

@@ -6,13 +6,20 @@ import (
 	"github.com/Pinguladora/threagile/pkg/types"
 )
 
+// The RAA values (in %) from which technical assets should be hardened; the reduced limit applies to high-value
+// targets.
+const (
+	hardeningRAALimit        = 55
+	hardeningRAALimitReduced = 40
+)
+
 type MissingHardeningRule struct {
 	raaLimit        int
 	raaLimitReduced int
 }
 
 func NewMissingHardeningRule() *MissingHardeningRule {
-	return &MissingHardeningRule{raaLimit: 55, raaLimitReduced: 40}
+	return &MissingHardeningRule{raaLimit: hardeningRAALimit, raaLimitReduced: hardeningRAALimitReduced}
 }
 
 func (r *MissingHardeningRule) Category() *types.RiskCategory {
@@ -35,7 +42,7 @@ func (r *MissingHardeningRule) Category() *types.RiskCategory {
 		RiskAssessment:             "The risk rating depends on the sensitivity of the data processed in the technical asset.",
 		FalsePositives:             "Usually no false positives.",
 		ModelFailurePossibleReason: false,
-		CWE:                        16,
+		CWE:                        cweConfiguration,
 	}
 }
 

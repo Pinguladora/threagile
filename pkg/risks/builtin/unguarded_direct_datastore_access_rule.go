@@ -36,7 +36,7 @@ func (*UnguardedDirectDatastoreAccessRule) Category() *types.RiskCategory {
 			"For assets with RAA values higher than 40 % the risk-rating increases.",
 		FalsePositives:             "When the caller is considered fully trusted as if it was part of the datastore itself.",
 		ModelFailurePossibleReason: false,
-		CWE:                        501,
+		CWE:                        cweTrustBoundaryViolation,
 	}
 }
 

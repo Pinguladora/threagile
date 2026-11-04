@@ -34,7 +34,7 @@ func (*SearchQueryInjectionRule) Category() *types.RiskCategory {
 		FalsePositives: "Server engine queries by search values not consisting of parts controllable by the caller can be considered " +
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,
-		CWE:                        74,
+		CWE:                        cweInjection,
 	}
 }
 

@@ -33,7 +33,7 @@ func (*PathTraversalRule) Category() *types.RiskCategory {
 		FalsePositives: "File accesses by filenames not consisting of parts controllable by the caller can be considered " +
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,
-		CWE:                        22,
+		CWE:                        cwePathTraversal,
 	}
 }
 

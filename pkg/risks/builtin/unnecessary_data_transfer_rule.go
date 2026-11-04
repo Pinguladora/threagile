@@ -37,7 +37,7 @@ func (*UnnecessaryDataTransferRule) Category() *types.RiskCategory {
 			"can be considered as false positives (incomplete models) after individual review. These should then be addressed by " +
 			"completing the model so that all necessary data assets are processed by the technical asset involved.",
 		ModelFailurePossibleReason: true,
-		CWE:                        1008,
+		CWE:                        cweArchitecturalConcepts,
 	}
 }
 

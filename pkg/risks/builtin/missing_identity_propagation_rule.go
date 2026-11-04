@@ -37,7 +37,7 @@ func (*MissingIdentityPropagationRule) Category() *types.RiskCategory {
 		FalsePositives: "Technical assets which do not process requests regarding functionality or data linked to end-users (customers) " +
 			"can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: false,
-		CWE:                        284,
+		CWE:                        cweImproperAccessControl,
 	}
 }
 

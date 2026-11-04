@@ -32,7 +32,7 @@ func (*CrossSiteScriptingRule) Category() *types.RiskCategory {
 			"is not accessed via a browser-like component (i.e not by a human user initiating the request that " +
 			"gets passed through all components until it reaches the web application) this can be considered a false positive.",
 		ModelFailurePossibleReason: false,
-		CWE:                        79,
+		CWE:                        cweCrossSiteScripting,
 	}
 }
 

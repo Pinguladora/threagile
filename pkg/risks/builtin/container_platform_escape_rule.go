@@ -38,7 +38,7 @@ func (*ContainerPlatformEscapeRule) Category() *types.RiskCategory {
 		FalsePositives: "Container platforms not running parts of the target architecture can be considered " +
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,
-		CWE:                        1008,
+		CWE:                        cweArchitecturalConcepts,
 	}
 }
 

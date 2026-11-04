@@ -42,7 +42,7 @@ func (*CodeBackdooringRule) Category() *types.RiskCategory {
 			"and applied hardening, which must be equivalent to a managed developer client environment) this can be considered a false positive " +
 			"after individual review.",
 		ModelFailurePossibleReason: false,
-		CWE:                        912,
+		CWE:                        cweHiddenFunctionality,
 	}
 }
 

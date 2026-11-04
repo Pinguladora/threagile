@@ -34,7 +34,7 @@ func (*UnencryptedAssetRule) Category() *types.RiskCategory {
 		RiskAssessment:             "Depending on the confidentiality rating of the stored data-assets either medium or high risk.",
 		FalsePositives:             "When all sensitive data stored within the asset is already fully encrypted on document or data level.",
 		ModelFailurePossibleReason: false,
-		CWE:                        311,
+		CWE:                        cweMissingEncryption,
 	}
 }
 

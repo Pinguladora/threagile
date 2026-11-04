@@ -37,7 +37,7 @@ func (*DosRiskyAccessAcrossTrustBoundaryRule) Category() *types.RiskCategory {
 			"for the asset is applied, the risk-rating is considered " + types.MediumSeverity.String() + ".",
 		FalsePositives:             "When the accessed target operations are not time- or resource-consuming.",
 		ModelFailurePossibleReason: false,
-		CWE:                        400,
+		CWE:                        cweUncontrolledResourceConsumption,
 	}
 }
 

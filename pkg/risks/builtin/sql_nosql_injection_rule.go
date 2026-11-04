@@ -30,7 +30,7 @@ func (*SqlNoSqlInjectionRule) Category() *types.RiskCategory {
 		FalsePositives: "Database accesses by queries not consisting of parts controllable by the caller can be considered " +
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,
-		CWE:                        89,
+		CWE:                        cweSQLInjection,
 	}
 }
 

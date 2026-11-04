@@ -33,7 +33,7 @@ func (*ContainerBaseImageBackdooringRule) Category() *types.RiskCategory {
 		FalsePositives: "Fully trusted (i.e. reviewed and cryptographically signed or similar) base images of containers can be considered " +
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,
-		CWE:                        912,
+		CWE:                        cweHiddenFunctionality,
 	}
 }
 

@@ -33,7 +33,7 @@ func (*PushInsteadPullDeploymentRule) Category() *types.RiskCategory {
 		FalsePositives: "Communication links that are not deployment paths " +
 			"can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: true,
-		CWE:                        1127,
+		CWE:                        cweInsufficientCompilationWarnings,
 	}
 }
 
