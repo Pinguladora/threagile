@@ -36,44 +36,13 @@ func compare(firstValue Value, secondValue Value) (*Event, error) {
 		return compareArrays(first, second)
 
 	case *BoolValue:
-		second, conversionError := ToBoolValue(secondValue)
-		if conversionError != nil {
-			return nil, conversionError
-		}
-
-		if first.BoolValue() == second.BoolValue() {
-			return NewEventFrom(NewEqualProperty(second), first, second), nil
-		}
-
-		return NewEventFrom(NewNotEqualProperty(second), first, second), nil
+		return compareBools(first, secondValue)
 
 	case *DecimalValue:
-		second, conversionError := ToDecimalValue(secondValue)
-		if conversionError != nil {
-			return nil, conversionError
-		}
-
-		value := first.DecimalValue().Cmp(second.DecimalValue())
-		prop := NewEqualProperty(secondValue)
-		if value < 0 {
-			prop = NewLessProperty(secondValue)
-		} else if value > 0 {
-			prop = NewGreaterProperty(secondValue)
-		}
-
-		return NewEventFrom(prop, first, second), nil
+		return compareDecimals(first, secondValue)
 
 	case *StringValue:
-		second, conversionError := ToStringValue(secondValue)
-		if conversionError != nil {
-			return nil, conversionError
-		}
-
-		if first.StringValue() == second.StringValue() {
-			return NewEventFrom(NewEqualProperty(second), first, second), nil
-		}
-
-		return NewEventFrom(NewNotEqualProperty(second), first, second), nil
+		return compareStrings(first, secondValue)
 
 	case *AnyValue:
 		if firstValue.Value() == nil {
@@ -87,6 +56,49 @@ func compare(firstValue Value, secondValue Value) (*Event, error) {
 	}
 
 	return nil, fmt.Errorf("can't compare %T to %T", firstValue, secondValue)
+}
+
+func compareBools(first *BoolValue, secondValue Value) (*Event, error) {
+	second, conversionError := ToBoolValue(secondValue)
+	if conversionError != nil {
+		return nil, conversionError
+	}
+
+	if first.BoolValue() == second.BoolValue() {
+		return NewEventFrom(NewEqualProperty(second), first, second), nil
+	}
+
+	return NewEventFrom(NewNotEqualProperty(second), first, second), nil
+}
+
+func compareDecimals(first *DecimalValue, secondValue Value) (*Event, error) {
+	second, conversionError := ToDecimalValue(secondValue)
+	if conversionError != nil {
+		return nil, conversionError
+	}
+
+	value := first.DecimalValue().Cmp(second.DecimalValue())
+	prop := NewEqualProperty(secondValue)
+	if value < 0 {
+		prop = NewLessProperty(secondValue)
+	} else if value > 0 {
+		prop = NewGreaterProperty(secondValue)
+	}
+
+	return NewEventFrom(prop, first, second), nil
+}
+
+func compareStrings(first *StringValue, secondValue Value) (*Event, error) {
+	second, conversionError := ToStringValue(secondValue)
+	if conversionError != nil {
+		return nil, conversionError
+	}
+
+	if first.StringValue() == second.StringValue() {
+		return NewEventFrom(NewEqualProperty(second), first, second), nil
+	}
+
+	return NewEventFrom(NewNotEqualProperty(second), first, second), nil
 }
 
 // compareToNil compares nothing to a value, which nothing equals when it is empty, false, zero or nothing as well.
