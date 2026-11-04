@@ -37,7 +37,8 @@ func (what *FalseExpression) ParseAny(script any) (common.Expression, any, error
 func (what *FalseExpression) EvalBool(scope *common.Scope) (*common.BoolValue, string, error) {
 	value, errorLiteral, evalError := what.expression.EvalBool(scope)
 	if evalError != nil {
-		return common.EmptyBoolValue(), errorLiteral, fmt.Errorf("%q: error evaluating false-expression: %w", what.literal, evalError)
+		return common.EmptyBoolValue(), errorLiteral,
+			fmt.Errorf("%q: error evaluating false-expression: %w", what.literal, evalError)
 	}
 
 	return common.SomeBoolValue(!value.BoolValue(), value.Event()), "", nil

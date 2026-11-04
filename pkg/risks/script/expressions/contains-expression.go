@@ -73,7 +73,8 @@ func (what *ContainsExpression) evalBool(item common.Value, inValue common.Value
 		return common.SomeBoolValue(false, nil), "", nil
 
 	default:
-		return common.EmptyBoolValue(), "", fmt.Errorf("failed to eval contains-expression: expected iterable type, got %T", inValue)
+		return common.EmptyBoolValue(), "",
+			fmt.Errorf("failed to eval contains-expression: expected iterable type, got %T", inValue)
 	}
 }
 

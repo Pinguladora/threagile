@@ -77,7 +77,8 @@ func (what *AllExpression) evalBool(scope *common.Scope, inValue common.Value) (
 		return common.SomeBoolValue(false, nil), "", nil
 
 	default:
-		return common.EmptyBoolValue(), what.Literal(), fmt.Errorf("failed to eval all-expression: expected iterable type, got %T", inValue)
+		return common.EmptyBoolValue(), what.Literal(),
+			fmt.Errorf("failed to eval all-expression: expected iterable type, got %T", inValue)
 	}
 }
 
