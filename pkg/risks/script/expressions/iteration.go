@@ -2,11 +2,8 @@ package expressions
 
 import (
 	"fmt"
-	"maps"
-	"slices"
 
 	"github.com/Pinguladora/threagile/pkg/risks/script/common"
-	"github.com/shopspring/decimal"
 )
 
 // parseIteration parses the script of an expression that iterates over values (all-, any- and count-expression)
@@ -78,61 +75,6 @@ func parseIterationExpression(
 	return boolExpression, nil, nil
 }
 
-// iterationItem is an item of an iterable value.
-type iterationItem struct {
-	index common.Value  // the index (a decimal) of the item in a slice, or its key (a string) in a map
-	value any           // the value of the item
-	event *common.Event // the event of the item if it is a value itself, otherwise nil
-	label string        // how error messages refer to the item
-}
-
-// forEachItem calls visit for each item of an iterable value, a slice or a map (in the order of its sorted keys),
-// until visit tells to stop. It returns what visit returned when it stopped.
-func forEachItem(
-	iterable any, visit func(item iterationItem) (stop bool, errorLiteral string, err error),
-) (string, error) {
-	switch castValue := iterable.(type) {
-	case []any:
-		for index, value := range castValue {
-			stop, errorLiteral, err := visit(iterationItem{
-				index: common.SomeDecimalValue(decimal.NewFromInt(int64(index)), nil),
-				value: value,
-				label: fmt.Sprintf("#%v", index+1),
-			})
-			if stop {
-				return errorLiteral, err
-			}
-		}
-
-	case []common.Value:
-		for index, value := range castValue {
-			stop, errorLiteral, err := visit(iterationItem{
-				index: common.SomeDecimalValue(decimal.NewFromInt(int64(index)), nil),
-				value: value.Value(),
-				event: value.Event(),
-				label: fmt.Sprintf("#%v", index+1),
-			})
-			if stop {
-				return errorLiteral, err
-			}
-		}
-
-	case map[string]any:
-		for _, name := range slices.Sorted(maps.Keys(castValue)) {
-			stop, errorLiteral, err := visit(iterationItem{
-				index: common.SomeStringValue(name, nil),
-				value: castValue[name],
-				label: fmt.Sprintf("%q", name),
-			})
-			if stop {
-				return errorLiteral, err
-			}
-		}
-	}
-
-	return "", nil
-}
-
 // iterableLen returns the number of items of an iterable value.
 func iterableLen(iterable any) int {
 	switch castValue := iterable.(type) {
@@ -154,22 +96,27 @@ func evalForEachItem(
 	scope *common.Scope, inValue common.Value, iterable any, itemName string, indexName string,
 	expression common.BoolExpression, name string, visit func(value *common.BoolValue) (stop bool),
 ) (string, error) {
-	return forEachItem(iterable, func(item iterationItem) (bool, string, error) {
+	var errorLiteral string
+	var evalError error
+	common.ForEachItem(iterable, func(item common.IterationItem) bool {
 		if len(indexName) > 0 {
-			scope.Set(indexName, item.index)
+			scope.Set(indexName, item.Index)
 		}
 
-		itemValue := scope.SetItem(common.SomeValue(item.value, inValue.Event()))
+		itemValue := scope.SetItem(common.SomeValue(item.Value, inValue.Event()))
 		if len(itemName) > 0 {
 			scope.Set(itemName, itemValue)
 		}
 
-		value, errorLiteral, expressionError := expression.EvalBool(scope)
+		value, expressionLiteral, expressionError := expression.EvalBool(scope)
 		if expressionError != nil {
-			return true, errorLiteral, fmt.Errorf("error evaluating expression %v of %v: %w", item.label, name,
-				expressionError)
+			errorLiteral = expressionLiteral
+			evalError = fmt.Errorf("error evaluating expression %v of %v: %w", item.Label, name, expressionError)
+			return true
 		}
 
-		return visit(value), "", nil
+		return visit(value)
 	})
+
+	return errorLiteral, evalError
 }

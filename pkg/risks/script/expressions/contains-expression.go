@@ -42,22 +42,24 @@ func (what *ContainsExpression) evalBool(item common.Value, inValue common.Value
 	switch castValue := inValue.Value().(type) {
 	case []any, []common.Value, map[string]any:
 		var sameValue *common.Event
-		errorLiteral, compareError := forEachItem(castValue, func(candidate iterationItem) (bool, string, error) {
-			compareValue, compareError := common.Compare(item, common.SomeValue(candidate.value, candidate.event), what.as)
-			if compareError != nil {
-				return true, what.Literal(), fmt.Errorf(
-					"failed to eval contains-expression: can't compare value to item %v: %w", candidate.label, compareError)
+		var compareError error
+		common.ForEachItem(castValue, func(candidate common.IterationItem) bool {
+			compareValue, candidateError := common.Compare(item, common.SomeValue(candidate.Value, candidate.Event), what.as)
+			if candidateError != nil {
+				compareError = fmt.Errorf("failed to eval contains-expression: can't compare value to item %v: %w",
+					candidate.Label, candidateError)
+				return true
 			}
 
 			if common.IsSame(compareValue.Property) {
 				sameValue = compareValue
-				return true, "", nil
+				return true
 			}
 
-			return false, "", nil
+			return false
 		})
 		if compareError != nil {
-			return common.EmptyBoolValue(), errorLiteral, compareError
+			return common.EmptyBoolValue(), what.Literal(), compareError
 		}
 
 		if sameValue != nil {
