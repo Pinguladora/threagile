@@ -368,3 +368,36 @@ func TestPushInsteadOfPullRuleGenerateRisksRiskCreated(t *testing.T) {
 		})
 	}
 }
+
+func TestPushInsteadOfPullRuleGeneratesOneRiskPerDeploymentTarget(t *testing.T) {
+	buildPipeline := types.TechnologyList{{Name: "build pipeline", Attributes: map[string]bool{types.BuildPipeline: true}}}
+	target := func(id string, confidentiality types.Confidentiality) *types.TechnicalAsset {
+		return &types.TechnicalAsset{
+			Id: id, Title: id, Usage: types.Business, Confidentiality: confidentiality,
+			Technologies: types.TechnologyList{{Name: "web-server"}},
+		}
+	}
+	risks, err := NewPushInsteadPullDeploymentRule().GenerateRisks(&types.Model{
+		TechnicalAssets: map[string]*types.TechnicalAsset{
+			"pipeline": {
+				Id: "pipeline", Title: "Pipeline", Technologies: buildPipeline,
+				CommunicationLinks: []*types.CommunicationLink{
+					{Id: "pipeline>deploy-a", TargetId: "sensitive", Usage: types.DevOps},
+					{Id: "pipeline>deploy-b", TargetId: "public", Usage: types.DevOps},
+				},
+			},
+			"sensitive": target("sensitive", types.StrictlyConfidential),
+			"public":    target("public", types.Public),
+		},
+	})
+	assert.NoError(t, err)
+
+	impacts := make(map[string]types.RiskExploitationImpact)
+	for _, risk := range risks {
+		impacts[risk.SyntheticId] = risk.ExploitationImpact
+	}
+	assert.Equal(t, map[string]types.RiskExploitationImpact{
+		"push-instead-of-pull-deployment@pipeline@sensitive": types.MediumImpact,
+		"push-instead-of-pull-deployment@pipeline@public":    types.LowImpact,
+	}, impacts, "distinct ids, and the sensitive target does not raise the impact of the other")
+}

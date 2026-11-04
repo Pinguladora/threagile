@@ -43,7 +43,6 @@ func (*PushInsteadPullDeploymentRule) SupportedTags() []string {
 
 func (r *PushInsteadPullDeploymentRule) GenerateRisks(input *types.Model) ([]*types.Risk, error) {
 	risks := make([]*types.Risk, 0)
-	impact := types.LowImpact
 	for _, buildPipeline := range input.TechnicalAssets {
 		if !buildPipeline.Technologies.GetAttribute(types.BuildPipeline) {
 			continue
@@ -59,6 +58,8 @@ func (r *PushInsteadPullDeploymentRule) GenerateRisks(input *types.Model) ([]*ty
 			if targetAsset.Technologies.GetAttribute(types.IsDevelopmentRelevant) || targetAsset.Usage == types.DevOps {
 				continue
 			}
+			// rated per deployment target, so one sensitive target does not raise the others
+			impact := types.LowImpact
 			if input.HighestProcessedConfidentiality(targetAsset) >= types.Confidential ||
 				input.HighestProcessedIntegrity(targetAsset) >= types.Critical ||
 				input.HighestProcessedAvailability(targetAsset) >= types.Critical {
@@ -83,6 +84,8 @@ func (r *PushInsteadPullDeploymentRule) createRisk(buildPipeline *types.Technica
 		DataBreachProbability:           types.Improbable,
 		DataBreachTechnicalAssetIDs:     []string{deploymentTarget.Id},
 	}
-	risk.SyntheticId = risk.CategoryId + "@" + buildPipeline.Id
+	// One risk per deployment target, so the target is part of the id; the build pipeline comes
+	// first, so that "<category>@<pipeline>@*" tracks all of a pipeline's targets.
+	risk.SyntheticId = risk.CategoryId + "@" + buildPipeline.Id + "@" + deploymentTarget.Id
 	return risk
 }
