@@ -1860,7 +1860,7 @@ func (adoc AdocReport) writeTechnicalAssetRisks(f *os.File, technicalAsset *type
 	if len(risksStr) > 0 {
 		writeLine(f, adocFootnoteRiskFindings)
 		for _, risk := range risksStr {
-			colorPrefix, colorSuffix := colorPrefixBySeverity(types.HighestSeverityStillAtRisk(risksStr), false)
+			colorPrefix, colorSuffix := colorPrefixBySeverity(risk.Severity, false)
 			if !risk.RiskStatus.IsStillAtRisk() {
 				colorPrefix = ""
 				colorSuffix = ""
