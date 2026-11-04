@@ -82,7 +82,7 @@ func TestMarshal(t *testing.T) {
 	for name, testCase := range testCases {
 		t.Run(name, func(t *testing.T) {
 			var v struct {
-				Quantity Quantity
+				Quantity Quantity `json:"Quantity" yaml:"quantity"`
 			}
 			v.Quantity = testCase.input
 
@@ -127,7 +127,7 @@ func TestUnmarshal(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			yamlString := fmt.Sprintf("quantity: %s\n", testCase.input)
 			var v struct {
-				Quantity Quantity
+				Quantity Quantity `json:"Quantity" yaml:"quantity"`
 			}
 			err := yaml.Unmarshal([]byte(yamlString), &v)
 
@@ -145,7 +145,7 @@ func TestUnmarshal(t *testing.T) {
 
 func TestUnmarshallJsonError(t *testing.T) {
 	var v struct {
-		Quantity Quantity
+		Quantity Quantity `json:"Quantity" yaml:"quantity"`
 	}
 	err := json.Unmarshal([]byte("{\"Quantity\":\"unknown\"}"), &v)
 
@@ -154,7 +154,7 @@ func TestUnmarshallJsonError(t *testing.T) {
 
 func TestUnmarshallYamlError(t *testing.T) {
 	var v struct {
-		Quantity Quantity
+		Quantity Quantity `json:"Quantity" yaml:"quantity"`
 	}
 	err := yaml.Unmarshal([]byte("quantity: unknown\n"), &v)
 
