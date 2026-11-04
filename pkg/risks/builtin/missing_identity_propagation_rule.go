@@ -16,7 +16,7 @@ func (*MissingIdentityPropagationRule) Category() *types.RiskCategory {
 		Title: "Missing Identity Propagation",
 		Description: "Technical assets (especially multi-tenant systems), which usually process data for end users should " +
 			"authorize every request based on the identity of the end user when the data flow is authenticated (i.e. " +
-			"non-public). For DevOps usages at least a technical-user authorization is required.",
+			"non-public). For DevOps usages at least the identity of a service account or a workload is required.",
 		Impact: "If this risk is unmitigated, attackers might be able to access or modify foreign data after a successful " +
 			"compromise of a component within the system due to missing resource-based authorization checks.",
 		ASVS:       "V4 - Access Control Verification Requirements",
@@ -24,7 +24,8 @@ func (*MissingIdentityPropagationRule) Category() *types.RiskCategory {
 		Action:     "Identity Propagation and Resource-based Authorization",
 		Mitigation: "When processing requests for end users if possible authorize in the backend against the propagated " +
 			"identity of the end user. This can be achieved in passing JWTs or similar tokens and checking them in the " +
-			"backend services. For DevOps usages apply at least a technical-user authorization.",
+			"backend services, and model the link with the identity <i>" + types.EndUser.String() + "</i>. For DevOps " +
+			"usages pass at least the identity of a service account or a workload.",
 		Check:    checkCheatSheetAndASVS,
 		Function: types.Architecture,
 		STRIDE:   types.ElevationOfPrivilege,
