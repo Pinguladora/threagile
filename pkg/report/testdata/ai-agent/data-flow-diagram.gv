@@ -222,7 +222,7 @@ peripheries=1
 color="#AF780E"
   ]; 
   981300970 [
-label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">llm</font><br/><font point-size="15" color="#666666">service</font></td></tr><tr><td><b><font color="#AF780E">Guardrail Model</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 26 %</font></td></tr></table>>
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">llm/ai-guardrail</font><br/><font point-size="15" color="#666666">service</font></td></tr><tr><td><b><font color="#AF780E">Guardrail Model</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 26 %</font></td></tr></table>>
 shape=ellipse style="solid,filled" penwidth="3.000000" fillcolor="#ffffb7"
 peripheries=1
 color="#AF780E"

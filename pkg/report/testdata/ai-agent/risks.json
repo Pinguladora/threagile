@@ -430,37 +430,6 @@
     "most_relevant_communication_link_title": "Order Storage"
   },
   {
-    "category": "missing-ai-guardrail",
-    "risk_status": "unchecked",
-    "severity": "medium",
-    "exploitation_likelihood": "unlikely",
-    "exploitation_impact": "medium",
-    "title": "\u003cb\u003eMissing AI Guardrail\u003c/b\u003e risk at \u003cb\u003eSupport Agent\u003c/b\u003e",
-    "synthetic_id": "missing-ai-guardrail@support-agent",
-    "most_relevant_technical_asset": "support-agent",
-    "most_relevant_communication_link": "chat-frontend\u003eassistant-request",
-    "data_breach_probability": "possible",
-    "data_breach_technical_assets": [
-      "support-agent"
-    ],
-    "plain_title": "Missing AI Guardrail risk at Support Agent",
-    "category_title": "Missing AI Guardrail",
-    "stride": "elevation-of-privilege",
-    "function": "architecture",
-    "cwe": 1427,
-    "references": [
-      "MAESTRO Layer 6: Security and Compliance",
-      "OWASP LLM01:2025 Prompt Injection",
-      "OWASP ASI01:2026 Agent Goal Hijack"
-    ],
-    "action": "AI Guardrails",
-    "mitigation": "Screen the untrusted input of the model or agent, and its output, with a guardrail like a prompt injection classifier, a content safety service or a policy framework for agents, and block or flag what it finds. Model a guardrail service as an ai-guardrail technical asset in the path of the untrusted content, or one the agent asks, and a guardrail library inside the agent by adding ai-guardrail to the technologies of the agent. A guardrail lowers the risk of prompt injection, but does not remove it.",
-    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
-    "most_relevant_technical_asset_title": "Support Agent",
-    "most_relevant_technical_asset_raa": 87.3574144486692,
-    "most_relevant_communication_link_title": "Assistant Request"
-  },
-  {
     "category": "missing-ai-monitoring",
     "risk_status": "unchecked",
     "severity": "elevated",

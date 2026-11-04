@@ -83,8 +83,9 @@ encrypted asset (or its trust boundary) with `aws:kms`, `azure:keyvault` or
 ## AI rules
 
 The AI rules model the threats of systems built on language models and agents. They
-use the technologies `llm`, `ai-agent`, `vector-database`, `mcp-server` and
-`model-registry`; the generic `ai` technology matches none of them. Each AI rule lists
+use the technologies `llm`, `ai-agent`, `vector-database`, `mcp-server`,
+`model-registry` and `ai-guardrail`, and `monitoring` for the systems that record what
+agents and models do; the generic `ai` technology matches none of them. Each AI rule lists
 the entries of the [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/),
 the OWASP Top 10 for Agentic Applications 2026 and the layers of the CSA MAESTRO
 framework it covers in its `references`, which the reports, `risks.json` and the OTM
@@ -105,6 +106,8 @@ through other assets: content passes on along the communication links.
 | Sensitive Data Disclosure through Model Output (`model-output-disclosure`) | language models and agents that untrusted content reaches and that process, or read from a vector database, confidential data | none | the confidentiality of what the model can read | LLM02, MAESTRO layer 1 |
 | Unauthenticated MCP Server (`unauthenticated-mcp-server`) | links without authentication into an MCP server whose tools reach confidential or critical assets | none | what the tools reach; very likely for internet callers, likely for callers taking untrusted content | ASI02, ASI03, LLM06, MAESTRO layers 4 and 7 |
 | Confused Deputy Agent (`confused-deputy-agent`) | agents that act for users (an incoming link with identity `end-user`, or from a client of humans) and reach assets with confidential or critical data with identity `service-account` or `workload`, directly or through the tools of an MCP server | none | the most sensitive asset reached; likely when the agent takes untrusted content | ASI03, LLM06, NHI9, MAESTRO layer 3 |
+| Missing AI Guardrail (`missing-ai-guardrail`) | language models and agents that untrusted content reaches through a link no guardrail screens: one not from an `ai-guardrail` asset, when the model or agent is no guardrail itself and asks none; links from other models and agents are skipped | none | the data the model or agent processes; likely when it talks to the internet directly | MAESTRO layer 6, LLM01, ASI01 |
+| Missing AI Monitoring (`missing-ai-monitoring`) | agents, and language models not on the internet, without a link to or from a `monitoring` asset | none | the data the agent or model processes; likely when it takes untrusted content | MAESTRO layer 5, ASI10 |
 
 Model a hosted model you call as a service (like a commercial LLM API) as an
 out-of-scope `llm` asset, so that the rules judge your use of it rather than the
@@ -112,8 +115,16 @@ model itself. A language model on the internet is no source of internet content:
 responses come from the model. Mark agents whose actions a human approves, or the single links that
 need an approval, with the `human-in-the-loop` tag, and add it to `tags_available`.
 
+Model a guardrail service, like a prompt injection classifier, a content safety service
+or an AI gateway that screens prompts, as an `ai-guardrail` asset: in the path of the
+untrusted content, or with a link from each agent or model that asks it. A guardrail
+library that runs inside an agent, like NeMo Guardrails, is the `ai-guardrail` technology
+next to `ai-agent` in the `technologies` of the agent. A guardrail lowers the risk of
+prompt injection without removing it, so the prompt injection rule still reports the
+agent or model.
+
 [`demo/ai-agent/threagile.yaml`](../demo/ai-agent/threagile.yaml) models an AI
-support assistant with all five AI technologies; analyze it to see the AI rules at work.
+support assistant with all six AI technologies; analyze it to see the AI rules at work.
 
 ## OT rules
 

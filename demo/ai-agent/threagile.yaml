@@ -342,7 +342,7 @@ technical_assets:
     used_as_client_by_human: false
     out_of_scope: false
     size: service
-    technology: llm
+    technologies: [llm, ai-guardrail]
     tags: []
     internet: false
     machine: container
