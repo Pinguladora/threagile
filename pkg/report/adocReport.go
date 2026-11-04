@@ -1585,120 +1585,147 @@ func (adoc adocReport) riskCategories(f *os.File) {
 	for _, category := range adoc.model.SortedRiskCategories() {
 		risksStr := adoc.model.SortedRisksOfCategory(category)
 
-		// category color
-		colorPrefix, colorSuffix := colorPrefixBySeverity(types.HighestSeverityStillAtRisk(risksStr), false)
-		if len(types.ReduceToOnlyStillAtRisk(risksStr)) == 0 {
-			colorPrefix = ""
+		writeRiskCategoryHeading(f, category, risksStr)
+		writeRiskCategoryDetails(f, category)
+		adoc.writeRiskCategoryFindings(f, category, risksStr)
+	}
+}
+
+// writeRiskCategoryHeading writes the heading of a risk category, coloured by the highest severity
+// of its risks still at risk.
+func writeRiskCategoryHeading(f *os.File, category *types.RiskCategory, risksStr []*types.Risk) {
+	// category color
+	colorPrefix, colorSuffix := colorPrefixBySeverity(types.HighestSeverityStillAtRisk(risksStr), false)
+	if len(types.ReduceToOnlyStillAtRisk(risksStr)) == 0 {
+		colorPrefix = ""
+		colorSuffix = ""
+	}
+
+	// category title
+	countStillAtRisk := len(types.ReduceToOnlyStillAtRisk(risksStr))
+	suffix := riskSuffix(countStillAtRisk, len(risksStr))
+	title := colorPrefix + category.Title + ": " + suffix + colorSuffix
+	writeLine(f, "[["+category.ID+"]]")
+	writeLine(f, "== "+title)
+	writeLine(f, "")
+}
+
+// writeRiskCategoryDetails writes the description, impact, detection logic, rating, false
+// positives, mitigation and check of a risk category.
+func writeRiskCategoryDetails(f *os.File, category *types.RiskCategory) {
+	// category details
+	cweLink := textNotApplicable
+	if category.CWE > 0 {
+		cweLink = "https://cwe.mitre.org/data/definitions/" + strconv.Itoa(category.CWE) + ".html[CWE " +
+			strconv.Itoa(category.CWE) + "]"
+	}
+	writeLine(f, "*Description* ("+category.STRIDE.Title()+"): "+cweLink+"::")
+	writeLine(f, fixBasicHtml(category.Description))
+	writeLine(f, "")
+	writeLine(f, "*Impact*::")
+	writeLine(f, fixBasicHtml(category.Impact))
+	writeLine(f, "")
+	writeLine(f, "*Detection Logic*::")
+	writeLine(f, fixBasicHtml(category.DetectionLogic))
+	writeLine(f, "")
+	writeLine(f, "*Risk Rating*::")
+	writeLine(f, fixBasicHtml(category.RiskAssessment))
+	writeLine(f, "")
+
+	writeLine(f, "[RiskStatusFalsePositive]#*False Positives*#::")
+	if len(category.FalsePositives) > 0 {
+		writeLine(f, "[RiskStatusFalsePositive]#"+category.FalsePositives+"#")
+	}
+	writeLine(f, "")
+
+	writeLine(f, "[RiskStatusMitigated]#*Mitigation*# ("+category.Function.Title()+"): "+category.Action+"::")
+	writeLine(f, fixBasicHtml(category.Mitigation))
+	writeLine(f, "")
+
+	asvsChapter := category.ASVS
+	asvsLink := textNotApplicable
+	if len(asvsChapter) > 0 {
+		asvsLink = "https://owasp.org/www-project-application-security-verification-standard/[" + asvsChapter + "]"
+	}
+
+	cheatSheetLink := adocCheatSheetLink(category.CheatSheet)
+	writeLine(f, "")
+	writeLine(f, "* [RiskStatusMitigated]#ASVS Chapter#: "+asvsLink)
+	writeLine(f, "* [RiskStatusMitigated]#Cheat Sheet#: "+cheatSheetLink)
+	writeLine(f, "\n\n*Check*\n")
+	writeLine(f, category.Check)
+}
+
+// adocCheatSheetLink returns the AsciiDoc link to a cheat sheet, named after its file.
+func adocCheatSheetLink(cheatSheetLink string) string {
+	if len(cheatSheetLink) == 0 {
+		cheatSheetLink = textNotApplicable
+	} else {
+		lastLinkParts := strings.Split(cheatSheetLink, "/")
+		linkText := lastLinkParts[len(lastLinkParts)-1]
+		if strings.HasSuffix(linkText, ".html") || strings.HasSuffix(linkText, ".htm") {
+			extension := filepath.Ext(linkText)
+			linkText = linkText[0 : len(linkText)-len(extension)]
+		}
+		cheatSheetLink = cheatSheetLink + "[" + linkText + "]"
+	}
+	return cheatSheetLink
+}
+
+// writeRiskCategoryFindings writes the risks of a risk category.
+func (adoc adocReport) writeRiskCategoryFindings(f *os.File, category *types.RiskCategory, risksStr []*types.Risk) {
+	// risk details
+	writeLine(f, "")
+	writeLine(f, "=== Risk Findings")
+	writeLine(f, adocFootnoteRiskFindings)
+	times := strconv.Itoa(len(risksStr)) + " time"
+	if len(risksStr) > 1 {
+		times += "s"
+	}
+	writeLine(f, "")
+	writeLine(f, "The risk *"+category.Title+"* was found *"+times+"* in the analyzed architecture to be "+
+		"potentially possible. Each spot should be checked individually by reviewing the implementation whether all "+
+		"controls have been applied properly in order to mitigate each risk.{fn-risk-findings}")
+
+	for _, risk := range risksStr {
+		colorPrefix, colorSuffix := colorPrefixBySeverity(risk.Severity, false)
+		if len(colorPrefix) == 0 {
 			colorSuffix = ""
 		}
 
-		// category title
-		countStillAtRisk := len(types.ReduceToOnlyStillAtRisk(risksStr))
-		suffix := riskSuffix(countStillAtRisk, len(risksStr))
-		title := colorPrefix + category.Title + ": " + suffix + colorSuffix
-		writeLine(f, "[["+category.ID+"]]")
-		writeLine(f, "== "+title)
-		writeLine(f, "")
-
-		// category details
-		cweLink := textNotApplicable
-		if category.CWE > 0 {
-			cweLink = "https://cwe.mitre.org/data/definitions/" + strconv.Itoa(category.CWE) + ".html[CWE " +
-				strconv.Itoa(category.CWE) + "]"
-		}
-		writeLine(f, "*Description* ("+category.STRIDE.Title()+"): "+cweLink+"::")
-		writeLine(f, fixBasicHtml(category.Description))
-		writeLine(f, "")
-		writeLine(f, "*Impact*::")
-		writeLine(f, fixBasicHtml(category.Impact))
-		writeLine(f, "")
-		writeLine(f, "*Detection Logic*::")
-		writeLine(f, fixBasicHtml(category.DetectionLogic))
-		writeLine(f, "")
-		writeLine(f, "*Risk Rating*::")
-		writeLine(f, fixBasicHtml(category.RiskAssessment))
-		writeLine(f, "")
-
-		writeLine(f, "[RiskStatusFalsePositive]#*False Positives*#::")
-		if len(category.FalsePositives) > 0 {
-			writeLine(f, "[RiskStatusFalsePositive]#"+category.FalsePositives+"#")
-		}
-		writeLine(f, "")
-
-		writeLine(f, "[RiskStatusMitigated]#*Mitigation*# ("+category.Function.Title()+"): "+category.Action+"::")
-		writeLine(f, fixBasicHtml(category.Mitigation))
-		writeLine(f, "")
-
-		asvsChapter := category.ASVS
-		asvsLink := textNotApplicable
-		if len(asvsChapter) > 0 {
-			asvsLink = "https://owasp.org/www-project-application-security-verification-standard/[" + asvsChapter + "]"
-		}
-
-		cheatSheetLink := category.CheatSheet
-		if len(cheatSheetLink) == 0 {
-			cheatSheetLink = textNotApplicable
-		} else {
-			lastLinkParts := strings.Split(cheatSheetLink, "/")
-			linkText := lastLinkParts[len(lastLinkParts)-1]
-			if strings.HasSuffix(linkText, ".html") || strings.HasSuffix(linkText, ".htm") {
-				extension := filepath.Ext(linkText)
-				linkText = linkText[0 : len(linkText)-len(extension)]
-			}
-			cheatSheetLink = cheatSheetLink + "[" + linkText + "]"
-		}
-		writeLine(f, "")
-		writeLine(f, "* [RiskStatusMitigated]#ASVS Chapter#: "+asvsLink)
-		writeLine(f, "* [RiskStatusMitigated]#Cheat Sheet#: "+cheatSheetLink)
-		writeLine(f, "\n\n*Check*\n")
-		writeLine(f, category.Check)
-
-		// risk details
-		writeLine(f, "")
-		writeLine(f, "=== Risk Findings")
-		writeLine(f, adocFootnoteRiskFindings)
-		times := strconv.Itoa(len(risksStr)) + " time"
-		if len(risksStr) > 1 {
-			times += "s"
-		}
-		writeLine(f, "")
-		writeLine(f, "The risk *"+category.Title+"* was found *"+times+"* in the analyzed architecture to be "+
-			"potentially possible. Each spot should be checked individually by reviewing the implementation whether all "+
-			"controls have been applied properly in order to mitigate each risk.{fn-risk-findings}")
-
-		for _, risk := range risksStr {
-			colorPrefix, colorSuffix := colorPrefixBySeverity(risk.Severity, false)
-			if len(colorPrefix) == 0 {
-				colorSuffix = ""
-			}
-
-			title := titleOfSeverity(risk.Severity)
-			if len(title) > 0 {
-				writeLine(f, "")
-				writeLine(f, "==== "+colorPrefix+"_"+title+"_"+colorSuffix)
-			}
-
-			if !risk.RiskStatus.IsStillAtRisk() {
-				colorPrefix = ""
-				colorSuffix = ""
-			}
-			writeLine(f, colorPrefix+fixBasicHtml(risk.Title)+": Exploitation likelihood is _"+
-				risk.ExploitationLikelihood.Title()+"_ with _"+risk.ExploitationImpact.Title()+"_ impact."+colorSuffix)
-			linkId := ""
-			switch {
-			case len(risk.MostRelevantSharedRuntimeId) > 0:
-				linkId = risk.MostRelevantSharedRuntimeId
-			case len(risk.MostRelevantTrustBoundaryId) > 0:
-				linkId = risk.MostRelevantTrustBoundaryId
-			case len(risk.MostRelevantTechnicalAssetId) > 0:
-				linkId = risk.MostRelevantTechnicalAssetId
-			}
+		title := titleOfSeverity(risk.Severity)
+		if len(title) > 0 {
 			writeLine(f, "")
-			writeLine(f, "<<"+linkId+",[SmallGrey]#"+risk.SyntheticId+"#>>")
-
-			adoc.riskTrackingStatus(f, risk)
+			writeLine(f, "==== "+colorPrefix+"_"+title+"_"+colorSuffix)
 		}
+
+		if !risk.RiskStatus.IsStillAtRisk() {
+			colorPrefix = ""
+			colorSuffix = ""
+		}
+		writeLine(f, colorPrefix+fixBasicHtml(risk.Title)+": Exploitation likelihood is _"+
+			risk.ExploitationLikelihood.Title()+"_ with _"+risk.ExploitationImpact.Title()+"_ impact."+colorSuffix)
+		linkId := mostRelevantLinkId(risk)
+		writeLine(f, "")
+		writeLine(f, "<<"+linkId+",[SmallGrey]#"+risk.SyntheticId+"#>>")
+
+		adoc.riskTrackingStatus(f, risk)
 	}
+}
+
+// mostRelevantLinkId returns the id of the shared runtime, trust boundary or technical asset that
+// a risk is most relevant for, in this order.
+func mostRelevantLinkId(risk *types.Risk) string {
+	linkId := ""
+	switch {
+	case len(risk.MostRelevantSharedRuntimeId) > 0:
+		linkId = risk.MostRelevantSharedRuntimeId
+	case len(risk.MostRelevantTrustBoundaryId) > 0:
+		linkId = risk.MostRelevantTrustBoundaryId
+	case len(risk.MostRelevantTechnicalAssetId) > 0:
+		linkId = risk.MostRelevantTechnicalAssetId
+	}
+	return linkId
 }
 
 func (adoc adocReport) writeRiskCategories() error {
