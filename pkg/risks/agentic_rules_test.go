@@ -11,9 +11,10 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// TestAgenticRulesEndToEnd analyzes agents working together with all built-in rules and checks the risks of the
-// rules on them. The model also holds what the rules must skip: a short-lived token over TLS, an agent that can
-// change nothing sensitive, agents within one process, an out-of-scope agent and a caller that is no agent.
+// TestAgenticRulesEndToEnd analyzes agents working together and running code with all built-in rules and checks
+// the risks of the rules on them. The model also holds what the rules must skip: a short-lived token over TLS, an
+// agent that can change nothing sensitive, agents within one process, an out-of-scope agent, a caller that is no
+// agent, a sandbox the code cannot leave, and interpreters of code that only trusted content shapes.
 func TestAgenticRulesEndToEnd(t *testing.T) {
 	config := new(threagile.Config).Defaults("")
 	config.SetAppFolder(t.TempDir())
@@ -31,7 +32,10 @@ func TestAgenticRulesEndToEnd(t *testing.T) {
 		severity   types.RiskSeverity
 		title      string
 	}
-	const interAgent = "<b>Insecure Inter-Agent Communication</b> risk at "
+	const (
+		interAgent    = "<b>Insecure Inter-Agent Communication</b> risk at "
+		codeExecution = "<b>Unsandboxed Code Execution</b> risk at "
+	)
 	expected := map[string]map[string]expectedRisk{
 		"insecure-inter-agent-communication": {
 			// across a network trust boundary
@@ -47,6 +51,25 @@ func TestAgenticRulesEndToEnd(t *testing.T) {
 			"insecure-inter-agent-communication@worker-g@orchestrator>task-g": {
 				types.Unlikely, types.MediumImpact, types.MediumSeverity,
 				interAgent + "<b>Worker G</b> from <b>Orchestrator</b> (unauthenticated)",
+			},
+		},
+		"unsandboxed-code-execution": {
+			// the agent writing the code talks to the browser on the internet
+			"unsandboxed-code-execution@linked-interpreter": {
+				types.VeryLikely, types.MediumImpact, types.ElevatedSeverity,
+				codeExecution + "<b>Linked Interpreter</b> running code of <b>Coding Agent</b>",
+			},
+			"unsandboxed-code-execution@egress-interpreter": {
+				types.VeryLikely, types.MediumImpact, types.ElevatedSeverity,
+				codeExecution + "<b>Egress Interpreter</b> running code of <b>Coding Agent</b>",
+			},
+			"unsandboxed-code-execution@runtime-interpreter": {
+				types.VeryLikely, types.MediumImpact, types.ElevatedSeverity,
+				codeExecution + "<b>Runtime Interpreter</b> running code of <b>Coding Agent</b>",
+			},
+			// inside the agent
+			"unsandboxed-code-execution@notebook-agent": {
+				types.VeryLikely, types.MediumImpact, types.ElevatedSeverity, codeExecution + "<b>Notebook Agent</b>",
 			},
 		},
 	}

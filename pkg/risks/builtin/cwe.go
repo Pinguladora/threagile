@@ -8,6 +8,7 @@ const (
 	cweCrossSiteScripting                 = 79   // CWE-79: Cross-site Scripting
 	cweSQLInjection                       = 89   // CWE-89: SQL Injection
 	cweLDAPInjection                      = 90   // CWE-90: LDAP Injection
+	cweCodeInjection                      = 94   // CWE-94: Improper Control of Generation of Code ('Code Injection')
 	cweSensitiveInformationExposure       = 200  // CWE-200: Exposure of Sensitive Information to an Unauthorized Actor
 	cweImproperAccessControl              = 284  // CWE-284: Improper Access Control
 	cweImproperAuthentication             = 287  // CWE-287: Improper Authentication
