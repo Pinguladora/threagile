@@ -59,7 +59,10 @@ func (what EncryptionStyle) Explain() string {
 }
 
 func (what EncryptionStyle) Title() string {
-	return [...]string{"None", "Transparent", "Data with Symmetric Shared Key", "Data with Asymmetric Shared Key", "Data with End-User Individual Key"}[what]
+	return [...]string{
+		"None", "Transparent", "Data with Symmetric Shared Key", "Data with Asymmetric Shared Key",
+		"Data with End-User Individual Key",
+	}[what]
 }
 
 func (what EncryptionStyle) Find(value string) (EncryptionStyle, error) {
