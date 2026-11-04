@@ -5,6 +5,7 @@ import (
 
 	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestEqualExpression_ParseBool_MapWithFirstSecond(t *testing.T) {
@@ -30,7 +31,8 @@ func TestEqualExpression_EvalBool_EqualStrings_ReturnsTrue(t *testing.T) {
 		"second": "hello",
 	}
 	expr := new(EqualExpression)
-	_, _, _ = expr.ParseBool(script)
+	_, _, parseErr := expr.ParseBool(script)
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalBool(scope)
 	assert.NoError(t, err)
@@ -47,7 +49,8 @@ func TestEqualExpression_EvalBool_DifferentStrings_ReturnsFalse(t *testing.T) {
 		"second": "world",
 	}
 	expr := new(EqualExpression)
-	_, _, _ = expr.ParseBool(script)
+	_, _, parseErr := expr.ParseBool(script)
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalBool(scope)
 	assert.NoError(t, err)

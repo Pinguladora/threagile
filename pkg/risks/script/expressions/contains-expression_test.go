@@ -5,6 +5,7 @@ import (
 
 	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestContainsExpression_ParseBool_MapWithItemIn(t *testing.T) {
@@ -31,7 +32,8 @@ func TestContainsExpression_EvalBool_ItemInArray_ReturnsTrue(t *testing.T) {
 		"in":   "{tags}",
 	}
 	expr := new(ContainsExpression)
-	_, _, _ = expr.ParseBool(script)
+	_, _, parseErr := expr.ParseBool(script)
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalBool(scope)
 	assert.NoError(t, err)
@@ -49,7 +51,8 @@ func TestContainsExpression_EvalBool_ItemNotInArray_ReturnsFalse(t *testing.T) {
 		"in":   "{tags}",
 	}
 	expr := new(ContainsExpression)
-	_, _, _ = expr.ParseBool(script)
+	_, _, parseErr := expr.ParseBool(script)
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalBool(scope)
 	assert.NoError(t, err)

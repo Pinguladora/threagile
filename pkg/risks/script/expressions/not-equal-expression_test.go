@@ -5,6 +5,7 @@ import (
 
 	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestNotEqualExpression_EvalBool_DifferentStrings_ReturnsTrue(t *testing.T) {
@@ -16,7 +17,8 @@ func TestNotEqualExpression_EvalBool_DifferentStrings_ReturnsTrue(t *testing.T) 
 		"second": "world",
 	}
 	expr := new(NotEqualExpression)
-	_, _, _ = expr.ParseBool(script)
+	_, _, parseErr := expr.ParseBool(script)
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalBool(scope)
 	assert.NoError(t, err)
@@ -33,7 +35,8 @@ func TestNotEqualExpression_EvalBool_EqualStrings_ReturnsFalse(t *testing.T) {
 		"second": "hello",
 	}
 	expr := new(NotEqualExpression)
-	_, _, _ = expr.ParseBool(script)
+	_, _, parseErr := expr.ParseBool(script)
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalBool(scope)
 	assert.NoError(t, err)

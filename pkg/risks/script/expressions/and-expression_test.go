@@ -5,6 +5,7 @@ import (
 
 	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestAndExpression_ParseBool_ArrayOfBoolExpressions(t *testing.T) {
@@ -24,9 +25,11 @@ func TestAndExpression_EvalBool_AllTrue(t *testing.T) {
 
 	// Build an AndExpression with two true ValueExpressions
 	trueExpr1 := new(ValueExpression)
-	_, _, _ = trueExpr1.ParseBool(true)
+	_, _, parseErr := trueExpr1.ParseBool(true)
+	require.NoError(t, parseErr)
 	trueExpr2 := new(ValueExpression)
-	_, _, _ = trueExpr2.ParseBool(true)
+	_, _, parseErr = trueExpr2.ParseBool(true)
+	require.NoError(t, parseErr)
 
 	expr := &AndExpression{
 		expressions: []common.BoolExpression{trueExpr1, trueExpr2},
@@ -43,9 +46,11 @@ func TestAndExpression_EvalBool_OneFalse_ShortCircuits(t *testing.T) {
 	_ = scope.Init(nil, nil)
 
 	trueExpr := new(ValueExpression)
-	_, _, _ = trueExpr.ParseBool(true)
+	_, _, parseErr := trueExpr.ParseBool(true)
+	require.NoError(t, parseErr)
 	falseExpr := new(ValueExpression)
-	_, _, _ = falseExpr.ParseBool(false)
+	_, _, parseErr = falseExpr.ParseBool(false)
+	require.NoError(t, parseErr)
 
 	expr := &AndExpression{
 		expressions: []common.BoolExpression{falseExpr, trueExpr},
