@@ -71,6 +71,7 @@ func Parse(data []byte) (*Document, error) {
 // components outside of all trust boundaries. A parent component of a trust zone or a component
 // becomes its ParentID, for interchange.ToInput to resolve.
 func ToInterchange(document *Document) *interchange.Model {
+	outside := outsideZone(document.TrustZones)
 	return &interchange.Model{
 		Project: interchange.Project{
 			ID:           document.Project.ID,
@@ -81,17 +82,29 @@ func ToInterchange(document *Document) *interchange.Model {
 			Tags:         document.Project.Tags,
 			Properties:   properties(document.Project.Attributes),
 		},
-		Zones:      zones(document.TrustZones),
-		Components: componentElements(document.Components),
+		Zones:      zones(document.TrustZones, outside),
+		Components: componentElements(document.Components, outside),
 		Flows:      flows(document.Dataflows),
 		DataAssets: dataAssets(document.Assets),
 	}
 }
 
-func zones(trustZones []TrustZone) []interchange.Zone {
+// outsideZone is the id of the trust zone FromInterchange added for the components outside of all
+// trust boundaries, empty when the document has none (as any OTM file from another tool).
+func outsideZone(trustZones []TrustZone) string {
+	for _, zone := range trustZones {
+		if zone.Attributes[outsideZoneAttribute] == "true" {
+			return zone.ID
+		}
+	}
+
+	return ""
+}
+
+func zones(trustZones []TrustZone, outside string) []interchange.Zone {
 	result := make([]interchange.Zone, 0, len(trustZones))
 	for _, zone := range trustZones {
-		if zone.ID == OutsideZoneID {
+		if outside != "" && zone.ID == outside {
 			continue
 		}
 
@@ -100,7 +113,7 @@ func zones(trustZones []TrustZone) []interchange.Zone {
 			Name:        zone.Name,
 			Type:        zone.Type,
 			Description: zone.Description,
-			ParentID:    parentID(zone.Parent),
+			ParentID:    parentID(zone.Parent, outside),
 			Properties:  properties(zone.Attributes),
 		})
 	}
@@ -108,7 +121,7 @@ func zones(trustZones []TrustZone) []interchange.Zone {
 	return result
 }
 
-func componentElements(components []Component) []interchange.Component {
+func componentElements(components []Component, outside string) []interchange.Component {
 	result := make([]interchange.Component, 0, len(components))
 	for _, component := range components {
 		element := interchange.Component{
@@ -116,7 +129,7 @@ func componentElements(components []Component) []interchange.Component {
 			Name:        component.Name,
 			Type:        component.Type,
 			Description: component.Description,
-			ParentID:    parentID(&component.Parent),
+			ParentID:    parentID(&component.Parent, outside),
 			Tags:        component.Tags,
 			Properties:  properties(component.Attributes),
 		}
@@ -167,10 +180,10 @@ func dataAssets(assets []Asset) []interchange.DataAsset {
 	return result
 }
 
-// parentID is the id of the enclosing trust zone or component, empty for none or the trust zone
-// of the components outside of all trust boundaries.
-func parentID(parent *Parent) string {
-	if parent == nil || parent.TrustZone == OutsideZoneID {
+// parentID is the id of the enclosing trust zone or component, empty for none or the outside zone
+// (the trust zone of the components outside of all trust boundaries).
+func parentID(parent *Parent, outside string) string {
+	if parent == nil || (outside != "" && parent.TrustZone == outside) {
 		return ""
 	}
 	if parent.TrustZone != "" {
