@@ -344,17 +344,21 @@ func (what *importer) dataAssetRefs(ids []string, where string) []string {
 	return sorted(refs)
 }
 
-// useTags returns the tags without empty ones, and records them for the tags the model declares.
+// useTags returns the tags in their order without empty ones and duplicates, and records them for
+// the tags the model declares.
 func (what *importer) useTags(tags []string) []string {
 	used := make([]string, 0, len(tags))
 	for _, tag := range tags {
-		if tag = strings.TrimSpace(tag); tag != "" {
+		if tag = strings.TrimSpace(tag); tag != "" && !slices.Contains(used, tag) {
 			used = append(used, tag)
 		}
 	}
 
 	what.tags = append(what.tags, used...)
-	return sorted(used)
+	if len(used) == 0 {
+		return nil
+	}
+	return used
 }
 
 // fields reads the properties of an element, noting values that threagile does not accept.

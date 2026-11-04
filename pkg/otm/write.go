@@ -11,7 +11,7 @@ import (
 
 // OutsideZoneID is the id of the trust zone that holds the components outside of all trust
 // boundaries, as OTM requires every component to have a parent. FromInterchange adds it only when
-// there are such components; an import leaves it out again.
+// there are such components, and ToInterchange leaves it out again.
 const OutsideZoneID = "outside-trust-boundaries"
 
 const (
