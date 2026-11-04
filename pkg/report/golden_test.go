@@ -42,6 +42,7 @@ var goldenFiles = []string{
 	"technical-assets.json",
 	"stats.json",
 	"otm.json",
+	"report.html",
 }
 
 // executionTimestamp matches the wall-clock time the AsciiDoc report records for the run.
@@ -88,11 +89,13 @@ func TestOutputsAreDeterministic(t *testing.T) {
 	}
 }
 
-// generateOutputs analyzes the example model and writes every output that does not need
-// Graphviz, the same way report.Generate does. It returns the written files by path relative
+// generateOutputs analyzes the example model and writes every output but the PDF report and the
+// PNG diagrams, the same way report.Generate does. It returns the written files by path relative
 // to the output folder, with the execution timestamp of the AsciiDoc report normalised.
 func generateOutputs(t *testing.T) map[string][]byte {
 	t.Helper()
+	// the HTML report records when it was generated
+	t.Setenv("SOURCE_DATE_EPOCH", "1700000000")
 	reporter := testReporter{t}
 	outputDir := t.TempDir()
 
@@ -119,6 +122,21 @@ func generateOutputs(t *testing.T) map[string][]byte {
 	require.NoError(t, report.WriteTechnicalAssetsJSON(parsedModel, filepath.Join(outputDir, config.GetJsonTechnicalAssetsFilename())))
 	require.NoError(t, report.WriteStatsJSON(parsedModel, filepath.Join(outputDir, config.GetJsonStatsFilename())))
 	require.NoError(t, report.WriteOTMJSON(parsedModel, filepath.Join(outputDir, config.GetJsonOTMFilename())))
+	require.NoError(t, report.WriteReportHTML(parsedModel, filepath.Join(outputDir, "report.html"),
+		report.HTMLReportOptions{
+			ModelFilename:       config.GetInputFile(),
+			ModelHash:           "test-model-hash",
+			BuildTimestamp:      "test-build-timestamp",
+			ThreagileVersion:    "test-version",
+			IntroTextRAA:        result.IntroTextRAA,
+			SkipRiskRules:       config.GetSkipRiskRules(),
+			RiskRules:           risks.GetBuiltInRiskRules(),
+			CustomRiskRules:     result.CustomRiskRules,
+			HideChapters:        config.GetReportConfigurationHideChapters(),
+			HideEmptyChapters:   config.GetHideEmptyChapters(),
+			DataFlowDiagramDOT:  readFile(t, filepath.Join(outputDir, config.GetDataFlowDiagramFilenameDOT())),
+			DataAssetDiagramDOT: readFile(t, filepath.Join(outputDir, config.GetDataAssetDiagramFilenameDOT())),
+		}, reporter))
 	require.NoError(t, report.WriteRisksExcelToFile(parsedModel, filepath.Join(outputDir, config.GetExcelRisksFilename()), config))
 	require.NoError(t, report.WriteTagsExcelToFile(parsedModel, filepath.Join(outputDir, config.GetExcelTagsFilename()), config))
 
@@ -168,6 +186,13 @@ func readOutputs(t *testing.T, outputDir string) map[string][]byte {
 	})
 	require.NoError(t, err)
 	return outputs
+}
+
+func readFile(t *testing.T, filename string) []byte {
+	t.Helper()
+	content, err := os.ReadFile(filepath.Clean(filename))
+	require.NoError(t, err)
+	return content
 }
 
 func writePlaceholderPNG(t *testing.T, filename string) string {

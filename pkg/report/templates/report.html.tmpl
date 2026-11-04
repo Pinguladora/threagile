@@ -1,0 +1,652 @@
+{{- /* The HTML report. Everything that comes from the model is escaped by html/template; texts
+that may carry threagile's basic markup go through markup, which keeps only that markup. */ -}}
+{{- define "ref"}}{{if .Anchor}}<a href="#{{.Anchor}}">{{.Title}}</a>{{else}}{{.Title}}{{end}}{{end -}}
+{{- define "refs"}}{{range $index, $ref := .}}{{if $index}}, {{end}}{{template "ref" $ref}}{{else}}<span class="muted">none</span>{{end}}{{end -}}
+{{- define "author"}}{{.Name}}{{with .Contact}} ({{.}}){{end}}{{with .Homepage}}, <a href="{{.}}" rel="noopener noreferrer">{{.}}</a>{{end}}{{end -}}
+{{- define "level"}}<span class="badge {{.Class}}">{{.Title}}</span>{{end -}}
+{{- define "risk-link"}}{{template "level" .Severity}} <a href="#{{.Anchor}}">{{.Title}}</a> {{template "level" .Status}}{{end -}}
+{{- define "impact-entries"}}
+{{- if .}}
+<dl class="entries">
+{{- range .}}
+<dt>{{template "level" .Severity}} <a href="#{{.Category.Anchor}}">{{.Category.Title}}</a>: <span class="summary">{{.Summary}}, exploitation likelihood is <em>{{.Likelihood}}</em> with <em>{{.Impact}}</em> impact</span></dt>
+<dd>{{.Text}}</dd>
+{{- end}}
+</dl>
+{{- else}}
+<p class="muted">No risks were identified.</p>
+{{- end}}
+{{- end -}}
+{{- define "risk-groups"}}
+{{- range .}}
+<h3>{{.Title}} <span class="summary">{{.Count}} {{if eq .Count 1}}risk{{else}}risks{{end}}</span></h3>
+<p class="muted">{{.Explanation}}</p>
+{{- template "impact-entries" .Entries}}
+{{- end}}
+{{- end -}}
+{{- define "risk-list"}}
+{{- if .}}
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Severity</th><th scope="col">Risk</th><th scope="col">Category</th><th scope="col">Most relevant</th><th scope="col">Status</th></tr></thead>
+<tbody>
+{{- range .}}
+<tr><td>{{template "level" .Severity}}</td><td><a href="#{{.Anchor}}">{{.Title}}</a></td><td>{{template "ref" .Category}}</td><td>{{template "refs" .Targets}}</td><td>{{template "level" .Status}}</td></tr>
+{{- end}}
+</tbody>
+</table>
+</div>
+{{- else}}
+<p class="muted">No risks.</p>
+{{- end}}
+{{- end -}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="{{.ContentSecurityPolicy}}">
+<meta name="referrer" content="no-referrer">
+<title>Threat Model Report: {{.Title}}</title>
+<style>{{.CSS}}</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to the report</a>
+<div class="page">
+<header class="title-page">
+<p class="kicker">Threat Model Report</p>
+<h1>{{.Title}}</h1>
+<dl class="meta">
+<dt>Author</dt><dd>{{template "author" .Author}}</dd>
+{{- if .Contributors}}
+<dt>Contributors</dt><dd><ul class="contributors">
+{{- range .Contributors}}
+<li>{{template "author" .}}</li>
+{{- end}}
+</ul></dd>
+{{- end}}
+<dt>Date</dt><dd>{{.Date}}</dd>
+<dt>Business criticality</dt><dd>{{.Model.BusinessCriticality}}</dd>
+<dt>Threagile version</dt><dd>{{.Run.ThreagileVersion}}</dd>
+</dl>
+</header>
+
+<nav class="toc" aria-labelledby="contents">
+<h2 id="contents">Contents</h2>
+<ol>
+{{- range .Sections}}
+<li><a href="#{{.ID}}">{{.Title}}</a></li>
+{{- end}}
+</ol>
+</nav>
+
+<main id="main">
+<section class="chapter" id="management-summary">
+<h2>Management Summary</h2>
+<p>Threagile toolkit was used to model the architecture of "{{.Title}}" and derive risks by analyzing the components and data flows. The risks identified during this analysis are shown in the following chapters. Identified risks during threat modeling do not necessarily mean that the vulnerability associated with this risk actually exists: it is more to be seen as a list of potential risks and threats, which should be individually reviewed and reduced by removing false positives. For the remaining risks it should be checked in the design and implementation of "{{.Title}}" whether the mitigation advices have been applied or not.</p>
+<p>Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.</p>
+<p>In total <strong>{{.Summary.TotalRisks}} initial risks</strong> in <strong>{{.Summary.CategoryCount}} categories</strong> have been identified during the threat modeling process:</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Severity</th><th scope="col" class="number">Risks</th><th scope="col">Status</th><th scope="col" class="number">Risks</th></tr></thead>
+<tbody>
+{{- $statuses := .Summary.ByStatus}}
+{{- range $index, $count := .Summary.BySeverity}}
+<tr><th scope="row">{{template "level" $count.Level}}</th><td class="number">{{$count.Count}}</td>
+{{- with index $statuses $index}}<th scope="row">{{template "level" .Level}}</th><td class="number">{{.Count}}</td>{{end}}</tr>
+{{- end}}
+{{- with index $statuses 5}}
+<tr><td></td><td></td><th scope="row">{{template "level" .Level}}</th><td class="number">{{.Count}}</td></tr>
+{{- end}}
+</tbody>
+</table>
+</div>
+{{- if .Model.ManagementSummaryComment}}
+<div class="text">{{markup .Model.ManagementSummaryComment}}</div>
+{{- end}}
+</section>
+
+<section class="chapter" id="initial-risks">
+<h2>Impact Analysis of the Initial Risks</h2>
+<p>The most prevalent impacts of the <strong>{{.InitialImpact.Count}} initial risks</strong> (distributed over <strong>{{.InitialImpact.CategoryCount}} risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
+{{- template "impact-entries" .InitialImpact.Entries}}
+</section>
+
+<section class="chapter" id="risk-mitigation">
+<h2>Risk Mitigation</h2>
+<p>The following table gives a high-level overview of the risk tracking status (including mitigated risks):</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Severity</th><th scope="col" class="number">Risks</th>
+{{- with index .Mitigation 0}}{{range .ByStatus}}<th scope="col" class="number">{{.Level.Title}}</th>{{end}}{{end}}<th scope="col">Distribution</th></tr></thead>
+<tbody>
+{{- range .Mitigation}}
+<tr><th scope="row">{{template "level" .Severity}}</th><td class="number">{{.Total}}</td>
+{{- range .ByStatus}}<td class="number">{{.Count}}</td>{{end}}
+<td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect>{{range .Bar}}<rect class="{{.Class}}" x="{{.X}}" width="{{.Width}}" height="10"></rect>{{end}}</svg></td></tr>
+{{- end}}
+</tbody>
+</table>
+</div>
+{{- if .Summary.RemainingRisks}}
+<p>After removal of risks with status <em>mitigated</em> and <em>false positive</em> the following <strong>{{.Summary.RemainingRisks}} remain unmitigated</strong>:</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Severity</th><th scope="col" class="number">Unmitigated risks</th><th scope="col">To be checked by</th><th scope="col" class="number">Unmitigated risks</th></tr></thead>
+<tbody>
+{{- $functions := .Summary.RemainingByFunction}}
+{{- range $index, $count := .Summary.RemainingBySeverity}}
+<tr><th scope="row">{{template "level" $count.Level}}</th><td class="number">{{$count.Count}}</td>
+{{- if lt $index (len $functions)}}{{with index $functions $index}}<th scope="row">{{.Level.Title}}</th><td class="number">{{.Count}}</td>{{end}}{{else}}<td></td><td></td>{{end}}</tr>
+{{- end}}
+</tbody>
+</table>
+</div>
+{{- else}}
+<p>After removal of risks with status <em>mitigated</em> and <em>false positive</em> <strong>0 remain unmitigated</strong>.</p>
+{{- end}}
+</section>
+{{- if .Shows "remaining-risks"}}
+
+<section class="chapter" id="remaining-risks">
+<h2>Impact Analysis of the Remaining Risks</h2>
+<p>The most prevalent impacts of the <strong>{{.RemainingImpact.Count}} remaining risks</strong> (distributed over <strong>{{.RemainingImpact.CategoryCount}} risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
+{{- template "impact-entries" .RemainingImpact.Entries}}
+</section>
+{{- end}}
+
+<section class="chapter" id="risks-by-severity">
+<h2>Risks by Severity</h2>
+<p>All <strong>{{.Summary.TotalRisks}} risks</strong> by severity, with their tracking status. Each risk links to its details in the chapter of its category.</p>
+{{- range .RisksBySeverity}}
+<h3>{{.Severity.Title}} <span class="summary">{{len .Risks}} {{if eq (len .Risks) 1}}risk{{else}}risks{{end}}</span></h3>
+{{- template "risk-list" .Risks}}
+{{- end}}
+</section>
+
+<section class="chapter" id="application-overview">
+<h2>Application Overview</h2>
+<h3>Business Criticality</h3>
+<p>The overall business criticality of "{{.Title}}" was rated as:</p>
+<ul class="choices">
+{{- range .BusinessCriticality}}
+<li{{if .Selected}} class="selected" aria-current="true"{{end}}>{{.Title}}</li>
+{{- end}}
+</ul>
+{{- with .Model.BusinessOverview}}
+<h3>Business Overview</h3>
+<div class="text">{{markup .Description}}</div>
+{{- end}}
+{{- with .Model.TechnicalOverview}}
+<h3>Technical Overview</h3>
+<div class="text">{{markup .Description}}</div>
+{{- end}}
+</section>
+
+<section class="chapter" id="data-flow-diagram">
+<h2>Data-Flow Diagram</h2>
+<p>The following diagram was generated by Threagile based on the model input and gives a high-level overview of the data-flow between technical assets. The RAA value is the calculated <em>Relative Attacker Attractiveness</em> in percent.</p>
+{{- if .DataFlowDiagram}}
+<figure class="diagram">
+{{.DataFlowDiagram}}
+<figcaption>Data-flow diagram of "{{.Title}}". The diagram is a vector graphic: zoom in for the details.</figcaption>
+</figure>
+{{- else}}
+<p class="muted">The diagram is not available.</p>
+{{- end}}
+</section>
+{{- if .Shows "asset-register"}}
+
+<section class="chapter" id="asset-register">
+<h2>Asset Register</h2>
+<h3>Technical Assets</h3>
+<dl class="entries">
+{{- range .TechnicalAssets}}
+<dt><a href="#{{.Anchor}}">{{.Asset.Title}}</a>{{if .Asset.OutOfScope}} <span class="badge out-of-scope">out of scope</span>{{end}}</dt>
+<dd>{{.Description}}</dd>
+{{- end}}
+</dl>
+<h3>Data Assets</h3>
+<dl class="entries">
+{{- range .DataAssets}}
+<dt><a href="#{{.Anchor}}">{{.Asset.Title}}</a></dt>
+<dd>{{.Description}}</dd>
+{{- end}}
+</dl>
+</section>
+{{- end}}
+{{- if .Shows "security-requirements"}}
+
+<section class="chapter" id="security-requirements">
+<h2>Security Requirements</h2>
+<p>This chapter lists the custom security requirements which have been defined for the modeled target.</p>
+<dl class="entries">
+{{- range .SecurityRequirements}}
+<dt>{{.Title}}</dt>
+<dd>{{.Text}}</dd>
+{{- end}}
+</dl>
+<p><em>This list is not complete and regulatory or law relevant security requirements have to be taken into account as well. Also custom individual security requirements might exist for the project.</em></p>
+</section>
+{{- end}}
+{{- if .Shows "abuse-cases"}}
+
+<section class="chapter" id="abuse-cases">
+<h2>Abuse Cases</h2>
+<p>This chapter lists the custom abuse cases which have been defined for the modeled target.</p>
+<dl class="entries">
+{{- range .AbuseCases}}
+<dt>{{.Title}}</dt>
+<dd>{{.Text}}</dd>
+{{- end}}
+</dl>
+<p><em>This list is not complete and regulatory or law relevant abuse cases have to be taken into account as well. Also custom individual abuse cases might exist for the project.</em></p>
+</section>
+{{- end}}
+{{- if .Shows "tags"}}
+
+<section class="chapter" id="tags">
+<h2>Tag Listing</h2>
+<p>This chapter lists what tags are used by which elements.</p>
+<dl class="entries">
+{{- range .Tags}}
+<dt>{{.Tag}}</dt>
+<dd>{{template "refs" .Uses}}</dd>
+{{- end}}
+</dl>
+</section>
+{{- end}}
+
+<section class="chapter" id="stride">
+<h2>STRIDE Classification of Identified Risks</h2>
+<p>This chapter clusters and classifies the risks by STRIDE categories: in total <strong>{{.Summary.TotalRisks}} potential risks</strong> have been identified during the threat modeling process.</p>
+{{- template "risk-groups" .STRIDE}}
+</section>
+
+<section class="chapter" id="functions">
+<h2>Assignment by Function</h2>
+<p>This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total <strong>{{.Summary.TotalRisks}} potential risks</strong> have been identified during the threat modeling process.</p>
+{{- template "risk-groups" .Functions}}
+</section>
+
+<section class="chapter" id="raa">
+<h2>RAA Analysis</h2>
+<p>{{markup .Run.IntroTextRAA}}</p>
+<dl class="entries">
+{{- range .RAA}}
+<dt>{{template "ref" .Asset}}: <span class="summary">RAA {{.RAA}}</span>{{with .Severity}} {{template "level" .}}{{end}}</dt>
+<dd>{{.Description}}</dd>
+{{- end}}
+</dl>
+</section>
+
+<section class="chapter" id="data-mapping">
+<h2>Data Mapping</h2>
+<p>The following diagram was generated by Threagile based on the model input and gives a high-level distribution of data assets across technical assets. The color matches the identified data breach probability and risk level (see the chapter <a href="#data-assets">Identified Data Breach Probabilities by Data Asset</a>). A solid line stands for <em>data is stored by the asset</em> and a dashed one means <em>data is processed by the asset</em>.</p>
+{{- if .DataAssetDiagram}}
+<figure class="diagram">
+{{.DataAssetDiagram}}
+<figcaption>Data mapping diagram of "{{.Title}}". The diagram is a vector graphic: zoom in for the details.</figcaption>
+</figure>
+{{- else}}
+<p class="muted">The diagram is not available.</p>
+{{- end}}
+</section>
+
+<section class="chapter" id="out-of-scope-assets">
+<h2>Out-of-Scope Assets <span class="summary">{{len .OutOfScope}} {{if eq (len .OutOfScope) 1}}asset{{else}}assets{{end}}</span></h2>
+<p>This chapter lists all technical assets that have been defined as out-of-scope. Each one should be checked in the model whether it should better be included in the overall risk analysis:</p>
+{{- if .OutOfScope}}
+<dl class="entries">
+{{- range .OutOfScope}}
+<dt>{{template "ref" .Asset}} <span class="badge out-of-scope">out of scope</span></dt>
+<dd>{{.Justification}}</dd>
+{{- end}}
+</dl>
+{{- else}}
+<p class="muted">No technical assets have been defined as out-of-scope.</p>
+{{- end}}
+</section>
+
+<section class="chapter" id="model-failures">
+<h2>Potential Model Failures <span class="summary">{{.ModelFailures.StillAtRisk}} of {{.ModelFailures.Count}} unmitigated</span></h2>
+<p>This chapter lists potential model failures where not all relevant assets have been modeled or the model might itself contain inconsistencies. Each potential model failure should be checked in the model against the architecture design:</p>
+{{- if .ModelFailures.Entries}}
+{{- template "impact-entries" .ModelFailures.Entries}}
+{{- else}}
+<p class="muted">No potential model failures have been identified.</p>
+{{- end}}
+</section>
+{{- if .Shows "questions"}}
+
+<section class="chapter" id="questions">
+<h2>Questions <span class="summary">{{.UnansweredQuestions}} of {{len .Questions}} unanswered</span></h2>
+<p>This chapter lists custom questions that arose during the threat modeling process.</p>
+<dl class="entries">
+{{- range .Questions}}
+<dt>{{.Question}}</dt>
+<dd>{{if .Answered}}{{.Answer}}{{else}}<span class="muted">answer pending</span>{{end}}</dd>
+{{- end}}
+</dl>
+</section>
+{{- end}}
+
+<section class="chapter" id="risk-categories">
+<h2>Identified Risks by Vulnerability Category</h2>
+<p>In total <strong>{{.Summary.TotalRisks}} potential risks</strong> have been identified during the threat modeling process, distributed across <strong>{{.Summary.CategoryCount}} vulnerability categories</strong>. The following sections describe each identified risk category and its risks.</p>
+{{- range .Categories}}
+<section class="item" id="{{.Anchor}}">
+<h3>{{.Category.Title}}{{with .Severity}} {{template "level" .}}{{end}} <span class="summary">{{.Summary}}</span></h3>
+<p class="id">{{.Category.ID}}</p>
+<div class="table-wrap">
+<table class="props">
+<tbody>
+<tr><th scope="row">STRIDE</th><td>{{.Category.STRIDE.Title}}</td></tr>
+<tr><th scope="row">CWE</th><td>{{if .CWELink}}<a href="{{.CWELink}}" rel="noopener noreferrer">CWE {{.Category.CWE}}</a>{{else}}n/a{{end}}</td></tr>
+<tr><th scope="row">Function</th><td>{{.Category.Function.Title}}</td></tr>
+<tr><th scope="row">Action</th><td>{{.Category.Action}}</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>{{if .Category.ASVS}}{{.Category.ASVS}}{{else}}n/a{{end}}</td></tr>
+<tr><th scope="row">Cheat sheet</th><td>{{if .CheatSheet.Anchor}}<a href="{{.CheatSheet.Anchor}}" rel="noopener noreferrer">{{.CheatSheet.Title}}</a>{{else}}n/a{{end}}</td></tr>
+</tbody>
+</table>
+</div>
+<h4>Description</h4>
+<div class="text">{{.Description}}</div>
+<h4>Impact</h4>
+<div class="text">{{.Impact}}</div>
+<h4>Detection Logic</h4>
+<div class="text">{{.DetectionLogic}}</div>
+<h4>Risk Rating</h4>
+<div class="text">{{.RiskAssessment}}</div>
+<h4>False Positives</h4>
+<div class="text">{{.FalsePositives}}</div>
+<h4>Mitigation</h4>
+<div class="text">{{.Mitigation}}</div>
+<h4>Check</h4>
+<div class="text">{{.Check}}</div>
+<h4>Risk Findings</h4>
+<p>The risk <strong>{{.Category.Title}}</strong> was found <strong>{{len .Risks}} {{if eq (len .Risks) 1}}time{{else}}times{{end}}</strong> in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Severity</th><th scope="col">Risk</th><th scope="col">Likelihood</th><th scope="col">Impact</th><th scope="col">Most relevant</th><th scope="col">Status</th><th scope="col">Tracking</th></tr></thead>
+<tbody>
+{{- range .Risks}}
+<tr id="{{.Anchor}}"><td>{{template "level" .Severity}}</td><td>{{.Title}}<br><span class="id">{{.SyntheticID}}</span></td><td>{{.Likelihood}}</td><td>{{.Impact}}</td><td>{{template "refs" .Targets}}</td><td>{{template "level" .Status}}</td>
+<td>{{if .Tracked}}{{with .TrackingDate}}{{.}}<br>{{end}}{{with .Tracking.CheckedBy}}by {{.}}<br>{{end}}{{with .Tracking.Ticket}}ticket {{.}}<br>{{end}}{{markup .Tracking.Justification}}{{else}}<span class="muted">not tracked</span>{{end}}</td></tr>
+{{- end}}
+</tbody>
+</table>
+</div>
+</section>
+{{- end}}
+</section>
+
+<section class="chapter" id="technical-assets">
+<h2>Identified Risks by Technical Asset</h2>
+<p>In total <strong>{{.Summary.TotalRisks}} potential risks</strong> have been identified during the threat modeling process, distributed across <strong>{{len .Model.InScopeTechnicalAssets}} in-scope technical assets</strong>. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.</p>
+{{- range .TechnicalAssets}}
+<section class="item" id="{{.Anchor}}">
+<h3>{{.Asset.Title}}{{if .Asset.OutOfScope}} <span class="badge out-of-scope">out of scope</span>{{else}}{{with .Severity}} {{template "level" .}}{{end}}{{end}} <span class="summary">{{.Summary}}</span></h3>
+<p class="id">{{.Asset.Id}}</p>
+<div class="text">{{.Description}}</div>
+<h4>Identified Risks of the Asset</h4>
+{{- if .Risks}}
+<ul>
+{{- range .Risks}}
+<li>{{template "risk-link" .}}</li>
+{{- end}}
+</ul>
+{{- else}}
+<p class="muted">{{if .Asset.OutOfScope}}The asset was defined as out-of-scope.{{else}}No risks were identified.{{end}}</p>
+{{- end}}
+<h4>Asset Information</h4>
+<div class="table-wrap">
+<table class="props">
+<tbody>
+<tr><th scope="row">Type</th><td>{{.Asset.Type}}</td></tr>
+<tr><th scope="row">Usage</th><td>{{.Asset.Usage}}</td></tr>
+<tr><th scope="row">RAA</th><td>{{.RAA}}</td></tr>
+<tr><th scope="row">Size</th><td>{{.Asset.Size}}</td></tr>
+<tr><th scope="row">Technology</th><td>{{.Asset.Technologies}}</td></tr>
+<tr><th scope="row">Tags</th><td>{{.Tags}}</td></tr>
+<tr><th scope="row">Trust boundary</th><td>{{with .TrustBoundary}}{{template "ref" .}}{{else}}<span class="muted">none</span>{{end}}</td></tr>
+<tr><th scope="row">Internet</th><td>{{yesNo .Asset.Internet}}</td></tr>
+<tr><th scope="row">Machine</th><td>{{.Asset.Machine}}</td></tr>
+<tr><th scope="row">Encryption</th><td>{{.Asset.Encryption}}</td></tr>
+<tr><th scope="row">Multi-tenant</th><td>{{yesNo .Asset.MultiTenant}}</td></tr>
+<tr><th scope="row">Redundant</th><td>{{yesNo .Asset.Redundant}}</td></tr>
+<tr><th scope="row">Custom-developed</th><td>{{yesNo .Asset.CustomDevelopedParts}}</td></tr>
+<tr><th scope="row">Client used by a human</th><td>{{yesNo .Asset.UsedAsClientByHuman}}</td></tr>
+<tr><th scope="row">Data formats accepted</th><td>{{.FormatsAccepted}}</td></tr>
+<tr><th scope="row">Data processed</th><td>{{template "refs" .DataProcessed}}</td></tr>
+<tr><th scope="row">Data stored</th><td>{{template "refs" .DataStored}}</td></tr>
+<tr><th scope="row">Outgoing communication links</th><td>{{template "refs" .Outgoing}}</td></tr>
+<tr><th scope="row">Incoming communication links</th><td>{{template "refs" .Incoming}}</td></tr>
+</tbody>
+</table>
+</div>
+<h4>Asset Rating</h4>
+<div class="table-wrap">
+<table class="props">
+<tbody>
+<tr><th scope="row">Owner</th><td>{{.Asset.Owner}}</td></tr>
+<tr><th scope="row">Confidentiality</th><td>{{.Asset.Confidentiality}}</td></tr>
+<tr><th scope="row">Integrity</th><td>{{.Asset.Integrity}}</td></tr>
+<tr><th scope="row">Availability</th><td>{{.Asset.Availability}}</td></tr>
+<tr><th scope="row">CIA justification</th><td>{{.Justification}}</td></tr>
+{{- if .Asset.OutOfScope}}
+<tr><th scope="row">Out-of-scope justification</th><td>{{markup .Asset.JustificationOutOfScope}}</td></tr>
+{{- end}}
+</tbody>
+</table>
+</div>
+</section>
+{{- end}}
+</section>
+
+<section class="chapter" id="data-assets">
+<h2>Identified Data Breach Probabilities by Data Asset</h2>
+<p>In total <strong>{{.Summary.TotalRisks}} potential risks</strong> have been identified during the threat modeling process, distributed across <strong>{{len .DataAssets}} data assets</strong>. The following sections describe the derived data breach probabilities grouped by data asset.</p>
+{{- range .DataAssets}}
+<section class="item" id="{{.Anchor}}">
+<h3>{{.Asset.Title}}{{with .Breach}} {{template "level" .}}{{end}} <span class="summary">{{.Summary}}</span></h3>
+<p class="id">{{.Asset.Id}}</p>
+<div class="text">{{.Description}}</div>
+<div class="table-wrap">
+<table class="props">
+<tbody>
+<tr><th scope="row">Usage</th><td>{{.Asset.Usage}}</td></tr>
+<tr><th scope="row">Quantity</th><td>{{.Asset.Quantity}}</td></tr>
+<tr><th scope="row">Tags</th><td>{{.Tags}}</td></tr>
+<tr><th scope="row">Origin</th><td>{{.Asset.Origin}}</td></tr>
+<tr><th scope="row">Owner</th><td>{{.Asset.Owner}}</td></tr>
+<tr><th scope="row">Confidentiality</th><td>{{.Asset.Confidentiality}}</td></tr>
+<tr><th scope="row">Integrity</th><td>{{.Asset.Integrity}}</td></tr>
+<tr><th scope="row">Availability</th><td>{{.Asset.Availability}}</td></tr>
+<tr><th scope="row">CIA justification</th><td>{{.Justification}}</td></tr>
+<tr><th scope="row">Processed by</th><td>{{template "refs" .ProcessedBy}}</td></tr>
+<tr><th scope="row">Stored by</th><td>{{template "refs" .StoredBy}}</td></tr>
+<tr><th scope="row">Sent via</th><td>{{template "refs" .SentVia}}</td></tr>
+<tr><th scope="row">Received via</th><td>{{template "refs" .ReceivedVia}}</td></tr>
+<tr><th scope="row">Data breach</th><td>{{with .Breach}}{{template "level" .}}{{else}}none{{end}}</td></tr>
+</tbody>
+</table>
+</div>
+<h4>Data Breach Risks</h4>
+{{- if .BreachRisks}}
+<p>This data asset has data breach potential because of {{len .BreachRisks}} remaining {{if eq (len .BreachRisks) 1}}risk{{else}}risks{{end}}:</p>
+<ul>
+{{- range .BreachRisks}}
+<li>{{.DataBreachProbability}}: {{template "risk-link" .}}</li>
+{{- end}}
+</ul>
+{{- else}}
+<p class="muted">This data asset has no data breach potential.</p>
+{{- end}}
+</section>
+{{- end}}
+</section>
+
+<section class="chapter" id="trust-boundaries">
+<h2>Trust Boundaries</h2>
+<p>In total <strong>{{len .TrustBoundaries}} {{if eq (len .TrustBoundaries) 1}}trust boundary has{{else}}trust boundaries have{{end}}</strong> been modeled during the threat modeling process.</p>
+{{- range .TrustBoundaries}}
+<section class="item" id="{{.Anchor}}">
+<h3>{{.Boundary.Title}}</h3>
+<p class="id">{{.Boundary.Id}}</p>
+<div class="text">{{.Description}}</div>
+<div class="table-wrap">
+<table class="props">
+<tbody>
+<tr><th scope="row">Type</th><td>{{.Boundary.Type}}{{if not .Boundary.Type.IsNetworkBoundary}} <span class="muted">(not a network boundary)</span>{{end}}</td></tr>
+<tr><th scope="row">Tags</th><td>{{.Tags}}</td></tr>
+<tr><th scope="row">Nested in</th><td>{{with .Parent}}{{template "ref" .}}{{else}}<span class="muted">none</span>{{end}}</td></tr>
+<tr><th scope="row">Assets inside</th><td>{{template "refs" .AssetsInside}}</td></tr>
+<tr><th scope="row">Boundaries nested</th><td>{{template "refs" .Nested}}</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+{{- end}}
+</section>
+
+<section class="chapter" id="shared-runtimes">
+<h2>Shared Runtimes</h2>
+<p>In total <strong>{{len .SharedRuntimes}} shared {{if eq (len .SharedRuntimes) 1}}runtime has{{else}}runtimes have{{end}}</strong> been modeled during the threat modeling process.</p>
+{{- range .SharedRuntimes}}
+<section class="item" id="{{.Anchor}}">
+<h3>{{.Runtime.Title}}</h3>
+<p class="id">{{.Runtime.Id}}</p>
+<div class="text">{{.Description}}</div>
+<div class="table-wrap">
+<table class="props">
+<tbody>
+<tr><th scope="row">Tags</th><td>{{.Tags}}</td></tr>
+<tr><th scope="row">Assets running</th><td>{{template "refs" .AssetsRunning}}</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+{{- end}}
+</section>
+
+<section class="chapter" id="communication-links">
+<h2>Communication Links</h2>
+<p>In total <strong>{{len .CommunicationLinks}} communication {{if eq (len .CommunicationLinks) 1}}link has{{else}}links have{{end}}</strong> been modeled, listed by their source asset.</p>
+{{- range .CommunicationLinks}}
+<section class="item" id="{{.Anchor}}">
+<h3>{{.Link.Title}} <span class="summary">from {{.Source.Title}} to {{.Target.Title}}</span></h3>
+<p class="id">{{.Link.Id}}</p>
+<div class="text">{{.Description}}</div>
+<div class="table-wrap">
+<table class="props">
+<tbody>
+<tr><th scope="row">Source</th><td>{{template "ref" .Source}}</td></tr>
+<tr><th scope="row">Target</th><td>{{template "ref" .Target}}</td></tr>
+<tr><th scope="row">Protocol</th><td>{{.Link.Protocol}}</td></tr>
+<tr><th scope="row">Encrypted</th><td>{{yesNo .Encrypted}}</td></tr>
+<tr><th scope="row">Authentication</th><td>{{.Link.Authentication}}</td></tr>
+<tr><th scope="row">Authorization</th><td>{{.Link.Authorization}}</td></tr>
+<tr><th scope="row">Read-only</th><td>{{yesNo .Link.Readonly}}</td></tr>
+<tr><th scope="row">Usage</th><td>{{.Link.Usage}}</td></tr>
+<tr><th scope="row">Tags</th><td>{{.Tags}}</td></tr>
+<tr><th scope="row">VPN</th><td>{{yesNo .Link.VPN}}</td></tr>
+<tr><th scope="row">IP-filtered</th><td>{{yesNo .Link.IpFiltered}}</td></tr>
+<tr><th scope="row">Data sent</th><td>{{template "refs" .DataSent}}</td></tr>
+<tr><th scope="row">Data received</th><td>{{template "refs" .DataReceived}}</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+{{- end}}
+</section>
+
+<section class="chapter" id="risk-tracking">
+<h2>Risk Tracking</h2>
+<p><strong>{{len .TrackedRisks}} of {{.Summary.TotalRisks}} risks</strong> are tracked in the model; the others are unchecked.</p>
+{{- if .TrackedRisks}}
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Risk</th><th scope="col">Severity</th><th scope="col">Status</th><th scope="col">Date</th><th scope="col">Checked by</th><th scope="col">Ticket</th><th scope="col">Justification</th></tr></thead>
+<tbody>
+{{- range .TrackedRisks}}
+<tr><td><a href="#{{.Anchor}}">{{.Title}}</a><br><span class="id">{{.SyntheticID}}</span></td><td>{{template "level" .Severity}}</td><td>{{template "level" .Status}}</td><td>{{.TrackingDate}}</td><td>{{.Tracking.CheckedBy}}</td><td>{{.Tracking.Ticket}}</td><td>{{markup .Tracking.Justification}}</td></tr>
+{{- end}}
+</tbody>
+</table>
+</div>
+{{- end}}
+</section>
+{{- if .Shows "risk-rules"}}
+
+<section class="chapter" id="risk-rules">
+<h2>Risk Rules Checked by Threagile</h2>
+<div class="table-wrap">
+<table class="props">
+<tbody>
+<tr><th scope="row">Threagile version</th><td>{{.Run.ThreagileVersion}}</td></tr>
+<tr><th scope="row">Threagile build timestamp</th><td>{{.Run.BuildTimestamp}}</td></tr>
+<tr><th scope="row">Threagile execution timestamp</th><td>{{.ExecutionTimestamp}}</td></tr>
+<tr><th scope="row">Model filename</th><td>{{.Run.ModelFilename}}</td></tr>
+<tr><th scope="row">Model hash (SHA256)</th><td class="id">{{.Run.ModelHash}}</td></tr>
+</tbody>
+</table>
+</div>
+<p>Threagile (see <a href="https://threagile.io" rel="noopener noreferrer">threagile.io</a> for more details) is an open-source toolkit for agile threat modeling, created by Christian Schneider (<a href="https://christian-schneider.net" rel="noopener noreferrer">christian-schneider.net</a>): It allows to model an architecture with its assets in an agile fashion as a YAML file directly inside the IDE. Upon execution of the Threagile toolkit all standard risk rules (as well as individual custom rules if present) are checked against the architecture model. At the time the Threagile toolkit was executed on the model input file the following risk rules were checked:</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Risk rule</th><th scope="col">STRIDE</th><th scope="col">Description</th><th scope="col">Detection</th><th scope="col">Rating</th></tr></thead>
+<tbody>
+{{- range .RiskRules}}
+<tr><th scope="row">{{if .Skipped}}<span class="badge out-of-scope">skipped</span> {{end}}{{.Category.Title}}<br><span class="id">{{.ID}}</span>{{with .Kind}}<br><em>{{.}}</em>{{end}}</th><td>{{.Category.STRIDE.Title}}</td><td>{{.Description}}</td><td>{{.DetectionLogic}}</td><td>{{.RiskAssessment}}</td></tr>
+{{- end}}
+</tbody>
+</table>
+</div>
+</section>
+{{- end}}
+
+<section class="chapter" id="ratings">
+<h2>Ratings</h2>
+<h3>Confidentiality Values</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Name</th><th scope="col" class="number">Value</th><th scope="col">Description</th></tr></thead>
+<tbody>
+{{- range .Confidentiality}}
+<tr><th scope="row">{{.Name}}</th><td class="number">{{.Value}}</td><td>{{.Explanation}}</td></tr>
+{{- end}}
+</tbody>
+</table>
+</div>
+<h3>Criticality Values</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Name</th><th scope="col" class="number">Value</th><th scope="col">Description</th></tr></thead>
+<tbody>
+{{- range .Criticality}}
+<tr><th scope="row">{{.Name}}</th><td class="number">{{.Value}}</td><td>{{.Explanation}}</td></tr>
+{{- end}}
+</tbody>
+</table>
+</div>
+</section>
+
+<section class="chapter" id="disclaimer">
+<h2>Disclaimer</h2>
+<p>{{.Author.Name}} conducted this threat analysis using the open-source Threagile toolkit on the applications and systems that were modeled as of this report's date. Information security threats are continually changing, with new vulnerabilities discovered on a daily basis, and no application can ever be 100% secure no matter how much threat modeling is conducted. It is recommended to execute threat modeling and also penetration testing on a regular basis (for example yearly) to ensure a high ongoing level of security and constantly check for new attack vectors.</p>
+<p>This report cannot and does not protect against personal or business loss as the result of use of the applications or systems described. {{.Author.Name}} and the Threagile toolkit offers no warranties, representations or legal certifications concerning the applications or systems it tests. All software includes defects: nothing in this document is intended to represent or warrant that threat modeling was complete and without error, nor does this document represent or warrant that the architecture analyzed is suitable to task, free of other defects than reported, fully compliant with any industry standards, or fully compatible with any operating system, hardware, or other application. Threat modeling tries to analyze the modeled architecture without having access to a real working system and thus cannot and does not test the implementation for defects and vulnerabilities. These kinds of checks would only be possible with a separate code review and penetration test against a working system and not via a threat model.</p>
+<p>By using the resulting information you agree that {{.Author.Name}} and the Threagile toolkit shall be held harmless in any event.</p>
+<p>This report is confidential and intended for internal, confidential use by the client. The recipient is obligated to ensure the highly confidential contents are kept secret. The recipient assumes responsibility for further distribution of this document.</p>
+<p>In this particular project, a time box approach was used to define the analysis effort. This means that the author allotted a prearranged amount of time to identify and document threats. Because of this, there is no guarantee that all possible threats and risks are discovered. Furthermore, the analysis applies to a snapshot of the current state of the modeled architecture (based on the architecture information provided by the customer) at the examination time.</p>
+<h3>Report Distribution</h3>
+<p>Distribution of this report (in full or in part like diagrams or risk findings) requires that this disclaimer as well as the chapter about the Threagile toolkit and method used is kept intact as part of the distributed report or referenced from the distributed parts.</p>
+</section>
+</main>
+
+<footer>
+<p>Generated by Threagile {{.Run.ThreagileVersion}} on <time datetime="{{.Generated}}">{{.Generated}}</time>.</p>
+</footer>
+</div>
+</body>
+</html>
