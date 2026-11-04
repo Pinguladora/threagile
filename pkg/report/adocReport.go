@@ -2188,7 +2188,9 @@ func (adoc adocReport) writeSharedRuntimes() error {
 	return nil
 }
 
-func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRiskRules []string, buildTimestamp string, threagileVersion string, modelHash string, customRiskRules types.RiskRules) {
+func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRiskRules []string,
+	buildTimestamp string, threagileVersion string, modelHash string, customRiskRules types.RiskRules,
+) {
 	writeLine(f, "= Risk Rules Checked by Threagile")
 	writeLine(f, "")
 	timestamp := types.Now()
@@ -2211,6 +2213,12 @@ func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRi
 		"the following risk rules were checked:")
 	writeLine(f, "")
 
+	adoc.writeCheckedRiskRules(f, skipRiskRules, customRiskRules)
+}
+
+// writeCheckedRiskRules writes the custom risk rules, the individual risk categories of the model
+// and the built-in risk rules, marking the skipped ones.
+func (adoc adocReport) writeCheckedRiskRules(f *os.File, skipRiskRules []string, customRiskRules types.RiskRules) {
 	// The risk rules are listed explicitly here rather than discovered through the run system:
 	skipped := ""
 
@@ -2225,15 +2233,7 @@ func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRi
 		writeLine(f, "[.small]#"+id+"#")
 		writeLine(f, "")
 		writeLine(f, "_Custom Risk Rule_")
-		writeLine(f, `
-[cols="h,1",frame=none,grid=none]
-|===
-| STRIDE:      | `+customRule.Category().STRIDE.Title()+`
-| Description: | `+firstParagraph(customRule.Category().Description)+`
-| Detection:   | `+customRule.Category().DetectionLogic+`
-| Rating:      | `+customRule.Category().RiskAssessment+`
-|===
-`)
+		writeRiskRuleTable(f, customRule.Category())
 	}
 
 	sort.Sort(types.ByRiskCategoryTitleSort(adoc.model.CustomRiskCategories))
@@ -2242,15 +2242,7 @@ func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRi
 		writeLine(f, "[.small]#"+individualRiskCategory.ID+"#")
 		writeLine(f, "")
 		writeLine(f, "_Individual Risk category_")
-		writeLine(f, `
-[cols="h,1",frame=none,grid=none]
-|===
-| STRIDE:      | `+individualRiskCategory.STRIDE.Title()+`
-| Description: | `+firstParagraph(individualRiskCategory.Description)+`
-| Detection:   | `+individualRiskCategory.DetectionLogic+`
-| Rating:      | `+individualRiskCategory.RiskAssessment+`
-|===
-`)
+		writeRiskRuleTable(f, individualRiskCategory)
 	}
 
 	for _, id := range slices.Sorted(maps.Keys(adoc.riskRules)) {
@@ -2263,16 +2255,22 @@ func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRi
 		writeLine(f, "== "+skipped+rule.Category().Title)
 		writeLine(f, "[.small]#"+rule.Category().ID+"#")
 		writeLine(f, "")
-		writeLine(f, `
+		writeRiskRuleTable(f, rule.Category())
+	}
+}
+
+// writeRiskRuleTable writes the STRIDE category, description, detection logic and rating of a
+// risk category.
+func writeRiskRuleTable(f *os.File, category *types.RiskCategory) {
+	writeLine(f, `
 [cols="h,1",frame=none,grid=none]
 |===
-| STRIDE:      | `+rule.Category().STRIDE.Title()+`
-| Description: | `+firstParagraph(rule.Category().Description)+`
-| Detection:   | `+rule.Category().DetectionLogic+`
-| Rating:      | `+rule.Category().RiskAssessment+`
+| STRIDE:      | `+category.STRIDE.Title()+`
+| Description: | `+firstParagraph(category.Description)+`
+| Detection:   | `+category.DetectionLogic+`
+| Rating:      | `+category.RiskAssessment+`
 |===
 `)
-	}
 }
 
 func (adoc adocReport) writeRiskRulesChecked(modelFilename string, skipRiskRules []string, buildTimestamp string,
