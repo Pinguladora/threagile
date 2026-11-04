@@ -1,5 +1,6 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/Pinguladora/threagile/main/support/schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "risk_category": {
       "properties": {
@@ -203,7 +204,6 @@
     }
   },
   "description": "Agile Threat Modeling",
-  "id": "https://threagile.io/schema.json",
   "properties": {
     "abuse_cases": {
       "description": "Custom abuse cases for the report",
@@ -1106,6 +1106,7 @@
                 "stream-processing",
                 "service-mesh",
                 "data-lake",
+                "big-data-platform",
                 "report-engine",
                 "ai",
                 "mail-server",
@@ -1174,6 +1175,7 @@
               "stream-processing",
               "service-mesh",
               "data-lake",
+              "big-data-platform",
               "report-engine",
               "ai",
               "mail-server",
