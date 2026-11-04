@@ -35,6 +35,8 @@ This flags is used when application run in [analyze mode](./mode-analyze.md)
 | `-generate-tags-excel`            | bool                 | specify if Excel with tags shall be generated                      | true                      |
 | `-generate-report-pdf`            | bool                 | specify if PDF with the analyse report shall be generated          | true                      |
 | `-generate-report-adoc`           | bool                 | specify if adoc report with the analysis  shall be generated       | true                      |
+| `-report-html`                    | string(path to file) | file name of the self-contained [HTML report](./html-report.md)    | report.html               |
+| `-skip-report-html`               | bool                 | skip generating the [HTML report](./html-report.md)                | false                     |
 | `-fail-on`                        | string(severity)     | exit with status 2 when unchecked risks of this severity or higher remain, see [Failing CI on unchecked risks](./mode-analyze.md#failing-ci-on-unchecked-risks) | (off)                     |
 
 ## Import flags

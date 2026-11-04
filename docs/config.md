@@ -37,6 +37,8 @@ This config keys is used when application run in [analyze mode](./mode-analyze.m
 | `JsonStatsFilename`           | string (path to file) | The output file name for JSON with risk statistics                 | stats.json              |
 | `JsonOTMFilename`             | string (path to file) | The same as `-otm-json` at [flags](./flags.md)                     | otm.json                |
 | `SkipOTMJSON`                 | bool                  | The same as `-skip-otm-json` at [flags](./flags.md)                | false                   |
+| `ReportHTMLFilename`          | string (path to file) | The same as `-report-html` at [flags](./flags.md)                  | report.html             |
+| `SkipReportHTML`              | bool                  | The same as `-skip-report-html` at [flags](./flags.md)             | false                   |
 | `TemplateFilename`            | string (path to file) | The same as `-background` at [flags](./flags.md)                   | see [flags](./flags.md) |
 | `ReportLogoImagePath`         | string (path to file) | The same as `-reportLogoImagePath` or `--v` at [flags](./flags.md) | see [flags](./flags.md) |
 | `KeepDiagramSourceFiles`      | bool                  | If true dot files will not be removed after png generated          | false                   |
