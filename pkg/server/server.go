@@ -98,18 +98,18 @@ func RunServer(config serverConfigReader, builtinRiskRules types.RiskRules) {
 	s.addStaticRoutes(router)
 
 	router.GET("/meta/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
 		})
 	})
 	router.GET("/meta/version", func(c *gin.Context) {
-		c.JSON(200, gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"version":         config.GetThreagileVersion(),
 			"build_timestamp": s.config.GetBuildTimestamp(),
 		})
 	})
 	router.GET("/meta/types", func(c *gin.Context) {
-		c.JSON(200, gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"quantity":                     arrayOfStringValues(types.QuantityValues()),
 			"confidentiality":              arrayOfStringValues(types.ConfidentialityValues()),
 			"criticality":                  arrayOfStringValues(types.CriticalityValues()),
@@ -330,6 +330,12 @@ func arrayOfStringValues(values []types.TypeEnum) []string {
 	return result
 }
 
+// The lengths of the names of the key folders (hex SHA-512 hashes) and the model folders (UUIDs).
+const (
+	sha512HexLength = 128
+	uuidLength      = 36
+)
+
 func (s *server) stats(ginContext *gin.Context) {
 	keyCount, modelCount := 0, 0
 	keyFolders, err := os.ReadDir(filepath.Join(s.config.GetServerFolder(), s.config.GetKeyFolder()))
@@ -341,7 +347,8 @@ func (s *server) stats(ginContext *gin.Context) {
 		return
 	}
 	for _, keyFolder := range keyFolders {
-		if len(keyFolder.Name()) == 128 { // it's a sha512 token hash probably, so count it as token folder for the stats
+		// it's a sha512 token hash probably, so count it as token folder for the stats
+		if len(keyFolder.Name()) == sha512HexLength {
 			keyCount++
 			if keyFolder.Name() != filepath.Clean(keyFolder.Name()) {
 				ginContext.JSON(http.StatusInternalServerError, gin.H{
@@ -358,7 +365,8 @@ func (s *server) stats(ginContext *gin.Context) {
 				return
 			}
 			for _, modelFolder := range modelFolders {
-				if len(modelFolder.Name()) == 36 { // it's a uuid model folder probably, so count it as model folder for the stats
+				// it's a uuid model folder probably, so count it as model folder for the stats
+				if len(modelFolder.Name()) == uuidLength {
 					modelCount++
 				}
 			}

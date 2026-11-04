@@ -59,13 +59,19 @@ func (s *server) createKey(ginContext *gin.Context) {
 	})
 }
 
+// At most maxCreationsPerThrottlingWindow objects of a type may be created per throttlingWindow.
+const (
+	throttlingWindow                = 3 * time.Minute
+	maxCreationsPerThrottlingWindow = 20
+)
+
 func (s *server) checkObjectCreationThrottler(ginContext *gin.Context, typeName string) bool {
 	s.throttlerLock.Lock()
 	defer s.throttlerLock.Unlock()
 
 	// remove all elements older than 3 minutes (= 180000000000 ns)
 	now := time.Now().UnixNano()
-	cutoff := now - 180000000000
+	cutoff := now - int64(throttlingWindow)
 	for keyCheck := range s.createdObjectsThrottler {
 		for i := 0; i < len(s.createdObjectsThrottler[keyCheck]); i++ {
 			if s.createdObjectsThrottler[keyCheck][i] < cutoff {
@@ -91,7 +97,7 @@ func (s *server) checkObjectCreationThrottler(ginContext *gin.Context, typeName 
 		s.createdObjectsThrottler[keyHash] = make([]int64, 0)
 	}
 	// check the limit of 20 creations for this type per 3 minutes
-	withinLimit := len(s.createdObjectsThrottler[keyHash]) < 20
+	withinLimit := len(s.createdObjectsThrottler[keyHash]) < maxCreationsPerThrottlingWindow
 	if withinLimit {
 		s.createdObjectsThrottler[keyHash] = append(s.createdObjectsThrottler[keyHash], now)
 		return true
