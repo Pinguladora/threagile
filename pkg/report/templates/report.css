@@ -1,0 +1,448 @@
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --fg: #1c1c21;
+  --muted: #55555f;
+  --border: #d4d4dc;
+  --surface: #f3f3f6;
+  --link: #0b57d0;
+  --accent: #3a52c8;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #131317;
+    --fg: #e7e7ec;
+    --muted: #a9a9b6;
+    --border: #3b3b47;
+    --surface: #1e1e25;
+    --link: #8ab4f8;
+    --accent: #a4b2ff;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow-wrap: break-word;
+}
+
+.page {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+a {
+  color: var(--link);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.25;
+  margin: 1.5em 0 0.5em;
+}
+
+h1 {
+  font-size: 2.25rem;
+  margin-top: 0.25em;
+}
+
+h2 {
+  font-size: 1.6rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 0.2em;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+h4 {
+  font-size: 1.05rem;
+}
+
+.title-page {
+  padding: 2rem 0 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.kicker {
+  margin: 0;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25rem 1rem;
+  margin: 1rem 0 0;
+}
+
+.meta dt {
+  color: var(--muted);
+}
+
+.meta dd {
+  margin: 0;
+}
+
+.contributors {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.toc ol {
+  padding-left: 1.5rem;
+}
+
+@media (min-width: 48rem) {
+  .toc ol {
+    columns: 2;
+    column-gap: 3rem;
+  }
+}
+
+.toc li {
+  break-inside: avoid;
+}
+
+.muted,
+.summary {
+  color: var(--muted);
+}
+
+.summary {
+  font-size: 0.85em;
+  font-weight: normal;
+}
+
+.id {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85em;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.item {
+  margin: 2rem 0;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.item > h3 {
+  margin-top: 0.5rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0 0.45em;
+  border: 1px solid transparent;
+  border-radius: 0.3em;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+  vertical-align: 0.1em;
+}
+
+/* The severity and status colours of the PDF report, with black or white text, whichever
+   contrasts more. The text always names the severity or status. */
+.sev-critical {
+  background: #ff2600;
+  color: #000000;
+  fill: #ff2600;
+}
+
+.sev-high {
+  background: #a0281e;
+  color: #ffffff;
+  fill: #a0281e;
+}
+
+.sev-elevated {
+  background: #ff8e00;
+  color: #000000;
+  fill: #ff8e00;
+}
+
+.sev-medium {
+  background: #c87832;
+  color: #000000;
+  fill: #c87832;
+}
+
+.sev-low {
+  background: #23465f;
+  color: #ffffff;
+  fill: #23465f;
+}
+
+.status-unchecked {
+  background: #ff0000;
+  color: #000000;
+  fill: #ff0000;
+}
+
+.status-in-discussion {
+  background: #ff9300;
+  color: #000000;
+  fill: #ff9300;
+}
+
+.status-accepted {
+  background: #ff40ff;
+  color: #000000;
+  fill: #ff40ff;
+}
+
+.status-in-progress {
+  background: #0000ff;
+  color: #ffffff;
+  fill: #0000ff;
+}
+
+.status-mitigated {
+  background: #008f00;
+  color: #000000;
+  fill: #008f00;
+}
+
+.status-false-positive {
+  background: #666666;
+  color: #ffffff;
+  fill: #666666;
+}
+
+.out-of-scope {
+  background: #7f7f7f;
+  color: #000000;
+}
+
+@media (prefers-color-scheme: dark) {
+  .badge {
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+}
+
+.table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  padding: 0.35rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+thead th {
+  background: var(--surface);
+  white-space: nowrap;
+}
+
+table.props th {
+  width: 14rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+td.number,
+th.number {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bar {
+  display: block;
+  width: 100%;
+  min-width: 8rem;
+  height: 1rem;
+}
+
+.bar .track {
+  fill: var(--surface);
+}
+
+.choices {
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.choices li {
+  padding: 0.1rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 0.3em;
+  color: var(--muted);
+}
+
+.choices li.selected {
+  border-color: var(--fg);
+  color: var(--fg);
+  font-weight: 700;
+}
+
+dl.entries dt {
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+dl.entries dd {
+  margin: 0.25rem 0 0 1.5rem;
+}
+
+.diagram {
+  margin: 1rem 0;
+  padding: 0.5rem;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 0.3rem;
+}
+
+.diagram svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.diagram figcaption {
+  color: #55555f;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 40rem) {
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  .meta {
+    grid-template-columns: 1fr;
+  }
+
+  .meta dd {
+    margin-bottom: 0.5rem;
+  }
+
+  table.props th {
+    width: auto;
+  }
+}
+
+@media print {
+  :root {
+    --bg: #ffffff;
+    --fg: #000000;
+    --muted: #444444;
+    --border: #bbbbbb;
+    --surface: #eeeeee;
+    --link: #000000;
+    --accent: #3a52c8;
+  }
+
+  body {
+    font-size: 10pt;
+  }
+
+  .page {
+    max-width: none;
+    padding: 0;
+  }
+
+  .skip-link {
+    display: none;
+  }
+
+  .badge,
+  .bar {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .chapter {
+    break-before: page;
+  }
+
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
+  }
+
+  tr,
+  .diagram,
+  dl.entries dd {
+    break-inside: avoid;
+  }
+
+  .table-wrap {
+    overflow: visible;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    color: #444444;
+    font-size: 0.85em;
+    overflow-wrap: anywhere;
+  }
+}
