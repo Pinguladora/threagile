@@ -438,6 +438,23 @@ plc:
     plc: true
     operational_technology: true
     industrial_controller: true
+policy-decision-point:
+  aliases:
+    - pdp
+    - authzen
+    - authzen-pdp
+    - authorization-service
+    - opa
+    - open-policy-agent
+    - cedar
+    - openfga
+    - spicedb
+  description: A policy decision point that decides the authorization of other services, like an AuthZEN PDP, Open Policy Agent, Cedar, OpenFGA or SpiceDB
+  attributes:
+    policy-decision-point: true
+    backend_related: true
+    high_value_target: true
+    identity_related: true
 report-engine:
   aliases:
     - reporting

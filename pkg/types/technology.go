@@ -19,6 +19,7 @@ const (
 	RTU                    = "rtu"
 	SafetyController       = "safety-controller"
 	SCADAServer            = "scada-server"
+	PolicyDecisionPoint    = "policy-decision-point"
 	BatchProcessing        = "batch-processing"
 	BigDataPlatform        = "big-data-platform"
 	BlockStorage           = "block-storage"

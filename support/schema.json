@@ -1179,7 +1179,8 @@
                 "plc",
                 "rtu",
                 "safety-controller",
-                "scada-server"
+                "scada-server",
+                "policy-decision-point"
               ],
               "type": "string"
             },
@@ -1261,7 +1262,8 @@
               "plc",
               "rtu",
               "safety-controller",
-              "scada-server"
+              "scada-server",
+              "policy-decision-point"
             ],
             "type": "string"
           },

@@ -326,6 +326,7 @@ Used by `technologies` of technical assets.
 | `model-registry` | `ml-model-registry`, `model-hub`, `model-repository` | A registry to store and distribute machine learning models |
 | `monitoring` | `siem` | A monitoring system (SIEM, logs) |
 | `plc` | `programmable-logic-controller`, `pac`, `dcs-controller` | A programmable logic controller (PLC) controlling an industrial process |
+| `policy-decision-point` | `pdp`, `authzen`, `authzen-pdp`, `authorization-service`, `opa`, `open-policy-agent`, `cedar`, `openfga`, `spicedb` | A policy decision point that decides the authorization of other services, like an AuthZEN PDP, Open Policy Agent, Cedar, OpenFGA or SpiceDB |
 | `report-engine` | `reporting` | Software for report generation |
 | `reverse-proxy` |  | A proxy hiding internal infrastructure from caller making requests. Can also reduce load |
 | `rtu` | `remote-terminal-unit` | A remote terminal unit (RTU) controlling a remote site of an industrial process |
