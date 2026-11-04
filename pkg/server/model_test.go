@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"path/filepath"
 	"strings"
 	"sync"
 	"testing"
@@ -102,5 +103,26 @@ func TestNewModelCanBeReadBack(t *testing.T) {
 	if title := field(t, call(t, router, http.MethodGet, model+"/cover", "", headers, http.StatusOK), "title"); title !=
 		"New Threat Model" {
 		t.Errorf("cover title %q", title)
+	}
+}
+
+func TestUpdatesInTheSameSecondKeepTheirBackups(t *testing.T) {
+	s, router := newModelServer(t)
+	headers, model := newModel(t, router)
+
+	for _, title := range []string{"First", "Second", "Third"} {
+		call(t, router, http.MethodPut, model+"/cover", `{"title":"`+title+`"}`, headers, http.StatusOK)
+	}
+
+	if title := field(t, call(t, router, http.MethodGet, model+"/cover", "", headers, http.StatusOK), "title"); title !=
+		"Third" {
+		t.Errorf("cover title %q", title)
+	}
+	backups, err := filepath.Glob(filepath.Join(s.config.GetDataFolder(), "keys", "*", "*", "history", "*.backup"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(backups) != 3 {
+		t.Errorf("%v backups, want 3: %v", len(backups), backups)
 	}
 }

@@ -1250,7 +1250,9 @@ func (s *server) backupModelToHistory(modelFolder string, changeReasonForHistory
 	if err != nil {
 		return fmt.Errorf("failed to read model to back up: %w", err)
 	}
-	historyFile := filepath.Join(historyFolder, time.Now().Format("2006-01-02 15:04:05")+" "+safeReason+".backup")
+	// The nanoseconds keep two backups in the same second apart, and the names sorted in time order.
+	historyFile := filepath.Join(historyFolder,
+		time.Now().Format("2006-01-02 15:04:05.000000000")+" "+safeReason+".backup")
 	err = os.WriteFile(historyFile, inputModel, 0o400) // #nosec G703
 	if err != nil {
 		return fmt.Errorf("failed to write model backup: %w", err)
