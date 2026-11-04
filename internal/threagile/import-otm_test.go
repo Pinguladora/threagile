@@ -2,12 +2,14 @@ package threagile
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/Pinguladora/threagile/pkg/model"
+	"github.com/Pinguladora/threagile/pkg/otm"
 	"github.com/Pinguladora/threagile/pkg/risks"
 )
 
@@ -24,7 +26,7 @@ func TestImportOTMWritesAModelThatAnalyzes(t *testing.T) {
 	for _, want := range []string{
 		`Imported "Some Example Application" into ` + filepath.Join(outputFolder, InputFile),
 		"5 trust boundaries, 14 technical assets, 20 communication links, 12 data assets",
-		"Threats are not imported (24 threats, 71 threat instances in the file)",
+		exampleThreatSummary(t),
 	} {
 		if !strings.Contains(output, want) {
 			t.Errorf("want %q in the output, got:\n%v", want, output)
@@ -109,4 +111,29 @@ func runImportOTM(t *testing.T, args ...string) (string, error) {
 
 	err := what.rootCmd.Execute()
 	return output.String(), err
+}
+
+// exampleThreatSummary is the threat summary import-otm prints for the example OTM file, counted
+// from the file so that new risk rules do not break the test.
+func exampleThreatSummary(t *testing.T) string {
+	t.Helper()
+
+	data, err := os.ReadFile(exampleOTMFile)
+	if err != nil {
+		t.Fatal(err)
+	}
+	document, err := otm.Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	instances := 0
+	for _, component := range document.Components {
+		instances += len(component.Threats)
+	}
+	for _, dataflow := range document.Dataflows {
+		instances += len(dataflow.Threats)
+	}
+
+	return fmt.Sprintf("Threats are not imported (%d threats, %d threat instances in the file)", len(document.Threats), instances)
 }
