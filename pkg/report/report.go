@@ -226,7 +226,6 @@ func (r *pdfReporter) createCover(parsedModel *types.Model) {
 }
 
 func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
-	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
 	r.pdf.AddPage()
 	r.currentChapterTitleBreadcrumb = "Table of Contents"
 	r.homeLink = r.addTocLink("{home}")
@@ -241,18 +240,31 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	r.pdf.SetDrawColor(160, 160, 160)
 	r.pdf.SetDashPattern([]float64{0.5, 0.5}, 0)
 
-	// ===============
+	y := r.tocResultsOverview(parsedModel, 50)
+	y = r.tocRiskCategories(parsedModel, y)
+	y = r.tocTechnicalAssets(parsedModel, y)
+	y = r.tocDataAssets(parsedModel, y)
+	y = r.tocTrustBoundaries(parsedModel, y)
+	y = r.tocSharedRuntimes(parsedModel, y)
+	r.tocAboutThreagile(y)
 
-	var y float64 = 50
+	r.pdf.SetDrawColor(0, 0, 0)
+	r.pdf.SetDashPattern([]float64{}, 0)
+
+	// Now write all the sections/pages. Before we start writing, we use `RegisterAlias` to
+	// ensure that the alias written in the table of contents will be replaced
+	// by the current page number. --> See the "r.pdf.RegisterAlias()" calls during the PDF creation in this file
+}
+
+// tocResultsOverview writes the entries of the results overview into the table of contents,
+// starting at y, and returns the y of the last entry.
+func (r *pdfReporter) tocResultsOverview(parsedModel *types.Model, y float64) float64 {
 	r.pdf.SetFont("Helvetica", "B", fontSizeBody)
 	r.pdf.Text(11, y, "Results Overview")
 	r.pdf.SetFont("Helvetica", "", fontSizeBody)
 
 	y += 6
-	r.pdf.Text(11, y, "    "+"Management Summary")
-	r.pdf.Text(175, y, "{management-summary}")
-	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{management-summary}"))
+	r.tocEntry(y, "Management Summary", "{management-summary}")
 
 	risksStr := textRisks
 	catStr := textCategories
@@ -264,23 +276,14 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 		catStr = textCategory
 	}
 	y += 6
-	r.pdf.Text(11, y, "    "+"Impact Analysis of "+strconv.Itoa(count)+" Initial "+risksStr+" in "+strconv.Itoa(catCount)+
-		" "+catStr)
-	r.pdf.Text(175, y, "{impact-analysis-initial-risks}")
-	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{impact-analysis-initial-risks}"))
+	r.tocEntry(y, "Impact Analysis of "+strconv.Itoa(count)+" Initial "+risksStr+" in "+strconv.Itoa(catCount)+
+		" "+catStr, "{impact-analysis-initial-risks}")
 
 	y += 6
-	r.pdf.Text(11, y, "    "+"Risk Mitigation")
-	r.pdf.Text(175, y, "{risk-mitigation-status}")
-	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{risk-mitigation-status}"))
+	r.tocEntry(y, "Risk Mitigation", "{risk-mitigation-status}")
 
 	y += 6
-	r.pdf.Text(11, y, "    "+"Asset Register")
-	r.pdf.Text(175, y, "{asset-register}")
-	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{asset-register}"))
+	r.tocEntry(y, "Asset Register", "{asset-register}")
 
 	y += 6
 	risksStr = textRisks
@@ -293,66 +296,47 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	if catCount == 1 {
 		catStr = textCategory
 	}
-	r.pdf.Text(11, y, "    "+"Impact Analysis of "+strconv.Itoa(count)+" Remaining "+risksStr+" in "+
-		strconv.Itoa(catCount)+" "+catStr)
-	r.pdf.Text(175, y, "{impact-analysis-remaining-risks}")
-	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{impact-analysis-remaining-risks}"))
+	r.tocEntry(y, "Impact Analysis of "+strconv.Itoa(count)+" Remaining "+risksStr+" in "+
+		strconv.Itoa(catCount)+" "+catStr, "{impact-analysis-remaining-risks}")
+	return r.tocModelDetails(parsedModel, y)
+}
+
+// tocModelDetails writes the entries of the chapters about the model, from the application
+// overview to the data mapping, into the table of contents after y. It returns the y of the last
+// entry.
+func (r *pdfReporter) tocModelDetails(parsedModel *types.Model, y float64) float64 {
+	y += 6
+	r.tocEntry(y, "Application Overview", "{target-overview}")
 
 	y += 6
-	r.pdf.Text(11, y, "    "+"Application Overview")
-	r.pdf.Text(175, y, "{target-overview}")
-	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{target-overview}"))
+	r.tocEntry(y, "Data-Flow Diagram", "{data-flow-diagram}")
 
 	y += 6
-	r.pdf.Text(11, y, "    "+"Data-Flow Diagram")
-	r.pdf.Text(175, y, "{data-flow-diagram}")
-	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{data-flow-diagram}"))
+	r.tocEntry(y, "Security Requirements", "{security-requirements}")
 
 	y += 6
-	r.pdf.Text(11, y, "    "+"Security Requirements")
-	r.pdf.Text(175, y, "{security-requirements}")
-	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{security-requirements}"))
+	r.tocEntry(y, "Abuse Cases", "{abuse-cases}")
 
 	y += 6
-	r.pdf.Text(11, y, "    "+"Abuse Cases")
-	r.pdf.Text(175, y, "{abuse-cases}")
-	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{abuse-cases}"))
+	r.tocEntry(y, "Tag Listing", "{tag-listing}")
 
 	y += 6
-	r.pdf.Text(11, y, "    "+"Tag Listing")
-	r.pdf.Text(175, y, "{tag-listing}")
-	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{tag-listing}"))
+	r.tocEntry(y, "STRIDE Classification of Identified Risks", "{stride}")
 
 	y += 6
-	r.pdf.Text(11, y, "    "+"STRIDE Classification of Identified Risks")
-	r.pdf.Text(175, y, "{stride}")
-	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{stride}"))
+	r.tocEntry(y, "Assignment by Function", "{function-assignment}")
 
 	y += 6
-	r.pdf.Text(11, y, "    "+"Assignment by Function")
-	r.pdf.Text(175, y, "{function-assignment}")
-	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{function-assignment}"))
+	r.tocEntry(y, "RAA Analysis", "{raa-analysis}")
 
 	y += 6
-	r.pdf.Text(11, y, "    "+"RAA Analysis")
-	r.pdf.Text(175, y, "{raa-analysis}")
-	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{raa-analysis}"))
+	r.tocEntry(y, "Data Mapping", "{data-risk-mapping}")
+	return r.tocModelReview(parsedModel, y)
+}
 
-	y += 6
-	r.pdf.Text(11, y, "    "+"Data Mapping")
-	r.pdf.Text(175, y, "{data-risk-mapping}")
-	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{data-risk-mapping}"))
-
+// tocModelReview writes the entries of the out-of-scope assets, potential model failures and
+// questions into the table of contents after y. It returns the y of the last entry.
+func (r *pdfReporter) tocModelReview(parsedModel *types.Model, y float64) float64 {
 	/*
 		y += 6
 		assets := "assets"
@@ -368,18 +352,15 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 
 	y += 6
 	assets := "Assets"
-	count = len(parsedModel.OutOfScopeTechnicalAssets())
+	count := len(parsedModel.OutOfScopeTechnicalAssets())
 	if count == 1 {
 		assets = textAsset
 	}
-	r.pdf.Text(11, y, "    "+"Out-of-Scope Assets: "+strconv.Itoa(count)+" "+assets)
-	r.pdf.Text(175, y, "{out-of-scope-assets}")
-	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{out-of-scope-assets}"))
+	r.tocEntry(y, "Out-of-Scope Assets: "+strconv.Itoa(count)+" "+assets, "{out-of-scope-assets}")
 
 	y += 6
 	modelFailures := flattenRiskSlice(filterByModelFailures(parsedModel, parsedModel.GeneratedRisksByCategory))
-	risksStr = textRisks
+	risksStr := textRisks
 	count = len(modelFailures)
 	if count == 1 {
 		risksStr = textRisk
@@ -410,25 +391,24 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	r.pdfColorBlack()
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
 	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{questions}"))
+	return y
+}
 
-	// ===============
-
+// tocRiskCategories writes the entries of the risk categories into the table of contents after y.
+// It returns the y of the last entry.
+func (r *pdfReporter) tocRiskCategories(parsedModel *types.Model, y float64) float64 {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
 	if len(parsedModel.GeneratedRisksByCategory) > 0 {
 		y += 6
 		y += 6
-		if y > 260 { // 260 instead of 275 for major group headlines to avoid "Schusterjungen"
-			r.pageBreakInLists()
-			y = 40
-		}
+		// 260 instead of 275 for major group headlines to avoid "Schusterjungen"
+		y = r.tocPageBreakBelow(y, 260)
 		r.pdf.SetFont("Helvetica", "B", fontSizeBody)
 		r.pdf.SetTextColor(0, 0, 0)
 		r.pdf.Text(11, y, "Risks by Vulnerability category")
 		r.pdf.SetFont("Helvetica", "", fontSizeBody)
 		y += 6
-		r.pdf.Text(11, y, "    "+"Identified Risks by Vulnerability category")
-		r.pdf.Text(175, y, "{intro-risks-by-vulnerability-category}")
-		r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-		r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{intro-risks-by-vulnerability-category}"))
+		r.tocEntry(y, "Identified Risks by Vulnerability category", "{intro-risks-by-vulnerability-category}")
 		for _, category := range parsedModel.SortedRiskCategories() {
 			newRisksStr := parsedModel.SortedRisksOfCategory(category)
 			r.pdfColorBySeverity(types.HighestSeverityStillAtRisk(newRisksStr))
@@ -436,48 +416,37 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 				r.pdfColorBlack()
 			}
 			y += 6
-			if y > 275 {
-				r.pageBreakInLists()
-				y = 40
-			}
+			y = r.tocPageBreakBelow(y, 275)
 			countStillAtRisk := len(types.ReduceToOnlyStillAtRisk(newRisksStr))
 			suffix := strconv.Itoa(countStillAtRisk) + " / " + strconv.Itoa(len(newRisksStr)) + " Risk"
 			if len(newRisksStr) != 1 {
 				suffix += "s"
 			}
-			r.pdf.Text(11, y, "    "+uni(category.Title)+": "+suffix)
-			r.pdf.Text(175, y, "{"+category.ID+"}")
-			r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-			r.tocLinkIdByAssetId[category.ID] = r.addTocLink("{" + category.ID + "}")
-			r.pdf.Link(10, y-5, 172.5, 6.5, r.tocLinkIdByAssetId[category.ID])
+			r.tocLinkIdByAssetId[category.ID] = r.tocEntry(y, uni(category.Title)+": "+suffix, "{"+category.ID+"}")
 		}
 	}
+	return y
+}
 
-	// ===============
-
+// tocTechnicalAssets writes the entries of the technical assets into the table of contents after y.
+// It returns the y of the last entry.
+func (r *pdfReporter) tocTechnicalAssets(parsedModel *types.Model, y float64) float64 {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
 	if len(parsedModel.TechnicalAssets) > 0 {
 		y += 6
 		y += 6
-		if y > 260 { // 260 instead of 275 for major group headlines to avoid "Schusterjungen"
-			r.pageBreakInLists()
-			y = 40
-		}
+		// 260 instead of 275 for major group headlines to avoid "Schusterjungen"
+		y = r.tocPageBreakBelow(y, 260)
 		r.pdf.SetFont("Helvetica", "B", fontSizeBody)
 		r.pdf.SetTextColor(0, 0, 0)
 		r.pdf.Text(11, y, "Risks by Technical Asset")
 		r.pdf.SetFont("Helvetica", "", fontSizeBody)
 		y += 6
-		r.pdf.Text(11, y, "    "+"Identified Risks by Technical Asset")
-		r.pdf.Text(175, y, "{intro-risks-by-technical-asset}")
-		r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-		r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{intro-risks-by-technical-asset}"))
+		r.tocEntry(y, "Identified Risks by Technical Asset", "{intro-risks-by-technical-asset}")
 		for _, technicalAsset := range sortedTechnicalAssetsByRiskSeverityAndTitle(parsedModel) {
 			newRisksStr := parsedModel.GeneratedRisks(technicalAsset)
 			y += 6
-			if y > 275 {
-				r.pageBreakInLists()
-				y = 40
-			}
+			y = r.tocPageBreakBelow(y, 275)
 			countStillAtRisk := len(types.ReduceToOnlyStillAtRisk(newRisksStr))
 			suffix := strconv.Itoa(countStillAtRisk) + " / " + strconv.Itoa(len(newRisksStr)) + " Risk"
 			if len(newRisksStr) != 1 {
@@ -492,38 +461,31 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 					r.pdfColorBlack()
 				}
 			}
-			r.pdf.Text(11, y, "    "+uni(technicalAsset.Title)+": "+suffix)
-			r.pdf.Text(175, y, "{"+technicalAsset.Id+"}")
-			r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-			r.tocLinkIdByAssetId[technicalAsset.Id] = r.addTocLink("{" + technicalAsset.Id + "}")
-			r.pdf.Link(10, y-5, 172.5, 6.5, r.tocLinkIdByAssetId[technicalAsset.Id])
+			r.tocLinkIdByAssetId[technicalAsset.Id] = r.tocEntry(y, uni(technicalAsset.Title)+": "+suffix,
+				"{"+technicalAsset.Id+"}")
 		}
 	}
+	return y
+}
 
-	// ===============
-
+// tocDataAssets writes the entries of the data assets into the table of contents after y.
+// It returns the y of the last entry.
+func (r *pdfReporter) tocDataAssets(parsedModel *types.Model, y float64) float64 {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
 	if len(parsedModel.DataAssets) > 0 {
 		y += 6
 		y += 6
-		if y > 260 { // 260 instead of 275 for major group headlines to avoid "Schusterjungen"
-			r.pageBreakInLists()
-			y = 40
-		}
+		// 260 instead of 275 for major group headlines to avoid "Schusterjungen"
+		y = r.tocPageBreakBelow(y, 260)
 		r.pdf.SetFont("Helvetica", "B", fontSizeBody)
 		r.pdfColorBlack()
 		r.pdf.Text(11, y, "Data Breach Probabilities by Data Asset")
 		r.pdf.SetFont("Helvetica", "", fontSizeBody)
 		y += 6
-		r.pdf.Text(11, y, "    "+"Identified Data Breach Probabilities by Data Asset")
-		r.pdf.Text(175, y, "{intro-risks-by-data-asset}")
-		r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-		r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{intro-risks-by-data-asset}"))
+		r.tocEntry(y, "Identified Data Breach Probabilities by Data Asset", "{intro-risks-by-data-asset}")
 		for _, dataAsset := range sortedDataAssetsByDataBreachProbabilityAndTitle(parsedModel) {
 			y += 6
-			if y > 275 {
-				r.pageBreakInLists()
-				y = 40
-			}
+			y = r.tocPageBreakBelow(y, 275)
 			newRisksStr := parsedModel.IdentifiedDataBreachProbabilityRisks(dataAsset)
 			countStillAtRisk := len(types.ReduceToOnlyStillAtRisk(newRisksStr))
 			suffix := strconv.Itoa(countStillAtRisk) + " / " + strconv.Itoa(len(newRisksStr)) + " Risk"
@@ -534,23 +496,21 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 			if !isDataBreachPotentialStillAtRisk(parsedModel, dataAsset) {
 				r.pdfColorBlack()
 			}
-			r.pdf.Text(11, y, "    "+uni(dataAsset.Title)+": "+suffix)
-			r.pdf.Text(175, y, "{data:"+dataAsset.Id+"}")
-			r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-			r.tocLinkIdByAssetId[dataAsset.Id] = r.addTocLink("{data:" + dataAsset.Id + "}")
-			r.pdf.Link(10, y-5, 172.5, 6.5, r.tocLinkIdByAssetId[dataAsset.Id])
+			r.tocLinkIdByAssetId[dataAsset.Id] = r.tocEntry(y, uni(dataAsset.Title)+": "+suffix, "{data:"+dataAsset.Id+"}")
 		}
 	}
+	return y
+}
 
-	// ===============
-
+// tocTrustBoundaries writes the entries of the trust boundaries into the table of contents after y.
+// It returns the y of the last entry.
+func (r *pdfReporter) tocTrustBoundaries(parsedModel *types.Model, y float64) float64 {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
 	if len(parsedModel.TrustBoundaries) > 0 {
 		y += 6
 		y += 6
-		if y > 260 { // 260 instead of 275 for major group headlines to avoid "Schusterjungen"
-			r.pageBreakInLists()
-			y = 40
-		}
+		// 260 instead of 275 for major group headlines to avoid "Schusterjungen"
+		y = r.tocPageBreakBelow(y, 260)
 		r.pdf.SetFont("Helvetica", "B", fontSizeBody)
 		r.pdfColorBlack()
 		r.pdf.Text(11, y, "Trust Boundaries")
@@ -558,32 +518,27 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 		for _, key := range sortedKeysOfTrustBoundaries(parsedModel) {
 			trustBoundary := parsedModel.TrustBoundaries[key]
 			y += 6
-			if y > 275 {
-				r.pageBreakInLists()
-				y = 40
-			}
+			y = r.tocPageBreakBelow(y, 275)
 			colorTwilight(r.pdf)
 			if !trustBoundary.Type.IsNetworkBoundary() {
 				r.pdfColorLightGray()
 			}
-			r.pdf.Text(11, y, "    "+uni(trustBoundary.Title))
-			r.pdf.Text(175, y, "{boundary:"+trustBoundary.Id+"}")
-			r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-			r.tocLinkIdByAssetId[trustBoundary.Id] = r.addTocLink("{boundary:" + trustBoundary.Id + "}")
-			r.pdf.Link(10, y-5, 172.5, 6.5, r.tocLinkIdByAssetId[trustBoundary.Id])
+			r.tocLinkIdByAssetId[trustBoundary.Id] = r.tocEntry(y, uni(trustBoundary.Title), "{boundary:"+trustBoundary.Id+"}")
 		}
 		r.pdfColorBlack()
 	}
+	return y
+}
 
-	// ===============
-
+// tocSharedRuntimes writes the entries of the shared runtimes into the table of contents after y.
+// It returns the y of the last entry.
+func (r *pdfReporter) tocSharedRuntimes(parsedModel *types.Model, y float64) float64 {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
 	if len(parsedModel.SharedRuntimes) > 0 {
 		y += 6
 		y += 6
-		if y > 260 { // 260 instead of 275 for major group headlines to avoid "Schusterjungen"
-			r.pageBreakInLists()
-			y = 40
-		}
+		// 260 instead of 275 for major group headlines to avoid "Schusterjungen"
+		y = r.tocPageBreakBelow(y, 260)
 		r.pdf.SetFont("Helvetica", "B", fontSizeBody)
 		r.pdfColorBlack()
 		r.pdf.Text(11, y, "Shared Runtime")
@@ -591,57 +546,52 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 		for _, key := range sortedKeysOfSharedRuntime(parsedModel) {
 			sharedRuntime := parsedModel.SharedRuntimes[key]
 			y += 6
-			if y > 275 {
-				r.pageBreakInLists()
-				y = 40
-			}
-			r.pdf.Text(11, y, "    "+uni(sharedRuntime.Title))
-			r.pdf.Text(175, y, "{runtime:"+sharedRuntime.Id+"}")
-			r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-			r.tocLinkIdByAssetId[sharedRuntime.Id] = r.addTocLink("{runtime:" + sharedRuntime.Id + "}")
-			r.pdf.Link(10, y-5, 172.5, 6.5, r.tocLinkIdByAssetId[sharedRuntime.Id])
+			y = r.tocPageBreakBelow(y, 275)
+			r.tocLinkIdByAssetId[sharedRuntime.Id] = r.tocEntry(y, uni(sharedRuntime.Title), "{runtime:"+sharedRuntime.Id+"}")
 		}
 	}
+	return y
+}
 
-	// ===============
-
+// tocAboutThreagile writes the entries about Threagile into the table of contents after y.
+func (r *pdfReporter) tocAboutThreagile(y float64) {
 	y += 6
 	y += 6
-	if y > 260 { // 260 instead of 275 for major group headlines to avoid "Schusterjungen"
-		r.pageBreakInLists()
-		y = 40
-	}
+	// 260 instead of 275 for major group headlines to avoid "Schusterjungen"
+	y = r.tocPageBreakBelow(y, 260)
 	r.pdfColorBlack()
 	r.pdf.SetFont("Helvetica", "B", fontSizeBody)
 	r.pdf.Text(11, y, "About Threagile")
 	r.pdf.SetFont("Helvetica", "", fontSizeBody)
 	y += 6
-	if y > 275 {
-		r.pageBreakInLists()
-		y = 40
-	}
-	r.pdf.Text(11, y, "    "+"Risk Rules Checked by Threagile")
-	r.pdf.Text(175, y, "{risk-rules-checked}")
-	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{risk-rules-checked}"))
+	y = r.tocPageBreakBelow(y, 275)
+	r.tocEntry(y, "Risk Rules Checked by Threagile", "{risk-rules-checked}")
 	y += 6
-	if y > 275 {
+	y = r.tocPageBreakBelow(y, 275)
+	r.pdfColorDisclaimer()
+	r.tocEntry(y, "Disclaimer", "{disclaimer}")
+	r.pdfColorBlack()
+}
+
+// tocPageBreakBelow starts a new page of the table of contents when y is below limit, and returns
+// the y of the next entry.
+func (r *pdfReporter) tocPageBreakBelow(y float64, limit float64) float64 {
+	if y > limit {
 		r.pageBreakInLists()
 		y = 40
 	}
-	r.pdfColorDisclaimer()
-	r.pdf.Text(11, y, "    "+"Disclaimer")
-	r.pdf.Text(175, y, "{disclaimer}")
+	return y
+}
+
+// tocEntry writes an entry of the table of contents at y, linked to the chapter with the alias,
+// and returns the link.
+func (r *pdfReporter) tocEntry(y float64, title string, alias string) int {
+	r.pdf.Text(11, y, "    "+title)
+	r.pdf.Text(175, y, alias)
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{disclaimer}"))
-	r.pdfColorBlack()
-
-	r.pdf.SetDrawColor(0, 0, 0)
-	r.pdf.SetDashPattern([]float64{}, 0)
-
-	// Now write all the sections/pages. Before we start writing, we use `RegisterAlias` to
-	// ensure that the alias written in the table of contents will be replaced
-	// by the current page number. --> See the "r.pdf.RegisterAlias()" calls during the PDF creation in this file
+	link := r.addTocLink(alias)
+	r.pdf.Link(10, y-5, 172.5, 6.5, link)
+	return link
 }
 
 // as in Go ranging over map is random order, range over them in sorted (hence reproducible) way:.
