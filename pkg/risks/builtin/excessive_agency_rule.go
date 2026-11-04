@@ -116,14 +116,14 @@ func (r *ExcessiveAgencyRule) createRisk(
 	if untrustedInput {
 		likelihood = types.Likely
 	}
-	impact := aiRiskImpact(types.Public, input.HighestIntegrity(target), types.Archive)
+	impact := impactOfRatings(types.Public, input.HighestIntegrity(target), types.Archive)
 
 	risk := &types.Risk{
 		CategoryId:                      r.Category().ID,
 		Severity:                        types.CalculateSeverity(likelihood, impact),
 		ExploitationLikelihood:          likelihood,
 		ExploitationImpact:              impact,
-		Title:                           aiRiskTitle("Excessive Agency", agent, "changing <b>"+target.Title+"</b>"),
+		Title:                           assetRiskTitle("Excessive Agency", agent, "changing <b>"+target.Title+"</b>"),
 		MostRelevantTechnicalAssetId:    agent.Id,
 		MostRelevantCommunicationLinkId: link.Id,
 		DataBreachProbability:           types.Improbable,

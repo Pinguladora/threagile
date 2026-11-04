@@ -166,9 +166,9 @@ func isInternetAdjacent(input *types.Model, technicalAsset *types.TechnicalAsset
 	return false
 }
 
-// aiRiskImpact rates the impact of an AI risk by the ratings at stake: high for strictly confidential or
+// impactOfRatings rates the impact of a risk by the ratings at stake: high for strictly confidential or
 // mission-critical, medium for confidential or critical, and low otherwise.
-func aiRiskImpact(
+func impactOfRatings(
 	confidentiality types.Confidentiality, integrity, availability types.Criticality,
 ) types.RiskExploitationImpact {
 	if confidentiality == types.StrictlyConfidential ||
@@ -183,7 +183,7 @@ func aiRiskImpact(
 
 // processedImpact rates the impact of an AI risk at a technical asset by what it processes.
 func processedImpact(input *types.Model, technicalAsset *types.TechnicalAsset) types.RiskExploitationImpact {
-	return aiRiskImpact(input.HighestProcessedConfidentiality(technicalAsset),
+	return impactOfRatings(input.HighestProcessedConfidentiality(technicalAsset),
 		input.HighestProcessedIntegrity(technicalAsset), input.HighestProcessedAvailability(technicalAsset))
 }
 
@@ -192,8 +192,8 @@ func raiseImpact(impact types.RiskExploitationImpact) types.RiskExploitationImpa
 	return min(impact+1, types.VeryHighImpact)
 }
 
-// aiRiskTitle is the title of an AI risk: its name in bold, at the technical asset, with a detail if any.
-func aiRiskTitle(name string, technicalAsset *types.TechnicalAsset, detail string) string {
+// assetRiskTitle is the title of a risk: its name in bold, at the technical asset, with a detail if any.
+func assetRiskTitle(name string, technicalAsset *types.TechnicalAsset, detail string) string {
 	title := "<b>" + name + "</b> risk at <b>" + technicalAsset.Title + "</b>"
 	if detail != "" {
 		title += " " + detail
