@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"path/filepath"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -143,5 +145,41 @@ func TestUsingATokenKeepsItAlive(t *testing.T) {
 		if timeout.lastAccessedNanoTime == idle {
 			t.Error("the last access of the token was not updated")
 		}
+	}
+}
+
+func TestFolderLockIsExclusive(t *testing.T) {
+	s, _ := newModelServer(t)
+	folder := filepath.Join(s.config.GetDataFolder(), "keys", "a")
+	if err := os.MkdirAll(folder, 0o700); err != nil {
+		t.Fatal(err)
+	}
+
+	var holders, overlaps atomic.Int32
+	var wg sync.WaitGroup
+	for range 50 {
+		wg.Go(func() {
+			s.lockFolder(folder)
+			defer s.unlockFolder(folder)
+			if holders.Add(1) > 1 {
+				overlaps.Add(1)
+			}
+			time.Sleep(time.Millisecond)
+			holders.Add(-1)
+		})
+	}
+	done := make(chan struct{})
+	go func() {
+		wg.Wait()
+		close(done)
+	}()
+	select {
+	case <-done:
+	case <-time.After(10 * time.Second):
+		t.Fatal("the requests waiting on the folder lock deadlocked")
+	}
+
+	if overlaps.Load() > 0 {
+		t.Errorf("%v times more than one request held the folder lock", overlaps.Load())
 	}
 }
