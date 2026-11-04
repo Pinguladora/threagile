@@ -125,7 +125,7 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 		if !config.GetKeepDiagramSourceFiles() {
 			tmpFileGV, err := os.CreateTemp(config.GetTempFolder(), config.GetDataFlowDiagramFilenameDOT())
 			if err != nil {
-				return err
+				return fmt.Errorf("unable to create a temporary data flow diagram file: %w", err)
 			}
 			gvFile = tmpFileGV.Name()
 			defer func() { _ = os.Remove(gvFile) }()
@@ -147,7 +147,7 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 		if !config.GetKeepDiagramSourceFiles() {
 			tmpFile, err := os.CreateTemp(config.GetTempFolder(), config.GetDataAssetDiagramFilenameDOT())
 			if err != nil {
-				return err
+				return fmt.Errorf("unable to create a temporary data asset diagram file: %w", err)
 			}
 			gvFile = tmpFile.Name()
 			defer func() { _ = os.Remove(gvFile) }()
@@ -218,17 +218,10 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 	}
 
 	if commands.ReportPDF {
-		// hash the YAML input file
-		f, err := os.Open(config.GetInputFile())
+		modelHash, err := hashFile(config.GetInputFile())
 		if err != nil {
 			return err
 		}
-		defer func() { _ = f.Close() }()
-		hasher := sha256.New()
-		if _, err := io.Copy(hasher, f); err != nil {
-			return err
-		}
-		modelHash := hex.EncodeToString(hasher.Sum(nil))
 		// report PDF
 		progressReporter.Info("Writing report pdf")
 
@@ -258,18 +251,11 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 	}
 
 	if commands.ReportADOC {
-		// hash the YAML input file
-		f, err := os.Open(config.GetInputFile())
+		modelHash, err := hashFile(config.GetInputFile())
 		if err != nil {
 			return err
 		}
-		defer func() { _ = f.Close() }()
-		hasher := sha256.New()
-		if _, err := io.Copy(hasher, f); err != nil {
-			return err
-		}
 
-		modelHash := hex.EncodeToString(hasher.Sum(nil))
 		// report ADOC
 		progressReporter.Info("Writing report adoc")
 		adocReporter := NewAdocReport(config.GetOutputFolder(), riskRules, config.GetHideEmptyChapters())
