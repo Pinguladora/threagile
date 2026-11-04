@@ -119,23 +119,10 @@ func writeDataFlowLegend(dotContent *strings.Builder) {
 			"1", "black", "box", "solid", "2.0", VeryLightGray, Black),
 	)
 
-	writeLegendCluster(dotContent, "cluster_label_legend", "Label color legend",
-		makeLegendNode("mission_critical", "Mission Critical Asset",
-			"0", Red, "box", "solid", "3.0", VeryLightGray, Red),
-		makeLegendNode("critical", "Critical Asset",
-			"0", Amber, "box", "solid", "3.0", VeryLightGray, Amber),
-		makeLegendNode("other", "Important and Other Assets",
-			"0", Black, "box", "solid", "2.0", VeryLightGray, Black),
-	)
-
-	writeLegendCluster(dotContent, "cluster_border_line_legend", "Label color legend",
-		makeLegendNode("dotted", "Model forgery attempt",
-			"0", Black, "box", "dotted ", "2.0", VeryLightGray, Black),
-		makeLegendNode("solid", "Normal", "0", Black, "box", "solid", "2.0", VeryLightGray, Black),
-	)
+	writeAssetColorLegends(dotContent)
 
 	writeLegendCluster(dotContent, "cluster_fill_legend",
-		"Shape fill legend (darker for physical machines, brighter for container and even more brighter for serverless",
+		"Shape fill legend (darker for physical machines, brighter for containers and even brighter for serverless)",
 		makeLegendNode("invalid_item",
 			"No data processed or stored, or using unknown technology, or no communication links",
 			"0", "black", "box", "solid", "2.0", LightPink, Black),
@@ -158,6 +145,34 @@ func writeDataFlowLegend(dotContent *strings.Builder) {
 		makeLegendArrow("bidirectional_link",
 			"Double hollow arrowhead at the initiator: data is also received back",
 			&types.CommunicationLink{DataAssetsSent: []string{"sent"}, DataAssetsReceived: []string{"received"}}),
+	)
+}
+
+// writeAssetColorLegends writes the legend clusters of the label colors, border colors and border lines of the
+// technical assets.
+func writeAssetColorLegends(dotContent *strings.Builder) {
+	writeLegendCluster(dotContent, "cluster_label_legend", "Label color legend (integrity)",
+		makeLegendNode("mission_critical", "Mission-critical integrity",
+			"0", Red, "box", "solid", "2.0", VeryLightGray, Black),
+		makeLegendNode("critical", "Critical integrity",
+			"0", Amber, "box", "solid", "2.0", VeryLightGray, Black),
+		makeLegendNode("other", "Important and lower integrity",
+			"0", Black, "box", "solid", "2.0", VeryLightGray, Black),
+	)
+
+	writeLegendCluster(dotContent, "cluster_border_color_legend", "Border color legend (confidentiality)",
+		makeLegendNode("strictly_confidential", "Strictly confidential",
+			"0", Black, "box", "solid", "3.0", VeryLightGray, Red),
+		makeLegendNode("confidential", "Confidential",
+			"0", Black, "box", "solid", "3.0", VeryLightGray, Amber),
+		makeLegendNode("restricted_and_lower", "Restricted and lower",
+			"0", Black, "box", "solid", "2.0", VeryLightGray, Black),
+	)
+
+	writeLegendCluster(dotContent, "cluster_border_line_legend", "Border line legend",
+		makeLegendNode("dotted", "No data processed (model forgery attempt), or out of scope",
+			"0", Black, "box", "dotted", "2.0", VeryLightGray, Black),
+		makeLegendNode("solid", "Normal", "0", Black, "box", "solid", "2.0", VeryLightGray, Black),
 	)
 }
 
