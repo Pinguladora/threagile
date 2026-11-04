@@ -116,163 +116,174 @@ func (model *Model) Merge(dir string, includeFilename string) error {
 		return fmt.Errorf("unable to parse model yaml: %w", unmarshalError)
 	}
 
-	var mergeError error
 	for item := range fileStructure {
-		switch strings.ToLower(item) {
-		case strings.ToLower("includes"):
-			for _, includeFile := range includedModel.Includes {
-				mergeError = model.Merge(filepath.Dir(includePath), includeFile)
-				if mergeError != nil {
-					return fmt.Errorf("failed to merge model include %q: %w", includeFile, mergeError)
-				}
-			}
-
-		case strings.ToLower("threagile_version"):
-			model.ThreagileVersion, mergeError = new(Strings).MergeSingleton(model.ThreagileVersion, includedModel.ThreagileVersion)
+		key := strings.ToLower(item)
+		if key == "includes" {
+			mergeError := model.mergeIncludes(filepath.Dir(includePath), includedModel.Includes)
 			if mergeError != nil {
-				return fmt.Errorf("failed to merge threagile version: %w", mergeError)
+				return mergeError
 			}
 
-		case strings.ToLower("title"):
-			model.Title, mergeError = new(Strings).MergeSingleton(model.Title, includedModel.Title)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge title: %w", mergeError)
-			}
-
-		case strings.ToLower("author"):
-			mergeError = model.Author.Merge(includedModel.Author)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge author: %w", mergeError)
-			}
-
-		case strings.ToLower("contributors"):
-			model.Contributors, mergeError = new(Author).MergeList(append(model.Contributors, includedModel.Contributors...))
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge contributors: %w", mergeError)
-			}
-
-		case strings.ToLower("date"):
-			model.Date, mergeError = new(Strings).MergeSingleton(model.Date, includedModel.Date)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge date: %w", mergeError)
-			}
-
-		case strings.ToLower("application_description"):
-			mergeError = model.AppDescription.Merge(includedModel.AppDescription)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge application description: %w", mergeError)
-			}
-
-		case strings.ToLower("business_overview"):
-			mergeError = model.BusinessOverview.Merge(includedModel.BusinessOverview)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge business overview: %w", mergeError)
-			}
-
-		case strings.ToLower("technical_overview"):
-			mergeError = model.TechnicalOverview.Merge(includedModel.TechnicalOverview)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge technical overview: %w", mergeError)
-			}
-
-		case strings.ToLower("business_criticality"):
-			model.BusinessCriticality, mergeError = new(Strings).MergeSingleton(model.BusinessCriticality, includedModel.BusinessCriticality)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge business criticality: %w", mergeError)
-			}
-
-		case strings.ToLower("management_summary_comment"):
-			model.ManagementSummaryComment = new(Strings).MergeMultiline(model.ManagementSummaryComment, includedModel.ManagementSummaryComment)
-
-		case strings.ToLower("security_requirements"):
-			model.SecurityRequirements, mergeError = new(Strings).MergeMap(model.SecurityRequirements, includedModel.SecurityRequirements)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge security requirements: %w", mergeError)
-			}
-
-		case strings.ToLower("questions"):
-			model.Questions, mergeError = new(Strings).MergeMap(model.Questions, includedModel.Questions)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge questions: %w", mergeError)
-			}
-
-		case strings.ToLower("abuse_cases"):
-			model.AbuseCases, mergeError = new(Strings).MergeMap(model.AbuseCases, includedModel.AbuseCases)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge abuse cases: %w", mergeError)
-			}
-
-		case strings.ToLower("tags_available"):
-			model.TagsAvailable = new(Strings).MergeUniqueSlice(model.TagsAvailable, includedModel.TagsAvailable)
-
-		case strings.ToLower("data_assets"):
-			model.DataAssets, mergeError = new(DataAsset).MergeMap(model.DataAssets, includedModel.DataAssets)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge data assets: %w", mergeError)
-			}
-
-		case strings.ToLower("technical_assets"):
-			model.TechnicalAssets, mergeError = new(TechnicalAsset).MergeMap(model.TechnicalAssets, includedModel.TechnicalAssets)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge technical assets: %w", mergeError)
-			}
-
-		case strings.ToLower("trust_boundaries"):
-			model.TrustBoundaries, mergeError = new(TrustBoundary).MergeMap(model.TrustBoundaries, includedModel.TrustBoundaries)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge trust boundaries: %w", mergeError)
-			}
-
-		case strings.ToLower("shared_runtimes"):
-			model.SharedRuntimes, mergeError = new(SharedRuntime).MergeMap(model.SharedRuntimes, includedModel.SharedRuntimes)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge shared runtimes: %w", mergeError)
-			}
-
-		case strings.ToLower("custom_risk_categories"):
-			mergeError = model.CustomRiskCategories.Add(includedModel.CustomRiskCategories...)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge risk categories: %w", mergeError)
-			}
-
-		case strings.ToLower("individual_risk_categories"):
-			model.IndividualRiskCategories, mergeError = new(RiskCategory).MergeMap(model.IndividualRiskCategories,
-				includedModel.IndividualRiskCategories)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge individual risk categories: %w", mergeError)
-			}
-
-		case strings.ToLower("risk_tracking"):
-			model.RiskTracking, mergeError = new(RiskTracking).MergeMap(model.RiskTracking, includedModel.RiskTracking)
-			if mergeError != nil {
-				return fmt.Errorf("failed to merge risk tracking: %w", mergeError)
-			}
-
-		case "diagram_tweak_nodesep":
-			model.DiagramTweakNodesep = includedModel.DiagramTweakNodesep
-
-		case "diagram_tweak_ranksep":
-			model.DiagramTweakRanksep = includedModel.DiagramTweakRanksep
-
-		case "diagram_tweak_edge_layout":
-			model.DiagramTweakEdgeLayout = includedModel.DiagramTweakEdgeLayout
-
-		case "diagram_tweak_suppress_edge_labels":
-			model.DiagramTweakSuppressEdgeLabels = includedModel.DiagramTweakSuppressEdgeLabels
-
-		case "diagram_tweak_layout_left_to_right":
-			model.DiagramTweakLayoutLeftToRight = includedModel.DiagramTweakLayoutLeftToRight
-
-		case "diagram_tweak_invisible_connections_between_assets":
-			model.DiagramTweakInvisibleConnectionsBetweenAssets = append(model.DiagramTweakInvisibleConnectionsBetweenAssets, includedModel.DiagramTweakInvisibleConnectionsBetweenAssets...)
-			sort.Strings(model.DiagramTweakInvisibleConnectionsBetweenAssets)
-			unique.Strings(&model.DiagramTweakInvisibleConnectionsBetweenAssets)
-
-		case "diagram_tweak_same_rank_assets":
-			model.DiagramTweakSameRankAssets = append(model.DiagramTweakSameRankAssets, includedModel.DiagramTweakSameRankAssets...)
-			sort.Strings(model.DiagramTweakSameRankAssets)
-			unique.Strings(&model.DiagramTweakSameRankAssets)
+			continue
 		}
+
+		mergeSection, ok := modelSectionMergers[key]
+		if !ok {
+			continue
+		}
+
+		mergeError := mergeSection(model, &includedModel)
+		if mergeError != nil {
+			return mergeError
+		}
+	}
+
+	return nil
+}
+
+// mergeIncludes merges the model files that an included model file includes in turn, relative to dir.
+func (model *Model) mergeIncludes(dir string, includes []string) error {
+	for _, includeFile := range includes {
+		mergeError := model.Merge(dir, includeFile)
+		if mergeError != nil {
+			return fmt.Errorf("failed to merge model include %q: %w", includeFile, mergeError)
+		}
+	}
+
+	return nil
+}
+
+// modelSectionMergers merge a top-level section of an included model file into the model, keyed by the
+// lower-cased section name. Merge handles the includes section itself.
+var modelSectionMergers = map[string]func(model *Model, included *Model) error{
+	"threagile_version": func(model *Model, included *Model) error {
+		return mergeSingletons(singleton("threagile version", &model.ThreagileVersion, included.ThreagileVersion))
+	},
+	"title": func(model *Model, included *Model) error {
+		return mergeSingletons(singleton("title", &model.Title, included.Title))
+	},
+	"author": func(model *Model, included *Model) error {
+		return wrapMergeError("author", model.Author.Merge(included.Author))
+	},
+	"contributors": func(model *Model, included *Model) error {
+		var mergeError error
+		model.Contributors, mergeError = new(Author).MergeList(append(model.Contributors, included.Contributors...))
+		return wrapMergeError("contributors", mergeError)
+	},
+	"date": func(model *Model, included *Model) error {
+		return mergeSingletons(singleton("date", &model.Date, included.Date))
+	},
+	"application_description": func(model *Model, included *Model) error {
+		return wrapMergeError("application description", model.AppDescription.Merge(included.AppDescription))
+	},
+	"business_overview": func(model *Model, included *Model) error {
+		return wrapMergeError("business overview", model.BusinessOverview.Merge(included.BusinessOverview))
+	},
+	"technical_overview": func(model *Model, included *Model) error {
+		return wrapMergeError("technical overview", model.TechnicalOverview.Merge(included.TechnicalOverview))
+	},
+	"business_criticality": func(model *Model, included *Model) error {
+		return mergeSingletons(singleton("business criticality", &model.BusinessCriticality, included.BusinessCriticality))
+	},
+	"management_summary_comment": func(model *Model, included *Model) error {
+		model.ManagementSummaryComment = new(Strings).MergeMultiline(model.ManagementSummaryComment,
+			included.ManagementSummaryComment)
+		return nil
+	},
+	"security_requirements": func(model *Model, included *Model) error {
+		var mergeError error
+		model.SecurityRequirements, mergeError = new(Strings).MergeMap(model.SecurityRequirements,
+			included.SecurityRequirements)
+		return wrapMergeError("security requirements", mergeError)
+	},
+	"questions": func(model *Model, included *Model) error {
+		var mergeError error
+		model.Questions, mergeError = new(Strings).MergeMap(model.Questions, included.Questions)
+		return wrapMergeError("questions", mergeError)
+	},
+	"abuse_cases": func(model *Model, included *Model) error {
+		var mergeError error
+		model.AbuseCases, mergeError = new(Strings).MergeMap(model.AbuseCases, included.AbuseCases)
+		return wrapMergeError("abuse cases", mergeError)
+	},
+	"tags_available": func(model *Model, included *Model) error {
+		model.TagsAvailable = new(Strings).MergeUniqueSlice(model.TagsAvailable, included.TagsAvailable)
+		return nil
+	},
+	"data_assets": func(model *Model, included *Model) error {
+		var mergeError error
+		model.DataAssets, mergeError = new(DataAsset).MergeMap(model.DataAssets, included.DataAssets)
+		return wrapMergeError("data assets", mergeError)
+	},
+	"technical_assets": func(model *Model, included *Model) error {
+		var mergeError error
+		model.TechnicalAssets, mergeError = new(TechnicalAsset).MergeMap(model.TechnicalAssets, included.TechnicalAssets)
+		return wrapMergeError("technical assets", mergeError)
+	},
+	"trust_boundaries": func(model *Model, included *Model) error {
+		var mergeError error
+		model.TrustBoundaries, mergeError = new(TrustBoundary).MergeMap(model.TrustBoundaries, included.TrustBoundaries)
+		return wrapMergeError("trust boundaries", mergeError)
+	},
+	"shared_runtimes": func(model *Model, included *Model) error {
+		var mergeError error
+		model.SharedRuntimes, mergeError = new(SharedRuntime).MergeMap(model.SharedRuntimes, included.SharedRuntimes)
+		return wrapMergeError("shared runtimes", mergeError)
+	},
+	"custom_risk_categories": func(model *Model, included *Model) error {
+		return wrapMergeError("risk categories", model.CustomRiskCategories.Add(included.CustomRiskCategories...))
+	},
+	"individual_risk_categories": func(model *Model, included *Model) error {
+		var mergeError error
+		model.IndividualRiskCategories, mergeError = new(RiskCategory).MergeMap(model.IndividualRiskCategories,
+			included.IndividualRiskCategories)
+		return wrapMergeError("individual risk categories", mergeError)
+	},
+	"risk_tracking": func(model *Model, included *Model) error {
+		var mergeError error
+		model.RiskTracking, mergeError = new(RiskTracking).MergeMap(model.RiskTracking, included.RiskTracking)
+		return wrapMergeError("risk tracking", mergeError)
+	},
+	"diagram_tweak_nodesep": func(model *Model, included *Model) error {
+		model.DiagramTweakNodesep = included.DiagramTweakNodesep
+		return nil
+	},
+	"diagram_tweak_ranksep": func(model *Model, included *Model) error {
+		model.DiagramTweakRanksep = included.DiagramTweakRanksep
+		return nil
+	},
+	"diagram_tweak_edge_layout": func(model *Model, included *Model) error {
+		model.DiagramTweakEdgeLayout = included.DiagramTweakEdgeLayout
+		return nil
+	},
+	"diagram_tweak_suppress_edge_labels": func(model *Model, included *Model) error {
+		model.DiagramTweakSuppressEdgeLabels = included.DiagramTweakSuppressEdgeLabels
+		return nil
+	},
+	"diagram_tweak_layout_left_to_right": func(model *Model, included *Model) error {
+		model.DiagramTweakLayoutLeftToRight = included.DiagramTweakLayoutLeftToRight
+		return nil
+	},
+	"diagram_tweak_invisible_connections_between_assets": func(model *Model, included *Model) error {
+		model.DiagramTweakInvisibleConnectionsBetweenAssets = append(model.DiagramTweakInvisibleConnectionsBetweenAssets,
+			included.DiagramTweakInvisibleConnectionsBetweenAssets...)
+		sort.Strings(model.DiagramTweakInvisibleConnectionsBetweenAssets)
+		unique.Strings(&model.DiagramTweakInvisibleConnectionsBetweenAssets)
+		return nil
+	},
+	"diagram_tweak_same_rank_assets": func(model *Model, included *Model) error {
+		model.DiagramTweakSameRankAssets = append(model.DiagramTweakSameRankAssets,
+			included.DiagramTweakSameRankAssets...)
+		sort.Strings(model.DiagramTweakSameRankAssets)
+		unique.Strings(&model.DiagramTweakSameRankAssets)
+		return nil
+	},
+}
+
+// wrapMergeError adds the merged section to a merge error; it returns nil for no error.
+func wrapMergeError(section string, mergeError error) error {
+	if mergeError != nil {
+		return fmt.Errorf("failed to merge %s: %w", section, mergeError)
 	}
 
 	return nil

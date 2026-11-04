@@ -33,108 +33,61 @@ type TechnicalAsset struct {
 }
 
 func (what *TechnicalAsset) Merge(other TechnicalAsset) error {
-	var mergeError error
-	what.ID, mergeError = new(Strings).MergeSingleton(what.ID, other.ID)
+	mergeError := mergeSingletons(
+		singleton("id", &what.ID, other.ID),
+		singleton("description", &what.Description, other.Description),
+		singleton("type", &what.Type, other.Type),
+		singleton("usage", &what.Usage, other.Usage),
+	)
 	if mergeError != nil {
-		return fmt.Errorf("failed to merge id: %w", mergeError)
+		return mergeError
 	}
 
-	what.Description, mergeError = new(Strings).MergeSingleton(what.Description, other.Description)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge description: %w", mergeError)
-	}
-
-	what.Type, mergeError = new(Strings).MergeSingleton(what.Type, other.Type)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge type: %w", mergeError)
-	}
-
-	what.Usage, mergeError = new(Strings).MergeSingleton(what.Usage, other.Usage)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge usage: %w", mergeError)
-	}
-
-	if !what.UsedAsClientByHuman {
-		what.UsedAsClientByHuman = other.UsedAsClientByHuman
-	}
-
-	if !what.OutOfScope {
-		what.OutOfScope = other.OutOfScope
-	}
+	mergeFlag(&what.UsedAsClientByHuman, other.UsedAsClientByHuman)
+	mergeFlag(&what.OutOfScope, other.OutOfScope)
 
 	what.JustificationOutOfScope = new(Strings).MergeMultiline(what.JustificationOutOfScope, other.JustificationOutOfScope)
 
-	what.Size, mergeError = new(Strings).MergeSingleton(what.Size, other.Size)
+	mergeError = mergeSingletons(
+		singleton("size", &what.Size, other.Size),
+		singleton("technology", &what.Technology, other.Technology),
+	)
 	if mergeError != nil {
-		return fmt.Errorf("failed to merge size: %w", mergeError)
-	}
-
-	what.Technology, mergeError = new(Strings).MergeSingleton(what.Technology, other.Technology)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge technology: %w", mergeError)
+		return mergeError
 	}
 
 	what.Tags = new(Strings).MergeUniqueSlice(what.Tags, other.Tags)
 
-	if !what.Internet {
-		what.Internet = other.Internet
-	}
+	mergeFlag(&what.Internet, other.Internet)
 
-	what.Machine, mergeError = new(Strings).MergeSingleton(what.Machine, other.Machine)
+	mergeError = mergeSingletons(
+		singleton("machine", &what.Machine, other.Machine),
+		singleton("encryption", &what.Encryption, other.Encryption),
+		singleton("owner", &what.Owner, other.Owner),
+		singleton("confidentiality", &what.Confidentiality, other.Confidentiality),
+		singleton("integrity", &what.Integrity, other.Integrity),
+		singleton("availability", &what.Availability, other.Availability),
+	)
 	if mergeError != nil {
-		return fmt.Errorf("failed to merge machine: %w", mergeError)
-	}
-
-	what.Encryption, mergeError = new(Strings).MergeSingleton(what.Encryption, other.Encryption)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge encryption: %w", mergeError)
-	}
-
-	what.Owner, mergeError = new(Strings).MergeSingleton(what.Owner, other.Owner)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge owner: %w", mergeError)
-	}
-
-	what.Confidentiality, mergeError = new(Strings).MergeSingleton(what.Confidentiality, other.Confidentiality)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge confidentiality: %w", mergeError)
-	}
-
-	what.Integrity, mergeError = new(Strings).MergeSingleton(what.Integrity, other.Integrity)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge integrity: %w", mergeError)
-	}
-
-	what.Availability, mergeError = new(Strings).MergeSingleton(what.Availability, other.Availability)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge availability: %w", mergeError)
+		return mergeError
 	}
 
 	what.JustificationCiaRating = new(Strings).MergeMultiline(what.JustificationCiaRating, other.JustificationCiaRating)
 
-	if !what.MultiTenant {
-		what.MultiTenant = other.MultiTenant
-	}
-
-	if !what.Redundant {
-		what.Redundant = other.Redundant
-	}
-
-	if !what.CustomDevelopedParts {
-		what.CustomDevelopedParts = other.CustomDevelopedParts
-	}
+	mergeFlag(&what.MultiTenant, other.MultiTenant)
+	mergeFlag(&what.Redundant, other.Redundant)
+	mergeFlag(&what.CustomDevelopedParts, other.CustomDevelopedParts)
 
 	what.DataAssetsProcessed = new(Strings).MergeUniqueSlice(what.DataAssetsProcessed, other.DataAssetsProcessed)
-
 	what.DataAssetsStored = new(Strings).MergeUniqueSlice(what.DataAssetsStored, other.DataAssetsStored)
-
 	what.DataFormatsAccepted = new(Strings).MergeUniqueSlice(what.DataFormatsAccepted, other.DataFormatsAccepted)
 
 	if what.DiagramTweakOrder == 0 {
 		what.DiagramTweakOrder = other.DiagramTweakOrder
 	}
 
-	what.CommunicationLinks, mergeError = new(CommunicationLink).MergeMap(what.CommunicationLinks, other.CommunicationLinks)
+	what.CommunicationLinks, mergeError = new(CommunicationLink).MergeMap(what.CommunicationLinks,
+		other.CommunicationLinks)
 	if mergeError != nil {
 		return fmt.Errorf("failed to merge communication_links: %w", mergeError)
 	}
@@ -142,7 +95,9 @@ func (what *TechnicalAsset) Merge(other TechnicalAsset) error {
 	return nil
 }
 
-func (what *TechnicalAsset) MergeMap(first map[string]TechnicalAsset, second map[string]TechnicalAsset) (map[string]TechnicalAsset, error) {
+func (what *TechnicalAsset) MergeMap(
+	first map[string]TechnicalAsset, second map[string]TechnicalAsset,
+) (map[string]TechnicalAsset, error) {
 	if first == nil {
 		// first is nil for a section that is missing, or a key left without a value, in the model merged into
 		first = make(map[string]TechnicalAsset, len(second))

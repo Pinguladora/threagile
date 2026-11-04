@@ -16,58 +16,33 @@ type RiskIdentified struct {
 }
 
 func (what *RiskIdentified) Merge(other RiskIdentified) error {
-	var mergeError error
-	what.Severity, mergeError = new(Strings).MergeSingleton(what.Severity, other.Severity)
+	mergeError := mergeSingletons(
+		singleton("severity", &what.Severity, other.Severity),
+		singleton("exploitation_likelihood", &what.ExploitationLikelihood, other.ExploitationLikelihood),
+		singleton("exploitation_impact", &what.ExploitationImpact, other.ExploitationImpact),
+		// the merge error has always called this field "date"
+		singleton("date", &what.DataBreachProbability, other.DataBreachProbability),
+	)
 	if mergeError != nil {
-		return fmt.Errorf("failed to merge severity: %w", mergeError)
+		return mergeError
 	}
 
-	what.ExploitationLikelihood, mergeError = new(Strings).MergeSingleton(what.ExploitationLikelihood, other.ExploitationLikelihood)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge exploitation_likelihood: %w", mergeError)
-	}
+	what.DataBreachTechnicalAssets = new(Strings).MergeUniqueSlice(what.DataBreachTechnicalAssets,
+		other.DataBreachTechnicalAssets)
 
-	what.ExploitationImpact, mergeError = new(Strings).MergeSingleton(what.ExploitationImpact, other.ExploitationImpact)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge exploitation_impact: %w", mergeError)
-	}
-
-	what.DataBreachProbability, mergeError = new(Strings).MergeSingleton(what.DataBreachProbability, other.DataBreachProbability)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge date: %w", mergeError)
-	}
-
-	what.DataBreachTechnicalAssets = new(Strings).MergeUniqueSlice(what.DataBreachTechnicalAssets, other.DataBreachTechnicalAssets)
-
-	what.MostRelevantDataAsset, mergeError = new(Strings).MergeSingleton(what.MostRelevantDataAsset, other.MostRelevantDataAsset)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge most_relevant_data_asset: %w", mergeError)
-	}
-
-	what.MostRelevantTechnicalAsset, mergeError = new(Strings).MergeSingleton(what.MostRelevantTechnicalAsset, other.MostRelevantTechnicalAsset)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge most_relevant_technical_asset: %w", mergeError)
-	}
-
-	what.MostRelevantCommunicationLink, mergeError = new(Strings).MergeSingleton(what.MostRelevantCommunicationLink, other.MostRelevantCommunicationLink)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge most_relevant_communication_link: %w", mergeError)
-	}
-
-	what.MostRelevantTrustBoundary, mergeError = new(Strings).MergeSingleton(what.MostRelevantTrustBoundary, other.MostRelevantTrustBoundary)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge most_relevant_trust_boundary: %w", mergeError)
-	}
-
-	what.MostRelevantSharedRuntime, mergeError = new(Strings).MergeSingleton(what.MostRelevantSharedRuntime, other.MostRelevantSharedRuntime)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge most_relevant_shared_runtime: %w", mergeError)
-	}
-
-	return nil
+	return mergeSingletons(
+		singleton("most_relevant_data_asset", &what.MostRelevantDataAsset, other.MostRelevantDataAsset),
+		singleton("most_relevant_technical_asset", &what.MostRelevantTechnicalAsset, other.MostRelevantTechnicalAsset),
+		singleton("most_relevant_communication_link", &what.MostRelevantCommunicationLink,
+			other.MostRelevantCommunicationLink),
+		singleton("most_relevant_trust_boundary", &what.MostRelevantTrustBoundary, other.MostRelevantTrustBoundary),
+		singleton("most_relevant_shared_runtime", &what.MostRelevantSharedRuntime, other.MostRelevantSharedRuntime),
+	)
 }
 
-func (what *RiskIdentified) MergeMap(first map[string]RiskIdentified, second map[string]RiskIdentified) (map[string]RiskIdentified, error) {
+func (what *RiskIdentified) MergeMap(
+	first map[string]RiskIdentified, second map[string]RiskIdentified,
+) (map[string]RiskIdentified, error) {
 	if first == nil {
 		// first is nil for a section that is missing, or a key left without a value, in the model merged into
 		first = make(map[string]RiskIdentified, len(second))
