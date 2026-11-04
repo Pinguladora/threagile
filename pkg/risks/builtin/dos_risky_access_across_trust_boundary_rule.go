@@ -39,6 +39,7 @@ func (*DosRiskyAccessAcrossTrustBoundaryRule) Category() *types.RiskCategory {
 		FalsePositives:             "When the accessed target operations are not time- or resource-consuming.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweUncontrolledResourceConsumption,
+		References:                 []string{owaspAPIUnrestrictedResourceConsumption},
 	}
 }
 

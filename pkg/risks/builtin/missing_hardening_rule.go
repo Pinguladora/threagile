@@ -45,6 +45,7 @@ func (r *MissingHardeningRule) Category() *types.RiskCategory {
 		FalsePositives:             "Usually no false positives.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweConfiguration,
+		References:                 []string{owaspSecurityMisconfiguration, owaspAPISecurityMisconfiguration},
 	}
 }
 

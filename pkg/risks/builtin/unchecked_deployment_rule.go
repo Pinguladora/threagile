@@ -38,6 +38,7 @@ func (*UncheckedDeploymentRule) Category() *types.RiskCategory {
 			"positive after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweInsufficientCompilationWarnings,
+		References:                 []string{owaspSoftwareSupplyChainFailures},
 	}
 }
 

@@ -52,6 +52,7 @@ func (*PublicCloudAssetAccessRule) Category() *types.RiskCategory {
 			"individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweIncorrectPermissionAssignment,
+		References:                 []string{owaspBrokenAccessControl, owaspSecurityMisconfiguration},
 	}
 }
 

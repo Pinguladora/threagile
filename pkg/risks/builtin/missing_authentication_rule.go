@@ -38,6 +38,7 @@ func (*MissingAuthenticationRule) Category() *types.RiskCategory {
 			"end-users (customers) can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweMissingAuthentication,
+		References:                 []string{owaspAuthenticationFailures, owaspAPIBrokenAuthentication},
 	}
 }
 

@@ -2165,7 +2165,9 @@
       "name": "Code Backdooring",
       "description": "For each build pipeline component Code Backdooring risks might arise where attackers compromise the build pipeline in order to let backdoored artifacts be shipped into production. Aside from direct code backdooring this includes backdooring of dependencies and even of more lower-level build infrastructure, like backdooring compilers (similar to what the XcodeGhost malware did) or dependencies.",
       "categories": [
-        "Tampering"
+        "Tampering",
+        "OWASP A03:2025 Software Supply Chain Failures",
+        "OWASP A08:2025 Software or Data Integrity Failures"
       ],
       "cwes": [
         "CWE-912"
@@ -2186,7 +2188,8 @@
       "name": "Container Base Image Backdooring",
       "description": "When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors.\u003cbr\u003e\u003cbr\u003eSee for example: \u003ca href=\"https://techcrunch.com/2018/06/15/tainted-crypto-mining-containers-pulled-from-docker-hub/\"\u003ehttps://techcrunch.com/2018/06/15/tainted-crypto-mining-containers-pulled-from-docker-hub/\u003c/a\u003e",
       "categories": [
-        "Tampering"
+        "Tampering",
+        "OWASP A03:2025 Software Supply Chain Failures"
       ],
       "cwes": [
         "CWE-912"
@@ -2207,7 +2210,8 @@
       "name": "DoS-risky Access Across Trust-Boundary",
       "description": "Assets accessed across trust boundaries with critical or mission-critical availability rating are more prone to Denial-of-Service (DoS) risks.",
       "categories": [
-        "Denial of Service"
+        "Denial of Service",
+        "OWASP API4:2023 Unrestricted Resource Consumption"
       ],
       "cwes": [
         "CWE-400"
@@ -2229,6 +2233,7 @@
       "description": "People who call a service with the account of a machine, like an administrator using the credentials of a service account or a client that ships with an API key of its own, act without an identity of theirs. The service cannot tell them apart, nor require a second factor or end their access when they leave, and the secret gets copied to wherever they work.",
       "categories": [
         "Repudiation",
+        "OWASP A07:2025 Authentication Failures",
         "OWASP NHI10:2025 Human Use of NHI",
         "OWASP ASI03:2026 Identity and Privilege Abuse"
       ],
@@ -2251,7 +2256,8 @@
       "name": "LDAP-Injection",
       "description": "When an LDAP server is accessed LDAP-Injection risks might arise. The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed.",
       "categories": [
-        "Tampering"
+        "Tampering",
+        "OWASP A05:2025 Injection"
       ],
       "cwes": [
         "CWE-90"
@@ -2273,6 +2279,7 @@
       "description": "Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it.",
       "categories": [
         "Spoofing",
+        "OWASP A07:2025 Authentication Failures",
         "OWASP NHI7:2025 Long-Lived Secrets",
         "OWASP NHI2:2025 Secret Leakage"
       ],
@@ -2295,7 +2302,9 @@
       "name": "Missing Authentication",
       "description": "Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes sensitive data. ",
       "categories": [
-        "Elevation of Privilege"
+        "Elevation of Privilege",
+        "OWASP A07:2025 Authentication Failures",
+        "OWASP API2:2023 Broken Authentication"
       ],
       "cwes": [
         "CWE-306"
@@ -2316,7 +2325,9 @@
       "name": "Missing Multi-Factor Authentication (MFA)",
       "description": "Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.",
       "categories": [
-        "Elevation of Privilege"
+        "Elevation of Privilege",
+        "OWASP A07:2025 Authentication Failures",
+        "OWASP API2:2023 Broken Authentication"
       ],
       "cwes": [
         "CWE-308"
@@ -2337,7 +2348,9 @@
       "name": "Missing Cloud Hardening",
       "description": "Cloud components should be hardened according to the cloud vendor best practices. This affects their configuration, auditing, and further areas.",
       "categories": [
-        "Tampering"
+        "Tampering",
+        "OWASP A02:2025 Security Misconfiguration",
+        "OWASP API8:2023 Security Misconfiguration"
       ],
       "cwes": [
         "CWE-1008"
@@ -2358,7 +2371,8 @@
       "name": "Missing File Validation",
       "description": "When a technical asset accepts files, these input files should be strictly validated about filename and type.",
       "categories": [
-        "Spoofing"
+        "Spoofing",
+        "OWASP A06:2025 Insecure Design"
       ],
       "cwes": [
         "CWE-434"
@@ -2379,7 +2393,9 @@
       "name": "Missing Hardening",
       "description": "Technical assets with a Relative Attacker Attractiveness (RAA) value of 55 % or higher should be explicitly hardened taking best practices and vendor hardening guides into account.",
       "categories": [
-        "Tampering"
+        "Tampering",
+        "OWASP A02:2025 Security Misconfiguration",
+        "OWASP API8:2023 Security Misconfiguration"
       ],
       "cwes": [
         "CWE-16"
@@ -2400,7 +2416,9 @@
       "name": "Missing Identity Propagation",
       "description": "Technical assets (especially multi-tenant systems), which usually process data for end users should authorize every request based on the identity of the end user when the data flow is authenticated (i.e. non-public). For DevOps usages at least the identity of a service account or a workload is required.",
       "categories": [
-        "Elevation of Privilege"
+        "Elevation of Privilege",
+        "OWASP A01:2025 Broken Access Control",
+        "OWASP API1:2023 Broken Object Level Authorization"
       ],
       "cwes": [
         "CWE-284"
@@ -2421,7 +2439,8 @@
       "name": "Missing Network Segmentation",
       "description": "Highly sensitive assets and/or data stores residing in the same network segment than other lower sensitive assets (like webservers or content management systems etc.) should be better protected by a network segmentation trust-boundary.",
       "categories": [
-        "Elevation of Privilege"
+        "Elevation of Privilege",
+        "OWASP A06:2025 Insecure Design"
       ],
       "cwes": [
         "CWE-1008"
@@ -2443,6 +2462,7 @@
       "description": "A service that acts for its users must check in each request that the user may access the object at hand, like the order or the account the request names. Checking only that the caller is logged in, or that its role may call the operation, lets any user read or change the objects of others by changing an id in the request (BOLA, also known as IDOR).",
       "categories": [
         "Elevation of Privilege",
+        "OWASP A01:2025 Broken Access Control",
         "OWASP API1:2023 Broken Object Level Authorization",
         "OWASP API5:2023 Broken Function Level Authorization"
       ],
@@ -2465,7 +2485,8 @@
       "name": "Missing Vault (Secret Storage)",
       "description": "In order to avoid the risk of secret leakage via config files (when attacked through vulnerabilities being able to read files like Path-Traversal and others), it is best practice to use a separate hardened process with proper authentication, authorization, and audit logging to access config secrets (like credentials, private keys, client certificates, etc.). This component is usually some kind of Vault.",
       "categories": [
-        "Information Disclosure"
+        "Information Disclosure",
+        "OWASP NHI2:2025 Secret Leakage"
       ],
       "cwes": [
         "CWE-522"
@@ -2486,7 +2507,8 @@
       "name": "Mixed Targets on Shared Runtime",
       "description": "Different attacker targets (like frontend and backend/datastore components) should not be running on the same shared (underlying) runtime.",
       "categories": [
-        "Elevation of Privilege"
+        "Elevation of Privilege",
+        "OWASP A06:2025 Insecure Design"
       ],
       "cwes": [
         "CWE-1008"
@@ -2507,7 +2529,8 @@
       "name": "Path-Traversal",
       "description": "When a filesystem is accessed Path-Traversal or Local-File-Inclusion (LFI) risks might arise. The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.",
       "categories": [
-        "Information Disclosure"
+        "Information Disclosure",
+        "OWASP A01:2025 Broken Access Control"
       ],
       "cwes": [
         "CWE-22"
@@ -2528,7 +2551,9 @@
       "name": "Public Cloud Asset Access",
       "description": "Cloud storage and messaging services like object storage buckets or message queues are governed by resource policies and access control lists. A policy with wildcards (like a principal of \u003ci\u003e\"*\"\u003c/i\u003e) or an ACL granting access to all users makes the asset public.",
       "categories": [
-        "Information Disclosure"
+        "Information Disclosure",
+        "OWASP A01:2025 Broken Access Control",
+        "OWASP A02:2025 Security Misconfiguration"
       ],
       "cwes": [
         "CWE-732"
@@ -2549,7 +2574,8 @@
       "name": "Publicly Shared Cloud Snapshot",
       "description": "Snapshots and images of cloud disks, databases and virtual machines (like EBS or RDS snapshots and EC2 AMIs) can be shared with all accounts of the cloud provider. A snapshot shared publicly by mistake hands everything stored on the asset to anyone.",
       "categories": [
-        "Information Disclosure"
+        "Information Disclosure",
+        "OWASP A02:2025 Security Misconfiguration"
       ],
       "cwes": [
         "CWE-668"
@@ -2570,7 +2596,9 @@
       "name": "Push instead of Pull Deployment",
       "description": "When comparing push-based vs. pull-based deployments from a security perspective, pull-based deployments improve the overall security of the deployment targets. Every exposed interface of a production system to accept a deployment increases the attack surface of the production system, thus a pull-based approach exposes less attack surface relevant interfaces.",
       "categories": [
-        "Tampering"
+        "Tampering",
+        "OWASP A08:2025 Software or Data Integrity Failures",
+        "OWASP NHI6:2025 Insecure Cloud Deployment Configurations"
       ],
       "cwes": [
         "CWE-1127"
@@ -2591,7 +2619,9 @@
       "name": "Server-Side Request Forgery (SSRF)",
       "description": "When a server system (i.e. not a client) is accessing other server systems via typical web protocols Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might arise. ",
       "categories": [
-        "Information Disclosure"
+        "Information Disclosure",
+        "OWASP A01:2025 Broken Access Control",
+        "OWASP API7:2023 Server Side Request Forgery"
       ],
       "cwes": [
         "CWE-918"
@@ -2656,7 +2686,8 @@
       "name": "SQL/NoSQL-Injection",
       "description": "When a database is accessed via database access protocols SQL/NoSQL-Injection risks might arise. The risk rating depends on the sensitivity technical asset itself and of the data assets processed.",
       "categories": [
-        "Tampering"
+        "Tampering",
+        "OWASP A05:2025 Injection"
       ],
       "cwes": [
         "CWE-89"
@@ -2677,7 +2708,8 @@
       "name": "Unchecked Deployment",
       "description": "For each build-pipeline component Unchecked Deployment risks might arise when the build-pipeline does not include established DevSecOps best-practices. DevSecOps best-practices scan as part of CI/CD pipelines for vulnerabilities in source- or byte-code, dependencies, container layers, and dynamically against running test systems. There are several open-source and commercial tools existing in the categories DAST, SAST, and IAST.",
       "categories": [
-        "Tampering"
+        "Tampering",
+        "OWASP A03:2025 Software Supply Chain Failures"
       ],
       "cwes": [
         "CWE-1127"
@@ -2698,7 +2730,8 @@
       "name": "Unencrypted Technical Assets",
       "description": "Due to the confidentiality rating of the technical asset itself and/or the stored data assets this technical asset must be encrypted. The risk rating depends on the sensitivity technical asset itself and of the data assets stored.",
       "categories": [
-        "Information Disclosure"
+        "Information Disclosure",
+        "OWASP A04:2025 Cryptographic Failures"
       ],
       "cwes": [
         "CWE-311"
@@ -2719,7 +2752,9 @@
       "name": "Unencrypted Communication",
       "description": "Due to the confidentiality and/or integrity rating of the data assets transferred over the communication link this connection must be encrypted.",
       "categories": [
-        "Information Disclosure"
+        "Information Disclosure",
+        "OWASP A04:2025 Cryptographic Failures",
+        "OWASP API8:2023 Security Misconfiguration"
       ],
       "cwes": [
         "CWE-319"
@@ -2740,7 +2775,8 @@
       "name": "Unguarded Access From Internet",
       "description": "Internet-exposed assets must be guarded by a protecting service, application, or reverse-proxy.",
       "categories": [
-        "Elevation of Privilege"
+        "Elevation of Privilege",
+        "OWASP A06:2025 Insecure Design"
       ],
       "cwes": [
         "CWE-501"
@@ -2761,7 +2797,8 @@
       "name": "Untrusted Deserialization",
       "description": "When a technical asset accepts data in a specific serialized form (like Java or .NET serialization), Untrusted Deserialization risks might arise.\u003cbr\u003e\u003cbr\u003eSee \u003ca href=\"https://christian-schneider.net/JavaDeserializationSecurityFAQ.html\"\u003ehttps://christian-schneider.net/JavaDeserializationSecurityFAQ.html\u003c/a\u003e for more details.",
       "categories": [
-        "Tampering"
+        "Tampering",
+        "OWASP A08:2025 Software or Data Integrity Failures"
       ],
       "cwes": [
         "CWE-502"
@@ -2782,7 +2819,8 @@
       "name": "XML External Entity (XXE)",
       "description": "When a technical asset accepts data in XML format, XML External Entity (XXE) risks might arise.",
       "categories": [
-        "Information Disclosure"
+        "Information Disclosure",
+        "OWASP A02:2025 Security Misconfiguration"
       ],
       "cwes": [
         "CWE-611"

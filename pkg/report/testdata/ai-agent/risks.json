@@ -19,6 +19,7 @@
     "function": "architecture",
     "cwe": 441,
     "references": [
+      "OWASP A01:2025 Broken Access Control",
       "OWASP ASI03:2026 Identity and Privilege Abuse",
       "OWASP LLM06:2025 Excessive Agency",
       "OWASP NHI9:2025 NHI Reuse",
@@ -49,6 +50,9 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
     "action": "Container Infrastructure Hardening",
     "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
@@ -73,6 +77,9 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
     "action": "Container Infrastructure Hardening",
     "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
@@ -97,6 +104,9 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
     "action": "Container Infrastructure Hardening",
     "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
@@ -121,6 +131,9 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
     "action": "Container Infrastructure Hardening",
     "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
@@ -145,6 +158,9 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
     "action": "Container Infrastructure Hardening",
     "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
@@ -169,6 +185,9 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
     "action": "Container Infrastructure Hardening",
     "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
@@ -193,6 +212,9 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
     "action": "Container Infrastructure Hardening",
     "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
@@ -217,6 +239,9 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
     "action": "Container Infrastructure Hardening",
     "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
@@ -241,6 +266,9 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
     "action": "Container Infrastructure Hardening",
     "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
@@ -265,6 +293,9 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
     "action": "Container Infrastructure Hardening",
     "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
@@ -290,6 +321,9 @@
     "stride": "spoofing",
     "function": "development",
     "cwe": 352,
+    "references": [
+      "OWASP A01:2025 Broken Access Control"
+    ],
     "action": "CSRF Prevention",
     "mitigation": "Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -315,6 +349,9 @@
     "stride": "tampering",
     "function": "development",
     "cwe": 79,
+    "references": [
+      "OWASP A05:2025 Injection"
+    ],
     "action": "XSS Prevention",
     "mitigation": "Try to encode all values sent back to the browser and also handle DOM-manipulations in a safe way to avoid DOM-based XSS. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -337,6 +374,9 @@
     "stride": "denial-of-service",
     "function": "operations",
     "cwe": 400,
+    "references": [
+      "OWASP API4:2023 Unrestricted Resource Consumption"
+    ],
     "action": "Anti-DoS Measures",
     "mitigation": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -360,6 +400,9 @@
     "stride": "denial-of-service",
     "function": "operations",
     "cwe": 400,
+    "references": [
+      "OWASP API4:2023 Unrestricted Resource Consumption"
+    ],
     "action": "Anti-DoS Measures",
     "mitigation": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -419,6 +462,7 @@
     "function": "operations",
     "cwe": 522,
     "references": [
+      "OWASP A07:2025 Authentication Failures",
       "OWASP NHI7:2025 Long-Lived Secrets",
       "OWASP NHI2:2025 Secret Leakage"
     ],
@@ -448,6 +492,7 @@
     "function": "operations",
     "cwe": 778,
     "references": [
+      "OWASP A09:2025 Security Logging and Alerting Failures",
       "MAESTRO Layer 5: Evaluation and Observability",
       "OWASP ASI10:2026 Rogue Agents"
     ],
@@ -476,6 +521,7 @@
     "function": "operations",
     "cwe": 778,
     "references": [
+      "OWASP A09:2025 Security Logging and Alerting Failures",
       "MAESTRO Layer 5: Evaluation and Observability",
       "OWASP ASI10:2026 Rogue Agents"
     ],
@@ -504,6 +550,10 @@
     "stride": "elevation-of-privilege",
     "function": "architecture",
     "cwe": 306,
+    "references": [
+      "OWASP A07:2025 Authentication Failures",
+      "OWASP API2:2023 Broken Authentication"
+    ],
     "action": "Authentication of Incoming Requests",
     "mitigation": "Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of multi-factor authentication for human users.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -530,6 +580,10 @@
     "stride": "elevation-of-privilege",
     "function": "business-side",
     "cwe": 308,
+    "references": [
+      "OWASP A07:2025 Authentication Failures",
+      "OWASP API2:2023 Broken Authentication"
+    ],
     "action": "Multi-Factor Authentication (MFA)",
     "mitigation": "Apply an authentication method to the technical asset protecting highly sensitive data via multi-factor authentication for human users.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -580,6 +634,10 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 1008,
+    "references": [
+      "OWASP A02:2025 Security Misconfiguration",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "Cloud Hardening",
     "mitigation": "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Amazon Web Services\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", or \"Prowler AWS CIS Benchmark Tool\"\u003c/i\u003e). \u003cbr\u003eFor EC2 and other servers running Amazon Linux, follow the \u003ci\u003eCIS Benchmark for Amazon Linux\u003c/i\u003e and switch to IMDSv2. \u003cbr\u003eFor S3 buckets follow the \u003ci\u003eSecurity Best Practices for Amazon S3\u003c/i\u003e at \u003ca href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\"\u003ehttps://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\u003c/a\u003e to avoid accidental leakage. \u003cbr\u003eAlso take a look at some of these tools: \u003ca href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\"\u003ehttps://github.com/toniblyx/my-arsenal-of-aws-security-tools\u003c/a\u003e \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eMicrosoft Azure\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Microsoft Azure\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e).\u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eGoogle Cloud Platform\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Google Cloud Computing Platform\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eOracle Cloud Platform\u003c/b\u003e: Follow the hardening best practices (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\"\u003c/i\u003e).",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
@@ -603,6 +661,10 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 1008,
+    "references": [
+      "OWASP A02:2025 Security Misconfiguration",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "Cloud Hardening",
     "mitigation": "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Amazon Web Services\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", or \"Prowler AWS CIS Benchmark Tool\"\u003c/i\u003e). \u003cbr\u003eFor EC2 and other servers running Amazon Linux, follow the \u003ci\u003eCIS Benchmark for Amazon Linux\u003c/i\u003e and switch to IMDSv2. \u003cbr\u003eFor S3 buckets follow the \u003ci\u003eSecurity Best Practices for Amazon S3\u003c/i\u003e at \u003ca href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\"\u003ehttps://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\u003c/a\u003e to avoid accidental leakage. \u003cbr\u003eAlso take a look at some of these tools: \u003ca href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\"\u003ehttps://github.com/toniblyx/my-arsenal-of-aws-security-tools\u003c/a\u003e \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eMicrosoft Azure\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Microsoft Azure\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e).\u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eGoogle Cloud Platform\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Google Cloud Computing Platform\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eOracle Cloud Platform\u003c/b\u003e: Follow the hardening best practices (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\"\u003c/i\u003e).",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
@@ -633,6 +695,10 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 1008,
+    "references": [
+      "OWASP A02:2025 Security Misconfiguration",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "Cloud Hardening",
     "mitigation": "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Amazon Web Services\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", or \"Prowler AWS CIS Benchmark Tool\"\u003c/i\u003e). \u003cbr\u003eFor EC2 and other servers running Amazon Linux, follow the \u003ci\u003eCIS Benchmark for Amazon Linux\u003c/i\u003e and switch to IMDSv2. \u003cbr\u003eFor S3 buckets follow the \u003ci\u003eSecurity Best Practices for Amazon S3\u003c/i\u003e at \u003ca href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\"\u003ehttps://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\u003c/a\u003e to avoid accidental leakage. \u003cbr\u003eAlso take a look at some of these tools: \u003ca href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\"\u003ehttps://github.com/toniblyx/my-arsenal-of-aws-security-tools\u003c/a\u003e \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eMicrosoft Azure\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Microsoft Azure\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e).\u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eGoogle Cloud Platform\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Google Cloud Computing Platform\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eOracle Cloud Platform\u003c/b\u003e: Follow the hardening best practices (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\"\u003c/i\u003e).",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
@@ -654,6 +720,10 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 1008,
+    "references": [
+      "OWASP A02:2025 Security Misconfiguration",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "Cloud Hardening",
     "mitigation": "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Amazon Web Services\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", or \"Prowler AWS CIS Benchmark Tool\"\u003c/i\u003e). \u003cbr\u003eFor EC2 and other servers running Amazon Linux, follow the \u003ci\u003eCIS Benchmark for Amazon Linux\u003c/i\u003e and switch to IMDSv2. \u003cbr\u003eFor S3 buckets follow the \u003ci\u003eSecurity Best Practices for Amazon S3\u003c/i\u003e at \u003ca href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\"\u003ehttps://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\u003c/a\u003e to avoid accidental leakage. \u003cbr\u003eAlso take a look at some of these tools: \u003ca href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\"\u003ehttps://github.com/toniblyx/my-arsenal-of-aws-security-tools\u003c/a\u003e \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eMicrosoft Azure\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Microsoft Azure\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e).\u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eGoogle Cloud Platform\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Google Cloud Computing Platform\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eOracle Cloud Platform\u003c/b\u003e: Follow the hardening best practices (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\"\u003c/i\u003e).",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
@@ -676,6 +746,10 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 16,
+    "references": [
+      "OWASP A02:2025 Security Misconfiguration",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "System Hardening",
     "mitigation": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -700,6 +774,10 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 16,
+    "references": [
+      "OWASP A02:2025 Security Misconfiguration",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "System Hardening",
     "mitigation": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -724,6 +802,10 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 16,
+    "references": [
+      "OWASP A02:2025 Security Misconfiguration",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "System Hardening",
     "mitigation": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -769,6 +851,9 @@
     "stride": "elevation-of-privilege",
     "function": "operations",
     "cwe": 1008,
+    "references": [
+      "OWASP A06:2025 Insecure Design"
+    ],
     "action": "Network Segmentation",
     "mitigation": "Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -793,6 +878,9 @@
     "stride": "elevation-of-privilege",
     "function": "operations",
     "cwe": 1008,
+    "references": [
+      "OWASP A06:2025 Insecure Design"
+    ],
     "action": "Network Segmentation",
     "mitigation": "Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -817,6 +905,9 @@
     "stride": "elevation-of-privilege",
     "function": "operations",
     "cwe": 1008,
+    "references": [
+      "OWASP A06:2025 Insecure Design"
+    ],
     "action": "Network Segmentation",
     "mitigation": "Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -843,6 +934,7 @@
     "function": "development",
     "cwe": 639,
     "references": [
+      "OWASP A01:2025 Broken Access Control",
       "OWASP API1:2023 Broken Object Level Authorization",
       "OWASP API5:2023 Broken Function Level Authorization"
     ],
@@ -873,6 +965,7 @@
     "function": "development",
     "cwe": 639,
     "references": [
+      "OWASP A01:2025 Broken Access Control",
       "OWASP API1:2023 Broken Object Level Authorization",
       "OWASP API5:2023 Broken Function Level Authorization"
     ],
@@ -898,6 +991,9 @@
     "stride": "information-disclosure",
     "function": "architecture",
     "cwe": 522,
+    "references": [
+      "OWASP NHI2:2025 Secret Leakage"
+    ],
     "action": "Vault (Secret Storage)",
     "mitigation": "Consider using a Vault (Secret Storage) to securely store and access config secrets (like credentials, private keys, client certificates, etc.).",
     "check": "GetAttribute a Vault (Secret Storage) in place?",
@@ -1131,6 +1227,9 @@
     "stride": "information-disclosure",
     "function": "operations",
     "cwe": 668,
+    "references": [
+      "OWASP A02:2025 Security Misconfiguration"
+    ],
     "action": "Snapshot Sharing Restrictions",
     "mitigation": "Prevent the public sharing of snapshots and images with a cloud configuration rule that revokes it, and audit the sharing settings regularly. Do not bake credentials into images; see the secrets management cheat sheet at \u003ca href=\"https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html\"\u003ehttps://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html\u003c/a\u003e. \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Turn on \u003ci\u003eblock public access\u003c/i\u003e for EBS snapshots (\u003ca href=\"https://docs.aws.amazon.com/ebs/latest/userguide/block-public-access-snapshots.html\"\u003ehttps://docs.aws.amazon.com/ebs/latest/userguide/block-public-access-snapshots.html\u003c/a\u003e) and for AMIs (\u003ca href=\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-to-amis.html\"\u003ehttps://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-to-amis.html\u003c/a\u003e) in every region, use the AWS Config managed rules \u003ci\u003eebs-snapshot-public-restorable-check\u003c/i\u003e (\u003ca href=\"https://docs.aws.amazon.com/config/latest/developerguide/ebs-snapshot-public-restorable-check.html\"\u003ehttps://docs.aws.amazon.com/config/latest/developerguide/ebs-snapshot-public-restorable-check.html\u003c/a\u003e) and \u003ci\u003erds-snapshots-public-prohibited\u003c/i\u003e (\u003ca href=\"https://docs.aws.amazon.com/config/latest/developerguide/rds-snapshots-public-prohibited.html\"\u003ehttps://docs.aws.amazon.com/config/latest/developerguide/rds-snapshots-public-prohibited.html\u003c/a\u003e) with an automatic remediation, and review the snapshot findings of \u003ci\u003eIAM Access Analyzer\u003c/i\u003e (\u003ca href=\"https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html\"\u003ehttps://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html\u003c/a\u003e).",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1156,6 +1255,10 @@
     "stride": "information-disclosure",
     "function": "development",
     "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
     "action": "SSRF Prevention",
     "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1186,6 +1289,10 @@
     "stride": "information-disclosure",
     "function": "development",
     "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
     "action": "SSRF Prevention",
     "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1217,6 +1324,10 @@
     "stride": "information-disclosure",
     "function": "development",
     "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
     "action": "SSRF Prevention",
     "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1248,6 +1359,10 @@
     "stride": "information-disclosure",
     "function": "development",
     "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
     "action": "SSRF Prevention",
     "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1278,6 +1393,10 @@
     "stride": "information-disclosure",
     "function": "development",
     "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
     "action": "SSRF Prevention",
     "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1308,6 +1427,10 @@
     "stride": "information-disclosure",
     "function": "development",
     "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
     "action": "SSRF Prevention",
     "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1338,6 +1461,10 @@
     "stride": "information-disclosure",
     "function": "development",
     "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
     "action": "SSRF Prevention",
     "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1368,6 +1495,10 @@
     "stride": "information-disclosure",
     "function": "development",
     "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
     "action": "SSRF Prevention",
     "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1398,6 +1529,10 @@
     "stride": "information-disclosure",
     "function": "development",
     "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
     "action": "SSRF Prevention",
     "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1428,6 +1563,10 @@
     "stride": "information-disclosure",
     "function": "development",
     "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
     "action": "SSRF Prevention",
     "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1458,6 +1597,10 @@
     "stride": "information-disclosure",
     "function": "development",
     "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
     "action": "SSRF Prevention",
     "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1484,6 +1627,9 @@
     "stride": "tampering",
     "function": "development",
     "cwe": 89,
+    "references": [
+      "OWASP A05:2025 Injection"
+    ],
     "action": "SQL/NoSQL-Injection Prevention",
     "mitigation": "Try to use parameter binding to be safe from injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1510,6 +1656,9 @@
     "stride": "tampering",
     "function": "development",
     "cwe": 89,
+    "references": [
+      "OWASP A05:2025 Injection"
+    ],
     "action": "SQL/NoSQL-Injection Prevention",
     "mitigation": "Try to use parameter binding to be safe from injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1536,6 +1685,9 @@
     "stride": "tampering",
     "function": "development",
     "cwe": 89,
+    "references": [
+      "OWASP A05:2025 Injection"
+    ],
     "action": "SQL/NoSQL-Injection Prevention",
     "mitigation": "Try to use parameter binding to be safe from injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1562,6 +1714,9 @@
     "stride": "tampering",
     "function": "development",
     "cwe": 89,
+    "references": [
+      "OWASP A05:2025 Injection"
+    ],
     "action": "SQL/NoSQL-Injection Prevention",
     "mitigation": "Try to use parameter binding to be safe from injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1620,6 +1775,9 @@
     "stride": "tampering",
     "function": "architecture",
     "cwe": 1127,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
     "action": "Build Pipeline Hardening",
     "mitigation": "Apply DevSecOps best-practices and use scanning tools to identify vulnerabilities in source- or byte-code,dependencies, container layers, and optionally also via dynamic scans against running test systems.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1644,6 +1802,9 @@
     "stride": "information-disclosure",
     "function": "operations",
     "cwe": 311,
+    "references": [
+      "OWASP A04:2025 Cryptographic Failures"
+    ],
     "action": "Encryption of Technical Asset",
     "mitigation": "Apply encryption to the technical asset.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1668,6 +1829,9 @@
     "stride": "information-disclosure",
     "function": "operations",
     "cwe": 311,
+    "references": [
+      "OWASP A04:2025 Cryptographic Failures"
+    ],
     "action": "Encryption of Technical Asset",
     "mitigation": "Apply encryption to the technical asset.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1693,6 +1857,9 @@
     "stride": "elevation-of-privilege",
     "function": "architecture",
     "cwe": 501,
+    "references": [
+      "OWASP A06:2025 Insecure Design"
+    ],
     "action": "Encapsulation of Technical Asset",
     "mitigation": "Encapsulate the asset behind a guarding service, application, or reverse-proxy. For admin maintenance a bastion-host should be used as a jump-server. For file transfer a store-and-forward-host should be used as an indirect file exchange platform.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",

@@ -39,6 +39,7 @@ func (*MissingIdentityPropagationRule) Category() *types.RiskCategory {
 			"end-users (customers) can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweImproperAccessControl,
+		References:                 []string{owaspBrokenAccessControl, owaspAPIBrokenObjectLevelAuthorization},
 	}
 }
 

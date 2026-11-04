@@ -40,6 +40,7 @@ func (*UnencryptedAssetRule) Category() *types.RiskCategory {
 			"document or data level.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweMissingEncryption,
+		References:                 []string{owaspCryptographicFailures},
 	}
 }
 

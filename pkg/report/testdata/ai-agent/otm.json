@@ -1590,6 +1590,7 @@
       "description": "An AI agent that acts for its users but reaches data and tools with an identity of its own, a service account or a workload, can do for any user what the agent may do for all of them. The targets check the agent, not the user, so whatever a user asks for, or a prompt injection makes the agent ask for, is allowed.",
       "categories": [
         "Elevation of Privilege",
+        "OWASP A01:2025 Broken Access Control",
         "OWASP ASI03:2026 Identity and Privilege Abuse",
         "OWASP LLM06:2025 Excessive Agency",
         "OWASP NHI9:2025 NHI Reuse",
@@ -1614,7 +1615,8 @@
       "name": "Container Base Image Backdooring",
       "description": "When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors.\u003cbr\u003e\u003cbr\u003eSee for example: \u003ca href=\"https://techcrunch.com/2018/06/15/tainted-crypto-mining-containers-pulled-from-docker-hub/\"\u003ehttps://techcrunch.com/2018/06/15/tainted-crypto-mining-containers-pulled-from-docker-hub/\u003c/a\u003e",
       "categories": [
-        "Tampering"
+        "Tampering",
+        "OWASP A03:2025 Software Supply Chain Failures"
       ],
       "cwes": [
         "CWE-912"
@@ -1635,7 +1637,8 @@
       "name": "Cross-Site Request Forgery (CSRF)",
       "description": "When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.",
       "categories": [
-        "Spoofing"
+        "Spoofing",
+        "OWASP A01:2025 Broken Access Control"
       ],
       "cwes": [
         "CWE-352"
@@ -1656,7 +1659,8 @@
       "name": "Cross-Site Scripting (XSS)",
       "description": "For each web application Cross-Site Scripting (XSS) risks might arise. In terms of the overall risk level take other applications running on the same domain into account as well.",
       "categories": [
-        "Tampering"
+        "Tampering",
+        "OWASP A05:2025 Injection"
       ],
       "cwes": [
         "CWE-79"
@@ -1677,7 +1681,8 @@
       "name": "DoS-risky Access Across Trust-Boundary",
       "description": "Assets accessed across trust boundaries with critical or mission-critical availability rating are more prone to Denial-of-Service (DoS) risks.",
       "categories": [
-        "Denial of Service"
+        "Denial of Service",
+        "OWASP API4:2023 Unrestricted Resource Consumption"
       ],
       "cwes": [
         "CWE-400"
@@ -1724,6 +1729,7 @@
       "description": "Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it.",
       "categories": [
         "Spoofing",
+        "OWASP A07:2025 Authentication Failures",
         "OWASP NHI7:2025 Long-Lived Secrets",
         "OWASP NHI2:2025 Secret Leakage"
       ],
@@ -1747,6 +1753,7 @@
       "description": "What an AI agent or a language model does depends on what it reads, so it cannot be tested in full before it runs. Without a record of its prompts, its tool calls and its answers in a monitoring system, nobody sees a prompt injection, an agent going astray or a model that drifts, nor can tell afterwards what it did.",
       "categories": [
         "Repudiation",
+        "OWASP A09:2025 Security Logging and Alerting Failures",
         "MAESTRO Layer 5: Evaluation and Observability",
         "OWASP ASI10:2026 Rogue Agents"
       ],
@@ -1769,7 +1776,9 @@
       "name": "Missing Authentication",
       "description": "Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes sensitive data. ",
       "categories": [
-        "Elevation of Privilege"
+        "Elevation of Privilege",
+        "OWASP A07:2025 Authentication Failures",
+        "OWASP API2:2023 Broken Authentication"
       ],
       "cwes": [
         "CWE-306"
@@ -1790,7 +1799,9 @@
       "name": "Missing Multi-Factor Authentication (MFA)",
       "description": "Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.",
       "categories": [
-        "Elevation of Privilege"
+        "Elevation of Privilege",
+        "OWASP A07:2025 Authentication Failures",
+        "OWASP API2:2023 Broken Authentication"
       ],
       "cwes": [
         "CWE-308"
@@ -1832,7 +1843,9 @@
       "name": "Missing Cloud Hardening",
       "description": "Cloud components should be hardened according to the cloud vendor best practices. This affects their configuration, auditing, and further areas.",
       "categories": [
-        "Tampering"
+        "Tampering",
+        "OWASP A02:2025 Security Misconfiguration",
+        "OWASP API8:2023 Security Misconfiguration"
       ],
       "cwes": [
         "CWE-1008"
@@ -1853,7 +1866,9 @@
       "name": "Missing Hardening",
       "description": "Technical assets with a Relative Attacker Attractiveness (RAA) value of 55 % or higher should be explicitly hardened taking best practices and vendor hardening guides into account.",
       "categories": [
-        "Tampering"
+        "Tampering",
+        "OWASP A02:2025 Security Misconfiguration",
+        "OWASP API8:2023 Security Misconfiguration"
       ],
       "cwes": [
         "CWE-16"
@@ -1895,7 +1910,8 @@
       "name": "Missing Network Segmentation",
       "description": "Highly sensitive assets and/or data stores residing in the same network segment than other lower sensitive assets (like webservers or content management systems etc.) should be better protected by a network segmentation trust-boundary.",
       "categories": [
-        "Elevation of Privilege"
+        "Elevation of Privilege",
+        "OWASP A06:2025 Insecure Design"
       ],
       "cwes": [
         "CWE-1008"
@@ -1917,6 +1933,7 @@
       "description": "A service that acts for its users must check in each request that the user may access the object at hand, like the order or the account the request names. Checking only that the caller is logged in, or that its role may call the operation, lets any user read or change the objects of others by changing an id in the request (BOLA, also known as IDOR).",
       "categories": [
         "Elevation of Privilege",
+        "OWASP A01:2025 Broken Access Control",
         "OWASP API1:2023 Broken Object Level Authorization",
         "OWASP API5:2023 Broken Function Level Authorization"
       ],
@@ -1939,7 +1956,8 @@
       "name": "Missing Vault (Secret Storage)",
       "description": "In order to avoid the risk of secret leakage via config files (when attacked through vulnerabilities being able to read files like Path-Traversal and others), it is best practice to use a separate hardened process with proper authentication, authorization, and audit logging to access config secrets (like credentials, private keys, client certificates, etc.). This component is usually some kind of Vault.",
       "categories": [
-        "Information Disclosure"
+        "Information Disclosure",
+        "OWASP NHI2:2025 Secret Leakage"
       ],
       "cwes": [
         "CWE-522"
@@ -2054,7 +2072,8 @@
       "name": "Publicly Shared Cloud Snapshot",
       "description": "Snapshots and images of cloud disks, databases and virtual machines (like EBS or RDS snapshots and EC2 AMIs) can be shared with all accounts of the cloud provider. A snapshot shared publicly by mistake hands everything stored on the asset to anyone.",
       "categories": [
-        "Information Disclosure"
+        "Information Disclosure",
+        "OWASP A02:2025 Security Misconfiguration"
       ],
       "cwes": [
         "CWE-668"
@@ -2075,7 +2094,9 @@
       "name": "Server-Side Request Forgery (SSRF)",
       "description": "When a server system (i.e. not a client) is accessing other server systems via typical web protocols Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might arise. ",
       "categories": [
-        "Information Disclosure"
+        "Information Disclosure",
+        "OWASP A01:2025 Broken Access Control",
+        "OWASP API7:2023 Server Side Request Forgery"
       ],
       "cwes": [
         "CWE-918"
@@ -2096,7 +2117,8 @@
       "name": "SQL/NoSQL-Injection",
       "description": "When a database is accessed via database access protocols SQL/NoSQL-Injection risks might arise. The risk rating depends on the sensitivity technical asset itself and of the data assets processed.",
       "categories": [
-        "Tampering"
+        "Tampering",
+        "OWASP A05:2025 Injection"
       ],
       "cwes": [
         "CWE-89"
@@ -2143,7 +2165,8 @@
       "name": "Unchecked Deployment",
       "description": "For each build-pipeline component Unchecked Deployment risks might arise when the build-pipeline does not include established DevSecOps best-practices. DevSecOps best-practices scan as part of CI/CD pipelines for vulnerabilities in source- or byte-code, dependencies, container layers, and dynamically against running test systems. There are several open-source and commercial tools existing in the categories DAST, SAST, and IAST.",
       "categories": [
-        "Tampering"
+        "Tampering",
+        "OWASP A03:2025 Software Supply Chain Failures"
       ],
       "cwes": [
         "CWE-1127"
@@ -2164,7 +2187,8 @@
       "name": "Unencrypted Technical Assets",
       "description": "Due to the confidentiality rating of the technical asset itself and/or the stored data assets this technical asset must be encrypted. The risk rating depends on the sensitivity technical asset itself and of the data assets stored.",
       "categories": [
-        "Information Disclosure"
+        "Information Disclosure",
+        "OWASP A04:2025 Cryptographic Failures"
       ],
       "cwes": [
         "CWE-311"
@@ -2185,7 +2209,8 @@
       "name": "Unguarded Access From Internet",
       "description": "Internet-exposed assets must be guarded by a protecting service, application, or reverse-proxy.",
       "categories": [
-        "Elevation of Privilege"
+        "Elevation of Privilege",
+        "OWASP A06:2025 Insecure Design"
       ],
       "cwes": [
         "CWE-501"

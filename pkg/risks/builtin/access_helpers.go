@@ -7,8 +7,13 @@ import (
 // The entries of the catalogs and standards that the rules on credentials and authorization reference.
 const (
 	owaspAPIBrokenObjectLevelAuthorization   = "OWASP API1:2023 Broken Object Level Authorization"
+	owaspAPIBrokenAuthentication             = "OWASP API2:2023 Broken Authentication"
+	owaspAPIUnrestrictedResourceConsumption  = "OWASP API4:2023 Unrestricted Resource Consumption"
 	owaspAPIBrokenFunctionLevelAuthorization = "OWASP API5:2023 Broken Function Level Authorization"
-	owaspNHISecretLeakage                    = "OWASP NHI2:2025 Secret Leakage"     // #nosec G101 // a catalog entry
+	owaspAPIServerSideRequestForgery         = "OWASP API7:2023 Server Side Request Forgery"
+	owaspAPISecurityMisconfiguration         = "OWASP API8:2023 Security Misconfiguration"
+	owaspNHISecretLeakage                    = "OWASP NHI2:2025 Secret Leakage" // #nosec G101 // a catalog entry
+	owaspNHIInsecureCloudDeployment          = "OWASP NHI6:2025 Insecure Cloud Deployment Configurations"
 	owaspNHILongLivedSecrets                 = "OWASP NHI7:2025 Long-Lived Secrets" // #nosec G101 // a catalog entry
 	owaspNHIReuse                            = "OWASP NHI9:2025 NHI Reuse"
 	owaspNHIHumanUse                         = "OWASP NHI10:2025 Human Use of NHI"

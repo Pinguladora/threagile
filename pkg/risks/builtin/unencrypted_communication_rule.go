@@ -38,6 +38,7 @@ func (*UnencryptedCommunicationRule) Category() *types.RiskCategory {
 			"orchestration platform handles encryption.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweCleartextTransmission,
+		References:                 []string{owaspCryptographicFailures, owaspAPISecurityMisconfiguration},
 	}
 }
 

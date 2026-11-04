@@ -45,6 +45,7 @@ func (*UnguardedAccessFromInternetRule) Category() *types.RiskCategory {
 			types.ReverseProxy + ", " + types.WAF + ", or " + types.Gateway + " components.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweTrustBoundaryViolation,
+		References:                 []string{owaspInsecureDesign},
 	}
 }
 

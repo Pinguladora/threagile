@@ -41,6 +41,7 @@ func (*UnguardedDirectDatastoreAccessRule) Category() *types.RiskCategory {
 		FalsePositives:             "When the caller is considered fully trusted as if it was part of the datastore itself.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweTrustBoundaryViolation,
+		References:                 []string{owaspInsecureDesign},
 	}
 }
 

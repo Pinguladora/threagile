@@ -40,6 +40,7 @@ func (*MissingVaultIsolationRule) Category() *types.RiskCategory {
 			"same extend as if all were vaults with data of highest sensitivity.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweArchitecturalConcepts,
+		References:                 []string{owaspInsecureDesign},
 	}
 }
 

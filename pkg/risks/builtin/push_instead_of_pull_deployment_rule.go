@@ -36,6 +36,7 @@ func (*PushInsteadPullDeploymentRule) Category() *types.RiskCategory {
 			"can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: true,
 		CWE:                        cweInsufficientCompilationWarnings,
+		References:                 []string{owaspIntegrityFailures, owaspNHIInsecureCloudDeployment},
 	}
 }
 

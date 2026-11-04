@@ -37,6 +37,7 @@ func (*AccidentalSecretLeakRule) Category() *types.RiskCategory {
 		FalsePositives:             "Usually no false positives.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweSensitiveInformationExposure,
+		References:                 []string{owaspNHISecretLeakage},
 	}
 }
 

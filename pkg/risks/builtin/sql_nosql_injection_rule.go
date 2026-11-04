@@ -33,6 +33,7 @@ func (*SqlNoSqlInjectionRule) Category() *types.RiskCategory {
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweSQLInjection,
+		References:                 []string{owaspInjection},
 	}
 }
 

@@ -35,6 +35,7 @@ func (*MissingFileValidationRule) Category() *types.RiskCategory {
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweUnrestrictedFileUpload,
+		References:                 []string{owaspInsecureDesign},
 	}
 }
 

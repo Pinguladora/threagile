@@ -46,6 +46,7 @@ func (*ContainerPlatformEscapeRule) Category() *types.RiskCategory {
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweArchitecturalConcepts,
+		References:                 []string{owaspSecurityMisconfiguration},
 	}
 }
 

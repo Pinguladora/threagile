@@ -38,6 +38,7 @@ func (*ContainerBaseImageBackdooringRule) Category() *types.RiskCategory {
 			"can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweHiddenFunctionality,
+		References:                 []string{owaspSoftwareSupplyChainFailures},
 	}
 }
 

@@ -41,7 +41,9 @@ func (*MissingAIMonitoringRule) Category() *types.RiskCategory {
 			"positives after individual review.",
 		ModelFailurePossibleReason: true,
 		CWE:                        cweInsufficientLogging,
-		References:                 []string{maestroEvaluationAndObservability, owaspAgenticRogueAgents},
+		References: []string{
+			owaspLoggingAndAlertingFailures, maestroEvaluationAndObservability, owaspAgenticRogueAgents,
+		},
 	}
 }
 
