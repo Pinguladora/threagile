@@ -62,7 +62,7 @@ func (what *Threagile) explainRisk(cmd *cobra.Command, args []string) error {
 	result, runError := model.ReadAndAnalyzeModel(what.config, risks.GetBuiltInRiskRules(), progressReporter)
 	if runError != nil {
 		cmd.Printf("Failed to read and analyze model: %v", runError)
-		return runError
+		return fmt.Errorf("failed to read and analyze model: %w", runError)
 	}
 
 	// todo: implement this
