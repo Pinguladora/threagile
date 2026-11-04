@@ -546,7 +546,7 @@ func WriteDataAssetDiagramGraphvizDOT(parsedModel *types.Model, diagramFilenameD
 `)
 
 	// Technical Assets ===============================================================================
-	techAssets := make([]*types.TechnicalAsset, 0)
+	techAssets := make([]*types.TechnicalAsset, 0, len(parsedModel.TechnicalAssets))
 	for _, techAsset := range parsedModel.TechnicalAssets {
 		techAssets = append(techAssets, techAsset)
 	}
@@ -559,7 +559,7 @@ func WriteDataAssetDiagramGraphvizDOT(parsedModel *types.Model, diagramFilenameD
 	}
 
 	// Data Assets ===============================================================================
-	dataAssets := make([]*types.DataAsset, 0)
+	dataAssets := make([]*types.DataAsset, 0, len(parsedModel.DataAssets))
 	for _, dataAsset := range parsedModel.DataAssets {
 		dataAssets = append(dataAssets, dataAsset)
 	}

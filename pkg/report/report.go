@@ -675,7 +675,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 
 // as in Go ranging over map is random order, range over them in sorted (hence reproducible) way:.
 func sortedKeysOfTrustBoundaries(model *types.Model) []string {
-	keys := make([]string, 0)
+	keys := make([]string, 0, len(model.TrustBoundaries))
 	for k := range model.TrustBoundaries {
 		keys = append(keys, k)
 	}
@@ -685,7 +685,7 @@ func sortedKeysOfTrustBoundaries(model *types.Model) []string {
 
 // as in Go ranging over map is random order, range over them in sorted (hence reproducible) way:.
 func sortedKeysOfSharedRuntime(model *types.Model) []string {
-	keys := make([]string, 0)
+	keys := make([]string, 0, len(model.SharedRuntimes))
 	for k := range model.SharedRuntimes {
 		keys = append(keys, k)
 	}

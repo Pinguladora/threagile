@@ -23,7 +23,7 @@ func (what *RiskGroup) Init(riskItems []RiskItem) *RiskGroup {
 }
 
 func (what *RiskGroup) SortedGroups() []string {
-	groups := make([]string, 0)
+	groups := make([]string, 0, len(what.Groups))
 	for group := range what.Groups {
 		groups = append(groups, group)
 	}
@@ -116,7 +116,7 @@ func (what *RiskGroup) writeGroup(excel *excelize.File, sheetName string, cellSt
 }
 
 func (what *RiskGroup) uniqueValues(column int) []string {
-	values := make([]string, 0)
+	values := make([]string, 0, len(what.Items))
 	for _, risk := range what.Items {
 		values = append(values, risk.Columns[column])
 	}
