@@ -1344,26 +1344,14 @@ func (r *pdfReporter) renderImpactAnalysis(parsedModel *types.Model, initialRisk
 	html.Write(5, "Risk finding paragraphs are clickable and link to the corresponding chapter.")
 	r.pdf.SetFont("Helvetica", "", fontSizeBody)
 
-	r.addCategories(parsedModel,
-		getRiskCategories(parsedModel,
-			reduceToSeverityRisk(parsedModel.GeneratedRisksByCategory, initialRisks, types.CriticalSeverity)),
-		types.CriticalSeverity, false, initialRisks, true, false)
-	r.addCategories(parsedModel,
-		getRiskCategories(parsedModel,
-			reduceToSeverityRisk(parsedModel.GeneratedRisksByCategory, initialRisks, types.HighSeverity)),
-		types.HighSeverity, false, initialRisks, true, false)
-	r.addCategories(parsedModel,
-		getRiskCategories(parsedModel,
-			reduceToSeverityRisk(parsedModel.GeneratedRisksByCategory, initialRisks, types.ElevatedSeverity)),
-		types.ElevatedSeverity, false, initialRisks, true, false)
-	r.addCategories(parsedModel,
-		getRiskCategories(parsedModel,
-			reduceToSeverityRisk(parsedModel.GeneratedRisksByCategory, initialRisks, types.MediumSeverity)),
-		types.MediumSeverity, false, initialRisks, true, false)
-	r.addCategories(parsedModel,
-		getRiskCategories(parsedModel,
-			reduceToSeverityRisk(parsedModel.GeneratedRisksByCategory, initialRisks, types.LowSeverity)),
-		types.LowSeverity, false, initialRisks, true, false)
+	for _, severity := range []types.RiskSeverity{
+		types.CriticalSeverity, types.HighSeverity, types.ElevatedSeverity, types.MediumSeverity, types.LowSeverity,
+	} {
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel,
+				reduceToSeverityRisk(parsedModel.GeneratedRisksByCategory, initialRisks, severity)),
+			severity, false, initialRisks, true, false)
+	}
 
 	r.pdf.SetDrawColor(0, 0, 0)
 	r.pdf.SetDashPattern([]float64{}, 0)
@@ -1636,7 +1624,10 @@ func createDataRiskQuickWins() {
 }
 */
 
-func (r *pdfReporter) addCategories(parsedModel *types.Model, riskCategories []*types.RiskCategory, severity types.RiskSeverity, bothInitialAndRemainingRisks bool, initialRisks bool, describeImpact bool, describeDescription bool) {
+func (r *pdfReporter) addCategories(parsedModel *types.Model, riskCategories []*types.RiskCategory,
+	severity types.RiskSeverity, bothInitialAndRemainingRisks bool, initialRisks bool, describeImpact bool,
+	describeDescription bool,
+) {
 	html := r.pdf.HTMLBasicNew()
 	var strBuilder strings.Builder
 	sort.Sort(types.ByRiskCategoryTitleSort(riskCategories))
@@ -1654,39 +1645,9 @@ func (r *pdfReporter) addCategories(parsedModel *types.Model, riskCategories []*
 		} else {
 			strBuilder.WriteString("<br><br>")
 		}
-		var prefix string
-		switch severity {
-		case types.CriticalSeverity:
-			colorCriticalRisk(r.pdf)
-			prefix = "Critical: "
-		case types.HighSeverity:
-			colorHighRisk(r.pdf)
-			prefix = "High: "
-		case types.ElevatedSeverity:
-			colorElevatedRisk(r.pdf)
-			prefix = "Elevated: "
-		case types.MediumSeverity:
-			colorMediumRisk(r.pdf)
-			prefix = "Medium: "
-		case types.LowSeverity:
-			colorLowRisk(r.pdf)
-			prefix = "Low: "
-		default:
-			r.pdfColorBlack()
-			prefix = ""
-		}
-		switch types.HighestSeverityStillAtRisk(risksStr) {
-		case types.CriticalSeverity:
-			colorCriticalRisk(r.pdf)
-		case types.HighSeverity:
-			colorHighRisk(r.pdf)
-		case types.ElevatedSeverity:
-			colorElevatedRisk(r.pdf)
-		case types.MediumSeverity:
-			colorMediumRisk(r.pdf)
-		case types.LowSeverity:
-			colorLowRisk(r.pdf)
-		}
+		r.pdfColorBySeverity(severity)
+		prefix := severityPrefix(severity)
+		r.pdfColorByKnownSeverity(types.HighestSeverityStillAtRisk(risksStr))
 		if len(types.ReduceToOnlyStillAtRisk(risksStr)) == 0 {
 			r.pdfColorBlack()
 		}
@@ -1697,42 +1658,70 @@ func (r *pdfReporter) addCategories(parsedModel *types.Model, riskCategories []*
 		strBuilder.WriteString("<b>")
 		strBuilder.WriteString(riskCategory.Title)
 		strBuilder.WriteString("</b>: ")
-		count := len(risksStr)
-		initialStr := "Initial"
-		if !initialRisks {
-			initialStr = "Remaining"
-		}
-		remainingRisks := types.ReduceToOnlyStillAtRisk(risksStr)
-		suffix := strconv.Itoa(count) + " " + initialStr + " Risk"
-		if bothInitialAndRemainingRisks {
-			suffix = strconv.Itoa(len(remainingRisks)) + " / " + strconv.Itoa(count) + " Risk"
-		}
-		if count != 1 {
-			suffix += "s"
-		}
-		suffix += " - Exploitation likelihood is <i>"
-		if initialRisks {
-			suffix += highestExploitationLikelihood(risksStr).Title() + "</i> with <i>" +
-				highestExploitationImpact(risksStr).Title() + "</i> impact."
-		} else {
-			suffix += highestExploitationLikelihood(remainingRisks).Title() + "</i> with <i>" +
-				highestExploitationImpact(remainingRisks).Title() + "</i> impact."
-		}
-		strBuilder.WriteString(suffix + "<br>")
+		strBuilder.WriteString(impactCategorySuffix(risksStr, initialRisks, bothInitialAndRemainingRisks) + "<br>")
 		html.Write(5, strBuilder.String())
 		strBuilder.Reset()
 		r.pdf.SetTextColor(0, 0, 0)
-		switch {
-		case describeImpact:
-			strBuilder.WriteString(firstParagraph(riskCategory.Impact))
-		case describeDescription:
-			strBuilder.WriteString(firstParagraph(riskCategory.Description))
-		default:
-			strBuilder.WriteString(firstParagraph(riskCategory.Mitigation))
-		}
+		strBuilder.WriteString(impactCategoryParagraph(riskCategory, describeImpact, describeDescription))
 		html.Write(5, strBuilder.String())
 		strBuilder.Reset()
 		r.pdf.Link(9, posY, 190, r.pdf.GetY()-posY+4, r.tocLinkIdByAssetId[riskCategory.ID])
+	}
+}
+
+// pdfColorByKnownSeverity sets the text colour of a risk severity, and leaves it for an unknown one.
+func (r *pdfReporter) pdfColorByKnownSeverity(severity types.RiskSeverity) {
+	switch severity {
+	case types.CriticalSeverity:
+		colorCriticalRisk(r.pdf)
+	case types.HighSeverity:
+		colorHighRisk(r.pdf)
+	case types.ElevatedSeverity:
+		colorElevatedRisk(r.pdf)
+	case types.MediumSeverity:
+		colorMediumRisk(r.pdf)
+	case types.LowSeverity:
+		colorLowRisk(r.pdf)
+	}
+}
+
+// impactCategorySuffix returns the number of risks of a risk category in an impact analysis, with
+// their highest exploitation likelihood and impact.
+func impactCategorySuffix(risksStr []*types.Risk, initialRisks bool, bothInitialAndRemainingRisks bool) string {
+	count := len(risksStr)
+	initialStr := "Initial"
+	if !initialRisks {
+		initialStr = "Remaining"
+	}
+	remainingRisks := types.ReduceToOnlyStillAtRisk(risksStr)
+	suffix := strconv.Itoa(count) + " " + initialStr + " Risk"
+	if bothInitialAndRemainingRisks {
+		suffix = strconv.Itoa(len(remainingRisks)) + " / " + strconv.Itoa(count) + " Risk"
+	}
+	if count != 1 {
+		suffix += "s"
+	}
+	suffix += " - Exploitation likelihood is <i>"
+	if initialRisks {
+		suffix += highestExploitationLikelihood(risksStr).Title() + "</i> with <i>" +
+			highestExploitationImpact(risksStr).Title() + "</i> impact."
+	} else {
+		suffix += highestExploitationLikelihood(remainingRisks).Title() + "</i> with <i>" +
+			highestExploitationImpact(remainingRisks).Title() + "</i> impact."
+	}
+	return suffix
+}
+
+// impactCategoryParagraph returns the first paragraph of the impact, description or mitigation of
+// a risk category, in this order of preference.
+func impactCategoryParagraph(riskCategory *types.RiskCategory, describeImpact bool, describeDescription bool) string {
+	switch {
+	case describeImpact:
+		return firstParagraph(riskCategory.Impact)
+	case describeDescription:
+		return firstParagraph(riskCategory.Description)
+	default:
+		return firstParagraph(riskCategory.Mitigation)
 	}
 }
 
