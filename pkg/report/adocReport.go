@@ -1698,12 +1698,12 @@ func joinedOrNoneString(strs []string, noneValue string) string {
 	return singleLine
 }
 
-func dataAssetListTitleJoinOrNone(assets []*types.DataAsset, noneValue string) string {
+func dataAssetListTitleJoinOrNone(assets []*types.DataAsset) string {
 	dataAssetTitles := make([]string, 0, len(assets))
 	for _, dataAsset := range assets {
 		dataAssetTitles = append(dataAssetTitles, dataAsset.Title)
 	}
-	return joinedOrNoneString(dataAssetTitles, noneValue)
+	return joinedOrNoneString(dataAssetTitles, "")
 }
 
 func technicalAssetTitleOrNone(links []*types.TechnicalAsset, noneValue string) string {
@@ -1803,8 +1803,8 @@ func (adoc adocReport) technicalAssets(f *os.File) {
 		}
 
 		tagsUsedText := joinedOrNoneString(technicalAsset.Tags, "")
-		dataAssetsProcessedText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsProcessedSorted(technicalAsset), "")
-		dataAssetsStoredText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsStoredSorted(technicalAsset), "")
+		dataAssetsProcessedText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsProcessedSorted(technicalAsset))
+		dataAssetsStoredText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsStoredSorted(technicalAsset))
 		formatsAcceptedText := dataFormatTitleJoinOrNone(technicalAsset.DataFormatsAcceptedSorted(), "[GrayText]#none of the special data formats accepted#")
 
 		writeLine(f, `
@@ -1844,8 +1844,8 @@ func (adoc adocReport) technicalAssets(f *os.File) {
 				writeLine(f, fixBasicHtml(outgoingCommLink.Description))
 
 				tagsUsedText := joinedOrNoneString(outgoingCommLink.Tags, "")
-				dataAssetsSentText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsSentSorted(outgoingCommLink), "")
-				dataAssetsReceivedText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsReceivedSorted(outgoingCommLink), "")
+				dataAssetsSentText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsSentSorted(outgoingCommLink))
+				dataAssetsReceivedText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsReceivedSorted(outgoingCommLink))
 
 				writeLine(f, `
 [cols="h,1,h,1",frame=none,grid=none]
@@ -1869,8 +1869,8 @@ func (adoc adocReport) technicalAssets(f *os.File) {
 				writeLine(f, fixBasicHtml(incomingCommLink.Description))
 
 				tagsUsedText := joinedOrNoneString(incomingCommLink.Tags, "")
-				dataAssetsSentText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsSentSorted(incomingCommLink), "")
-				dataAssetsReceivedText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsReceivedSorted(incomingCommLink), "")
+				dataAssetsSentText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsSentSorted(incomingCommLink))
+				dataAssetsReceivedText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsReceivedSorted(incomingCommLink))
 
 				writeLine(f, `
 [cols="h,1,h,1",frame=none,grid=none]
