@@ -3,6 +3,7 @@
 The output of running tool may be in different formats:
 
 * `report.pdf` - most comprehensive report contained all information.
+* `report.html` - the same report as a single, self-contained [HTML page](./html-report.md), to read in a browser or keep as a CI artifact.
 * `risks.xlsx` and `risks.json` - list of identified risks in Excel and JSON formats.
 * `data-asset-diagram.png` - image/dot file which contains all data assets and relationship between them.
 * `data-flow-diagram.png` - image/dot file which contains all technical assets and relationship between them.
@@ -12,7 +13,7 @@ The output of running tool may be in different formats:
 
 ## Reproducible reports
 
-The same model always produces the same diagrams, JSON, Excel and AsciiDoc files.
+The same model always produces the same diagrams, JSON, Excel, HTML and AsciiDoc files.
 The only thing that changes between runs is the timestamp the reports are stamped
 with (the report date when the model has no `date`, and the execution timestamp).
 Set [`SOURCE_DATE_EPOCH`](https://reproducible-builds.org/specs/source-date-epoch/)
