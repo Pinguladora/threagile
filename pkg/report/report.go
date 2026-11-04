@@ -253,14 +253,14 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
 	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{management-summary}"))
 
-	risksStr := "Risks"
-	catStr := "Categories"
+	risksStr := textRisks
+	catStr := textCategories
 	count, catCount := totalRiskCount(parsedModel), len(parsedModel.GeneratedRisksByCategory)
 	if count == 1 {
-		risksStr = "Risk"
+		risksStr = textRisk
 	}
 	if catCount == 1 {
-		catStr = "category"
+		catStr = textCategory
 	}
 	y += 6
 	r.pdf.Text(11, y, "    "+"Impact Analysis of "+strconv.Itoa(count)+" Initial "+risksStr+" in "+strconv.Itoa(catCount)+" "+catStr)
@@ -281,14 +281,14 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{asset-register}"))
 
 	y += 6
-	risksStr = "Risks"
-	catStr = "Categories"
+	risksStr = textRisks
+	catStr = textCategories
 	count, catCount = len(filteredByStillAtRisk(parsedModel)), len(reduceToOnlyStillAtRisk(parsedModel.GeneratedRisksByCategoryWithCurrentStatus()))
 	if count == 1 {
-		risksStr = "Risk"
+		risksStr = textRisk
 	}
 	if catCount == 1 {
-		catStr = "category"
+		catStr = textCategory
 	}
 	r.pdf.Text(11, y, "    "+"Impact Analysis of "+strconv.Itoa(count)+" Remaining "+risksStr+" in "+strconv.Itoa(catCount)+" "+catStr)
 	r.pdf.Text(175, y, "{impact-analysis-remaining-risks}")
@@ -366,7 +366,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	assets := "Assets"
 	count = len(parsedModel.OutOfScopeTechnicalAssets())
 	if count == 1 {
-		assets = "Asset"
+		assets = textAsset
 	}
 	r.pdf.Text(11, y, "    "+"Out-of-Scope Assets: "+strconv.Itoa(count)+" "+assets)
 	r.pdf.Text(175, y, "{out-of-scope-assets}")
@@ -375,10 +375,10 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 
 	y += 6
 	modelFailures := flattenRiskSlice(filterByModelFailures(parsedModel, parsedModel.GeneratedRisksByCategory))
-	risksStr = "Risks"
+	risksStr = textRisks
 	count = len(modelFailures)
 	if count == 1 {
-		risksStr = "Risk"
+		risksStr = textRisk
 	}
 	countStillAtRisk := len(types.ReduceToOnlyStillAtRisk(modelFailures))
 	if countStillAtRisk > 0 {
@@ -394,7 +394,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	questions := "Questions"
 	count = len(parsedModel.Questions)
 	if count == 1 {
-		questions = "Question"
+		questions = textQuestion
 	}
 	if questionsUnanswered(parsedModel) > 0 {
 		colorModelFailure(r.pdf)
@@ -492,7 +492,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 			}
 			if technicalAsset.OutOfScope {
 				r.pdfColorOutOfScope()
-				suffix = "out-of-scope"
+				suffix = textOutOfScope
 			} else {
 				switch types.HighestSeverityStillAtRisk(newRisksStr) {
 				case types.CriticalSeverity:
@@ -1591,12 +1591,12 @@ func (r *pdfReporter) renderImpactAnalysis(parsedModel *types.Model, initialRisk
 	if !initialRisks {
 		count, catCount = len(filteredByStillAtRisk(parsedModel)), len(reduceToOnlyStillAtRisk(parsedModel.GeneratedRisksByCategoryWithCurrentStatus()))
 	}
-	riskStr, catStr := "Risks", "Categories"
+	riskStr, catStr := textRisks, textCategories
 	if count == 1 {
-		riskStr = "Risk"
+		riskStr = textRisk
 	}
 	if catCount == 1 {
-		catStr = "category"
+		catStr = textCategory
 	}
 	if initialRisks {
 		chapTitle := "Impact Analysis of " + strconv.Itoa(count) + " Initial " + riskStr + " in " + strconv.Itoa(catCount) + " " + catStr
@@ -1614,7 +1614,7 @@ func (r *pdfReporter) renderImpactAnalysis(parsedModel *types.Model, initialRisk
 	var strBuilder strings.Builder
 	riskStr = "risks"
 	if count == 1 {
-		riskStr = "risk"
+		riskStr = textRiskLower
 	}
 	initialStr := "initial"
 	if !initialRisks {
@@ -1651,7 +1651,7 @@ func (r *pdfReporter) createOutOfScopeAssets(parsedModel *types.Model) {
 	assets := "Assets"
 	count := len(parsedModel.OutOfScopeTechnicalAssets())
 	if count == 1 {
-		assets = "Asset"
+		assets = textAsset
 	}
 	chapTitle := "Out-of-Scope Assets: " + strconv.Itoa(count) + " " + assets
 	r.addHeadline(chapTitle, false)
@@ -1711,10 +1711,10 @@ func (r *pdfReporter) createOutOfScopeAssets(parsedModel *types.Model) {
 func (r *pdfReporter) createModelFailures(parsedModel *types.Model) {
 	r.pdf.SetTextColor(0, 0, 0)
 	modelFailures := flattenRiskSlice(filterByModelFailures(parsedModel, parsedModel.GeneratedRisksByCategory))
-	risksStr := "Risks"
+	risksStr := textRisks
 	count := len(modelFailures)
 	if count == 1 {
-		risksStr = "Risk"
+		risksStr = textRisk
 	}
 	countStillAtRisk := len(types.ReduceToOnlyStillAtRisk(modelFailures))
 	if countStillAtRisk > 0 {
@@ -2423,7 +2423,7 @@ func (r *pdfReporter) createQuestions(parsedModel *types.Model) {
 	questions := "Questions"
 	count := len(parsedModel.Questions)
 	if count == 1 {
-		questions = "Question"
+		questions = textQuestion
 	}
 	if questionsUnanswered(parsedModel) > 0 {
 		colorModelFailure(r.pdf)
@@ -2592,7 +2592,7 @@ func (r *pdfReporter) createRiskCategories(parsedModel *types.Model) {
 
 		// category details
 		var text strings.Builder
-		cweLink := "n/a"
+		cweLink := textNotApplicable
 		if category.CWE > 0 {
 			cweLink = "<a href=\"https://cwe.mitre.org/data/definitions/" + strconv.Itoa(category.CWE) + ".html\">CWE " +
 				strconv.Itoa(category.CWE) + "</a>"
@@ -2625,7 +2625,7 @@ func (r *pdfReporter) createRiskCategories(parsedModel *types.Model) {
 
 		cheatSheetLink := category.CheatSheet
 		if len(cheatSheetLink) == 0 {
-			cheatSheetLink = "n/a"
+			cheatSheetLink = textNotApplicable
 		} else {
 			lastLinkParts := strings.Split(cheatSheetLink, "/")
 			linkText := lastLinkParts[len(lastLinkParts)-1]
@@ -2836,7 +2836,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 		}
 		if technicalAsset.OutOfScope {
 			r.pdfColorOutOfScope()
-			suffix = "out-of-scope"
+			suffix = textOutOfScope
 		} else {
 			switch types.HighestSeverityStillAtRisk(risksStr) {
 			case types.CriticalSeverity:
@@ -3031,7 +3031,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 		textRAA := fmt.Sprintf("%.0f", technicalAsset.RAA) + " %"
 		if technicalAsset.OutOfScope {
 			r.pdfColorGray()
-			textRAA = "out-of-scope"
+			textRAA = textOutOfScope
 		}
 		r.pdf.MultiCell(145, 6, textRAA, "0", "0", false)
 		r.pdfColorBlack()
@@ -3072,7 +3072,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 		}
 		if len(tagsUsedText) == 0 {
 			r.pdfColorGray()
-			tagsUsedText = "none"
+			tagsUsedText = textNone
 		}
 		r.pdf.MultiCell(145, 6, uni(tagsUsedText), "0", "0", false)
 		if r.pdf.GetY() > 270 {
@@ -3151,7 +3151,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 		}
 		if len(dataAssetsProcessedText) == 0 {
 			r.pdfColorGray()
-			dataAssetsProcessedText = "none"
+			dataAssetsProcessedText = textNone
 		}
 		r.pdf.MultiCell(145, 6, uni(dataAssetsProcessedText), "0", "0", false)
 
@@ -3168,7 +3168,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 		}
 		if len(dataAssetsStoredText) == 0 {
 			r.pdfColorGray()
-			dataAssetsStoredText = "none"
+			dataAssetsStoredText = textNone
 		}
 		r.pdf.MultiCell(145, 6, uni(dataAssetsStoredText), "0", "0", false)
 
@@ -3385,7 +3385,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 				}
 				if len(tagsUsedText) == 0 {
 					r.pdfColorGray()
-					tagsUsedText = "none"
+					tagsUsedText = textNone
 				}
 				r.pdf.MultiCell(140, 6, uni(tagsUsedText), "0", "0", false)
 				if r.pdf.GetY() > 270 {
@@ -3419,7 +3419,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 				}
 				if len(dataAssetsSentText) == 0 {
 					r.pdfColorGray()
-					dataAssetsSentText = "none"
+					dataAssetsSentText = textNone
 				}
 				r.pdf.MultiCell(140, 6, uni(dataAssetsSentText), "0", "0", false)
 				r.pdfColorGray()
@@ -3435,7 +3435,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 				}
 				if len(dataAssetsReceivedText) == 0 {
 					r.pdfColorGray()
-					dataAssetsReceivedText = "none"
+					dataAssetsReceivedText = textNone
 				}
 				r.pdf.MultiCell(140, 6, uni(dataAssetsReceivedText), "0", "0", false)
 				r.pdf.Ln(-1)
@@ -3555,7 +3555,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 				}
 				if len(tagsUsedText) == 0 {
 					r.pdfColorGray()
-					tagsUsedText = "none"
+					tagsUsedText = textNone
 				}
 				r.pdf.MultiCell(140, 6, uni(tagsUsedText), "0", "0", false)
 				if r.pdf.GetY() > 270 {
@@ -3590,7 +3590,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 				}
 				if len(dataAssetsSentText) == 0 {
 					r.pdfColorGray()
-					dataAssetsSentText = "none"
+					dataAssetsSentText = textNone
 				}
 				r.pdf.MultiCell(140, 6, uni(dataAssetsSentText), "0", "0", false)
 				r.pdfColorGray()
@@ -3607,7 +3607,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 				}
 				if len(dataAssetsReceivedText) == 0 {
 					r.pdfColorGray()
-					dataAssetsReceivedText = "none"
+					dataAssetsReceivedText = textNone
 				}
 				r.pdf.MultiCell(140, 6, uni(dataAssetsReceivedText), "0", "0", false)
 				r.pdf.Ln(-1)
@@ -3716,7 +3716,7 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 		}
 		if len(tagsUsedText) == 0 {
 			r.pdfColorGray()
-			tagsUsedText = "none"
+			tagsUsedText = textNone
 		}
 		r.pdf.MultiCell(145, 6, uni(tagsUsedText), "0", "0", false)
 		if r.pdf.GetY() > 265 {
@@ -3803,7 +3803,7 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 		}
 		if len(processedByText) == 0 {
 			r.pdfColorGray()
-			processedByText = "none"
+			processedByText = textNone
 		}
 		r.pdf.MultiCell(145, 6, uni(processedByText), "0", "0", false)
 
@@ -3824,7 +3824,7 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 		}
 		if len(storedByText) == 0 {
 			r.pdfColorGray()
-			storedByText = "none"
+			storedByText = textNone
 		}
 		r.pdf.MultiCell(145, 6, uni(storedByText), "0", "0", false)
 
@@ -3845,7 +3845,7 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 		}
 		if len(sentViaText) == 0 {
 			r.pdfColorGray()
-			sentViaText = "none"
+			sentViaText = textNone
 		}
 		r.pdf.MultiCell(145, 6, uni(sentViaText), "0", "0", false)
 
@@ -3866,7 +3866,7 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 		}
 		if len(receivedViaText) == 0 {
 			r.pdfColorGray()
-			receivedViaText = "none"
+			receivedViaText = textNone
 		}
 		r.pdf.MultiCell(145, 6, uni(receivedViaText), "0", "0", false)
 
@@ -3889,7 +3889,7 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 		}
 		if !isDataBreachPotentialStillAtRisk(parsedModel, dataAsset) {
 			r.pdfColorBlack()
-			riskText = "none"
+			riskText = textNone
 		}
 		r.pdf.MultiCell(145, 6, riskText, "0", "0", false)
 		r.pdf.SetFont("Helvetica", "", fontSizeBody)
@@ -3915,7 +3915,7 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 			r.pdfColorBlack()
 			riskRemainingStr := "risksStr"
 			if countStillAtRisk == 1 {
-				riskRemainingStr = "risk"
+				riskRemainingStr = textRiskLower
 			}
 			r.pdf.MultiCell(145, 6, "This data asset has data breach potential because of "+
 				""+strconv.Itoa(countStillAtRisk)+" remaining "+riskRemainingStr+":", "0", "0", false)
@@ -3956,9 +3956,9 @@ func (r *pdfReporter) createTrustBoundaries(parsedModel *types.Model) {
 	r.addHeadline(title, false)
 
 	html := r.pdf.HTMLBasicNew()
-	word := "has"
+	word := textHas
 	if len(parsedModel.TrustBoundaries) > 1 {
-		word = "have"
+		word = textHave
 	}
 	html.Write(5, "In total <b>"+strconv.Itoa(len(parsedModel.TrustBoundaries))+" trust boundaries</b> "+word+" been "+
 		"modeled during the threat modeling process.")
@@ -4020,7 +4020,7 @@ func (r *pdfReporter) createTrustBoundaries(parsedModel *types.Model) {
 		}
 		if len(tagsUsedText) == 0 {
 			r.pdfColorGray()
-			tagsUsedText = "none"
+			tagsUsedText = textNone
 		}
 		r.pdf.MultiCell(145, 6, uni(tagsUsedText), "0", "0", false)
 
@@ -4042,7 +4042,7 @@ func (r *pdfReporter) createTrustBoundaries(parsedModel *types.Model) {
 		}
 		if len(assetsInsideText) == 0 {
 			r.pdfColorGray()
-			assetsInsideText = "none"
+			assetsInsideText = textNone
 		}
 		r.pdf.MultiCell(145, 6, uni(assetsInsideText), "0", "0", false)
 
@@ -4063,7 +4063,7 @@ func (r *pdfReporter) createTrustBoundaries(parsedModel *types.Model) {
 		}
 		if len(boundariesNestedText) == 0 {
 			r.pdfColorGray()
-			boundariesNestedText = "none"
+			boundariesNestedText = textNone
 		}
 		r.pdf.MultiCell(145, 6, uni(boundariesNestedText), "0", "0", false)
 	}
@@ -4076,9 +4076,9 @@ func (r *pdfReporter) createSharedRuntimes(parsedModel *types.Model) {
 	r.addHeadline(title, false)
 
 	html := r.pdf.HTMLBasicNew()
-	word, runtime := "has", "runtime"
+	word, runtime := textHas, "runtime"
 	if len(parsedModel.SharedRuntimes) > 1 {
-		word, runtime = "have", "runtimes"
+		word, runtime = textHave, "runtimes"
 	}
 	html.Write(5, "In total <b>"+strconv.Itoa(len(parsedModel.SharedRuntimes))+" shared "+runtime+"</b> "+word+" been "+
 		"modeled during the threat modeling process.")
@@ -4123,7 +4123,7 @@ func (r *pdfReporter) createSharedRuntimes(parsedModel *types.Model) {
 		}
 		if len(tagsUsedText) == 0 {
 			r.pdfColorGray()
-			tagsUsedText = "none"
+			tagsUsedText = textNone
 		}
 		r.pdf.MultiCell(145, 6, uni(tagsUsedText), "0", "0", false)
 
@@ -4145,7 +4145,7 @@ func (r *pdfReporter) createSharedRuntimes(parsedModel *types.Model) {
 		}
 		if len(assetsInsideText) == 0 {
 			r.pdfColorGray()
-			assetsInsideText = "none"
+			assetsInsideText = textNone
 		}
 		r.pdf.MultiCell(145, 6, uni(assetsInsideText), "0", "0", false)
 	}
@@ -4188,7 +4188,7 @@ func (r *pdfReporter) createRiskRulesChecked(parsedModel *types.Model, modelFile
 		r.pdf.Ln(-1)
 		r.pdf.SetFont("Helvetica", "B", fontSizeBody)
 		if contains(skipRiskRules, id) {
-			skipped = "SKIPPED - "
+			skipped = textSkipped
 		} else {
 			skipped = ""
 		}
@@ -4263,7 +4263,7 @@ func (r *pdfReporter) createRiskRulesChecked(parsedModel *types.Model, modelFile
 		r.pdf.Ln(-1)
 		r.pdf.SetFont("Helvetica", "B", fontSizeBody)
 		if contains(skipRiskRules, rule.Category().ID) {
-			skipped = "SKIPPED - "
+			skipped = textSkipped
 		} else {
 			skipped = ""
 		}

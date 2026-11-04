@@ -614,11 +614,11 @@ func (adoc adocReport) impactAnalysis(f *os.File, initialRisks bool) int {
 
 	riskText := "risks"
 	if count == 1 {
-		riskText = "risk"
+		riskText = textRiskLower
 	}
 	catText := "categories"
 	if catCount == 1 {
-		catText = "category"
+		catText = textCategory
 	}
 
 	titleCaser := cases.Title(language.English)
@@ -1344,7 +1344,7 @@ func (adoc adocReport) writeDataRiskMapping(dataAssetDiagramFilenamePNG string) 
 }
 
 func (adoc adocReport) outOfScopeAssets(f *os.File) {
-	assets := "Asset"
+	assets := textAsset
 	count := len(adoc.model.OutOfScopeTechnicalAssets())
 	if count > 1 {
 		assets += "s"
@@ -1440,7 +1440,7 @@ func (adoc adocReport) writeModelFailures() error {
 }
 
 func (adoc adocReport) questions(f *os.File) int {
-	questionStr := "Question"
+	questionStr := textQuestion
 	count := len(adoc.model.Questions)
 	if count > 1 {
 		questionStr += "s"
@@ -1583,7 +1583,7 @@ func (adoc adocReport) riskCategories(f *os.File) {
 		writeLine(f, "")
 
 		// category details
-		cweLink := "n/a"
+		cweLink := textNotApplicable
 		if category.CWE > 0 {
 			cweLink = "https://cwe.mitre.org/data/definitions/" + strconv.Itoa(category.CWE) + ".html[CWE " +
 				strconv.Itoa(category.CWE) + "]"
@@ -1612,14 +1612,14 @@ func (adoc adocReport) riskCategories(f *os.File) {
 		writeLine(f, "")
 
 		asvsChapter := category.ASVS
-		asvsLink := "n/a"
+		asvsLink := textNotApplicable
 		if len(asvsChapter) > 0 {
 			asvsLink = "https://owasp.org/www-project-application-security-verification-standard/[" + asvsChapter + "]"
 		}
 
 		cheatSheetLink := category.CheatSheet
 		if len(cheatSheetLink) == 0 {
-			cheatSheetLink = "n/a"
+			cheatSheetLink = textNotApplicable
 		} else {
 			lastLinkParts := strings.Split(cheatSheetLink, "/")
 			linkText := lastLinkParts[len(lastLinkParts)-1]
@@ -1761,7 +1761,7 @@ func (adoc adocReport) technicalAssets(f *os.File) {
 		colorPrefix, colorSuffix := colorPrefixBySeverity(types.HighestSeverityStillAtRisk(risksStr), false)
 		if technicalAsset.OutOfScope {
 			colorPrefix = "[OutOfScope]#"
-			suffix = "out-of-scope"
+			suffix = textOutOfScope
 		} else if len(types.ReduceToOnlyStillAtRisk(risksStr)) == 0 {
 			colorPrefix = ""
 			colorSuffix = ""
@@ -1950,7 +1950,7 @@ func (adoc adocReport) dataAssets(f *os.File) {
 		sortByDataBreachProbability(dataBreachRisksStillAtRisk)
 		dataBreachText := "This data asset has no data breach potential."
 		if len(dataBreachRisksStillAtRisk) > 0 {
-			riskRemainingStr := "risk"
+			riskRemainingStr := textRiskLower
 			if countStillAtRisk > 1 {
 				riskRemainingStr += "s"
 			}
@@ -1962,7 +1962,7 @@ func (adoc adocReport) dataAssets(f *os.File) {
 		if !isDataBreachPotentialStillAtRisk(adoc.model, dataAsset) {
 			colorPrefix = ""
 			colorSuffix = ""
-			riskText = "none"
+			riskText = textNone
 		}
 
 		writeLine(f, `
@@ -2015,9 +2015,9 @@ func (adoc adocReport) writeDataAssets() error {
 func (adoc adocReport) trustBoundaries(f *os.File) {
 	writeLine(f, "= Trust Boundaries")
 
-	word := "has"
+	word := textHas
 	if len(adoc.model.TrustBoundaries) > 1 {
-		word = "have"
+		word = textHave
 	}
 	writeLine(f, "In total *"+strconv.Itoa(len(adoc.model.TrustBoundaries))+" trust boundaries* "+word+" been "+
 		"modeled during the threat modeling process.")
@@ -2066,9 +2066,9 @@ func (adoc adocReport) writeTrustBoundaries() error {
 
 func (adoc adocReport) sharedRuntimes(f *os.File) {
 	writeLine(f, "= Shared Runtimes")
-	word, runtime := "has", "runtime"
+	word, runtime := textHas, "runtime"
 	if len(adoc.model.SharedRuntimes) > 1 {
-		word, runtime = "have", "runtimes"
+		word, runtime = textHave, "runtimes"
 	}
 	writeLine(f, "In total *"+strconv.Itoa(len(adoc.model.SharedRuntimes))+" shared "+runtime+"* "+word+" been "+
 		"modeled during the threat modeling process.")
@@ -2133,7 +2133,7 @@ func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRi
 	for _, id := range slices.Sorted(maps.Keys(customRiskRules)) {
 		customRule := customRiskRules[id]
 		if contains(skipRiskRules, id) {
-			skipped = "SKIPPED - "
+			skipped = textSkipped
 		} else {
 			skipped = ""
 		}
@@ -2172,7 +2172,7 @@ func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRi
 	for _, id := range slices.Sorted(maps.Keys(adoc.riskRules)) {
 		rule := adoc.riskRules[id]
 		if contains(skipRiskRules, rule.Category().ID) {
-			skipped = "SKIPPED - "
+			skipped = textSkipped
 		} else {
 			skipped = ""
 		}

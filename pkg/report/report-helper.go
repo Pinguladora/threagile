@@ -11,6 +11,27 @@ import (
 	"github.com/Pinguladora/threagile/pkg/types"
 )
 
+// Words that the PDF and AsciiDoc reports choose between depending on a count.
+const (
+	textRisk       = "Risk"
+	textRisks      = "Risks"
+	textRiskLower  = "risk"
+	textCategories = "Categories"
+	textCategory   = "category"
+	textAsset      = "Asset"
+	textQuestion   = "Question"
+	textHas        = "has"
+	textHave       = "have"
+)
+
+// Texts that the PDF and AsciiDoc reports show in place of, or in front of, a value.
+const (
+	textNone          = "none"
+	textNotApplicable = "n/a"
+	textOutOfScope    = "out-of-scope"
+	textSkipped       = "SKIPPED - "
+)
+
 func filteredByRiskStatus(parsedModel *types.Model, status types.RiskStatus) []*types.Risk {
 	filteredRisks := make([]*types.Risk, 0)
 	for _, risks := range sortedByCategory(parsedModel.GeneratedRisksByCategoryWithCurrentStatus()) {
