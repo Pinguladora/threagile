@@ -20,6 +20,11 @@ This will generate a lot of useful reports which will overview the system in a d
 
 Some of identified risks are real risks, some of it is accepted risk therefore next important field would be `risk_tracking` where it would be possible to document risk analysis model.
 
+`risk_tracking` is keyed by the synthetic id of a risk, like `unencrypted-asset@orders-db`. A `*` stands for any
+one part of the id between the `@` characters, and a key covers the whole id: `unencrypted-asset@*` tracks the
+`unencrypted-asset` risk of every asset, `dos-risky-access-across-trust-boundary@*@*@*` the four-part ids of
+that rule, and `*@orders-db` the risks of `orders-db` but not those of `orders-db-replica`.
+
 ## Connections through proxies (`via`)
 
 A communication link can list, in order, the technical assets the connection passes through on its way to the target, such as a load balancer and a WAF:

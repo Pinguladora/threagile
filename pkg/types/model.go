@@ -115,8 +115,7 @@ func (model *Model) ApplyWildcardRiskTrackingEvaluation(
 		progressReporter.Infof("Applying wildcard risk tracking for risk id: %v", syntheticRiskIdPattern)
 
 		foundSome := false
-		matchingRiskIdExpression := regexp.MustCompile(
-			strings.ReplaceAll(regexp.QuoteMeta(syntheticRiskIdPattern), `\*`, `[^@]+`))
+		matchingRiskIdExpression := riskIdExpression(syntheticRiskIdPattern)
 		for _, syntheticRiskId := range slices.Sorted(maps.Keys(model.GeneratedRisksBySyntheticId)) {
 			if matchingRiskIdExpression.Match([]byte(syntheticRiskId)) &&
 				model.HasNotYetAnyDirectNonWildcardRiskTracking(syntheticRiskId) {
@@ -143,6 +142,12 @@ func (model *Model) ApplyWildcardRiskTrackingEvaluation(
 		}
 	}
 	return nil
+}
+
+// riskIdExpression matches the synthetic ids of the risks that a risk id pattern names, as risk tracking does:
+// each "*" stands for one part of the id between the @ characters, and the pattern covers the whole id.
+func riskIdExpression(pattern string) *regexp.Regexp {
+	return regexp.MustCompile("^" + strings.ReplaceAll(regexp.QuoteMeta(pattern), `\*`, `[^@]+`) + "$")
 }
 
 func (model *Model) CheckRiskTracking(ignoreOrphanedRiskTracking bool, progressReporter ProgressReporter) error {
