@@ -99,7 +99,8 @@ type payloadModels struct {
 	TimestampModified time.Time `json:"timestamp_modified" yaml:"timestamp_modified"`
 }
 
-func (s *server) listModels(ginContext *gin.Context) { // TODO currently returns error when any model is no longer valid in syntax, so eventually have some fallback to not just bark on an invalid model...
+// listModels fails as soon as any model is no longer valid in syntax; it has no fallback for invalid models.
+func (s *server) listModels(ginContext *gin.Context) {
 	folderNameOfKey, key, ok := s.checkTokenToFolderName(ginContext)
 	if !ok {
 		return
@@ -454,7 +455,7 @@ func (s *server) deleteDataAsset(ginContext *gin.Context) {
 							if referencedAsset == dataAsset.ID { // apply the removal
 								referencesDeleted = true
 								// Remove the element at index i
-								// TODO needs more testing
+								// this removal is not well tested
 								copy(techAsset.DataAssetsProcessed[i:], techAsset.DataAssetsProcessed[i+1:])                         // Shift a[i+1:] left one index.
 								techAsset.DataAssetsProcessed[len(techAsset.DataAssetsProcessed)-1] = ""                             // Erase last element (write zero value).
 								techAsset.DataAssetsProcessed = techAsset.DataAssetsProcessed[:len(techAsset.DataAssetsProcessed)-1] // Truncate slice.
@@ -467,7 +468,7 @@ func (s *server) deleteDataAsset(ginContext *gin.Context) {
 							if referencedAsset == dataAsset.ID { // apply the removal
 								referencesDeleted = true
 								// Remove the element at index i
-								// TODO needs more testing
+								// this removal is not well tested
 								copy(techAsset.DataAssetsStored[i:], techAsset.DataAssetsStored[i+1:])                      // Shift a[i+1:] left one index.
 								techAsset.DataAssetsStored[len(techAsset.DataAssetsStored)-1] = ""                          // Erase last element (write zero value).
 								techAsset.DataAssetsStored = techAsset.DataAssetsStored[:len(techAsset.DataAssetsStored)-1] // Truncate slice.
@@ -481,7 +482,7 @@ func (s *server) deleteDataAsset(ginContext *gin.Context) {
 								if referencedAsset == dataAsset.ID { // apply the removal
 									referencesDeleted = true
 									// Remove the element at index i
-									// TODO needs more testing
+									// this removal is not well tested
 									copy(techAsset.CommunicationLinks[title].DataAssetsSent[i:], techAsset.CommunicationLinks[title].DataAssetsSent[i+1:]) // Shift a[i+1:] left one index.
 									techAsset.CommunicationLinks[title].DataAssetsSent[len(techAsset.CommunicationLinks[title].DataAssetsSent)-1] = ""     // Erase last element (write zero value).
 									x := techAsset.CommunicationLinks[title]
@@ -494,7 +495,7 @@ func (s *server) deleteDataAsset(ginContext *gin.Context) {
 								if referencedAsset == dataAsset.ID { // apply the removal
 									referencesDeleted = true
 									// Remove the element at index i
-									// TODO needs more testing
+									// this removal is not well tested
 									copy(techAsset.CommunicationLinks[title].DataAssetsReceived[i:], techAsset.CommunicationLinks[title].DataAssetsReceived[i+1:]) // Shift a[i+1:] left one index.
 									techAsset.CommunicationLinks[title].DataAssetsReceived[len(techAsset.CommunicationLinks[title].DataAssetsReceived)-1] = ""     // Erase last element (write zero value).
 									x := techAsset.CommunicationLinks[title]
@@ -511,7 +512,7 @@ func (s *server) deleteDataAsset(ginContext *gin.Context) {
 							if individualRiskInstance.MostRelevantDataAsset == dataAsset.ID { // apply the removal
 								referencesDeleted = true
 								x := individualRiskCat.RisksIdentified[individualRiskInstanceTitle]
-								x.MostRelevantDataAsset = "" // TODO needs more testing
+								x.MostRelevantDataAsset = "" // not well tested
 								individualRiskCat.RisksIdentified[individualRiskInstanceTitle] = x
 							}
 						}
@@ -606,7 +607,7 @@ func (s *server) setDataAsset(ginContext *gin.Context) {
 							for individualRiskInstanceTitle, individualRiskInstance := range individualRiskCat.RisksIdentified {
 								if individualRiskInstance.MostRelevantDataAsset == dataAsset.ID { // apply the ID change
 									x := individualRiskCat.RisksIdentified[individualRiskInstanceTitle]
-									x.MostRelevantDataAsset = dataAssetInput.ID // TODO needs more testing
+									x.MostRelevantDataAsset = dataAssetInput.ID // not well tested
 									individualRiskCat.RisksIdentified[individualRiskInstanceTitle] = x
 								}
 							}
@@ -780,7 +781,7 @@ func (s *server) setSharedRuntime(ginContext *gin.Context) {
 							for individualRiskInstanceTitle, individualRiskInstance := range individualRiskCat.RisksIdentified {
 								if individualRiskInstance.MostRelevantSharedRuntime == sharedRuntime.ID { // apply the ID change
 									x := individualRiskCat.RisksIdentified[individualRiskInstanceTitle]
-									x.MostRelevantSharedRuntime = sharedRuntimeInput.ID // TODO needs more testing
+									x.MostRelevantSharedRuntime = sharedRuntimeInput.ID // not well tested
 									individualRiskCat.RisksIdentified[individualRiskInstanceTitle] = x
 								}
 							}
@@ -932,7 +933,7 @@ func (s *server) deleteSharedRuntime(ginContext *gin.Context) {
 							if individualRiskInstance.MostRelevantSharedRuntime == sharedRuntime.ID { // apply the removal
 								referencesDeleted = true
 								x := individualRiskCat.RisksIdentified[individualRiskInstanceTitle]
-								x.MostRelevantSharedRuntime = "" // TODO needs more testing
+								x.MostRelevantSharedRuntime = "" // not well tested
 								individualRiskCat.RisksIdentified[individualRiskInstanceTitle] = x
 							}
 						}
