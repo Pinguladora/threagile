@@ -1027,6 +1027,30 @@
     "most_relevant_communication_link_title": "NFS Filesystem Access"
   },
   {
+    "category": "public-cloud-asset-access",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003ePublic Cloud Asset Access (S3)\u003c/b\u003e risk at \u003cb\u003eContract File Server\u003c/b\u003e",
+    "synthetic_id": "public-cloud-asset-access@contract-file-server",
+    "most_relevant_technical_asset": "contract-file-server",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "contract-file-server"
+    ],
+    "plain_title": "Public Cloud Asset Access (S3) risk at Contract File Server",
+    "category_title": "Public Cloud Asset Access",
+    "stride": "information-disclosure",
+    "function": "operations",
+    "cwe": 732,
+    "action": "Cloud Access Policies",
+    "mitigation": "Audit the resource policies and ACLs of the cloud asset regularly and reduce the granted rights to the bare minimum: no wildcard principals or actions, and conditions that pin access to the expected accounts, VPCs or endpoints. Label the assets that have to be public and isolate them from the non-public ones. \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Turn on \u003ci\u003eS3 Block Public Access\u003c/i\u003e at the account level (see \u003ca href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html\"\u003ehttps://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html\u003c/a\u003e) and review the public and cross-account findings of \u003ci\u003eIAM Access Analyzer\u003c/i\u003e, which covers S3 buckets, SQS queues and further resource types (see \u003ca href=\"https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html\"\u003ehttps://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html\u003c/a\u003e).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Contract File Server",
+    "most_relevant_technical_asset_raa": 33.2657200811359
+  },
+  {
     "category": "push-instead-of-pull-deployment",
     "risk_status": "unchecked",
     "severity": "medium",

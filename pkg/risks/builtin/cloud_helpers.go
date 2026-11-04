@@ -6,6 +6,24 @@ import (
 	"github.com/Pinguladora/threagile/pkg/types"
 )
 
+// Category texts the cloud risk rules share, also with other rules.
+const (
+	checkCheatSheetAndASVS = "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+
+	asvsAccessControl = "V4 - Access Control Verification Requirements"
+
+	cheatSheetSecureCloudArchitecture = "https://cheatsheetseries.owasp.org/cheatsheets/" +
+		"Secure_Cloud_Architecture_Cheat_Sheet.html"
+
+	awsIAMAccessAnalyzer = "https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html"
+)
+
+// htmlLink renders a URL as a link that shows the URL itself, the way the mitigations of the rules link to
+// vendor documentation.
+func htmlLink(url string) string {
+	return "<a href=\"" + url + "\">" + url + "</a>"
+}
+
 // Helpers shared by the cloud risk rules. They use the vocabulary of the missing-cloud-hardening rule:
 // cloud trust boundary types and the provider tags (aws, azure, gcp, ocp and their "provider:service" sub-tags).
 
