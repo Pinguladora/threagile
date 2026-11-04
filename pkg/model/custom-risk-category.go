@@ -57,12 +57,14 @@ func LoadCustomRiskRules(pluginDir string, pluginFiles []string, reporter types.
 				newRunner, loadError := new(runner).Load(filepath.Join(pluginDir, pluginFile))
 				if loadError != nil {
 					reporter.Error(fmt.Sprintf("WARNING: Custom risk rule %q not loaded: %v\n", pluginFile, loadError))
+					continue
 				}
 
 				risk := new(CustomRiskCategory)
 				runError := newRunner.Run(nil, &risk, "-get-info")
 				if runError != nil {
 					reporter.Error(fmt.Sprintf("WARNING: Failed to get info for custom risk rule %q: %v\n", pluginFile, runError))
+					continue
 				}
 
 				risk.runner = newRunner
