@@ -53,225 +53,51 @@ func CastValue(value Value, castType string) (Value, error) {
 }
 
 func toConfidentiality(value Value) (Value, error) {
-	switch castValue := value.Value().(type) {
-	case string:
-		converted, conversionError := types.Confidentiality(0).Find(castValue)
-		if conversionError != nil {
-			return nil, conversionError
-		}
-
-		return SomeDecimalValue(decimal.NewFromInt(int64(converted)), value.Event()), nil
-
-	case int:
-		return SomeDecimalValue(decimal.NewFromInt(int64(castValue)), value.Event()), nil
-
-	case int64:
-		return SomeDecimalValue(decimal.NewFromInt(castValue), value.Event()), nil
-
-	case Value:
-		return toConfidentiality(castValue)
-
-	default:
-		return nil, fmt.Errorf("toConfidentiality: unexpected type %T", value)
-	}
+	return castToEnum(value, types.Confidentiality(0).Find)
 }
 
 func toCriticality(value Value) (Value, error) {
-	switch castValue := value.Value().(type) {
-	case string:
-		converted, conversionError := types.Criticality(0).Find(castValue)
-		if conversionError != nil {
-			return nil, conversionError
-		}
-
-		return SomeDecimalValue(decimal.NewFromInt(int64(converted)), value.Event()), nil
-
-	case int:
-		return SomeDecimalValue(decimal.NewFromInt(int64(castValue)), value.Event()), nil
-
-	case int64:
-		return SomeDecimalValue(decimal.NewFromInt(castValue), value.Event()), nil
-
-	case Value:
-		return toCriticality(castValue)
-
-	default:
-		return nil, fmt.Errorf("toConfidentiality: unexpected type %T", value)
-	}
+	return castToEnum(value, types.Criticality(0).Find)
 }
 
 func toAuthentication(value Value) (Value, error) {
-	switch castValue := value.Value().(type) {
-	case string:
-		converted, conversionError := types.Authentication(0).Find(castValue)
-		if conversionError != nil {
-			return nil, conversionError
-		}
-
-		return SomeDecimalValue(decimal.NewFromInt(int64(converted)), value.Event()), nil
-
-	case int:
-		return SomeDecimalValue(decimal.NewFromInt(int64(castValue)), value.Event()), nil
-
-	case int64:
-		return SomeDecimalValue(decimal.NewFromInt(castValue), value.Event()), nil
-
-	case Value:
-		return toAuthentication(castValue)
-
-	default:
-		return nil, fmt.Errorf("toConfidentiality: unexpected type %T", value)
-	}
+	return castToEnum(value, types.Authentication(0).Find)
 }
 
 func toAuthorization(value Value) (Value, error) {
-	switch castValue := value.Value().(type) {
-	case string:
-		converted, conversionError := types.Authorization(0).Find(castValue)
-		if conversionError != nil {
-			return nil, conversionError
-		}
-
-		return SomeDecimalValue(decimal.NewFromInt(int64(converted)), value.Event()), nil
-
-	case int:
-		return SomeDecimalValue(decimal.NewFromInt(int64(castValue)), value.Event()), nil
-
-	case int64:
-		return SomeDecimalValue(decimal.NewFromInt(castValue), value.Event()), nil
-
-	case Value:
-		return toAuthorization(castValue)
-
-	default:
-		return nil, fmt.Errorf("toConfidentiality: unexpected type %T", value)
-	}
+	return castToEnum(value, types.Authorization(0).Find)
 }
 
 func toProbability(value Value) (Value, error) {
-	switch castValue := value.Value().(type) {
-	case string:
-		converted, conversionError := types.DataBreachProbability(0).Find(castValue)
-		if conversionError != nil {
-			return nil, conversionError
-		}
-
-		return SomeDecimalValue(decimal.NewFromInt(int64(converted)), value.Event()), nil
-
-	case int:
-		return SomeDecimalValue(decimal.NewFromInt(int64(castValue)), value.Event()), nil
-
-	case int64:
-		return SomeDecimalValue(decimal.NewFromInt(castValue), value.Event()), nil
-
-	case Value:
-		return toProbability(castValue)
-
-	default:
-		return nil, fmt.Errorf("toConfidentiality: unexpected type %T", value)
-	}
+	return castToEnum(value, types.DataBreachProbability(0).Find)
 }
 
 func toEncryption(value Value) (Value, error) {
-	switch castValue := value.Value().(type) {
-	case string:
-		converted, conversionError := types.EncryptionStyle(0).Find(castValue)
-		if conversionError != nil {
-			return nil, conversionError
-		}
-
-		return SomeDecimalValue(decimal.NewFromInt(int64(converted)), value.Event()), nil
-
-	case int:
-		return SomeDecimalValue(decimal.NewFromInt(int64(castValue)), value.Event()), nil
-
-	case int64:
-		return SomeDecimalValue(decimal.NewFromInt(castValue), value.Event()), nil
-
-	case Value:
-		return toEncryption(castValue)
-
-	default:
-		return nil, fmt.Errorf("toConfidentiality: unexpected type %T", value)
-	}
+	return castToEnum(value, types.EncryptionStyle(0).Find)
 }
 
 func toQuantity(value Value) (Value, error) {
-	switch castValue := value.Value().(type) {
-	case string:
-		converted, conversionError := types.Quantity(0).Find(castValue)
-		if conversionError != nil {
-			return nil, conversionError
-		}
-
-		return SomeDecimalValue(decimal.NewFromInt(int64(converted)), value.Event()), nil
-
-	case int:
-		return SomeDecimalValue(decimal.NewFromInt(int64(castValue)), value.Event()), nil
-
-	case int64:
-		return SomeDecimalValue(decimal.NewFromInt(castValue), value.Event()), nil
-
-	case Value:
-		return toQuantity(castValue)
-
-	default:
-		return nil, fmt.Errorf("toConfidentiality: unexpected type %T", value)
-	}
+	return castToEnum(value, types.Quantity(0).Find)
 }
 
 func toImpact(value Value) (Value, error) {
-	switch castValue := value.Value().(type) {
-	case string:
-		converted, conversionError := types.RiskExploitationImpact(0).Find(castValue)
-		if conversionError != nil {
-			return nil, conversionError
-		}
-
-		return SomeDecimalValue(decimal.NewFromInt(int64(converted)), value.Event()), nil
-
-	case int:
-		return SomeDecimalValue(decimal.NewFromInt(int64(castValue)), value.Event()), nil
-
-	case int64:
-		return SomeDecimalValue(decimal.NewFromInt(castValue), value.Event()), nil
-
-	case Value:
-		return toImpact(castValue)
-
-	default:
-		return nil, fmt.Errorf("toConfidentiality: unexpected type %T", value)
-	}
+	return castToEnum(value, types.RiskExploitationImpact(0).Find)
 }
 
 func toLikelihood(value Value) (Value, error) {
-	switch castValue := value.Value().(type) {
-	case string:
-		converted, conversionError := types.RiskExploitationLikelihood(0).Find(castValue)
-		if conversionError != nil {
-			return nil, conversionError
-		}
-
-		return SomeDecimalValue(decimal.NewFromInt(int64(converted)), value.Event()), nil
-
-	case int:
-		return SomeDecimalValue(decimal.NewFromInt(int64(castValue)), value.Event()), nil
-
-	case int64:
-		return SomeDecimalValue(decimal.NewFromInt(castValue), value.Event()), nil
-
-	case Value:
-		return toLikelihood(castValue)
-
-	default:
-		return nil, fmt.Errorf("toConfidentiality: unexpected type %T", value)
-	}
+	return castToEnum(value, types.RiskExploitationLikelihood(0).Find)
 }
 
 func toSize(value Value) (Value, error) {
+	return castToEnum(value, types.TechnicalAssetSize(0).Find)
+}
+
+// castToEnum casts a value to the number of a value of an enum type: the value is either a name that find finds, or
+// the number already.
+func castToEnum[T ~int](value Value, find func(name string) (T, error)) (Value, error) {
 	switch castValue := value.Value().(type) {
 	case string:
-		converted, conversionError := types.TechnicalAssetSize(0).Find(castValue)
+		converted, conversionError := find(castValue)
 		if conversionError != nil {
 			return nil, conversionError
 		}
@@ -285,7 +111,7 @@ func toSize(value Value) (Value, error) {
 		return SomeDecimalValue(decimal.NewFromInt(castValue), value.Event()), nil
 
 	case Value:
-		return toSize(castValue)
+		return castToEnum(castValue, find)
 
 	default:
 		return nil, fmt.Errorf("toConfidentiality: unexpected type %T", value)
