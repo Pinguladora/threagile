@@ -104,45 +104,55 @@ func (what *Scope) Set(name string, value Value) {
 func (what *Scope) Get(name string) (Value, bool) {
 	path := strings.Split(name, ".")
 	if strings.HasPrefix(path[0], "$") {
-		switch strings.ToLower(path[0]) {
-		// value name starts with `$model`: refers to `what.Model`
-		case "$model":
-			value, ok := what.get(path[1:], what.Model, NewPath("threat model", strings.Join(path[1:], ".")))
-			if ok {
-				return value, true
-			}
-
-		// value name starts with `$risk`: refers to `what.Risk`
-		case "$risk":
-			value, ok := what.get(path[1:], what.Risk, NewPath("risk category", strings.Join(path[1:], ".")))
-			if ok {
-				return value, true
-			}
+		value, ok := what.getGlobal(path)
+		if ok {
+			return value, true
 		}
 	}
 
 	// value name starts with a dot: refers to `what.item`
 	if len(path[0]) == 0 {
-		if len(path[1:]) > 0 {
-			if what.item == nil {
-				return nil, false
-			}
-
-			switch castValue := what.item.Value().(type) {
-			case map[string]any:
-				value, ok := what.get(path[1:], castValue, what.item.Event().Path().Copy().AddPathLeaf(strings.Join(path[1:], ".")))
-				if ok {
-					return value, true
-				}
-			}
-
-			return nil, false
-		}
-
-		return what.item, true
+		return what.getItem(path[1:])
 	}
 
 	// value name starts with something else: refers to `what.Vars`
+	return what.getVar(path)
+}
+
+func (what *Scope) getGlobal(path []string) (Value, bool) {
+	switch strings.ToLower(path[0]) {
+	// value name starts with `$model`: refers to `what.Model`
+	case "$model":
+		return what.get(path[1:], what.Model, NewPath("threat model", strings.Join(path[1:], ".")))
+
+	// value name starts with `$risk`: refers to `what.Risk`
+	case "$risk":
+		return what.get(path[1:], what.Risk, NewPath("risk category", strings.Join(path[1:], ".")))
+	}
+
+	return nil, false
+}
+
+func (what *Scope) getItem(path []string) (Value, bool) {
+	if len(path) == 0 {
+		return what.item, true
+	}
+
+	if what.item == nil {
+		return nil, false
+	}
+
+	if castValue, isMap := what.item.Value().(map[string]any); isMap {
+		value, ok := what.get(path, castValue, what.item.Event().Path().Copy().AddPathLeaf(strings.Join(path, ".")))
+		if ok {
+			return value, true
+		}
+	}
+
+	return nil, false
+}
+
+func (what *Scope) getVar(path []string) (Value, bool) {
 	if what.Vars == nil {
 		return nil, false
 	}

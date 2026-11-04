@@ -76,27 +76,6 @@ func SomeValue(anyValue any, event *Event) Value {
 	case decimal.Decimal:
 		return SomeDecimalValue(castValue, event)
 
-	case int:
-		return SomeDecimalValue(decimal.NewFromInt(int64(castValue)), event)
-
-	case int8:
-		return SomeDecimalValue(decimal.NewFromInt(int64(castValue)), event)
-
-	case int16:
-		return SomeDecimalValue(decimal.NewFromInt(int64(castValue)), event)
-
-	case int32:
-		return SomeDecimalValue(decimal.NewFromInt(int64(castValue)), event)
-
-	case int64:
-		return SomeDecimalValue(decimal.NewFromInt(castValue), event)
-
-	case float32:
-		return SomeDecimalValue(decimal.NewFromFloat32(castValue), event)
-
-	case float64:
-		return SomeDecimalValue(decimal.NewFromFloat(castValue), event)
-
 	case []Value:
 		return SomeArrayValue(castValue, event)
 
@@ -118,9 +97,42 @@ func SomeValue(anyValue any, event *Event) Value {
 		return castValue
 	}
 
+	if number, isNumber := toDecimal(anyValue); isNumber {
+		return SomeDecimalValue(number, event)
+	}
+
 	return &AnyValue{
 		value: anyValue,
 		event: event,
+	}
+}
+
+// toDecimal converts a number of one of the integer and floating point types to a decimal.
+func toDecimal(anyValue any) (decimal.Decimal, bool) {
+	switch castValue := anyValue.(type) {
+	case int:
+		return decimal.NewFromInt(int64(castValue)), true
+
+	case int8:
+		return decimal.NewFromInt(int64(castValue)), true
+
+	case int16:
+		return decimal.NewFromInt(int64(castValue)), true
+
+	case int32:
+		return decimal.NewFromInt(int64(castValue)), true
+
+	case int64:
+		return decimal.NewFromInt(castValue), true
+
+	case float32:
+		return decimal.NewFromFloat32(castValue), true
+
+	case float64:
+		return decimal.NewFromFloat(castValue), true
+
+	default:
+		return decimal.Decimal{}, false
 	}
 }
 
