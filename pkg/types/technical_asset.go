@@ -12,23 +12,23 @@ type TechnicalAsset struct {
 	Id                      string                `json:"id,omitempty"                         yaml:"id,omitempty"`
 	Title                   string                `json:"title,omitempty"                      yaml:"title,omitempty"`
 	Description             string                `json:"description,omitempty"                yaml:"description,omitempty"`
-	Usage                   Usage                 `json:"usage,omitempty"                      yaml:"usage,omitempty"`
-	Type                    TechnicalAssetType    `json:"type,omitempty"                       yaml:"type,omitempty"`
-	Size                    TechnicalAssetSize    `json:"size,omitempty"                       yaml:"size,omitempty"`
+	Usage                   Usage                 `json:"usage"                                yaml:"usage,omitempty"`
+	Type                    TechnicalAssetType    `json:"type"                                 yaml:"type,omitempty"`
+	Size                    TechnicalAssetSize    `json:"size"                                 yaml:"size,omitempty"`
 	Technologies            TechnologyList        `json:"technologies,omitempty"               yaml:"technologies,omitempty"`
-	Machine                 TechnicalAssetMachine `json:"machine,omitempty"                    yaml:"machine,omitempty"`
+	Machine                 TechnicalAssetMachine `json:"machine"                              yaml:"machine,omitempty"`
 	Internet                bool                  `json:"internet,omitempty"                   yaml:"internet,omitempty"`
 	MultiTenant             bool                  `json:"multi_tenant,omitempty"               yaml:"multi_tenant,omitempty"`
 	Redundant               bool                  `json:"redundant,omitempty"                  yaml:"redundant,omitempty"`
 	CustomDevelopedParts    bool                  `json:"custom_developed_parts,omitempty"     yaml:"custom_developed_parts,omitempty"`
 	OutOfScope              bool                  `json:"out_of_scope,omitempty"               yaml:"out_of_scope,omitempty"`
 	UsedAsClientByHuman     bool                  `json:"used_as_client_by_human,omitempty"    yaml:"used_as_client_by_human,omitempty"`
-	Encryption              EncryptionStyle       `json:"encryption,omitempty"                 yaml:"encryption,omitempty"`
+	Encryption              EncryptionStyle       `json:"encryption"                           yaml:"encryption,omitempty"`
 	JustificationOutOfScope string                `json:"justification_out_of_scope,omitempty" yaml:"justification_out_of_scope,omitempty"`
 	Owner                   string                `json:"owner,omitempty"                      yaml:"owner,omitempty"`
-	Confidentiality         Confidentiality       `json:"confidentiality,omitempty"            yaml:"confidentiality,omitempty"`
-	Integrity               Criticality           `json:"integrity,omitempty"                  yaml:"integrity,omitempty"`
-	Availability            Criticality           `json:"availability,omitempty"               yaml:"availability,omitempty"`
+	Confidentiality         Confidentiality       `json:"confidentiality"                      yaml:"confidentiality,omitempty"`
+	Integrity               Criticality           `json:"integrity"                            yaml:"integrity,omitempty"`
+	Availability            Criticality           `json:"availability"                         yaml:"availability,omitempty"`
 	JustificationCiaRating  string                `json:"justification_cia_rating,omitempty"   yaml:"justification_cia_rating,omitempty"`
 	Tags                    []string              `json:"tags,omitempty"                       yaml:"tags,omitempty"`
 	DataAssetsProcessed     []string              `json:"data_assets_processed,omitempty"      yaml:"data_assets_processed,omitempty"`
