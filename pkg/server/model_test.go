@@ -8,6 +8,7 @@ import (
 	"strings"
 	"sync"
 	"testing"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -124,5 +125,23 @@ func TestUpdatesInTheSameSecondKeepTheirBackups(t *testing.T) {
 	}
 	if len(backups) != 3 {
 		t.Errorf("%v backups, want 3: %v", len(backups), backups)
+	}
+}
+
+func TestUsingATokenKeepsItAlive(t *testing.T) {
+	s, router := newModelServer(t)
+	headers, model := newModel(t, router)
+
+	idle := time.Now().Add(-20 * time.Minute).UnixNano()
+	for hash, timeout := range s.mapTokenHashToTimeoutStruct {
+		timeout.lastAccessedNanoTime = idle
+		s.mapTokenHashToTimeoutStruct[hash] = timeout
+	}
+	call(t, router, http.MethodGet, model+"/cover", "", headers, http.StatusOK)
+
+	for _, timeout := range s.mapTokenHashToTimeoutStruct {
+		if timeout.lastAccessedNanoTime == idle {
+			t.Error("the last access of the token was not updated")
+		}
 	}
 }
