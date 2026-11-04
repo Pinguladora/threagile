@@ -24,10 +24,9 @@ type CommunicationLink struct {
 }
 
 func (what *CommunicationLink) Merge(other CommunicationLink) error {
-	var mergeError error
-	what.Target, mergeError = new(Strings).MergeSingleton(what.Target, other.Target)
+	mergeError := mergeSingletons(singleton("target", &what.Target, other.Target))
 	if mergeError != nil {
-		return fmt.Errorf("failed to merge target: %w", mergeError)
+		return mergeError
 	}
 
 	// the via list is a path in order, so it merges like a single value
@@ -37,43 +36,25 @@ func (what *CommunicationLink) Merge(other CommunicationLink) error {
 		return fmt.Errorf("failed to merge via: conflicting values: %q versus %q", what.Via, other.Via)
 	}
 
-	what.Description, mergeError = new(Strings).MergeSingleton(what.Description, other.Description)
+	mergeError = mergeSingletons(
+		singleton("description", &what.Description, other.Description),
+		singleton("protocol", &what.Protocol, other.Protocol),
+		singleton("authentication", &what.Authentication, other.Authentication),
+		singleton("authorization", &what.Authorization, other.Authorization),
+	)
 	if mergeError != nil {
-		return fmt.Errorf("failed to merge description: %w", mergeError)
-	}
-
-	what.Protocol, mergeError = new(Strings).MergeSingleton(what.Protocol, other.Protocol)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge protocol: %w", mergeError)
-	}
-
-	what.Authentication, mergeError = new(Strings).MergeSingleton(what.Authentication, other.Authentication)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge authentication: %w", mergeError)
-	}
-
-	what.Authorization, mergeError = new(Strings).MergeSingleton(what.Authorization, other.Authorization)
-	if mergeError != nil {
-		return fmt.Errorf("failed to merge authorization: %w", mergeError)
+		return mergeError
 	}
 
 	what.Tags = new(Strings).MergeUniqueSlice(what.Tags, other.Tags)
 
-	if !what.VPN {
-		what.VPN = other.VPN
-	}
+	mergeFlag(&what.VPN, other.VPN)
+	mergeFlag(&what.IpFiltered, other.IpFiltered)
+	mergeFlag(&what.Readonly, other.Readonly)
 
-	if !what.IpFiltered {
-		what.IpFiltered = other.IpFiltered
-	}
-
-	if !what.Readonly {
-		what.Readonly = other.Readonly
-	}
-
-	what.Usage, mergeError = new(Strings).MergeSingleton(what.Usage, other.Usage)
+	mergeError = mergeSingletons(singleton("usage", &what.Usage, other.Usage))
 	if mergeError != nil {
-		return fmt.Errorf("failed to merge usage: %w", mergeError)
+		return mergeError
 	}
 
 	what.DataAssetsSent = new(Strings).MergeUniqueSlice(what.DataAssetsSent, other.DataAssetsSent)
@@ -84,14 +65,14 @@ func (what *CommunicationLink) Merge(other CommunicationLink) error {
 		what.DiagramTweakWeight = other.DiagramTweakWeight
 	}
 
-	if !what.DiagramTweakConstraint {
-		what.DiagramTweakConstraint = other.DiagramTweakConstraint
-	}
+	mergeFlag(&what.DiagramTweakConstraint, other.DiagramTweakConstraint)
 
 	return nil
 }
 
-func (what *CommunicationLink) MergeMap(first map[string]CommunicationLink, second map[string]CommunicationLink) (map[string]CommunicationLink, error) {
+func (what *CommunicationLink) MergeMap(
+	first map[string]CommunicationLink, second map[string]CommunicationLink,
+) (map[string]CommunicationLink, error) {
 	if first == nil {
 		// first is nil for a section that is missing, or a key left without a value, in the model merged into
 		first = make(map[string]CommunicationLink, len(second))

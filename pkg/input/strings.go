@@ -102,3 +102,36 @@ func (what *Strings) IndentPrintf(level int, script any) string {
 func (what *Strings) IndentLine(level int, format string, params ...any) string {
 	return strings.Repeat("    ", level) + fmt.Sprintf(format, params...)
 }
+
+// singletonField is a string field that merges like a single value (see Strings.MergeSingleton),
+// with the name its merge errors give it.
+type singletonField struct {
+	name  string
+	value *string
+	other string
+}
+
+// singleton describes a field for mergeSingletons.
+func singleton(name string, value *string, other string) singletonField {
+	return singletonField{name: name, value: value, other: other}
+}
+
+// mergeSingletons merges each field in turn and stops at the first conflict.
+func mergeSingletons(fields ...singletonField) error {
+	for _, field := range fields {
+		var mergeError error
+		*field.value, mergeError = new(Strings).MergeSingleton(*field.value, field.other)
+		if mergeError != nil {
+			return fmt.Errorf("failed to merge %s: %w", field.name, mergeError)
+		}
+	}
+
+	return nil
+}
+
+// mergeFlag sets a flag that is not set yet to the other value.
+func mergeFlag(value *bool, other bool) {
+	if !*value {
+		*value = other
+	}
+}
