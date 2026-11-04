@@ -42,6 +42,7 @@ func (*MissingAuthenticationSecondFactorRule) Category() *types.RiskCategory {
 			"end-users (customers) can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweSingleFactorAuthentication,
+		References:                 []string{owaspAuthenticationFailures, owaspAPIBrokenAuthentication},
 	}
 }
 

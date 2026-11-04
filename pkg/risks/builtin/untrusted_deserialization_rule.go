@@ -40,6 +40,7 @@ func (*UntrustedDeserializationRule) Category() *types.RiskCategory {
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweUntrustedDeserialization,
+		References:                 []string{owaspIntegrityFailures},
 	}
 }
 

@@ -33,6 +33,7 @@ func (*ServiceRegistryPoisoningRule) Category() *types.RiskCategory {
 			"can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweProtectionMechanismFailure,
+		References:                 []string{owaspIntegrityFailures},
 	}
 }
 

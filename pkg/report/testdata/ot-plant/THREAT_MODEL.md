@@ -914,7 +914,7 @@ The risk **Direct IT/OT Communication** was found **1 time** in the analyzed arc
 | Action | Personal Identities for People |
 | ASVS chapter | V2 - Authentication Verification Requirements |
 | Cheat sheet | [Secrets_Management_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) |
-| References | OWASP NHI10:2025 Human Use of NHI; OWASP ASI03:2026 Identity and Privilege Abuse |
+| References | OWASP A07:2025 Authentication Failures; OWASP NHI10:2025 Human Use of NHI; OWASP ASI03:2026 Identity and Privilege Abuse |
 
 **Description**
 
@@ -1019,7 +1019,7 @@ The risk **Insecure Control Protocol** was found **6 times** in the analyzed arc
 | Action | Short-Lived Credentials |
 | ASVS chapter | V2 - Authentication Verification Requirements |
 | Cheat sheet | [Secrets_Management_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) |
-| References | OWASP NHI7:2025 Long-Lived Secrets; OWASP NHI2:2025 Secret Leakage |
+| References | OWASP A07:2025 Authentication Failures; OWASP NHI7:2025 Long-Lived Secrets; OWASP NHI2:2025 Secret Leakage |
 
 **Description**
 
@@ -1071,6 +1071,7 @@ The risk **Long-Lived Credentials** was found **3 times** in the analyzed archit
 | Action | System Hardening |
 | ASVS chapter | V14 - Configuration Verification Requirements |
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
+| References | OWASP A02:2025 Security Misconfiguration; OWASP API8:2023 Security Misconfiguration |
 
 **Description**
 
@@ -1173,6 +1174,7 @@ The risk **Missing Safety System Independence** was found **2 times** in the ana
 | Action | SQL/NoSQL-Injection Prevention |
 | ASVS chapter | V5 - Validation, Sanitization and Encoding Verification Requirements |
 | Cheat sheet | [SQL_Injection_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html) |
+| References | OWASP A05:2025 Injection |
 
 **Description**
 
@@ -1224,6 +1226,7 @@ The risk **SQL/NoSQL-Injection** was found **3 times** in the analyzed architect
 | Action | Encryption of Communication Links |
 | ASVS chapter | V9 - Communication Verification Requirements |
 | Cheat sheet | [Transport_Layer_Protection_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html) |
+| References | OWASP A04:2025 Cryptographic Failures; OWASP API8:2023 Security Misconfiguration |
 
 **Description**
 
@@ -1282,6 +1285,7 @@ The risk **Unencrypted Communication** was found **10 times** in the analyzed ar
 | Action | Encapsulation of Technical Asset |
 | ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
+| References | OWASP A06:2025 Insecure Design |
 
 **Description**
 
@@ -1331,6 +1335,7 @@ The risk **Unguarded Access From Internet** was found **1 time** in the analyzed
 | Action | Anti-DoS Measures |
 | ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
 | Cheat sheet | [Denial_of_Service_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html) |
+| References | OWASP API4:2023 Unrestricted Resource Consumption |
 
 **Description**
 
@@ -1436,6 +1441,7 @@ The risk **Missing Identity Store** was found **1 time** in the analyzed archite
 | Action | Multi-Factor Authentication (MFA) |
 | ASVS chapter | V2 - Authentication Verification Requirements |
 | Cheat sheet | [Multifactor_Authentication_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html) |
+| References | OWASP A07:2025 Authentication Failures; OWASP API2:2023 Broken Authentication |
 
 **Description**
 
@@ -1485,6 +1491,7 @@ The risk **Missing Multi-Factor Authentication (MFA)** was found **1 time** in t
 | Action | Vault (Secret Storage) |
 | ASVS chapter | V6 - Stored Cryptography Verification Requirements |
 | Cheat sheet | [Cryptographic_Storage_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html) |
+| References | OWASP NHI2:2025 Secret Leakage |
 
 **Description**
 
@@ -1534,6 +1541,7 @@ The risk **Missing Vault (Secret Storage)** was found **1 time** in the analyzed
 | Action | SSRF Prevention |
 | ASVS chapter | V12 - File and Resources Verification Requirements |
 | Cheat sheet | [Server_Side_Request_Forgery_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html) |
+| References | OWASP A01:2025 Broken Access Control; OWASP API7:2023 Server Side Request Forgery |
 
 **Description**
 
@@ -2990,6 +2998,40 @@ The vendor connects to the jump host over a VPN
 
 The risk rules reference the entries of threat catalogs. For each entry of the catalogs that the risks of this model fall into, the tables list the risk rules that checked it and the risks they found. An entry that no risk rule checks needs a review of its own.
 
+### OWASP Top 10:2025
+
+The risk rules checked **10 of 10** entries of the [OWASP Top 10:2025](https://top10.owasp.org/2025/).
+
+| Entry | Risk rules | Risks |
+| --- | --- | --- |
+| `A01` Broken Access Control | Confused Deputy Agent, Cross-Account Takeover, Cross-Site Request Forgery (CSRF), Missing Identity Propagation, Missing Object-Level Authorization, Path-Traversal, Public Cloud Asset Access, [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 2/2 unmitigated Risks |
+| `A02` Security Misconfiguration | Container Platform Escape, Missing Cloud Hardening, [Missing Hardening](#missing-hardening), Public Cloud Asset Access, Publicly Shared Cloud Snapshot, XML External Entity (XXE) | 3/3 unmitigated Risks |
+| `A03` Software Supply Chain Failures | Code Backdooring, Container Base Image Backdooring, Unchecked Deployment | _no risks found_ |
+| `A04` Cryptographic Failures | [Unencrypted Communication](#unencrypted-communication), Unencrypted Technical Assets | 10/10 unmitigated Risks |
+| `A05` Injection | Cross-Site Scripting (XSS), LDAP-Injection, [SQL/NoSQL-Injection](#sqlnosql-injection), Search-Query Injection | 3/3 unmitigated Risks |
+| `A06` Insecure Design | Missing File Validation, Missing Identity Provider Isolation, Missing Network Segmentation, Missing Vault Isolation, Mixed Targets on Shared Runtime, [Unguarded Access From Internet](#unguarded-access-from-internet), Unguarded Direct Datastore Access | 1/1 unmitigated Risk |
+| `A07` Authentication Failures | [Human Use of Machine Identity](#human-use-of-machine-identity), [Long-Lived Credentials](#long-lived-credentials), Missing Authentication, [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | 5/5 unmitigated Risks |
+| `A08` Software or Data Integrity Failures | Code Backdooring, Push instead of Pull Deployment, Service Registry Poisoning, Untrusted Deserialization | _no risks found_ |
+| `A09` Security Logging and Alerting Failures | Missing AI Monitoring | _no risks found_ |
+| `A10` Mishandling of Exceptional Conditions | Missing Policy Decision Point Redundancy | _no risks found_ |
+
+### OWASP API Security Top 10 2023
+
+The risk rules checked **6 of 10** entries of the [OWASP API Security Top 10 2023](https://owasp.org/API-Security/editions/2023/en/0x11-t10/).
+
+| Entry | Risk rules | Risks |
+| --- | --- | --- |
+| `API1` Broken Object Level Authorization | Missing Identity Propagation, Missing Object-Level Authorization | _no risks found_ |
+| `API2` Broken Authentication | Missing Authentication, [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | 1/1 unmitigated Risk |
+| `API3` Broken Object Property Level Authorization | none | _not checked by any risk rule_ |
+| `API4` Unrestricted Resource Consumption | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | 8/8 unmitigated Risks |
+| `API5` Broken Function Level Authorization | Missing Object-Level Authorization | _no risks found_ |
+| `API6` Unrestricted Access to Sensitive Business Flows | none | _not checked by any risk rule_ |
+| `API7` Server Side Request Forgery | [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 2/2 unmitigated Risks |
+| `API8` Security Misconfiguration | Missing Cloud Hardening, [Missing Hardening](#missing-hardening), [Unencrypted Communication](#unencrypted-communication) | 13/13 unmitigated Risks |
+| `API9` Improper Inventory Management | none | _not checked by any risk rule_ |
+| `API10` Unsafe Consumption of APIs | none | _not checked by any risk rule_ |
+
 ### OWASP Top 10 for Agentic Applications 2026
 
 The risk rules checked **9 of 10** entries of the [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/).
@@ -3009,16 +3051,16 @@ The risk rules checked **9 of 10** entries of the [OWASP Top 10 for Agentic Appl
 
 ### OWASP Non-Human Identities Top 10 2025
 
-The risk rules checked **4 of 10** entries of the [OWASP Non-Human Identities Top 10 2025](https://owasp.org/www-project-non-human-identities-top-10/2025/).
+The risk rules checked **5 of 10** entries of the [OWASP Non-Human Identities Top 10 2025](https://owasp.org/www-project-non-human-identities-top-10/2025/).
 
 | Entry | Risk rules | Risks |
 | --- | --- | --- |
 | `NHI1` Improper Offboarding | none | _not checked by any risk rule_ |
-| `NHI2` Secret Leakage | [Long-Lived Credentials](#long-lived-credentials) | 3/3 unmitigated Risks |
+| `NHI2` Secret Leakage | [Long-Lived Credentials](#long-lived-credentials), [Missing Vault (Secret Storage)](#missing-vault-secret-storage) | 4/4 unmitigated Risks |
 | `NHI3` Vulnerable Third-Party NHI | none | _not checked by any risk rule_ |
 | `NHI4` Insecure Authentication | none | _not checked by any risk rule_ |
 | `NHI5` Overprivileged NHI | none | _not checked by any risk rule_ |
-| `NHI6` Insecure Cloud Deployment Configurations | none | _not checked by any risk rule_ |
+| `NHI6` Insecure Cloud Deployment Configurations | Push instead of Pull Deployment | _no risks found_ |
 | `NHI7` Long-Lived Secrets | [Long-Lived Credentials](#long-lived-credentials) | 3/3 unmitigated Risks |
 | `NHI8` Environment Isolation | none | _not checked by any risk rule_ |
 | `NHI9` NHI Reuse | Confused Deputy Agent, Shared Machine Account | _no risks found_ |

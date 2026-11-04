@@ -44,7 +44,7 @@ func (*LongLivedCredentialsRule) Category() *types.RiskCategory {
 			"after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweInsufficientlyProtectedCredentials,
-		References:                 []string{owaspNHILongLivedSecrets, owaspNHISecretLeakage},
+		References:                 []string{owaspAuthenticationFailures, owaspNHILongLivedSecrets, owaspNHISecretLeakage},
 	}
 }
 

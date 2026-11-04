@@ -42,6 +42,7 @@ func (*SearchQueryInjectionRule) Category() *types.RiskCategory {
 			"considered as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweInjection,
+		References:                 []string{owaspInjection},
 	}
 }
 

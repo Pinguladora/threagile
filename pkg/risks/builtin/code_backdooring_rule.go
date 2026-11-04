@@ -44,6 +44,7 @@ func (*CodeBackdooringRule) Category() *types.RiskCategory {
 			"be considered a false positive after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweHiddenFunctionality,
+		References:                 []string{owaspSoftwareSupplyChainFailures, owaspIntegrityFailures},
 	}
 }
 

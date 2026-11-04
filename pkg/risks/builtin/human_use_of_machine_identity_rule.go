@@ -42,7 +42,7 @@ func (*HumanUseOfMachineIdentityRule) Category() *types.RiskCategory {
 			"review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweWeakAuthentication,
-		References:                 []string{owaspNHIHumanUse, owaspAgenticPrivilegeAbuse},
+		References:                 []string{owaspAuthenticationFailures, owaspNHIHumanUse, owaspAgenticPrivilegeAbuse},
 	}
 }
 

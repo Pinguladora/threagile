@@ -35,6 +35,7 @@ func (*LdapInjectionRule) Category() *types.RiskCategory {
 			"considered as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweLDAPInjection,
+		References:                 []string{owaspInjection},
 	}
 }
 

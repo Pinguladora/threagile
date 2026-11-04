@@ -48,7 +48,7 @@ func (*ConfusedDeputyAgentRule) Category() *types.RiskCategory {
 		ModelFailurePossibleReason: false,
 		CWE:                        cweConfusedDeputy,
 		References: []string{
-			owaspAgenticPrivilegeAbuse, owaspLLMExcessiveAgency, owaspNHIReuse, maestroAgentFrameworks,
+			owaspBrokenAccessControl, owaspAgenticPrivilegeAbuse, owaspLLMExcessiveAgency, owaspNHIReuse, maestroAgentFrameworks,
 		},
 	}
 }

@@ -42,6 +42,7 @@ func (*ServerSideRequestForgeryRule) Category() *types.RiskCategory {
 			"as false positives after review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweServerSideRequestForgery,
+		References:                 []string{owaspBrokenAccessControl, owaspAPIServerSideRequestForgery},
 	}
 }
 

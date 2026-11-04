@@ -59,6 +59,7 @@ func (*PublicCloudSnapshotRule) Category() *types.RiskCategory {
 			"positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweExposureToWrongSphere,
+		References:                 []string{owaspSecurityMisconfiguration},
 	}
 }
 

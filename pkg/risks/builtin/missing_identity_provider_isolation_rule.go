@@ -40,6 +40,7 @@ func (*MissingIdentityProviderIsolationRule) Category() *types.RiskCategory {
 			"same extend as if all were identity providers with data of highest sensitivity.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweArchitecturalConcepts,
+		References:                 []string{owaspInsecureDesign},
 	}
 }
 

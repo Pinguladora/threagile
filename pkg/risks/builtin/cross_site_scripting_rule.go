@@ -35,6 +35,7 @@ func (*CrossSiteScriptingRule) Category() *types.RiskCategory {
 			"gets passed through all components until it reaches the web application) this can be considered a false positive.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweCrossSiteScripting,
+		References:                 []string{owaspInjection},
 	}
 }
 

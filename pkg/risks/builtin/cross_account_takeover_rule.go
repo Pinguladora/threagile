@@ -51,6 +51,7 @@ func (*CrossAccountTakeoverRule) Category() *types.RiskCategory {
 			"as a false positive after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweConfusedDeputy,
+		References:                 []string{owaspBrokenAccessControl},
 	}
 }
 

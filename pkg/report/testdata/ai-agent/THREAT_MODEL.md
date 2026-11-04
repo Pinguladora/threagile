@@ -1049,7 +1049,7 @@ In total **65 potential risks** have been identified during the threat modeling 
 | Action | Act with the Identity of the User |
 | ASVS chapter | V4 - Access Control Verification Requirements |
 | Cheat sheet | [Authorization_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) |
-| References | OWASP ASI03:2026 Identity and Privilege Abuse; OWASP LLM06:2025 Excessive Agency; OWASP NHI9:2025 NHI Reuse; MAESTRO Layer 3: Agent Frameworks |
+| References | OWASP A01:2025 Broken Access Control; OWASP ASI03:2026 Identity and Privilege Abuse; OWASP LLM06:2025 Excessive Agency; OWASP NHI9:2025 NHI Reuse; MAESTRO Layer 3: Agent Frameworks |
 
 **Description**
 
@@ -1099,6 +1099,7 @@ The risk **Confused Deputy Agent** was found **1 time** in the analyzed architec
 | Action | XSS Prevention |
 | ASVS chapter | V5 - Validation, Sanitization and Encoding Verification Requirements |
 | Cheat sheet | [Cross_Site_Scripting_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html) |
+| References | OWASP A05:2025 Injection |
 
 **Description**
 
@@ -1198,7 +1199,7 @@ The risk **Excessive Agency** was found **1 time** in the analyzed architecture 
 | Action | AI Observability |
 | ASVS chapter | V7 - Error Handling and Logging Verification Requirements |
 | Cheat sheet | [Logging_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html) |
-| References | MAESTRO Layer 5: Evaluation and Observability; OWASP ASI10:2026 Rogue Agents |
+| References | OWASP A09:2025 Security Logging and Alerting Failures; MAESTRO Layer 5: Evaluation and Observability; OWASP ASI10:2026 Rogue Agents |
 
 **Description**
 
@@ -1249,6 +1250,7 @@ The risk **Missing AI Monitoring** was found **2 times** in the analyzed archite
 | Action | Authentication of Incoming Requests |
 | ASVS chapter | V2 - Authentication Verification Requirements |
 | Cheat sheet | [Authentication_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html) |
+| References | OWASP A07:2025 Authentication Failures; OWASP API2:2023 Broken Authentication |
 
 **Description**
 
@@ -1298,7 +1300,7 @@ The risk **Missing Authentication** was found **1 time** in the analyzed archite
 | Action | Object-Level Authorization |
 | ASVS chapter | V4 - Access Control Verification Requirements |
 | Cheat sheet | [Authorization_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) |
-| References | OWASP API1:2023 Broken Object Level Authorization; OWASP API5:2023 Broken Function Level Authorization |
+| References | OWASP A01:2025 Broken Access Control; OWASP API1:2023 Broken Object Level Authorization; OWASP API5:2023 Broken Function Level Authorization |
 
 **Description**
 
@@ -1400,6 +1402,7 @@ The risk **Prompt Injection** was found **2 times** in the analyzed architecture
 | Action | SQL/NoSQL-Injection Prevention |
 | ASVS chapter | V5 - Validation, Sanitization and Encoding Verification Requirements |
 | Cheat sheet | [SQL_Injection_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html) |
+| References | OWASP A05:2025 Injection |
 
 **Description**
 
@@ -1503,6 +1506,7 @@ The risk **Sensitive Data Disclosure through Model Output** was found **2 times*
 | Action | SSRF Prevention |
 | ASVS chapter | V12 - File and Resources Verification Requirements |
 | Cheat sheet | [Server_Side_Request_Forgery_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html) |
+| References | OWASP A01:2025 Broken Access Control; OWASP API7:2023 Server Side Request Forgery |
 
 **Description**
 
@@ -1662,6 +1666,7 @@ The risk **Vector Store Poisoning** was found **1 time** in the analyzed archite
 | Action | Container Infrastructure Hardening |
 | ASVS chapter | V10 - Malicious Code Verification Requirements |
 | Cheat sheet | [Docker_Security_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) |
+| References | OWASP A03:2025 Software Supply Chain Failures |
 
 **Description**
 
@@ -1722,6 +1727,7 @@ The risk **Container Base Image Backdooring** was found **10 times** in the anal
 | Action | CSRF Prevention |
 | ASVS chapter | V4 - Access Control Verification Requirements |
 | Cheat sheet | [Cross-Site_Request_Forgery_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) |
+| References | OWASP A01:2025 Broken Access Control |
 
 **Description**
 
@@ -1771,7 +1777,7 @@ The risk **Cross-Site Request Forgery (CSRF)** was found **1 time** in the analy
 | Action | Short-Lived Credentials |
 | ASVS chapter | V2 - Authentication Verification Requirements |
 | Cheat sheet | [Secrets_Management_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) |
-| References | OWASP NHI7:2025 Long-Lived Secrets; OWASP NHI2:2025 Secret Leakage |
+| References | OWASP A07:2025 Authentication Failures; OWASP NHI7:2025 Long-Lived Secrets; OWASP NHI2:2025 Secret Leakage |
 
 **Description**
 
@@ -1870,6 +1876,7 @@ The risk **Missing Build Infrastructure** was found **1 time** in the analyzed a
 | Action | Cloud Hardening |
 | ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
+| References | OWASP A02:2025 Security Misconfiguration; OWASP API8:2023 Security Misconfiguration |
 
 **Description**
 
@@ -1936,6 +1943,7 @@ The risk **Missing Cloud Hardening** was found **4 times** in the analyzed archi
 | Action | System Hardening |
 | ASVS chapter | V14 - Configuration Verification Requirements |
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
+| References | OWASP A02:2025 Security Misconfiguration; OWASP API8:2023 Security Misconfiguration |
 
 **Description**
 
@@ -2036,6 +2044,7 @@ The risk **Missing Identity Store** was found **1 time** in the analyzed archite
 | Action | Multi-Factor Authentication (MFA) |
 | ASVS chapter | V2 - Authentication Verification Requirements |
 | Cheat sheet | [Multifactor_Authentication_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html) |
+| References | OWASP A07:2025 Authentication Failures; OWASP API2:2023 Broken Authentication |
 
 **Description**
 
@@ -2085,6 +2094,7 @@ The risk **Missing Multi-Factor Authentication (MFA)** was found **1 time** in t
 | Action | Vault (Secret Storage) |
 | ASVS chapter | V6 - Stored Cryptography Verification Requirements |
 | Cheat sheet | [Cryptographic_Storage_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html) |
+| References | OWASP NHI2:2025 Secret Leakage |
 
 **Description**
 
@@ -2134,6 +2144,7 @@ The risk **Missing Vault (Secret Storage)** was found **1 time** in the analyzed
 | Action | Snapshot Sharing Restrictions |
 | ASVS chapter | V14 - Configuration Verification Requirements |
 | Cheat sheet | [Secure_Cloud_Architecture_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secure_Cloud_Architecture_Cheat_Sheet.html) |
+| References | OWASP A02:2025 Security Misconfiguration |
 
 **Description**
 
@@ -2185,6 +2196,7 @@ The risk **Publicly Shared Cloud Snapshot** was found **1 time** in the analyzed
 | Action | Encryption of Technical Asset |
 | ASVS chapter | V6 - Stored Cryptography Verification Requirements |
 | Cheat sheet | [Cryptographic_Storage_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html) |
+| References | OWASP A04:2025 Cryptographic Failures |
 
 **Description**
 
@@ -2235,6 +2247,7 @@ The risk **Unencrypted Technical Assets** was found **2 times** in the analyzed 
 | Action | Encapsulation of Technical Asset |
 | ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
+| References | OWASP A06:2025 Insecure Design |
 
 **Description**
 
@@ -2335,6 +2348,7 @@ The risk **Unverified Model Supply Chain** was found **2 times** in the analyzed
 | Action | Anti-DoS Measures |
 | ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
 | Cheat sheet | [Denial_of_Service_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html) |
+| References | OWASP API4:2023 Unrestricted Resource Consumption |
 
 **Description**
 
@@ -2385,6 +2399,7 @@ The risk **DoS-risky Access Across Trust-Boundary** was found **2 times** in the
 | Action | Network Segmentation |
 | ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
+| References | OWASP A06:2025 Insecure Design |
 
 **Description**
 
@@ -2485,6 +2500,7 @@ The risk **Missing Web Application Firewall (WAF)** was found **1 time** in the 
 | Action | Build Pipeline Hardening |
 | ASVS chapter | V14 - Configuration Verification Requirements |
 | Cheat sheet | [Vulnerable_Dependency_Management_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html) |
+| References | OWASP A03:2025 Software Supply Chain Failures |
 
 **Description**
 
@@ -3876,20 +3892,37 @@ Looks up orders and issues refunds
 
 The risk rules reference the entries of threat catalogs. For each entry of the catalogs that the risks of this model fall into, the tables list the risk rules that checked it and the risks they found. An entry that no risk rule checks needs a review of its own.
 
-### OWASP API Security Top 10 2023
+### OWASP Top 10:2025
 
-The risk rules checked **2 of 10** entries of the [OWASP API Security Top 10 2023](https://owasp.org/API-Security/editions/2023/en/0x11-t10/).
+The risk rules checked **10 of 10** entries of the [OWASP Top 10:2025](https://top10.owasp.org/2025/).
 
 | Entry | Risk rules | Risks |
 | --- | --- | --- |
-| `API1` Broken Object Level Authorization | [Missing Object-Level Authorization](#missing-object-level-authorization) | 2/2 unmitigated Risks |
-| `API2` Broken Authentication | none | _not checked by any risk rule_ |
+| `A01` Broken Access Control | [Confused Deputy Agent](#confused-deputy-agent), Cross-Account Takeover, [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf), Missing Identity Propagation, [Missing Object-Level Authorization](#missing-object-level-authorization), Path-Traversal, Public Cloud Asset Access, [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 15/15 unmitigated Risks |
+| `A02` Security Misconfiguration | Container Platform Escape, [Missing Cloud Hardening](#missing-cloud-hardening), [Missing Hardening](#missing-hardening), Public Cloud Asset Access, [Publicly Shared Cloud Snapshot](#publicly-shared-cloud-snapshot), XML External Entity (XXE) | 8/8 unmitigated Risks |
+| `A03` Software Supply Chain Failures | Code Backdooring, [Container Base Image Backdooring](#container-base-image-backdooring), [Unchecked Deployment](#unchecked-deployment) | 11/11 unmitigated Risks |
+| `A04` Cryptographic Failures | Unencrypted Communication, [Unencrypted Technical Assets](#unencrypted-technical-assets) | 2/2 unmitigated Risks |
+| `A05` Injection | [Cross-Site Scripting (XSS)](#cross-site-scripting-xss), LDAP-Injection, [SQL/NoSQL-Injection](#sqlnosql-injection), Search-Query Injection | 5/5 unmitigated Risks |
+| `A06` Insecure Design | Missing File Validation, Missing Identity Provider Isolation, [Missing Network Segmentation](#missing-network-segmentation), Missing Vault Isolation, Mixed Targets on Shared Runtime, [Unguarded Access From Internet](#unguarded-access-from-internet), Unguarded Direct Datastore Access | 4/4 unmitigated Risks |
+| `A07` Authentication Failures | Human Use of Machine Identity, [Long-Lived Credentials](#long-lived-credentials), [Missing Authentication](#missing-authentication), [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | 3/3 unmitigated Risks |
+| `A08` Software or Data Integrity Failures | Code Backdooring, Push instead of Pull Deployment, Service Registry Poisoning, Untrusted Deserialization | _no risks found_ |
+| `A09` Security Logging and Alerting Failures | [Missing AI Monitoring](#missing-ai-monitoring) | 2/2 unmitigated Risks |
+| `A10` Mishandling of Exceptional Conditions | Missing Policy Decision Point Redundancy | _no risks found_ |
+
+### OWASP API Security Top 10 2023
+
+The risk rules checked **6 of 10** entries of the [OWASP API Security Top 10 2023](https://owasp.org/API-Security/editions/2023/en/0x11-t10/).
+
+| Entry | Risk rules | Risks |
+| --- | --- | --- |
+| `API1` Broken Object Level Authorization | Missing Identity Propagation, [Missing Object-Level Authorization](#missing-object-level-authorization) | 2/2 unmitigated Risks |
+| `API2` Broken Authentication | [Missing Authentication](#missing-authentication), [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | 2/2 unmitigated Risks |
 | `API3` Broken Object Property Level Authorization | none | _not checked by any risk rule_ |
-| `API4` Unrestricted Resource Consumption | none | _not checked by any risk rule_ |
+| `API4` Unrestricted Resource Consumption | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | 2/2 unmitigated Risks |
 | `API5` Broken Function Level Authorization | [Missing Object-Level Authorization](#missing-object-level-authorization) | 2/2 unmitigated Risks |
 | `API6` Unrestricted Access to Sensitive Business Flows | none | _not checked by any risk rule_ |
-| `API7` Server Side Request Forgery | none | _not checked by any risk rule_ |
-| `API8` Security Misconfiguration | none | _not checked by any risk rule_ |
+| `API7` Server Side Request Forgery | [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 11/11 unmitigated Risks |
+| `API8` Security Misconfiguration | [Missing Cloud Hardening](#missing-cloud-hardening), [Missing Hardening](#missing-hardening), Unencrypted Communication | 7/7 unmitigated Risks |
 | `API9` Improper Inventory Management | none | _not checked by any risk rule_ |
 | `API10` Unsafe Consumption of APIs | none | _not checked by any risk rule_ |
 
@@ -3943,16 +3976,16 @@ The risk rules checked **7 of 7** entries of the [CSA MAESTRO](https://cloudsecu
 
 ### OWASP Non-Human Identities Top 10 2025
 
-The risk rules checked **4 of 10** entries of the [OWASP Non-Human Identities Top 10 2025](https://owasp.org/www-project-non-human-identities-top-10/2025/).
+The risk rules checked **5 of 10** entries of the [OWASP Non-Human Identities Top 10 2025](https://owasp.org/www-project-non-human-identities-top-10/2025/).
 
 | Entry | Risk rules | Risks |
 | --- | --- | --- |
 | `NHI1` Improper Offboarding | none | _not checked by any risk rule_ |
-| `NHI2` Secret Leakage | [Long-Lived Credentials](#long-lived-credentials) | 1/1 unmitigated Risk |
+| `NHI2` Secret Leakage | [Long-Lived Credentials](#long-lived-credentials), [Missing Vault (Secret Storage)](#missing-vault-secret-storage) | 2/2 unmitigated Risks |
 | `NHI3` Vulnerable Third-Party NHI | none | _not checked by any risk rule_ |
 | `NHI4` Insecure Authentication | none | _not checked by any risk rule_ |
 | `NHI5` Overprivileged NHI | none | _not checked by any risk rule_ |
-| `NHI6` Insecure Cloud Deployment Configurations | none | _not checked by any risk rule_ |
+| `NHI6` Insecure Cloud Deployment Configurations | Push instead of Pull Deployment | _no risks found_ |
 | `NHI7` Long-Lived Secrets | [Long-Lived Credentials](#long-lived-credentials) | 1/1 unmitigated Risk |
 | `NHI8` Environment Isolation | none | _not checked by any risk rule_ |
 | `NHI9` NHI Reuse | [Confused Deputy Agent](#confused-deputy-agent), Shared Machine Account | 1/1 unmitigated Risk |

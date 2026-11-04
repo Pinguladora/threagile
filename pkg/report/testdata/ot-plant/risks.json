@@ -48,6 +48,9 @@
     "stride": "denial-of-service",
     "function": "operations",
     "cwe": 400,
+    "references": [
+      "OWASP API4:2023 Unrestricted Resource Consumption"
+    ],
     "action": "Anti-DoS Measures",
     "mitigation": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -71,6 +74,9 @@
     "stride": "denial-of-service",
     "function": "operations",
     "cwe": 400,
+    "references": [
+      "OWASP API4:2023 Unrestricted Resource Consumption"
+    ],
     "action": "Anti-DoS Measures",
     "mitigation": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -94,6 +100,9 @@
     "stride": "denial-of-service",
     "function": "operations",
     "cwe": 400,
+    "references": [
+      "OWASP API4:2023 Unrestricted Resource Consumption"
+    ],
     "action": "Anti-DoS Measures",
     "mitigation": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -117,6 +126,9 @@
     "stride": "denial-of-service",
     "function": "operations",
     "cwe": 400,
+    "references": [
+      "OWASP API4:2023 Unrestricted Resource Consumption"
+    ],
     "action": "Anti-DoS Measures",
     "mitigation": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -140,6 +152,9 @@
     "stride": "denial-of-service",
     "function": "operations",
     "cwe": 400,
+    "references": [
+      "OWASP API4:2023 Unrestricted Resource Consumption"
+    ],
     "action": "Anti-DoS Measures",
     "mitigation": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -163,6 +178,9 @@
     "stride": "denial-of-service",
     "function": "operations",
     "cwe": 400,
+    "references": [
+      "OWASP API4:2023 Unrestricted Resource Consumption"
+    ],
     "action": "Anti-DoS Measures",
     "mitigation": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -186,6 +204,9 @@
     "stride": "denial-of-service",
     "function": "operations",
     "cwe": 400,
+    "references": [
+      "OWASP API4:2023 Unrestricted Resource Consumption"
+    ],
     "action": "Anti-DoS Measures",
     "mitigation": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -209,6 +230,9 @@
     "stride": "denial-of-service",
     "function": "operations",
     "cwe": 400,
+    "references": [
+      "OWASP API4:2023 Unrestricted Resource Consumption"
+    ],
     "action": "Anti-DoS Measures",
     "mitigation": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -236,6 +260,7 @@
     "function": "operations",
     "cwe": 1390,
     "references": [
+      "OWASP A07:2025 Authentication Failures",
       "OWASP NHI10:2025 Human Use of NHI",
       "OWASP ASI03:2026 Identity and Privilege Abuse"
     ],
@@ -468,6 +493,7 @@
     "function": "operations",
     "cwe": 522,
     "references": [
+      "OWASP A07:2025 Authentication Failures",
       "OWASP NHI7:2025 Long-Lived Secrets",
       "OWASP NHI2:2025 Secret Leakage"
     ],
@@ -498,6 +524,7 @@
     "function": "operations",
     "cwe": 522,
     "references": [
+      "OWASP A07:2025 Authentication Failures",
       "OWASP NHI7:2025 Long-Lived Secrets",
       "OWASP NHI2:2025 Secret Leakage"
     ],
@@ -528,6 +555,7 @@
     "function": "operations",
     "cwe": 522,
     "references": [
+      "OWASP A07:2025 Authentication Failures",
       "OWASP NHI7:2025 Long-Lived Secrets",
       "OWASP NHI2:2025 Secret Leakage"
     ],
@@ -557,6 +585,10 @@
     "stride": "elevation-of-privilege",
     "function": "business-side",
     "cwe": 308,
+    "references": [
+      "OWASP A07:2025 Authentication Failures",
+      "OWASP API2:2023 Broken Authentication"
+    ],
     "action": "Multi-Factor Authentication (MFA)",
     "mitigation": "Apply an authentication method to the technical asset protecting highly sensitive data via multi-factor authentication for human users.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -582,6 +614,10 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 16,
+    "references": [
+      "OWASP A02:2025 Security Misconfiguration",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "System Hardening",
     "mitigation": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -606,6 +642,10 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 16,
+    "references": [
+      "OWASP A02:2025 Security Misconfiguration",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "System Hardening",
     "mitigation": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -630,6 +670,10 @@
     "stride": "tampering",
     "function": "operations",
     "cwe": 16,
+    "references": [
+      "OWASP A02:2025 Security Misconfiguration",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "System Hardening",
     "mitigation": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -738,6 +782,9 @@
     "stride": "information-disclosure",
     "function": "architecture",
     "cwe": 522,
+    "references": [
+      "OWASP NHI2:2025 Secret Leakage"
+    ],
     "action": "Vault (Secret Storage)",
     "mitigation": "Consider using a Vault (Secret Storage) to securely store and access config secrets (like credentials, private keys, client certificates, etc.).",
     "check": "GetAttribute a Vault (Secret Storage) in place?",
@@ -763,6 +810,10 @@
     "stride": "information-disclosure",
     "function": "development",
     "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
     "action": "SSRF Prevention",
     "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -790,6 +841,10 @@
     "stride": "information-disclosure",
     "function": "development",
     "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
     "action": "SSRF Prevention",
     "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -816,6 +871,9 @@
     "stride": "tampering",
     "function": "development",
     "cwe": 89,
+    "references": [
+      "OWASP A05:2025 Injection"
+    ],
     "action": "SQL/NoSQL-Injection Prevention",
     "mitigation": "Try to use parameter binding to be safe from injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -842,6 +900,9 @@
     "stride": "tampering",
     "function": "development",
     "cwe": 89,
+    "references": [
+      "OWASP A05:2025 Injection"
+    ],
     "action": "SQL/NoSQL-Injection Prevention",
     "mitigation": "Try to use parameter binding to be safe from injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -868,6 +929,9 @@
     "stride": "tampering",
     "function": "development",
     "cwe": 89,
+    "references": [
+      "OWASP A05:2025 Injection"
+    ],
     "action": "SQL/NoSQL-Injection Prevention",
     "mitigation": "Try to use parameter binding to be safe from injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -894,6 +958,10 @@
     "stride": "information-disclosure",
     "function": "operations",
     "cwe": 319,
+    "references": [
+      "OWASP A04:2025 Cryptographic Failures",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "Encryption of Communication Links",
     "mitigation": "Apply transport layer encryption to the communication link.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -920,6 +988,10 @@
     "stride": "information-disclosure",
     "function": "operations",
     "cwe": 319,
+    "references": [
+      "OWASP A04:2025 Cryptographic Failures",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "Encryption of Communication Links",
     "mitigation": "Apply transport layer encryption to the communication link.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -946,6 +1018,10 @@
     "stride": "information-disclosure",
     "function": "operations",
     "cwe": 319,
+    "references": [
+      "OWASP A04:2025 Cryptographic Failures",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "Encryption of Communication Links",
     "mitigation": "Apply transport layer encryption to the communication link.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -972,6 +1048,10 @@
     "stride": "information-disclosure",
     "function": "operations",
     "cwe": 319,
+    "references": [
+      "OWASP A04:2025 Cryptographic Failures",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "Encryption of Communication Links",
     "mitigation": "Apply transport layer encryption to the communication link.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -998,6 +1078,10 @@
     "stride": "information-disclosure",
     "function": "operations",
     "cwe": 319,
+    "references": [
+      "OWASP A04:2025 Cryptographic Failures",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "Encryption of Communication Links",
     "mitigation": "Apply transport layer encryption to the communication link.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1024,6 +1108,10 @@
     "stride": "information-disclosure",
     "function": "operations",
     "cwe": 319,
+    "references": [
+      "OWASP A04:2025 Cryptographic Failures",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "Encryption of Communication Links",
     "mitigation": "Apply transport layer encryption to the communication link.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1050,6 +1138,10 @@
     "stride": "information-disclosure",
     "function": "operations",
     "cwe": 319,
+    "references": [
+      "OWASP A04:2025 Cryptographic Failures",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "Encryption of Communication Links",
     "mitigation": "Apply transport layer encryption to the communication link.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1076,6 +1168,10 @@
     "stride": "information-disclosure",
     "function": "operations",
     "cwe": 319,
+    "references": [
+      "OWASP A04:2025 Cryptographic Failures",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "Encryption of Communication Links",
     "mitigation": "Apply transport layer encryption to the communication link.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1102,6 +1198,10 @@
     "stride": "information-disclosure",
     "function": "operations",
     "cwe": 319,
+    "references": [
+      "OWASP A04:2025 Cryptographic Failures",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "Encryption of Communication Links",
     "mitigation": "Apply transport layer encryption to the communication link.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1128,6 +1228,10 @@
     "stride": "information-disclosure",
     "function": "operations",
     "cwe": 319,
+    "references": [
+      "OWASP A04:2025 Cryptographic Failures",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
     "action": "Encryption of Communication Links",
     "mitigation": "Apply transport layer encryption to the communication link.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
@@ -1154,6 +1258,9 @@
     "stride": "elevation-of-privilege",
     "function": "architecture",
     "cwe": 501,
+    "references": [
+      "OWASP A06:2025 Insecure Design"
+    ],
     "action": "Encapsulation of Technical Asset",
     "mitigation": "Encapsulate the asset behind a guarding service, application, or reverse-proxy. For admin maintenance a bastion-host should be used as a jump-server. For file transfer a store-and-forward-host should be used as an indirect file exchange platform.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",

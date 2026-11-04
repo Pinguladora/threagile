@@ -35,6 +35,7 @@ func (*PathTraversalRule) Category() *types.RiskCategory {
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cwePathTraversal,
+		References:                 []string{owaspBrokenAccessControl},
 	}
 }
 

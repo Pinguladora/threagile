@@ -36,7 +36,7 @@ func (*MissingPolicyDecisionPointRedundancyRule) Category() *types.RiskCategory 
 			"considered as false positives after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweFailingOpen,
-		References:                 []string{openIDAuthorizationAPI, nistABAC},
+		References:                 []string{owaspMishandlingExceptionConditions, openIDAuthorizationAPI, nistABAC},
 	}
 }
 

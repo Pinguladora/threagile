@@ -37,6 +37,7 @@ func (*MixedTargetsOnSharedRuntimeRule) Category() *types.RiskCategory {
 			"all were containing/processing highly sensitive data.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweArchitecturalConcepts,
+		References:                 []string{owaspInsecureDesign},
 	}
 }
 

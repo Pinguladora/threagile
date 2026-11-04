@@ -46,7 +46,7 @@ func (*MissingObjectLevelAuthorizationRule) Category() *types.RiskCategory {
 		ModelFailurePossibleReason: false,
 		CWE:                        cweUserControlledKey,
 		References: []string{
-			owaspAPIBrokenObjectLevelAuthorization, owaspAPIBrokenFunctionLevelAuthorization,
+			owaspBrokenAccessControl, owaspAPIBrokenObjectLevelAuthorization, owaspAPIBrokenFunctionLevelAuthorization,
 		},
 	}
 }

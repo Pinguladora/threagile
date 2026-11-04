@@ -34,6 +34,7 @@ func (*MissingVaultRule) Category() *types.RiskCategory {
 			"can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: true,
 		CWE:                        cweInsufficientlyProtectedCredentials,
+		References:                 []string{owaspNHISecretLeakage},
 	}
 }
 
