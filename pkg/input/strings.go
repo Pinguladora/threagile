@@ -42,6 +42,11 @@ func (what *Strings) MergeMultiline(first string, second string) string {
 }
 
 func (what *Strings) MergeMap(first map[string]string, second map[string]string) (map[string]string, error) {
+	if first == nil {
+		// first is nil for a section that is missing, or a key left without a value, in the model merged into
+		first = make(map[string]string, len(second))
+	}
+
 	for mapKey, mapValue := range second {
 		_, ok := first[mapKey]
 		if ok {

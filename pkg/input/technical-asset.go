@@ -143,6 +143,11 @@ func (what *TechnicalAsset) Merge(other TechnicalAsset) error {
 }
 
 func (what *TechnicalAsset) MergeMap(first map[string]TechnicalAsset, second map[string]TechnicalAsset) (map[string]TechnicalAsset, error) {
+	if first == nil {
+		// first is nil for a section that is missing, or a key left without a value, in the model merged into
+		first = make(map[string]TechnicalAsset, len(second))
+	}
+
 	for mapKey, mapValue := range second {
 		mapItem, ok := first[mapKey]
 		if ok {

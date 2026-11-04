@@ -81,6 +81,11 @@ func (what *CommunicationLink) Merge(other CommunicationLink) error {
 }
 
 func (what *CommunicationLink) MergeMap(first map[string]CommunicationLink, second map[string]CommunicationLink) (map[string]CommunicationLink, error) {
+	if first == nil {
+		// first is nil for a section that is missing, or a key left without a value, in the model merged into
+		first = make(map[string]CommunicationLink, len(second))
+	}
+
 	for mapKey, mapValue := range second {
 		mapItem, ok := first[mapKey]
 		if ok {

@@ -71,6 +71,11 @@ func (what *DataAsset) Merge(other DataAsset) error {
 }
 
 func (what *DataAsset) MergeMap(first map[string]DataAsset, second map[string]DataAsset) (map[string]DataAsset, error) {
+	if first == nil {
+		// first is nil for a section that is missing, or a key left without a value, in the model merged into
+		first = make(map[string]DataAsset, len(second))
+	}
+
 	for mapKey, mapValue := range second {
 		mapItem, ok := first[mapKey]
 		if ok {
