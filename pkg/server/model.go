@@ -1207,20 +1207,25 @@ func (s *server) writeModelYAML(
 	return true
 }
 
+// lockFolder locks the folder of a key. The lock of a folder is kept once created: dropping it on unlock would
+// let a request waiting on the old lock and a request taking a new one run at the same time.
 func (s *server) lockFolder(folderName string) {
 	s.globalLock.Lock()
-	defer s.globalLock.Unlock()
-	_, exists := s.locksByFolderName[folderName]
+	lock, exists := s.locksByFolderName[folderName]
 	if !exists {
-		s.locksByFolderName[folderName] = &sync.Mutex{}
+		lock = &sync.Mutex{}
+		s.locksByFolderName[folderName] = lock
 	}
-	s.locksByFolderName[folderName].Lock()
+	s.globalLock.Unlock()
+	lock.Lock()
 }
 
 func (s *server) unlockFolder(folderName string) {
-	if _, exists := s.locksByFolderName[folderName]; exists {
-		s.locksByFolderName[folderName].Unlock()
-		delete(s.locksByFolderName, folderName)
+	s.globalLock.Lock()
+	lock, exists := s.locksByFolderName[folderName]
+	s.globalLock.Unlock()
+	if exists {
+		lock.Unlock()
 	}
 }
 
