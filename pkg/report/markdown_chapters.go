@@ -32,6 +32,7 @@ var markdownChapters = map[string]func(*markdownWriter, *reportView){
 	"shared-runtimes":           (*markdownWriter).sharedRuntimes,
 	"communication-links":       (*markdownWriter).communicationLinks,
 	"risk-tracking":             (*markdownWriter).riskTracking,
+	chapterCatalogCoverage:      (*markdownWriter).catalogCoverage,
 	chapterRiskRules:            (*markdownWriter).riskRules,
 	"ratings":                   (*markdownWriter).ratings,
 	"disclaimer":                (*markdownWriter).disclaimer,
@@ -422,4 +423,25 @@ func trackingCell(risk *viewRisk) string {
 		parts = append(parts, justification)
 	}
 	return strings.Join(parts, "; ")
+}
+
+func (what *markdownWriter) catalogCoverage(view *reportView) {
+	what.paragraph(catalogCoverageIntro)
+	for _, threatCatalog := range view.Catalogs {
+		what.heading(3, threatCatalog.Anchor, threatCatalog.Title)
+		what.paragraph("The risk rules checked " + strong(strconv.Itoa(threatCatalog.Checked)+" of "+
+			strconv.Itoa(len(threatCatalog.Entries))) + " entries of the " +
+			markdownLink(markdownText(threatCatalog.Title), threatCatalog.Link) + ".")
+		rows := make([][]string, 0, len(threatCatalog.Entries))
+		for _, entry := range threatCatalog.Entries {
+			summary := markdownText(entry.Summary)
+			if entry.Risks == 0 {
+				summary = muted(summary)
+			}
+			rows = append(rows, []string{
+				markdownCode(entry.ID) + " " + markdownText(entry.Title), what.refs(entry.Rules), summary,
+			})
+		}
+		what.table([]markdownColumn{{"Entry", false}, {"Risk rules", false}, {"Risks", false}}, rows...)
+	}
 }

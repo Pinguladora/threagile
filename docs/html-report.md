@@ -7,6 +7,15 @@ checked. `--report-html` names the file and `--skip-report-html` skips it; the c
 `AssetRegister` and `RiskRulesCheckedByThreagile` chapters as in the PDF report, and chapters the
 model has nothing for, such as questions or abuse cases, are left out.
 
+Beyond the PDF report, the page and the [Markdown report](./markdown-report.md) have a chapter on
+the coverage of threat catalogs: for each entry of the OWASP Top 10, the OWASP API Security Top 10,
+the OWASP Top 10 for LLM Applications, the OWASP Top 10 for Agentic Applications, CSA MAESTRO and the
+OWASP Non-Human Identities Top 10, the risk rules that checked it, by the `references` of their categories, and the
+risks they found. It shows the catalogs that risks of the model fall into, and marks the entries that
+no rule checks, which need a review of their own. A custom rule or an individual risk category counts
+when its references name an entry as the built-in rules do, like `OWASP LLM01:2025 Prompt Injection`
+or `MAESTRO Layer 5: Evaluation and Observability`.
+
 The page needs nothing else, so it works offline and as a CI artifact:
 
 * The style sheet is inline, and the data-flow and data mapping diagrams are inline SVG, rendered

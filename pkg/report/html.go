@@ -40,8 +40,12 @@ var (
 	//go:embed templates/report.css
 	htmlReportCSS string
 
+	htmlReportFuncs = template.FuncMap{
+		"markup": htmlMarkup, "yesNo": yesNo, "catalogCoverageIntro": func() string { return catalogCoverageIntro },
+	}
+
 	htmlReportTemplate = template.Must(template.New("report.html.tmpl").
-				Funcs(template.FuncMap{"markup": htmlMarkup, "yesNo": yesNo}).
+				Funcs(htmlReportFuncs).
 				ParseFS(htmlReportTemplateFiles, "templates/report.html.tmpl"))
 )
 

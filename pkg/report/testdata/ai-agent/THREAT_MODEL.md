@@ -31,9 +31,10 @@
 22. [Shared Runtimes](#shared-runtimes)
 23. [Communication Links](#communication-links)
 24. [Risk Tracking](#risk-tracking)
-25. [Risk Rules Checked by Threagile](#risk-rules-checked-by-threagile)
-26. [Ratings](#ratings)
-27. [Disclaimer](#disclaimer)
+25. [Threat Catalog Coverage](#threat-catalog-coverage)
+26. [Risk Rules Checked by Threagile](#risk-rules-checked-by-threagile)
+27. [Ratings](#ratings)
+28. [Disclaimer](#disclaimer)
 
 ## Management Summary
 
@@ -3870,6 +3871,92 @@ Looks up orders and issues refunds
 | Risk | ID | Severity | Status | Date | Checked by | Ticket | Justification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | [**Unverified Model Supply Chain** risk at **Guardrail Model**](#unverified-model-supply-chain) | `model-supply-chain@guardrail-model` | Medium | In Progress | 2026-11-04 | John Doe | AI-42 | Signing the model versions in the training pipeline and verifying them at start |
+
+## Threat Catalog Coverage
+
+The risk rules reference the entries of threat catalogs. For each entry of the catalogs that the risks of this model fall into, the tables list the risk rules that checked it and the risks they found. An entry that no risk rule checks needs a review of its own.
+
+### OWASP API Security Top 10 2023
+
+The risk rules checked **2 of 10** entries of the [OWASP API Security Top 10 2023](https://owasp.org/API-Security/editions/2023/en/0x11-t10/).
+
+| Entry | Risk rules | Risks |
+| --- | --- | --- |
+| `API1` Broken Object Level Authorization | [Missing Object-Level Authorization](#missing-object-level-authorization) | 2/2 unmitigated Risks |
+| `API2` Broken Authentication | none | _not checked by any risk rule_ |
+| `API3` Broken Object Property Level Authorization | none | _not checked by any risk rule_ |
+| `API4` Unrestricted Resource Consumption | none | _not checked by any risk rule_ |
+| `API5` Broken Function Level Authorization | [Missing Object-Level Authorization](#missing-object-level-authorization) | 2/2 unmitigated Risks |
+| `API6` Unrestricted Access to Sensitive Business Flows | none | _not checked by any risk rule_ |
+| `API7` Server Side Request Forgery | none | _not checked by any risk rule_ |
+| `API8` Security Misconfiguration | none | _not checked by any risk rule_ |
+| `API9` Improper Inventory Management | none | _not checked by any risk rule_ |
+| `API10` Unsafe Consumption of APIs | none | _not checked by any risk rule_ |
+
+### OWASP Top 10 for LLM Applications 2025
+
+The risk rules checked **7 of 10** entries of the [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/).
+
+| Entry | Risk rules | Risks |
+| --- | --- | --- |
+| `LLM01` Prompt Injection | Missing AI Guardrail, [Prompt Injection](#prompt-injection) | 2/2 unmitigated Risks |
+| `LLM02` Sensitive Information Disclosure | [Sensitive Data Disclosure through Model Output](#sensitive-data-disclosure-through-model-output) | 2/2 unmitigated Risks |
+| `LLM03` Supply Chain | [Unverified Model Supply Chain](#unverified-model-supply-chain) | 2/2 unmitigated Risks |
+| `LLM04` Data and Model Poisoning | [Unverified Model Supply Chain](#unverified-model-supply-chain), [Vector Store Poisoning](#vector-store-poisoning) | 3/3 unmitigated Risks |
+| `LLM05` Improper Output Handling | Unsandboxed Code Execution | _no risks found_ |
+| `LLM06` Excessive Agency | [Confused Deputy Agent](#confused-deputy-agent), [Excessive Agency](#excessive-agency), [Unauthenticated MCP Server](#unauthenticated-mcp-server) | 3/3 unmitigated Risks |
+| `LLM07` System Prompt Leakage | none | _not checked by any risk rule_ |
+| `LLM08` Vector and Embedding Weaknesses | [Vector Store Poisoning](#vector-store-poisoning) | 1/1 unmitigated Risk |
+| `LLM09` Misinformation | none | _not checked by any risk rule_ |
+| `LLM10` Unbounded Consumption | none | _not checked by any risk rule_ |
+
+### OWASP Top 10 for Agentic Applications 2026
+
+The risk rules checked **9 of 10** entries of the [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/).
+
+| Entry | Risk rules | Risks |
+| --- | --- | --- |
+| `ASI01` Agent Goal Hijack | Missing AI Guardrail, [Prompt Injection](#prompt-injection) | 2/2 unmitigated Risks |
+| `ASI02` Tool Misuse and Exploitation | [Excessive Agency](#excessive-agency), [Unauthenticated MCP Server](#unauthenticated-mcp-server) | 2/2 unmitigated Risks |
+| `ASI03` Identity and Privilege Abuse | [Confused Deputy Agent](#confused-deputy-agent), [Excessive Agency](#excessive-agency), Human Use of Machine Identity, Shared Machine Account, [Unauthenticated MCP Server](#unauthenticated-mcp-server) | 3/3 unmitigated Risks |
+| `ASI04` Agentic Supply Chain Vulnerabilities | [Unverified Model Supply Chain](#unverified-model-supply-chain) | 2/2 unmitigated Risks |
+| `ASI05` Unexpected Code Execution | Unsandboxed Code Execution | _no risks found_ |
+| `ASI06` Memory and Context Poisoning | [Vector Store Poisoning](#vector-store-poisoning) | 1/1 unmitigated Risk |
+| `ASI07` Insecure Inter-Agent Communication | Insecure Inter-Agent Communication | _no risks found_ |
+| `ASI08` Cascading Failures | Insecure Inter-Agent Communication | _no risks found_ |
+| `ASI09` Human-Agent Trust Exploitation | none | _not checked by any risk rule_ |
+| `ASI10` Rogue Agents | [Missing AI Monitoring](#missing-ai-monitoring) | 2/2 unmitigated Risks |
+
+### CSA MAESTRO
+
+The risk rules checked **7 of 7** entries of the [CSA MAESTRO](https://cloudsecurityalliance.org/blog/2025/02/06/agentic-ai-threat-modeling-framework-maestro).
+
+| Entry | Risk rules | Risks |
+| --- | --- | --- |
+| `L1` Foundation Models | [Prompt Injection](#prompt-injection), [Sensitive Data Disclosure through Model Output](#sensitive-data-disclosure-through-model-output), [Unverified Model Supply Chain](#unverified-model-supply-chain) | 6/6 unmitigated Risks |
+| `L2` Data Operations | [Vector Store Poisoning](#vector-store-poisoning) | 1/1 unmitigated Risk |
+| `L3` Agent Frameworks | [Confused Deputy Agent](#confused-deputy-agent), [Excessive Agency](#excessive-agency), [Prompt Injection](#prompt-injection), Unsandboxed Code Execution | 4/4 unmitigated Risks |
+| `L4` Deployment and Infrastructure | [Unauthenticated MCP Server](#unauthenticated-mcp-server), Unsandboxed Code Execution | 1/1 unmitigated Risk |
+| `L5` Evaluation and Observability | [Missing AI Monitoring](#missing-ai-monitoring) | 2/2 unmitigated Risks |
+| `L6` Security and Compliance | Missing AI Guardrail | _no risks found_ |
+| `L7` Agent Ecosystem | Insecure Inter-Agent Communication, [Unauthenticated MCP Server](#unauthenticated-mcp-server) | 1/1 unmitigated Risk |
+
+### OWASP Non-Human Identities Top 10 2025
+
+The risk rules checked **4 of 10** entries of the [OWASP Non-Human Identities Top 10 2025](https://owasp.org/www-project-non-human-identities-top-10/2025/).
+
+| Entry | Risk rules | Risks |
+| --- | --- | --- |
+| `NHI1` Improper Offboarding | none | _not checked by any risk rule_ |
+| `NHI2` Secret Leakage | [Long-Lived Credentials](#long-lived-credentials) | 1/1 unmitigated Risk |
+| `NHI3` Vulnerable Third-Party NHI | none | _not checked by any risk rule_ |
+| `NHI4` Insecure Authentication | none | _not checked by any risk rule_ |
+| `NHI5` Overprivileged NHI | none | _not checked by any risk rule_ |
+| `NHI6` Insecure Cloud Deployment Configurations | none | _not checked by any risk rule_ |
+| `NHI7` Long-Lived Secrets | [Long-Lived Credentials](#long-lived-credentials) | 1/1 unmitigated Risk |
+| `NHI8` Environment Isolation | none | _not checked by any risk rule_ |
+| `NHI9` NHI Reuse | [Confused Deputy Agent](#confused-deputy-agent), Shared Machine Account | 1/1 unmitigated Risk |
+| `NHI10` Human Use of NHI | Human Use of Machine Identity | _no risks found_ |
 
 ## Risk Rules Checked by Threagile
 
