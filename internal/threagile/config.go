@@ -209,14 +209,7 @@ func (c *Config) Defaults(buildTimestamp string) *Config {
 		SkipRiskRulesValue:     make([]string, 0),
 		ExecuteModelMacroValue: "",
 		FailOnValue:            "",
-		RiskExcelValue: RiskExcelConfig{
-			HideColumns:        make([]string, 0),
-			SortByColumns:      make([]string, 0),
-			WidthOfColumns:     make(map[string]float64),
-			ShrinkColumnsToFit: true,
-			WrapText:           false,
-			ColorText:          true,
-		},
+		RiskExcelValue:         defaultRiskExcelConfig(),
 
 		ServerModeValue:               false,
 		DiagramDPIValue:               DefaultDiagramDPI,
@@ -230,24 +223,7 @@ func (c *Config) Defaults(buildTimestamp string) *Config {
 		KeepDiagramSourceFilesValue:     false,
 		IgnoreOrphanedRiskTrackingValue: false,
 
-		AttractivenessValue: Attractiveness{
-			Quantity: 0,
-			Confidentiality: AttackerFocus{
-				Asset:                 0,
-				ProcessedOrStoredData: 0,
-				TransferredData:       0,
-			},
-			Integrity: AttackerFocus{
-				Asset:                 0,
-				ProcessedOrStoredData: 0,
-				TransferredData:       0,
-			},
-			Availability: AttackerFocus{
-				Asset:                 0,
-				ProcessedOrStoredData: 0,
-				TransferredData:       0,
-			},
-		},
+		AttractivenessValue: defaultAttractiveness(),
 
 		ReportConfigurationValue: report.ReportConfiguation{
 			HideChapter: make(map[report.ChaptersToShowHide]bool),
@@ -262,9 +238,54 @@ func (c *Config) Load(configFilename string) error {
 		return nil
 	}
 
-	data, readError := os.ReadFile(filepath.Clean(configFilename))
+	config, values, readError := readConfigFile(configFilename)
 	if readError != nil {
 		return readError
+	}
+
+	c.Merge(*config, values)
+
+	return c.prepareFolders()
+}
+
+func defaultRiskExcelConfig() RiskExcelConfig {
+	return RiskExcelConfig{
+		HideColumns:        make([]string, 0),
+		SortByColumns:      make([]string, 0),
+		WidthOfColumns:     make(map[string]float64),
+		ShrinkColumnsToFit: true,
+		WrapText:           false,
+		ColorText:          true,
+	}
+}
+
+func defaultAttractiveness() Attractiveness {
+	return Attractiveness{
+		Quantity: 0,
+		Confidentiality: AttackerFocus{
+			Asset:                 0,
+			ProcessedOrStoredData: 0,
+			TransferredData:       0,
+		},
+		Integrity: AttackerFocus{
+			Asset:                 0,
+			ProcessedOrStoredData: 0,
+			TransferredData:       0,
+		},
+		Availability: AttackerFocus{
+			Asset:                 0,
+			ProcessedOrStoredData: 0,
+			TransferredData:       0,
+		},
+	}
+}
+
+// readConfigFile reads a YAML or JSON config file into a config, and into the values of its keys, which tell
+// the keys that the file sets.
+func readConfigFile(configFilename string) (*Config, map[string]any, error) {
+	data, readError := os.ReadFile(filepath.Clean(configFilename))
+	if readError != nil {
+		return nil, nil, fmt.Errorf("failed to read config file: %w", readError)
 	}
 
 	values := make(map[string]any)
@@ -273,27 +294,30 @@ func (c *Config) Load(configFilename string) error {
 	if strings.HasSuffix(configFilename, ".yaml") {
 		parseError := yaml.Unmarshal(data, &values)
 		if parseError != nil {
-			return fmt.Errorf("failed to parse keys of yaml config file %q: %w", configFilename, parseError)
+			return nil, nil, fmt.Errorf("failed to parse keys of yaml config file %q: %w", configFilename, parseError)
 		}
 
 		unmarshalError := yaml.Unmarshal(data, &config)
 		if unmarshalError != nil {
-			return fmt.Errorf("failed to parse yaml config file %q: %w", configFilename, unmarshalError)
+			return nil, nil, fmt.Errorf("failed to parse yaml config file %q: %w", configFilename, unmarshalError)
 		}
 	} else {
 		parseError := json.Unmarshal(data, &values)
 		if parseError != nil {
-			return fmt.Errorf("failed to parse keys of json config file %q: %w", configFilename, parseError)
+			return nil, nil, fmt.Errorf("failed to parse keys of json config file %q: %w", configFilename, parseError)
 		}
 
 		unmarshalError := json.Unmarshal(data, &config)
 		if unmarshalError != nil {
-			return fmt.Errorf("failed to parse json config file %q: %w", configFilename, unmarshalError)
+			return nil, nil, fmt.Errorf("failed to parse json config file %q: %w", configFilename, unmarshalError)
 		}
 	}
 
-	c.Merge(config, values)
+	return &config, values, nil
+}
 
+// prepareFolders cleans the paths of the folders and checks them, or creates them where threagile writes.
+func (c *Config) prepareFolders() error {
 	errorList := make([]error, 0)
 	c.TempFolderValue = c.CleanPath(c.TempFolderValue)
 	tempDirError := os.MkdirAll(c.TempFolderValue, 0o700)
@@ -351,9 +375,10 @@ func (c *Config) CheckServerFolder() error {
 			return serverDirError
 		}
 
-		keyDirError := os.MkdirAll(filepath.Join(c.ServerFolderValue, c.KeyFolderValue), 0o700)
+		keyDir := filepath.Join(c.ServerFolderValue, c.KeyFolderValue)
+		keyDirError := os.MkdirAll(keyDir, 0o700)
 		if keyDirError != nil {
-			return fmt.Errorf("failed to create key dir %q: %w", filepath.Join(c.ServerFolderValue, c.KeyFolderValue), keyDirError)
+			return fmt.Errorf("failed to create key dir %q: %w", keyDir, keyDirError)
 		}
 	}
 
@@ -362,224 +387,249 @@ func (c *Config) CheckServerFolder() error {
 
 func (c *Config) Merge(config Config, values map[string]any) {
 	for key := range values {
-		switch strings.ToLower(key) {
-		case strings.ToLower("BuildTimestamp"):
-			c.BuildTimestampValue = config.BuildTimestampValue
+		merge, ok := configMergers[strings.ToLower(key)]
+		if ok {
+			merge(c, &config, values[key])
+		}
+	}
+}
 
-		case strings.ToLower("Verbose"):
-			c.VerboseValue = config.VerboseValue
+// configMergers merge a key of a config file into the config, keyed by the lower-cased key; they get the
+// parsed config file and the raw value of the key.
+var configMergers = lowerCaseKeys(map[string]func(c *Config, config *Config, value any){
+	"BuildTimestamp": func(c *Config, config *Config, _ any) {
+		c.BuildTimestampValue = config.BuildTimestampValue
+	},
+	"Verbose": func(c *Config, config *Config, _ any) {
+		c.VerboseValue = config.VerboseValue
+	},
+	"Interactive": func(c *Config, config *Config, _ any) {
+		c.InteractiveValue = config.InteractiveValue
+	},
+	"AppFolder": func(c *Config, config *Config, _ any) {
+		c.AppFolderValue = config.AppFolderValue
+	},
+	"PluginFolder": func(c *Config, config *Config, _ any) {
+		c.PluginFolderValue = config.PluginFolderValue
+	},
+	"DataFolder": func(c *Config, config *Config, _ any) {
+		c.DataFolderValue = config.DataFolderValue
+	},
+	"OutputFolder": func(c *Config, config *Config, _ any) {
+		c.OutputFolderValue = config.OutputFolderValue
+	},
+	"ServerFolder": func(c *Config, config *Config, _ any) {
+		c.ServerFolderValue = config.ServerFolderValue
+	},
+	"TempFolder": func(c *Config, config *Config, _ any) {
+		c.TempFolderValue = config.TempFolderValue
+	},
+	"KeyFolder": func(c *Config, config *Config, _ any) {
+		c.KeyFolderValue = config.KeyFolderValue
+	},
+	"InputFile": func(c *Config, config *Config, _ any) {
+		c.InputFileValue = config.InputFileValue
+	},
+	"ImportedInputFile": func(c *Config, config *Config, _ any) {
+		c.ImportedInputFileValue = config.ImportedInputFileValue
+	},
+	"OTMFile": func(c *Config, config *Config, _ any) {
+		c.OTMFileValue = config.OTMFileValue
+	},
+	"DataFlowDiagramFilenamePNG": func(c *Config, config *Config, _ any) {
+		c.DataFlowDiagramFilenamePNGValue = config.DataFlowDiagramFilenamePNGValue
+	},
+	"DataAssetDiagramFilenamePNG": func(c *Config, config *Config, _ any) {
+		c.DataAssetDiagramFilenamePNGValue = config.DataAssetDiagramFilenamePNGValue
+	},
+	"DataFlowDiagramFilenameDOT": func(c *Config, config *Config, _ any) {
+		c.DataFlowDiagramFilenameDOTValue = config.DataFlowDiagramFilenameDOTValue
+	},
+	"DataAssetDiagramFilenameDOT": func(c *Config, config *Config, _ any) {
+		c.DataAssetDiagramFilenameDOTValue = config.DataAssetDiagramFilenameDOTValue
+	},
+	"ReportFilename": func(c *Config, config *Config, _ any) {
+		c.ReportFilenameValue = config.ReportFilenameValue
+	},
+	"ExcelRisksFilename": func(c *Config, config *Config, _ any) {
+		c.ExcelRisksFilenameValue = config.ExcelRisksFilenameValue
+	},
+	"ExcelTagsFilename": func(c *Config, config *Config, _ any) {
+		c.ExcelTagsFilenameValue = config.ExcelTagsFilenameValue
+	},
+	"JsonRisksFilename": func(c *Config, config *Config, _ any) {
+		c.JsonRisksFilenameValue = config.JsonRisksFilenameValue
+	},
+	"JsonTechnicalAssetsFilename": func(c *Config, config *Config, _ any) {
+		c.JsonTechnicalAssetsFilenameValue = config.JsonTechnicalAssetsFilenameValue
+	},
+	"JsonStatsFilename": func(c *Config, config *Config, _ any) {
+		c.JsonStatsFilenameValue = config.JsonStatsFilenameValue
+	},
+	"JsonOTMFilename": func(c *Config, config *Config, _ any) {
+		c.JsonOTMFilenameValue = config.JsonOTMFilenameValue
+	},
+	"SkipOTMJSON": func(c *Config, config *Config, _ any) {
+		c.SkipOTMJSONValue = config.SkipOTMJSONValue
+	},
+	"SkipDataFlowDiagram": func(c *Config, config *Config, _ any) {
+		c.SkipDataFlowDiagramValue = config.SkipDataFlowDiagramValue
+	},
+	"SkipDataAssetDiagram": func(c *Config, config *Config, _ any) {
+		c.SkipDataAssetDiagramValue = config.SkipDataAssetDiagramValue
+	},
+	"SkipRisksJSON": func(c *Config, config *Config, _ any) {
+		c.SkipRisksJSONValue = config.SkipRisksJSONValue
+	},
+	"SkipTechnicalAssetsJSON": func(c *Config, config *Config, _ any) {
+		c.SkipTechnicalAssetsJSONValue = config.SkipTechnicalAssetsJSONValue
+	},
+	"SkipStatsJSON": func(c *Config, config *Config, _ any) {
+		c.SkipStatsJSONValue = config.SkipStatsJSONValue
+	},
+	"SkipRisksExcel": func(c *Config, config *Config, _ any) {
+		c.SkipRisksExcelValue = config.SkipRisksExcelValue
+	},
+	"SkipTagsExcel": func(c *Config, config *Config, _ any) {
+		c.SkipTagsExcelValue = config.SkipTagsExcelValue
+	},
+	"SkipReportPDF": func(c *Config, config *Config, _ any) {
+		c.SkipReportPDFValue = config.SkipReportPDFValue
+	},
+	"SkipReportADOC": func(c *Config, config *Config, _ any) {
+		c.SkipReportADOCValue = config.SkipReportADOCValue
+	},
+	"ReportHTMLFilename": func(c *Config, config *Config, _ any) {
+		c.ReportHTMLFilenameValue = config.ReportHTMLFilenameValue
+	},
+	"SkipReportHTML": func(c *Config, config *Config, _ any) {
+		c.SkipReportHTMLValue = config.SkipReportHTMLValue
+	},
+	"TemplateFilename": func(c *Config, config *Config, _ any) {
+		c.TemplateFilenameValue = config.TemplateFilenameValue
+	},
+	"ReportLogoImagePath": func(c *Config, config *Config, _ any) {
+		c.ReportLogoImagePathValue = config.ReportLogoImagePathValue
+	},
+	"TechnologyFilename": func(c *Config, config *Config, _ any) {
+		c.TechnologyFilenameValue = config.TechnologyFilenameValue
+	},
+	"HideEmptyChapters": func(c *Config, config *Config, _ any) {
+		c.HideEmptyChaptersValue = config.HideEmptyChaptersValue
+	},
+	"RiskRulePlugins": func(c *Config, config *Config, _ any) {
+		c.RiskRulePluginsValue = config.RiskRulePluginsValue
+	},
+	"SkipRiskRules": func(c *Config, config *Config, _ any) {
+		c.SkipRiskRulesValue = config.SkipRiskRulesValue
+	},
+	"ExecuteModelMacro": func(c *Config, config *Config, _ any) {
+		c.ExecuteModelMacroValue = config.ExecuteModelMacroValue
+	},
+	"FailOn": func(c *Config, config *Config, _ any) {
+		c.FailOnValue = config.FailOnValue
+	},
+	"RiskExcel": func(c *Config, config *Config, value any) {
+		c.mergeRiskExcel(config, value)
+	},
+	"ServerMode": func(c *Config, config *Config, _ any) {
+		c.ServerModeValue = config.ServerModeValue
+	},
+	"DiagramDPI": func(c *Config, config *Config, _ any) {
+		c.DiagramDPIValue = config.DiagramDPIValue
+	},
+	"ServerPort": func(c *Config, config *Config, _ any) {
+		c.ServerPortValue = config.ServerPortValue
+	},
+	"GraphvizDPI": func(c *Config, config *Config, _ any) {
+		c.GraphvizDPIValue = config.GraphvizDPIValue
+	},
+	"MaxGraphvizDPI": func(c *Config, config *Config, _ any) {
+		c.MaxGraphvizDPIValue = config.MaxGraphvizDPIValue
+	},
+	"BackupHistoryFilesToKeep": func(c *Config, config *Config, _ any) {
+		c.BackupHistoryFilesToKeepValue = config.BackupHistoryFilesToKeepValue
+	},
+	"AddModelTitle": func(c *Config, config *Config, _ any) {
+		c.AddModelTitleValue = config.AddModelTitleValue
+	},
+	"AddLegend": func(c *Config, config *Config, _ any) {
+		c.AddLegendValue = config.AddLegendValue
+	},
+	"KeepDiagramSourceFiles": func(c *Config, config *Config, _ any) {
+		c.KeepDiagramSourceFilesValue = config.KeepDiagramSourceFilesValue
+	},
+	"IgnoreOrphanedRiskTracking": func(c *Config, config *Config, _ any) {
+		c.IgnoreOrphanedRiskTrackingValue = config.IgnoreOrphanedRiskTrackingValue
+	},
+	"Attractiveness": func(c *Config, config *Config, _ any) {
+		c.AttractivenessValue = config.AttractivenessValue
+	},
+	"ReportConfiguration": func(c *Config, config *Config, value any) {
+		c.mergeReportConfiguration(config, value)
+	},
+})
 
-		case strings.ToLower("Interactive"):
-			c.InteractiveValue = config.InteractiveValue
+func lowerCaseKeys[V any](byKey map[string]V) map[string]V {
+	byLowerCaseKey := make(map[string]V, len(byKey))
+	for key, value := range byKey {
+		byLowerCaseKey[strings.ToLower(key)] = value
+	}
+	return byLowerCaseKey
+}
 
-		case strings.ToLower("AppFolder"):
-			c.AppFolderValue = config.AppFolderValue
+func (c *Config) mergeRiskExcel(config *Config, value any) {
+	configMap, mapOk := value.(map[string]any)
+	if !mapOk {
+		return
+	}
 
-		case strings.ToLower("PluginFolder"):
-			c.PluginFolderValue = config.PluginFolderValue
+	for valueName := range configMap {
+		switch strings.ToLower(valueName) {
+		case strings.ToLower("HideColumns"):
+			c.RiskExcelValue.HideColumns = append(c.RiskExcelValue.HideColumns, config.RiskExcelValue.HideColumns...)
 
-		case strings.ToLower("DataFolder"):
-			c.DataFolderValue = config.DataFolderValue
+		case strings.ToLower("SortByColumns"):
+			c.RiskExcelValue.SortByColumns = append(c.RiskExcelValue.SortByColumns, config.RiskExcelValue.SortByColumns...)
 
-		case strings.ToLower("OutputFolder"):
-			c.OutputFolderValue = config.OutputFolderValue
-
-		case strings.ToLower("ServerFolder"):
-			c.ServerFolderValue = config.ServerFolderValue
-
-		case strings.ToLower("TempFolder"):
-			c.TempFolderValue = config.TempFolderValue
-
-		case strings.ToLower("KeyFolder"):
-			c.KeyFolderValue = config.KeyFolderValue
-
-		case strings.ToLower("InputFile"):
-			c.InputFileValue = config.InputFileValue
-
-		case strings.ToLower("ImportedInputFile"):
-			c.ImportedInputFileValue = config.ImportedInputFileValue
-
-		case strings.ToLower("OTMFile"):
-			c.OTMFileValue = config.OTMFileValue
-
-		case strings.ToLower("DataFlowDiagramFilenamePNG"):
-			c.DataFlowDiagramFilenamePNGValue = config.DataFlowDiagramFilenamePNGValue
-
-		case strings.ToLower("DataAssetDiagramFilenamePNG"):
-			c.DataAssetDiagramFilenamePNGValue = config.DataAssetDiagramFilenamePNGValue
-
-		case strings.ToLower("DataFlowDiagramFilenameDOT"):
-			c.DataFlowDiagramFilenameDOTValue = config.DataFlowDiagramFilenameDOTValue
-
-		case strings.ToLower("DataAssetDiagramFilenameDOT"):
-			c.DataAssetDiagramFilenameDOTValue = config.DataAssetDiagramFilenameDOTValue
-
-		case strings.ToLower("ReportFilename"):
-			c.ReportFilenameValue = config.ReportFilenameValue
-
-		case strings.ToLower("ExcelRisksFilename"):
-			c.ExcelRisksFilenameValue = config.ExcelRisksFilenameValue
-
-		case strings.ToLower("ExcelTagsFilename"):
-			c.ExcelTagsFilenameValue = config.ExcelTagsFilenameValue
-
-		case strings.ToLower("JsonRisksFilename"):
-			c.JsonRisksFilenameValue = config.JsonRisksFilenameValue
-
-		case strings.ToLower("JsonTechnicalAssetsFilename"):
-			c.JsonTechnicalAssetsFilenameValue = config.JsonTechnicalAssetsFilenameValue
-
-		case strings.ToLower("JsonStatsFilename"):
-			c.JsonStatsFilenameValue = config.JsonStatsFilenameValue
-
-		case strings.ToLower("JsonOTMFilename"):
-			c.JsonOTMFilenameValue = config.JsonOTMFilenameValue
-
-		case strings.ToLower("SkipOTMJSON"):
-			c.SkipOTMJSONValue = config.SkipOTMJSONValue
-
-		case strings.ToLower("SkipDataFlowDiagram"):
-			c.SkipDataFlowDiagramValue = config.SkipDataFlowDiagramValue
-
-		case strings.ToLower("SkipDataAssetDiagram"):
-			c.SkipDataAssetDiagramValue = config.SkipDataAssetDiagramValue
-
-		case strings.ToLower("SkipRisksJSON"):
-			c.SkipRisksJSONValue = config.SkipRisksJSONValue
-
-		case strings.ToLower("SkipTechnicalAssetsJSON"):
-			c.SkipTechnicalAssetsJSONValue = config.SkipTechnicalAssetsJSONValue
-
-		case strings.ToLower("SkipStatsJSON"):
-			c.SkipStatsJSONValue = config.SkipStatsJSONValue
-
-		case strings.ToLower("SkipRisksExcel"):
-			c.SkipRisksExcelValue = config.SkipRisksExcelValue
-
-		case strings.ToLower("SkipTagsExcel"):
-			c.SkipTagsExcelValue = config.SkipTagsExcelValue
-
-		case strings.ToLower("SkipReportPDF"):
-			c.SkipReportPDFValue = config.SkipReportPDFValue
-
-		case strings.ToLower("SkipReportADOC"):
-			c.SkipReportADOCValue = config.SkipReportADOCValue
-
-		case strings.ToLower("ReportHTMLFilename"):
-			c.ReportHTMLFilenameValue = config.ReportHTMLFilenameValue
-
-		case strings.ToLower("SkipReportHTML"):
-			c.SkipReportHTMLValue = config.SkipReportHTMLValue
-
-		case strings.ToLower("TemplateFilename"):
-			c.TemplateFilenameValue = config.TemplateFilenameValue
-
-		case strings.ToLower("ReportLogoImagePath"):
-			c.ReportLogoImagePathValue = config.ReportLogoImagePathValue
-
-		case strings.ToLower("TechnologyFilename"):
-			c.TechnologyFilenameValue = config.TechnologyFilenameValue
-
-		case strings.ToLower("HideEmptyChapters"):
-			c.HideEmptyChaptersValue = config.HideEmptyChaptersValue
-
-		case strings.ToLower("RiskRulePlugins"):
-			c.RiskRulePluginsValue = config.RiskRulePluginsValue
-
-		case strings.ToLower("SkipRiskRules"):
-			c.SkipRiskRulesValue = config.SkipRiskRulesValue
-
-		case strings.ToLower("ExecuteModelMacro"):
-			c.ExecuteModelMacroValue = config.ExecuteModelMacroValue
-
-		case strings.ToLower("FailOn"):
-			c.FailOnValue = config.FailOnValue
-
-		case strings.ToLower("RiskExcel"):
-			configMap, mapOk := values[key].(map[string]any)
-			if !mapOk {
-				continue
+		case strings.ToLower("WidthOfColumns"):
+			if c.RiskExcelValue.WidthOfColumns == nil {
+				c.RiskExcelValue.WidthOfColumns = make(map[string]float64)
 			}
 
-			for valueName := range configMap {
-				switch strings.ToLower(valueName) {
-				case strings.ToLower("HideColumns"):
-					c.RiskExcelValue.HideColumns = append(c.RiskExcelValue.HideColumns, config.RiskExcelValue.HideColumns...)
+			maps.Copy(c.RiskExcelValue.WidthOfColumns, config.RiskExcelValue.WidthOfColumns)
 
-				case strings.ToLower("SortByColumns"):
-					c.RiskExcelValue.SortByColumns = append(c.RiskExcelValue.SortByColumns, config.RiskExcelValue.SortByColumns...)
+		case strings.ToLower("ShrinkColumnsToFit"):
+			c.RiskExcelValue.ShrinkColumnsToFit = config.RiskExcelValue.ShrinkColumnsToFit
 
-				case strings.ToLower("WidthOfColumns"):
-					if c.RiskExcelValue.WidthOfColumns == nil {
-						c.RiskExcelValue.WidthOfColumns = make(map[string]float64)
-					}
+		case strings.ToLower("WrapText"):
+			c.RiskExcelValue.WrapText = config.RiskExcelValue.WrapText
 
-					maps.Copy(c.RiskExcelValue.WidthOfColumns, config.RiskExcelValue.WidthOfColumns)
+		case strings.ToLower("ColorText"):
+			c.RiskExcelValue.ColorText = config.RiskExcelValue.ColorText
+		}
+	}
+}
 
-				case strings.ToLower("ShrinkColumnsToFit"):
-					c.RiskExcelValue.ShrinkColumnsToFit = config.RiskExcelValue.ShrinkColumnsToFit
+func (c *Config) mergeReportConfiguration(config *Config, value any) {
+	configMap, mapOk := value.(map[string]any)
+	if !mapOk {
+		return
+	}
 
-				case strings.ToLower("WrapText"):
-					c.RiskExcelValue.WrapText = config.RiskExcelValue.WrapText
+	for valueName := range configMap {
+		if strings.ToLower(valueName) != "hidechapter" {
+			continue
+		}
 
-				case strings.ToLower("ColorText"):
-					c.RiskExcelValue.ColorText = config.RiskExcelValue.ColorText
-				}
-			}
+		if c.ReportConfigurationValue.HideChapter == nil {
+			c.ReportConfigurationValue.HideChapter = make(map[report.ChaptersToShowHide]bool)
+		}
 
-		case strings.ToLower("ServerMode"):
-			c.ServerModeValue = config.ServerModeValue
-
-		case strings.ToLower("DiagramDPI"):
-			c.DiagramDPIValue = config.DiagramDPIValue
-
-		case strings.ToLower("ServerPort"):
-			c.ServerPortValue = config.ServerPortValue
-
-		case strings.ToLower("GraphvizDPI"):
-			c.GraphvizDPIValue = config.GraphvizDPIValue
-
-		case strings.ToLower("MaxGraphvizDPI"):
-			c.MaxGraphvizDPIValue = config.MaxGraphvizDPIValue
-
-		case strings.ToLower("BackupHistoryFilesToKeep"):
-			c.BackupHistoryFilesToKeepValue = config.BackupHistoryFilesToKeepValue
-
-		case strings.ToLower("AddModelTitle"):
-			c.AddModelTitleValue = config.AddModelTitleValue
-
-		case strings.ToLower("AddLegend"):
-			c.AddLegendValue = config.AddLegendValue
-
-		case strings.ToLower("KeepDiagramSourceFiles"):
-			c.KeepDiagramSourceFilesValue = config.KeepDiagramSourceFilesValue
-
-		case strings.ToLower("IgnoreOrphanedRiskTracking"):
-			c.IgnoreOrphanedRiskTrackingValue = config.IgnoreOrphanedRiskTrackingValue
-
-		case strings.ToLower("Attractiveness"):
-			c.AttractivenessValue = config.AttractivenessValue
-
-		case strings.ToLower("ReportConfiguration"):
-			configMap, mapOk := values[key].(map[string]any)
-			if !mapOk {
-				continue
-			}
-
-			for valueName := range configMap {
-				switch strings.ToLower(valueName) {
-				case strings.ToLower("HideChapter"):
-					if c.ReportConfigurationValue.HideChapter == nil {
-						c.ReportConfigurationValue.HideChapter = make(map[report.ChaptersToShowHide]bool)
-					}
-
-					for chapter, value := range config.ReportConfigurationValue.HideChapter {
-						c.ReportConfigurationValue.HideChapter[chapter] = value
-						if value {
-							log.Println("Hiding chapter: ", chapter)
-						}
-					}
-				}
+		for chapter, value := range config.ReportConfigurationValue.HideChapter {
+			c.ReportConfigurationValue.HideChapter[chapter] = value
+			if value {
+				log.Println("Hiding chapter: ", chapter)
 			}
 		}
 	}
