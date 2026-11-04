@@ -40,7 +40,7 @@ func (*AccidentalSecretLeakRule) Category() *types.RiskCategory {
 }
 
 func (*AccidentalSecretLeakRule) SupportedTags() []string {
-	// todo: how is 'nexus' being used?
+	// 'nexus' is accepted as a tag, but unlike 'git' it does not change the risk yet: how it should be used is open.
 	return []string{"git", "nexus"}
 }
 

@@ -93,8 +93,9 @@ func (r *MixedTargetsOnSharedRuntimeRule) createRisk(input *types.Model, sharedR
 		Severity:               types.CalculateSeverity(types.Unlikely, impact),
 		ExploitationLikelihood: types.Unlikely,
 		ExploitationImpact:     impact,
+		// The title does not list the assets running on the shared HW yet.
 		Title: "<b>Mixed Targets on Shared Runtime</b> named <b>" + sharedRuntime.Title + "</b> might enable attackers moving from one less " +
-			"valuable target to a more valuable one", // TODO list at least the assets in the text which are running on the shared HW
+			"valuable target to a more valuable one",
 		MostRelevantSharedRuntimeId: sharedRuntime.Id,
 		DataBreachProbability:       types.Improbable,
 		DataBreachTechnicalAssetIDs: sharedRuntime.TechnicalAssetsRunning,

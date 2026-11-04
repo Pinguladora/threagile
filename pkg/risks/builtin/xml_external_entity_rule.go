@@ -72,7 +72,8 @@ func (r *XmlExternalEntityRule) createRisk(parsedModel *types.Model, technicalAs
 		Title:                        title,
 		MostRelevantTechnicalAssetId: technicalAsset.Id,
 		DataBreachProbability:        types.Probable,
-		DataBreachTechnicalAssetIDs:  []string{technicalAsset.Id}, // TODO: use the same logic here as for SSRF rule, as XXE is also SSRF ;)
+		// The same logic as for the SSRF rule could find more affected assets here, as XXE is also SSRF.
+		DataBreachTechnicalAssetIDs: []string{technicalAsset.Id},
 	}
 	risk.SyntheticId = risk.CategoryId + "@" + technicalAsset.Id
 	return risk

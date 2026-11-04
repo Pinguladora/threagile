@@ -29,11 +29,12 @@ func (*DosRiskyAccessAcrossTrustBoundaryRule) Category() *types.RiskCategory {
 		DetectionLogic: "In-scope technical assets (excluding " + types.LoadBalancer + ") with " +
 			"availability rating of " + types.Critical.String() + " or higher which have incoming data-flows across a " +
 			"network trust-boundary (excluding " + types.DevOps.String() + " usage).",
+		// The rating is not reduced when the data-flow is authenticated and encrypted, though it might be.
 		RiskAssessment: "Matching technical assets with availability rating " +
 			"of " + types.Critical.String() + " or higher are " +
 			"at " + types.LowSeverity.String() + " risk. When the availability rating is " +
 			types.MissionCritical.String() + " and neither a VPN nor IP filter for the incoming data-flow nor redundancy " +
-			"for the asset is applied, the risk-rating is considered " + types.MediumSeverity.String() + ".", // TODO reduce also, when data-flow authenticated and encrypted?
+			"for the asset is applied, the risk-rating is considered " + types.MediumSeverity.String() + ".",
 		FalsePositives:             "When the accessed target operations are not time- or resource-consuming.",
 		ModelFailurePossibleReason: false,
 		CWE:                        400,
