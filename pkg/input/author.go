@@ -1,7 +1,7 @@
 package input
 
 import (
-	"errors"
+	"fmt"
 	"sort"
 	"strings"
 )
@@ -12,22 +12,25 @@ type Author struct {
 	Homepage string `json:"homepage,omitempty" yaml:"homepage,omitempty"`
 }
 
+// Merge merges another entry of the same author: a field that only one of them has is kept, and a field
+// they both have must match.
 func (what *Author) Merge(other Author) error {
-	if len(what.Name) > 0 && !strings.EqualFold(what.Name, other.Name) {
-		return errors.New("author name mismatch")
+	for _, field := range []struct {
+		name         string
+		value, other *string
+	}{
+		{"name", &what.Name, &other.Name},
+		{"contact", &what.Contact, &other.Contact},
+		{"homepage", &what.Homepage, &other.Homepage},
+	} {
+		switch {
+		case len(*field.other) == 0:
+		case len(*field.value) == 0:
+			*field.value = *field.other
+		case !strings.EqualFold(*field.value, *field.other):
+			return fmt.Errorf("author %v mismatch", field.name)
+		}
 	}
-
-	if len(what.Contact) > 0 && !strings.EqualFold(what.Contact, other.Contact) {
-		return errors.New("author contact mismatch")
-	}
-
-	if len(what.Homepage) > 0 && !strings.EqualFold(what.Homepage, other.Homepage) {
-		return errors.New("author homepage mismatch")
-	}
-
-	what.Name = other.Name
-	what.Contact = other.Contact
-	what.Homepage = other.Homepage
 
 	return nil
 }
@@ -47,8 +50,7 @@ func (what *Author) MergeList(list []Author) ([]Author, error) {
 		return nil, mergeError
 	}
 
-	newList := make([]Author, 1)
-	newList[0] = first
+	others := make([]Author, 0, len(tail))
 	for _, second := range tail {
 		if first.Match(second) {
 			mergeError = first.Merge(second)
@@ -56,11 +58,12 @@ func (what *Author) MergeList(list []Author) ([]Author, error) {
 				return nil, mergeError
 			}
 		} else {
-			newList = append(newList, second)
+			others = append(others, second)
 		}
 	}
 
-	return newList, nil
+	// first is added only now, with what the other entries of the same author added to it
+	return append([]Author{first}, others...), nil
 }
 
 func (what *Author) Match(other Author) bool {
