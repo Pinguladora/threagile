@@ -431,20 +431,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 		r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{intro-risks-by-vulnerability-category}"))
 		for _, category := range parsedModel.SortedRiskCategories() {
 			newRisksStr := parsedModel.SortedRisksOfCategory(category)
-			switch types.HighestSeverityStillAtRisk(newRisksStr) {
-			case types.CriticalSeverity:
-				colorCriticalRisk(r.pdf)
-			case types.HighSeverity:
-				colorHighRisk(r.pdf)
-			case types.ElevatedSeverity:
-				colorElevatedRisk(r.pdf)
-			case types.MediumSeverity:
-				colorMediumRisk(r.pdf)
-			case types.LowSeverity:
-				colorLowRisk(r.pdf)
-			default:
-				r.pdfColorBlack()
-			}
+			r.pdfColorBySeverity(types.HighestSeverityStillAtRisk(newRisksStr))
 			if len(types.ReduceToOnlyStillAtRisk(newRisksStr)) == 0 {
 				r.pdfColorBlack()
 			}
@@ -500,20 +487,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 				r.pdfColorOutOfScope()
 				suffix = textOutOfScope
 			} else {
-				switch types.HighestSeverityStillAtRisk(newRisksStr) {
-				case types.CriticalSeverity:
-					colorCriticalRisk(r.pdf)
-				case types.HighSeverity:
-					colorHighRisk(r.pdf)
-				case types.ElevatedSeverity:
-					colorElevatedRisk(r.pdf)
-				case types.MediumSeverity:
-					colorMediumRisk(r.pdf)
-				case types.LowSeverity:
-					colorLowRisk(r.pdf)
-				default:
-					r.pdfColorBlack()
-				}
+				r.pdfColorBySeverity(types.HighestSeverityStillAtRisk(newRisksStr))
 				if len(types.ReduceToOnlyStillAtRisk(newRisksStr)) == 0 {
 					r.pdfColorBlack()
 				}
@@ -2401,20 +2375,7 @@ func (r *pdfReporter) createRiskCategories(parsedModel *types.Model) {
 		risksStr := parsedModel.SortedRisksOfCategory(category)
 
 		// category color
-		switch types.HighestSeverityStillAtRisk(risksStr) {
-		case types.CriticalSeverity:
-			colorCriticalRisk(r.pdf)
-		case types.HighSeverity:
-			colorHighRisk(r.pdf)
-		case types.ElevatedSeverity:
-			colorElevatedRisk(r.pdf)
-		case types.MediumSeverity:
-			colorMediumRisk(r.pdf)
-		case types.LowSeverity:
-			colorLowRisk(r.pdf)
-		default:
-			r.pdfColorBlack()
-		}
+		r.pdfColorBySeverity(types.HighestSeverityStillAtRisk(risksStr))
 		if len(types.ReduceToOnlyStillAtRisk(risksStr)) == 0 {
 			r.pdfColorBlack()
 		}
@@ -2682,20 +2643,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 			r.pdfColorOutOfScope()
 			suffix = textOutOfScope
 		} else {
-			switch types.HighestSeverityStillAtRisk(risksStr) {
-			case types.CriticalSeverity:
-				colorCriticalRisk(r.pdf)
-			case types.HighSeverity:
-				colorHighRisk(r.pdf)
-			case types.ElevatedSeverity:
-				colorElevatedRisk(r.pdf)
-			case types.MediumSeverity:
-				colorMediumRisk(r.pdf)
-			case types.LowSeverity:
-				colorLowRisk(r.pdf)
-			default:
-				r.pdfColorBlack()
-			}
+			r.pdfColorBySeverity(types.HighestSeverityStillAtRisk(risksStr))
 			if len(types.ReduceToOnlyStillAtRisk(risksStr)) == 0 {
 				r.pdfColorBlack()
 			}
@@ -4239,6 +4187,24 @@ func (r *pdfReporter) pdfColorOutOfScope() {
 func (r *pdfReporter) leftMargin() float64 {
 	left, _, _, _ := r.pdf.GetMargins() //nolint:dogsled // gofpdf has no getter for the left margin alone
 	return left
+}
+
+// pdfColorBySeverity sets the text colour of a risk severity, black for an unknown one.
+func (r *pdfReporter) pdfColorBySeverity(severity types.RiskSeverity) {
+	switch severity {
+	case types.CriticalSeverity:
+		colorCriticalRisk(r.pdf)
+	case types.HighSeverity:
+		colorHighRisk(r.pdf)
+	case types.ElevatedSeverity:
+		colorElevatedRisk(r.pdf)
+	case types.MediumSeverity:
+		colorMediumRisk(r.pdf)
+	case types.LowSeverity:
+		colorLowRisk(r.pdf)
+	default:
+		r.pdfColorBlack()
+	}
 }
 
 func (r *pdfReporter) pdfColorGray() {
