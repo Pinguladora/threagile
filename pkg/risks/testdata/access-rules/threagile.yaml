@@ -130,6 +130,74 @@ technical_assets:
         usage: business
         data_assets_sent: [orders]
         data_assets_received: [orders]
+      Shop Administration:
+        target: shop-api
+        description: Shop Administration
+        protocol: https
+        authentication: short-lived-token
+        identity: end-user
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: devops
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Shop Through Proxy:
+        target: shop-proxy
+        description: Shop Through Proxy
+        protocol: https
+        authentication: session-id
+        identity: end-user
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Shop Proxy:
+    id: shop-proxy
+    description: Shop Proxy
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: reverse-proxy
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Proxied Shop Use:
+        target: shop-api
+        description: Proxied Shop Use
+        protocol: https
+        authentication: session-id
+        identity: end-user
+        authorization: object-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
 
   Partner:
     id: partner
@@ -444,7 +512,7 @@ trust_boundaries:
     description: The shop
     type: network-cloud-security-group
     tags: []
-    technical_assets_inside: [admin-console, batch-job, reporting, shop-api, orders-db, policy-engine, backup-policy-engine]
+    technical_assets_inside: [admin-console, shop-proxy, batch-job, reporting, shop-api, orders-db, policy-engine, backup-policy-engine]
     trust_boundaries_nested: []
 
   Legacy Network:

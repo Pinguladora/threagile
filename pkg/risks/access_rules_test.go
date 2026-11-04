@@ -14,7 +14,8 @@ import (
 // TestAccessRulesEndToEnd analyzes a shop with all built-in rules and checks the risks of the rules on credentials
 // and authorization. The model also holds what the rules must skip: the password of a person, a long-lived token
 // of a workload identity, a token of unknown lifetime, links with object-level or unknown authorization, a
-// redundant policy decision point and an authenticated, encrypted link to one.
+// redundant policy decision point, an authenticated, encrypted link to one, an administrator's devops link and a
+// link into a reverse proxy, which forwards requests without authorizing them.
 func TestAccessRulesEndToEnd(t *testing.T) {
 	config := new(threagile.Config).Defaults("")
 	config.SetAppFolder(t.TempDir())
