@@ -90,6 +90,8 @@ func (what *Threagile) initFlags() *Threagile {
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.riskRulePluginsValue, customRiskRulesPluginFlagName, strings.Join(what.config.GetRiskRulePlugins(), ","), "comma-separated list of plugins file names with custom risk rules to load")
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.skipRiskRulesValue, skipRiskRulesFlagName, strings.Join(what.config.GetSkipRiskRules(), ","), "comma-separated list of risk rules (by their ID) to skip")
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.ExecuteModelMacroValue, executeModelMacroFlagName, what.config.GetExecuteModelMacro(), "macro to execute")
+	what.rootCmd.PersistentFlags().StringVar(&what.flags.FailOnValue, failOnFlagName, what.config.GetFailOn(),
+		"exit with status 2 when unchecked risks of this severity or higher remain (low, medium, elevated, high, critical)")
 
 	// RiskExcelValue not available as flags
 
@@ -385,6 +387,10 @@ func (what *Threagile) processArgs(cmd *cobra.Command, args []string) bool {
 
 	if what.isFlagOverridden(cmd, skipRiskRulesFlagName) {
 		what.config.SkipRiskRulesValue = strings.Split(what.flags.skipRiskRulesValue, ",")
+	}
+
+	if what.isFlagOverridden(cmd, failOnFlagName) {
+		what.config.FailOnValue = what.flags.FailOnValue
 	}
 
 	if what.isFlagOverridden(cmd, executeModelMacroFlagName) {

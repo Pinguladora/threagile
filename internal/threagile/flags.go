@@ -40,6 +40,7 @@ const (
 	customRiskRulesPluginFlagName = "custom-risk-rules-plugin"
 	skipRiskRulesFlagName         = "skip-risk-rules"
 	executeModelMacroFlagName     = "execute-model-macro"
+	failOnFlagName                = "fail-on"
 
 	serverModeFlagName               = "server-mode"
 	serverPortFlagName               = "server-port"

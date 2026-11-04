@@ -17,6 +17,9 @@ func (what *Threagile) Execute() {
 	err := what.rootCmd.Execute()
 	if err != nil {
 		what.rootCmd.Println(err)
+		if _, failed := riskGateFailure(err); failed {
+			os.Exit(riskGateExitCode)
+		}
 		os.Exit(1)
 	}
 

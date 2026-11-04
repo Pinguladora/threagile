@@ -24,3 +24,19 @@ SOURCE_DATE_EPOCH=$(git log -1 --format=%ct) threagile analyze-model --model thr
 All outputs are then byte-identical between runs, except `report.pdf`: the PDF
 library numbers the objects of the imported background page in random order, so
 the PDF bytes differ while its content stays the same.
+
+## Failing CI on unchecked risks
+
+`--fail-on <severity>` (or `"FailOn"` in the config file) turns the analysis into
+a gate. When risks of that severity or higher are still unchecked, meaning they
+have no `risk_tracking` entry or one with status `unchecked`, threagile writes the
+reports as usual, lists those risks and exits with status 2. Any other error exits
+with status 1. Severities are `low`, `medium`, `elevated`, `high` and `critical`.
+
+Risks in any other status (in discussion, accepted, in progress, mitigated, false
+positive) have been looked at, so they do not fail the gate. To let a new risk
+through, add a `risk_tracking` entry for it to the model.
+
+```sh
+threagile analyze-model --model threagile.yaml --output out --fail-on high
+```
