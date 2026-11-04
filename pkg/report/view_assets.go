@@ -235,7 +235,7 @@ func newViewTechnicalAsset(parsedModel *types.Model, asset *types.TechnicalAsset
 		Risks:           risks.of(generatedRisks),
 	}
 	if asset.OutOfScope {
-		view.Summary = "out of scope"
+		view.Summary = viewOutOfScopeText
 	}
 	if boundary := parsedModel.GetTechnicalAssetTrustBoundaryId(asset); boundary != "" {
 		ref := refTrustBoundary(parsedModel, boundary)

@@ -183,51 +183,67 @@ func (what *reportView) Shows(id string) bool {
 
 func (what *reportView) sections(options ReportOptions) []viewSection {
 	optional := map[string]bool{
-		"remaining-risks":       len(what.RemainingImpact.Entries) > 0 || !options.HideEmptyChapters,
-		"asset-register":        !options.HideChapters[AssetRegister],
-		"security-requirements": len(what.SecurityRequirements) > 0,
-		"abuse-cases":           len(what.AbuseCases) > 0,
-		"tags":                  len(what.Tags) > 0,
-		"questions":             len(what.Questions) > 0,
-		"risk-rules":            !options.HideChapters[RiskRulesCheckedByThreagile],
+		chapterRemainingRisks:       len(what.RemainingImpact.Entries) > 0 || !options.HideEmptyChapters,
+		chapterAssetRegister:        !options.HideChapters[AssetRegister],
+		chapterSecurityRequirements: len(what.SecurityRequirements) > 0,
+		chapterAbuseCases:           len(what.AbuseCases) > 0,
+		chapterTags:                 len(what.Tags) > 0,
+		chapterQuestions:            len(what.Questions) > 0,
+		chapterRiskRules:            !options.HideChapters[RiskRulesCheckedByThreagile],
 	}
-	all := []viewSection{
-		{"management-summary", "Management Summary"},
-		{"initial-risks", "Impact Analysis of the Initial Risks"},
-		{"risk-mitigation", "Risk Mitigation"},
-		{"remaining-risks", "Impact Analysis of the Remaining Risks"},
-		{"risks-by-severity", "Risks by Severity"},
-		{"application-overview", "Application Overview"},
-		{"data-flow-diagram", "Data-Flow Diagram"},
-		{"asset-register", "Asset Register"},
-		{"security-requirements", "Security Requirements"},
-		{"abuse-cases", "Abuse Cases"},
-		{"tags", "Tag Listing"},
-		{"stride", "STRIDE Classification of Identified Risks"},
-		{"functions", "Assignment by Function"},
-		{"raa", "RAA Analysis"},
-		{"data-mapping", "Data Mapping"},
-		{"out-of-scope-assets", "Out-of-Scope Assets"},
-		{"model-failures", "Potential Model Failures"},
-		{"questions", viewQuestionsTitle},
-		{"risk-categories", "Identified Risks by Vulnerability Category"},
-		{"technical-assets", "Identified Risks by Technical Asset"},
-		{"data-assets", "Identified Data Breach Probabilities by Data Asset"},
-		{"trust-boundaries", "Trust Boundaries"},
-		{"shared-runtimes", "Shared Runtimes"},
-		{"communication-links", "Communication Links"},
-		{"risk-tracking", "Risk Tracking"},
-		{"risk-rules", "Risk Rules Checked by Threagile"},
-		{"ratings", "Ratings"},
-		{"disclaimer", "Disclaimer"},
-	}
-	sections := make([]viewSection, 0, len(all))
-	for _, section := range all {
+	sections := make([]viewSection, 0, len(viewChapters))
+	for _, section := range viewChapters {
 		if shown, isOptional := optional[section.ID]; shown || !isOptional {
 			sections = append(sections, section)
 		}
 	}
 	return sections
+}
+
+// The ids of the chapters that a report leaves out when they would be empty or are hidden.
+const (
+	chapterRemainingRisks       = "remaining-risks"
+	chapterAssetRegister        = "asset-register"
+	chapterSecurityRequirements = "security-requirements"
+	chapterAbuseCases           = "abuse-cases"
+	chapterTags                 = "tags"
+	chapterQuestions            = "questions"
+	chapterRiskRules            = "risk-rules"
+)
+
+// viewOutOfScopeText is what the reports show for a technical asset out of scope.
+const viewOutOfScopeText = "out of scope"
+
+// viewChapters are all chapters of the report, in their order.
+var viewChapters = []viewSection{
+	{"management-summary", "Management Summary"},
+	{"initial-risks", "Impact Analysis of the Initial Risks"},
+	{"risk-mitigation", "Risk Mitigation"},
+	{chapterRemainingRisks, "Impact Analysis of the Remaining Risks"},
+	{"risks-by-severity", "Risks by Severity"},
+	{"application-overview", "Application Overview"},
+	{"data-flow-diagram", "Data-Flow Diagram"},
+	{chapterAssetRegister, "Asset Register"},
+	{chapterSecurityRequirements, "Security Requirements"},
+	{chapterAbuseCases, "Abuse Cases"},
+	{chapterTags, "Tag Listing"},
+	{"stride", "STRIDE Classification of Identified Risks"},
+	{"functions", "Assignment by Function"},
+	{"raa", "RAA Analysis"},
+	{"data-mapping", "Data Mapping"},
+	{"out-of-scope-assets", "Out-of-Scope Assets"},
+	{"model-failures", "Potential Model Failures"},
+	{chapterQuestions, viewQuestionsTitle},
+	{"risk-categories", "Identified Risks by Vulnerability Category"},
+	{"technical-assets", "Identified Risks by Technical Asset"},
+	{"data-assets", "Identified Data Breach Probabilities by Data Asset"},
+	{"trust-boundaries", "Trust Boundaries"},
+	{"shared-runtimes", "Shared Runtimes"},
+	{"communication-links", "Communication Links"},
+	{"risk-tracking", "Risk Tracking"},
+	{chapterRiskRules, "Risk Rules Checked by Threagile"},
+	{"ratings", "Ratings"},
+	{"disclaimer", "Disclaimer"},
 }
 
 func overviewText(overview *types.Overview) *markupText {
@@ -343,7 +359,7 @@ func refsOfIDs(parsedModel *types.Model, ids []string, ref func(*types.Model, st
 
 func formatRAA(asset *types.TechnicalAsset) string {
 	if asset.OutOfScope {
-		return "out of scope"
+		return viewOutOfScopeText
 	}
 	return strconv.FormatFloat(asset.RAA, 'f', 0, 64) + " %"
 }
