@@ -171,6 +171,14 @@ ejb:
     less_protected_type: true
     processing_end_user_requests: true
     propagate_identity_to_outgoing_targets: true
+engineering-workstation:
+  aliases:
+    - ews
+    - engineering-station
+  description: An engineering workstation that programs and configures the controllers of an industrial control system
+  attributes:
+    engineering-workstation: true
+    operational_technology: true
 erp:
   aliases:
     - enterprise-resource-planning
@@ -188,6 +196,20 @@ event-listener:
   attributes:
     event-listener: true
     backend_related: true
+field-device:
+  aliases:
+    - sensor
+    - actuator
+    - industrial-sensor
+    - industrial-actuator
+    - ied
+    - intelligent-electronic-device
+    - drive
+  description: A sensor, actuator or other field device of an industrial control system
+  attributes:
+    field-device: true
+    operational_technology: true
+    no_storage_at_rest: true
 file-server:
   aliases:
     - file-storage
@@ -210,6 +232,23 @@ gateway:
     ftp_internet_access_ok: true
     http_internet_access_ok: true
     propagate_identity_to_outgoing_targets: true
+historian:
+  aliases:
+    - process-historian
+    - data-historian
+  description: A historian storing the process data of an industrial control system
+  attributes:
+    historian: true
+    operational_technology: true
+hmi:
+  aliases:
+    - human-machine-interface
+    - operator-panel
+    - operator-station
+  description: A human-machine interface that operators monitor and control an industrial process with
+  attributes:
+    hmi: true
+    operational_technology: true
 hsm:
   aliases:
     - hardware-security-module
@@ -389,6 +428,16 @@ monitoring:
     less_protected_type: true
     unnecessary_data_tolerated: true
     unprotected_communications_tolerated: true
+plc:
+  aliases:
+    - programmable-logic-controller
+    - pac
+    - dcs-controller
+  description: A programmable logic controller (PLC) controlling an industrial process
+  attributes:
+    plc: true
+    operational_technology: true
+    industrial_controller: true
 report-engine:
   aliases:
     - reporting
@@ -410,6 +459,34 @@ reverse-proxy:
     no_storage_at_rest: true
     propagate_identity_to_outgoing_targets: true
     traffic_forwarding: true
+rtu:
+  aliases:
+    - remote-terminal-unit
+  description: A remote terminal unit (RTU) controlling a remote site of an industrial process
+  attributes:
+    rtu: true
+    operational_technology: true
+    industrial_controller: true
+safety-controller:
+  aliases:
+    - sis
+    - safety-instrumented-system
+    - safety-plc
+  description: The controller of a safety instrumented system (SIS), which brings an industrial process into a safe state
+  attributes:
+    safety-controller: true
+    operational_technology: true
+    industrial_controller: true
+scada-server:
+  aliases:
+    - scada
+    - dcs-server
+    - control-server
+    - supervisory-controller
+  description: A SCADA or DCS server supervising and controlling an industrial process
+  attributes:
+    scada-server: true
+    operational_technology: true
 scheduler:
   aliases:
     - cron
