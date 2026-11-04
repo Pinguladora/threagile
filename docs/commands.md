@@ -6,6 +6,7 @@
 | `server`                 | Run program in [server mode](./mode-server.md) |                                               |                                              |
 | `analyze-model`          | Run program in [analyze mode](./mode-analyze.md)                                               | `analyze`, `analyse`, `run`, `analyse-model` |
 | `import-otm`             | Convert an [Open Threat Model (OTM)](./otm.md) file into a Threagile model yaml file           |                                              |
+| `migrate-model`          | Rewrite a model of an earlier version to the current fields, in place: [migrating models](./model.md#migrating-models-of-earlier-versions) |                                              |
 | `create-editing-support` | Create yaml [schema file](../support/schema.json) which may be used in file editors            |                                              |
 | `create-example-model`   | Create example Threagile model yaml file to demonstrate the tool                               |                                              |
 | `create-stub-model`      | Create a simple Threagile model yaml file to get started with building model                   |                                              |

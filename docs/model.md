@@ -50,6 +50,20 @@ In JetBrains IDEs, add the URL under *Settings > Languages & Frameworks > Schema
 Mappings*. To work offline, `threagile create-editing-support --output .` writes the schema of the binary, and
 live templates for the model, into the current folder.
 
+## Migrating models of earlier versions
+
+Earlier versions of the model put the identity that a communication link carries into its `authorization`
+(`none`, `technical-user` or `end-user-identity-propagation`), and called multi-factor authentication
+`two-factor`. Threagile still reads such models: on a link without an `identity`, it reads these values of
+`authorization` as the identity (`none`, `service-account` or `end-user`) and the authorization as `unknown`,
+and warns about it. `two-factor` is read as `multi-factor`.
+
+`threagile migrate-model --model threagile.yaml` rewrites a model, and the files it includes, to the current
+fields. It changes only the lines it migrates, so comments and layout stay, and lists what to review by hand: the
+authorization of the migrated links, which it leaves `unknown`, and links authenticated with `token`, which may be
+`short-lived-token` or `long-lived-token`. Links written in flow style (`{ target: ..., authorization: ... }`) are
+listed to migrate by hand.
+
 ## Connections through proxies (`via`)
 
 A communication link can list, in order, the technical assets the connection passes through on its way to the target, such as a load balancer and a WAF:

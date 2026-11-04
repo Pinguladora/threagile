@@ -20,7 +20,7 @@ const flagsDocFile = "../../docs/flags.md"
 
 // TestFlagsDocMatchesCommands keeps docs/flags.md in line with the flags the commands take.
 func TestFlagsDocMatchesCommands(t *testing.T) {
-	root := new(Threagile).initRoot().initImport().initImportOTM().initAnalyze().initCreate().initExecute().
+	root := new(Threagile).initRoot().initImport().initImportOTM().initMigrate().initAnalyze().initCreate().initExecute().
 		initExplain().initList().initPrint().initQuit().initServer().initVersion().rootCmd
 
 	got := flagsDoc(root)
