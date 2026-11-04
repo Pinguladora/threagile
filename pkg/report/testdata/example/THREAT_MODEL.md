@@ -42,14 +42,14 @@ Threagile toolkit was used to model the architecture of "Some Example Applicatio
 
 Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.
 
-In total **68 initial risks** in **26 categories** have been identified during the threat modeling process:
+In total **70 initial risks** in **27 categories** have been identified during the threat modeling process:
 
 | Severity | Risks | Status | Risks |
 | --- | ---: | --- | ---: |
-| Critical | 1 | Unchecked | 40 |
+| Critical | 1 | Unchecked | 42 |
 | High | 2 | In Discussion | 0 |
 | Elevated | 27 | Accepted | 1 |
-| Medium | 34 | In Progress | 3 |
+| Medium | 36 | In Progress | 3 |
 | Low | 4 | Mitigated | 24 |
 |  |  | False Positive | 0 |
 
@@ -57,7 +57,7 @@ Just some **more** custom summary possible here...
 
 ## Impact Analysis of the Initial Risks
 
-The most prevalent impacts of the **68 initial risks** (distributed over **26 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **70 initial risks** (distributed over **27 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Critical**: [Some Individual Risk Example](#some-individual-risk-example): 2 Initial Risks, exploitation likelihood is _Frequent_ with _Very High_ impact
 
@@ -135,6 +135,10 @@ The most prevalent impacts of the **68 initial risks** (distributed over **26 ri
 
     If this risk is unmitigated, attackers might be able to access or modify foreign data after a successful compromise of a component within the system due to missing resource-based authorization checks.
 
+- **Medium**: [Missing Network Segmentation](#missing-network-segmentation): 2 Initial Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards more valuable targets, as they are not separated by network segmentation.
+
 - **Medium**: [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa): 9 Initial Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication.
@@ -188,22 +192,22 @@ The following table gives a high-level overview of the risk tracking status (inc
 | Critical | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
 | High | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
 | Elevated | 27 | 18 | 0 | 1 | 0 | 8 | 0 |
-| Medium | 34 | 18 | 0 | 0 | 0 | 16 | 0 |
+| Medium | 36 | 20 | 0 | 0 | 0 | 16 | 0 |
 | Low | 4 | 1 | 0 | 0 | 3 | 0 | 0 |
 
-After removal of risks with status _mitigated_ and _false positive_ the following **44 remain unmitigated**:
+After removal of risks with status _mitigated_ and _false positive_ the following **46 remain unmitigated**:
 
 | Severity | Unmitigated risks | To be checked by | Unmitigated risks |
 | --- | ---: | --- | ---: |
 | Critical | 1 | Business Side | 2 |
 | High | 2 | Architecture | 14 |
 | Elevated | 19 | Development | 6 |
-| Medium | 18 | Operations | 22 |
+| Medium | 20 | Operations | 24 |
 | Low | 4 |  |  |
 
 ## Impact Analysis of the Remaining Risks
 
-The most prevalent impacts of the **44 remaining risks** (distributed over **22 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **46 remaining risks** (distributed over **23 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Critical**: [Some Individual Risk Example](#some-individual-risk-example): 2 Remaining Risks, exploitation likelihood is _Frequent_ with _Very High_ impact
 
@@ -273,6 +277,10 @@ The most prevalent impacts of the **44 remaining risks** (distributed over **22 
 
     If this risk is unmitigated, attackers might be able to access or modify foreign data after a successful compromise of a component within the system due to missing resource-based authorization checks.
 
+- **Medium**: [Missing Network Segmentation](#missing-network-segmentation): 2 Remaining Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards more valuable targets, as they are not separated by network segmentation.
+
 - **Medium**: [Missing Vault (Secret Storage)](#missing-vault-secret-storage): 1 Remaining Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to easier steal config secrets (like credentials, private keys, client certificates, etc.) once a vulnerability to access files is present and exploited.
@@ -311,7 +319,7 @@ The most prevalent impacts of the **44 remaining risks** (distributed over **22 
 
 ## Risks by Severity
 
-All **68 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
+All **70 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
 
 ### Critical
 
@@ -366,7 +374,7 @@ All **68 risks** by severity, with their tracking status. Each risk links to its
 
 ### Medium
 
-**34 risks**
+**36 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
@@ -386,6 +394,8 @@ All **68 risks** by severity, with their tracking status. Each risk links to its
 | Medium | [**Missing Two-Factor Authentication** covering communication link **Web Application Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Apache Webserver**](#missing-two-factor-authentication-2fa) | [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa) | [Apache Webserver](#apache-webserver), [Web Application Traffic](#web-application-traffic) | Mitigated |
 | Medium | [**Missing Cloud Hardening (S3)** risk at **Contract File Server**: _Security Best Practices for AWS S3_](#missing-cloud-hardening) | [Missing Cloud Hardening](#missing-cloud-hardening) | none | Unchecked |
 | Medium | [**Missing End User Identity Propagation** over communication link **ERP System Traffic** from **Apache Webserver** to **Backoffice ERP System**](#missing-identity-propagation) | [Missing Identity Propagation](#missing-identity-propagation) | [Backoffice ERP System](#backoffice-erp-system), [ERP System Traffic](#erp-system-traffic) | Unchecked |
+| Medium | [**Missing Network Segmentation** to further encapsulate and protect **Apache Webserver** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) | [Missing Network Segmentation](#missing-network-segmentation) | [Apache Webserver](#apache-webserver) | Unchecked |
+| Medium | [**Missing Network Segmentation** to further encapsulate and protect **Jenkins Build Server** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) | [Missing Network Segmentation](#missing-network-segmentation) | [Jenkins Build Server](#jenkins-build-server) | Unchecked |
 | Medium | [**Missing Vault (Secret Storage)** in the threat model (referencing asset **Backoffice ERP System** as an example)](#missing-vault-secret-storage) | [Missing Vault (Secret Storage)](#missing-vault-secret-storage) | [Backoffice ERP System](#backoffice-erp-system) | Unchecked |
 | Medium | [**Mixed Targets on Shared Runtime** named **WebApp and Backoffice Virtualization** might enable attackers moving from one less valuable target to a more valuable one](#mixed-targets-on-shared-runtime) | [Mixed Targets on Shared Runtime](#mixed-targets-on-shared-runtime) | [WebApp and Backoffice Virtualization](#webapp-and-backoffice-virtualization) | Unchecked |
 | Medium | [**Public Cloud Asset Access (S3)** risk at **Contract File Server**](#public-cloud-asset-access) | [Public Cloud Asset Access](#public-cloud-asset-access) | [Contract File Server](#contract-file-server) | Unchecked |
@@ -690,7 +700,7 @@ This chapter lists what tags are used by which elements.
 
 ## STRIDE Classification of Identified Risks
 
-This chapter clusters and classifies the risks by STRIDE categories: in total **68 potential risks** have been identified during the threat modeling process.
+This chapter clusters and classifies the risks by STRIDE categories: in total **70 potential risks** have been identified during the threat modeling process.
 
 ### Spoofing
 
@@ -824,7 +834,7 @@ Denial of service - Availability
 
 ### Elevation of Privilege
 
-**16 risks**
+**18 risks**
 
 Elevation of privilege - Authorization
 
@@ -840,6 +850,10 @@ Elevation of privilege - Authorization
 
     Technical assets (especially multi-tenant systems), which usually process data for end users should authorize every request based on the identity of the end user when the data flow is authenticated (i.e. non-public). For DevOps usages at least a technical-user authorization is required.
 
+- **Medium**: [Missing Network Segmentation](#missing-network-segmentation): 2/2 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    Highly sensitive assets and/or data stores residing in the same network segment than other lower sensitive assets (like webservers or content management systems etc.) should be better protected by a network segmentation trust-boundary.
+
 - **Medium**: [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa): 9 mitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     Technical assets (especially multi-tenant systems) should authenticate incoming requests with two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
@@ -850,7 +864,7 @@ Elevation of privilege - Authorization
 
 ## Assignment by Function
 
-This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **68 potential risks** have been identified during the threat modeling process.
+This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **70 potential risks** have been identified during the threat modeling process.
 
 ### Business Side
 
@@ -940,7 +954,7 @@ Development
 
 ### Operations
 
-**35 risks**
+**37 risks**
 
 Operations
 
@@ -975,6 +989,10 @@ Operations
 - **Medium**: [Missing Cloud Hardening](#missing-cloud-hardening): 6/6 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
 
     Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model).
+
+- **Medium**: [Missing Network Segmentation](#missing-network-segmentation): 2/2 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.
 
 - **Medium**: [Mixed Targets on Shared Runtime](#mixed-targets-on-shared-runtime): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -1162,7 +1180,7 @@ This chapter lists custom questions that arose during the threat modeling proces
 
 ## Identified Risks by Vulnerability Category
 
-In total **68 potential risks** have been identified during the threat modeling process, distributed across **26 vulnerability categories**. The following sections describe each identified risk category and its risks.
+In total **70 potential risks** have been identified during the threat modeling process, distributed across **27 vulnerability categories**. The following sections describe each identified risk category and its risks.
 
 ### Some Individual Risk Example
 
@@ -1985,6 +2003,56 @@ The risk **Missing Identity Propagation** was found **1 time** in the analyzed a
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Medium | **Missing End User Identity Propagation** over communication link **ERP System Traffic** from **Apache Webserver** to **Backoffice ERP System** | `missing-identity-propagation@apache-webserver>erp-system-traffic@apache-webserver@erp-system` | Unlikely | Medium | [Backoffice ERP System](#backoffice-erp-system), [ERP System Traffic](#erp-system-traffic) | Unchecked | _not tracked_ |
 
+### Missing Network Segmentation
+
+**Medium** · 2/2 unmitigated Risks · `missing-network-segmentation`
+
+| Property | Value |
+| --- | --- |
+| STRIDE | Elevation of Privilege |
+| CWE | [CWE 1008](https://cwe.mitre.org/data/definitions/1008.html) |
+| Function | Operations |
+| Action | Network Segmentation |
+| ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
+| Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
+
+**Description**
+
+Highly sensitive assets and/or data stores residing in the same network segment than other lower sensitive assets (like webservers or content management systems etc.) should be better protected by a network segmentation trust-boundary.
+
+**Impact**
+
+If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards more valuable targets, as they are not separated by network segmentation.
+
+**Detection Logic**
+
+In-scope technical assets with high sensitivity and RAA values as well as data stores when surrounded by assets (without a network trust-boundary in-between) which are of type client-system, web-server, web-application, cms, web-service-rest, web-service-soap, build-pipeline, sourcecode-repository, monitoring, or similar and there is no direct connection between these (hence no requirement to be so close to each other).
+
+**Risk Rating**
+
+Default is low risk. The risk is increased to medium when the asset missing the trust-boundary protection is rated as strictly-confidential or mission-critical.
+
+**False Positives**
+
+When all assets within the network segmentation trust-boundary are hardened and protected to the same extend as if all were containing/processing highly sensitive data.
+
+**Mitigation**
+
+Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.
+
+**Check**
+
+Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
+
+**Risk Findings**
+
+The risk **Missing Network Segmentation** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+
+| Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Medium | **Missing Network Segmentation** to further encapsulate and protect **Apache Webserver** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers | `missing-network-segmentation@apache-webserver` | Unlikely | Medium | [Apache Webserver](#apache-webserver) | Unchecked | _not tracked_ |
+| Medium | **Missing Network Segmentation** to further encapsulate and protect **Jenkins Build Server** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers | `missing-network-segmentation@jenkins-build-server` | Unlikely | Medium | [Jenkins Build Server](#jenkins-build-server) | Unchecked | _not tracked_ |
+
 ### Missing Vault (Secret Storage)
 
 **Medium** · 1/1 unmitigated Risk · `missing-vault`
@@ -2504,7 +2572,7 @@ The risk **Unencrypted Technical Assets** was found **7 times** in the analyzed 
 
 ## Identified Risks by Technical Asset
 
-In total **68 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
+In total **70 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
 
 ### Customer Contract Database
 
@@ -2613,7 +2681,7 @@ ERP system
 
 ### Apache Webserver
 
-**Elevated** · 6/9 unmitigated Risks · `apache-webserver`
+**Elevated** · 7/10 unmitigated Risks · `apache-webserver`
 
 Apache Webserver hosting the API code and client-side code
 
@@ -2625,6 +2693,7 @@ Apache Webserver hosting the API code and client-side code
 - **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Apache Webserver** server-side web-requesting the target **Identity Provider** via **Auth Credential Check Traffic**](#server-side-request-forgery-ssrf) (Unchecked)
 - **Elevated**: [**Missing Hardening** risk at **Apache Webserver**](#missing-hardening) (Mitigated)
 - **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
+- **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Apache Webserver** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - **Medium**: [**Push instead of Pull Deployment** at **Apache Webserver** via build pipeline asset **Jenkins Build Server**](#push-instead-of-pull-deployment) (Unchecked)
 - **Medium**: [**Unencrypted Technical Asset** named **Apache Webserver**](#unencrypted-technical-assets) (Mitigated)
 - **Medium**: [**Missing Two-Factor Authentication** covering communication link **Web Application Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Apache Webserver**](#missing-two-factor-authentication-2fa) (Mitigated)
@@ -2763,7 +2832,7 @@ Git repository server
 
 ### Jenkins Build Server
 
-**Elevated** · 4/7 unmitigated Risks · `jenkins-build-server`
+**Elevated** · 5/8 unmitigated Risks · `jenkins-build-server`
 
 Jenkins build-server
 
@@ -2773,6 +2842,7 @@ Jenkins build-server
 - **Elevated**: [**Unguarded Access from Internet** of **Jenkins Build Server** by **External Development Client** via **Jenkins Web-UI Access**](#unguarded-access-from-internet) (Unchecked)
 - **Elevated**: [**Missing Hardening** risk at **Jenkins Build Server**](#missing-hardening) (Mitigated)
 - **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
+- **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Jenkins Build Server** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - **Medium**: [**Unchecked Deployment** risk at **Jenkins Build Server**](#unchecked-deployment) (Unchecked)
 - **Medium**: [**Unencrypted Technical Asset** named **Jenkins Build Server**](#unencrypted-technical-assets) (Mitigated)
 - **Medium**: [**Missing Two-Factor Authentication** covering communication link **Jenkins Web-UI Access** from **External Development Client** to **Jenkins Build Server**](#missing-two-factor-authentication-2fa) (Mitigated)
@@ -3178,11 +3248,11 @@ External developer client
 
 ## Identified Data Breach Probabilities by Data Asset
 
-In total **68 potential risks** have been identified during the threat modeling process, distributed across **12 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
+In total **70 potential risks** have been identified during the threat modeling process, distributed across **12 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
 
 ### Build Job Config
 
-**Probable** · 5/8 unmitigated Risks · `build-job-config`
+**Probable** · 6/9 unmitigated Risks · `build-job-config`
 
 Data for customizing of the build job system.
 
@@ -3205,17 +3275,18 @@ Data for customizing of the build job system.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 5 remaining risks:
+This data asset has data breach potential because of 6 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Elevated**: [**Untrusted Deserialization** risk at **Jenkins Build Server**](#untrusted-deserialization) (Unchecked)
 - Possible, **Medium**: [**Unchecked Deployment** risk at **External Development Client**](#unchecked-deployment) (Unchecked)
 - Possible, **Medium**: [**Unchecked Deployment** risk at **Jenkins Build Server**](#unchecked-deployment) (Unchecked)
 - Possible, **Elevated**: [**Unguarded Access from Internet** of **Jenkins Build Server** by **External Development Client** via **Jenkins Web-UI Access**](#unguarded-access-from-internet) (Unchecked)
+- Improbable, **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Jenkins Build Server** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 
 ### Client Application Code
 
-**Probable** · 22/31 unmitigated Risks · `client-application-code`
+**Probable** · 24/33 unmitigated Risks · `client-application-code`
 
 Angular and other client-side code delivered by the application.
 
@@ -3238,7 +3309,7 @@ Angular and other client-side code delivered by the application.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 22 remaining risks:
+This data asset has data breach potential because of 24 remaining risks:
 
 - Probable, **Medium**: [**Accidental Secret Leak(Git)** risk at **Git Repository**: _Git Leak Prevention_](#accidental-secret-leak) (Unchecked)
 - Probable, **Medium**: [**Code Backdooring** risk at **Git Repository**](#code-backdooring) (Unchecked)
@@ -3260,12 +3331,14 @@ This data asset has data breach potential because of 22 remaining risks:
 - Possible, **Elevated**: [**Unguarded Access from Internet** of **Git Repository** by **External Development Client** via **Git-Repo Code Write Access**](#unguarded-access-from-internet) (Unchecked)
 - Possible, **Elevated**: [**Unguarded Access from Internet** of **Git Repository** by **External Development Client** via **Git-Repo Web-UI Access**](#unguarded-access-from-internet) (Unchecked)
 - Possible, **Elevated**: [**Unguarded Access from Internet** of **Jenkins Build Server** by **External Development Client** via **Jenkins Web-UI Access**](#unguarded-access-from-internet) (Unchecked)
+- Improbable, **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Apache Webserver** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
+- Improbable, **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Jenkins Build Server** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Medium**: [**Mixed Targets on Shared Runtime** named **WebApp and Backoffice Virtualization** might enable attackers moving from one less valuable target to a more valuable one](#mixed-targets-on-shared-runtime) (Unchecked)
 - Improbable, **Medium**: [**Push instead of Pull Deployment** at **Apache Webserver** via build pipeline asset **Jenkins Build Server**](#push-instead-of-pull-deployment) (Unchecked)
 
 ### Customer Accounts
 
-**Probable** · 26/43 unmitigated Risks · `customer-accounts`
+**Probable** · 27/44 unmitigated Risks · `customer-accounts`
 
 Customer Accounts (including transient credentials when entered for checking them)
 
@@ -3288,7 +3361,7 @@ Customer Accounts (including transient credentials when entered for checking the
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 26 remaining risks:
+This data asset has data breach potential because of 27 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -3313,6 +3386,7 @@ This data asset has data breach potential because of 26 remaining risks:
 - Possible, **Medium**: [**Unencrypted Communication** named **Database Traffic** between **Backoffice ERP System** and **Customer Contract Database** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - Possible, **Elevated**: [**Unencrypted Communication** named **Web Application Traffic** between **Load Balancer** and **Apache Webserver** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - Improbable, **Medium**: [**Missing End User Identity Propagation** over communication link **ERP System Traffic** from **Apache Webserver** to **Backoffice ERP System**](#missing-identity-propagation) (Unchecked)
+- Improbable, **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Apache Webserver** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Medium**: [**Mixed Targets on Shared Runtime** named **WebApp and Backoffice Virtualization** might enable attackers moving from one less valuable target to a more valuable one](#mixed-targets-on-shared-runtime) (Unchecked)
 - Improbable, **Medium**: [**Push instead of Pull Deployment** at **Apache Webserver** via build pipeline asset **Jenkins Build Server**](#push-instead-of-pull-deployment) (Unchecked)
 - Improbable, **Medium**: [**Push instead of Pull Deployment** at **Marketing CMS** via build pipeline asset **Jenkins Build Server**](#push-instead-of-pull-deployment) (Unchecked)
@@ -3356,7 +3430,7 @@ This data asset has data breach potential because of 9 remaining risks:
 
 ### Customer Contracts
 
-**Probable** · 23/31 unmitigated Risks · `customer-contracts`
+**Probable** · 24/32 unmitigated Risks · `customer-contracts`
 
 Customer Contracts (PDF)
 
@@ -3379,7 +3453,7 @@ Customer Contracts (PDF)
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 23 remaining risks:
+This data asset has data breach potential because of 24 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -3402,12 +3476,13 @@ This data asset has data breach potential because of 23 remaining risks:
 - Possible, **Medium**: [**Unencrypted Communication** named **NFS Filesystem Access** between **Backoffice ERP System** and **Contract File Server**](#unencrypted-communication) (Unchecked)
 - Possible, **Elevated**: [**Unencrypted Communication** named **Web Application Traffic** between **Load Balancer** and **Apache Webserver** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - Improbable, **Medium**: [**Missing End User Identity Propagation** over communication link **ERP System Traffic** from **Apache Webserver** to **Backoffice ERP System**](#missing-identity-propagation) (Unchecked)
+- Improbable, **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Apache Webserver** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Medium**: [**Mixed Targets on Shared Runtime** named **WebApp and Backoffice Virtualization** might enable attackers moving from one less valuable target to a more valuable one](#mixed-targets-on-shared-runtime) (Unchecked)
 - Improbable, **Medium**: [**Push instead of Pull Deployment** at **Apache Webserver** via build pipeline asset **Jenkins Build Server**](#push-instead-of-pull-deployment) (Unchecked)
 
 ### Customer Operational Data
 
-**Probable** · 22/32 unmitigated Risks · `customer-operational-data`
+**Probable** · 23/33 unmitigated Risks · `customer-operational-data`
 
 Customer Operational Data
 
@@ -3430,7 +3505,7 @@ Customer Operational Data
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 22 remaining risks:
+This data asset has data breach potential because of 23 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -3452,6 +3527,7 @@ This data asset has data breach potential because of 22 remaining risks:
 - Possible, **Medium**: [**Unencrypted Communication** named **Database Traffic** between **Backoffice ERP System** and **Customer Contract Database** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - Possible, **Elevated**: [**Unencrypted Communication** named **Web Application Traffic** between **Load Balancer** and **Apache Webserver** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - Improbable, **Medium**: [**Missing End User Identity Propagation** over communication link **ERP System Traffic** from **Apache Webserver** to **Backoffice ERP System**](#missing-identity-propagation) (Unchecked)
+- Improbable, **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Apache Webserver** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Medium**: [**Mixed Targets on Shared Runtime** named **WebApp and Backoffice Virtualization** might enable attackers moving from one less valuable target to a more valuable one](#mixed-targets-on-shared-runtime) (Unchecked)
 - Improbable, **Medium**: [**Push instead of Pull Deployment** at **Apache Webserver** via build pipeline asset **Jenkins Build Server**](#push-instead-of-pull-deployment) (Unchecked)
 
@@ -3567,7 +3643,7 @@ This data asset has data breach potential because of 11 remaining risks:
 
 ### Marketing Material
 
-**Probable** · 14/19 unmitigated Risks · `marketing-material`
+**Probable** · 15/20 unmitigated Risks · `marketing-material`
 
 Website and marketing data to inform potential customers and generate new leads.
 
@@ -3590,7 +3666,7 @@ Website and marketing data to inform potential customers and generate new leads.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 14 remaining risks:
+This data asset has data breach potential because of 15 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Marketing CMS**](#container-base-image-backdooring) (Unchecked)
@@ -3604,12 +3680,13 @@ This data asset has data breach potential because of 14 remaining risks:
 - Possible, **Medium**: [**Unchecked Deployment** risk at **External Development Client**](#unchecked-deployment) (Unchecked)
 - Possible, **Medium**: [**Unchecked Deployment** risk at **Jenkins Build Server**](#unchecked-deployment) (Unchecked)
 - Possible, **Elevated**: [**Unguarded Access from Internet** of **Jenkins Build Server** by **External Development Client** via **Jenkins Web-UI Access**](#unguarded-access-from-internet) (Unchecked)
+- Improbable, **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Jenkins Build Server** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Medium**: [**Mixed Targets on Shared Runtime** named **WebApp and Backoffice Virtualization** might enable attackers moving from one less valuable target to a more valuable one](#mixed-targets-on-shared-runtime) (Unchecked)
 - Improbable, **Medium**: [**Push instead of Pull Deployment** at **Marketing CMS** via build pipeline asset **Jenkins Build Server**](#push-instead-of-pull-deployment) (Unchecked)
 
 ### Server Application Code
 
-**Probable** · 22/31 unmitigated Risks · `server-application-code`
+**Probable** · 24/33 unmitigated Risks · `server-application-code`
 
 API and other server-side code of the application.
 
@@ -3632,7 +3709,7 @@ API and other server-side code of the application.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 22 remaining risks:
+This data asset has data breach potential because of 24 remaining risks:
 
 - Probable, **Medium**: [**Accidental Secret Leak(Git)** risk at **Git Repository**: _Git Leak Prevention_](#accidental-secret-leak) (Unchecked)
 - Probable, **Medium**: [**Code Backdooring** risk at **Git Repository**](#code-backdooring) (Unchecked)
@@ -3654,12 +3731,14 @@ This data asset has data breach potential because of 22 remaining risks:
 - Possible, **Elevated**: [**Unguarded Access from Internet** of **Git Repository** by **External Development Client** via **Git-Repo Code Write Access**](#unguarded-access-from-internet) (Unchecked)
 - Possible, **Elevated**: [**Unguarded Access from Internet** of **Git Repository** by **External Development Client** via **Git-Repo Web-UI Access**](#unguarded-access-from-internet) (Unchecked)
 - Possible, **Elevated**: [**Unguarded Access from Internet** of **Jenkins Build Server** by **External Development Client** via **Jenkins Web-UI Access**](#unguarded-access-from-internet) (Unchecked)
+- Improbable, **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Apache Webserver** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
+- Improbable, **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Jenkins Build Server** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Medium**: [**Mixed Targets on Shared Runtime** named **WebApp and Backoffice Virtualization** might enable attackers moving from one less valuable target to a more valuable one](#mixed-targets-on-shared-runtime) (Unchecked)
 - Improbable, **Medium**: [**Push instead of Pull Deployment** at **Apache Webserver** via build pipeline asset **Jenkins Build Server**](#push-instead-of-pull-deployment) (Unchecked)
 
 ### Some Internal Business Data
 
-**Probable** · 22/32 unmitigated Risks · `internal-business-data`
+**Probable** · 23/33 unmitigated Risks · `internal-business-data`
 
 Internal business data of the ERP system used unrelated to the customer-facing processes.
 
@@ -3682,7 +3761,7 @@ Internal business data of the ERP system used unrelated to the customer-facing p
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 22 remaining risks:
+This data asset has data breach potential because of 23 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -3704,6 +3783,7 @@ This data asset has data breach potential because of 22 remaining risks:
 - Possible, **Medium**: [**Unencrypted Communication** named **Database Traffic** between **Backoffice ERP System** and **Customer Contract Database** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - Possible, **Elevated**: [**Unencrypted Communication** named **Web Application Traffic** between **Load Balancer** and **Apache Webserver** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - Improbable, **Medium**: [**Missing End User Identity Propagation** over communication link **ERP System Traffic** from **Apache Webserver** to **Backoffice ERP System**](#missing-identity-propagation) (Unchecked)
+- Improbable, **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Apache Webserver** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Medium**: [**Mixed Targets on Shared Runtime** named **WebApp and Backoffice Virtualization** might enable attackers moving from one less valuable target to a more valuable one](#mixed-targets-on-shared-runtime) (Unchecked)
 - Improbable, **Medium**: [**Push instead of Pull Deployment** at **Apache Webserver** via build pipeline asset **Jenkins Build Server**](#push-instead-of-pull-deployment) (Unchecked)
 
@@ -4242,7 +4322,7 @@ Link to the LDAP auth server
 
 ## Risk Tracking
 
-**28 of 68 risks** are tracked in the model; the others are unchecked.
+**28 of 70 risks** are tracked in the model; the others are unchecked.
 
 | Risk | ID | Severity | Status | Date | Checked by | Ticket | Justification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
