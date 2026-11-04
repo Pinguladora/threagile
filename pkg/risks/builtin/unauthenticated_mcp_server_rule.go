@@ -82,7 +82,7 @@ func toolReachImpact(input *types.Model, server *types.TechnicalAsset) (types.Ri
 		if !ok {
 			continue
 		}
-		targetImpact := aiRiskImpact(input.HighestTechnicalAssetConfidentiality(target),
+		targetImpact := impactOfRatings(input.HighestTechnicalAssetConfidentiality(target),
 			input.HighestIntegrity(target), input.HighestAvailability(target))
 		if targetImpact >= types.MediumImpact {
 			reachesSensitive = true
@@ -122,7 +122,7 @@ func (r *UnauthenticatedMCPServerRule) createRisk(
 		Severity:               types.CalculateSeverity(likelihood, impact),
 		ExploitationLikelihood: likelihood,
 		ExploitationImpact:     impact,
-		Title: aiRiskTitle("Unauthenticated MCP Server", server,
+		Title: assetRiskTitle("Unauthenticated MCP Server", server,
 			"called by <b>"+callerTitle+"</b>"),
 		MostRelevantTechnicalAssetId:    server.Id,
 		MostRelevantCommunicationLinkId: link.Id,

@@ -98,7 +98,7 @@ func (r *VectorStorePoisoningRule) createRisk(
 		Severity:                     types.CalculateSeverity(likelihood, impact),
 		ExploitationLikelihood:       likelihood,
 		ExploitationImpact:           impact,
-		Title:                        aiRiskTitle("Vector Store Poisoning", store, "used by <b>"+users[0].Title+"</b>"),
+		Title:                        assetRiskTitle("Vector Store Poisoning", store, "used by <b>"+users[0].Title+"</b>"),
 		MostRelevantTechnicalAssetId: store.Id,
 		DataBreachProbability:        types.Improbable,
 		DataBreachTechnicalAssetIDs:  []string{store.Id},

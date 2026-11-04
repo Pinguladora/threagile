@@ -77,7 +77,7 @@ func (r *ModelOutputDisclosureRule) createRisk(
 	if isInternetAdjacent(input, technicalAsset) {
 		likelihood = types.VeryLikely
 	}
-	impact := aiRiskImpact(confidentiality, types.Archive, types.Archive)
+	impact := impactOfRatings(confidentiality, types.Archive, types.Archive)
 
 	breachAssets := make([]string, 0, 1+len(stores))
 	breachAssets = append(breachAssets, technicalAsset.Id)
@@ -89,7 +89,7 @@ func (r *ModelOutputDisclosureRule) createRisk(
 		Severity:                     types.CalculateSeverity(likelihood, impact),
 		ExploitationLikelihood:       likelihood,
 		ExploitationImpact:           impact,
-		Title:                        aiRiskTitle("Sensitive Data Disclosure through Model Output", technicalAsset, ""),
+		Title:                        assetRiskTitle("Sensitive Data Disclosure through Model Output", technicalAsset, ""),
 		MostRelevantTechnicalAssetId: technicalAsset.Id,
 		DataBreachProbability:        types.Probable,
 		DataBreachTechnicalAssetIDs:  breachAssets,

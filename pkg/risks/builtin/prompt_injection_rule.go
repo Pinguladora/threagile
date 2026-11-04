@@ -83,7 +83,7 @@ func (r *PromptInjectionRule) createRisk(
 		Severity:                     types.CalculateSeverity(likelihood, impact),
 		ExploitationLikelihood:       likelihood,
 		ExploitationImpact:           impact,
-		Title:                        aiRiskTitle("Prompt Injection", technicalAsset, ""),
+		Title:                        assetRiskTitle("Prompt Injection", technicalAsset, ""),
 		MostRelevantTechnicalAssetId: technicalAsset.Id,
 		DataBreachProbability:        types.Possible,
 		DataBreachTechnicalAssetIDs:  []string{technicalAsset.Id},
