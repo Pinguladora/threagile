@@ -28,11 +28,11 @@ func (*removeUnusedTagsMacro) GetNextQuestion(*types.Model) (nextQuestion MacroQ
 }
 
 func (*removeUnusedTagsMacro) ApplyAnswer(_ string, _ ...string) (message string, validResult bool, err error) {
-	return "Answer processed", true, nil
+	return answerProcessed, true, nil
 }
 
 func (*removeUnusedTagsMacro) GoBack() (message string, validResult bool, err error) {
-	return "Cannot go back further", false, nil
+	return cannotGoBackFurther, false, nil
 }
 
 func (*removeUnusedTagsMacro) GetFinalChangeImpact(_ *input.Model, _ *types.Model) (changes []string, message string, validResult bool, err error) {
