@@ -2,7 +2,6 @@ package report_test
 
 import (
 	"bytes"
-	"encoding/json"
 	"flag"
 	"image"
 	"image/png"
@@ -44,7 +43,7 @@ const (
 	determinismRuns = 4
 )
 
-// goldenFiles are the outputs compared against testdata; the JSON ones are stored indented.
+// goldenFiles are the outputs compared against testdata.
 var goldenFiles = []string{
 	"data-flow-diagram.gv",
 	"data-asset-diagram.gv",
@@ -75,9 +74,6 @@ func testGoldenOutputs(t *testing.T, golden goldenModel) {
 		t.Run(name, func(t *testing.T) {
 			got, ok := outputs[name]
 			require.True(t, ok, "output %s was not written", name)
-			if filepath.Ext(name) == ".json" {
-				got = indentJSON(t, got)
-			}
 
 			goldenFile := filepath.Join(golden.dir, name)
 			if *update {
@@ -235,14 +231,6 @@ func writePlaceholderPNG(t *testing.T, filename string) string {
 	defer func() { _ = file.Close() }()
 	require.NoError(t, png.Encode(file, image.NewGray(image.Rect(0, 0, 4, 3))))
 	return filename
-}
-
-func indentJSON(t *testing.T, content []byte) []byte {
-	t.Helper()
-	var indented bytes.Buffer
-	require.NoError(t, json.Indent(&indented, content, "", "  "))
-	indented.WriteString("\n")
-	return indented.Bytes()
 }
 
 // testReporter sends warnings to the test log and fails the test on errors.
