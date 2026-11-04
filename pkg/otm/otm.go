@@ -1,8 +1,9 @@
-// Package otm writes threat models in the Open Threat Model (OTM) format, IriusRisk's open,
-// tool-neutral threat model format: https://github.com/iriusrisk/OpenThreatModel.
+// Package otm reads and writes threat models in the Open Threat Model (OTM) format, IriusRisk's
+// open, tool-neutral threat model format: https://github.com/iriusrisk/OpenThreatModel.
 //
 // The types follow the OTM JSON schema of the version in Version; the field names are OTM's own.
-// FromInterchange translates the format-neutral elements of package interchange into OTM.
+// FromInterchange and ToInterchange translate between OTM and the format-neutral elements of
+// package interchange; Parse reads an OTM document from JSON or YAML.
 package otm
 
 // Version is the OTM version that threagile writes and reads.

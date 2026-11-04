@@ -35,6 +35,7 @@ type Config struct {
 
 	InputFileValue                   string `json:"InputFile,omitempty"                   yaml:"InputFile"`
 	ImportedInputFileValue           string `json:"ImportedInputFile,omitempty"           yaml:"ImportedInputFile"`
+	OTMFileValue                     string `json:"OTMFile,omitempty"                     yaml:"OTMFile"`
 	DataFlowDiagramFilenamePNGValue  string `json:"DataFlowDiagramFilenamePNG,omitempty"  yaml:"DataFlowDiagramFilenamePNG"`
 	DataAssetDiagramFilenamePNGValue string `json:"DataAssetDiagramFilenamePNG,omitempty" yaml:"DataAssetDiagramFilenamePNG"`
 	DataFlowDiagramFilenameDOTValue  string `json:"DataFlowDiagramFilenameDOT,omitempty"  yaml:"DataFlowDiagramFilenameDOT"`
@@ -98,6 +99,7 @@ type ConfigGetter interface {
 	GetKeyFolder() string
 	GetTechnologyFilename() string
 	GetInputFile() string
+	GetOTMFile() string
 	GetDataFlowDiagramFilenamePNG() string
 	GetDataAssetDiagramFilenamePNG() string
 	GetDataFlowDiagramFilenameDOT() string
@@ -392,6 +394,9 @@ func (c *Config) Merge(config Config, values map[string]any) {
 		case strings.ToLower("ImportedInputFile"):
 			c.ImportedInputFileValue = config.ImportedInputFileValue
 
+		case strings.ToLower("OTMFile"):
+			c.OTMFileValue = config.OTMFileValue
+
 		case strings.ToLower("DataFlowDiagramFilenamePNG"):
 			c.DataFlowDiagramFilenamePNGValue = config.DataFlowDiagramFilenamePNGValue
 
@@ -682,6 +687,10 @@ func (c *Config) SetInputFile(inputFile string) {
 
 func (c *Config) GetImportedInputFile() string {
 	return c.ImportedInputFileValue
+}
+
+func (c *Config) GetOTMFile() string {
+	return c.OTMFileValue
 }
 
 func (c *Config) SetImportedInputFile(inputFile string) {

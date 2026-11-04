@@ -73,6 +73,8 @@ func (what *Threagile) initFlags() *Threagile {
 
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.InputFileValue, inputFileFlagName, what.config.GetInputFile(), "input model yaml file")
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.ImportedInputFileValue, importedFileFlagName, what.config.GetImportedInputFile(), "imported input model yaml file")
+	what.rootCmd.PersistentFlags().StringVar(&what.flags.OTMFileValue, otmFileFlagName, what.config.GetOTMFile(),
+		"Open Threat Model (OTM) file to import with "+ImportOTMCommand)
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.DataFlowDiagramFilenamePNGValue, dataFlowDiagramPNGFileFlagName, what.config.GetDataFlowDiagramFilenamePNG(), "data flow diagram PNG file")
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.DataAssetDiagramFilenamePNGValue, dataAssetDiagramPNGFileFlagName, what.config.GetDataAssetDiagramFilenamePNG(), "data asset diagram PNG file")
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.DataFlowDiagramFilenameDOTValue, dataFlowDiagramDOTFileFlagName, what.config.GetDataFlowDiagramFilenameDOT(), "data flow diagram DOT file")
@@ -332,6 +334,10 @@ func (what *Threagile) processArgs(cmd *cobra.Command, args []string) bool {
 
 	if what.isFlagOverridden(cmd, inputFileFlagName) {
 		what.config.InputFileValue = what.config.CleanPath(what.flags.InputFileValue)
+	}
+
+	if what.isFlagOverridden(cmd, otmFileFlagName) {
+		what.config.OTMFileValue = what.config.CleanPath(what.flags.OTMFileValue)
 	}
 
 	if what.isFlagOverridden(cmd, dataFlowDiagramPNGFileFlagName) {

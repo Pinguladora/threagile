@@ -43,6 +43,7 @@ const (
 	CreateStubModelCommand      = "create-stub-model"
 	CreateEditingSupportCommand = "create-editing-support"
 	ImportModelCommand          = "import-model"
+	ImportOTMCommand            = "import-otm"
 	ListTypesCommand            = "list-types"
 	ListRiskRulesCommand        = "list-risk-rules"
 	ListModelMacrosCommand      = "list-model-macros"
