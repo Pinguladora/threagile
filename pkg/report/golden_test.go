@@ -41,6 +41,7 @@ var goldenFiles = []string{
 	"risks.json",
 	"technical-assets.json",
 	"stats.json",
+	"otm.json",
 }
 
 // executionTimestamp matches the wall-clock time the AsciiDoc report records for the run.
@@ -117,6 +118,7 @@ func generateOutputs(t *testing.T) map[string][]byte {
 	require.NoError(t, report.WriteRisksJSON(parsedModel, filepath.Join(outputDir, config.GetJsonRisksFilename())))
 	require.NoError(t, report.WriteTechnicalAssetsJSON(parsedModel, filepath.Join(outputDir, config.GetJsonTechnicalAssetsFilename())))
 	require.NoError(t, report.WriteStatsJSON(parsedModel, filepath.Join(outputDir, config.GetJsonStatsFilename())))
+	require.NoError(t, report.WriteOTMJSON(parsedModel, filepath.Join(outputDir, config.GetJsonOTMFilename())))
 	require.NoError(t, report.WriteRisksExcelToFile(parsedModel, filepath.Join(outputDir, config.GetExcelRisksFilename()), config))
 	require.NoError(t, report.WriteTagsExcelToFile(parsedModel, filepath.Join(outputDir, config.GetExcelTagsFilename()), config))
 

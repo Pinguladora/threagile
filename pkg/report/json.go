@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Pinguladora/threagile/pkg/interchange"
+	"github.com/Pinguladora/threagile/pkg/otm"
 	"github.com/Pinguladora/threagile/pkg/types"
 )
 
@@ -97,6 +99,20 @@ func WriteStatsJSON(parsedModel *types.Model, filename string) error {
 	err = os.WriteFile(filename, jsonBytes, 0o600)
 	if err != nil {
 		return fmt.Errorf("failed to write stats to JSON file: %w", err)
+	}
+	return nil
+}
+
+// WriteOTMJSON writes the model, with the risk categories it found risks of as threats and each
+// risk as a threat instance, as an Open Threat Model (OTM) document.
+func WriteOTMJSON(parsedModel *types.Model, filename string) error {
+	jsonBytes, err := json.Marshal(otm.FromInterchange(interchange.FromModel(parsedModel)))
+	if err != nil {
+		return fmt.Errorf("failed to marshal OTM to JSON: %w", err)
+	}
+	err = os.WriteFile(filename, jsonBytes, 0o600)
+	if err != nil {
+		return fmt.Errorf("failed to write OTM to JSON file: %w", err)
 	}
 	return nil
 }
