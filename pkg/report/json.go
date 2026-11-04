@@ -120,41 +120,18 @@ func WriteOTMJSON(parsedModel *types.Model, filename string) error {
 func overallRiskStatistics(parsedModel *types.Model) riskStatistics {
 	result := riskStatistics{}
 	result.Risks = make(map[string]map[string]int)
-	result.Risks[types.CriticalSeverity.String()] = make(map[string]int)
-	result.Risks[types.CriticalSeverity.String()][types.Unchecked.String()] = 0
-	result.Risks[types.CriticalSeverity.String()][types.InDiscussion.String()] = 0
-	result.Risks[types.CriticalSeverity.String()][types.Accepted.String()] = 0
-	result.Risks[types.CriticalSeverity.String()][types.InProgress.String()] = 0
-	result.Risks[types.CriticalSeverity.String()][types.Mitigated.String()] = 0
-	result.Risks[types.CriticalSeverity.String()][types.FalsePositive.String()] = 0
-	result.Risks[types.HighSeverity.String()] = make(map[string]int)
-	result.Risks[types.HighSeverity.String()][types.Unchecked.String()] = 0
-	result.Risks[types.HighSeverity.String()][types.InDiscussion.String()] = 0
-	result.Risks[types.HighSeverity.String()][types.Accepted.String()] = 0
-	result.Risks[types.HighSeverity.String()][types.InProgress.String()] = 0
-	result.Risks[types.HighSeverity.String()][types.Mitigated.String()] = 0
-	result.Risks[types.HighSeverity.String()][types.FalsePositive.String()] = 0
-	result.Risks[types.ElevatedSeverity.String()] = make(map[string]int)
-	result.Risks[types.ElevatedSeverity.String()][types.Unchecked.String()] = 0
-	result.Risks[types.ElevatedSeverity.String()][types.InDiscussion.String()] = 0
-	result.Risks[types.ElevatedSeverity.String()][types.Accepted.String()] = 0
-	result.Risks[types.ElevatedSeverity.String()][types.InProgress.String()] = 0
-	result.Risks[types.ElevatedSeverity.String()][types.Mitigated.String()] = 0
-	result.Risks[types.ElevatedSeverity.String()][types.FalsePositive.String()] = 0
-	result.Risks[types.MediumSeverity.String()] = make(map[string]int)
-	result.Risks[types.MediumSeverity.String()][types.Unchecked.String()] = 0
-	result.Risks[types.MediumSeverity.String()][types.InDiscussion.String()] = 0
-	result.Risks[types.MediumSeverity.String()][types.Accepted.String()] = 0
-	result.Risks[types.MediumSeverity.String()][types.InProgress.String()] = 0
-	result.Risks[types.MediumSeverity.String()][types.Mitigated.String()] = 0
-	result.Risks[types.MediumSeverity.String()][types.FalsePositive.String()] = 0
-	result.Risks[types.LowSeverity.String()] = make(map[string]int)
-	result.Risks[types.LowSeverity.String()][types.Unchecked.String()] = 0
-	result.Risks[types.LowSeverity.String()][types.InDiscussion.String()] = 0
-	result.Risks[types.LowSeverity.String()][types.Accepted.String()] = 0
-	result.Risks[types.LowSeverity.String()][types.InProgress.String()] = 0
-	result.Risks[types.LowSeverity.String()][types.Mitigated.String()] = 0
-	result.Risks[types.LowSeverity.String()][types.FalsePositive.String()] = 0
+	severities := []types.RiskSeverity{
+		types.CriticalSeverity, types.HighSeverity, types.ElevatedSeverity, types.MediumSeverity, types.LowSeverity,
+	}
+	statuses := []types.RiskStatus{
+		types.Unchecked, types.InDiscussion, types.Accepted, types.InProgress, types.Mitigated, types.FalsePositive,
+	}
+	for _, severity := range severities {
+		result.Risks[severity.String()] = make(map[string]int)
+		for _, status := range statuses {
+			result.Risks[severity.String()][status.String()] = 0
+		}
+	}
 	for _, risks := range parsedModel.GeneratedRisksByCategory {
 		for _, risk := range risks {
 			result.Risks[risk.Severity.String()][risk.RiskStatus.String()]++
