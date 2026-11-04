@@ -33,7 +33,7 @@ type pdfReporter struct {
 	contentTemplateId             int
 	diagramLegendTemplateId       int
 	pageNo                        int
-	linkCounter                   int
+	tocLinkIdByAlias              map[string]int
 	tocLinkIdByAssetId            map[string]int
 	homeLink                      int
 	currentChapterTitleBreadcrumb string
@@ -49,9 +49,9 @@ func (r *pdfReporter) initReport() {
 	r.pdf = nil
 	r.isLandscapePage = false
 	r.pageNo = 0
-	r.linkCounter = 0
 	r.homeLink = 0
 	r.currentChapterTitleBreadcrumb = ""
+	r.tocLinkIdByAlias = make(map[string]int)
 	r.tocLinkIdByAssetId = make(map[string]int)
 }
 
@@ -166,7 +166,6 @@ func (r *pdfReporter) createPdfAndInitMetadata(model *types.Model) {
 			r.pdf.Text(186, 284, text)
 		}
 	})
-	r.linkCounter = 1 // link counting starts at 1 via r.pdf.AddLink
 }
 
 func (r *pdfReporter) addBreadcrumb(parsedModel *types.Model) {
@@ -218,7 +217,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
 	r.pdf.AddPage()
 	r.currentChapterTitleBreadcrumb = "Table of Contents"
-	r.homeLink = r.pdf.AddLink()
+	r.homeLink = r.addTocLink("{home}")
 	r.defineLinkTarget("{home}")
 	gofpdi.UseImportedTemplate(r.pdf, r.contentTemplateId, 0, 0, 0, 300)
 	r.pdf.SetFont("Helvetica", "B", fontSizeHeadline)
@@ -241,7 +240,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	r.pdf.Text(11, y, "    "+"Management Summary")
 	r.pdf.Text(175, y, "{management-summary}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{management-summary}"))
 
 	risksStr := "Risks"
 	catStr := "Categories"
@@ -256,19 +255,19 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	r.pdf.Text(11, y, "    "+"Impact Analysis of "+strconv.Itoa(count)+" Initial "+risksStr+" in "+strconv.Itoa(catCount)+" "+catStr)
 	r.pdf.Text(175, y, "{impact-analysis-initial-risks}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{impact-analysis-initial-risks}"))
 
 	y += 6
 	r.pdf.Text(11, y, "    "+"Risk Mitigation")
 	r.pdf.Text(175, y, "{risk-mitigation-status}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{risk-mitigation-status}"))
 
 	y += 6
 	r.pdf.Text(11, y, "    "+"Asset Register")
 	r.pdf.Text(175, y, "{asset-register}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{asset-register}"))
 
 	y += 6
 	risksStr = "Risks"
@@ -283,61 +282,61 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	r.pdf.Text(11, y, "    "+"Impact Analysis of "+strconv.Itoa(count)+" Remaining "+risksStr+" in "+strconv.Itoa(catCount)+" "+catStr)
 	r.pdf.Text(175, y, "{impact-analysis-remaining-risks}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{impact-analysis-remaining-risks}"))
 
 	y += 6
 	r.pdf.Text(11, y, "    "+"Application Overview")
 	r.pdf.Text(175, y, "{target-overview}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{target-overview}"))
 
 	y += 6
 	r.pdf.Text(11, y, "    "+"Data-Flow Diagram")
 	r.pdf.Text(175, y, "{data-flow-diagram}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{data-flow-diagram}"))
 
 	y += 6
 	r.pdf.Text(11, y, "    "+"Security Requirements")
 	r.pdf.Text(175, y, "{security-requirements}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{security-requirements}"))
 
 	y += 6
 	r.pdf.Text(11, y, "    "+"Abuse Cases")
 	r.pdf.Text(175, y, "{abuse-cases}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{abuse-cases}"))
 
 	y += 6
 	r.pdf.Text(11, y, "    "+"Tag Listing")
 	r.pdf.Text(175, y, "{tag-listing}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{tag-listing}"))
 
 	y += 6
 	r.pdf.Text(11, y, "    "+"STRIDE Classification of Identified Risks")
 	r.pdf.Text(175, y, "{stride}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{stride}"))
 
 	y += 6
 	r.pdf.Text(11, y, "    "+"Assignment by Function")
 	r.pdf.Text(175, y, "{function-assignment}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{function-assignment}"))
 
 	y += 6
 	r.pdf.Text(11, y, "    "+"RAA Analysis")
 	r.pdf.Text(175, y, "{raa-analysis}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{raa-analysis}"))
 
 	y += 6
 	r.pdf.Text(11, y, "    "+"Data Mapping")
 	r.pdf.Text(175, y, "{data-risk-mapping}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{data-risk-mapping}"))
 
 	/*
 		y += 6
@@ -361,7 +360,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	r.pdf.Text(11, y, "    "+"Out-of-Scope Assets: "+strconv.Itoa(count)+" "+assets)
 	r.pdf.Text(175, y, "{out-of-scope-assets}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{out-of-scope-assets}"))
 
 	y += 6
 	modelFailures := flattenRiskSlice(filterByModelFailures(parsedModel, parsedModel.GeneratedRisksByCategory))
@@ -378,7 +377,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	r.pdf.Text(175, y, "{model-failures}")
 	r.pdfColorBlack()
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{model-failures}"))
 
 	y += 6
 	questions := "Questions"
@@ -393,7 +392,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	r.pdf.Text(175, y, "{questions}")
 	r.pdfColorBlack()
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{questions}"))
 
 	// ===============
 
@@ -412,7 +411,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 		r.pdf.Text(11, y, "    "+"Identified Risks by Vulnerability category")
 		r.pdf.Text(175, y, "{intro-risks-by-vulnerability-category}")
 		r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-		r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+		r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{intro-risks-by-vulnerability-category}"))
 		for _, category := range parsedModel.SortedRiskCategories() {
 			newRisksStr := parsedModel.SortedRisksOfCategory(category)
 			switch types.HighestSeverityStillAtRisk(newRisksStr) {
@@ -445,7 +444,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 			r.pdf.Text(11, y, "    "+uni(category.Title)+": "+suffix)
 			r.pdf.Text(175, y, "{"+category.ID+"}")
 			r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-			r.tocLinkIdByAssetId[category.ID] = r.pdf.AddLink()
+			r.tocLinkIdByAssetId[category.ID] = r.addTocLink("{" + category.ID + "}")
 			r.pdf.Link(10, y-5, 172.5, 6.5, r.tocLinkIdByAssetId[category.ID])
 		}
 	}
@@ -467,7 +466,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 		r.pdf.Text(11, y, "    "+"Identified Risks by Technical Asset")
 		r.pdf.Text(175, y, "{intro-risks-by-technical-asset}")
 		r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-		r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+		r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{intro-risks-by-technical-asset}"))
 		for _, technicalAsset := range sortedTechnicalAssetsByRiskSeverityAndTitle(parsedModel) {
 			newRisksStr := parsedModel.GeneratedRisks(technicalAsset)
 			y += 6
@@ -505,7 +504,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 			r.pdf.Text(11, y, "    "+uni(technicalAsset.Title)+": "+suffix)
 			r.pdf.Text(175, y, "{"+technicalAsset.Id+"}")
 			r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-			r.tocLinkIdByAssetId[technicalAsset.Id] = r.pdf.AddLink()
+			r.tocLinkIdByAssetId[technicalAsset.Id] = r.addTocLink("{" + technicalAsset.Id + "}")
 			r.pdf.Link(10, y-5, 172.5, 6.5, r.tocLinkIdByAssetId[technicalAsset.Id])
 		}
 	}
@@ -527,7 +526,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 		r.pdf.Text(11, y, "    "+"Identified Data Breach Probabilities by Data Asset")
 		r.pdf.Text(175, y, "{intro-risks-by-data-asset}")
 		r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-		r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+		r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{intro-risks-by-data-asset}"))
 		for _, dataAsset := range sortedDataAssetsByDataBreachProbabilityAndTitle(parsedModel) {
 			y += 6
 			if y > 275 {
@@ -556,7 +555,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 			r.pdf.Text(11, y, "    "+uni(dataAsset.Title)+": "+suffix)
 			r.pdf.Text(175, y, "{data:"+dataAsset.Id+"}")
 			r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-			r.tocLinkIdByAssetId[dataAsset.Id] = r.pdf.AddLink()
+			r.tocLinkIdByAssetId[dataAsset.Id] = r.addTocLink("{data:" + dataAsset.Id + "}")
 			r.pdf.Link(10, y-5, 172.5, 6.5, r.tocLinkIdByAssetId[dataAsset.Id])
 		}
 	}
@@ -588,7 +587,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 			r.pdf.Text(11, y, "    "+uni(trustBoundary.Title))
 			r.pdf.Text(175, y, "{boundary:"+trustBoundary.Id+"}")
 			r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-			r.tocLinkIdByAssetId[trustBoundary.Id] = r.pdf.AddLink()
+			r.tocLinkIdByAssetId[trustBoundary.Id] = r.addTocLink("{boundary:" + trustBoundary.Id + "}")
 			r.pdf.Link(10, y-5, 172.5, 6.5, r.tocLinkIdByAssetId[trustBoundary.Id])
 		}
 		r.pdfColorBlack()
@@ -617,7 +616,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 			r.pdf.Text(11, y, "    "+uni(sharedRuntime.Title))
 			r.pdf.Text(175, y, "{runtime:"+sharedRuntime.Id+"}")
 			r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-			r.tocLinkIdByAssetId[sharedRuntime.Id] = r.pdf.AddLink()
+			r.tocLinkIdByAssetId[sharedRuntime.Id] = r.addTocLink("{runtime:" + sharedRuntime.Id + "}")
 			r.pdf.Link(10, y-5, 172.5, 6.5, r.tocLinkIdByAssetId[sharedRuntime.Id])
 		}
 	}
@@ -642,7 +641,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	r.pdf.Text(11, y, "    "+"Risk Rules Checked by Threagile")
 	r.pdf.Text(175, y, "{risk-rules-checked}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{risk-rules-checked}"))
 	y += 6
 	if y > 275 {
 		r.pageBreakInLists()
@@ -652,7 +651,7 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	r.pdf.Text(11, y, "    "+"Disclaimer")
 	r.pdf.Text(175, y, "{disclaimer}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
-	r.pdf.Link(10, y-5, 172.5, 6.5, r.pdf.AddLink())
+	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{disclaimer}"))
 	r.pdfColorBlack()
 
 	r.pdf.SetDrawColor(0, 0, 0)
@@ -749,8 +748,19 @@ func (r *pdfReporter) defineLinkTarget(alias string) {
 		pageNumbStr = "  " + pageNumbStr
 	}
 	r.pdf.RegisterAlias(alias, pageNumbStr)
-	r.pdf.SetLink(r.linkCounter, 0, -1)
-	r.linkCounter++
+	// not every chapter is listed in the table of contents (a model without technical assets lists
+	// no risks by technical asset, for one), so the link is looked up by alias rather than counted
+	if link, ok := r.tocLinkIdByAlias[alias]; ok {
+		r.pdf.SetLink(link, 0, -1)
+	}
+}
+
+// addTocLink adds a link for the table of contents entry of the chapter that defineLinkTarget
+// later defines under the same alias.
+func (r *pdfReporter) addTocLink(alias string) int {
+	link := r.pdf.AddLink()
+	r.tocLinkIdByAlias[alias] = link
+	return link
 }
 
 func (r *pdfReporter) createDisclaimer(parsedModel *types.Model) {
