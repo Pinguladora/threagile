@@ -84,3 +84,51 @@ func TestLoadReadsTheOTMOutputKeys(t *testing.T) {
 		t.Errorf("got %q and %v, want the values of the config file", config.GetJsonOTMFilename(), config.GetSkipOTMJSON())
 	}
 }
+
+func TestLoadReadsTheSkipKeys(t *testing.T) {
+	keys := []string{
+		"SkipDataFlowDiagram", "SkipDataAssetDiagram", "SkipRisksJSON", "SkipTechnicalAssetsJSON",
+		"SkipStatsJSON", "SkipOTMJSON", "SkipRisksExcel", "SkipTagsExcel", "SkipReportPDF", "SkipReportADOC",
+	}
+	values := map[string]any{
+		"PluginFolder": t.TempDir(),
+		"DataFolder":   t.TempDir(),
+		"OutputFolder": t.TempDir(),
+		"TempFolder":   t.TempDir(),
+	}
+	for _, key := range keys {
+		values[key] = true
+	}
+
+	data, err := json.Marshal(values)
+	if err != nil {
+		t.Fatal(err)
+	}
+	configFile := filepath.Join(t.TempDir(), "config.json")
+	if err := os.WriteFile(configFile, data, 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	config := new(Config).Defaults("")
+	if err := config.Load(configFile); err != nil {
+		t.Fatal(err)
+	}
+
+	got := map[string]bool{
+		"SkipDataFlowDiagram":     config.GetSkipDataFlowDiagram(),
+		"SkipDataAssetDiagram":    config.GetSkipDataAssetDiagram(),
+		"SkipRisksJSON":           config.GetSkipRisksJSON(),
+		"SkipTechnicalAssetsJSON": config.GetSkipTechnicalAssetsJSON(),
+		"SkipStatsJSON":           config.GetSkipStatsJSON(),
+		"SkipOTMJSON":             config.GetSkipOTMJSON(),
+		"SkipRisksExcel":          config.GetSkipRisksExcel(),
+		"SkipTagsExcel":           config.GetSkipTagsExcel(),
+		"SkipReportPDF":           config.GetSkipReportPDF(),
+		"SkipReportADOC":          config.GetSkipReportADOC(),
+	}
+	for _, key := range keys {
+		if !got[key] {
+			t.Errorf("%s from the config file was ignored", key)
+		}
+	}
+}

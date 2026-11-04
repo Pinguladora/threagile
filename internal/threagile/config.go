@@ -433,6 +433,33 @@ func (c *Config) Merge(config Config, values map[string]any) {
 		case strings.ToLower("SkipOTMJSON"):
 			c.SkipOTMJSONValue = config.SkipOTMJSONValue
 
+		case strings.ToLower("SkipDataFlowDiagram"):
+			c.SkipDataFlowDiagramValue = config.SkipDataFlowDiagramValue
+
+		case strings.ToLower("SkipDataAssetDiagram"):
+			c.SkipDataAssetDiagramValue = config.SkipDataAssetDiagramValue
+
+		case strings.ToLower("SkipRisksJSON"):
+			c.SkipRisksJSONValue = config.SkipRisksJSONValue
+
+		case strings.ToLower("SkipTechnicalAssetsJSON"):
+			c.SkipTechnicalAssetsJSONValue = config.SkipTechnicalAssetsJSONValue
+
+		case strings.ToLower("SkipStatsJSON"):
+			c.SkipStatsJSONValue = config.SkipStatsJSONValue
+
+		case strings.ToLower("SkipRisksExcel"):
+			c.SkipRisksExcelValue = config.SkipRisksExcelValue
+
+		case strings.ToLower("SkipTagsExcel"):
+			c.SkipTagsExcelValue = config.SkipTagsExcelValue
+
+		case strings.ToLower("SkipReportPDF"):
+			c.SkipReportPDFValue = config.SkipReportPDFValue
+
+		case strings.ToLower("SkipReportADOC"):
+			c.SkipReportADOCValue = config.SkipReportADOCValue
+
 		case strings.ToLower("TemplateFilename"):
 			c.TemplateFilenameValue = config.TemplateFilenameValue
 
