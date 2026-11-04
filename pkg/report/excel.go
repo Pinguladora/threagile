@@ -83,26 +83,7 @@ func WriteRisksExcelToFile(parsedModel *types.Model, filename string, config rep
 	for _, category := range parsedModel.SortedRiskCategories() {
 		risks := parsedModel.SortedRisksOfCategory(category)
 		for _, risk := range risks {
-			techAsset := parsedModel.TechnicalAssets[risk.MostRelevantTechnicalAssetId]
-			techAssetTitle := ""
-			techAssetRAA := 0.
-			if techAsset != nil {
-				techAssetTitle = techAsset.Title
-				techAssetRAA = techAsset.RAA
-			}
-
-			commLink := parsedModel.CommunicationLinks[risk.MostRelevantCommunicationLinkId]
-			commLinkTitle := ""
-			if commLink != nil {
-				commLinkTitle = commLink.Title
-			}
-
-			date := ""
-			riskTracking := parsedModel.GetRiskTrackingWithDefault(risk)
-			if !riskTracking.Date.IsZero() {
-				date = riskTracking.Date.Format("2006-01-02")
-			}
-
+			details := newRiskDetails(parsedModel, category, risk)
 			riskItems = append(riskItems, RiskItem{
 				Columns: []string{
 					risk.Severity.Title(),
@@ -112,21 +93,21 @@ func WriteRisksExcelToFile(parsedModel *types.Model, filename string, config rep
 					category.Function.Title(),
 					"CWE-" + strconv.Itoa(category.CWE),
 					category.Title,
-					techAssetTitle,
-					commLinkTitle,
-					decimal.NewFromFloat(techAssetRAA).StringFixed(0),
+					details.technicalAssetTitle(),
+					details.communicationLinkTitle(),
+					decimal.NewFromFloat(details.technicalAssetRAA()).StringFixed(0),
 					removeFormattingTags(risk.Title),
 					category.Action,
 					category.Mitigation,
 					category.Check,
 					risk.SyntheticId,
-					riskTracking.Status.Title(),
-					riskTracking.Justification,
-					date,
-					riskTracking.CheckedBy,
-					riskTracking.Ticket,
+					details.tracking.Status.Title(),
+					details.tracking.Justification,
+					details.trackingDate(),
+					details.tracking.CheckedBy,
+					details.tracking.Ticket,
 				},
-				Status:   riskTracking.Status,
+				Status:   details.tracking.Status,
 				Severity: risk.Severity,
 			})
 		}
