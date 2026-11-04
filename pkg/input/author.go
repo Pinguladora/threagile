@@ -37,7 +37,7 @@ func (what *Author) MergeList(list []Author) ([]Author, error) {
 		return strings.Compare(list[i].Name, list[j].Name) < 0
 	})
 
-	if len(list) < 2 {
+	if len(list) <= 1 {
 		return list, nil
 	}
 
