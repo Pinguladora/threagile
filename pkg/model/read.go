@@ -77,7 +77,9 @@ type configReader interface {
 	GetProgressReporter() types.ProgressReporter
 }
 
-func ReadAndAnalyzeModel(config configReader, builtinRiskRules types.RiskRules, progressReporter types.ProgressReporter) (*ReadResult, error) {
+func ReadAndAnalyzeModel(
+	config configReader, builtinRiskRules types.RiskRules, progressReporter types.ProgressReporter,
+) (*ReadResult, error) {
 	progressReporter.Infof("Writing into output directory: %v", config.GetOutputFolder())
 	progressReporter.Infof("Parsing model: %v", config.GetInputFile())
 
@@ -97,7 +99,10 @@ func ReadAndAnalyzeModel(config configReader, builtinRiskRules types.RiskRules, 
 	return result, analysisError
 }
 
-func AnalyzeModel(modelInput *input.Model, config configReader, builtinRiskRules types.RiskRules, customRiskRules types.RiskRules, progressReporter types.ProgressReporter) (*ReadResult, error) {
+func AnalyzeModel(
+	modelInput *input.Model, config configReader, builtinRiskRules types.RiskRules, customRiskRules types.RiskRules,
+	progressReporter types.ProgressReporter,
+) (*ReadResult, error) {
 	converted, convertError := modelInput.ConvertIndividualRiskCategories()
 	if convertError != nil {
 		return nil, fmt.Errorf("unable to parse model yaml: %w", convertError)
