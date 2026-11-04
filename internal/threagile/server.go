@@ -16,8 +16,10 @@ func (what *Threagile) initServer() *Threagile {
 		},
 	}
 
-	serverCmd.PersistentFlags().IntVar(&what.flags.ServerPortValue, serverPortFlagName, what.config.GetServerPort(), "server port")
-	serverCmd.PersistentFlags().StringVar(&what.flags.ServerFolderValue, serverDirFlagName, what.config.GetDataFolder(), "base folder for server mode (default: "+DataDir+")")
+	serverCmd.PersistentFlags().IntVar(&what.flags.ServerPortValue, serverPortFlagName, what.config.GetServerPort(),
+		"server port")
+	serverCmd.PersistentFlags().StringVar(&what.flags.ServerFolderValue, serverDirFlagName, what.config.GetDataFolder(),
+		"base folder for server mode (default: "+DataDir+")")
 
 	what.rootCmd.AddCommand(serverCmd)
 
