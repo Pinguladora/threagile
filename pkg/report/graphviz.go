@@ -23,244 +23,16 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 	dotContent.WriteString("digraph generatedModel { concentrate=false \n")
 
 	if addLegend {
-		dotContent.WriteString("subgraph cluster_shape_legend { \n")
-		dotContent.WriteString("  label=\"Shape legend\"; \n")
-		dotContent.WriteString("  color=\"lightgrey\"; \n")
-		dotContent.WriteString("  style=\"dashed\"; \n")
-		dotContent.WriteString(makeLegendNode("external_entity_item", "External Entity",
-			"0", "black", "box", "solid", "2.0", VeryLightGray, Black))
-		dotContent.WriteString(makeLegendNode("process_item", "Process",
-			"0", "black", "ellipse", "solid", "2.0", VeryLightGray, Black))
-		dotContent.WriteString(makeLegendNode("datastore_item", "Datastore",
-			"0", "black", "cylinder", "solid", "2.0", VeryLightGray, Black))
-		dotContent.WriteString(makeLegendNode("used_as_client_item", "Used as client",
-			"0", "black", "octagon", "solid", "2.0", VeryLightGray, Black))
-		dotContent.WriteString("} \n")
-
-		dotContent.WriteString("subgraph cluster_tenant_legend { \n")
-		dotContent.WriteString("  label=\"Tenant legend\"; \n")
-		dotContent.WriteString("  color=\"lightgrey\"; \n")
-		dotContent.WriteString("  style=\"dashed\"; \n")
-		dotContent.WriteString(makeLegendNode("single_tenant", "Single tenant",
-			"0", "black", "box", "solid", "2.0", VeryLightGray, Black))
-		dotContent.WriteString(makeLegendNode("multi_tenant", "Multitenant",
-			"1", "black", "box", "solid", "2.0", VeryLightGray, Black))
-		dotContent.WriteString("} \n")
-
-		dotContent.WriteString("subgraph cluster_label_legend { \n")
-		dotContent.WriteString("  label=\"Label color legend\"; \n")
-		dotContent.WriteString("  color=\"lightgrey\"; \n")
-		dotContent.WriteString("  style=\"dashed\"; \n")
-		dotContent.WriteString(makeLegendNode("mission_critical", "Mission Critical Asset",
-			"0", Red, "box", "solid", "3.0", VeryLightGray, Red))
-		dotContent.WriteString(makeLegendNode("critical", "Critical Asset",
-			"0", Amber, "box", "solid", "3.0", VeryLightGray, Amber))
-		dotContent.WriteString(makeLegendNode("other", "Important and Other Assets",
-			"0", Black, "box", "solid", "2.0", VeryLightGray, Black))
-		dotContent.WriteString("} \n")
-
-		dotContent.WriteString("subgraph cluster_border_line_legend { \n")
-		dotContent.WriteString("  label=\"Label color legend\"; \n")
-		dotContent.WriteString("  color=\"lightgrey\"; \n")
-		dotContent.WriteString("  style=\"dashed\"; \n")
-		dotContent.WriteString(makeLegendNode("dotted", "Model forgery attempt",
-			"0", Black, "box", "dotted ", "2.0", VeryLightGray, Black))
-		dotContent.WriteString(makeLegendNode("solid", "Normal", "0", Black, "box", "solid", "2.0", VeryLightGray, Black))
-		dotContent.WriteString("} \n")
-
-		dotContent.WriteString("subgraph cluster_fill_legend { \n")
-		dotContent.WriteString("  label=\"Shape fill legend (darker for physical machines, brighter for container and even " +
-			"more brighter for serverless\"; \n")
-		dotContent.WriteString("  color=\"lightgrey\"; \n")
-		dotContent.WriteString("  style=\"dashed\"; \n")
-		dotContent.WriteString(makeLegendNode("invalid_item",
-			"No data processed or stored, or using unknown technology, or no communication links",
-			"0", "black", "box", "solid", "2.0", LightPink, Black))
-		dotContent.WriteString(makeLegendNode("internet", "Asset used over the internet",
-			"0", "black", "box", "solid", "2.0", ExtremeLightBlue, Black))
-		dotContent.WriteString(makeLegendNode("out_of_scope", "Out of scope",
-			"0", "black", "box", "solid", "2.0", OutOfScopeFancy, Black))
-		dotContent.WriteString(makeLegendNode("custom_developed_part", "Custom developed part",
-			"0", "black", "box", "solid", "2.0", CustomDevelopedParts, Black))
-		dotContent.WriteString(makeLegendNode("other_assets", "Other assets",
-			"0", "black", "box", "solid", "2.0", VeryLightGray, Black))
-		dotContent.WriteString("} \n")
-
-		dotContent.WriteString("subgraph cluster_arrow_legend { \n")
-		dotContent.WriteString("  label=\"Arrow legend" +
-			" (an arrow points from the asset that initiates the connection to its target)\"; \n")
-		dotContent.WriteString("  color=\"lightgrey\"; \n")
-		dotContent.WriteString("  style=\"dashed\"; \n")
-		dotContent.WriteString(makeLegendArrow("read_write_link", "Filled arrowhead at the target: read/write link",
-			&types.CommunicationLink{DataAssetsSent: []string{"sent"}}))
-		dotContent.WriteString(makeLegendArrow("readonly_link", "Hollow arrowhead at the target: read-only link",
-			&types.CommunicationLink{Readonly: true, DataAssetsReceived: []string{"received"}}))
-		dotContent.WriteString(makeLegendArrow("bidirectional_link",
-			"Double hollow arrowhead at the initiator: data is also received back",
-			&types.CommunicationLink{DataAssetsSent: []string{"sent"}, DataAssetsReceived: []string{"received"}}))
-		dotContent.WriteString("} \n")
+		writeDataFlowLegend(&dotContent)
 	}
 
-	// Metadata init ===============================================================================
-	tweaks := ""
-	if parsedModel.DiagramTweakNodesep > 0 {
-		tweaks += "\n		nodesep=\"" + strconv.Itoa(parsedModel.DiagramTweakNodesep) + "\""
+	graphAttributes, drawSpaceLines, err := dataFlowGraphAttributes(parsedModel, dpi, addModelTitle)
+	if err != nil {
+		return nil, err
 	}
-	if parsedModel.DiagramTweakRanksep > 0 {
-		tweaks += "\n		ranksep=\"" + strconv.Itoa(parsedModel.DiagramTweakRanksep) + "\""
-	}
-	drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks := true
-	splines := "ortho"
-	if len(parsedModel.DiagramTweakEdgeLayout) > 0 {
-		switch parsedModel.DiagramTweakEdgeLayout {
-		case "spline", "polyline", "curved", "false":
-			splines = parsedModel.DiagramTweakEdgeLayout
-			drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks = false
-		case "ortho":
-			// the default
-		default:
-			return nil, fmt.Errorf("unknown value for diagram_tweak_suppress_edge_labels "+
-				"(spline, polyline, ortho, curved, false): %s", parsedModel.DiagramTweakEdgeLayout)
-		}
-	}
-	rankdir := "TB"
-	if parsedModel.DiagramTweakLayoutLeftToRight {
-		rankdir = "LR"
-	}
-	modelTitle := ""
-	if addModelTitle {
-		modelTitle = `label="` + quote(parsedModel.Title) + `"`
-	}
-	dotContent.WriteString(`	graph [ ` + modelTitle + `
-		labelloc=t
-		fontname="Verdana"
-		fontsize=40
-        outputorder="nodesfirst"
-		dpi=` + strconv.Itoa(dpi) + `
-		splines=` + splines + `
-		rankdir="` + rankdir + `"
-` + tweaks + `
-	];
-	node [
-		fontname="Verdana"
-		fontsize="20"
-	];
-	edge [
-		shape="none"
-		fontname="Verdana"
-		fontsize="18"
-	];
-`)
+	dotContent.WriteString(graphAttributes)
 
-	// Trust Boundaries ===============================================================================
-	subgraphSnippetsById := make(map[string]string)
-	// first create them in memory (see the link replacement below for nested trust boundaries) - otherwise in Go
-	// ranging over map is random order
-	// range over them in sorted (hence re-producible) way:
-	keys := make([]string, 0)
-	for k := range parsedModel.TrustBoundaries {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-	for _, key := range keys {
-		trustBoundary := parsedModel.TrustBoundaries[key]
-		var snippet strings.Builder
-		if len(trustBoundary.TechnicalAssetsInside) > 0 || len(trustBoundary.TrustBoundariesNested) > 0 {
-			if drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks {
-				// see https://stackoverflow.com/questions/17247455/how-do-i-add-extra-space-between-clusters?noredirect=1&lq=1
-				snippet.WriteString("\n subgraph cluster_space_boundary_for_layout_only_1" + hash(trustBoundary.Id) + " {\n")
-				snippet.WriteString(`	graph [
-                                              dpi=` + strconv.Itoa(dpi) + `
-											  label=<<table border="0" cellborder="0" cellpadding="0" bgcolor="#FFFFFF55"><tr><td><b> ` +
-					`</b></td></tr></table>>
-											  fontsize="21"
-											  style="invis"
-											  color="green"
-											  fontcolor="green"
-											  margin="50.0"
-											  penwidth="6.5"
-                                              outputorder="nodesfirst"
-											];`)
-			}
-			snippet.WriteString("\n subgraph cluster_" + hash(trustBoundary.Id) + " {\n")
-			color, fontColor, bgColor, style, fontname := rgbHexColorTwilight(), rgbHexColorTwilight() /*"#550E0C"*/, "#FAFAFA",
-				"dashed", "Verdana"
-			penWidth := 4.5
-			if len(trustBoundary.TrustBoundariesNested) > 0 {
-				penWidth = 5.5
-			}
-			if parsedModel.FindParentTrustBoundary(trustBoundary) != nil {
-				bgColor = "#F1F1F1"
-			}
-			if trustBoundary.Type == types.NetworkPolicyNamespaceIsolation {
-				fontColor, bgColor = "#222222", "#DFF4FF"
-			}
-			if trustBoundary.Type == types.ExecutionEnvironment {
-				fontColor, bgColor, style = "#555555", "#FFFFF0", lineStyleDotted
-			}
-			snippet.WriteString(`	graph [
-      dpi=` + strconv.Itoa(dpi) + `
-      label=<<table border="0" cellborder="0" cellpadding="0"><tr><td><b>` +
-				encode(trustBoundary.Title) + `</b> (` + trustBoundary.Type.String() + `)</td></tr></table>>
-      fontsize="21"
-      style="` + style + `"
-      color="` + color + `"
-      bgcolor="` + bgColor + `"
-      fontcolor="` + fontColor + `"
-      fontname="` + fontname + `"
-      penwidth="` + fmt.Sprintf("%f", penWidth) + `"
-      forcelabels=true
-      outputorder="nodesfirst"
-	  margin="50.0"
-    ];`)
-			snippet.WriteString("\n")
-			keys := trustBoundary.TechnicalAssetsInside
-			sort.Strings(keys)
-			for _, technicalAssetInside := range keys {
-				// log.Println("About to add technical asset link to trust boundary: ", technicalAssetInside)
-				technicalAsset := parsedModel.TechnicalAssets[technicalAssetInside]
-				snippet.WriteString(hash(technicalAsset.Id))
-				snippet.WriteString(";\n")
-			}
-			keys = trustBoundary.TrustBoundariesNested
-			sort.Strings(keys)
-			for _, trustBoundaryNested := range keys {
-				// log.Println("About to add nested trust boundary to trust boundary: ", trustBoundaryNested)
-				trustBoundaryNested := parsedModel.TrustBoundaries[trustBoundaryNested]
-				snippet.WriteString("LINK-NEEDS-REPLACED-BY-cluster_" + hash(trustBoundaryNested.Id))
-				snippet.WriteString(";\n")
-			}
-			snippet.WriteString(" }\n\n")
-			if drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks {
-				snippet.WriteString(" }\n\n")
-			}
-		}
-		subgraphSnippetsById[hash(trustBoundary.Id)] = snippet.String()
-	}
-	// here replace links and remove from map after replacement (i.e. move snippet into nested)
-	for i := range subgraphSnippetsById {
-		re := regexp.MustCompile(`LINK-NEEDS-REPLACED-BY-cluster_([0-9]*);`)
-		for {
-			matches := re.FindStringSubmatch(subgraphSnippetsById[i])
-			if len(matches) > 0 {
-				embeddedSnippet := " //nested:" + subgraphSnippetsById[matches[1]]
-				subgraphSnippetsById[i] = strings.ReplaceAll(subgraphSnippetsById[i], matches[0], embeddedSnippet)
-				subgraphSnippetsById[matches[1]] = "" // to something like remove it
-			} else {
-				break
-			}
-		}
-	}
-	// now write them all
-	keys = make([]string, 0)
-	for k := range subgraphSnippetsById {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-	for _, key := range keys {
-		snippet := subgraphSnippetsById[key]
-		dotContent.WriteString(snippet)
-	}
+	dotContent.WriteString(trustBoundarySubgraphs(parsedModel, dpi, drawSpaceLines))
 
 	// Technical Assets ===============================================================================
 	// first create them in memory (see the link replacement below for nested trust boundaries) - otherwise in Go
@@ -280,29 +52,7 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 	// Data Flows (Technical Communication Links) =========================================================================
 	for _, technicalAsset := range techAssets {
 		for _, dataFlow := range technicalAsset.CommunicationLinks {
-			sourceId := technicalAsset.Id
-			targetId := dataFlow.TargetId
-			// log.Println("About to add link from", sourceId, "to", targetId, "with id", dataFlow.ID)
-			var arrowStyle, arrowColor string
-			dir, arrowHead, arrowTail := dataFlowArrows(dataFlow)
-			arrowStyle = ` style="` + determineArrowLineStyle(dataFlow) +
-				`" penwidth="` + determineArrowPenWidth(dataFlow, parsedModel) +
-				`" arrowtail="` + arrowTail + `" arrowhead="` + arrowHead + `" dir="` + dir + `" arrowsize="2.0" `
-			arrowColor = ` color="` + determineArrowColor(dataFlow, parsedModel) + `"`
-			tweaks := ""
-			if dataFlow.DiagramTweakWeight > 0 {
-				tweaks += " weight=\"" + strconv.Itoa(dataFlow.DiagramTweakWeight) + "\" "
-			}
-
-			dotContent.WriteString("\n")
-			dotContent.WriteString("  " + hash(sourceId) + " -> " + hash(targetId) +
-				` [` + arrowColor + ` ` + arrowStyle + tweaks + ` constraint=` +
-				strconv.FormatBool(dataFlow.DiagramTweakConstraint) + ` `)
-			if !parsedModel.DiagramTweakSuppressEdgeLabels {
-				dotContent.WriteString(` xlabel="` + encode(dataFlow.Protocol.String()) + `" fontcolor="` +
-					determineLabelColor(dataFlow, parsedModel) + `" `)
-			}
-			dotContent.WriteString(" ];\n")
+			dotContent.WriteString(dataFlowEdge(parsedModel, technicalAsset, dataFlow))
 		}
 	}
 
@@ -319,17 +69,322 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 	dotContent.WriteString(diagramSameRankNodeTweaks)
 	dotContent.WriteString("}")
 
+	return writeDOTFile(diagramFilenameDOT, dotContent.String())
+}
+
+// writeDOTFile writes the DOT source of a diagram into a file and returns the closed file.
+func writeDOTFile(diagramFilenameDOT string, dotContent string) (*os.File, error) {
 	// Write the DOT file
 	file, err := os.Create(filepath.Clean(diagramFilenameDOT))
 	if err != nil {
 		return nil, fmt.Errorf("error creating %s: %w", diagramFilenameDOT, err)
 	}
 	defer func() { _ = file.Close() }()
-	_, err = fmt.Fprintln(file, dotContent.String())
+	_, err = fmt.Fprintln(file, dotContent)
 	if err != nil {
 		return nil, fmt.Errorf("error writing %s: %w", diagramFilenameDOT, err)
 	}
 	return file, nil
+}
+
+// writeLegendCluster writes a legend cluster of the data-flow diagram with its entries.
+func writeLegendCluster(dotContent *strings.Builder, name string, label string, entries ...string) {
+	dotContent.WriteString("subgraph " + name + " { \n")
+	dotContent.WriteString("  label=\"" + label + "\"; \n")
+	dotContent.WriteString("  color=\"lightgrey\"; \n")
+	dotContent.WriteString("  style=\"dashed\"; \n")
+	for _, entry := range entries {
+		dotContent.WriteString(entry)
+	}
+	dotContent.WriteString("} \n")
+}
+
+// writeDataFlowLegend writes the legend clusters of the data-flow diagram.
+func writeDataFlowLegend(dotContent *strings.Builder) {
+	writeLegendCluster(dotContent, "cluster_shape_legend", "Shape legend",
+		makeLegendNode("external_entity_item", "External Entity",
+			"0", "black", "box", "solid", "2.0", VeryLightGray, Black),
+		makeLegendNode("process_item", "Process",
+			"0", "black", "ellipse", "solid", "2.0", VeryLightGray, Black),
+		makeLegendNode("datastore_item", "Datastore",
+			"0", "black", "cylinder", "solid", "2.0", VeryLightGray, Black),
+		makeLegendNode("used_as_client_item", "Used as client",
+			"0", "black", "octagon", "solid", "2.0", VeryLightGray, Black),
+	)
+
+	writeLegendCluster(dotContent, "cluster_tenant_legend", "Tenant legend",
+		makeLegendNode("single_tenant", "Single tenant",
+			"0", "black", "box", "solid", "2.0", VeryLightGray, Black),
+		makeLegendNode("multi_tenant", "Multitenant",
+			"1", "black", "box", "solid", "2.0", VeryLightGray, Black),
+	)
+
+	writeLegendCluster(dotContent, "cluster_label_legend", "Label color legend",
+		makeLegendNode("mission_critical", "Mission Critical Asset",
+			"0", Red, "box", "solid", "3.0", VeryLightGray, Red),
+		makeLegendNode("critical", "Critical Asset",
+			"0", Amber, "box", "solid", "3.0", VeryLightGray, Amber),
+		makeLegendNode("other", "Important and Other Assets",
+			"0", Black, "box", "solid", "2.0", VeryLightGray, Black),
+	)
+
+	writeLegendCluster(dotContent, "cluster_border_line_legend", "Label color legend",
+		makeLegendNode("dotted", "Model forgery attempt",
+			"0", Black, "box", "dotted ", "2.0", VeryLightGray, Black),
+		makeLegendNode("solid", "Normal", "0", Black, "box", "solid", "2.0", VeryLightGray, Black),
+	)
+
+	writeLegendCluster(dotContent, "cluster_fill_legend",
+		"Shape fill legend (darker for physical machines, brighter for container and even more brighter for serverless",
+		makeLegendNode("invalid_item",
+			"No data processed or stored, or using unknown technology, or no communication links",
+			"0", "black", "box", "solid", "2.0", LightPink, Black),
+		makeLegendNode("internet", "Asset used over the internet",
+			"0", "black", "box", "solid", "2.0", ExtremeLightBlue, Black),
+		makeLegendNode("out_of_scope", "Out of scope",
+			"0", "black", "box", "solid", "2.0", OutOfScopeFancy, Black),
+		makeLegendNode("custom_developed_part", "Custom developed part",
+			"0", "black", "box", "solid", "2.0", CustomDevelopedParts, Black),
+		makeLegendNode("other_assets", "Other assets",
+			"0", "black", "box", "solid", "2.0", VeryLightGray, Black),
+	)
+
+	writeLegendCluster(dotContent, "cluster_arrow_legend", "Arrow legend"+
+		" (an arrow points from the asset that initiates the connection to its target)",
+		makeLegendArrow("read_write_link", "Filled arrowhead at the target: read/write link",
+			&types.CommunicationLink{DataAssetsSent: []string{"sent"}}),
+		makeLegendArrow("readonly_link", "Hollow arrowhead at the target: read-only link",
+			&types.CommunicationLink{Readonly: true, DataAssetsReceived: []string{"received"}}),
+		makeLegendArrow("bidirectional_link",
+			"Double hollow arrowhead at the initiator: data is also received back",
+			&types.CommunicationLink{DataAssetsSent: []string{"sent"}, DataAssetsReceived: []string{"received"}}),
+	)
+}
+
+// dataFlowGraphAttributes returns the graph, node and edge attributes of the data-flow diagram,
+// and whether to draw space lines around the trust boundaries, which depends on the edge layout.
+func dataFlowGraphAttributes(parsedModel *types.Model, dpi int, addModelTitle bool) (string, bool, error) {
+	// Metadata init ===============================================================================
+	tweaks := ""
+	if parsedModel.DiagramTweakNodesep > 0 {
+		tweaks += "\n		nodesep=\"" + strconv.Itoa(parsedModel.DiagramTweakNodesep) + "\""
+	}
+	if parsedModel.DiagramTweakRanksep > 0 {
+		tweaks += "\n		ranksep=\"" + strconv.Itoa(parsedModel.DiagramTweakRanksep) + "\""
+	}
+	drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks := true
+	splines := "ortho"
+	if len(parsedModel.DiagramTweakEdgeLayout) > 0 {
+		switch parsedModel.DiagramTweakEdgeLayout {
+		case "spline", "polyline", "curved", "false":
+			splines = parsedModel.DiagramTweakEdgeLayout
+			drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks = false
+		case "ortho":
+			// the default
+		default:
+			return "", false, fmt.Errorf("unknown value for diagram_tweak_suppress_edge_labels "+
+				"(spline, polyline, ortho, curved, false): %s", parsedModel.DiagramTweakEdgeLayout)
+		}
+	}
+	rankdir := "TB"
+	if parsedModel.DiagramTweakLayoutLeftToRight {
+		rankdir = "LR"
+	}
+	modelTitle := ""
+	if addModelTitle {
+		modelTitle = `label="` + quote(parsedModel.Title) + `"`
+	}
+	return `	graph [ ` + modelTitle + `
+		labelloc=t
+		fontname="Verdana"
+		fontsize=40
+        outputorder="nodesfirst"
+		dpi=` + strconv.Itoa(dpi) + `
+		splines=` + splines + `
+		rankdir="` + rankdir + `"
+` + tweaks + `
+	];
+	node [
+		fontname="Verdana"
+		fontsize="20"
+	];
+	edge [
+		shape="none"
+		fontname="Verdana"
+		fontsize="18"
+	];
+`, drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks, nil
+}
+
+// trustBoundarySubgraphs returns the clusters of the trust boundaries in the data-flow diagram,
+// the nested ones inside their parents.
+func trustBoundarySubgraphs(parsedModel *types.Model, dpi int,
+	drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks bool,
+) string {
+	var subgraphs strings.Builder
+	// Trust Boundaries ===============================================================================
+	subgraphSnippetsById := make(map[string]string)
+	// first create them in memory (see the link replacement below for nested trust boundaries) - otherwise in Go
+	// ranging over map is random order
+	// range over them in sorted (hence re-producible) way:
+	keys := make([]string, 0, len(parsedModel.TrustBoundaries))
+	for k := range parsedModel.TrustBoundaries {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		trustBoundary := parsedModel.TrustBoundaries[key]
+		subgraphSnippetsById[hash(trustBoundary.Id)] = trustBoundarySnippet(parsedModel, trustBoundary, dpi,
+			drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks)
+	}
+	// here replace links and remove from map after replacement (i.e. move snippet into nested)
+	for i := range subgraphSnippetsById {
+		re := regexp.MustCompile(`LINK-NEEDS-REPLACED-BY-cluster_([0-9]*);`)
+		for {
+			matches := re.FindStringSubmatch(subgraphSnippetsById[i])
+			if len(matches) > 0 {
+				embeddedSnippet := " //nested:" + subgraphSnippetsById[matches[1]]
+				subgraphSnippetsById[i] = strings.ReplaceAll(subgraphSnippetsById[i], matches[0], embeddedSnippet)
+				subgraphSnippetsById[matches[1]] = "" // to something like remove it
+			} else {
+				break
+			}
+		}
+	}
+	// now write them all
+	keys = make([]string, 0, len(subgraphSnippetsById))
+	for k := range subgraphSnippetsById {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		snippet := subgraphSnippetsById[key]
+		subgraphs.WriteString(snippet)
+	}
+	return subgraphs.String()
+}
+
+// trustBoundarySnippet returns the cluster of a trust boundary in the data-flow diagram, with a
+// placeholder link for each nested trust boundary.
+func trustBoundarySnippet(parsedModel *types.Model, trustBoundary *types.TrustBoundary, dpi int,
+	drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks bool,
+) string {
+	var snippet strings.Builder
+	if len(trustBoundary.TechnicalAssetsInside) > 0 || len(trustBoundary.TrustBoundariesNested) > 0 {
+		if drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks {
+			snippet.WriteString(spaceBoundaryForLayout(trustBoundary, dpi))
+		}
+		snippet.WriteString("\n subgraph cluster_" + hash(trustBoundary.Id) + " {\n")
+		snippet.WriteString(trustBoundaryGraphAttributes(parsedModel, trustBoundary, dpi))
+		snippet.WriteString("\n")
+		keys := trustBoundary.TechnicalAssetsInside
+		sort.Strings(keys)
+		for _, technicalAssetInside := range keys {
+			// log.Println("About to add technical asset link to trust boundary: ", technicalAssetInside)
+			technicalAsset := parsedModel.TechnicalAssets[technicalAssetInside]
+			snippet.WriteString(hash(technicalAsset.Id))
+			snippet.WriteString(";\n")
+		}
+		keys = trustBoundary.TrustBoundariesNested
+		sort.Strings(keys)
+		for _, trustBoundaryNested := range keys {
+			// log.Println("About to add nested trust boundary to trust boundary: ", trustBoundaryNested)
+			trustBoundaryNested := parsedModel.TrustBoundaries[trustBoundaryNested]
+			snippet.WriteString("LINK-NEEDS-REPLACED-BY-cluster_" + hash(trustBoundaryNested.Id))
+			snippet.WriteString(";\n")
+		}
+		snippet.WriteString(" }\n\n")
+		if drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks {
+			snippet.WriteString(" }\n\n")
+		}
+	}
+	return snippet.String()
+}
+
+// spaceBoundaryForLayout returns the opening of the invisible cluster around a trust boundary
+// that adds space between the clusters of the data-flow diagram.
+func spaceBoundaryForLayout(trustBoundary *types.TrustBoundary, dpi int) string {
+	var snippet strings.Builder
+	// see https://stackoverflow.com/questions/17247455/how-do-i-add-extra-space-between-clusters?noredirect=1&lq=1
+	snippet.WriteString("\n subgraph cluster_space_boundary_for_layout_only_1" + hash(trustBoundary.Id) + " {\n")
+	snippet.WriteString(`	graph [
+                                              dpi=` + strconv.Itoa(dpi) + `
+											  label=<<table border="0" cellborder="0" cellpadding="0" bgcolor="#FFFFFF55"><tr><td><b> ` +
+		`</b></td></tr></table>>
+											  fontsize="21"
+											  style="invis"
+											  color="green"
+											  fontcolor="green"
+											  margin="50.0"
+											  penwidth="6.5"
+                                              outputorder="nodesfirst"
+											];`)
+	return snippet.String()
+}
+
+// trustBoundaryGraphAttributes returns the graph attributes of the cluster of a trust boundary.
+func trustBoundaryGraphAttributes(parsedModel *types.Model, trustBoundary *types.TrustBoundary, dpi int) string {
+	color, fontColor, bgColor, style, fontname := rgbHexColorTwilight(), rgbHexColorTwilight() /*"#550E0C"*/, "#FAFAFA",
+		"dashed", "Verdana"
+	penWidth := 4.5
+	if len(trustBoundary.TrustBoundariesNested) > 0 {
+		penWidth = 5.5
+	}
+	if parsedModel.FindParentTrustBoundary(trustBoundary) != nil {
+		bgColor = "#F1F1F1"
+	}
+	if trustBoundary.Type == types.NetworkPolicyNamespaceIsolation {
+		fontColor, bgColor = "#222222", "#DFF4FF"
+	}
+	if trustBoundary.Type == types.ExecutionEnvironment {
+		fontColor, bgColor, style = "#555555", "#FFFFF0", lineStyleDotted
+	}
+	return `	graph [
+      dpi=` + strconv.Itoa(dpi) + `
+      label=<<table border="0" cellborder="0" cellpadding="0"><tr><td><b>` +
+		encode(trustBoundary.Title) + `</b> (` + trustBoundary.Type.String() + `)</td></tr></table>>
+      fontsize="21"
+      style="` + style + `"
+      color="` + color + `"
+      bgcolor="` + bgColor + `"
+      fontcolor="` + fontColor + `"
+      fontname="` + fontname + `"
+      penwidth="` + fmt.Sprintf("%f", penWidth) + `"
+      forcelabels=true
+      outputorder="nodesfirst"
+	  margin="50.0"
+    ];`
+}
+
+// dataFlowEdge returns the edge of a communication link in the data-flow diagram.
+func dataFlowEdge(parsedModel *types.Model, technicalAsset *types.TechnicalAsset,
+	dataFlow *types.CommunicationLink,
+) string {
+	var edge strings.Builder
+	sourceId := technicalAsset.Id
+	targetId := dataFlow.TargetId
+	// log.Println("About to add link from", sourceId, "to", targetId, "with id", dataFlow.ID)
+	var arrowStyle, arrowColor string
+	dir, arrowHead, arrowTail := dataFlowArrows(dataFlow)
+	arrowStyle = ` style="` + determineArrowLineStyle(dataFlow) +
+		`" penwidth="` + determineArrowPenWidth(dataFlow, parsedModel) +
+		`" arrowtail="` + arrowTail + `" arrowhead="` + arrowHead + `" dir="` + dir + `" arrowsize="2.0" `
+	arrowColor = ` color="` + determineArrowColor(dataFlow, parsedModel) + `"`
+	tweaks := ""
+	if dataFlow.DiagramTweakWeight > 0 {
+		tweaks += " weight=\"" + strconv.Itoa(dataFlow.DiagramTweakWeight) + "\" "
+	}
+
+	edge.WriteString("\n")
+	edge.WriteString("  " + hash(sourceId) + " -> " + hash(targetId) +
+		` [` + arrowColor + ` ` + arrowStyle + tweaks + ` constraint=` +
+		strconv.FormatBool(dataFlow.DiagramTweakConstraint) + ` `)
+	if !parsedModel.DiagramTweakSuppressEdgeLabels {
+		edge.WriteString(` xlabel="` + encode(dataFlow.Protocol.String()) + `" fontcolor="` +
+			determineLabelColor(dataFlow, parsedModel) + `" `)
+	}
+	edge.WriteString(" ];\n")
+	return edge.String()
 }
 
 func makeLegendNode(id, title, compartmentBorder, labelColor, shape, borderLineStyle, borderPenWidth, shapeFillColor,
@@ -463,30 +518,37 @@ func determineArrowColor(cl *types.CommunicationLink, parsedModel *types.Model) 
 	case cl.IpFiltered:
 		return Brown
 	}
-	// check for red
-	for _, sentDataAsset := range cl.DataAssetsSent {
-		if parsedModel.DataAssets[sentDataAsset].Confidentiality == types.StrictlyConfidential {
-			return Red
-		}
+	return dataFlowConfidentialityColor(cl, parsedModel)
+}
+
+// dataFlowConfidentialityColor is red when a communication link transfers strictly confidential
+// data, amber when it transfers confidential data, and black otherwise.
+func dataFlowConfidentialityColor(cl *types.CommunicationLink, parsedModel *types.Model) string {
+	confidentialityIs := func(confidentiality types.Confidentiality) func(*types.DataAsset) bool {
+		return func(dataAsset *types.DataAsset) bool { return dataAsset.Confidentiality == confidentiality }
 	}
-	for _, receivedDataAsset := range cl.DataAssetsReceived {
-		if parsedModel.DataAssets[receivedDataAsset].Confidentiality == types.StrictlyConfidential {
-			return Red
-		}
+	// check for red
+	if anyDataAsset(parsedModel, cl.DataAssetsSent, confidentialityIs(types.StrictlyConfidential)) ||
+		anyDataAsset(parsedModel, cl.DataAssetsReceived, confidentialityIs(types.StrictlyConfidential)) {
+		return Red
 	}
 	// check for amber
-	for _, sentDataAsset := range cl.DataAssetsSent {
-		if parsedModel.DataAssets[sentDataAsset].Confidentiality == types.Confidential {
-			return Amber
-		}
-	}
-	for _, receivedDataAsset := range cl.DataAssetsReceived {
-		if parsedModel.DataAssets[receivedDataAsset].Confidentiality == types.Confidential {
-			return Amber
-		}
+	if anyDataAsset(parsedModel, cl.DataAssetsSent, confidentialityIs(types.Confidential)) ||
+		anyDataAsset(parsedModel, cl.DataAssetsReceived, confidentialityIs(types.Confidential)) {
+		return Amber
 	}
 	// default
 	return Black
+}
+
+// anyDataAsset reports whether one of the data assets with the given ids matches.
+func anyDataAsset(parsedModel *types.Model, dataAssetIds []string, matches func(*types.DataAsset) bool) bool {
+	for _, dataAssetId := range dataAssetIds {
+		if matches(parsedModel.DataAssets[dataAssetId]) {
+			return true
+		}
+	}
+	return false
 }
 
 func GenerateDataFlowDiagramGraphvizImage(dotFile *os.File, targetDir string,
@@ -604,37 +666,35 @@ func WriteDataAssetDiagramGraphvizDOT(parsedModel *types.Model, diagramFilenameD
 
 	// Data Asset to Tech Asset links ===============================================================================
 	for _, technicalAsset := range techAssets {
-		for _, sourceId := range technicalAsset.DataAssetsStored {
-			targetId := technicalAsset.Id
-			dotContent.WriteString("\n")
-			dotContent.WriteString(hash(sourceId) + " -> " + hash(targetId) +
-				` [ color="blue" style="solid" ];`)
-			dotContent.WriteString("\n")
-		}
-		for _, sourceId := range technicalAsset.DataAssetsProcessed {
-			if !contains(technicalAsset.DataAssetsStored, sourceId) { // here only if not already drawn above
-				targetId := technicalAsset.Id
-				dotContent.WriteString("\n")
-				dotContent.WriteString(hash(sourceId) + " -> " + hash(targetId) +
-					` [ color="#666666" style="dashed" ];`)
-				dotContent.WriteString("\n")
-			}
-		}
+		dotContent.WriteString(dataAssetLinks(technicalAsset))
 	}
 
 	dotContent.WriteString("}")
 
-	// Write the DOT file
-	file, err := os.Create(filepath.Clean(diagramFilenameDOT))
-	if err != nil {
-		return nil, fmt.Errorf("error creating %s: %w", diagramFilenameDOT, err)
+	return writeDOTFile(diagramFilenameDOT, dotContent.String())
+}
+
+// dataAssetLinks returns the edges of the data asset diagram from the data assets that a
+// technical asset stores (solid) or only processes (dashed) to the technical asset.
+func dataAssetLinks(technicalAsset *types.TechnicalAsset) string {
+	var links strings.Builder
+	for _, sourceId := range technicalAsset.DataAssetsStored {
+		targetId := technicalAsset.Id
+		links.WriteString("\n")
+		links.WriteString(hash(sourceId) + " -> " + hash(targetId) +
+			` [ color="blue" style="solid" ];`)
+		links.WriteString("\n")
 	}
-	defer func() { _ = file.Close() }()
-	_, err = fmt.Fprintln(file, dotContent.String())
-	if err != nil {
-		return nil, fmt.Errorf("error writing %s: %w", diagramFilenameDOT, err)
+	for _, sourceId := range technicalAsset.DataAssetsProcessed {
+		if !contains(technicalAsset.DataAssetsStored, sourceId) { // here only if not already drawn above
+			targetId := technicalAsset.Id
+			links.WriteString("\n")
+			links.WriteString(hash(sourceId) + " -> " + hash(targetId) +
+				` [ color="#666666" style="dashed" ];`)
+			links.WriteString("\n")
+		}
 	}
-	return file, nil
+	return links.String()
 }
 
 func sortByDataAssetDataBreachProbabilityAndTitle(parsedModel *types.Model, assets []*types.DataAsset) {
@@ -667,54 +727,41 @@ func makeDataAssetNode(parsedModel *types.Model, dataAsset *types.DataAsset) str
 		`</b>> penwidth="3.0" style="filled" fillcolor="` + color + `" color="` + color + "\"\n  ]; "
 }
 
-func makeTechAssetNode(parsedModel *types.Model, technicalAsset *types.TechnicalAsset, simplified bool) string {
-	if simplified {
-		color := rgbHexColorOutOfScope()
-		if !technicalAsset.OutOfScope {
-			generatedRisks := parsedModel.GeneratedRisks(technicalAsset)
-			switch types.HighestSeverityStillAtRisk(generatedRisks) {
-			case types.CriticalSeverity:
-				color = rgbHexColorCriticalRisk()
-			case types.HighSeverity:
-				color = rgbHexColorHighRisk()
-			case types.ElevatedSeverity:
-				color = rgbHexColorElevatedRisk()
-			case types.MediumSeverity:
-				color = rgbHexColorMediumRisk()
-			case types.LowSeverity:
-				color = rgbHexColorLowRisk()
-			default:
-				color = Gray // since black is too dark here as fill color
-			}
-			if len(types.ReduceToOnlyStillAtRisk(generatedRisks)) == 0 {
-				color = Gray // since black is too dark here as fill color
-			}
+// makeSimplifiedTechAssetNode returns the node of a technical asset in the data asset diagram,
+// coloured by the highest severity of its risks still at risk.
+func makeSimplifiedTechAssetNode(parsedModel *types.Model, technicalAsset *types.TechnicalAsset) string {
+	color := rgbHexColorOutOfScope()
+	if !technicalAsset.OutOfScope {
+		generatedRisks := parsedModel.GeneratedRisks(technicalAsset)
+		switch types.HighestSeverityStillAtRisk(generatedRisks) {
+		case types.CriticalSeverity:
+			color = rgbHexColorCriticalRisk()
+		case types.HighSeverity:
+			color = rgbHexColorHighRisk()
+		case types.ElevatedSeverity:
+			color = rgbHexColorElevatedRisk()
+		case types.MediumSeverity:
+			color = rgbHexColorMediumRisk()
+		case types.LowSeverity:
+			color = rgbHexColorLowRisk()
+		default:
+			color = Gray // since black is too dark here as fill color
 		}
-		return "  " + hash(technicalAsset.Id) + ` [ shape="box" style="filled" fillcolor="` + color + `"
+		if len(types.ReduceToOnlyStillAtRisk(generatedRisks)) == 0 {
+			color = Gray // since black is too dark here as fill color
+		}
+	}
+	return "  " + hash(technicalAsset.Id) + ` [ shape="box" style="filled" fillcolor="` + color + `"
 				label=<<b>` + encode(technicalAsset.Title) + `</b>> penwidth="3.0" color="` + color + `" ];
 				`
+}
+
+func makeTechAssetNode(parsedModel *types.Model, technicalAsset *types.TechnicalAsset, simplified bool) string {
+	if simplified {
+		return makeSimplifiedTechAssetNode(parsedModel, technicalAsset)
 	}
 
-	var shape, title string
-	lineBreak := ""
-	switch technicalAsset.Type {
-	case types.ExternalEntity:
-		shape = "box"
-		title = technicalAsset.Title
-	case types.Process:
-		shape = "ellipse"
-		title = technicalAsset.Title
-	case types.Datastore:
-		shape = "cylinder"
-		title = technicalAsset.Title
-		if technicalAsset.Redundant {
-			lineBreak = "<br/>"
-		}
-	}
-
-	if technicalAsset.UsedAsClientByHuman {
-		shape = "octagon"
-	}
+	shape, title, lineBreak := techAssetShape(technicalAsset)
 
 	// RAA = Relative Attacker Attractiveness
 	raa := technicalAsset.RAA
@@ -745,6 +792,30 @@ peripheries=` + strconv.Itoa(determineShapePeripheries(technicalAsset)) + `
 color="` + determineShapeBorderColor(technicalAsset, parsedModel) + "\"\n  ]; "
 }
 
+// techAssetShape returns the shape of the node of a technical asset, its title, and the line
+// break that a redundant datastore gets above its technologies.
+func techAssetShape(technicalAsset *types.TechnicalAsset) (shape string, title string, lineBreak string) {
+	switch technicalAsset.Type {
+	case types.ExternalEntity:
+		shape = "box"
+		title = technicalAsset.Title
+	case types.Process:
+		shape = "ellipse"
+		title = technicalAsset.Title
+	case types.Datastore:
+		shape = "cylinder"
+		title = technicalAsset.Title
+		if technicalAsset.Redundant {
+			lineBreak = "<br/>"
+		}
+	}
+
+	if technicalAsset.UsedAsClientByHuman {
+		shape = "octagon"
+	}
+	return shape, title, lineBreak
+}
+
 func determineShapeStyle(ta *types.TechnicalAsset) string {
 	return "filled"
 }
@@ -766,7 +837,13 @@ func determineShapeFillColor(ta *types.TechnicalAsset, parsedModel *types.Model)
 	case ta.CustomDevelopedParts:
 		fillColor = CustomDevelopedParts
 	}
-	switch ta.Machine {
+	return machineFillColor(fillColor, ta.Machine)
+}
+
+// machineFillColor darkens a fill colour for physical machines and brightens it for containers,
+// and even more for serverless.
+func machineFillColor(fillColor string, machine types.TechnicalAssetMachine) string {
+	switch machine {
 	case types.Physical:
 		fillColor = darkenHexColor(fillColor)
 	case types.Container:
@@ -832,33 +909,20 @@ func determineShapeBorderLineStyle(ta *types.TechnicalAsset) string {
 
 // red when >= confidential data stored in unencrypted technical asset.
 func determineTechnicalAssetLabelColor(ta *types.TechnicalAsset, model *types.Model) string {
+	integrityIs := func(integrity types.Criticality) func(*types.DataAsset) bool {
+		return func(dataAsset *types.DataAsset) bool { return dataAsset.Integrity == integrity }
+	}
 	// Check for red
-	if ta.Integrity == types.MissionCritical {
+	if ta.Integrity == types.MissionCritical ||
+		anyDataAsset(model, ta.DataAssetsStored, integrityIs(types.MissionCritical)) ||
+		anyDataAsset(model, ta.DataAssetsProcessed, integrityIs(types.MissionCritical)) {
 		return Red
 	}
-	for _, storedDataAsset := range ta.DataAssetsStored {
-		if model.DataAssets[storedDataAsset].Integrity == types.MissionCritical {
-			return Red
-		}
-	}
-	for _, processedDataAsset := range ta.DataAssetsProcessed {
-		if model.DataAssets[processedDataAsset].Integrity == types.MissionCritical {
-			return Red
-		}
-	}
 	// Check for amber
-	if ta.Integrity == types.Critical {
+	if ta.Integrity == types.Critical ||
+		anyDataAsset(model, ta.DataAssetsStored, integrityIs(types.Critical)) ||
+		anyDataAsset(model, ta.DataAssetsProcessed, integrityIs(types.Critical)) {
 		return Amber
-	}
-	for _, storedDataAsset := range ta.DataAssetsStored {
-		if model.DataAssets[storedDataAsset].Integrity == types.Critical {
-			return Amber
-		}
-	}
-	for _, processedDataAsset := range ta.DataAssetsProcessed {
-		if model.DataAssets[processedDataAsset].Integrity == types.Critical {
-			return Amber
-		}
 	}
 	return Black
 }
