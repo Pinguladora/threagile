@@ -40,13 +40,16 @@ func (what *ArrayExpression) EvalArray(scope *common.Scope) (*common.ArrayValue,
 	for index, expression := range what.expressions.Expressions() {
 		value, errorLiteral, evalError := expression.EvalAny(scope)
 		if evalError != nil {
-			return nil, errorLiteral, fmt.Errorf("%q: error evaluating array-expression #%v: %w", what.literal, index+1, evalError)
+			return nil, errorLiteral,
+				fmt.Errorf("%q: error evaluating array-expression #%v: %w", what.literal, index+1, evalError)
 		}
 
 		values = append(values, value)
 	}
 
-	return common.SomeArrayValue(values, common.NewEvent(common.NewValueProperty(values), common.NewPath("array value")).From(values...)), "", nil
+	return common.SomeArrayValue(
+		values, common.NewEvent(common.NewValueProperty(values), common.NewPath("array value")).From(values...),
+	), "", nil
 }
 
 func (what *ArrayExpression) EvalAny(scope *common.Scope) (common.Value, string, error) {

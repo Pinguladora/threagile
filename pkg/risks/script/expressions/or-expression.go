@@ -49,7 +49,8 @@ func (what *OrExpression) EvalBool(scope *common.Scope) (*common.BoolValue, stri
 	for index, expression := range what.expressions {
 		value, errorLiteral, evalError := expression.EvalBool(scope)
 		if evalError != nil {
-			return common.EmptyBoolValue(), errorLiteral, fmt.Errorf("%q: error evaluating or-expression #%v: %w", what.literal, index+1, evalError)
+			return common.EmptyBoolValue(), errorLiteral,
+				fmt.Errorf("%q: error evaluating or-expression #%v: %w", what.literal, index+1, evalError)
 		}
 
 		if value.BoolValue() {
@@ -59,7 +60,8 @@ func (what *OrExpression) EvalBool(scope *common.Scope) (*common.BoolValue, stri
 		values = append(values, value)
 	}
 
-	return common.SomeBoolValue(false, common.NewEvent(common.NewFalseProperty(), common.EmptyPath()).From(values...)), "", nil
+	falseEvent := common.NewEvent(common.NewFalseProperty(), common.EmptyPath()).From(values...)
+	return common.SomeBoolValue(false, falseEvent), "", nil
 }
 
 func (what *OrExpression) EvalAny(scope *common.Scope) (common.Value, string, error) {

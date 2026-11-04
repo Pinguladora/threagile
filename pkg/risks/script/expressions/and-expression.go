@@ -49,7 +49,8 @@ func (what *AndExpression) EvalBool(scope *common.Scope) (*common.BoolValue, str
 	for index, expression := range what.expressions {
 		value, errorLiteral, evalError := expression.EvalBool(scope)
 		if evalError != nil {
-			return common.EmptyBoolValue(), errorLiteral, fmt.Errorf("%q: error evaluating and-expression #%v: %w", what.literal, index+1, evalError)
+			return common.EmptyBoolValue(), errorLiteral,
+				fmt.Errorf("%q: error evaluating and-expression #%v: %w", what.literal, index+1, evalError)
 		}
 
 		if !value.BoolValue() {
@@ -59,7 +60,8 @@ func (what *AndExpression) EvalBool(scope *common.Scope) (*common.BoolValue, str
 		values = append(values, value)
 	}
 
-	return common.SomeBoolValue(true, common.NewEvent(common.NewTrueProperty(), common.EmptyPath()).From(values...)), "", nil
+	trueEvent := common.NewEvent(common.NewTrueProperty(), common.EmptyPath()).From(values...)
+	return common.SomeBoolValue(true, trueEvent), "", nil
 }
 
 func (what *AndExpression) EvalAny(scope *common.Scope) (common.Value, string, error) {

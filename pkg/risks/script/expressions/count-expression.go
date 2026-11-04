@@ -38,7 +38,9 @@ func (what *CountExpression) EvalDecimal(scope *common.Scope) (*common.DecimalVa
 	return what.evalDecimal(scope, inValue)
 }
 
-func (what *CountExpression) evalDecimal(scope *common.Scope, inValue common.Value) (*common.DecimalValue, string, error) {
+func (what *CountExpression) evalDecimal(
+	scope *common.Scope, inValue common.Value,
+) (*common.DecimalValue, string, error) {
 	switch castValue := inValue.Value().(type) {
 	case []any, []common.Value, map[string]any:
 		if what.expression == nil {
@@ -69,7 +71,8 @@ func (what *CountExpression) evalDecimal(scope *common.Scope, inValue common.Val
 		return common.EmptyDecimalValue(), "", nil
 
 	default:
-		return common.EmptyDecimalValue(), what.Literal(), fmt.Errorf("failed to eval all-expression: expected iterable type, got %T", inValue)
+		return common.EmptyDecimalValue(), what.Literal(),
+			fmt.Errorf("failed to eval all-expression: expected iterable type, got %T", inValue)
 	}
 }
 

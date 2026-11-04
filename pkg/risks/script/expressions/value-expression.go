@@ -121,11 +121,14 @@ func (what *ValueExpression) evalBool(scope *common.Scope, anyValue common.Value
 		return common.SomeBoolValue(false, nil), "", nil
 
 	default:
-		return common.EmptyBoolValue(), what.Literal(), fmt.Errorf("failed to eval value-expression: value type %T is not a bool", what.value)
+		return common.EmptyBoolValue(), what.Literal(),
+			fmt.Errorf("failed to eval value-expression: value type %T is not a bool", what.value)
 	}
 }
 
-func (what *ValueExpression) evalDecimal(scope *common.Scope, anyValue common.Value) (*common.DecimalValue, string, error) {
+func (what *ValueExpression) evalDecimal(
+	scope *common.Scope, anyValue common.Value,
+) (*common.DecimalValue, string, error) {
 	switch castValue := anyValue.(type) {
 	case *common.StringValue:
 		return what.stringToDecimal(scope, castValue)
@@ -137,11 +140,14 @@ func (what *ValueExpression) evalDecimal(scope *common.Scope, anyValue common.Va
 		return common.SomeDecimalValue(decimal.Zero, nil), "", nil
 
 	default:
-		return common.EmptyDecimalValue(), what.Literal(), fmt.Errorf("failed to eval value-expression: value type %T is not a decimal", what.value)
+		return common.EmptyDecimalValue(), what.Literal(),
+			fmt.Errorf("failed to eval value-expression: value type %T is not a decimal", what.value)
 	}
 }
 
-func (what *ValueExpression) evalString(scope *common.Scope, anyValue common.Value) (*common.StringValue, string, error) {
+func (what *ValueExpression) evalString(
+	scope *common.Scope, anyValue common.Value,
+) (*common.StringValue, string, error) {
 	switch castValue := anyValue.(type) {
 	case *common.StringValue:
 		return what.stringToString(scope, castValue)
@@ -150,7 +156,8 @@ func (what *ValueExpression) evalString(scope *common.Scope, anyValue common.Val
 		return common.SomeStringValue("", nil), "", nil
 
 	default:
-		return common.EmptyStringValue(), what.Literal(), fmt.Errorf("failed to eval value-expression: value type %T is not a string", what.value)
+		return common.EmptyStringValue(), what.Literal(),
+			fmt.Errorf("failed to eval value-expression: value type %T is not a string", what.value)
 	}
 }
 
@@ -176,7 +183,9 @@ func (what *ValueExpression) evalAny(scope *common.Scope, anyValue common.Value)
 	}
 }
 
-func (what *ValueExpression) stringToBool(scope *common.Scope, valueString *common.StringValue) (*common.BoolValue, string, error) {
+func (what *ValueExpression) stringToBool(
+	scope *common.Scope, valueString *common.StringValue,
+) (*common.BoolValue, string, error) {
 	value, errorLiteral, evalError := what.evalStringReference(scope, valueString) // resolve references
 	if evalError != nil {
 		return common.EmptyBoolValue(), errorLiteral, evalError
@@ -209,11 +218,14 @@ func (what *ValueExpression) stringToBool(scope *common.Scope, valueString *comm
 		return what.evalBool(scope, castValue)
 
 	default:
-		return common.EmptyBoolValue(), what.Literal(), fmt.Errorf("expected value-expression to eval to a bool instead of %T", value)
+		return common.EmptyBoolValue(), what.Literal(),
+			fmt.Errorf("expected value-expression to eval to a bool instead of %T", value)
 	}
 }
 
-func (what *ValueExpression) stringToDecimal(scope *common.Scope, valueString *common.StringValue) (*common.DecimalValue, string, error) {
+func (what *ValueExpression) stringToDecimal(
+	scope *common.Scope, valueString *common.StringValue,
+) (*common.DecimalValue, string, error) {
 	value, errorLiteral, evalError := what.evalStringReference(scope, valueString)
 	if evalError != nil {
 		return common.EmptyDecimalValue(), errorLiteral, evalError
@@ -235,11 +247,14 @@ func (what *ValueExpression) stringToDecimal(scope *common.Scope, valueString *c
 		return common.SomeDecimalValue(decimal.Zero, value.Event()), "", nil
 
 	default:
-		return common.EmptyDecimalValue(), what.Literal(), fmt.Errorf("expected value-expression to eval to a decimal instead of %T", value)
+		return common.EmptyDecimalValue(), what.Literal(),
+			fmt.Errorf("expected value-expression to eval to a decimal instead of %T", value)
 	}
 }
 
-func (what *ValueExpression) stringToString(scope *common.Scope, valueString *common.StringValue) (*common.StringValue, string, error) {
+func (what *ValueExpression) stringToString(
+	scope *common.Scope, valueString *common.StringValue,
+) (*common.StringValue, string, error) {
 	value, errorLiteral, evalError := what.evalStringReference(scope, valueString)
 	if evalError != nil {
 		return common.EmptyStringValue(), errorLiteral, evalError
@@ -256,11 +271,14 @@ func (what *ValueExpression) stringToString(scope *common.Scope, valueString *co
 		return common.EmptyStringValue(), "", nil
 
 	default:
-		return common.EmptyStringValue(), what.Literal(), fmt.Errorf("expected value-expression to eval to a string instead of %T", value)
+		return common.EmptyStringValue(), what.Literal(),
+			fmt.Errorf("expected value-expression to eval to a string instead of %T", value)
 	}
 }
 
-func (what *ValueExpression) evalStringReference(scope *common.Scope, ref *common.StringValue) (common.Value, string, error) {
+func (what *ValueExpression) evalStringReference(
+	scope *common.Scope, ref *common.StringValue,
+) (common.Value, string, error) {
 	varRe := `\{[^{}]+}`
 	value := what.resolveStringValues(scope, varRe, ref)
 	if regexp.MustCompile(`^` + varRe + `$`).MatchString(value.StringValue()) {
@@ -287,7 +305,9 @@ func (what *ValueExpression) evalStringReference(scope *common.Scope, ref *commo
 	return common.SomeValue(resolvedValue, ref.Event()), "", nil
 }
 
-func (what *ValueExpression) resolveStringValues(scope *common.Scope, reString string, value *common.StringValue) *common.StringValue {
+func (what *ValueExpression) resolveStringValues(
+	scope *common.Scope, reString string, value *common.StringValue,
+) *common.StringValue {
 	replacements := 0
 	values := make([]common.Value, 0)
 	text := regexp.MustCompile(reString).ReplaceAllStringFunc(value.StringValue(), func(name string) string {
@@ -326,7 +346,9 @@ func (what *ValueExpression) resolveStringValues(scope *common.Scope, reString s
 	return common.SomeStringValue(text, value.Event())
 }
 
-func (what *ValueExpression) resolveMethodCalls(scope *common.Scope, reString string, value *common.StringValue) (*common.StringValue, string, error) {
+func (what *ValueExpression) resolveMethodCalls(
+	scope *common.Scope, reString string, value *common.StringValue,
+) (*common.StringValue, string, error) {
 	replacements := 0
 	values := make([]common.Value, 0)
 	text := regexp.MustCompile(reString).ReplaceAllStringFunc(value.StringValue(), func(name string) string {
@@ -359,7 +381,9 @@ func (what *ValueExpression) resolveMethodCalls(scope *common.Scope, reString st
 // methodCallMatchLength is the length of a match of a method call: the call, the method name and the arguments.
 const methodCallMatchLength = 3
 
-func (what *ValueExpression) resolveMethodCall(scope *common.Scope, reString string, value *common.StringValue) (common.Value, string, error) {
+func (what *ValueExpression) resolveMethodCall(
+	scope *common.Scope, reString string, value *common.StringValue,
+) (common.Value, string, error) {
 	re := regexp.MustCompile(reString)
 
 	match := re.FindStringSubmatch(value.StringValue())
@@ -372,7 +396,9 @@ func (what *ValueExpression) resolveMethodCall(scope *common.Scope, reString str
 	if len(strings.TrimSpace(match[2])) > 0 {
 		// The arguments are simply split at the commas; arguments like '{var1}, {var2}' could use a better parser.
 		for arg := range strings.SplitSeq(match[2], ",") {
-			val, errorLiteral, evalError := what.evalStringReference(scope, common.SomeStringValue(strings.TrimSpace(arg), value.Event()))
+			val, errorLiteral, evalError := what.evalStringReference(scope, common.SomeStringValue(
+				strings.TrimSpace(arg), value.Event(),
+			))
 			if evalError != nil {
 				return nil, errorLiteral, fmt.Errorf("failed to eval method parameter: %w", evalError)
 			}
