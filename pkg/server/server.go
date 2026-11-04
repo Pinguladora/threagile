@@ -41,6 +41,7 @@ type serverConfigReader interface {
 	GetDataFlowDiagramFilenameDOT() string
 	GetDataAssetDiagramFilenameDOT() string
 	GetReportFilename() string
+	GetReportHTMLFilename() string
 	GetExcelRisksFilename() string
 	GetRiskExcelConfigHideColumns() []string
 	GetRiskExcelConfigSortByColumns() []string

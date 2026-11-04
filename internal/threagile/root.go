@@ -87,6 +87,8 @@ func (what *Threagile) initFlags() *Threagile {
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.JsonStatsFilenameValue, statsJsonFileFlagName, what.config.GetJsonStatsFilename(), "stats JSON file")
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.JsonOTMFilenameValue, otmJsonFileFlagName,
 		what.config.GetJsonOTMFilename(), "Open Threat Model (OTM) JSON file")
+	what.rootCmd.PersistentFlags().StringVar(&what.flags.ReportHTMLFilenameValue, reportHTMLFileFlagName,
+		what.config.GetReportHTMLFilename(), "HTML report file")
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.TemplateFilenameValue, templateFileNameFlagName, what.config.GetTemplateFilename(), "template pdf file")
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.ReportLogoImagePathValue, reportLogoImagePathFlagName, what.config.GetReportLogoImagePath(), "report logo image")
 	what.rootCmd.PersistentFlags().StringVar(&what.flags.TechnologyFilenameValue, technologyFileFlagName, what.config.GetTechnologyFilename(), "file name of additional technologies")
@@ -121,6 +123,8 @@ func (what *Threagile) initFlags() *Threagile {
 	what.rootCmd.PersistentFlags().BoolVar(&what.flags.SkipTagsExcelValue, skipTagsExcelFlagName, what.config.GetSkipTagsExcel(), "skip generating tags excel")
 	what.rootCmd.PersistentFlags().BoolVar(&what.flags.SkipReportPDFValue, skipReportPDFFlagName, what.config.GetSkipReportPDF(), "skip generating report pdf, including diagrams")
 	what.rootCmd.PersistentFlags().BoolVar(&what.flags.SkipReportADOCValue, skipReportADOCFlagName, what.config.GetSkipReportADOC(), "skip generating report adoc, including diagrams")
+	what.rootCmd.PersistentFlags().BoolVar(&what.flags.SkipReportHTMLValue, skipReportHTMLFlagName,
+		what.config.GetSkipReportHTML(), "skip generating report html")
 
 	what.rootCmd.PersistentFlags().BoolVar(&what.flags.generateDataFlowDiagramFlag, generateDataFlowDiagramFlagName, !what.config.GetSkipDataFlowDiagram(), "(deprecated) generate generating data flow diagram")
 	what.rootCmd.PersistentFlags().BoolVar(&what.flags.generateDataAssetDiagramFlag, generateDataAssetDiagramFlagName, !what.config.GetSkipDataAssetDiagram(), "(deprecated) generate generating data asset diagram")
@@ -273,6 +277,7 @@ func (what *Threagile) readCommands() *report.GenerateCommands {
 	commands.TagsExcel = !what.flags.SkipTagsExcelValue
 	commands.ReportPDF = !what.flags.SkipReportPDFValue
 	commands.ReportADOC = !what.flags.SkipReportADOCValue
+	commands.ReportHTML = !what.flags.SkipReportHTMLValue
 	return commands
 }
 
@@ -384,6 +389,10 @@ func (what *Threagile) processArgs(cmd *cobra.Command, args []string) bool {
 		what.config.JsonOTMFilenameValue = what.config.CleanPath(what.flags.JsonOTMFilenameValue)
 	}
 
+	if what.isFlagOverridden(cmd, reportHTMLFileFlagName) {
+		what.config.ReportHTMLFilenameValue = what.config.CleanPath(what.flags.ReportHTMLFilenameValue)
+	}
+
 	if what.isFlagOverridden(cmd, templateFileNameFlagName) {
 		what.config.TemplateFilenameValue = what.flags.TemplateFilenameValue
 	}
@@ -486,6 +495,10 @@ func (what *Threagile) processArgs(cmd *cobra.Command, args []string) bool {
 
 	if what.isFlagOverridden(cmd, skipReportADOCFlagName) {
 		what.config.SkipReportADOCValue = what.flags.SkipReportADOCValue
+	}
+
+	if what.isFlagOverridden(cmd, skipReportHTMLFlagName) {
+		what.config.SkipReportHTMLValue = what.flags.SkipReportHTMLValue
 	}
 
 	if what.isFlagOverridden(cmd, generateDataFlowDiagramFlagName) {

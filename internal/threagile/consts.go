@@ -23,6 +23,7 @@ const (
 	JsonTechnicalAssetsFilename = "technical-assets.json"
 	JsonStatsFilename           = "stats.json"
 	JsonOTMFilename             = "otm.json"
+	ReportHTMLFilename          = "report.html"
 	TemplateFilename            = report.DefaultTemplateFilename
 	ReportLogoImagePath         = report.DefaultReportLogoImagePath
 	DataFlowDiagramFilenameDOT  = "data-flow-diagram.gv"

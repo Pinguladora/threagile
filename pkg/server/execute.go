@@ -154,6 +154,7 @@ func (s *server) execute(ginContext *gin.Context, dryRun bool) (yamlContent []by
 			filepath.Join(tmpOutputDir, s.config.GetDataFlowDiagramFilenamePNG()),
 			filepath.Join(tmpOutputDir, s.config.GetDataAssetDiagramFilenamePNG()),
 			filepath.Join(tmpOutputDir, s.config.GetReportFilename()),
+			filepath.Join(tmpOutputDir, s.config.GetReportHTMLFilename()),
 			filepath.Join(tmpOutputDir, s.config.GetExcelRisksFilename()),
 			filepath.Join(tmpOutputDir, s.config.GetExcelTagsFilename()),
 			filepath.Join(tmpOutputDir, s.config.GetJsonRisksFilename()),
