@@ -17,5 +17,5 @@ type Risk struct {
 	DataBreachTechnicalAssetIDs     []string                   `json:"data_breach_technical_assets,omitempty"     yaml:"data_breach_technical_assets,omitempty"`
 	RiskExplanation                 []string                   `json:"risk_explanation,omitempty"                 yaml:"risk_explanation,omitempty"`
 	RatingExplanation               []string                   `json:"rating_explanation,omitempty"               yaml:"rating_explanation,omitempty"`
-	// TODO: refactor all "ID" here to "ID"?
+	// The fields spell ID and Id inconsistently; renaming them would change the exported API.
 }
