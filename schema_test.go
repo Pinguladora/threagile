@@ -35,6 +35,7 @@ var schemaEnumTypes = map[string][]types.TypeEnum{
 	"risk_tracking/*/status":                                              types.RiskStatusValues(),
 	"technical_assets/*/availability":                                     types.CriticalityValues(),
 	"technical_assets/*/communication_links/*/authentication":             types.AuthenticationValues(),
+	"technical_assets/*/communication_links/*/identity":                   types.IdentityValues(),
 	"technical_assets/*/communication_links/*/authorization":              types.AuthorizationValues(),
 	"technical_assets/*/communication_links/*/protocol":                   types.ProtocolValues(),
 	"technical_assets/*/communication_links/*/usage":                      types.UsageValues(),
@@ -60,6 +61,14 @@ var schemaEnumTypes = map[string][]types.TypeEnum{
 // schemaEnumsWithoutGoType are enums of plain strings that the diagram code checks itself.
 var schemaEnumsWithoutGoType = map[string][]string{
 	"diagram_tweak_edge_layout": {"", "ortho", "spline", "polyline", "false", "curved"},
+}
+
+// schemaDeprecatedEnumValues are values that an enum of the schema lists besides those of its Go type, because
+// threagile still reads them in models of earlier versions.
+var schemaDeprecatedEnumValues = map[string][]string{
+	"technical_assets/*/communication_links/*/authentication": {"two-factor"},
+	// the identity, which earlier versions of the model put into the authorization
+	"technical_assets/*/communication_links/*/authorization": {"technical-user", "end-user-identity-propagation"},
 }
 
 type defaultTechnologies struct{}
@@ -112,7 +121,7 @@ func TestSchemaEnumsMatchGoTypes(t *testing.T) {
 		}
 
 		for _, value := range values {
-			if !slices.Contains(goNames, value) {
+			if !slices.Contains(goNames, value) && !slices.Contains(schemaDeprecatedEnumValues[enumPath], value) {
 				t.Errorf("schema enum %s lists %q, which threagile does not accept", enumPath, value)
 			}
 		}

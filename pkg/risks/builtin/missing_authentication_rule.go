@@ -22,7 +22,7 @@ func (*MissingAuthenticationRule) Category() *types.RiskCategory {
 		CheatSheet: cheatSheetAuthentication,
 		Action:     "Authentication of Incoming Requests",
 		Mitigation: "Apply an authentication method to the technical asset. To protect highly sensitive data consider " +
-			"the use of two-factor authentication for human users.",
+			"the use of multi-factor authentication for human users.",
 		Check:    checkCheatSheetAndASVS,
 		Function: types.Architecture,
 		STRIDE:   types.ElevationOfPrivilege,
@@ -109,7 +109,7 @@ func (r *MissingAuthenticationRule) createRisk(
 ) *types.Risk {
 	factorString := ""
 	if twoFactor {
-		factorString = "Two-Factor "
+		factorString = "Multi-Factor "
 	}
 	if len(hopBetween) > 0 {
 		hopBetween = "forwarded via <b>" + hopBetween + "</b> "

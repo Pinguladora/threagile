@@ -27,6 +27,7 @@ var typeFields = map[string]string{
 	"Data Breach Probability":      "`data_breach_probability` of the risks of individual risk categories",
 	"Data Format":                  "`data_formats_accepted` of technical assets",
 	"Encryption":                   "`encryption` of technical assets",
+	"Identity":                     "`identity` of communication links",
 	"Protocol":                     "`protocol` of communication links",
 	"Quantity":                     "`quantity` of data assets",
 	"Risk Exploitation Impact":     "`exploitation_impact` of the risks of individual risk categories",

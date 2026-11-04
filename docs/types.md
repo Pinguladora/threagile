@@ -11,9 +11,11 @@ Used by `authentication` of communication links.
 | `none` | No authentication |
 | `credentials` | Username and password, pin or passphrase |
 | `session-id` | A server generated session id with limited life span |
-| `token` | A server generated token. Containing session id, other data and is cryptographically signed |
+| `token` | A cryptographically signed token whose lifetime is not modelled; prefer short-lived-token or long-lived-token |
+| `short-lived-token` | A signed token that expires within hours, like an OAuth 2.0 access token or an OpenID Connect ID token |
+| `long-lived-token` | A bearer secret that does not expire soon, like an API key or a personal access token |
 | `client-certificate` | A certificate file stored on the client identifying this specific client |
-| `two-factor` | Credentials plus another factor like a physical object (card) or biometrics |
+| `multi-factor` | Credentials plus one or more other factors, like a security key, an authenticator app or biometrics (formerly two-factor) |
 | `externalized` | Some external company handles authentication |
 
 ## Authorization
@@ -22,9 +24,11 @@ Used by `authorization` of communication links.
 
 | Value | Description |
 |-------|-------------|
-| `none` | No authorization |
-| `technical-user` | Technical user (service-to-service) like DB user credentials |
-| `end-user-identity-propagation` | Identity of end user propagates to this service |
+| `unknown` | Not modelled; the risk rules assume nothing about the authorization |
+| `none` | No authorization: every caller may do everything |
+| `authenticated-only` | Every authenticated caller may do everything |
+| `function-level` | Each operation checks whether the caller may call it, for example by role |
+| `object-level` | Each operation also checks whether the caller may access the object at hand, like the order or the account |
 
 ## Confidentiality
 
@@ -84,6 +88,17 @@ Used by `encryption` of technical assets.
 | `data-with-symmetric-shared-key` | Both communication partners have the same key. This must be kept secret |
 | `data-with-asymmetric-shared-key` | The key is split into public and private. Those two are shared between partners |
 | `data-with-end-user-individual-key` | The key is (managed) by the end user |
+
+## Identity
+
+Used by `identity` of communication links.
+
+| Value | Description |
+|-------|-------------|
+| `none` | No identity reaches the target, like an anonymous call |
+| `service-account` | The caller's own account with static credentials, like a database user (formerly the technical-user authorization) |
+| `workload` | The caller's own identity, short-lived and issued by the platform, like a cloud IAM role, a Kubernetes service account token or a SPIFFE ID |
+| `end-user` | The identity of the end user is passed on, like a forwarded or exchanged user token (formerly the end-user-identity-propagation authorization) |
 
 ## Protocol
 

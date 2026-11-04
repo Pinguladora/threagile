@@ -1,0 +1,119 @@
+threagile_version: 1.0.0
+
+# A model of an earlier version: the authorization of its links holds their identity.
+
+title: Legacy Identity
+
+date: 2026-11-04
+
+author:
+  name: John Doe
+
+business_criticality: important
+
+business_overview:
+  description: Legacy identity test
+  images: []
+
+technical_overview:
+  description: Legacy identity test
+  images: []
+
+data_assets:
+
+  Orders:
+    id: orders
+    description: Orders
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: confidential
+    integrity: critical
+    availability: important
+    justification_cia_rating: Orders of the customers
+
+technical_assets:
+
+  Shop:
+    id: shop
+    description: The web shop
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: web-application
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: important
+    justification_cia_rating: Handles the orders
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Order Queries:
+        target: orders-db
+        description: Reads and writes the orders
+        protocol: jdbc-encrypted
+        authentication: credentials
+        authorization: technical-user
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Order Events:
+        target: orders-db
+        description: Writes order events
+        protocol: jdbc-encrypted
+        authentication: two-factor
+        authorization: end-user-identity-propagation
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: []
+
+  Orders Database:
+    id: orders-db
+    description: The orders
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: database
+    tags: []
+    internet: false
+    machine: container
+    encryption: transparent
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: important
+    justification_cia_rating: Holds the orders
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: [orders]
+    data_formats_accepted: [json]
+    communication_links: {}
+
+trust_boundaries: {}
+
+shared_runtimes: {}

@@ -57,7 +57,7 @@ func (r *MissingIdentityStoreRule) GenerateRisks(input *types.Model) ([]*types.R
 		technicalAsset := input.TechnicalAssets[id]
 		// use the sorted one to always get the same tech asset with the highest sensitivity as example asset
 		for _, commLink := range technicalAsset.CommunicationLinksSorted() {
-			if commLink.Authorization != types.EndUserIdentityPropagation {
+			if commLink.Identity != types.EndUser {
 				continue
 			}
 			riskIdentified = true

@@ -118,7 +118,7 @@ The most prevalent impacts of the **59 initial risks** (distributed over **25 ri
 
     If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model in the identity provider/store that is currently missing in the model.
 
-- **Medium**: [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa): 1 Initial Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa): 1 Initial Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication.
 
@@ -244,7 +244,7 @@ The most prevalent impacts of the **59 remaining risks** (distributed over **25 
 
     If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model in the identity provider/store that is currently missing in the model.
 
-- **Medium**: [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa): 1 Remaining Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa): 1 Remaining Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication.
 
@@ -348,7 +348,7 @@ _No risks._
 | Medium | [**Container Base Image Backdooring** risk at **Support Agent**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Support Agent](#support-agent) | Unchecked |
 | Medium | [**Container Base Image Backdooring** risk at **Support Tools**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Support Tools](#support-tools) | Unchecked |
 | Medium | [**Cross-Site Request Forgery (CSRF)** risk at **Chat Frontend** via **Support Chat** from **Customer Browser**](#cross-site-request-forgery-csrf) | [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf) | [Chat Frontend](#chat-frontend), [Support Chat](#support-chat) | Unchecked |
-| Medium | [**Missing Two-Factor Authentication** covering communication link **Support Chat** from **Customer Browser** to **Chat Frontend**](#missing-two-factor-authentication-2fa) | [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa) | [Chat Frontend](#chat-frontend), [Support Chat](#support-chat) | Unchecked |
+| Medium | [**Missing Multi-Factor Authentication** covering communication link **Support Chat** from **Customer Browser** to **Chat Frontend**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [Chat Frontend](#chat-frontend), [Support Chat](#support-chat) | Unchecked |
 | Medium | [**Missing Build Infrastructure** in the threat model (referencing asset **Order Service** as an example)](#missing-build-infrastructure) | [Missing Build Infrastructure](#missing-build-infrastructure) | [Order Service](#order-service) | Unchecked |
 | Medium | [**Missing Cloud Hardening** risk at **Agent Subnet**](#missing-cloud-hardening) | [Missing Cloud Hardening](#missing-cloud-hardening) | none | Unchecked |
 | Medium | [**Missing Cloud Hardening** risk at **Backend Subnet**](#missing-cloud-hardening) | [Missing Cloud Hardening](#missing-cloud-hardening) | none | Unchecked |
@@ -690,9 +690,9 @@ Elevation of privilege - Authorization
 
     A language model cannot tell the instructions of its prompt apart from the data in it. Content that reaches a model or an agent from users, the internet or another trust zone can carry instructions of its own, either directly in a request or indirectly in a document, a web page or a tool response the model reads, and so take over what the model does.
 
-- **Medium**: [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
-    Technical assets (especially multi-tenant systems) should authenticate incoming requests with two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
+    Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
 
 - **Medium**: [Unguarded Access From Internet](#unguarded-access-from-internet): 1/1 unmitigated Risk, exploitation likelihood is _Very Likely_ with _Low_ impact
 
@@ -712,9 +712,9 @@ This chapter clusters and assigns the risks by functions which are most likely a
 
 Business
 
-- **Medium**: [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
-    Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.
+    Apply an authentication method to the technical asset protecting highly sensitive data via multi-factor authentication for human users.
 
 ### Architecture
 
@@ -728,7 +728,7 @@ Architecture
 
 - **Elevated**: [Missing Authentication](#missing-authentication): 1/1 unmitigated Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
-    Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of two-factor authentication for human users.
+    Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of multi-factor authentication for human users.
 
 - **Elevated**: [Sensitive Data Disclosure through Model Output](#sensitive-data-disclosure-through-model-output): 2/2 unmitigated Risks, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -1098,7 +1098,7 @@ Technical assets which do not process requests regarding functionality or data l
 
 **Mitigation**
 
-Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of two-factor authentication for human users.
+Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of multi-factor authentication for human users.
 
 **Check**
 
@@ -1749,7 +1749,7 @@ The risk **Missing Identity Store** was found **1 time** in the analyzed archite
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Medium | **Missing Identity Store** in the threat model (referencing asset **Support Agent** as an example) | `missing-identity-store@support-agent` | Unlikely | Medium | [Support Agent](#support-agent) | Unchecked | _not tracked_ |
 
-### Missing Two-Factor Authentication (2FA)
+### Missing Multi-Factor Authentication (MFA)
 
 **Medium** · 1/1 unmitigated Risk · `missing-authentication-second-factor`
 
@@ -1758,13 +1758,13 @@ The risk **Missing Identity Store** was found **1 time** in the analyzed archite
 | STRIDE | Elevation of Privilege |
 | CWE | [CWE 308](https://cwe.mitre.org/data/definitions/308.html) |
 | Function | Business Side |
-| Action | Authentication with Second Factor (2FA) |
+| Action | Multi-Factor Authentication (MFA) |
 | ASVS chapter | V2 - Authentication Verification Requirements |
 | Cheat sheet | [Multifactor_Authentication_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html) |
 
 **Description**
 
-Technical assets (especially multi-tenant systems) should authenticate incoming requests with two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
+Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
 
 **Impact**
 
@@ -1772,7 +1772,7 @@ If this risk is unmitigated, attackers might be able to access or modify highly 
 
 **Detection Logic**
 
-In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via two-factor authentication (2FA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule.
+In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via multi-factor authentication (MFA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule.
 
 **Risk Rating**
 
@@ -1784,7 +1784,7 @@ Technical assets which do not process requests regarding functionality or data l
 
 **Mitigation**
 
-Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.
+Apply an authentication method to the technical asset protecting highly sensitive data via multi-factor authentication for human users.
 
 **Check**
 
@@ -1792,11 +1792,11 @@ Are recommendations from the linked cheat sheet and referenced ASVS chapter appl
 
 **Risk Findings**
 
-The risk **Missing Two-Factor Authentication (2FA)** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+The risk **Missing Multi-Factor Authentication (MFA)** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Medium | **Missing Two-Factor Authentication** covering communication link **Support Chat** from **Customer Browser** to **Chat Frontend** | `missing-authentication-second-factor@customer-browser>support-chat@customer-browser@chat-frontend` | Unlikely | Medium | [Chat Frontend](#chat-frontend), [Support Chat](#support-chat) | Unchecked | _not tracked_ |
+| Medium | **Missing Multi-Factor Authentication** covering communication link **Support Chat** from **Customer Browser** to **Chat Frontend** | `missing-authentication-second-factor@customer-browser>support-chat@customer-browser@chat-frontend` | Unlikely | Medium | [Chat Frontend](#chat-frontend), [Support Chat](#support-chat) | Unchecked | _not tracked_ |
 
 ### Missing Vault (Secret Storage)
 
@@ -2262,7 +2262,7 @@ The support chat page and its backend for frontend
 - **Elevated**: [**Cross-Site Scripting (XSS)** risk at **Chat Frontend**](#cross-site-scripting-xss) (Unchecked)
 - **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Chat Frontend** server-side web-requesting the target **Support Agent** via **Assistant Request**](#server-side-request-forgery-ssrf) (Unchecked)
 - **Medium**: [**Container Base Image Backdooring** risk at **Chat Frontend**](#container-base-image-backdooring) (Unchecked)
-- **Medium**: [**Missing Two-Factor Authentication** covering communication link **Support Chat** from **Customer Browser** to **Chat Frontend**](#missing-two-factor-authentication-2fa) (Unchecked)
+- **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Support Chat** from **Customer Browser** to **Chat Frontend**](#missing-multi-factor-authentication-mfa) (Unchecked)
 - **Medium**: [**Cross-Site Request Forgery (CSRF)** risk at **Chat Frontend** via **Support Chat** from **Customer Browser**](#cross-site-request-forgery-csrf) (Unchecked)
 - **Medium**: [**Unguarded Access from Internet** of **Chat Frontend** by **Customer Browser** via **Support Chat**](#unguarded-access-from-internet) (Unchecked)
 
@@ -2915,7 +2915,7 @@ This data asset has data breach potential because of 36 remaining risks:
 - Probable, **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Guardrail Model**](#sensitive-data-disclosure-through-model-output) (Unchecked)
 - Probable, **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Support Agent**](#sensitive-data-disclosure-through-model-output) (Unchecked)
 - Possible, **Elevated**: [**Cross-Site Scripting (XSS)** risk at **Chat Frontend**](#cross-site-scripting-xss) (Unchecked)
-- Possible, **Medium**: [**Missing Two-Factor Authentication** covering communication link **Support Chat** from **Customer Browser** to **Chat Frontend**](#missing-two-factor-authentication-2fa) (Unchecked)
+- Possible, **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Support Chat** from **Customer Browser** to **Chat Frontend**](#missing-multi-factor-authentication-mfa) (Unchecked)
 - Possible, **Elevated**: [**Prompt Injection** risk at **Guardrail Model**](#prompt-injection) (Unchecked)
 - Possible, **Elevated**: [**Prompt Injection** risk at **Support Agent**](#prompt-injection) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Chat Frontend** server-side web-requesting the target **Support Agent** via **Assistant Request**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -3281,7 +3281,8 @@ Forwards the messages of a customer to the assistant
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | token |
-| Authorization | end-user-identity-propagation |
+| Identity | end-user |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3303,7 +3304,8 @@ The customers chat with the assistant
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | session-id |
-| Authorization | end-user-identity-propagation |
+| Identity | end-user |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3325,7 +3327,8 @@ Loads the current model version at start
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | token |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | yes |
 | Usage | business |
 | Tags | none |
@@ -3347,7 +3350,8 @@ Writes the embeddings of the articles
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | token |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3369,7 +3373,8 @@ Reads the published articles
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | token |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | yes |
 | Usage | business |
 | Tags | none |
@@ -3391,7 +3396,8 @@ Reads and writes the orders
 | Protocol | jdbc-encrypted |
 | Encrypted | yes |
 | Authentication | credentials |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3413,7 +3419,8 @@ Calls the order, refund and web search tools
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | none |
-| Authorization | none |
+| Identity | none |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3435,7 +3442,8 @@ Retrieves the articles matching a question
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | token |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | yes |
 | Usage | business |
 | Tags | none |
@@ -3457,7 +3465,8 @@ Checks requests and answers for harmful content
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | token |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3479,7 +3488,8 @@ Stores summaries of resolved conversations as memory
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | token |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3501,7 +3511,8 @@ Plans the next step and writes the answers
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | credentials |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3523,7 +3534,8 @@ Searches the web for product information
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | credentials |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | yes |
 | Usage | business |
 | Tags | none |
@@ -3545,7 +3557,8 @@ Looks up orders and issues refunds
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | token |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3591,7 +3604,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Insecure Control Protocol | `insecure-control-protocol` | Tampering | Most industrial control protocols, like Modbus, DNP3, S7comm, EtherNet/IP or PROFINET, were designed for closed networks: a controller or field device executes every command it receives, without checking who sent it or whether it was changed on the way. Anyone who can send packets to it can write setpoints and outputs, stop it or download a new program. | In-scope controllers (plc, rtu, safety-controller) and field-device technical assets with an incoming non-readonly communication link over an industrial control protocol without a secure variant in use (all of them except modbus-security, dnp3-encrypted and opc-ua-encrypted). | The risk rating depends on the integrity and availability of the controlled process, and is the highest for safety controllers. The attack is very likely when the sender is on the internet, likely when it is an IT asset, reaches IT or calls across a network trust boundary, and unlikely otherwise. |
 | LDAP-Injection | `ldap-injection` | Tampering | When an LDAP server is accessed LDAP-Injection risks might arise. The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed. | In-scope clients accessing LDAP servers via typical LDAP access protocols. | The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed. |
 | Missing Authentication | `missing-authentication` | Elevation of Privilege | Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes sensitive data. | In-scope technical assets (except load-balancer, reverse-proxy, service-registry, waf, ids, and ips and in-process calls) should authenticate incoming requests when the asset processes sensitive data. This is especially the case for all multi-tenant assets (there even non-sensitive ones). Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. | The risk rating (medium or high) depends on the sensitivity of the data sent across the communication link. Monitoring callers are exempted from this risk. |
-| Missing Two-Factor Authentication (2FA) | `missing-authentication-second-factor` | Elevation of Privilege | Technical assets (especially multi-tenant systems) should authenticate incoming requests with two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans. | In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via two-factor authentication (2FA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. | medium |
+| Missing Multi-Factor Authentication (MFA) | `missing-authentication-second-factor` | Elevation of Privilege | Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans. | In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via multi-factor authentication (MFA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. | medium |
 | Missing Build Infrastructure | `missing-build-infrastructure` | Tampering | The modeled architecture does not contain a build infrastructure (devops-client, sourcecode-repo, build-pipeline, etc.), which might be the risk of a model missing critical assets (and thus not seeing their risks). If the architecture contains custom-developed parts, the pipeline where code gets developed and built needs to be part of the model. | Models with in-scope custom-developed parts missing in-scope development (code creation) and build infrastructure components (devops-client, sourcecode-repo, build-pipeline, etc.). | The risk rating depends on the highest sensitivity of the in-scope assets running custom-developed parts. |
 | Missing Cloud Hardening | `missing-cloud-hardening` | Tampering | Cloud components should be hardened according to the cloud vendor best practices. This affects their configuration, auditing, and further areas. | In-scope cloud components (either residing in cloud trust boundaries or more specifically tagged with cloud provider types). | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. |
 | Missing File Validation | `missing-file-validation` | Spoofing | When a technical asset accepts files, these input files should be strictly validated about filename and type. | In-scope technical assets with custom-developed code accepting file data formats. | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. |

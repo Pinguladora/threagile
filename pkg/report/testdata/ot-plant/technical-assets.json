@@ -446,7 +446,7 @@
         "description": "Remote desktop session on the engineering workstation",
         "protocol": "binary-encrypted",
         "authentication": "credentials",
-        "authorization": "end-user-identity-propagation",
+        "identity": "end-user",
         "data_assets_sent": [
           "controller-programs"
         ],
@@ -507,7 +507,7 @@
         "protocol": "opc-ua",
         "readonly": true,
         "authentication": "credentials",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "data_assets_received": [
           "process-values"
         ],
@@ -523,7 +523,7 @@
         "protocol": "https",
         "readonly": true,
         "authentication": "credentials",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "data_assets_received": [
           "historical-process-data"
         ],
@@ -579,7 +579,7 @@
         "description": "Shows the process and sends the commands of the operators",
         "protocol": "opc-ua-encrypted",
         "authentication": "credentials",
-        "authorization": "end-user-identity-propagation",
+        "identity": "end-user",
         "data_assets_sent": [
           "control-commands"
         ],
@@ -653,7 +653,7 @@
         "description": "Pushes new values to the replica in the DMZ",
         "protocol": "https",
         "authentication": "credentials",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "data_assets_sent": [
           "historical-process-data"
         ],
@@ -747,7 +747,7 @@
         "description": "Stores the process values",
         "protocol": "https",
         "authentication": "credentials",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "data_assets_sent": [
           "process-values",
           "historical-process-data"
@@ -779,7 +779,7 @@
         "description": "Polls values and writes setpoints",
         "protocol": "opc-ua-encrypted",
         "authentication": "credentials",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "data_assets_sent": [
           "control-commands"
         ],
@@ -872,8 +872,8 @@
         "title": "Remote Support",
         "description": "The vendor connects to the jump host over a VPN",
         "protocol": "ssh",
-        "authentication": "two-factor",
-        "authorization": "end-user-identity-propagation",
+        "authentication": "multi-factor",
+        "identity": "end-user",
         "data_assets_sent": [
           "controller-programs"
         ],

@@ -16,6 +16,7 @@ type CommunicationLink struct {
 	IpFiltered             bool           `json:"ip_filtered,omitempty"              yaml:"ip_filtered,omitempty"`
 	Readonly               bool           `json:"readonly,omitempty"                 yaml:"readonly,omitempty"`
 	Authentication         Authentication `json:"authentication,omitempty"           yaml:"authentication,omitempty"`
+	Identity               Identity       `json:"identity,omitempty"                 yaml:"identity,omitempty"`
 	Authorization          Authorization  `json:"authorization,omitempty"            yaml:"authorization,omitempty"`
 	Usage                  Usage          `json:"usage,omitempty"                    yaml:"usage,omitempty"`
 	DataAssetsSent         []string       `json:"data_assets_sent,omitempty"         yaml:"data_assets_sent,omitempty"`

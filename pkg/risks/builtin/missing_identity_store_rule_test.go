@@ -53,8 +53,8 @@ func TestMissingIdentityStoreRuleGenerateRisksNoEndUserIdentityPropagationNoRisk
 				OutOfScope: false,
 				CommunicationLinks: []*types.CommunicationLink{
 					{
-						TargetId:      "ta1",
-						Authorization: types.NoneAuthorization,
+						TargetId: "ta1",
+						Identity: types.NoneIdentity,
 					},
 				},
 			},
@@ -235,8 +235,8 @@ func TestMissingIdentityStoreRule(t *testing.T) {
 						Integrity:       testCase.sourceIntegrity,
 						CommunicationLinks: []*types.CommunicationLink{
 							{
-								TargetId:      "ta1",
-								Authorization: types.EndUserIdentityPropagation,
+								TargetId: "ta1",
+								Identity: types.EndUser,
 							},
 						},
 					},

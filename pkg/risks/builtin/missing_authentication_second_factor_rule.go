@@ -17,23 +17,23 @@ func NewMissingAuthenticationSecondFactorRule(
 func (*MissingAuthenticationSecondFactorRule) Category() *types.RiskCategory {
 	return &types.RiskCategory{
 		ID:    "missing-authentication-second-factor",
-		Title: "Missing Two-Factor Authentication (2FA)",
+		Title: "Missing Multi-Factor Authentication (MFA)",
 		Description: "Technical assets (especially multi-tenant systems) should authenticate incoming requests with " +
-			"two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of " +
+			"multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of " +
 			"confidentiality, integrity, and availability) and is accessed by humans.",
 		Impact: "If this risk is unmitigated, attackers might be able to access or modify highly sensitive data " +
 			"without strong authentication.",
 		ASVS:       asvsAuthentication,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html",
-		Action:     "Authentication with Second Factor (2FA)",
+		Action:     "Multi-Factor Authentication (MFA)",
 		Mitigation: "Apply an authentication method to the technical asset protecting highly sensitive data via " +
-			"two-factor authentication for human users.",
+			"multi-factor authentication for human users.",
 		Check:    checkCheatSheetAndASVS,
 		Function: types.BusinessSide,
 		STRIDE:   types.ElevationOfPrivilege,
 		DetectionLogic: "In-scope technical assets (except " + types.LoadBalancer + ", " + types.ReverseProxy + ", " +
 			types.WAF + ", " + types.IDS + ", and " + types.IPS +
-			") should authenticate incoming requests via two-factor authentication (2FA) when the asset processes or stores " +
+			") should authenticate incoming requests via multi-factor authentication (MFA) when the asset processes or stores " +
 			"highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client " +
 			"used by a human user. Links over industrial control protocols that cannot authenticate are left to the " +
 			"insecure-control-protocol rule.",
@@ -100,7 +100,7 @@ func appendRisk(
 	moreRisky :=
 		input.HighestCommunicationLinkConfidentiality(callersCommLink) >= types.Confidential ||
 			input.HighestCommunicationLinkIntegrity(callersCommLink) >= types.Critical
-	if moreRisky && callersCommLink.Authentication != types.TwoFactor {
+	if moreRisky && callersCommLink.Authentication != types.MultiFactor {
 		risks = append(risks, r.missingAuthenticationRule.createRisk(
 			input, technicalAsset, commLink, callersCommLink, title, types.MediumImpact, types.Unlikely, true, r.Category(),
 		))

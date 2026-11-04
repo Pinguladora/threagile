@@ -2696,6 +2696,8 @@ func (r *pdfReporter) technicalAssetCommLink(parsedModel *types.Model, commLink 
 	r.pageBreakBelow(270)
 	r.linkAttributeRow("Authentication:", commLink.Authentication.String())
 	r.pageBreakBelow(270)
+	r.linkAttributeRow("Identity:", commLink.Identity.String())
+	r.pageBreakBelow(270)
 	r.linkAttributeRow("Authorization:", commLink.Authorization.String())
 	r.pageBreakBelow(270)
 	r.linkAttributeRow("Read-Only:", strconv.FormatBool(commLink.Readonly))

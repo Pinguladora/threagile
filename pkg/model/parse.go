@@ -484,7 +484,7 @@ func (parser *technicalAssetParser) parseCommunicationLink(
 }
 
 // newCommunicationLink starts a communication link of the source asset with its parsed protocol,
-// authentication, authorization and usage.
+// authentication, identity, authorization and usage.
 func newCommunicationLink(
 	sourceId string, title string, commLinkTitle string, commLink input.CommunicationLink,
 ) (*types.CommunicationLink, error) {
@@ -493,10 +493,9 @@ func newCommunicationLink(
 		return nil, fmt.Errorf("unknown 'authentication' value of technical asset %q communication link %q: %v",
 			title, commLinkTitle, commLink.Authentication)
 	}
-	authorization, err := types.ParseAuthorization(commLink.Authorization)
+	identity, authorization, err := parseLinkAccess(withLegacyIdentityMoved(commLink))
 	if err != nil {
-		return nil, fmt.Errorf("unknown 'authorization' value of technical asset %q communication link %q: %v",
-			title, commLinkTitle, commLink.Authorization)
+		return nil, fmt.Errorf("technical asset %q communication link %q: %w", title, commLinkTitle, err)
 	}
 	usage, err := types.ParseUsage(commLink.Usage)
 	if err != nil {
@@ -516,6 +515,7 @@ func newCommunicationLink(
 		Description:            withDefault(commLink.Description, commLinkTitle),
 		Protocol:               protocol,
 		Authentication:         authentication,
+		Identity:               identity,
 		Authorization:          authorization,
 		Usage:                  usage,
 		VPN:                    commLink.VPN,

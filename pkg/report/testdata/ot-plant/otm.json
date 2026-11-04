@@ -693,8 +693,8 @@
       ],
       "attributes": {
         "threagile:authentication": "none",
-        "threagile:authorization": "none",
         "threagile:data_assets_received": "process-values",
+        "threagile:identity": "none",
         "threagile:protocol": "profinet",
         "threagile:readonly": "true",
         "threagile:usage": "business"
@@ -723,8 +723,8 @@
       ],
       "attributes": {
         "threagile:authentication": "none",
-        "threagile:authorization": "none",
         "threagile:data_assets_received": "process-values",
+        "threagile:identity": "none",
         "threagile:protocol": "profinet",
         "threagile:readonly": "true",
         "threagile:usage": "business"
@@ -763,8 +763,8 @@
       ],
       "attributes": {
         "threagile:authentication": "none",
-        "threagile:authorization": "none",
         "threagile:data_assets_sent": "control-commands",
+        "threagile:identity": "none",
         "threagile:protocol": "profinet",
         "threagile:usage": "business"
       }
@@ -813,9 +813,9 @@
       ],
       "attributes": {
         "threagile:authentication": "none",
-        "threagile:authorization": "none",
         "threagile:data_assets_received": "controller-programs",
         "threagile:data_assets_sent": "controller-programs",
+        "threagile:identity": "none",
         "threagile:protocol": "s7comm",
         "threagile:usage": "business"
       }
@@ -874,9 +874,9 @@
       ],
       "attributes": {
         "threagile:authentication": "none",
-        "threagile:authorization": "none",
         "threagile:data_assets_received": "safety-logic",
         "threagile:data_assets_sent": "safety-logic",
+        "threagile:identity": "none",
         "threagile:protocol": "s7comm",
         "threagile:usage": "business"
       }
@@ -893,9 +893,9 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
-        "threagile:authorization": "end-user-identity-propagation",
         "threagile:data_assets_received": "controller-programs",
         "threagile:data_assets_sent": "controller-programs",
+        "threagile:identity": "end-user",
         "threagile:protocol": "binary-encrypted",
         "threagile:usage": "business"
       }
@@ -943,8 +943,8 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_received": "process-values",
+        "threagile:identity": "service-account",
         "threagile:protocol": "opc-ua",
         "threagile:readonly": "true",
         "threagile:usage": "business"
@@ -973,8 +973,8 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_received": "historical-process-data",
+        "threagile:identity": "service-account",
         "threagile:protocol": "https",
         "threagile:readonly": "true",
         "threagile:usage": "business"
@@ -1005,9 +1005,9 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
-        "threagile:authorization": "end-user-identity-propagation",
         "threagile:data_assets_received": "process-values",
         "threagile:data_assets_sent": "control-commands",
+        "threagile:identity": "end-user",
         "threagile:protocol": "opc-ua-encrypted",
         "threagile:usage": "business"
       }
@@ -1045,8 +1045,8 @@
       ],
       "attributes": {
         "threagile:authentication": "none",
-        "threagile:authorization": "none",
         "threagile:data_assets_received": "process-values",
+        "threagile:identity": "none",
         "threagile:protocol": "modbus",
         "threagile:readonly": "true",
         "threagile:usage": "business"
@@ -1085,8 +1085,8 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_sent": "historical-process-data",
+        "threagile:identity": "service-account",
         "threagile:protocol": "https",
         "threagile:usage": "business"
       }
@@ -1125,8 +1125,8 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_sent": "process-values,historical-process-data",
+        "threagile:identity": "service-account",
         "threagile:protocol": "https",
         "threagile:usage": "business"
       }
@@ -1176,9 +1176,9 @@
       ],
       "attributes": {
         "threagile:authentication": "none",
-        "threagile:authorization": "none",
         "threagile:data_assets_received": "process-values",
         "threagile:data_assets_sent": "control-commands",
+        "threagile:identity": "none",
         "threagile:protocol": "modbus",
         "threagile:usage": "business"
       }
@@ -1208,9 +1208,9 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_received": "process-values",
         "threagile:data_assets_sent": "control-commands",
+        "threagile:identity": "service-account",
         "threagile:protocol": "opc-ua-encrypted",
         "threagile:usage": "business"
       }
@@ -1260,9 +1260,9 @@
       ],
       "attributes": {
         "threagile:authentication": "none",
-        "threagile:authorization": "none",
         "threagile:data_assets_received": "process-values",
         "threagile:data_assets_sent": "control-commands",
+        "threagile:identity": "none",
         "threagile:protocol": "dnp3",
         "threagile:usage": "business"
       }
@@ -1322,9 +1322,9 @@
       ],
       "attributes": {
         "threagile:authentication": "none",
-        "threagile:authorization": "none",
         "threagile:data_assets_received": "process-values",
         "threagile:data_assets_sent": "control-commands",
+        "threagile:identity": "none",
         "threagile:protocol": "modbus",
         "threagile:usage": "business"
       }
@@ -1352,10 +1352,10 @@
         }
       ],
       "attributes": {
-        "threagile:authentication": "two-factor",
-        "threagile:authorization": "end-user-identity-propagation",
+        "threagile:authentication": "multi-factor",
         "threagile:data_assets_received": "controller-programs",
         "threagile:data_assets_sent": "controller-programs",
+        "threagile:identity": "end-user",
         "threagile:protocol": "ssh",
         "threagile:usage": "business"
       }
@@ -1437,8 +1437,8 @@
     },
     {
       "id": "missing-authentication-second-factor",
-      "name": "Missing Two-Factor Authentication (2FA)",
-      "description": "Technical assets (especially multi-tenant systems) should authenticate incoming requests with two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.",
+      "name": "Missing Multi-Factor Authentication (MFA)",
+      "description": "Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.",
       "categories": [
         "Elevation of Privilege"
       ],
@@ -1660,8 +1660,8 @@
     },
     {
       "id": "missing-authentication-second-factor-mitigation",
-      "name": "Authentication with Second Factor (2FA)",
-      "description": "Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.",
+      "name": "Multi-Factor Authentication (MFA)",
+      "description": "Apply an authentication method to the technical asset protecting highly sensitive data via multi-factor authentication for human users.",
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"

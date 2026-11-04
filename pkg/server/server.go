@@ -127,6 +127,7 @@ func (s *server) addMetaRoutes(router *gin.Engine, config serverConfigReader) {
 			"criticality":                  arrayOfStringValues(types.CriticalityValues()),
 			"technical_asset_type":         arrayOfStringValues(types.TechnicalAssetTypeValues()),
 			"technical_asset_size":         arrayOfStringValues(types.TechnicalAssetSizeValues()),
+			"identity":                     arrayOfStringValues(types.IdentityValues()),
 			"authorization":                arrayOfStringValues(types.AuthorizationValues()),
 			"authentication":               arrayOfStringValues(types.AuthenticationValues()),
 			"usage":                        arrayOfStringValues(types.UsageValues()),

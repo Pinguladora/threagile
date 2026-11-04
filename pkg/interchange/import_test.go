@@ -76,6 +76,8 @@ func TestToInputAppliesDefaults(t *testing.T) {
 	assert.Equal(t, []string{"orders"}, queries.DataAssetsReceived, "a bidirectional flow receives its data assets back")
 	assert.Equal(t, interchange.DefaultProtocol, queries.Protocol)
 	assert.Equal(t, interchange.DefaultAuthentication, queries.Authentication)
+	assert.Equal(t, interchange.DefaultIdentity, queries.Identity)
+	assert.Equal(t, interchange.DefaultAuthorization, queries.Authorization)
 	assert.Contains(t, web.CommunicationLinks, "queries (f2)", "link names need to differ in more than case")
 
 	orders := result.DataAssets["Orders"]
@@ -143,6 +145,7 @@ func TestDefaultsAreThreagileValues(t *testing.T) {
 		{interchange.DefaultCriticality, func(v string) error { _, err := types.ParseCriticality(v); return err }},
 		{interchange.DefaultProtocol, func(v string) error { _, err := types.ParseProtocol(v); return err }},
 		{interchange.DefaultAuthentication, func(v string) error { _, err := types.ParseAuthentication(v); return err }},
+		{interchange.DefaultIdentity, func(v string) error { _, err := types.ParseIdentity(v); return err }},
 		{interchange.DefaultAuthorization, func(v string) error { _, err := types.ParseAuthorization(v); return err }},
 		{interchange.DefaultQuantity, func(v string) error { _, err := types.ParseQuantity(v); return err }},
 	} {
@@ -150,6 +153,30 @@ func TestDefaultsAreThreagileValues(t *testing.T) {
 	}
 
 	assert.NotNil(t, technologies(t).Get(interchange.DefaultTechnology))
+}
+
+// TestToInputReadsIdentityFromLegacyAuthorization imports flows exported by earlier versions of threagile, whose
+// authorization holds their identity, next to a flow with both.
+func TestToInputReadsIdentityFromLegacyAuthorization(t *testing.T) {
+	elements := foreignModel()
+	elements.Flows = []interchange.Flow{
+		{
+			ID: "f1", Name: "Legacy", SourceID: "web", DestinationID: "db",
+			Properties: interchange.Properties{"authorization": "technical-user"},
+		},
+		{
+			ID: "f2", Name: "Current", SourceID: "web", DestinationID: "db",
+			Properties: interchange.Properties{"identity": "end-user", "authorization": "object-level"},
+		},
+	}
+
+	result, _ := interchange.ToInput(elements, technologies(t))
+
+	links := result.TechnicalAssets["Web"].CommunicationLinks
+	assert.Equal(t, "service-account", links["Legacy"].Identity)
+	assert.Equal(t, interchange.DefaultAuthorization, links["Legacy"].Authorization)
+	assert.Equal(t, "end-user", links["Current"].Identity)
+	assert.Equal(t, "object-level", links["Current"].Authorization)
 }
 
 func technologies(t *testing.T) types.TechnologyMap {
