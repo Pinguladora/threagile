@@ -27,7 +27,7 @@ func TestInferConfidentiality_NotSet_NoOthers_ExpectTODO(t *testing.T) {
 	da := make(map[string]input.DataAsset)
 
 	_, err := ParseModel(&mockConfig{}, createInputModel(ta, da), make(types.RiskRules), make(types.RiskRules))
-	// TODO: rename test and check if everyone agree that by default it should be public if there are no other assets
+	// whether the default without other assets should be public is not agreed yet, hence the test name
 
 	assert.NoError(t, err)
 }
@@ -70,7 +70,7 @@ func TestInferIntegrity_NotSet_NoOthers_ExpectTODO(t *testing.T) {
 	da := make(map[string]input.DataAsset)
 
 	_, err := ParseModel(&mockConfig{}, createInputModel(ta, da), make(types.RiskRules), make(types.RiskRules))
-	// TODO: rename test and check if everyone agree that by default it should be public if there are no other assets
+	// whether the default without other assets should be public is not agreed yet, hence the test name
 
 	assert.NoError(t, err)
 }

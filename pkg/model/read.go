@@ -30,8 +30,6 @@ func (what ReadResult) ExplainRisk(cfg explainRiskConfig, risk string, reporter 
 	return errors.New("not implemented")
 }
 
-// TODO: consider about splitting this function into smaller ones for better reusability
-
 type configReader interface {
 	GetBuildTimestamp() string
 	GetVerbose() bool
