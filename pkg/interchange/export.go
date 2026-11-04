@@ -171,6 +171,7 @@ func newFlows(model *types.Model) []Flow {
 		flow.Properties.set("protocol", link.Protocol.String())
 		flow.Properties.set("authentication", link.Authentication.String())
 		flow.Properties.set("identity", link.Identity.String())
+		flow.Properties.set("account", link.Account)
 		if link.Authorization != types.UnknownAuthorization {
 			flow.Properties.set("authorization", link.Authorization.String())
 		}

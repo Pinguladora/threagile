@@ -526,3 +526,11 @@ func taggedTitles(parsedModel *types.Model, tag string) string {
 	}
 	return description
 }
+
+// linkIdentity is the identity of a communication link, followed by the account it names, if any.
+func linkIdentity(link *types.CommunicationLink) string {
+	if link.Account == "" {
+		return link.Identity.String()
+	}
+	return link.Identity.String() + " (" + link.Account + ")"
+}

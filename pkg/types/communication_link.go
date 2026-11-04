@@ -17,6 +17,7 @@ type CommunicationLink struct {
 	Readonly               bool           `json:"readonly,omitempty"                 yaml:"readonly,omitempty"`
 	Authentication         Authentication `json:"authentication,omitempty"           yaml:"authentication,omitempty"`
 	Identity               Identity       `json:"identity,omitempty"                 yaml:"identity,omitempty"`
+	Account                string         `json:"account,omitempty"                  yaml:"account,omitempty"`
 	Authorization          Authorization  `json:"authorization,omitempty"            yaml:"authorization,omitempty"`
 	Usage                  Usage          `json:"usage,omitempty"                    yaml:"usage,omitempty"`
 	DataAssetsSent         []string       `json:"data_assets_sent,omitempty"         yaml:"data_assets_sent,omitempty"`

@@ -12,6 +12,7 @@ type CommunicationLink struct {
 	Protocol               string   `json:"protocol,omitempty"                 yaml:"protocol,omitempty"`
 	Authentication         string   `json:"authentication,omitempty"           yaml:"authentication,omitempty"`
 	Identity               string   `json:"identity,omitempty"                 yaml:"identity,omitempty"`
+	Account                string   `json:"account,omitempty"                  yaml:"account,omitempty"`
 	Authorization          string   `json:"authorization,omitempty"            yaml:"authorization,omitempty"`
 	Tags                   []string `json:"tags,omitempty"                     yaml:"tags,omitempty"`
 	VPN                    bool     `json:"vpn,omitempty"                      yaml:"vpn,omitempty"`
@@ -42,6 +43,7 @@ func (what *CommunicationLink) Merge(other CommunicationLink) error {
 		singleton("protocol", &what.Protocol, other.Protocol),
 		singleton("authentication", &what.Authentication, other.Authentication),
 		singleton("identity", &what.Identity, other.Identity),
+		singleton("account", &what.Account, other.Account),
 		singleton("authorization", &what.Authorization, other.Authorization),
 	)
 	if mergeError != nil {

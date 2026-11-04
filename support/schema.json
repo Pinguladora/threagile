@@ -762,6 +762,10 @@
                   ],
                   "type": "string"
                 },
+                "account": {
+                  "description": "The name of the account that the caller uses for a service-account or workload identity, like the name of a service account or a cloud IAM role, so that the rules see an account that several callers share",
+                  "type": "string"
+                },
                 "authorization": {
                   "description": "How finely the target checks what the caller may do (unknown when left out). technical-user and end-user-identity-propagation are identities that earlier versions of the model put here; on a link without an identity, threagile reads them as its identity",
                   "enum": [
