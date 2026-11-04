@@ -39,11 +39,7 @@ func (what *LoopStatement) Parse(script any) (common.Statement, any, error) {
 				return nil, value, fmt.Errorf("failed to parse %q of loop-statement: expected string, got %T", key, value)
 			}
 
-			if key == common.Item {
-				what.item = text
-			} else {
-				what.index = text
-			}
+			what.setName(key, text)
 
 		case common.Do:
 			item, errorScript, itemError := new(StatementList).Parse(value)
@@ -59,6 +55,15 @@ func (what *LoopStatement) Parse(script any) (common.Statement, any, error) {
 	}
 
 	return what, nil, nil
+}
+
+// setName sets the name of the current item or of its index, by the key it is given under.
+func (what *LoopStatement) setName(key string, name string) {
+	if key == common.Item {
+		what.item = name
+	} else {
+		what.index = name
+	}
 }
 
 func (what *LoopStatement) Run(scope *common.Scope) (string, error) {
