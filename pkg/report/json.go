@@ -77,7 +77,7 @@ func WriteRisksJSON(parsedModel *types.Model, filename string) error {
 	return nil
 }
 
-// TODO: also a "data assets" json?
+// There is no corresponding JSON file for the data assets.
 
 func WriteTechnicalAssetsJSON(parsedModel *types.Model, filename string) error {
 	jsonBytes, err := json.Marshal(parsedModel.TechnicalAssets)
@@ -164,6 +164,6 @@ func overallRiskStatistics(parsedModel *types.Model) riskStatistics {
 }
 
 type riskStatistics struct {
-	// TODO add also some more like before / after (i.e. with mitigation applied)
+	// Only the current counts are kept, not before / after (i.e. with mitigation applied).
 	Risks map[string]map[string]int `json:"risks" yaml:"risks"`
 }

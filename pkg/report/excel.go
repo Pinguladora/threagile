@@ -284,7 +284,9 @@ func WriteTagsExcelToFile(parsedModel *types.Model, filename string, config repo
 		return err
 	}
 
-	err = excel.SetCellValue(sheetName, "A1", "Element") // TODO is "Element" the correct generic name when referencing assets, links, trust boundaries etc.? Eventually add separate column "type of element" like "technical asset" or "data asset"?
+	// "Element" is a generic name for assets, links, trust boundaries etc.; a separate
+	// "type of element" column (e.g. "technical asset", "data asset") could be added.
+	err = excel.SetCellValue(sheetName, "A1", "Element")
 	if err != nil {
 		return err
 	}

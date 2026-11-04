@@ -1036,7 +1036,7 @@ func (adoc adocReport) tagListing(f *os.File) {
 	sorted := adoc.model.TagsAvailable
 	sort.Strings(sorted)
 	for _, tag := range sorted {
-		description := "" // TODO: add some separation texts to distinguish between technical assets and data assets etc. for example?
+		description := "" // could hold a separation text to distinguish technical assets, data assets etc.
 		for _, techAsset := range sortedTechnicalAssetsByTitle(adoc.model) {
 			if contains(techAsset.Tags, tag) {
 				if len(description) > 0 {
@@ -1545,7 +1545,8 @@ func (adoc adocReport) riskCategories(f *os.File) {
 		"*"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.MediumSeverity)))+" as medium*, "+
 		"and *"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.LowSeverity)))+" as low*. "+
 		"\n\nThese risks are distributed across *"+strconv.Itoa(len(adoc.model.GeneratedRisksByCategory))+" vulnerability categories*. ")
-	writeLine(f, "The following sub-chapters of this section describe each identified risk category.") // TODO more explanation text
+	// a longer explanation could follow here
+	writeLine(f, "The following sub-chapters of this section describe each identified risk category.")
 	writeLine(f, "")
 
 	for _, category := range adoc.model.SortedRiskCategories() {
@@ -1733,7 +1734,8 @@ func (adoc adocReport) technicalAssets(f *os.File) {
 		"*"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.MediumSeverity)))+" as medium*, "+
 		"and *"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.LowSeverity)))+" as low*. "+
 		"\n\nThese risks are distributed across *"+strconv.Itoa(len(adoc.model.InScopeTechnicalAssets()))+" in-scope technical assets*. ")
-	writeLine(f, "The following sub-chapters of this section describe each identified risk grouped by technical asset. ") // TODO more explanation text
+	// a longer explanation could follow here
+	writeLine(f, "The following sub-chapters of this section describe each identified risk grouped by technical asset. ")
 	writeLine(f, "The RAA value of a technical asset is the calculated \"Relative Attacker Attractiveness\" value in percent.")
 
 	for _, technicalAsset := range sortedTechnicalAssetsByRiskSeverityAndTitle(adoc.model) {
@@ -1906,7 +1908,9 @@ func (adoc adocReport) dataAssets(f *os.File) {
 		"*"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.MediumSeverity)))+" as medium*, "+
 		"and *"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.LowSeverity)))+" as low*. "+
 		"\n\nThese risks are distributed across *"+strconv.Itoa(len(adoc.model.DataAssets))+" data assets*. ")
-	writeLine(f, "The following sub-chapters of this section describe the derived data breach probabilities grouped by data asset.") // TODO more explanation text
+	// a longer explanation could follow here
+	writeLine(f, "The following sub-chapters of this section describe the derived data breach probabilities "+
+		"grouped by data asset.")
 	writeLine(f, "")
 	for _, dataAsset := range sortedDataAssetsByDataBreachProbabilityAndTitle(adoc.model) {
 		dataBreachProbability := identifiedDataBreachProbabilityStillAtRisk(adoc.model, dataAsset)
@@ -2109,7 +2113,7 @@ func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRi
 		"the following risk rules were checked:")
 	writeLine(f, "")
 
-	// TODO use the new run system to discover risk rules instead of hard-coding them here:
+	// The risk rules are listed explicitly here rather than discovered through the run system:
 	skipped := ""
 
 	for _, id := range slices.Sorted(maps.Keys(customRiskRules)) {
