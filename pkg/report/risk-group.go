@@ -97,7 +97,7 @@ func (what *RiskGroup) writeGroup(excel *excelize.File, sheetName string, cellSt
 
 			setCellValueError := excel.SetCellValue(sheetName, cellName, column)
 			if setCellValueError != nil {
-				return excelRow, setCellValueError
+				return excelRow, fmt.Errorf("failed to set cell value: %w", setCellValueError)
 			}
 
 			columnName, columnNameError := excelize.ColumnNumberToName(columnIndex + 1)

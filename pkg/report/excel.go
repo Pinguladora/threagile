@@ -137,7 +137,7 @@ func WriteRisksExcelToFile(parsedModel *types.Model, filename string, config rep
 		for colIndex, col := range cols {
 			name, columnNumberToNameError := excelize.ColumnNumberToName(colIndex + 1)
 			if columnNumberToNameError != nil {
-				return columnNumberToNameError
+				return fmt.Errorf("failed to get column name of column %d: %w", colIndex+1, columnNumberToNameError)
 			}
 
 			var minWidth float64 = 0
@@ -186,7 +186,7 @@ func WriteRisksExcelToFile(parsedModel *types.Model, filename string, config rep
 
 			setColWidthError := excel.SetColWidth(sheetName, name, name, minWidth)
 			if setColWidthError != nil {
-				return setColWidthError
+				return fmt.Errorf("unable to set column width: %w", setColWidthError)
 			}
 		}
 	}
@@ -259,7 +259,7 @@ func WriteTagsExcelToFile(parsedModel *types.Model, filename string, config repo
 		Version:        "1.0.0",
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to set doc properties: %w", err)
 	}
 
 	sheetIndex, _ := excel.NewSheet(sheetName)
@@ -268,7 +268,7 @@ func WriteTagsExcelToFile(parsedModel *types.Model, filename string, config repo
 	size := 9
 	err = excel.SetPageLayout(sheetName, &excelize.PageLayoutOptions{Orientation: &orientation, Size: &size}) // A4
 	if err != nil {
-		return err
+		return fmt.Errorf("unable to set page layout: %w", err)
 	}
 
 	err = excel.SetHeaderFooter(sheetName, &excelize.HeaderFooterOptions{
@@ -281,14 +281,14 @@ func WriteTagsExcelToFile(parsedModel *types.Model, filename string, config repo
 		FirstHeader:      `&Tag Matrix &"-,` + parsedModel.Title + `"Bold&"-,Regular"Summary+000A&D`,
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("unable to set header/footer: %w", err)
 	}
 
 	// "Element" is a generic name for assets, links, trust boundaries etc.; a separate
 	// "type of element" column (e.g. "technical asset", "data asset") could be added.
 	err = excel.SetCellValue(sheetName, "A1", "Element")
 	if err != nil {
-		return err
+		return fmt.Errorf("unable to set cell value: %w", err)
 	}
 
 	sortedTagsAvailable := parsedModel.TagsActuallyUsed()
@@ -301,13 +301,13 @@ func WriteTagsExcelToFile(parsedModel *types.Model, filename string, config repo
 
 		err = excel.SetCellValue(sheetName, cellName, tag)
 		if err != nil {
-			return err
+			return fmt.Errorf("unable to set cell value: %w", err)
 		}
 	}
 
 	err = excel.SetColWidth(sheetName, "A", "A", 60)
 	if err != nil {
-		return err
+		return fmt.Errorf("unable to set column width: %w", err)
 	}
 
 	lastColumn, _ := excelize.ColumnNumberToName(len(sortedTagsAvailable) + 2)
@@ -315,7 +315,7 @@ func WriteTagsExcelToFile(parsedModel *types.Model, filename string, config repo
 		err = excel.SetColWidth(sheetName, "B", lastColumn, 35)
 	}
 	if err != nil {
-		return err
+		return fmt.Errorf("unable to set column width: %w", err)
 	}
 
 	cellStyles, createCellStylesError := new(ExcelStyles).Init(excel, config)
