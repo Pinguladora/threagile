@@ -71,7 +71,7 @@ func (what *LoopStatement) Run(scope *common.Scope) (string, error) {
 
 	value, errorEvalLiteral, evalError := what.in.EvalAny(scope)
 	if evalError != nil {
-		return errorEvalLiteral, evalError
+		return errorEvalLiteral, fmt.Errorf("failed to eval %q of loop-statement: %w", common.In, evalError)
 	}
 
 	return what.run(scope, value)

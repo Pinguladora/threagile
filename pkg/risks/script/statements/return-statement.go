@@ -36,7 +36,7 @@ func (what *ReturnStatement) Run(scope *common.Scope) (string, error) {
 
 	value, errorLiteral, evalError := what.expression.EvalAny(scope)
 	if evalError != nil {
-		return errorLiteral, evalError
+		return errorLiteral, fmt.Errorf("failed to eval return-statement: %w", evalError)
 	}
 
 	scope.SetReturnValue(common.AddValueHistory(value, scope.GetHistory()))
