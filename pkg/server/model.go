@@ -1002,8 +1002,8 @@ func (s *server) readModel(ginContext *gin.Context, modelUUID string, key []byte
 		return modelInputResult, yamlText, false
 	}
 
-	nonce := fileBytes[0:12]
-	ciphertext := fileBytes[12:]
+	nonce := fileBytes[0:nonceSize]
+	ciphertext := fileBytes[nonceSize:]
 	plaintext, err := aesGcm.Open(nil, nonce, ciphertext, nil) // #nosec G407 // false positive The nounce is read from file for decryption not encryption
 	if err != nil {
 		log.Println(err)
@@ -1237,7 +1237,7 @@ func (s *server) writeModelYAML(ginContext *gin.Context, yaml string, key []byte
 		return false
 	}
 	// Never use more than 2^32 random nonces with a given key because of the risk of a repeat.
-	nonce := make([]byte, 12)
+	nonce := make([]byte, nonceSize)
 	if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
 		log.Println(err)
 		ginContext.JSON(http.StatusInternalServerError, gin.H{
@@ -1357,6 +1357,17 @@ func folderNameForModel(folderNameOfKey string, uuid string) string {
 	return filepath.Join(folderNameOfKey, uuid)
 }
 
+// nonceSize is the size of the nonce that a model file starts with.
+const nonceSize = 12
+
+// The parameters of Argon2 for deriving the key of the model files.
+const (
+	argon2Memory      = 64 * 1024
+	argon2Iterations  = 3
+	argon2Parallelism = 2
+	argon2SaltLength  = 16
+)
+
 type argon2Params struct {
 	memory      uint32
 	iterations  uint32
@@ -1368,10 +1379,10 @@ type argon2Params struct {
 func generateKeyFromAlreadyStrongRandomInput(alreadyRandomInput []byte) []byte {
 	// Establish the parameters to use for Argon2.
 	p := &argon2Params{
-		memory:      64 * 1024,
-		iterations:  3,
-		parallelism: 2,
-		saltLength:  16,
+		memory:      argon2Memory,
+		iterations:  argon2Iterations,
+		parallelism: argon2Parallelism,
+		saltLength:  argon2SaltLength,
 		keyLength:   keySize,
 	}
 	// As the input is already cryptographically secure random, the salt is simply the first n bytes

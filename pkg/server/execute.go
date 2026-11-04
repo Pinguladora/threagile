@@ -36,6 +36,12 @@ func (s *server) check(ginContext *gin.Context) {
 	}
 }
 
+// maxModelUploadSize is the size in bytes of the largest model that the server accepts.
+const maxModelUploadSize = 50000000
+
+// dryRunDPI is the DPI of the diagrams of a dry run.
+const dryRunDPI = 40
+
 func (s *server) execute(ginContext *gin.Context, dryRun bool) (yamlContent []byte, ok bool) {
 	defer func() {
 		var err error
@@ -62,7 +68,7 @@ func (s *server) execute(ginContext *gin.Context, dryRun bool) (yamlContent []by
 		return yamlContent, false
 	}
 
-	if header.Size > 50000000 {
+	if header.Size > maxModelUploadSize {
 		msg := "maximum model upload file size exceeded (denial-of-service protection)"
 		log.Println(msg)
 		ginContext.JSON(http.StatusRequestEntityTooLarge, gin.H{
@@ -132,7 +138,7 @@ func (s *server) execute(ginContext *gin.Context, dryRun bool) (yamlContent []by
 	defer func() { _ = os.Remove(tmpResultFile.Name()) }()
 
 	if dryRun {
-		s.doItViaRuntimeCall(yamlFile, tmpOutputDir, false, false, false, false, false, true, true, true, 40)
+		s.doItViaRuntimeCall(yamlFile, tmpOutputDir, false, false, false, false, false, true, true, true, dryRunDPI)
 	} else {
 		s.doItViaRuntimeCall(yamlFile, tmpOutputDir, true, true, true, true, true, true, true, true, dpi)
 	}
