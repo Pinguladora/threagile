@@ -6,6 +6,7 @@ import (
 	"maps"
 	"os"
 	"path/filepath"
+	"slices"
 
 	"gopkg.in/yaml.v3"
 )
@@ -165,9 +166,9 @@ func TechnicalAssetTechnologyValues(cfg technologyMapConfigReader) []TypeEnum {
 	_ = technologies.LoadWithConfig(cfg, "technologies.yaml")
 	technologies.PropagateAttributes()
 
-	values := make([]TypeEnum, 0)
-	for _, technology := range technologies {
-		values = append(values, TypeEnum(technology))
+	values := make([]TypeEnum, 0, len(technologies))
+	for _, name := range slices.Sorted(maps.Keys(technologies)) {
+		values = append(values, TypeEnum(technologies[name]))
 	}
 
 	return values
