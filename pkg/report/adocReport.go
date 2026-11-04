@@ -1804,70 +1804,102 @@ func (adoc adocReport) technicalAssets(f *os.File) {
 
 	for _, technicalAsset := range sortedTechnicalAssetsByRiskSeverityAndTitle(adoc.model) {
 		risksStr := adoc.model.GeneratedRisks(technicalAsset)
-		countStillAtRisk := len(types.ReduceToOnlyStillAtRisk(risksStr))
-		suffix := riskSuffix(countStillAtRisk, len(risksStr))
-		colorPrefix, colorSuffix := colorPrefixBySeverity(types.HighestSeverityStillAtRisk(risksStr), false)
-		if technicalAsset.OutOfScope {
-			colorPrefix = "[OutOfScope]#"
-			suffix = textOutOfScope
-		} else if len(types.ReduceToOnlyStillAtRisk(risksStr)) == 0 {
-			colorPrefix = ""
-			colorSuffix = ""
-		}
+		writeTechnicalAssetHeading(f, technicalAsset, risksStr)
+		adoc.writeTechnicalAssetRisks(f, technicalAsset, risksStr)
+		adoc.writeTechnicalAssetInformation(f, technicalAsset)
 
-		// asset title
-		title := colorPrefix + technicalAsset.Title + ": " + suffix + colorSuffix
-		writeLine(f, "[["+technicalAsset.Id+"]]")
-		writeLine(f, "== "+title)
-
-		// asset description
-		writeLine(f, "=== Description")
-		writeLine(f, technicalAsset.Description)
-		writeLine(f, "")
-
-		// and more metadata of asset in tabular view
-		writeLine(f, "=== Identified Risks of Asset")
-		if len(risksStr) > 0 {
-			writeLine(f, adocFootnoteRiskFindings)
-			for _, risk := range risksStr {
-				colorPrefix, colorSuffix = colorPrefixBySeverity(types.HighestSeverityStillAtRisk(risksStr), false)
-				if !risk.RiskStatus.IsStillAtRisk() {
-					colorPrefix = ""
-					colorSuffix = ""
-				}
-				writeLine(f, "\n==== "+colorPrefix+titleOfSeverity(risk.Severity)+colorSuffix+"\n")
-				writeLine(f, colorPrefix+fixBasicHtml(risk.Title)+": Exploitation likelihood is _"+
-					risk.ExploitationLikelihood.Title()+"_ with _"+risk.ExploitationImpact.Title()+"_ impact."+colorSuffix)
-				writeLine(f, "")
-
-				writeLine(f, "<<"+risk.CategoryId+",[SmallGrey]#"+risk.SyntheticId+"#>>")
-				adoc.riskTrackingStatus(f, risk)
+		if len(technicalAsset.CommunicationLinks) > 0 {
+			writeLine(f, "=== Outgoing Communication Links: "+strconv.Itoa(len(technicalAsset.CommunicationLinks)))
+			for _, outgoingCommLink := range technicalAsset.CommunicationLinksSorted() {
+				adoc.writeCommunicationLink(f, outgoingCommLink, "outgoing", "Target", outgoingCommLink.TargetId)
 			}
-		} else {
-			text := "No risksStr were identified."
-			if technicalAsset.OutOfScope {
-				text = "Asset was defined as out-of-scope."
+		}
+
+		incomingCommLinks := adoc.model.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id]
+		if len(incomingCommLinks) > 0 {
+			writeLine(f, "=== Incoming Communication Links: "+strconv.Itoa(len(incomingCommLinks)))
+			for _, incomingCommLink := range incomingCommLinks {
+				adoc.writeCommunicationLink(f, incomingCommLink, "incoming", "Source", incomingCommLink.SourceId)
 			}
-			writeLine(f, "[GrayText]#"+text+"#")
 		}
+	}
+}
 
-		// ASSET INFORMATION
-		writeLine(f, "")
-		writeLine(f, "<<<")
-		writeLine(f, "")
-		writeLine(f, "=== Asset Information")
-		textRAA := fmt.Sprintf("%.0f", technicalAsset.RAA) + " %"
+// writeTechnicalAssetHeading writes the heading of a technical asset, coloured by the highest
+// severity of its risks still at risk.
+func writeTechnicalAssetHeading(f *os.File, technicalAsset *types.TechnicalAsset, risksStr []*types.Risk) {
+	countStillAtRisk := len(types.ReduceToOnlyStillAtRisk(risksStr))
+	suffix := riskSuffix(countStillAtRisk, len(risksStr))
+	colorPrefix, colorSuffix := colorPrefixBySeverity(types.HighestSeverityStillAtRisk(risksStr), false)
+	if technicalAsset.OutOfScope {
+		colorPrefix = "[OutOfScope]#"
+		suffix = textOutOfScope
+	} else if len(types.ReduceToOnlyStillAtRisk(risksStr)) == 0 {
+		colorPrefix = ""
+		colorSuffix = ""
+	}
+
+	// asset title
+	title := colorPrefix + technicalAsset.Title + ": " + suffix + colorSuffix
+	writeLine(f, "[["+technicalAsset.Id+"]]")
+	writeLine(f, "== "+title)
+}
+
+// writeTechnicalAssetRisks writes the description and the risks of a technical asset.
+func (adoc adocReport) writeTechnicalAssetRisks(f *os.File, technicalAsset *types.TechnicalAsset,
+	risksStr []*types.Risk,
+) {
+	// asset description
+	writeLine(f, "=== Description")
+	writeLine(f, technicalAsset.Description)
+	writeLine(f, "")
+
+	// and more metadata of asset in tabular view
+	writeLine(f, "=== Identified Risks of Asset")
+	if len(risksStr) > 0 {
+		writeLine(f, adocFootnoteRiskFindings)
+		for _, risk := range risksStr {
+			colorPrefix, colorSuffix := colorPrefixBySeverity(types.HighestSeverityStillAtRisk(risksStr), false)
+			if !risk.RiskStatus.IsStillAtRisk() {
+				colorPrefix = ""
+				colorSuffix = ""
+			}
+			writeLine(f, "\n==== "+colorPrefix+titleOfSeverity(risk.Severity)+colorSuffix+"\n")
+			writeLine(f, colorPrefix+fixBasicHtml(risk.Title)+": Exploitation likelihood is _"+
+				risk.ExploitationLikelihood.Title()+"_ with _"+risk.ExploitationImpact.Title()+"_ impact."+colorSuffix)
+			writeLine(f, "")
+
+			writeLine(f, "<<"+risk.CategoryId+",[SmallGrey]#"+risk.SyntheticId+"#>>")
+			adoc.riskTrackingStatus(f, risk)
+		}
+	} else {
+		text := "No risksStr were identified."
 		if technicalAsset.OutOfScope {
-			textRAA = "[GrayText]#out-of-scope#"
+			text = "Asset was defined as out-of-scope."
 		}
+		writeLine(f, "[GrayText]#"+text+"#")
+	}
+}
 
-		tagsUsedText := joinedOrNoneString(technicalAsset.Tags, "")
-		dataAssetsProcessedText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsProcessedSorted(technicalAsset))
-		dataAssetsStoredText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsStoredSorted(technicalAsset))
-		formatsAcceptedText := dataFormatTitleJoinOrNone(technicalAsset.DataFormatsAcceptedSorted(), "[GrayText]#none of "+
-			"the special data formats accepted#")
+// writeTechnicalAssetInformation writes the information and the rating of a technical asset.
+func (adoc adocReport) writeTechnicalAssetInformation(f *os.File, technicalAsset *types.TechnicalAsset) {
+	// ASSET INFORMATION
+	writeLine(f, "")
+	writeLine(f, "<<<")
+	writeLine(f, "")
+	writeLine(f, "=== Asset Information")
+	textRAA := fmt.Sprintf("%.0f", technicalAsset.RAA) + " %"
+	if technicalAsset.OutOfScope {
+		textRAA = "[GrayText]#out-of-scope#"
+	}
 
-		writeLine(f, `
+	tagsUsedText := joinedOrNoneString(technicalAsset.Tags, "")
+	dataAssetsProcessedText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsProcessedSorted(technicalAsset))
+	dataAssetsStoredText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsStoredSorted(technicalAsset))
+	formatsAcceptedText := dataFormatTitleJoinOrNone(technicalAsset.DataFormatsAcceptedSorted(), "[GrayText]#none of "+
+		"the special data formats accepted#")
+
+	writeLine(f, `
 [cols="h,1,h,1",frame=none,grid=none]
 |===
 | ID:             3+| `+technicalAsset.Id+`
@@ -1876,18 +1908,18 @@ func (adoc adocReport) technicalAssets(f *os.File) {
 | Technology:       | `+technicalAsset.Technologies.String()+`| Tags: | `+tagsUsedText+`
 | Internet:         | `+strconv.FormatBool(technicalAsset.Internet)+`| Machine: | `+technicalAsset.Machine.String()+`
 | Encryption:       | `+technicalAsset.Encryption.String()+`| Multi-Tenant: | `+
-			strconv.FormatBool(technicalAsset.MultiTenant)+`
+		strconv.FormatBool(technicalAsset.MultiTenant)+`
 | Redundant:        | `+strconv.FormatBool(technicalAsset.Redundant)+`| Custom-Developed: | `+
-			strconv.FormatBool(technicalAsset.CustomDevelopedParts)+`
+		strconv.FormatBool(technicalAsset.CustomDevelopedParts)+`
 | Client by Human:  | `+strconv.FormatBool(technicalAsset.UsedAsClientByHuman)+`| Formats Accepted: | `+
-			formatsAcceptedText+`
+		formatsAcceptedText+`
 | Data Processed: 3+| `+dataAssetsProcessedText+`
 | Data Stored:    3+| `+dataAssetsStoredText+`
 |===
 `)
 
-		writeLine(f, "=== Asset Rating")
-		writeLine(f, `
+	writeLine(f, "=== Asset Rating")
+	writeLine(f, `
 [cols="h,2",frame=none,grid=none]
 |===
 | Owner:             | `+technicalAsset.Owner+`
@@ -1895,68 +1927,39 @@ func (adoc adocReport) technicalAssets(f *os.File) {
 | Integrity:         | `+technicalAsset.Integrity.String()+`<<ref-criticality-values,*>>
 | Availability:      | `+technicalAsset.Availability.String()+`<<ref-criticality-values,*>>
 | CIA-Justification: | `+technicalAsset.JustificationCiaRating)
-		if technicalAsset.OutOfScope {
-			writeLine(f, "| Asset Out-of-Scope Justification: 2+| "+technicalAsset.JustificationOutOfScope)
-		}
-		writeLine(f, "|===\n")
-
-		if len(technicalAsset.CommunicationLinks) > 0 {
-			writeLine(f, "=== Outgoing Communication Links: "+strconv.Itoa(len(technicalAsset.CommunicationLinks)))
-			for _, outgoingCommLink := range technicalAsset.CommunicationLinksSorted() {
-				writeLine(f, "==== "+outgoingCommLink.Title+" (outgoing)")
-				writeLine(f, fixBasicHtml(outgoingCommLink.Description))
-
-				tagsUsedText := joinedOrNoneString(outgoingCommLink.Tags, "")
-				dataAssetsSentText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsSentSorted(outgoingCommLink))
-				dataAssetsReceivedText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsReceivedSorted(outgoingCommLink))
-
-				writeLine(f, `
-[cols="h,1,h,1",frame=none,grid=none]
-|===
-| Target:         | <<`+outgoingCommLink.TargetId+`,`+adoc.model.TechnicalAssets[outgoingCommLink.TargetId].Title+
-					`>>| Protocol:       | `+outgoingCommLink.Protocol.String()+`
-| Encrypted:      | `+strconv.FormatBool(outgoingCommLink.Protocol.IsEncrypted())+`| Authentication: | `+
-					outgoingCommLink.Authentication.String()+`
-| Authorization:  | `+outgoingCommLink.Authorization.String()+`| Read-Only:      | `+
-					strconv.FormatBool(outgoingCommLink.Readonly)+`
-| Usage:          | `+outgoingCommLink.Usage.String()+`| Tags:           | `+tagsUsedText+`
-| VPN:            | `+strconv.FormatBool(outgoingCommLink.VPN)+`| IP-Filtered:    | `+
-					strconv.FormatBool(outgoingCommLink.IpFiltered)+`
-| Data Sent:      | `+dataAssetsSentText+`| Data Received:  | `+dataAssetsReceivedText+`
-|===
-`)
-			}
-		}
-
-		incomingCommLinks := adoc.model.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id]
-		if len(incomingCommLinks) > 0 {
-			writeLine(f, "=== Incoming Communication Links: "+strconv.Itoa(len(incomingCommLinks)))
-			for _, incomingCommLink := range incomingCommLinks {
-				writeLine(f, "==== "+incomingCommLink.Title+" (incoming)")
-				writeLine(f, fixBasicHtml(incomingCommLink.Description))
-
-				tagsUsedText := joinedOrNoneString(incomingCommLink.Tags, "")
-				dataAssetsSentText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsSentSorted(incomingCommLink))
-				dataAssetsReceivedText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsReceivedSorted(incomingCommLink))
-
-				writeLine(f, `
-[cols="h,1,h,1",frame=none,grid=none]
-|===
-| Source:         | <<`+incomingCommLink.SourceId+`,`+adoc.model.TechnicalAssets[incomingCommLink.SourceId].Title+
-					`>>| Protocol:       | `+incomingCommLink.Protocol.String()+`
-| Encrypted:      | `+strconv.FormatBool(incomingCommLink.Protocol.IsEncrypted())+`| Authentication: | `+
-					incomingCommLink.Authentication.String()+`
-| Authorization:  | `+incomingCommLink.Authorization.String()+`| Read-Only:      | `+
-					strconv.FormatBool(incomingCommLink.Readonly)+`
-| Usage:          | `+incomingCommLink.Usage.String()+`| Tags:           | `+tagsUsedText+`
-| VPN:            | `+strconv.FormatBool(incomingCommLink.VPN)+`| IP-Filtered:    | `+
-					strconv.FormatBool(incomingCommLink.IpFiltered)+`
-| Data Sent:      | `+dataAssetsSentText+`| Data Received:  | `+dataAssetsReceivedText+`
-|===
-`)
-			}
-		}
+	if technicalAsset.OutOfScope {
+		writeLine(f, "| Asset Out-of-Scope Justification: 2+| "+technicalAsset.JustificationOutOfScope)
 	}
+	writeLine(f, "|===\n")
+}
+
+// writeCommunicationLink writes the details of an outgoing or incoming communication link of a
+// technical asset, with the technical asset at its other end.
+func (adoc adocReport) writeCommunicationLink(f *os.File, commLink *types.CommunicationLink, direction string,
+	peerLabel string, peerId string,
+) {
+	writeLine(f, "==== "+commLink.Title+" ("+direction+")")
+	writeLine(f, fixBasicHtml(commLink.Description))
+
+	tagsUsedText := joinedOrNoneString(commLink.Tags, "")
+	dataAssetsSentText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsSentSorted(commLink))
+	dataAssetsReceivedText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsReceivedSorted(commLink))
+
+	writeLine(f, `
+[cols="h,1,h,1",frame=none,grid=none]
+|===
+| `+peerLabel+`:         | <<`+peerId+`,`+adoc.model.TechnicalAssets[peerId].Title+
+		`>>| Protocol:       | `+commLink.Protocol.String()+`
+| Encrypted:      | `+strconv.FormatBool(commLink.Protocol.IsEncrypted())+`| Authentication: | `+
+		commLink.Authentication.String()+`
+| Authorization:  | `+commLink.Authorization.String()+`| Read-Only:      | `+
+		strconv.FormatBool(commLink.Readonly)+`
+| Usage:          | `+commLink.Usage.String()+`| Tags:           | `+tagsUsedText+`
+| VPN:            | `+strconv.FormatBool(commLink.VPN)+`| IP-Filtered:    | `+
+		strconv.FormatBool(commLink.IpFiltered)+`
+| Data Sent:      | `+dataAssetsSentText+`| Data Received:  | `+dataAssetsReceivedText+`
+|===
+`)
 }
 
 func (adoc adocReport) writeTechnicalAssets() error {
