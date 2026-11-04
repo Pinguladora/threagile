@@ -39,7 +39,8 @@ var TrustBoundaryTypeDescription = [...]TypeDescription{
 	{"network-cloud-provider", "Network is at a cloud provider"},
 	{"network-cloud-security-group", "Cloud rules controlling network traffic"},
 	{"network-policy-namespace-isolation", "Segregation in a Kubernetes cluster"},
-	{"execution-environment", "Logical group of items (not a protective network boundary in that sense). More like a namespace or another logical group of items"},
+	{"execution-environment", "Logical group of items (not a protective network boundary in that sense). " +
+		"More like a namespace or another logical group of items"},
 }
 
 func ParseTrustBoundary(value string) (trustBoundary TrustBoundaryType, err error) {

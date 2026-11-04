@@ -63,7 +63,9 @@ func (what STRIDE) Explain() string {
 }
 
 func (what STRIDE) Title() string {
-	return [...]string{"Spoofing", "Tampering", "Repudiation", "Information Disclosure", "Denial of Service", "Elevation of Privilege"}[what]
+	return [...]string{
+		"Spoofing", "Tampering", "Repudiation", "Information Disclosure", "Denial of Service", "Elevation of Privilege",
+	}[what]
 }
 
 func (what STRIDE) MarshalJSON() ([]byte, error) {

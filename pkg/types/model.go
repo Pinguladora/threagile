@@ -106,7 +106,9 @@ func (model *Model) CheckTags(tags []string, where string) ([]string, error) {
 	return tagsUsed, nil
 }
 
-func (model *Model) ApplyWildcardRiskTrackingEvaluation(ignoreOrphanedRiskTracking bool, progressReporter ProgressReporter) error {
+func (model *Model) ApplyWildcardRiskTrackingEvaluation(
+	ignoreOrphanedRiskTracking bool, progressReporter ProgressReporter,
+) error {
 	progressReporter.Info("Executing risk tracking evaluation")
 	// several patterns can match the same risk and the first one wins, so apply them in a fixed order
 	deferredRiskTracking := model.GetDeferredRiskTrackingDueToWildcardMatching()
@@ -118,7 +120,8 @@ func (model *Model) ApplyWildcardRiskTrackingEvaluation(ignoreOrphanedRiskTracki
 		matchingRiskIdExpression := regexp.MustCompile(
 			strings.ReplaceAll(regexp.QuoteMeta(syntheticRiskIdPattern), `\*`, `[^@]+`))
 		for _, syntheticRiskId := range slices.Sorted(maps.Keys(model.GeneratedRisksBySyntheticId)) {
-			if matchingRiskIdExpression.Match([]byte(syntheticRiskId)) && model.HasNotYetAnyDirectNonWildcardRiskTracking(syntheticRiskId) {
+			if matchingRiskIdExpression.Match([]byte(syntheticRiskId)) &&
+				model.HasNotYetAnyDirectNonWildcardRiskTracking(syntheticRiskId) {
 				foundSome = true
 				model.RiskTracking[syntheticRiskId] = &RiskTracking{
 					SyntheticRiskId: strings.TrimSpace(syntheticRiskId),
@@ -159,9 +162,11 @@ func (model *Model) CheckRiskTracking(ignoreOrphanedRiskTracking bool, progressR
 
 		if !foundSome {
 			if ignoreOrphanedRiskTracking {
-				progressReporter.Infof("Risk tracking references unknown risk (risk id not found): %v", tracking.SyntheticRiskId)
+				progressReporter.Infof("Risk tracking references unknown risk (risk id not found): %v",
+					tracking.SyntheticRiskId)
 			} else {
-				return fmt.Errorf("Risk tracking references unknown risk (risk id not found) - you might want to use the option -ignore-orphaned-risk-tracking: %v"+
+				return fmt.Errorf("Risk tracking references unknown risk (risk id not found) - "+
+					"you might want to use the option -ignore-orphaned-risk-tracking: %v"+
 					"\n\nNOTE: For risk tracking each risk-id needs to be defined (the string with the @ sign in it). "+
 					"These unique risk IDs are visible in the PDF report (the small grey string under each risk), "+
 					"the Excel (column \"ID\"), as well as the JSON responses. Some risk IDs have only one @ sign in them, "+
@@ -169,7 +174,8 @@ func (model *Model) CheckRiskTracking(ignoreOrphanedRiskTracking bool, progressR
 					"creates its individual ID by taking all affected elements causing the risk to be within an @-delimited part. "+
 					"Using wildcards (the * sign) for parts delimited by @ signs allows to handle groups of certain risks at once. "+
 					"Best is to lookup the IDs to use in the created Excel file. Alternatively a model macro \"seed-risk-tracking\" "+
-					"is available that helps in initially seeding the risk tracking part here based on already identified and not yet handled risks",
+					"is available that helps in initially seeding the risk tracking part here "+
+					"based on already identified and not yet handled risks",
 					tracking.SyntheticRiskId)
 			}
 		}

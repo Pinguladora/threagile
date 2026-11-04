@@ -3,7 +3,7 @@ package types
 import "strings"
 
 const (
-	MayContainSecrets                                 = "may_contain_secrets" // #nosec G101 // this is a constant for a string
+	MayContainSecrets                                 = "may_contain_secrets" // #nosec G101 // a tag, not a secret
 	NoAuthenticationRequired                          = "no_authentication_required"
 	IsHighValueTarget                                 = "high_value_target"
 	IsWebService                                      = "web_service"

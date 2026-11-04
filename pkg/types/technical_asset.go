@@ -119,7 +119,8 @@ func (what TechnicalAsset) QuickWins() float64 {
 				if !ParsedModelRoot.TechnicalAssets[techAssetId].OutOfScope {
 					for _, risk := range risks {
 						if len(risk.MostRelevantTechnicalAssetId) > 0 { // T O D O caching of generated risks inside the method?
-							if HighestSeverityStillAtRisk(ParsedModelRoot.TechnicalAssets[risk.MostRelevantTechnicalAssetId].GeneratedRisks()) == highestSeverity {
+							mostRelevantAsset := ParsedModelRoot.TechnicalAssets[risk.MostRelevantTechnicalAssetId]
+							if HighestSeverityStillAtRisk(mostRelevantAsset.GeneratedRisks()) == highestSeverity {
 								howManySameLevelCausingUsagesOfThisData++
 								break
 							}
