@@ -58,7 +58,7 @@
         "description": "Link to the identity provider server",
         "protocol": "https",
         "authentication": "credentials",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "data_assets_sent": [
           "customer-accounts"
         ],
@@ -73,7 +73,7 @@
         "description": "Link to the ERP system",
         "protocol": "https",
         "authentication": "token",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "data_assets_sent": [
           "customer-accounts",
           "customer-operational-data",
@@ -140,7 +140,7 @@
         "description": "Link to the database (JDBC tunneled via SSH)",
         "protocol": "ssh",
         "authentication": "client-certificate",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "usage": "devops",
         "data_assets_sent": [
           "db-dumps"
@@ -162,7 +162,7 @@
         "description": "Link to the ERP system (Web)",
         "protocol": "https",
         "authentication": "token",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "usage": "devops",
         "data_assets_sent": [
           "erp-customizing"
@@ -181,7 +181,7 @@
         "description": "Link to the LDAP auth server for managing users",
         "protocol": "ldaps",
         "authentication": "credentials",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "usage": "devops",
         "data_assets_sent": [
           "customer-accounts"
@@ -247,7 +247,7 @@
         ],
         "vpn": true,
         "authentication": "token",
-        "authorization": "end-user-identity-propagation",
+        "identity": "end-user",
         "data_assets_sent": [
           "internal-business-data"
         ],
@@ -267,7 +267,7 @@
         "protocol": "https",
         "vpn": true,
         "authentication": "token",
-        "authorization": "end-user-identity-propagation",
+        "identity": "end-user",
         "data_assets_sent": [
           "marketing-material"
         ],
@@ -376,7 +376,7 @@
         "description": "Link to the load balancer",
         "protocol": "https",
         "authentication": "session-id",
-        "authorization": "end-user-identity-propagation",
+        "identity": "end-user",
         "data_assets_sent": [
           "customer-accounts",
           "customer-operational-data"
@@ -455,7 +455,7 @@
         "description": "Link to the DB system",
         "protocol": "jdbc",
         "authentication": "credentials",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "data_assets_sent": [
           "customer-accounts",
           "customer-operational-data",
@@ -545,7 +545,7 @@
         "description": "Link to the Git repo",
         "protocol": "ssh",
         "authentication": "client-certificate",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "usage": "devops",
         "data_assets_sent": [
           "client-application-code",
@@ -566,7 +566,7 @@
         "description": "Link to the Git repo",
         "protocol": "https",
         "authentication": "token",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "usage": "devops",
         "data_assets_sent": [
           "client-application-code",
@@ -587,7 +587,7 @@
         "description": "Link to the Jenkins build server",
         "protocol": "https",
         "authentication": "credentials",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "usage": "devops",
         "data_assets_sent": [
           "build-job-config"
@@ -696,7 +696,7 @@
         "description": "Link to the LDAP server",
         "protocol": "ldaps",
         "authentication": "credentials",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "data_assets_sent": [
           "customer-accounts"
         ],
@@ -765,7 +765,7 @@
         "description": "Link to the Apache webserver",
         "protocol": "ssh",
         "authentication": "client-certificate",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "usage": "devops",
         "data_assets_sent": [
           "client-application-code",
@@ -782,7 +782,7 @@
         "description": "Link to the CMS",
         "protocol": "ssh",
         "authentication": "client-certificate",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "usage": "devops",
         "data_assets_sent": [
           "marketing-material"
@@ -799,7 +799,7 @@
         "protocol": "ssh",
         "readonly": true,
         "authentication": "client-certificate",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "usage": "devops",
         "data_assets_received": [
           "client-application-code",
@@ -911,7 +911,7 @@
         "description": "Link to the web server",
         "protocol": "http",
         "authentication": "session-id",
-        "authorization": "end-user-identity-propagation",
+        "identity": "end-user",
         "data_assets_sent": [
           "customer-accounts",
           "customer-operational-data"
@@ -979,7 +979,7 @@
         "protocol": "ldap",
         "readonly": true,
         "authentication": "credentials",
-        "authorization": "technical-user",
+        "identity": "service-account",
         "data_assets_sent": [
           "customer-accounts"
         ],

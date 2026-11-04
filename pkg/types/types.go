@@ -24,6 +24,7 @@ func GetBuiltinTypeValues(cfg technologyMapConfigReader) map[string][]TypeEnum {
 		"Data Breach Probability":                      DataBreachProbabilityValues(),
 		"Data Format":                                  DataFormatValues(),
 		"Encryption":                                   EncryptionStyleValues(),
+		"Identity":                                     IdentityValues(),
 		"Protocol":                                     ProtocolValues(),
 		"Quantity":                                     QuantityValues(),
 		"Risk Exploitation Impact":                     RiskExploitationImpactValues(),

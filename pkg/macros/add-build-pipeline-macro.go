@@ -387,7 +387,7 @@ func (change *buildPipelineChange) encryption() string {
 
 // devOpsLink is an HTTPS communication link of the build pipeline that authenticates with credentials.
 func devOpsLink(
-	target string, description string, authorization types.Authorization, readonly bool, sent []string,
+	target string, description string, identity types.Identity, readonly bool, sent []string,
 	received []string,
 ) input.CommunicationLink {
 	return input.CommunicationLink{
@@ -395,7 +395,7 @@ func devOpsLink(
 		Description:            description,
 		Protocol:               types.HTTPS.String(),
 		Authentication:         types.Credentials.String(),
-		Authorization:          authorization.String(),
+		Identity:               identity.String(),
 		Tags:                   []string{},
 		VPN:                    false,
 		IpFiltered:             false,
@@ -414,7 +414,7 @@ func (change *buildPipelineChange) addDevelopmentClient() {
 		return
 	}
 	// fmt.Println("Adding technical asset:", id) // ################################################
-	userIdentity := types.EndUserIdentityPropagation
+	userIdentity := types.EndUser
 	commLinks := make(map[string]input.CommunicationLink)
 	commLinks["Sourcecode Repository Traffic"] = devOpsLink(change.sourceRepoID, "Sourcecode Repository Traffic",
 		userIdentity, false, []string{sourcecodeDataAsset}, []string{sourcecodeDataAsset})
@@ -559,18 +559,18 @@ func (change *buildPipelineChange) addBuildPipeline() {
 		return
 	}
 	// fmt.Println("Adding technical asset:", id) // ################################################
-	technicalUser := types.TechnicalUser
+	serviceAccount := types.ServiceAccount
 	commLinks := make(map[string]input.CommunicationLink)
 	commLinks["Sourcecode Repository Traffic"] = devOpsLink(change.sourceRepoID, "Sourcecode Repository Traffic",
-		technicalUser, true, nil, []string{sourcecodeDataAsset})
+		serviceAccount, true, nil, []string{sourcecodeDataAsset})
 	commLinks["Artifact Registry Traffic"] = devOpsLink(change.artifactRegistryID, "Artifact Registry Traffic",
-		technicalUser, false, []string{deploymentDataAsset}, []string{deploymentDataAsset})
+		serviceAccount, false, []string{deploymentDataAsset}, []string{deploymentDataAsset})
 	if change.containerTechUsed {
 		change.addContainerPlatformLinks(commLinks)
 	}
 	if change.codeInspectionUsed {
 		commLinks["Code Inspection Platform Traffic"] = devOpsLink(change.codeInspectionPlatformID,
-			"Code Inspection Platform Traffic", technicalUser, false, []string{sourcecodeDataAsset}, []string{})
+			"Code Inspection Platform Traffic", serviceAccount, false, []string{sourcecodeDataAsset}, []string{})
 	}
 	// The individual deployments
 	for _, deployTargetID := range change.macroState["deploy-targets"] { // add a connection to each deployment target
@@ -592,14 +592,14 @@ func (change *buildPipelineChange) addBuildPipeline() {
 // container platform: the build pipeline pushes to the platform, or the platform pulls from the registry.
 func (change *buildPipelineChange) addContainerPlatformLinks(commLinks map[string]input.CommunicationLink) {
 	commLinks["Container Registry Traffic"] = devOpsLink(change.containerRepoID, "Container Registry Traffic",
-		types.TechnicalUser, false, []string{deploymentDataAsset}, []string{deploymentDataAsset})
+		types.ServiceAccount, false, []string{deploymentDataAsset}, []string{deploymentDataAsset})
 	if change.answer("push-or-pull") == pushOrPull[0] { // Push
 		commLinks["Container Platform Push"] = devOpsLink(change.containerPlatformID, "Container Platform Push",
-			types.TechnicalUser, false, []string{deploymentDataAsset}, []string{deploymentDataAsset})
+			types.ServiceAccount, false, []string{deploymentDataAsset}, []string{deploymentDataAsset})
 		return
 	}
 	// Pull
-	commLinkPull := devOpsLink(change.containerRepoID, "Container Platform Pull", types.TechnicalUser, true, nil,
+	commLinkPull := devOpsLink(change.containerRepoID, "Container Platform Pull", types.ServiceAccount, true, nil,
 		[]string{deploymentDataAsset})
 	if !change.dryRun {
 		titleOfTargetAsset := change.answer("container-platform") + " Container Platform"
@@ -626,7 +626,7 @@ func (change *buildPipelineChange) addDeployment(deployTargetID string, commLink
 			Description:            "Deployment Push to " + deployTargetID,
 			Protocol:               types.SSH.String(),
 			Authentication:         types.ClientCertificate.String(),
-			Authorization:          types.TechnicalUser.String(),
+			Identity:               types.ServiceAccount.String(),
 			Tags:                   []string{},
 			VPN:                    false,
 			IpFiltered:             false,
@@ -639,7 +639,7 @@ func (change *buildPipelineChange) addDeployment(deployTargetID string, commLink
 		}
 	default: // Pull
 		pullFromWhere := change.artifactRegistryID
-		commLinkPull := devOpsLink(pullFromWhere, "Deployment Pull from "+deployTargetID, types.TechnicalUser, true,
+		commLinkPull := devOpsLink(pullFromWhere, "Deployment Pull from "+deployTargetID, types.ServiceAccount, true,
 			nil, []string{deploymentDataAsset})
 		if !change.dryRun {
 			// take care to lookup by title (as keyed in input YAML by title and only in parsed model representation by ID)
@@ -677,7 +677,7 @@ func (change *buildPipelineChange) addContainerSpawning(deployTargetID string) {
 		Description:            "Container Spawning " + deployTargetID,
 		Protocol:               types.ContainerSpawning.String(),
 		Authentication:         types.NoneAuthentication.String(),
-		Authorization:          types.NoneAuthorization.String(),
+		Identity:               types.NoneIdentity.String(),
 		Tags:                   []string{},
 		VPN:                    false,
 		IpFiltered:             false,

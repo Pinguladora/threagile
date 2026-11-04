@@ -39,9 +39,21 @@ func TestParseAuthentication(t *testing.T) {
 			input:    "client-certificate",
 			expected: ClientCertificate,
 		},
-		"two-factor": {
+		"short-lived-token": {
+			input:    "short-lived-token",
+			expected: ShortLivedToken,
+		},
+		"long-lived-token": {
+			input:    "long-lived-token",
+			expected: LongLivedToken,
+		},
+		"multi-factor": {
+			input:    "multi-factor",
+			expected: MultiFactor,
+		},
+		"two-factor (earlier name)": {
 			input:    "two-factor",
-			expected: TwoFactor,
+			expected: MultiFactor,
 		},
 		"externalized": {
 			input:    "externalized",

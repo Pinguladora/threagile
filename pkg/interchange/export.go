@@ -170,7 +170,10 @@ func newFlows(model *types.Model) []Flow {
 
 		flow.Properties.set("protocol", link.Protocol.String())
 		flow.Properties.set("authentication", link.Authentication.String())
-		flow.Properties.set("authorization", link.Authorization.String())
+		flow.Properties.set("identity", link.Identity.String())
+		if link.Authorization != types.UnknownAuthorization {
+			flow.Properties.set("authorization", link.Authorization.String())
+		}
 		flow.Properties.set("usage", link.Usage.String())
 		flow.Properties.setFlag("vpn", link.VPN)
 		flow.Properties.setFlag("ip_filtered", link.IpFiltered)

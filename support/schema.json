@@ -737,22 +737,39 @@
             "additionalProperties": {
               "properties": {
                 "authentication": {
-                  "description": "Authentication",
+                  "description": "How the caller authenticates: token leaves the lifetime of the token open, two-factor is the earlier name of multi-factor",
                   "enum": [
                     "none",
                     "credentials",
                     "session-id",
                     "token",
+                    "short-lived-token",
+                    "long-lived-token",
                     "client-certificate",
-                    "two-factor",
-                    "externalized"
+                    "multi-factor",
+                    "externalized",
+                    "two-factor"
+                  ],
+                  "type": "string"
+                },
+                "identity": {
+                  "description": "The identity the link carries to its target: none, the caller's own service account with static credentials, its workload identity issued by the platform, or the end user's",
+                  "enum": [
+                    "none",
+                    "service-account",
+                    "workload",
+                    "end-user"
                   ],
                   "type": "string"
                 },
                 "authorization": {
-                  "description": "Authorization (Threagile also reads enduser-identity-propagation, the spelling of releases up to 0.9, as end-user-identity-propagation)",
+                  "description": "How finely the target checks what the caller may do (unknown when left out). technical-user and end-user-identity-propagation are identities that earlier versions of the model put here; on a link without an identity, threagile reads them as its identity",
                   "enum": [
+                    "unknown",
                     "none",
+                    "authenticated-only",
+                    "function-level",
+                    "object-level",
                     "technical-user",
                     "end-user-identity-propagation"
                   ],
@@ -914,7 +931,6 @@
                 "description",
                 "protocol",
                 "authentication",
-                "authorization",
                 "vpn",
                 "ip_filtered",
                 "readonly",

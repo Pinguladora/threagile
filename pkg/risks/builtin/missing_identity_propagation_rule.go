@@ -77,10 +77,10 @@ func (r *MissingIdentityPropagationRule) skipCommunicationLinkAsset(
 		caller.Type == types.Datastore {
 		return true
 	}
-	if commLink.Authentication == types.NoneAuthentication || commLink.Authorization == types.EndUserIdentityPropagation {
+	if commLink.Authentication == types.NoneAuthentication || commLink.Identity == types.EndUser {
 		return true
 	}
-	if commLink.Usage == types.DevOps && commLink.Authorization != types.NoneAuthorization {
+	if commLink.Usage == types.DevOps && commLink.Identity != types.NoneIdentity {
 		return true
 	}
 	return false

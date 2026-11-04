@@ -346,7 +346,8 @@ The `as` parameter in comparisons converts string enum values to numeric ordinal
 | Cast Type | Values (low to high) |
 |-----------|---------------------|
 | `authentication` | Authentication enum values |
-| `authorization` | Authorization enum values |
+| `identity` | `none`, `service-account`, `workload`, `end-user` |
+| `authorization` | `unknown` < `none` < `authenticated-only` < `function-level` < `object-level`; check for `unknown` first, as it sorts lowest |
 | `confidentiality` | `public` < `internal` < `restricted` < `confidential` < `strictly-confidential` |
 | `criticality` | `archive` < `operational` < `important` < `critical` < `mission-critical` |
 | `integrity` | Same as criticality |

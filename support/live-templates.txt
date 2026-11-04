@@ -164,6 +164,7 @@ Live template for a communication link:
         description: $END$
         protocol: $protocol$
         authentication: $authentication$
+        identity: $identity$
         authorization: $authorization$
         tags: $tags$
         vpn: $vpn$

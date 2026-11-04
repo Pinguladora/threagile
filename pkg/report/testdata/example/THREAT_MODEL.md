@@ -135,13 +135,13 @@ The most prevalent impacts of the **70 initial risks** (distributed over **27 ri
 
     If this risk is unmitigated, attackers might be able to access or modify foreign data after a successful compromise of a component within the system due to missing resource-based authorization checks.
 
+- **Medium**: [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa): 9 Initial Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication.
+
 - **Medium**: [Missing Network Segmentation](#missing-network-segmentation): 2 Initial Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards more valuable targets, as they are not separated by network segmentation.
-
-- **Medium**: [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa): 9 Initial Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
-
-    If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication.
 
 - **Medium**: [Missing Vault (Secret Storage)](#missing-vault-secret-storage): 1 Initial Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -383,15 +383,15 @@ All **70 risks** by severity, with their tracking status. Each risk links to its
 | Medium | [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) | [Code Backdooring](#code-backdooring) | [Jenkins Build Server](#jenkins-build-server) | Unchecked |
 | Medium | [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Apache Webserver](#apache-webserver) | Unchecked |
 | Medium | [**Container Base Image Backdooring** risk at **Marketing CMS**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Marketing CMS](#marketing-cms) | Unchecked |
-| Medium | [**Missing Two-Factor Authentication** covering communication link **CMS Content Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Marketing CMS**](#missing-two-factor-authentication-2fa) | [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa) | [Marketing CMS](#marketing-cms), [CMS Content Traffic](#cms-content-traffic) | Mitigated |
-| Medium | [**Missing Two-Factor Authentication** covering communication link **DB Update Access** from **Backend Admin Client** to **Customer Contract Database**](#missing-two-factor-authentication-2fa) | [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa) | [Customer Contract Database](#customer-contract-database), [DB Update Access](#db-update-access) | Mitigated |
-| Medium | [**Missing Two-Factor Authentication** covering communication link **ERP Internal Access** from **Backoffice Client** to **Backoffice ERP System**](#missing-two-factor-authentication-2fa) | [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa) | [Backoffice ERP System](#backoffice-erp-system), [ERP Internal Access](#erp-internal-access) | Mitigated |
-| Medium | [**Missing Two-Factor Authentication** covering communication link **ERP Web Access** from **Backend Admin Client** to **Backoffice ERP System**](#missing-two-factor-authentication-2fa) | [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa) | [Backoffice ERP System](#backoffice-erp-system), [ERP Web Access](#erp-web-access) | Mitigated |
-| Medium | [**Missing Two-Factor Authentication** covering communication link **Git-Repo Code Write Access** from **External Development Client** to **Git Repository**](#missing-two-factor-authentication-2fa) | [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa) | [Git Repository](#git-repository), [Git-Repo Code Write Access](#git-repo-code-write-access) | Mitigated |
-| Medium | [**Missing Two-Factor Authentication** covering communication link **Git-Repo Web-UI Access** from **External Development Client** to **Git Repository**](#missing-two-factor-authentication-2fa) | [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa) | [Git Repository](#git-repository), [Git-Repo Web-UI Access](#git-repo-web-ui-access) | Mitigated |
-| Medium | [**Missing Two-Factor Authentication** covering communication link **Jenkins Web-UI Access** from **External Development Client** to **Jenkins Build Server**](#missing-two-factor-authentication-2fa) | [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa) | [Jenkins Build Server](#jenkins-build-server), [Jenkins Web-UI Access](#jenkins-web-ui-access) | Mitigated |
-| Medium | [**Missing Two-Factor Authentication** covering communication link **User Management Access** from **Backend Admin Client** to **LDAP Auth Server**](#missing-two-factor-authentication-2fa) | [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa) | [LDAP Auth Server](#ldap-auth-server), [User Management Access](#user-management-access) | Mitigated |
-| Medium | [**Missing Two-Factor Authentication** covering communication link **Web Application Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Apache Webserver**](#missing-two-factor-authentication-2fa) | [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa) | [Apache Webserver](#apache-webserver), [Web Application Traffic](#web-application-traffic) | Mitigated |
+| Medium | [**Missing Multi-Factor Authentication** covering communication link **CMS Content Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Marketing CMS**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [Marketing CMS](#marketing-cms), [CMS Content Traffic](#cms-content-traffic) | Mitigated |
+| Medium | [**Missing Multi-Factor Authentication** covering communication link **DB Update Access** from **Backend Admin Client** to **Customer Contract Database**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [Customer Contract Database](#customer-contract-database), [DB Update Access](#db-update-access) | Mitigated |
+| Medium | [**Missing Multi-Factor Authentication** covering communication link **ERP Internal Access** from **Backoffice Client** to **Backoffice ERP System**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [Backoffice ERP System](#backoffice-erp-system), [ERP Internal Access](#erp-internal-access) | Mitigated |
+| Medium | [**Missing Multi-Factor Authentication** covering communication link **ERP Web Access** from **Backend Admin Client** to **Backoffice ERP System**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [Backoffice ERP System](#backoffice-erp-system), [ERP Web Access](#erp-web-access) | Mitigated |
+| Medium | [**Missing Multi-Factor Authentication** covering communication link **Git-Repo Code Write Access** from **External Development Client** to **Git Repository**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [Git Repository](#git-repository), [Git-Repo Code Write Access](#git-repo-code-write-access) | Mitigated |
+| Medium | [**Missing Multi-Factor Authentication** covering communication link **Git-Repo Web-UI Access** from **External Development Client** to **Git Repository**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [Git Repository](#git-repository), [Git-Repo Web-UI Access](#git-repo-web-ui-access) | Mitigated |
+| Medium | [**Missing Multi-Factor Authentication** covering communication link **Jenkins Web-UI Access** from **External Development Client** to **Jenkins Build Server**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [Jenkins Build Server](#jenkins-build-server), [Jenkins Web-UI Access](#jenkins-web-ui-access) | Mitigated |
+| Medium | [**Missing Multi-Factor Authentication** covering communication link **User Management Access** from **Backend Admin Client** to **LDAP Auth Server**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [LDAP Auth Server](#ldap-auth-server), [User Management Access](#user-management-access) | Mitigated |
+| Medium | [**Missing Multi-Factor Authentication** covering communication link **Web Application Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Apache Webserver**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [Apache Webserver](#apache-webserver), [Web Application Traffic](#web-application-traffic) | Mitigated |
 | Medium | [**Missing Cloud Hardening (S3)** risk at **Contract File Server**: _Security Best Practices for AWS S3_](#missing-cloud-hardening) | [Missing Cloud Hardening](#missing-cloud-hardening) | none | Unchecked |
 | Medium | [**Missing End User Identity Propagation** over communication link **ERP System Traffic** from **Apache Webserver** to **Backoffice ERP System**](#missing-identity-propagation) | [Missing Identity Propagation](#missing-identity-propagation) | [Backoffice ERP System](#backoffice-erp-system), [ERP System Traffic](#erp-system-traffic) | Unchecked |
 | Medium | [**Missing Network Segmentation** to further encapsulate and protect **Apache Webserver** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) | [Missing Network Segmentation](#missing-network-segmentation) | [Apache Webserver](#apache-webserver) | Unchecked |
@@ -850,13 +850,13 @@ Elevation of privilege - Authorization
 
     Technical assets (especially multi-tenant systems), which usually process data for end users should authorize every request based on the identity of the end user when the data flow is authenticated (i.e. non-public). For DevOps usages at least a technical-user authorization is required.
 
+- **Medium**: [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa): 9 mitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
+
 - **Medium**: [Missing Network Segmentation](#missing-network-segmentation): 2/2 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     Highly sensitive assets and/or data stores residing in the same network segment than other lower sensitive assets (like webservers or content management systems etc.) should be better protected by a network segmentation trust-boundary.
-
-- **Medium**: [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa): 9 mitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
-
-    Technical assets (especially multi-tenant systems) should authenticate incoming requests with two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
 
 - **Medium**: [Mixed Targets on Shared Runtime](#mixed-targets-on-shared-runtime): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -876,9 +876,9 @@ Business
 
     Some text describing the mitigation...
 
-- **Medium**: [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa): 9 mitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa): 9 mitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
-    Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.
+    Apply an authentication method to the technical asset protecting highly sensitive data via multi-factor authentication for human users.
 
 - **Medium**: [Some Individual Risk Example](#some-individual-risk-example): 2/2 unmitigated Risks, exploitation likelihood is _Frequent_ with _Very High_ impact
 
@@ -892,7 +892,7 @@ Architecture
 
 - **Elevated**: [Missing Authentication](#missing-authentication): 2/2 unmitigated Risks, exploitation likelihood is _Likely_ with _Medium_ impact
 
-    Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of two-factor authentication for human users.
+    Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of multi-factor authentication for human users.
 
 - **Elevated**: [Unguarded Access From Internet](#unguarded-access-from-internet): 3/3 unmitigated Risks, exploitation likelihood is _Very Likely_ with _Medium_ impact
 
@@ -1365,7 +1365,7 @@ Technical assets which do not process requests regarding functionality or data l
 
 **Mitigation**
 
-Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of two-factor authentication for human users.
+Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of multi-factor authentication for human users.
 
 **Check**
 
@@ -2458,7 +2458,7 @@ The risk **Missing Hardening** was found **6 times** in the analyzed architectur
 | Elevated | **Missing Hardening** risk at **Jenkins Build Server** | `missing-hardening@jenkins-build-server` | Likely | Medium | [Jenkins Build Server](#jenkins-build-server) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
 | Elevated | **Missing Hardening** risk at **LDAP Auth Server** | `missing-hardening@ldap-auth-server` | Likely | Medium | [LDAP Auth Server](#ldap-auth-server) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
 
-### Missing Two-Factor Authentication (2FA)
+### Missing Multi-Factor Authentication (MFA)
 
 9 mitigated Risks · `missing-authentication-second-factor`
 
@@ -2467,13 +2467,13 @@ The risk **Missing Hardening** was found **6 times** in the analyzed architectur
 | STRIDE | Elevation of Privilege |
 | CWE | [CWE 308](https://cwe.mitre.org/data/definitions/308.html) |
 | Function | Business Side |
-| Action | Authentication with Second Factor (2FA) |
+| Action | Multi-Factor Authentication (MFA) |
 | ASVS chapter | V2 - Authentication Verification Requirements |
 | Cheat sheet | [Multifactor_Authentication_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html) |
 
 **Description**
 
-Technical assets (especially multi-tenant systems) should authenticate incoming requests with two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
+Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
 
 **Impact**
 
@@ -2481,7 +2481,7 @@ If this risk is unmitigated, attackers might be able to access or modify highly 
 
 **Detection Logic**
 
-In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via two-factor authentication (2FA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule.
+In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via multi-factor authentication (MFA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule.
 
 **Risk Rating**
 
@@ -2493,7 +2493,7 @@ Technical assets which do not process requests regarding functionality or data l
 
 **Mitigation**
 
-Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.
+Apply an authentication method to the technical asset protecting highly sensitive data via multi-factor authentication for human users.
 
 **Check**
 
@@ -2501,19 +2501,19 @@ Are recommendations from the linked cheat sheet and referenced ASVS chapter appl
 
 **Risk Findings**
 
-The risk **Missing Two-Factor Authentication (2FA)** was found **9 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+The risk **Missing Multi-Factor Authentication (MFA)** was found **9 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Medium | **Missing Two-Factor Authentication** covering communication link **CMS Content Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Marketing CMS** | `missing-authentication-second-factor@load-balancer>cms-content-traffic@load-balancer@marketing-cms` | Unlikely | Medium | [Marketing CMS](#marketing-cms), [CMS Content Traffic](#cms-content-traffic) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
-| Medium | **Missing Two-Factor Authentication** covering communication link **DB Update Access** from **Backend Admin Client** to **Customer Contract Database** | `missing-authentication-second-factor@backend-admin-client>db-update-access@backend-admin-client@sql-database` | Unlikely | Medium | [Customer Contract Database](#customer-contract-database), [DB Update Access](#db-update-access) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
-| Medium | **Missing Two-Factor Authentication** covering communication link **ERP Internal Access** from **Backoffice Client** to **Backoffice ERP System** | `missing-authentication-second-factor@backoffice-client>erp-internal-access@backoffice-client@erp-system` | Unlikely | Medium | [Backoffice ERP System](#backoffice-erp-system), [ERP Internal Access](#erp-internal-access) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
-| Medium | **Missing Two-Factor Authentication** covering communication link **ERP Web Access** from **Backend Admin Client** to **Backoffice ERP System** | `missing-authentication-second-factor@backend-admin-client>erp-web-access@backend-admin-client@erp-system` | Unlikely | Medium | [Backoffice ERP System](#backoffice-erp-system), [ERP Web Access](#erp-web-access) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
-| Medium | **Missing Two-Factor Authentication** covering communication link **Git-Repo Code Write Access** from **External Development Client** to **Git Repository** | `missing-authentication-second-factor@external-dev-client>git-repo-code-write-access@external-dev-client@git-repo` | Unlikely | Medium | [Git Repository](#git-repository), [Git-Repo Code Write Access](#git-repo-code-write-access) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
-| Medium | **Missing Two-Factor Authentication** covering communication link **Git-Repo Web-UI Access** from **External Development Client** to **Git Repository** | `missing-authentication-second-factor@external-dev-client>git-repo-web-ui-access@external-dev-client@git-repo` | Unlikely | Medium | [Git Repository](#git-repository), [Git-Repo Web-UI Access](#git-repo-web-ui-access) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
-| Medium | **Missing Two-Factor Authentication** covering communication link **Jenkins Web-UI Access** from **External Development Client** to **Jenkins Build Server** | `missing-authentication-second-factor@external-dev-client>jenkins-web-ui-access@external-dev-client@jenkins-build-server` | Unlikely | Medium | [Jenkins Build Server](#jenkins-build-server), [Jenkins Web-UI Access](#jenkins-web-ui-access) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
-| Medium | **Missing Two-Factor Authentication** covering communication link **User Management Access** from **Backend Admin Client** to **LDAP Auth Server** | `missing-authentication-second-factor@backend-admin-client>user-management-access@backend-admin-client@ldap-auth-server` | Unlikely | Medium | [LDAP Auth Server](#ldap-auth-server), [User Management Access](#user-management-access) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
-| Medium | **Missing Two-Factor Authentication** covering communication link **Web Application Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Apache Webserver** | `missing-authentication-second-factor@load-balancer>web-application-traffic@load-balancer@apache-webserver` | Unlikely | Medium | [Apache Webserver](#apache-webserver), [Web Application Traffic](#web-application-traffic) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
+| Medium | **Missing Multi-Factor Authentication** covering communication link **CMS Content Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Marketing CMS** | `missing-authentication-second-factor@load-balancer>cms-content-traffic@load-balancer@marketing-cms` | Unlikely | Medium | [Marketing CMS](#marketing-cms), [CMS Content Traffic](#cms-content-traffic) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
+| Medium | **Missing Multi-Factor Authentication** covering communication link **DB Update Access** from **Backend Admin Client** to **Customer Contract Database** | `missing-authentication-second-factor@backend-admin-client>db-update-access@backend-admin-client@sql-database` | Unlikely | Medium | [Customer Contract Database](#customer-contract-database), [DB Update Access](#db-update-access) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
+| Medium | **Missing Multi-Factor Authentication** covering communication link **ERP Internal Access** from **Backoffice Client** to **Backoffice ERP System** | `missing-authentication-second-factor@backoffice-client>erp-internal-access@backoffice-client@erp-system` | Unlikely | Medium | [Backoffice ERP System](#backoffice-erp-system), [ERP Internal Access](#erp-internal-access) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
+| Medium | **Missing Multi-Factor Authentication** covering communication link **ERP Web Access** from **Backend Admin Client** to **Backoffice ERP System** | `missing-authentication-second-factor@backend-admin-client>erp-web-access@backend-admin-client@erp-system` | Unlikely | Medium | [Backoffice ERP System](#backoffice-erp-system), [ERP Web Access](#erp-web-access) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
+| Medium | **Missing Multi-Factor Authentication** covering communication link **Git-Repo Code Write Access** from **External Development Client** to **Git Repository** | `missing-authentication-second-factor@external-dev-client>git-repo-code-write-access@external-dev-client@git-repo` | Unlikely | Medium | [Git Repository](#git-repository), [Git-Repo Code Write Access](#git-repo-code-write-access) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
+| Medium | **Missing Multi-Factor Authentication** covering communication link **Git-Repo Web-UI Access** from **External Development Client** to **Git Repository** | `missing-authentication-second-factor@external-dev-client>git-repo-web-ui-access@external-dev-client@git-repo` | Unlikely | Medium | [Git Repository](#git-repository), [Git-Repo Web-UI Access](#git-repo-web-ui-access) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
+| Medium | **Missing Multi-Factor Authentication** covering communication link **Jenkins Web-UI Access** from **External Development Client** to **Jenkins Build Server** | `missing-authentication-second-factor@external-dev-client>jenkins-web-ui-access@external-dev-client@jenkins-build-server` | Unlikely | Medium | [Jenkins Build Server](#jenkins-build-server), [Jenkins Web-UI Access](#jenkins-web-ui-access) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
+| Medium | **Missing Multi-Factor Authentication** covering communication link **User Management Access** from **Backend Admin Client** to **LDAP Auth Server** | `missing-authentication-second-factor@backend-admin-client>user-management-access@backend-admin-client@ldap-auth-server` | Unlikely | Medium | [LDAP Auth Server](#ldap-auth-server), [User Management Access](#user-management-access) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
+| Medium | **Missing Multi-Factor Authentication** covering communication link **Web Application Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Apache Webserver** | `missing-authentication-second-factor@load-balancer>web-application-traffic@load-balancer@apache-webserver` | Unlikely | Medium | [Apache Webserver](#apache-webserver), [Web Application Traffic](#web-application-traffic) | Mitigated | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures were implemented and checked |
 
 ### Unencrypted Technical Assets
 
@@ -2585,7 +2585,7 @@ The database behind the ERP system
 - **Critical**: [**Example Individual Risk** at **Database**](#some-individual-risk-example) (Unchecked)
 - **Elevated**: [**Publicly Shared Cloud Snapshot** risk at **Customer Contract Database**](#publicly-shared-cloud-snapshot) (Unchecked)
 - **Elevated**: [**Missing Hardening** risk at **Customer Contract Database**](#missing-hardening) (Mitigated)
-- **Medium**: [**Missing Two-Factor Authentication** covering communication link **DB Update Access** from **Backend Admin Client** to **Customer Contract Database**](#missing-two-factor-authentication-2fa) (Mitigated)
+- **Medium**: [**Missing Multi-Factor Authentication** covering communication link **DB Update Access** from **Backend Admin Client** to **Customer Contract Database**](#missing-multi-factor-authentication-mfa) (Mitigated)
 - **Medium**: [**Unencrypted Technical Asset** named **Customer Contract Database** missing end user individual encryption with data-with-end-user-individual-key](#unencrypted-technical-assets) (Mitigated)
 
 **Asset Information**
@@ -2640,8 +2640,8 @@ ERP system
 - **Medium**: [**Missing Vault (Secret Storage)** in the threat model (referencing asset **Backoffice ERP System** as an example)](#missing-vault-secret-storage) (Unchecked)
 - **Medium**: [**Unencrypted Communication** named **NFS Filesystem Access** between **Backoffice ERP System** and **Contract File Server**](#unencrypted-communication) (Unchecked)
 - **Medium**: [**Unencrypted Technical Asset** named **Backoffice ERP System** missing end user individual encryption with data-with-end-user-individual-key](#unencrypted-technical-assets) (Mitigated)
-- **Medium**: [**Missing Two-Factor Authentication** covering communication link **ERP Internal Access** from **Backoffice Client** to **Backoffice ERP System**](#missing-two-factor-authentication-2fa) (Mitigated)
-- **Medium**: [**Missing Two-Factor Authentication** covering communication link **ERP Web Access** from **Backend Admin Client** to **Backoffice ERP System**](#missing-two-factor-authentication-2fa) (Mitigated)
+- **Medium**: [**Missing Multi-Factor Authentication** covering communication link **ERP Internal Access** from **Backoffice Client** to **Backoffice ERP System**](#missing-multi-factor-authentication-mfa) (Mitigated)
+- **Medium**: [**Missing Multi-Factor Authentication** covering communication link **ERP Web Access** from **Backend Admin Client** to **Backoffice ERP System**](#missing-multi-factor-authentication-mfa) (Mitigated)
 - **Low**: [**Denial-of-Service** risky access of **Backoffice ERP System** by **Apache Webserver** via **ERP System Traffic**](#dos-risky-access-across-trust-boundary) (In Progress)
 - **Low**: [**Denial-of-Service** risky access of **Backoffice ERP System** by **Backoffice Client** via **ERP Internal Access**](#dos-risky-access-across-trust-boundary) (In Progress)
 
@@ -2696,7 +2696,7 @@ Apache Webserver hosting the API code and client-side code
 - **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Apache Webserver** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - **Medium**: [**Push instead of Pull Deployment** at **Apache Webserver** via build pipeline asset **Jenkins Build Server**](#push-instead-of-pull-deployment) (Unchecked)
 - **Medium**: [**Unencrypted Technical Asset** named **Apache Webserver**](#unencrypted-technical-assets) (Mitigated)
-- **Medium**: [**Missing Two-Factor Authentication** covering communication link **Web Application Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Apache Webserver**](#missing-two-factor-authentication-2fa) (Mitigated)
+- **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Web Application Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Apache Webserver**](#missing-multi-factor-authentication-mfa) (Mitigated)
 
 **Asset Information**
 
@@ -2792,8 +2792,8 @@ Git repository server
 - **Medium**: [**Accidental Secret Leak(Git)** risk at **Git Repository**: _Git Leak Prevention_](#accidental-secret-leak) (Unchecked)
 - **Medium**: [**Code Backdooring** risk at **Git Repository**](#code-backdooring) (Unchecked)
 - **Medium**: [**Unencrypted Technical Asset** named **Git Repository**](#unencrypted-technical-assets) (Mitigated)
-- **Medium**: [**Missing Two-Factor Authentication** covering communication link **Git-Repo Code Write Access** from **External Development Client** to **Git Repository**](#missing-two-factor-authentication-2fa) (Mitigated)
-- **Medium**: [**Missing Two-Factor Authentication** covering communication link **Git-Repo Web-UI Access** from **External Development Client** to **Git Repository**](#missing-two-factor-authentication-2fa) (Mitigated)
+- **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Git-Repo Code Write Access** from **External Development Client** to **Git Repository**](#missing-multi-factor-authentication-mfa) (Mitigated)
+- **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Git-Repo Web-UI Access** from **External Development Client** to **Git Repository**](#missing-multi-factor-authentication-mfa) (Mitigated)
 - **Low**: [**Unchecked Deployment** risk at **Git Repository**](#unchecked-deployment) (Unchecked)
 
 **Asset Information**
@@ -2845,7 +2845,7 @@ Jenkins build-server
 - **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Jenkins Build Server** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - **Medium**: [**Unchecked Deployment** risk at **Jenkins Build Server**](#unchecked-deployment) (Unchecked)
 - **Medium**: [**Unencrypted Technical Asset** named **Jenkins Build Server**](#unencrypted-technical-assets) (Mitigated)
-- **Medium**: [**Missing Two-Factor Authentication** covering communication link **Jenkins Web-UI Access** from **External Development Client** to **Jenkins Build Server**](#missing-two-factor-authentication-2fa) (Mitigated)
+- **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Jenkins Web-UI Access** from **External Development Client** to **Jenkins Build Server**](#missing-multi-factor-authentication-mfa) (Mitigated)
 
 **Asset Information**
 
@@ -2939,7 +2939,7 @@ CMS for the marketing content
 - **Medium**: [**Unencrypted Communication** named **Auth Traffic** between **Marketing CMS** and **LDAP Auth Server** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - **Medium**: [**Push instead of Pull Deployment** at **Marketing CMS** via build pipeline asset **Jenkins Build Server**](#push-instead-of-pull-deployment) (Unchecked)
 - **Medium**: [**Unencrypted Technical Asset** named **Marketing CMS**](#unencrypted-technical-assets) (Mitigated)
-- **Medium**: [**Missing Two-Factor Authentication** covering communication link **CMS Content Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Marketing CMS**](#missing-two-factor-authentication-2fa) (Mitigated)
+- **Medium**: [**Missing Multi-Factor Authentication** covering communication link **CMS Content Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Marketing CMS**](#missing-multi-factor-authentication-mfa) (Mitigated)
 - **Low**: [**Denial-of-Service** risky access of **Marketing CMS** by **Backoffice Client** via **Marketing CMS Editing**](#dos-risky-access-across-trust-boundary) (In Progress)
 
 **Asset Information**
@@ -3030,7 +3030,7 @@ LDAP authentication server
 **Identified Risks of the Asset**
 
 - **Elevated**: [**Missing Hardening** risk at **LDAP Auth Server**](#missing-hardening) (Mitigated)
-- **Medium**: [**Missing Two-Factor Authentication** covering communication link **User Management Access** from **Backend Admin Client** to **LDAP Auth Server**](#missing-two-factor-authentication-2fa) (Mitigated)
+- **Medium**: [**Missing Multi-Factor Authentication** covering communication link **User Management Access** from **Backend Admin Client** to **LDAP Auth Server**](#missing-multi-factor-authentication-mfa) (Mitigated)
 
 **Asset Information**
 
@@ -3893,7 +3893,8 @@ Link to the ERP system
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | token |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3915,7 +3916,8 @@ Link to the identity provider server
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | credentials |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3937,7 +3939,8 @@ Link to the LDAP auth server for managing users
 | Protocol | ldaps |
 | Encrypted | yes |
 | Authentication | credentials |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | devops |
 | Tags | none |
@@ -3959,7 +3962,8 @@ Link to the ERP system (Web)
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | token |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | devops |
 | Tags | none |
@@ -3981,7 +3985,8 @@ Link to the database (JDBC tunneled via SSH)
 | Protocol | ssh |
 | Encrypted | yes |
 | Authentication | client-certificate |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | devops |
 | Tags | none |
@@ -4003,7 +4008,8 @@ Link to the CMS for editing content
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | token |
-| Authorization | end-user-identity-propagation |
+| Identity | end-user |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -4025,7 +4031,8 @@ Link to the ERP system
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | token |
-| Authorization | end-user-identity-propagation |
+| Identity | end-user |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | some-erp |
@@ -4047,7 +4054,8 @@ Link to the file system
 | Protocol | nfs |
 | Encrypted | no |
 | Authentication | none |
-| Authorization | none |
+| Identity | none |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -4069,7 +4077,8 @@ Link to the DB system
 | Protocol | jdbc |
 | Encrypted | no |
 | Authentication | credentials |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -4091,7 +4100,8 @@ Link to the load balancer
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | session-id |
-| Authorization | end-user-identity-propagation |
+| Identity | end-user |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -4113,7 +4123,8 @@ Link to the Jenkins build server
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | credentials |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | devops |
 | Tags | none |
@@ -4135,7 +4146,8 @@ Link to the Git repo
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | token |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | devops |
 | Tags | none |
@@ -4157,7 +4169,8 @@ Link to the Git repo
 | Protocol | ssh |
 | Encrypted | yes |
 | Authentication | client-certificate |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | devops |
 | Tags | none |
@@ -4179,7 +4192,8 @@ Link to the LDAP server
 | Protocol | ldaps |
 | Encrypted | yes |
 | Authentication | credentials |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -4201,7 +4215,8 @@ Link to the Git repository server
 | Protocol | ssh |
 | Encrypted | yes |
 | Authentication | client-certificate |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | yes |
 | Usage | devops |
 | Tags | none |
@@ -4223,7 +4238,8 @@ Link to the CMS
 | Protocol | ssh |
 | Encrypted | yes |
 | Authentication | client-certificate |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | devops |
 | Tags | none |
@@ -4245,7 +4261,8 @@ Link to the Apache webserver
 | Protocol | ssh |
 | Encrypted | yes |
 | Authentication | client-certificate |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | devops |
 | Tags | none |
@@ -4267,7 +4284,8 @@ Link to the web server
 | Protocol | http |
 | Encrypted | no |
 | Authentication | session-id |
-| Authorization | end-user-identity-propagation |
+| Identity | end-user |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -4289,7 +4307,8 @@ Link to the CMS server
 | Protocol | http |
 | Encrypted | no |
 | Authentication | none |
-| Authorization | none |
+| Identity | none |
+| Authorization | unknown |
 | Read-only | yes |
 | Usage | business |
 | Tags | none |
@@ -4311,7 +4330,8 @@ Link to the LDAP auth server
 | Protocol | ldap |
 | Encrypted | no |
 | Authentication | credentials |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | yes |
 | Usage | business |
 | Tags | none |
@@ -4335,15 +4355,15 @@ Link to the LDAP auth server
 | [**Missing Hardening** risk at **Jenkins Build Server**](#missing-hardening) | `missing-hardening@jenkins-build-server` | Elevated | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
 | [**Missing Hardening** risk at **LDAP Auth Server**](#missing-hardening) | `missing-hardening@ldap-auth-server` | Elevated | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
 | [**Untrusted Deserialization** risk at **Backoffice ERP System**](#untrusted-deserialization) | `untrusted-deserialization@erp-system` | Elevated | Accepted | 2020-01-04 | John Doe | XYZ-1234 | Risk accepted as tolerable |
-| [**Missing Two-Factor Authentication** covering communication link **CMS Content Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Marketing CMS**](#missing-two-factor-authentication-2fa) | `missing-authentication-second-factor@load-balancer>cms-content-traffic@load-balancer@marketing-cms` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
-| [**Missing Two-Factor Authentication** covering communication link **DB Update Access** from **Backend Admin Client** to **Customer Contract Database**](#missing-two-factor-authentication-2fa) | `missing-authentication-second-factor@backend-admin-client>db-update-access@backend-admin-client@sql-database` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
-| [**Missing Two-Factor Authentication** covering communication link **ERP Internal Access** from **Backoffice Client** to **Backoffice ERP System**](#missing-two-factor-authentication-2fa) | `missing-authentication-second-factor@backoffice-client>erp-internal-access@backoffice-client@erp-system` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
-| [**Missing Two-Factor Authentication** covering communication link **ERP Web Access** from **Backend Admin Client** to **Backoffice ERP System**](#missing-two-factor-authentication-2fa) | `missing-authentication-second-factor@backend-admin-client>erp-web-access@backend-admin-client@erp-system` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
-| [**Missing Two-Factor Authentication** covering communication link **Git-Repo Code Write Access** from **External Development Client** to **Git Repository**](#missing-two-factor-authentication-2fa) | `missing-authentication-second-factor@external-dev-client>git-repo-code-write-access@external-dev-client@git-repo` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
-| [**Missing Two-Factor Authentication** covering communication link **Git-Repo Web-UI Access** from **External Development Client** to **Git Repository**](#missing-two-factor-authentication-2fa) | `missing-authentication-second-factor@external-dev-client>git-repo-web-ui-access@external-dev-client@git-repo` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
-| [**Missing Two-Factor Authentication** covering communication link **Jenkins Web-UI Access** from **External Development Client** to **Jenkins Build Server**](#missing-two-factor-authentication-2fa) | `missing-authentication-second-factor@external-dev-client>jenkins-web-ui-access@external-dev-client@jenkins-build-server` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
-| [**Missing Two-Factor Authentication** covering communication link **User Management Access** from **Backend Admin Client** to **LDAP Auth Server**](#missing-two-factor-authentication-2fa) | `missing-authentication-second-factor@backend-admin-client>user-management-access@backend-admin-client@ldap-auth-server` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
-| [**Missing Two-Factor Authentication** covering communication link **Web Application Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Apache Webserver**](#missing-two-factor-authentication-2fa) | `missing-authentication-second-factor@load-balancer>web-application-traffic@load-balancer@apache-webserver` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
+| [**Missing Multi-Factor Authentication** covering communication link **CMS Content Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Marketing CMS**](#missing-multi-factor-authentication-mfa) | `missing-authentication-second-factor@load-balancer>cms-content-traffic@load-balancer@marketing-cms` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
+| [**Missing Multi-Factor Authentication** covering communication link **DB Update Access** from **Backend Admin Client** to **Customer Contract Database**](#missing-multi-factor-authentication-mfa) | `missing-authentication-second-factor@backend-admin-client>db-update-access@backend-admin-client@sql-database` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
+| [**Missing Multi-Factor Authentication** covering communication link **ERP Internal Access** from **Backoffice Client** to **Backoffice ERP System**](#missing-multi-factor-authentication-mfa) | `missing-authentication-second-factor@backoffice-client>erp-internal-access@backoffice-client@erp-system` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
+| [**Missing Multi-Factor Authentication** covering communication link **ERP Web Access** from **Backend Admin Client** to **Backoffice ERP System**](#missing-multi-factor-authentication-mfa) | `missing-authentication-second-factor@backend-admin-client>erp-web-access@backend-admin-client@erp-system` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
+| [**Missing Multi-Factor Authentication** covering communication link **Git-Repo Code Write Access** from **External Development Client** to **Git Repository**](#missing-multi-factor-authentication-mfa) | `missing-authentication-second-factor@external-dev-client>git-repo-code-write-access@external-dev-client@git-repo` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
+| [**Missing Multi-Factor Authentication** covering communication link **Git-Repo Web-UI Access** from **External Development Client** to **Git Repository**](#missing-multi-factor-authentication-mfa) | `missing-authentication-second-factor@external-dev-client>git-repo-web-ui-access@external-dev-client@git-repo` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
+| [**Missing Multi-Factor Authentication** covering communication link **Jenkins Web-UI Access** from **External Development Client** to **Jenkins Build Server**](#missing-multi-factor-authentication-mfa) | `missing-authentication-second-factor@external-dev-client>jenkins-web-ui-access@external-dev-client@jenkins-build-server` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
+| [**Missing Multi-Factor Authentication** covering communication link **User Management Access** from **Backend Admin Client** to **LDAP Auth Server**](#missing-multi-factor-authentication-mfa) | `missing-authentication-second-factor@backend-admin-client>user-management-access@backend-admin-client@ldap-auth-server` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
+| [**Missing Multi-Factor Authentication** covering communication link **Web Application Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Apache Webserver**](#missing-multi-factor-authentication-mfa) | `missing-authentication-second-factor@load-balancer>web-application-traffic@load-balancer@apache-webserver` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
 | [**Unencrypted Technical Asset** named **Apache Webserver**](#unencrypted-technical-assets) | `unencrypted-asset@apache-webserver` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
 | [**Unencrypted Technical Asset** named **Backoffice ERP System** missing end user individual encryption with data-with-end-user-individual-key](#unencrypted-technical-assets) | `unencrypted-asset@erp-system` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
 | [**Unencrypted Technical Asset** named **Git Repository**](#unencrypted-technical-assets) | `unencrypted-asset@git-repo` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
@@ -4385,7 +4405,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Insecure Control Protocol | `insecure-control-protocol` | Tampering | Most industrial control protocols, like Modbus, DNP3, S7comm, EtherNet/IP or PROFINET, were designed for closed networks: a controller or field device executes every command it receives, without checking who sent it or whether it was changed on the way. Anyone who can send packets to it can write setpoints and outputs, stop it or download a new program. | In-scope controllers (plc, rtu, safety-controller) and field-device technical assets with an incoming non-readonly communication link over an industrial control protocol without a secure variant in use (all of them except modbus-security, dnp3-encrypted and opc-ua-encrypted). | The risk rating depends on the integrity and availability of the controlled process, and is the highest for safety controllers. The attack is very likely when the sender is on the internet, likely when it is an IT asset, reaches IT or calls across a network trust boundary, and unlikely otherwise. |
 | LDAP-Injection | `ldap-injection` | Tampering | When an LDAP server is accessed LDAP-Injection risks might arise. The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed. | In-scope clients accessing LDAP servers via typical LDAP access protocols. | The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed. |
 | Missing Authentication | `missing-authentication` | Elevation of Privilege | Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes sensitive data. | In-scope technical assets (except load-balancer, reverse-proxy, service-registry, waf, ids, and ips and in-process calls) should authenticate incoming requests when the asset processes sensitive data. This is especially the case for all multi-tenant assets (there even non-sensitive ones). Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. | The risk rating (medium or high) depends on the sensitivity of the data sent across the communication link. Monitoring callers are exempted from this risk. |
-| Missing Two-Factor Authentication (2FA) | `missing-authentication-second-factor` | Elevation of Privilege | Technical assets (especially multi-tenant systems) should authenticate incoming requests with two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans. | In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via two-factor authentication (2FA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. | medium |
+| Missing Multi-Factor Authentication (MFA) | `missing-authentication-second-factor` | Elevation of Privilege | Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans. | In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via multi-factor authentication (MFA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. | medium |
 | Missing Build Infrastructure | `missing-build-infrastructure` | Tampering | The modeled architecture does not contain a build infrastructure (devops-client, sourcecode-repo, build-pipeline, etc.), which might be the risk of a model missing critical assets (and thus not seeing their risks). If the architecture contains custom-developed parts, the pipeline where code gets developed and built needs to be part of the model. | Models with in-scope custom-developed parts missing in-scope development (code creation) and build infrastructure components (devops-client, sourcecode-repo, build-pipeline, etc.). | The risk rating depends on the highest sensitivity of the in-scope assets running custom-developed parts. |
 | Missing Cloud Hardening | `missing-cloud-hardening` | Tampering | Cloud components should be hardened according to the cloud vendor best practices. This affects their configuration, auditing, and further areas. | In-scope cloud components (either residing in cloud trust boundaries or more specifically tagged with cloud provider types). | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. |
 | Missing File Validation | `missing-file-validation` | Spoofing | When a technical asset accepts files, these input files should be strictly validated about filename and type. | In-scope technical assets with custom-developed code accepting file data formats. | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. |

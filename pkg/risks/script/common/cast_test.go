@@ -54,6 +54,27 @@ func TestCastValue_Likelihood(t *testing.T) {
 	assert.True(t, decimal.NewFromInt(0).Equal(decimalOf(t, result)))
 }
 
+func TestCastValue_Identity(t *testing.T) {
+	val := SomeStringValue("workload", nil)
+	result, err := CastValue(val, "identity")
+
+	assert.NoError(t, err)
+	// workload is index 2
+	assert.True(t, decimal.NewFromInt(2).Equal(decimalOf(t, result)))
+}
+
+func TestCastValue_AuthorizationOrdersGranularity(t *testing.T) {
+	ordinals := make([]decimal.Decimal, 0, 5)
+	for _, value := range []string{"unknown", "none", "authenticated-only", "function-level", "object-level"} {
+		result, err := CastValue(SomeStringValue(value, nil), "authorization")
+		require.NoError(t, err, value)
+		ordinals = append(ordinals, decimalOf(t, result))
+	}
+	for index := 1; index < len(ordinals); index++ {
+		assert.True(t, ordinals[index-1].LessThan(ordinals[index]), "%v before %v", ordinals[index-1], ordinals[index])
+	}
+}
+
 func TestCastValue_UnknownType(t *testing.T) {
 	val := SomeStringValue("something", nil)
 	_, err := CastValue(val, "unknown_type")

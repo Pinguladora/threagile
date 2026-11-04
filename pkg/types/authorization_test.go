@@ -5,12 +5,10 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package types
 
 import (
-	"encoding/json"
 	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"gopkg.in/yaml.v3"
 )
 
 type ParseAuthorizationTest struct {
@@ -21,29 +19,37 @@ type ParseAuthorizationTest struct {
 
 func TestParseAuthorization(t *testing.T) {
 	testCases := map[string]ParseAuthorizationTest{
+		"empty (not modelled)": {
+			input:    "",
+			expected: UnknownAuthorization,
+		},
+		"unknown": {
+			input:    "unknown",
+			expected: UnknownAuthorization,
+		},
 		"none": {
 			input:    "none",
 			expected: NoneAuthorization,
 		},
-		"technical-user": {
-			input:    "technical-user",
-			expected: TechnicalUser,
+		"authenticated-only": {
+			input:    "authenticated-only",
+			expected: AuthenticatedOnly,
 		},
-		"end-user-identity-propagation": {
-			input:    "end-user-identity-propagation",
-			expected: EndUserIdentityPropagation,
+		"function-level": {
+			input:    "function-level",
+			expected: FunctionLevel,
 		},
-		"enduser-identity-propagation (legacy spelling)": {
-			input:    "enduser-identity-propagation",
-			expected: EndUserIdentityPropagation,
+		"Object-Level (any case)": {
+			input:    "Object-Level",
+			expected: ObjectLevel,
 		},
-		"Enduser-Identity-Propagation (legacy spelling, any case)": {
-			input:    "Enduser-Identity-Propagation",
-			expected: EndUserIdentityPropagation,
+		"technical-user (an identity now)": {
+			input:         "technical-user",
+			expectedError: errors.New("unknown authorization value \"technical-user\""),
 		},
-		"unknown": {
-			input:         "unknown",
-			expectedError: errors.New("unknown authorization value \"unknown\""),
+		"rbac": {
+			input:         "rbac",
+			expectedError: errors.New("unknown authorization value \"rbac\""),
 		},
 	}
 
@@ -55,19 +61,4 @@ func TestParseAuthorization(t *testing.T) {
 			assert.Equal(t, testCase.expectedError, err)
 		})
 	}
-}
-
-// TestLegacyAuthorizationIsNormalised reads the spelling of older releases (threagile#92) and
-// writes the current one.
-func TestLegacyAuthorizationIsNormalised(t *testing.T) {
-	var authorization Authorization
-	assert.NoError(t, yaml.Unmarshal([]byte("enduser-identity-propagation"), &authorization))
-	assert.Equal(t, EndUserIdentityPropagation, authorization)
-
-	written, err := yaml.Marshal(authorization)
-	assert.NoError(t, err)
-	assert.Equal(t, "end-user-identity-propagation\n", string(written))
-
-	assert.NoError(t, json.Unmarshal([]byte(`"enduser-identity-propagation"`), &authorization))
-	assert.Equal(t, EndUserIdentityPropagation, authorization)
 }

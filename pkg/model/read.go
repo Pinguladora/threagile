@@ -101,6 +101,13 @@ func AnalyzeModel(
 			"a list of risk categories, each with its title in a title field (converted %d risk categories)", converted)
 	}
 
+	if converted := ConvertLegacyIdentities(modelInput); converted > 0 {
+		progressReporter.Warnf("the authorization of %d communication links holds their identity (none, technical-user "+
+			"or end-user-identity-propagation), as earlier versions of the model did: read it as their identity, "+
+			"and their authorization as not modelled; set identity and authorization to remove this warning",
+			converted)
+	}
+
 	parsedModel, parseError := ParseModel(config, modelInput, builtinRiskRules, customRiskRules)
 	if parseError != nil {
 		return nil, fmt.Errorf("unable to parse model yaml: %w", parseError)

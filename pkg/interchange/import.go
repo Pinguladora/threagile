@@ -28,7 +28,8 @@ const (
 	DefaultCriticality         = "operational"        // integrity and availability of a technical asset
 	DefaultProtocol            = "unknown-protocol"   // protocol of a communication link
 	DefaultAuthentication      = "none"               // authentication of a communication link
-	DefaultAuthorization       = "none"               // authorization of a communication link
+	DefaultIdentity            = "none"               // identity of a communication link
+	DefaultAuthorization       = "unknown"            // authorization of a communication link
 	DefaultQuantity            = "few"                // quantity of a data asset
 )
 
@@ -216,6 +217,7 @@ func (what *importer) addCommunicationLinks(result *input.Model) {
 
 		properties := flow.Properties
 		fields := what.fieldsOf(properties, where)
+		identity, authorization := fields.linkAccess()
 		sent, received := what.flowDataAssets(flow, where)
 		// threagile derives the id of a link from its name, so the names need to differ in more than case
 		title := uniqueName(titlesBySource[sourceTitle], Slug, flow.Name, flow.ID)
@@ -224,7 +226,8 @@ func (what *importer) addCommunicationLinks(result *input.Model) {
 			Description:        flow.Description,
 			Protocol:           fields.enum("protocol", DefaultProtocol, parses(types.ParseProtocol)),
 			Authentication:     fields.enum("authentication", DefaultAuthentication, parses(types.ParseAuthentication)),
-			Authorization:      fields.enum("authorization", DefaultAuthorization, parses(types.ParseAuthorization)),
+			Identity:           identity,
+			Authorization:      authorization,
 			Tags:               what.useTags(flow.Tags),
 			VPN:                properties.flag("vpn"),
 			IpFiltered:         properties.flag("ip_filtered"),
@@ -385,6 +388,18 @@ func (what fields) enum(key string, fallback string, parse func(string) error) s
 	}
 
 	return value
+}
+
+// linkAccess returns the identity and the authorization of a flow. A flow without an identity may hold it in its
+// authorization, as the exports of earlier versions of the model did.
+func (what fields) linkAccess() (identity string, authorization string) {
+	if strings.TrimSpace(what.properties["identity"]) == "" {
+		if legacy, ok := types.LegacyIdentity(strings.TrimSpace(what.properties["authorization"])); ok {
+			return legacy.String(), DefaultAuthorization
+		}
+	}
+	return what.enum("identity", DefaultIdentity, parses(types.ParseIdentity)),
+		what.enum("authorization", DefaultAuthorization, parses(types.ParseAuthorization))
 }
 
 func (what *importer) note(format string, a ...any) {

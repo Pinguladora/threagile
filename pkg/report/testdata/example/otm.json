@@ -1315,8 +1315,8 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_sent": "customer-accounts",
+        "threagile:identity": "service-account",
         "threagile:protocol": "https",
         "threagile:usage": "business"
       }
@@ -1368,9 +1368,9 @@
       ],
       "attributes": {
         "threagile:authentication": "token",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_received": "customer-accounts,customer-operational-data,customer-contracts,internal-business-data",
         "threagile:data_assets_sent": "customer-accounts,customer-operational-data,internal-business-data",
+        "threagile:identity": "service-account",
         "threagile:protocol": "https",
         "threagile:usage": "business"
       }
@@ -1402,9 +1402,9 @@
       ],
       "attributes": {
         "threagile:authentication": "client-certificate",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_received": "db-dumps,erp-logs,customer-accounts,customer-operational-data",
         "threagile:data_assets_sent": "db-dumps",
+        "threagile:identity": "service-account",
         "threagile:protocol": "ssh",
         "threagile:usage": "devops"
       }
@@ -1434,9 +1434,9 @@
       ],
       "attributes": {
         "threagile:authentication": "token",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_received": "erp-logs",
         "threagile:data_assets_sent": "erp-customizing",
+        "threagile:identity": "service-account",
         "threagile:protocol": "https",
         "threagile:usage": "devops"
       }
@@ -1465,9 +1465,9 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_received": "customer-accounts",
         "threagile:data_assets_sent": "customer-accounts",
+        "threagile:identity": "service-account",
         "threagile:protocol": "ldaps",
         "threagile:usage": "devops"
       }
@@ -1510,9 +1510,9 @@
       ],
       "attributes": {
         "threagile:authentication": "token",
-        "threagile:authorization": "end-user-identity-propagation",
         "threagile:data_assets_received": "customer-contracts,internal-business-data",
         "threagile:data_assets_sent": "internal-business-data",
+        "threagile:identity": "end-user",
         "threagile:protocol": "https",
         "threagile:usage": "business",
         "threagile:vpn": "true"
@@ -1542,9 +1542,9 @@
       ],
       "attributes": {
         "threagile:authentication": "token",
-        "threagile:authorization": "end-user-identity-propagation",
         "threagile:data_assets_received": "marketing-material",
         "threagile:data_assets_sent": "marketing-material",
+        "threagile:identity": "end-user",
         "threagile:protocol": "https",
         "threagile:usage": "business",
         "threagile:vpn": "true"
@@ -1566,9 +1566,9 @@
       ],
       "attributes": {
         "threagile:authentication": "session-id",
-        "threagile:authorization": "end-user-identity-propagation",
         "threagile:data_assets_received": "customer-accounts,customer-operational-data,customer-contracts,client-application-code,marketing-material",
         "threagile:data_assets_sent": "customer-accounts,customer-operational-data",
+        "threagile:identity": "end-user",
         "threagile:protocol": "https",
         "threagile:usage": "business"
       }
@@ -1609,9 +1609,9 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_received": "customer-accounts,customer-operational-data,internal-business-data",
         "threagile:data_assets_sent": "customer-accounts,customer-operational-data,internal-business-data",
+        "threagile:identity": "service-account",
         "threagile:protocol": "jdbc",
         "threagile:usage": "business"
       }
@@ -1660,9 +1660,9 @@
       ],
       "attributes": {
         "threagile:authentication": "none",
-        "threagile:authorization": "none",
         "threagile:data_assets_received": "customer-contracts",
         "threagile:data_assets_sent": "customer-contracts",
+        "threagile:identity": "none",
         "threagile:protocol": "nfs",
         "threagile:usage": "business"
       }
@@ -1702,9 +1702,9 @@
       ],
       "attributes": {
         "threagile:authentication": "client-certificate",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_received": "client-application-code,server-application-code",
         "threagile:data_assets_sent": "client-application-code,server-application-code",
+        "threagile:identity": "service-account",
         "threagile:protocol": "ssh",
         "threagile:usage": "devops"
       }
@@ -1744,9 +1744,9 @@
       ],
       "attributes": {
         "threagile:authentication": "token",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_received": "client-application-code,server-application-code",
         "threagile:data_assets_sent": "client-application-code,server-application-code",
+        "threagile:identity": "service-account",
         "threagile:protocol": "https",
         "threagile:usage": "devops"
       }
@@ -1785,9 +1785,9 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_received": "build-job-config",
         "threagile:data_assets_sent": "build-job-config",
+        "threagile:identity": "service-account",
         "threagile:protocol": "https",
         "threagile:usage": "devops"
       }
@@ -1815,8 +1815,8 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_sent": "customer-accounts",
+        "threagile:identity": "service-account",
         "threagile:protocol": "ldaps",
         "threagile:usage": "business"
       }
@@ -1845,8 +1845,8 @@
       ],
       "attributes": {
         "threagile:authentication": "client-certificate",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_sent": "client-application-code,server-application-code",
+        "threagile:identity": "service-account",
         "threagile:protocol": "ssh",
         "threagile:usage": "devops"
       }
@@ -1874,8 +1874,8 @@
       ],
       "attributes": {
         "threagile:authentication": "client-certificate",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_sent": "marketing-material",
+        "threagile:identity": "service-account",
         "threagile:protocol": "ssh",
         "threagile:usage": "devops"
       }
@@ -1892,8 +1892,8 @@
       ],
       "attributes": {
         "threagile:authentication": "client-certificate",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_received": "client-application-code,server-application-code",
+        "threagile:identity": "service-account",
         "threagile:protocol": "ssh",
         "threagile:readonly": "true",
         "threagile:usage": "devops"
@@ -1932,8 +1932,8 @@
       ],
       "attributes": {
         "threagile:authentication": "none",
-        "threagile:authorization": "none",
         "threagile:data_assets_received": "marketing-material",
+        "threagile:identity": "none",
         "threagile:protocol": "http",
         "threagile:readonly": "true",
         "threagile:usage": "business"
@@ -1976,9 +1976,9 @@
       ],
       "attributes": {
         "threagile:authentication": "session-id",
-        "threagile:authorization": "end-user-identity-propagation",
         "threagile:data_assets_received": "customer-accounts,customer-operational-data,customer-contracts,client-application-code",
         "threagile:data_assets_sent": "customer-accounts,customer-operational-data",
+        "threagile:identity": "end-user",
         "threagile:protocol": "http",
         "threagile:usage": "business"
       }
@@ -2017,9 +2017,9 @@
       ],
       "attributes": {
         "threagile:authentication": "credentials",
-        "threagile:authorization": "technical-user",
         "threagile:data_assets_received": "customer-accounts",
         "threagile:data_assets_sent": "customer-accounts",
+        "threagile:identity": "service-account",
         "threagile:protocol": "ldap",
         "threagile:readonly": "true",
         "threagile:usage": "business"
@@ -2155,8 +2155,8 @@
     },
     {
       "id": "missing-authentication-second-factor",
-      "name": "Missing Two-Factor Authentication (2FA)",
-      "description": "Technical assets (especially multi-tenant systems) should authenticate incoming requests with two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.",
+      "name": "Missing Multi-Factor Authentication (MFA)",
+      "description": "Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.",
       "categories": [
         "Elevation of Privilege"
       ],
@@ -2644,7 +2644,7 @@
     {
       "id": "missing-authentication-mitigation",
       "name": "Authentication of Incoming Requests",
-      "description": "Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of two-factor authentication for human users.",
+      "description": "Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of multi-factor authentication for human users.",
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
@@ -2652,8 +2652,8 @@
     },
     {
       "id": "missing-authentication-second-factor-mitigation",
-      "name": "Authentication with Second Factor (2FA)",
-      "description": "Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.",
+      "name": "Multi-Factor Authentication (MFA)",
+      "description": "Apply an authentication method to the technical asset protecting highly sensitive data via multi-factor authentication for human users.",
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"

@@ -9,6 +9,7 @@ import (
 
 const (
 	authentication  = "authentication"
+	identity        = "identity"
 	authorization   = "authorization"
 	confidentiality = "confidentiality"
 	criticality     = "criticality"
@@ -24,6 +25,7 @@ const (
 
 var cast = map[string]castFunc{
 	authentication:  toAuthentication,
+	identity:        toIdentity,
 	authorization:   toAuthorization,
 	confidentiality: toConfidentiality,
 	criticality:     toCriticality,
@@ -62,6 +64,10 @@ func toCriticality(value Value) (Value, error) {
 
 func toAuthentication(value Value) (Value, error) {
 	return castToEnum(value, types.Authentication(0).Find)
+}
+
+func toIdentity(value Value) (Value, error) {
+	return castToEnum(value, types.Identity(0).Find)
 }
 
 func toAuthorization(value Value) (Value, error) {

@@ -103,7 +103,7 @@ The most prevalent impacts of the **39 initial risks** (distributed over **12 ri
 
     If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model in the identity provider/store that is currently missing in the model.
 
-- **Medium**: [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa): 1 Initial Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa): 1 Initial Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication.
 
@@ -189,7 +189,7 @@ The most prevalent impacts of the **39 remaining risks** (distributed over **12 
 
     If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model in the identity provider/store that is currently missing in the model.
 
-- **Medium**: [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa): 1 Remaining Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa): 1 Remaining Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication.
 
@@ -264,7 +264,7 @@ _No risks._
 | Medium | [**Denial-of-Service** risky access of **Pump Station RTU** by **SCADA Server** via **Pump Station Telemetry**](#dos-risky-access-across-trust-boundary) | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | [Pump Station RTU](#pump-station-rtu), [Pump Station Telemetry](#pump-station-telemetry) | Unchecked |
 | Medium | [**Denial-of-Service** risky access of **SCADA Server** by **Office Workstation** via **Live Dashboard**](#dos-risky-access-across-trust-boundary) | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | [SCADA Server](#scada-server), [Live Dashboard](#live-dashboard) | Unchecked |
 | Medium | [**Insecure Control Protocol** risk at **Dosing Pump** over **profinet** from **Dosing PLC**](#insecure-control-protocol) | [Insecure Control Protocol](#insecure-control-protocol) | [Dosing Pump](#dosing-pump), [Dosing Pump Control](#dosing-pump-control) | Unchecked |
-| Medium | [**Missing Two-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-two-factor-authentication-2fa) | [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa) | [SCADA Server](#scada-server), [Operation](#operation) | Unchecked |
+| Medium | [**Missing Multi-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [SCADA Server](#scada-server), [Operation](#operation) | Unchecked |
 | Medium | [**Missing Hardening** risk at **Plant Historian**](#missing-hardening) | [Missing Hardening](#missing-hardening) | [Plant Historian](#plant-historian) | Unchecked |
 | Medium | [**Missing Identity Store** in the threat model (referencing asset **Engineering Workstation** as an example)](#missing-identity-store) | [Missing Identity Store](#missing-identity-store) | [Engineering Workstation](#engineering-workstation) | Unchecked |
 | Medium | [**Missing Vault (Secret Storage)** in the threat model (referencing asset **Chlorine Safety Controller** as an example)](#missing-vault-secret-storage) | [Missing Vault (Secret Storage)](#missing-vault-secret-storage) | [Chlorine Safety Controller](#chlorine-safety-controller) | Unchecked |
@@ -578,9 +578,9 @@ Elevation of privilege - Authorization
 
     Internet-exposed assets must be guarded by a protecting service, application, or reverse-proxy.
 
-- **Medium**: [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
-    Technical assets (especially multi-tenant systems) should authenticate incoming requests with two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
+    Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
 
 ## Assignment by Function
 
@@ -592,9 +592,9 @@ This chapter clusters and assigns the risks by functions which are most likely a
 
 Business
 
-- **Medium**: [Missing Two-Factor Authentication (2FA)](#missing-two-factor-authentication-2fa): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
-    Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.
+    Apply an authentication method to the technical asset protecting highly sensitive data via multi-factor authentication for human users.
 
 ### Architecture
 
@@ -1271,7 +1271,7 @@ The risk **Missing Identity Store** was found **1 time** in the analyzed archite
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Medium | **Missing Identity Store** in the threat model (referencing asset **Engineering Workstation** as an example) | `missing-identity-store@engineering-workstation` | Unlikely | Medium | [Engineering Workstation](#engineering-workstation) | Unchecked | _not tracked_ |
 
-### Missing Two-Factor Authentication (2FA)
+### Missing Multi-Factor Authentication (MFA)
 
 **Medium** · 1/1 unmitigated Risk · `missing-authentication-second-factor`
 
@@ -1280,13 +1280,13 @@ The risk **Missing Identity Store** was found **1 time** in the analyzed archite
 | STRIDE | Elevation of Privilege |
 | CWE | [CWE 308](https://cwe.mitre.org/data/definitions/308.html) |
 | Function | Business Side |
-| Action | Authentication with Second Factor (2FA) |
+| Action | Multi-Factor Authentication (MFA) |
 | ASVS chapter | V2 - Authentication Verification Requirements |
 | Cheat sheet | [Multifactor_Authentication_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html) |
 
 **Description**
 
-Technical assets (especially multi-tenant systems) should authenticate incoming requests with two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
+Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
 
 **Impact**
 
@@ -1294,7 +1294,7 @@ If this risk is unmitigated, attackers might be able to access or modify highly 
 
 **Detection Logic**
 
-In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via two-factor authentication (2FA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule.
+In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via multi-factor authentication (MFA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule.
 
 **Risk Rating**
 
@@ -1306,7 +1306,7 @@ Technical assets which do not process requests regarding functionality or data l
 
 **Mitigation**
 
-Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.
+Apply an authentication method to the technical asset protecting highly sensitive data via multi-factor authentication for human users.
 
 **Check**
 
@@ -1314,11 +1314,11 @@ Are recommendations from the linked cheat sheet and referenced ASVS chapter appl
 
 **Risk Findings**
 
-The risk **Missing Two-Factor Authentication (2FA)** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+The risk **Missing Multi-Factor Authentication (MFA)** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Medium | **Missing Two-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server** | `missing-authentication-second-factor@operator-hmi>operation@operator-hmi@scada-server` | Unlikely | Medium | [SCADA Server](#scada-server), [Operation](#operation) | Unchecked | _not tracked_ |
+| Medium | **Missing Multi-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server** | `missing-authentication-second-factor@operator-hmi>operation@operator-hmi@scada-server` | Unlikely | Medium | [SCADA Server](#scada-server), [Operation](#operation) | Unchecked | _not tracked_ |
 
 ### Missing Vault (Secret Storage)
 
@@ -1810,7 +1810,7 @@ Supervises the treatment and sends the commands of the operators
 - **Elevated**: [**SQL/NoSQL-Injection** risk at **SCADA Server** against database **Plant Historian** via **Archiving**](#sqlnosql-injection) (Unchecked)
 - **Elevated**: [**Missing Hardening** risk at **SCADA Server**](#missing-hardening) (Unchecked)
 - **Medium**: [**Denial-of-Service** risky access of **SCADA Server** by **Office Workstation** via **Live Dashboard**](#dos-risky-access-across-trust-boundary) (Unchecked)
-- **Medium**: [**Missing Two-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-two-factor-authentication-2fa) (Unchecked)
+- **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-multi-factor-authentication-mfa) (Unchecked)
 - **Medium**: [**Server-Side Request Forgery (SSRF)** risk at **SCADA Server** server-side web-requesting the target **Plant Historian** via **Archiving**](#server-side-request-forgery-ssrf) (Unchecked)
 
 **Asset Information**
@@ -2147,7 +2147,7 @@ This data asset has data breach potential because of 10 remaining risks:
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Plant Historian** against database **Historian Replica** via **Replication**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **SCADA Server** against database **Plant Historian** via **Archiving**](#sqlnosql-injection) (Unchecked)
 - Possible, **Elevated**: [**Direct IT/OT Communication** risk at **SCADA Server** with **Office Workstation**](#direct-itot-communication) (Unchecked)
-- Possible, **Medium**: [**Missing Two-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-two-factor-authentication-2fa) (Unchecked)
+- Possible, **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-multi-factor-authentication-mfa) (Unchecked)
 - Possible, **Medium**: [**Server-Side Request Forgery (SSRF)** risk at **Plant Historian** server-side web-requesting the target **Historian Replica** via **Replication**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Medium**: [**Server-Side Request Forgery (SSRF)** risk at **SCADA Server** server-side web-requesting the target **Plant Historian** via **Archiving**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Unencrypted Communication** named **Live Dashboard** between **Office Workstation** and **SCADA Server** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
@@ -2183,7 +2183,7 @@ This data asset has data breach potential because of 24 remaining risks:
 
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **SCADA Server** against database **Plant Historian** via **Archiving**](#sqlnosql-injection) (Unchecked)
 - Possible, **Elevated**: [**Direct IT/OT Communication** risk at **SCADA Server** with **Office Workstation**](#direct-itot-communication) (Unchecked)
-- Possible, **Medium**: [**Missing Two-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-two-factor-authentication-2fa) (Unchecked)
+- Possible, **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-multi-factor-authentication-mfa) (Unchecked)
 - Possible, **Medium**: [**Server-Side Request Forgery (SSRF)** risk at **Plant Historian** server-side web-requesting the target **Historian Replica** via **Replication**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Medium**: [**Server-Side Request Forgery (SSRF)** risk at **SCADA Server** server-side web-requesting the target **Plant Historian** via **Archiving**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Medium**: [**Unencrypted Communication** named **Chlorine Reading** between **Dosing PLC** and **Chlorine Analyzer**](#unencrypted-communication) (Unchecked)
@@ -2234,7 +2234,7 @@ Setpoints, start and stop commands and outputs to pumps and valves
 This data asset has data breach potential because of 21 remaining risks:
 
 - Possible, **Elevated**: [**Direct IT/OT Communication** risk at **SCADA Server** with **Office Workstation**](#direct-itot-communication) (Unchecked)
-- Possible, **Medium**: [**Missing Two-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-two-factor-authentication-2fa) (Unchecked)
+- Possible, **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-multi-factor-authentication-mfa) (Unchecked)
 - Possible, **Medium**: [**Server-Side Request Forgery (SSRF)** risk at **SCADA Server** server-side web-requesting the target **Plant Historian** via **Archiving**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Unencrypted Communication** named **Dosing Control** between **SCADA Server** and **Dosing PLC**](#unencrypted-communication) (Unchecked)
 - Possible, **Elevated**: [**Unencrypted Communication** named **Dosing Programming** between **Engineering Workstation** and **Dosing PLC**](#unencrypted-communication) (Unchecked)
@@ -2433,7 +2433,8 @@ Reads the chlorine gas detectors
 | Protocol | profinet |
 | Encrypted | no |
 | Authentication | none |
-| Authorization | none |
+| Identity | none |
+| Authorization | unknown |
 | Read-only | yes |
 | Usage | business |
 | Tags | none |
@@ -2455,7 +2456,8 @@ Sets the speed of the dosing pump
 | Protocol | profinet |
 | Encrypted | no |
 | Authentication | none |
-| Authorization | none |
+| Identity | none |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -2477,7 +2479,8 @@ Reads the chlorine concentration
 | Protocol | profinet |
 | Encrypted | no |
 | Authentication | none |
-| Authorization | none |
+| Identity | none |
+| Authorization | unknown |
 | Read-only | yes |
 | Usage | business |
 | Tags | none |
@@ -2499,7 +2502,8 @@ Downloads the safety logic
 | Protocol | s7comm |
 | Encrypted | no |
 | Authentication | none |
-| Authorization | none |
+| Identity | none |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -2521,7 +2525,8 @@ Downloads and monitors the logic of the dosing PLC
 | Protocol | s7comm |
 | Encrypted | no |
 | Authentication | none |
-| Authorization | none |
+| Identity | none |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -2543,7 +2548,8 @@ Remote desktop session on the engineering workstation
 | Protocol | binary-encrypted |
 | Encrypted | yes |
 | Authentication | credentials |
-| Authorization | end-user-identity-propagation |
+| Identity | end-user |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -2565,7 +2571,8 @@ Reads the reports of the treatment
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | credentials |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | yes |
 | Usage | business |
 | Tags | none |
@@ -2587,7 +2594,8 @@ Shows the live values of the plant on a dashboard
 | Protocol | opc-ua |
 | Encrypted | no |
 | Authentication | credentials |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | yes |
 | Usage | business |
 | Tags | none |
@@ -2609,7 +2617,8 @@ Shows the state of the safety function
 | Protocol | modbus |
 | Encrypted | no |
 | Authentication | none |
-| Authorization | none |
+| Identity | none |
+| Authorization | unknown |
 | Read-only | yes |
 | Usage | business |
 | Tags | none |
@@ -2631,7 +2640,8 @@ Shows the process and sends the commands of the operators
 | Protocol | opc-ua-encrypted |
 | Encrypted | yes |
 | Authentication | credentials |
-| Authorization | end-user-identity-propagation |
+| Identity | end-user |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -2653,7 +2663,8 @@ Pushes new values to the replica in the DMZ
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | credentials |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -2675,7 +2686,8 @@ Lets the operators reset a trip of the safety controller from the HMI
 | Protocol | modbus |
 | Encrypted | no |
 | Authentication | none |
-| Authorization | none |
+| Identity | none |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -2697,7 +2709,8 @@ Polls the remote pump station and starts and stops the pumps
 | Protocol | dnp3 |
 | Encrypted | no |
 | Authentication | none |
-| Authorization | none |
+| Identity | none |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -2719,7 +2732,8 @@ Polls values and writes setpoints
 | Protocol | opc-ua-encrypted |
 | Encrypted | yes |
 | Authentication | credentials |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -2741,7 +2755,8 @@ Polls values and writes setpoints
 | Protocol | modbus |
 | Encrypted | no |
 | Authentication | none |
-| Authorization | none |
+| Identity | none |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -2763,7 +2778,8 @@ Stores the process values
 | Protocol | https |
 | Encrypted | yes |
 | Authentication | credentials |
-| Authorization | technical-user |
+| Identity | service-account |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -2784,8 +2800,9 @@ The vendor connects to the jump host over a VPN
 | Target | [Jump Host](#jump-host) |
 | Protocol | ssh |
 | Encrypted | yes |
-| Authentication | two-factor |
-| Authorization | end-user-identity-propagation |
+| Authentication | multi-factor |
+| Identity | end-user |
+| Authorization | unknown |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -2831,7 +2848,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Insecure Control Protocol | `insecure-control-protocol` | Tampering | Most industrial control protocols, like Modbus, DNP3, S7comm, EtherNet/IP or PROFINET, were designed for closed networks: a controller or field device executes every command it receives, without checking who sent it or whether it was changed on the way. Anyone who can send packets to it can write setpoints and outputs, stop it or download a new program. | In-scope controllers (plc, rtu, safety-controller) and field-device technical assets with an incoming non-readonly communication link over an industrial control protocol without a secure variant in use (all of them except modbus-security, dnp3-encrypted and opc-ua-encrypted). | The risk rating depends on the integrity and availability of the controlled process, and is the highest for safety controllers. The attack is very likely when the sender is on the internet, likely when it is an IT asset, reaches IT or calls across a network trust boundary, and unlikely otherwise. |
 | LDAP-Injection | `ldap-injection` | Tampering | When an LDAP server is accessed LDAP-Injection risks might arise. The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed. | In-scope clients accessing LDAP servers via typical LDAP access protocols. | The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed. |
 | Missing Authentication | `missing-authentication` | Elevation of Privilege | Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes sensitive data. | In-scope technical assets (except load-balancer, reverse-proxy, service-registry, waf, ids, and ips and in-process calls) should authenticate incoming requests when the asset processes sensitive data. This is especially the case for all multi-tenant assets (there even non-sensitive ones). Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. | The risk rating (medium or high) depends on the sensitivity of the data sent across the communication link. Monitoring callers are exempted from this risk. |
-| Missing Two-Factor Authentication (2FA) | `missing-authentication-second-factor` | Elevation of Privilege | Technical assets (especially multi-tenant systems) should authenticate incoming requests with two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans. | In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via two-factor authentication (2FA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. | medium |
+| Missing Multi-Factor Authentication (MFA) | `missing-authentication-second-factor` | Elevation of Privilege | Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans. | In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via multi-factor authentication (MFA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. | medium |
 | Missing Build Infrastructure | `missing-build-infrastructure` | Tampering | The modeled architecture does not contain a build infrastructure (devops-client, sourcecode-repo, build-pipeline, etc.), which might be the risk of a model missing critical assets (and thus not seeing their risks). If the architecture contains custom-developed parts, the pipeline where code gets developed and built needs to be part of the model. | Models with in-scope custom-developed parts missing in-scope development (code creation) and build infrastructure components (devops-client, sourcecode-repo, build-pipeline, etc.). | The risk rating depends on the highest sensitivity of the in-scope assets running custom-developed parts. |
 | Missing Cloud Hardening | `missing-cloud-hardening` | Tampering | Cloud components should be hardened according to the cloud vendor best practices. This affects their configuration, auditing, and further areas. | In-scope cloud components (either residing in cloud trust boundaries or more specifically tagged with cloud provider types). | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. |
 | Missing File Validation | `missing-file-validation` | Spoofing | When a technical asset accepts files, these input files should be strictly validated about filename and type. | In-scope technical assets with custom-developed code accepting file data formats. | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. |

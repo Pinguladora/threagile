@@ -164,7 +164,7 @@ func TestMissingAuthenticationSecondFactorRuleUsedAsClientByHumanLessRiskyDataSe
 			"ta1": {
 				{
 					SourceId:       "ta2",
-					Authentication: types.TwoFactor,
+					Authentication: types.MultiFactor,
 				},
 			},
 		},
@@ -195,7 +195,7 @@ func TestMissingAuthenticationSecondFactorRuleUsedAsClientByHumanCriticalIntegri
 			"ta1": {
 				{
 					SourceId:       "ta2",
-					Authentication: types.TwoFactor,
+					Authentication: types.MultiFactor,
 					DataAssetsSent: []string{"da1"},
 				},
 			},
@@ -251,7 +251,7 @@ func TestMissingAuthenticationSecondFactorRuleUsedAsClientByHumanConfidentialDat
 
 	assert.Nil(t, err)
 	assert.Len(t, risks, 1)
-	assert.Equal(t, "<b>Missing Two-Factor Authentication</b> covering communication link <b>Access confidential data with client certificate</b> from <b>Browser</b> to <b>Test Technical Asset</b>", risks[0].Title)
+	assert.Equal(t, "<b>Missing Multi-Factor Authentication</b> covering communication link <b>Access confidential data with client certificate</b> from <b>Browser</b> to <b>Test Technical Asset</b>", risks[0].Title)
 }
 
 func TestMissingAuthenticationSecondFactorRuleNotUsedAsClientByHumanAndNotTrafficForwardingCriticalIntegrityDataAccessRiskyDataSentTwoFactorAuthenticationEnabledNoRisksCreated(t *testing.T) {
@@ -571,7 +571,7 @@ func TestMissingAuthenticationSecondFactorRuleCallersCallerProcessLessRiskyDataN
 			"elb": {
 				{
 					SourceId:       "ta2",
-					Authentication: types.TwoFactor,
+					Authentication: types.MultiFactor,
 					DataAssetsSent: []string{"da1"},
 				},
 			},
@@ -633,7 +633,7 @@ func TestMissingAuthenticationSecondFactorRuleCallersCallerProcessCriticalDataTw
 			"elb": {
 				{
 					SourceId:       "ta2",
-					Authentication: types.TwoFactor,
+					Authentication: types.MultiFactor,
 					DataAssetsSent: []string{"da1"},
 				},
 			},
@@ -713,5 +713,5 @@ func TestMissingAuthenticationSecondFactorRuleCallersCallerProcessConfidentialDa
 
 	assert.Nil(t, err)
 	assert.Len(t, risks, 1)
-	assert.Equal(t, "<b>Missing Two-Factor Authentication</b> covering communication link <b>Access confidential data with client certificate from load balancer</b> from <b>Browser</b> forwarded via <b>Load Balancer</b> to <b>Test Technical Asset</b>", risks[0].Title)
+	assert.Equal(t, "<b>Missing Multi-Factor Authentication</b> covering communication link <b>Access confidential data with client certificate from load balancer</b> from <b>Browser</b> forwarded via <b>Load Balancer</b> to <b>Test Technical Asset</b>", risks[0].Title)
 }

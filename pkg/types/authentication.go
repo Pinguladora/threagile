@@ -20,8 +20,10 @@ const (
 	SessionId
 	Token
 	ClientCertificate
-	TwoFactor
+	MultiFactor
 	Externalized
+	ShortLivedToken
+	LongLivedToken
 )
 
 func AuthenticationValues() []TypeEnum {
@@ -30,8 +32,10 @@ func AuthenticationValues() []TypeEnum {
 		Credentials,
 		SessionId,
 		Token,
+		ShortLivedToken,
+		LongLivedToken,
 		ClientCertificate,
-		TwoFactor,
+		MultiFactor,
 		Externalized,
 	}
 }
@@ -40,10 +44,20 @@ var AuthenticationTypeDescription = [...]TypeDescription{
 	{"none", "No authentication"},
 	{"credentials", "Username and password, pin or passphrase"},
 	{"session-id", "A server generated session id with limited life span"},
-	{"token", "A server generated token. Containing session id, other data and is cryptographically signed"},
+	{"token", "A cryptographically signed token whose lifetime is not modelled; prefer short-lived-token or " +
+		"long-lived-token"},
 	{"client-certificate", "A certificate file stored on the client identifying this specific client"},
-	{"two-factor", "Credentials plus another factor like a physical object (card) or biometrics"},
+	{"multi-factor", "Credentials plus one or more other factors, like a security key, an authenticator app or " +
+		"biometrics (formerly two-factor)"},
 	{"externalized", "Some external company handles authentication"},
+	{"short-lived-token", "A signed token that expires within hours, like an OAuth 2.0 access token or an OpenID " +
+		"Connect ID token"},
+	{"long-lived-token", "A bearer secret that does not expire soon, like an API key or a personal access token"},
+}
+
+// legacyAuthenticationNames are the names that earlier versions of the model used.
+var legacyAuthenticationNames = map[string]Authentication{
+	"two-factor": MultiFactor,
 }
 
 func ParseAuthentication(value string) (authentication Authentication, err error) {
@@ -64,6 +78,10 @@ func (what Authentication) Find(value string) (Authentication, error) {
 		if strings.EqualFold(value, description.Name) {
 			return Authentication(index), nil
 		}
+	}
+
+	if legacy, ok := legacyAuthenticationNames[strings.ToLower(value)]; ok {
+		return legacy, nil
 	}
 
 	return Authentication(0), fmt.Errorf("unknown authentication value %q", value)
