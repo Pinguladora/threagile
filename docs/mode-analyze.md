@@ -7,6 +7,7 @@ The output of running tool may be in different formats:
 * `data-asset-diagram.png` - image/dot file which contains all data assets and relationship between them.
 * `data-flow-diagram.png` - image/dot file which contains all technical assets and relationship between them.
 * `stats.json` - contains statistics of identified risks.
+* `otm.json` - the model and its risks as an [Open Threat Model (OTM)](./otm.md) document, for other threat modeling tools.
 * [adocReport](./docs/asciidoctor-report.md)
 
 ## Reproducible reports

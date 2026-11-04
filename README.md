@@ -19,6 +19,8 @@ We know that modifying yaml file via text editor may be tough and to simplify it
 
 Custom risk rules can be written as YAML scripts without compiling Go code. See the [script language reference](./docs/scripts/language-reference.md), the [guide for writing custom risk rules](./docs/scripts/guide.md), and how to [test your scripts](./docs/scripts/testing.md).
 
+Models can be exchanged with other threat modeling tools as [Open Threat Model (OTM)](./docs/otm.md) files: the analysis writes `otm.json`, and `import-otm` turns an OTM file into a model.
+
 Efforts on UI are ongoing and there are few attempts to do it although that is far from being ready.
 
 [Here](./docs/how-to.md) may be useful use cases on how others are using the tool and may be helpful to simplify onboarding of Threagile tool for your team.
