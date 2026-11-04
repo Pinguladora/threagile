@@ -25,9 +25,11 @@ func (*UnguardedDirectDatastoreAccessRule) Category() *types.RiskCategory {
 		Check:       checkCheatSheetAndASVS,
 		Function:    types.Architecture,
 		STRIDE:      types.ElevationOfPrivilege,
+		// A new rule "missing bastion host" could complement this one.
 		DetectionLogic: "In-scope technical assets of type " + types.Datastore.String() + " (except " + types.IdentityStoreLDAP + " when accessed from " + types.IdentityProvider + " and " + types.FileServer + " when accessed via file transfer protocols) with confidentiality rating " +
 			"of " + types.Confidential.String() + " (or higher) or with integrity rating of " + types.Critical.String() + " (or higher) " +
-			"which have incoming data-flows from assets outside across a network trust-boundary. DevOps config and deployment access is excluded from this risk.", // TODO new rule "missing bastion host"?
+			"which have incoming data-flows from assets outside across a network trust-boundary. DevOps config and " +
+			"deployment access is excluded from this risk.",
 		RiskAssessment: "The matching technical assets are at " + types.LowSeverity.String() + " risk. When either the " +
 			"confidentiality rating is " + types.StrictlyConfidential.String() + " or the integrity rating " +
 			"is " + types.MissionCritical.String() + ", the risk-rating is considered " + types.MediumSeverity.String() + ". " +

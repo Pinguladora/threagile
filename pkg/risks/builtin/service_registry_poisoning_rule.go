@@ -71,7 +71,9 @@ func (r *ServiceRegistryPoisoningRule) createRisk(input *types.Model, technicalA
 		Title:                        title,
 		MostRelevantTechnicalAssetId: technicalAsset.Id,
 		DataBreachProbability:        types.Improbable,
-		DataBreachTechnicalAssetIDs:  []string{technicalAsset.Id}, // TODO: find all service-lookup-using tech assets, which then might use spoofed lookups?
+		// The tech assets using the registry for service lookups, which then might use spoofed lookups, are not
+		// looked for yet.
+		DataBreachTechnicalAssetIDs: []string{technicalAsset.Id},
 	}
 	risk.SyntheticId = risk.CategoryId + "@" + technicalAsset.Id
 	return risk

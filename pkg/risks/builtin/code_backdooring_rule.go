@@ -34,8 +34,9 @@ func (*CodeBackdooringRule) Category() *types.RiskCategory {
 		DetectionLogic: "In-scope development relevant technical assets which are either accessed by out-of-scope unmanaged " +
 			"developer clients and/or are directly accessed by any kind of internet-located (non-VPN) component or are themselves directly located " +
 			"on the internet.",
+		// The rating does not take the CIA rating of the deployment targets (and their data) into account yet.
 		RiskAssessment: "The risk rating depends on the confidentiality and integrity rating of the code being handled and deployed " +
-			"as well as the placement/calling of this technical asset on/from the internet.", // TODO also take the CIA rating of the deployment targets (and their data) into account?
+			"as well as the placement/calling of this technical asset on/from the internet.",
 		FalsePositives: "When the build-pipeline and sourcecode-repo is not exposed to the internet and considered fully " +
 			"trusted (which implies that all accessing clients are also considered fully trusted in terms of their patch management " +
 			"and applied hardening, which must be equivalent to a managed developer client environment) this can be considered a false positive " +
@@ -59,7 +60,8 @@ func (r *CodeBackdooringRule) GenerateRisks(parsedModel *types.Model) ([]*types.
 				continue
 			}
 
-			// TODO: ensure that even internet or unmanaged clients coming over a reverse-proxy or load-balancer like component are treated as if it was directly accessed/exposed on the internet or towards unmanaged dev clients
+			// Internet or unmanaged clients coming over a reverse-proxy or load-balancer like component are not yet
+			// treated as if the asset was directly accessed/exposed on the internet or towards unmanaged dev clients.
 
 			for _, callerLink := range parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id] {
 				caller := parsedModel.TechnicalAssets[callerLink.SourceId]

@@ -226,7 +226,7 @@ func (r *MissingCloudHardeningRule) addSubtagSpecificRisks(input *types.Model, i
 		if isTechnicalAssetTaggedWithAnyTraversingUp(input, tA, "aws:s3") {
 			risks = append(risks, r.createRiskForTechnicalAsset(input, tA, "S3", "Security Best Practices for AWS S3"))
 		}
-		// TODO: add more subtag-specific risks
+		// Only these two sub-tags have specific risks so far; more sub-tags could get some.
 	}
 	return risks
 }
