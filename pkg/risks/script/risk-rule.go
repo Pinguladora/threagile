@@ -26,7 +26,7 @@ func (what *RiskRule) Init() *RiskRule {
 func (what *RiskRule) ParseFromData(text []byte) (*RiskRule, error) {
 	categoryError := yaml.Unmarshal(text, &what.category)
 	if categoryError != nil {
-		return nil, categoryError
+		return nil, fmt.Errorf("failed to parse the risk category: %w", categoryError)
 	}
 
 	var rule struct {
@@ -37,7 +37,7 @@ func (what *RiskRule) ParseFromData(text []byte) (*RiskRule, error) {
 
 	ruleError := yaml.Unmarshal(text, &rule)
 	if ruleError != nil {
-		return nil, ruleError
+		return nil, fmt.Errorf("failed to parse the risk rule: %w", ruleError)
 	}
 
 	what.supportedTags = rule.SupportedTags
@@ -71,7 +71,7 @@ func (what *RiskRule) GenerateRisks(parsedModel *types.Model) ([]*types.Risk, er
 
 	modelError := newScope.SetModel(parsedModel)
 	if modelError != nil {
-		return nil, modelError
+		return nil, fmt.Errorf("failed to set the model of the scope: %w", modelError)
 	}
 
 	newRisks, errorLiteral, riskError := what.script.GenerateRisks(newScope)

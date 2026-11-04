@@ -59,7 +59,7 @@ func (what *Script) ParseScriptsFromData(text []byte) (map[string]*Script, error
 	items := make(map[string]any)
 	parseError := yaml.Unmarshal(text, &items)
 	if parseError != nil {
-		return nil, parseError
+		return nil, fmt.Errorf("failed to parse the script data: %w", parseError)
 	}
 
 	return what.ParseScripts(items)
@@ -103,7 +103,7 @@ func (what *Script) ParseCategoryFromData(text []byte) (*Script, error) {
 	items := make(map[string]any)
 	parseError := yaml.Unmarshal(text, &items)
 	if parseError != nil {
-		return nil, parseError
+		return nil, fmt.Errorf("failed to parse the script data: %w", parseError)
 	}
 
 	return what.ParseCategory(items)
@@ -129,7 +129,7 @@ func (what *Script) ParseScriptFromData(text []byte) (*Script, error) {
 	items := make(map[string]any)
 	parseError := yaml.Unmarshal(text, &items)
 	if parseError != nil {
-		return nil, parseError
+		return nil, fmt.Errorf("failed to parse the script data: %w", parseError)
 	}
 
 	return what.ParseScript(items)
@@ -467,7 +467,7 @@ func (what *Script) getRiskID(outerScope *common.Scope, techAsset common.Value, 
 
 		value, errorEvalLiteral, evalError := expression.EvalString(scope)
 		if evalError != nil {
-			return "", errorEvalLiteral, evalError
+			return "", errorEvalLiteral, fmt.Errorf("failed to eval ID expression: %w", evalError)
 		}
 
 		return value.StringValue(), "", nil
