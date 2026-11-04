@@ -423,7 +423,7 @@ func appendExplained(lines []string, text string, explanation []string) []string
 }
 
 func (what *Script) Explain(history []*common.Event) []string {
-	text := make([]string, 0)
+	text := make([]string, 0, len(history))
 	for _, event := range history {
 		text = append(text, event.Indented(0)...)
 	}
