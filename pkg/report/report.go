@@ -1989,11 +1989,12 @@ func (r *pdfReporter) addCategories(parsedModel *types.Model, riskCategories []*
 		html.Write(5, strBuilder.String())
 		strBuilder.Reset()
 		r.pdf.SetTextColor(0, 0, 0)
-		if describeImpact {
+		switch {
+		case describeImpact:
 			strBuilder.WriteString(firstParagraph(riskCategory.Impact))
-		} else if describeDescription {
+		case describeDescription:
 			strBuilder.WriteString(firstParagraph(riskCategory.Description))
-		} else {
+		default:
 			strBuilder.WriteString(firstParagraph(riskCategory.Mitigation))
 		}
 		html.Write(5, strBuilder.String())
@@ -2738,11 +2739,12 @@ func (r *pdfReporter) createRiskCategories(parsedModel *types.Model) {
 			r.pdf.SetFont("Helvetica", "", fontSizeVerySmall)
 			r.pdf.MultiCell(215, 5, uni(risk.SyntheticId), "0", "0", false)
 			r.pdf.SetFont("Helvetica", "", fontSizeBody)
-			if len(risk.MostRelevantSharedRuntimeId) > 0 {
+			switch {
+			case len(risk.MostRelevantSharedRuntimeId) > 0:
 				r.pdf.Link(20, posY, 180, r.pdf.GetY()-posY, r.tocLinkIdByAssetId[risk.MostRelevantSharedRuntimeId])
-			} else if len(risk.MostRelevantTrustBoundaryId) > 0 {
+			case len(risk.MostRelevantTrustBoundaryId) > 0:
 				r.pdf.Link(20, posY, 180, r.pdf.GetY()-posY, r.tocLinkIdByAssetId[risk.MostRelevantTrustBoundaryId])
-			} else if len(risk.MostRelevantTechnicalAssetId) > 0 {
+			case len(risk.MostRelevantTechnicalAssetId) > 0:
 				r.pdf.Link(20, posY, 180, r.pdf.GetY()-posY, r.tocLinkIdByAssetId[risk.MostRelevantTechnicalAssetId])
 			}
 			r.writeRiskTrackingStatus(parsedModel, risk)

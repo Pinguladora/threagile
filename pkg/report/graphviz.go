@@ -425,11 +425,12 @@ func determineArrowColor(cl *types.CommunicationLink, parsedModel *types.Model) 
 		cl.Protocol == types.UnknownProtocol {
 		return Pink // pink, because it's strange when too many technical communication links transfer no data... some ok, but many in a diagram ist a sign of model forgery...
 	}
-	if cl.Usage == types.DevOps {
+	switch {
+	case cl.Usage == types.DevOps:
 		return MiddleLightGray
-	} else if cl.VPN {
+	case cl.VPN:
 		return DarkBlue
-	} else if cl.IpFiltered {
+	case cl.IpFiltered:
 		return Brown
 	}
 	// check for red
@@ -715,15 +716,19 @@ func determineShapeStyle(ta *types.TechnicalAsset) string {
 
 func determineShapeFillColor(ta *types.TechnicalAsset, parsedModel *types.Model) string {
 	fillColor := VeryLightGray
-	if (len(ta.DataAssetsProcessed) == 0 && len(ta.DataAssetsStored) == 0) || ta.Technologies.IsUnknown() {
-		fillColor = LightPink // lightPink, because it's strange when too many technical assets process no data... some ok, but many in a diagram ist a sign of model forgery...
-	} else if len(ta.CommunicationLinks) == 0 && len(parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[ta.Id]) == 0 {
+	switch {
+	case (len(ta.DataAssetsProcessed) == 0 && len(ta.DataAssetsStored) == 0) || ta.Technologies.IsUnknown():
+		// lightPink, because it's strange when too many technical assets process no data...
+		// some ok, but many in a diagram ist a sign of model forgery...
 		fillColor = LightPink
-	} else if ta.Internet {
+	case len(ta.CommunicationLinks) == 0 &&
+		len(parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[ta.Id]) == 0:
+		fillColor = LightPink
+	case ta.Internet:
 		fillColor = ExtremeLightBlue
-	} else if ta.OutOfScope {
+	case ta.OutOfScope:
 		fillColor = OutOfScopeFancy
-	} else if ta.CustomDevelopedParts {
+	case ta.CustomDevelopedParts:
 		fillColor = CustomDevelopedParts
 	}
 	switch ta.Machine {

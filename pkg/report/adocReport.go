@@ -69,6 +69,14 @@ func copyFile(source string, destination string) error {
 	return nil
 }
 
+// mustCopyFile copies source to destination and exits the program if that fails.
+func mustCopyFile(source string, destination string) {
+	err := copyFile(source, destination)
+	if err != nil {
+		log.Fatal("Could not copy file: »" + source + "« to »" + destination + "«: " + err.Error())
+	}
+}
+
 func fixBasicHtml(inputWithHtml string) string {
 	result := strings.ReplaceAll(inputWithHtml, "<b>", "*")
 	result = strings.ReplaceAll(result, "</b>", "*")
@@ -566,11 +574,12 @@ func (adoc adocReport) addCategories(f *os.File, risksByCategory map[string][]*t
 		fullLine += suffix + colorSuffix + ">>::"
 		writeLine(f, fullLine)
 
-		if describeImpact {
+		switch {
+		case describeImpact:
 			writeLine(f, firstParagraph(riskCategory.Impact))
-		} else if describeDescription {
+		case describeDescription:
 			writeLine(f, firstParagraph(riskCategory.Description))
-		} else {
+		default:
 			writeLine(f, firstParagraph(riskCategory.Mitigation))
 		}
 		writeLine(f, "")
@@ -922,11 +931,11 @@ For a full high-resolution version of this diagram please refer to the PNG image
 func imageIsWiderThanHigh(diagramFilenamePNG string) bool {
 	/* #nosec diagramFilenamePNG is not tainted (see caller restricting it to image files of model folder only) */
 	imagePath, err := os.Open(diagramFilenamePNG)
-	defer func() { _ = imagePath.Close() }()
 	if err != nil {
 		log.Fatalln("error opening image file: %w", err)
 		return false
 	}
+	defer func() { _ = imagePath.Close() }()
 	srcImage, _, _ := image.Decode(imagePath)
 	srcDimensions := srcImage.Bounds()
 	// wider than high?
@@ -942,10 +951,7 @@ func (adoc adocReport) writeDataFlowDiagram(diagramFilenamePNG string) error {
 		return err
 	}
 	adocDfdFilename := filepath.Join(adoc.imagesDir, "data-flow-diagram.png")
-	err = copyFile(diagramFilenamePNG, adocDfdFilename)
-	if err != nil {
-		log.Fatal("Could not copy file: »" + diagramFilenamePNG + "« to »" + adocDfdFilename + "«: " + err.Error())
-	}
+	mustCopyFile(diagramFilenamePNG, adocDfdFilename)
 
 	landScape := imageIsWiderThanHigh(adocDfdFilename)
 	if landScape {
@@ -1309,10 +1315,7 @@ func (adoc adocReport) writeDataRiskMapping(dataAssetDiagramFilenamePNG string) 
 		return err
 	}
 	adocDataRiskMappingFilename := filepath.Join(adoc.imagesDir, "data-asset-diagram.png")
-	err = copyFile(dataAssetDiagramFilenamePNG, adocDataRiskMappingFilename)
-	if err != nil {
-		log.Fatal("Could not copy file: »" + dataAssetDiagramFilenamePNG + "« to »" + adocDataRiskMappingFilename + "«: " + err.Error())
-	}
+	mustCopyFile(dataAssetDiagramFilenamePNG, adocDataRiskMappingFilename)
 
 	landScape := imageIsWiderThanHigh(adocDataRiskMappingFilename)
 	if landScape {
@@ -1651,11 +1654,12 @@ func (adoc adocReport) riskCategories(f *os.File) {
 			}
 			writeLine(f, colorPrefix+fixBasicHtml(risk.Title)+": Exploitation likelihood is _"+risk.ExploitationLikelihood.Title()+"_ with _"+risk.ExploitationImpact.Title()+"_ impact."+colorSuffix)
 			linkId := ""
-			if len(risk.MostRelevantSharedRuntimeId) > 0 {
+			switch {
+			case len(risk.MostRelevantSharedRuntimeId) > 0:
 				linkId = risk.MostRelevantSharedRuntimeId
-			} else if len(risk.MostRelevantTrustBoundaryId) > 0 {
+			case len(risk.MostRelevantTrustBoundaryId) > 0:
 				linkId = risk.MostRelevantTrustBoundaryId
-			} else if len(risk.MostRelevantTechnicalAssetId) > 0 {
+			case len(risk.MostRelevantTechnicalAssetId) > 0:
 				linkId = risk.MostRelevantTechnicalAssetId
 			}
 			writeLine(f, "")
@@ -1746,11 +1750,9 @@ func (adoc adocReport) technicalAssets(f *os.File) {
 		if technicalAsset.OutOfScope {
 			colorPrefix = "[OutOfScope]#"
 			suffix = "out-of-scope"
-		} else {
-			if len(types.ReduceToOnlyStillAtRisk(risksStr)) == 0 {
-				colorPrefix = ""
-				colorSuffix = ""
-			}
+		} else if len(types.ReduceToOnlyStillAtRisk(risksStr)) == 0 {
+			colorPrefix = ""
+			colorSuffix = ""
 		}
 
 		// asset title
