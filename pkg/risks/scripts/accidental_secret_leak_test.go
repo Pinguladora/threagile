@@ -9,7 +9,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// TODO: fix when there are no technical assets in scope
+// Disabled: the script rule fails with "no technical assets in scope" on a model without technical assets,
+// where it should create no risks.
 // func TestAccidentalSecretLeakRuleGenerateRisksEmptyModelNotRisksCreated(t *testing.T) {
 // 	rule := loadAccidentalSecretLeakRule()
 
@@ -57,7 +58,7 @@ func TestAccidentalSecretLeakRuleGenerateRisksTechAssetNotContainSecretsNotRisks
 	assert.Empty(t, risks)
 }
 
-// TODO: fix the test
+// Disabled: the script rule does not create the risk this test expects yet.
 // func TestAccidentalSecretLeakRuleGenerateRisksTechAssetGitContainSecretsRisksCreated(t *testing.T) {
 // 	rule := loadAccidentalSecretLeakRule()
 
@@ -82,7 +83,7 @@ func TestAccidentalSecretLeakRuleGenerateRisksTechAssetNotContainSecretsNotRisks
 // 	assert.Contains(t, risks[0].Title, "Accidental Secret Leak (Git)")
 // }
 
-// TODO: fix the test
+// Disabled: the script rule does not create the risk this test expects yet.
 // func TestAccidentalSecretLeakRuleGenerateRisksTechAssetNotGitContainSecretsRisksCreated(t *testing.T) {
 // 	rule := loadAccidentalSecretLeakRule()
 
@@ -106,7 +107,7 @@ func TestAccidentalSecretLeakRuleGenerateRisksTechAssetNotContainSecretsNotRisks
 // 	assert.Equal(t, "<b>Accidental Secret Leak</b> risk at <b></b>", risks[0].Title)
 // }
 
-// TODO: fix the test
+// Disabled: the script rule does not create the risk this test expects yet.
 // func TestAccidentalSecretLeakRuleGenerateRisksTechAssetProcessStrictlyConfidentialDataAssetHighImpactRiskCreated(t *testing.T) {
 // 	rule := loadAccidentalSecretLeakRule()
 
