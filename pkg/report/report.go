@@ -791,6 +791,7 @@ func (r *pdfReporter) createManagementSummary(parsedModel *types.Model, tempFold
 	countStatusFalsePositive := len(filteredByRiskStatus(parsedModel, types.FalsePositive))
 
 	html := r.pdf.HTMLBasicNew()
+	// the wording does not switch between singular and plural (risk/s, category/ies, has/have)
 	html.Write(5, "Threagile toolkit was used to model the architecture of \""+uni(parsedModel.Title)+"\" "+
 		"and derive risks by analyzing the components and data flows. The risks identified during this analysis are shown "+
 		"in the following chapters. Identified risks during threat modeling do not necessarily mean that the "+
@@ -805,7 +806,7 @@ func (r *pdfReporter) createManagementSummary(parsedModel *types.Model, tempFold
 		"link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given."+
 		"<br><br>"+
 		"In total <b>"+strconv.Itoa(totalRiskCount(parsedModel))+" initial risks</b> in <b>"+strconv.Itoa(len(parsedModel.GeneratedRisksByCategory))+" categories</b> have "+
-		"been identified during the threat modeling process:<br><br>") // TODO plural singular stuff risk/s category/ies has/have
+		"been identified during the threat modeling process:<br><br>")
 
 	r.pdf.SetFont("Helvetica", "B", fontSizeBody)
 
@@ -2476,7 +2477,7 @@ func (r *pdfReporter) createTagListing(parsedModel *types.Model) {
 	sorted := parsedModel.TagsAvailable
 	sort.Strings(sorted)
 	for _, tag := range sorted {
-		description := "" // TODO: add some separation texts to distinguish between technical assets and data assets etc. for example?
+		description := "" // could hold a separation text to distinguish technical assets, data assets etc.
 		for _, techAsset := range sortedTechnicalAssetsByTitle(parsedModel) {
 			if contains(techAsset.Tags, tag) {
 				if len(description) > 0 {
@@ -2549,7 +2550,8 @@ func (r *pdfReporter) createRiskCategories(parsedModel *types.Model) {
 		"<b>" + strconv.Itoa(len(filteredBySeverity(parsedModel, types.MediumSeverity))) + " as medium</b>, " +
 		"and <b>" + strconv.Itoa(len(filteredBySeverity(parsedModel, types.LowSeverity))) + " as low</b>. " +
 		"<br><br>These risks are distributed across <b>" + strconv.Itoa(len(parsedModel.GeneratedRisksByCategory)) + " vulnerability categories</b>. ")
-	text.WriteString("The following sub-chapters of this section describe each identified risk category.") // TODO more explanation text
+	// a longer explanation could follow here
+	text.WriteString("The following sub-chapters of this section describe each identified risk category.")
 	html.Write(5, text.String())
 	text.Reset()
 	r.currentChapterTitleBreadcrumb = title
@@ -2816,7 +2818,9 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 		"<b>" + strconv.Itoa(len(filteredBySeverity(parsedModel, types.MediumSeverity))) + " as medium</b>, " +
 		"and <b>" + strconv.Itoa(len(filteredBySeverity(parsedModel, types.LowSeverity))) + " as low</b>. " +
 		"<br><br>These risks are distributed across <b>" + strconv.Itoa(len(parsedModel.InScopeTechnicalAssets())) + " in-scope technical assets</b>. ")
-	text.WriteString("The following sub-chapters of this section describe each identified risk grouped by technical asset. ") // TODO more explanation text
+	// a longer explanation could follow here
+	text.WriteString("The following sub-chapters of this section describe each identified risk " +
+		"grouped by technical asset. ")
 	text.WriteString("The RAA value of a technical asset is the calculated \"Relative Attacker Attractiveness\" value in percent.")
 	html.Write(5, text.String())
 	text.Reset()
@@ -3625,7 +3629,9 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 		"<b>"+strconv.Itoa(len(filteredBySeverity(parsedModel, types.MediumSeverity)))+" as medium</b>, "+
 		"and <b>"+strconv.Itoa(len(filteredBySeverity(parsedModel, types.LowSeverity)))+" as low</b>. "+
 		"<br><br>These risks are distributed across <b>"+strconv.Itoa(len(parsedModel.DataAssets))+" data assets</b>. ")
-	html.Write(5, "The following sub-chapters of this section describe the derived data breach probabilities grouped by data asset.<br>") // TODO more explanation text
+	// a longer explanation could follow here
+	html.Write(5, "The following sub-chapters of this section describe the derived data breach probabilities "+
+		"grouped by data asset.<br>")
 	r.pdf.SetFont("Helvetica", "", fontSizeSmall)
 	r.pdfColorGray()
 	html.Write(5, "Technical asset names and risk IDs are clickable and link to the corresponding chapter.")
@@ -3791,7 +3797,7 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 			if len(processedByText) > 0 {
 				processedByText += ", "
 			}
-			processedByText += dataAsset.Title // TODO add link to technical asset detail chapter and back
+			processedByText += dataAsset.Title // plain text, not linked to the technical asset detail chapter
 		}
 		if len(processedByText) == 0 {
 			r.pdfColorGray()
@@ -3812,7 +3818,7 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 			if len(storedByText) > 0 {
 				storedByText += ", "
 			}
-			storedByText += dataAsset.Title // TODO add link to technical asset detail chapter and back
+			storedByText += dataAsset.Title // plain text, not linked to the technical asset detail chapter
 		}
 		if len(storedByText) == 0 {
 			r.pdfColorGray()
@@ -3833,7 +3839,7 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 			if len(sentViaText) > 0 {
 				sentViaText += ", "
 			}
-			sentViaText += commLink.Title // TODO add link to technical asset detail chapter and back
+			sentViaText += commLink.Title // plain text, not linked to the technical asset detail chapter
 		}
 		if len(sentViaText) == 0 {
 			r.pdfColorGray()
@@ -3854,7 +3860,7 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 			if len(receivedViaText) > 0 {
 				receivedViaText += ", "
 			}
-			receivedViaText += commLink.Title // TODO add link to technical asset detail chapter and back
+			receivedViaText += commLink.Title // plain text, not linked to the technical asset detail chapter
 		}
 		if len(receivedViaText) == 0 {
 			r.pdfColorGray()
@@ -4029,7 +4035,8 @@ func (r *pdfReporter) createTrustBoundaries(parsedModel *types.Model) {
 			if len(assetsInsideText) > 0 {
 				assetsInsideText += ", "
 			}
-			assetsInsideText += parsedModel.TechnicalAssets[assetKey].Title // TODO add link to technical asset detail chapter and back
+			// plain text, not linked to the technical asset detail chapter
+			assetsInsideText += parsedModel.TechnicalAssets[assetKey].Title
 		}
 		if len(assetsInsideText) == 0 {
 			r.pdfColorGray()
@@ -4131,7 +4138,8 @@ func (r *pdfReporter) createSharedRuntimes(parsedModel *types.Model) {
 			if len(assetsInsideText) > 0 {
 				assetsInsideText += ", "
 			}
-			assetsInsideText += parsedModel.TechnicalAssets[assetKey].Title // TODO add link to technical asset detail chapter and back
+			// plain text, not linked to the technical asset detail chapter
+			assetsInsideText += parsedModel.TechnicalAssets[assetKey].Title
 		}
 		if len(assetsInsideText) == 0 {
 			r.pdfColorGray()
@@ -4169,7 +4177,7 @@ func (r *pdfReporter) createRiskRulesChecked(parsedModel *types.Model, modelFile
 	html.Write(5, strBuilder.String())
 	strBuilder.Reset()
 
-	// TODO use the new run system to discover risk rules instead of hard-coding them here:
+	// The risk rules are listed explicitly here rather than discovered through the run system:
 	skipped := ""
 	r.pdf.Ln(-1)
 
@@ -4550,7 +4558,7 @@ func (r *pdfReporter) embedDataRiskMapping(diagramFilenamePNG string, tempFolder
 	html := r.pdf.HTMLBasicNew()
 	html.Write(5, intro.String())
 
-	// TODO dedupe with code from other diagram embedding (almost same code)
+	// This is almost the same code as the data-flow diagram embedding.
 	// check to rotate the image if it is wider than high
 	srcDimensions, err := diagramSize(diagramFilenamePNG)
 	if err != nil {

@@ -377,7 +377,7 @@ func determineArrowPenWidth(cl *types.CommunicationLink, parsedModel *types.Mode
 }
 
 func determineLabelColor(cl *types.CommunicationLink, parsedModel *types.Model) string {
-	// TODO: Just move into main.go and let the generated risk determine the color, don't duplicate the logic here
+	// This duplicates the risk logic; the generated risks could determine the colour instead.
 	/*
 		if dataFlow.Protocol.IsEncrypted() {
 			return Gray
@@ -420,7 +420,7 @@ func determineArrowLineStyle(cl *types.CommunicationLink) string {
 
 // pink when model forgery attempt (i.e. nothing being sent and received).
 func determineArrowColor(cl *types.CommunicationLink, parsedModel *types.Model) string {
-	// TODO: Just move into main.go and let the generated risk determine the color, don't duplicate the logic here
+	// This duplicates the risk logic; the generated risks could determine the colour instead.
 	if len(cl.DataAssetsSent) == 0 && len(cl.DataAssetsReceived) == 0 ||
 		cl.Protocol == types.UnknownProtocol {
 		return Pink // pink, because it's strange when too many technical communication links transfer no data... some ok, but many in a diagram ist a sign of model forgery...
