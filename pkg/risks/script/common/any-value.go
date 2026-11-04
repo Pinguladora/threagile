@@ -80,18 +80,7 @@ func SomeValue(anyValue any, event *Event) Value {
 		return SomeArrayValue(castValue, event)
 
 	case []any:
-		array := make([]Value, 0)
-		for _, item := range castValue {
-			switch castItem := item.(type) {
-			case Value:
-				array = append(array, castItem)
-
-			default:
-				array = append(array, SomeValue(castItem, nil))
-			}
-		}
-
-		return SomeArrayValue(array, event)
+		return SomeArrayValue(toValues(castValue), event)
 
 	case Value:
 		return castValue
@@ -105,6 +94,22 @@ func SomeValue(anyValue any, event *Event) Value {
 		value: anyValue,
 		event: event,
 	}
+}
+
+// toValues converts the items to values, unless they are values already.
+func toValues(items []any) []Value {
+	array := make([]Value, 0)
+	for _, item := range items {
+		switch castItem := item.(type) {
+		case Value:
+			array = append(array, castItem)
+
+		default:
+			array = append(array, SomeValue(castItem, nil))
+		}
+	}
+
+	return array
 }
 
 // toDecimal converts a number of one of the integer and floating point types to a decimal.
