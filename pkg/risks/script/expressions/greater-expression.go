@@ -35,12 +35,16 @@ func (what *GreaterExpression) EvalBool(scope *common.Scope) (*common.BoolValue,
 		return common.EmptyBoolValue(), errorInLiteral, evalError
 	}
 
-	as, errorAsLiteral, asError := what.as.EvalString(scope)
-	if asError != nil {
-		return common.EmptyBoolValue(), errorAsLiteral, asError
+	as := ""
+	if what.as != nil { // "as" is optional
+		asValue, errorAsLiteral, asError := what.as.EvalString(scope)
+		if asError != nil {
+			return common.EmptyBoolValue(), errorAsLiteral, asError
+		}
+		as = asValue.StringValue()
 	}
 
-	compareValue, compareError := common.Compare(first, second, as.StringValue())
+	compareValue, compareError := common.Compare(first, second, as)
 	if compareError != nil {
 		return common.EmptyBoolValue(), what.Literal(), fmt.Errorf("failed to compare equal-expression: %w", compareError)
 	}

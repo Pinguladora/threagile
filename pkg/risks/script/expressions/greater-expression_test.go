@@ -61,3 +61,16 @@ func TestGreaterExpression_EvalBool_FirstLessOrEqual_ReturnsFalse(t *testing.T) 
 	assert.Empty(t, errorLiteral)
 	assert.False(t, result.BoolValue())
 }
+
+func TestGreaterExpression_EvalBool_WithoutAs(t *testing.T) {
+	scope := new(common.Scope)
+	_ = scope.Init(nil, nil)
+
+	expr := new(GreaterExpression)
+	_, _, parseErr := expr.ParseBool(map[string]any{"first": 2, "second": 1})
+	require.NoError(t, parseErr)
+
+	result, _, err := expr.EvalBool(scope)
+	require.NoError(t, err)
+	assert.True(t, result.BoolValue())
+}
