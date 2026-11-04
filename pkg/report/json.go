@@ -68,53 +68,34 @@ func WriteRisksJSON(parsedModel *types.Model, filename string) error {
 	for _, risk := range allRisks {
 		risks = append(risks, newRiskJSON(parsedModel, risk))
 	}
-	jsonBytes, err := json.Marshal(risks)
-	if err != nil {
-		return fmt.Errorf("failed to marshal risks to JSON: %w", err)
-	}
-	err = os.WriteFile(filename, jsonBytes, 0o600)
-	if err != nil {
-		return fmt.Errorf("failed to write risks to JSON file: %w", err)
-	}
-	return nil
+	return writeJSON(filename, risks, "risks")
 }
 
 // There is no corresponding JSON file for the data assets.
 
 func WriteTechnicalAssetsJSON(parsedModel *types.Model, filename string) error {
-	jsonBytes, err := json.Marshal(parsedModel.TechnicalAssets)
-	if err != nil {
-		return fmt.Errorf("failed to marshal technical assets to JSON: %w", err)
-	}
-	err = os.WriteFile(filename, jsonBytes, 0o600)
-	if err != nil {
-		return fmt.Errorf("failed to write technical assets to JSON file: %w", err)
-	}
-	return nil
+	return writeJSON(filename, parsedModel.TechnicalAssets, "technical assets")
 }
 
 func WriteStatsJSON(parsedModel *types.Model, filename string) error {
-	jsonBytes, err := json.Marshal(overallRiskStatistics(parsedModel))
-	if err != nil {
-		return fmt.Errorf("failed to marshal stats to JSON: %w", err)
-	}
-	err = os.WriteFile(filename, jsonBytes, 0o600)
-	if err != nil {
-		return fmt.Errorf("failed to write stats to JSON file: %w", err)
-	}
-	return nil
+	return writeJSON(filename, overallRiskStatistics(parsedModel), "stats")
 }
 
 // WriteOTMJSON writes the model, with the risk categories it found risks of as threats and each
 // risk as a threat instance, as an Open Threat Model (OTM) document.
 func WriteOTMJSON(parsedModel *types.Model, filename string) error {
-	jsonBytes, err := json.Marshal(otm.FromInterchange(interchange.FromModel(parsedModel)))
+	return writeJSON(filename, otm.FromInterchange(interchange.FromModel(parsedModel)), "OTM")
+}
+
+// writeJSON writes the value as JSON indented by two spaces, so that changes to the file read well in a diff.
+func writeJSON(filename string, value any, what string) error {
+	jsonBytes, err := json.MarshalIndent(value, "", "  ")
 	if err != nil {
-		return fmt.Errorf("failed to marshal OTM to JSON: %w", err)
+		return fmt.Errorf("failed to marshal %v to JSON: %w", what, err)
 	}
-	err = os.WriteFile(filename, jsonBytes, 0o600)
+	err = os.WriteFile(filename, append(jsonBytes, '\n'), 0o600)
 	if err != nil {
-		return fmt.Errorf("failed to write OTM to JSON file: %w", err)
+		return fmt.Errorf("failed to write %v to JSON file: %w", what, err)
 	}
 	return nil
 }
