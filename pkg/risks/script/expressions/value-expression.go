@@ -356,11 +356,14 @@ func (what *ValueExpression) resolveMethodCalls(scope *common.Scope, reString st
 	return what.resolveMethodCalls(scope, reString, common.SomeStringValue(text, value.Event().From(values...)))
 }
 
+// methodCallMatchLength is the length of a match of a method call: the call, the method name and the arguments.
+const methodCallMatchLength = 3
+
 func (what *ValueExpression) resolveMethodCall(scope *common.Scope, reString string, value *common.StringValue) (common.Value, string, error) {
 	re := regexp.MustCompile(reString)
 
 	match := re.FindStringSubmatch(value.StringValue())
-	if len(match) != 3 {
+	if len(match) != methodCallMatchLength {
 		return common.NilValue(), what.Literal(), fmt.Errorf("method call match failed for %q", value.StringValue())
 	}
 
