@@ -125,7 +125,8 @@ func (r *pdfReporter) WriteReportPDF(reportFilename string,
 	r.createTrustBoundaries(model)
 	r.createSharedRuntimes(model)
 	if val := hideChapters[RiskRulesCheckedByThreagile]; !val {
-		r.createRiskRulesChecked(model, modelFilename, skipRiskRules, buildTimestamp, threagileVersion, modelHash, customRiskRules)
+		r.createRiskRulesChecked(model, modelFilename, skipRiskRules, buildTimestamp, threagileVersion, modelHash,
+			customRiskRules)
 	}
 	r.createDisclaimer(model)
 	err = r.writeReportToFile(reportFilename)
@@ -263,7 +264,8 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 		catStr = textCategory
 	}
 	y += 6
-	r.pdf.Text(11, y, "    "+"Impact Analysis of "+strconv.Itoa(count)+" Initial "+risksStr+" in "+strconv.Itoa(catCount)+" "+catStr)
+	r.pdf.Text(11, y, "    "+"Impact Analysis of "+strconv.Itoa(count)+" Initial "+risksStr+" in "+strconv.Itoa(catCount)+
+		" "+catStr)
 	r.pdf.Text(175, y, "{impact-analysis-initial-risks}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
 	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{impact-analysis-initial-risks}"))
@@ -283,14 +285,16 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	y += 6
 	risksStr = textRisks
 	catStr = textCategories
-	count, catCount = len(filteredByStillAtRisk(parsedModel)), len(reduceToOnlyStillAtRisk(parsedModel.GeneratedRisksByCategoryWithCurrentStatus()))
+	count, catCount = len(filteredByStillAtRisk(parsedModel)),
+		len(reduceToOnlyStillAtRisk(parsedModel.GeneratedRisksByCategoryWithCurrentStatus()))
 	if count == 1 {
 		risksStr = textRisk
 	}
 	if catCount == 1 {
 		catStr = textCategory
 	}
-	r.pdf.Text(11, y, "    "+"Impact Analysis of "+strconv.Itoa(count)+" Remaining "+risksStr+" in "+strconv.Itoa(catCount)+" "+catStr)
+	r.pdf.Text(11, y, "    "+"Impact Analysis of "+strconv.Itoa(count)+" Remaining "+risksStr+" in "+
+		strconv.Itoa(catCount)+" "+catStr)
 	r.pdf.Text(175, y, "{impact-analysis-remaining-risks}")
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
 	r.pdf.Link(10, y-5, 172.5, 6.5, r.addTocLink("{impact-analysis-remaining-risks}"))
@@ -384,7 +388,8 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	if countStillAtRisk > 0 {
 		colorModelFailure(r.pdf)
 	}
-	r.pdf.Text(11, y, "    "+"Potential Model Failures: "+strconv.Itoa(countStillAtRisk)+" / "+strconv.Itoa(count)+" "+risksStr)
+	r.pdf.Text(11, y, "    "+"Potential Model Failures: "+strconv.Itoa(countStillAtRisk)+" / "+strconv.Itoa(count)+" "+
+		risksStr)
 	r.pdf.Text(175, y, "{model-failures}")
 	r.pdfColorBlack()
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
@@ -399,7 +404,8 @@ func (r *pdfReporter) createTableOfContents(parsedModel *types.Model) {
 	if questionsUnanswered(parsedModel) > 0 {
 		colorModelFailure(r.pdf)
 	}
-	r.pdf.Text(11, y, "    "+"Questions: "+strconv.Itoa(questionsUnanswered(parsedModel))+" / "+strconv.Itoa(count)+" "+questions)
+	r.pdf.Text(11, y, "    "+"Questions: "+strconv.Itoa(questionsUnanswered(parsedModel))+" / "+strconv.Itoa(count)+" "+
+		questions)
 	r.pdf.Text(175, y, "{questions}")
 	r.pdfColorBlack()
 	r.pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
@@ -728,41 +734,33 @@ func (r *pdfReporter) createDisclaimer(parsedModel *types.Model) {
 	r.pdf.SetY(46)
 
 	var disclaimer strings.Builder
-	disclaimer.WriteString(parsedModel.Author.Name + " conducted this threat analysis using the open-source Threagile toolkit " +
-		"on the applications and systems that were modeled as of this report's date. " +
-		"Information security threats are continually changing, with new " +
-		"vulnerabilities discovered on a daily basis, and no application can ever be 100% secure no matter how much " +
-		"threat modeling is conducted. It is recommended to execute threat modeling and also penetration testing on a regular basis " +
-		"(for example yearly) to ensure a high ongoing level of security and constantly check for new attack vectors. " +
-		"<br><br>" +
-		"This report cannot and does not protect against personal or business loss as the result of use of the " +
-		"applications or systems described. " + parsedModel.Author.Name + " and the Threagile toolkit offers no warranties, representations or " +
-		"legal certifications concerning the applications or systems it tests. All software includes defects: nothing " +
-		"in this document is intended to represent or warrant that threat modeling was complete and without error, " +
-		"nor does this document represent or warrant that the architecture analyzed is suitable to task, free of other " +
-		"defects than reported, fully compliant with any industry standards, or fully compatible with any operating " +
-		"system, hardware, or other application. Threat modeling tries to analyze the modeled architecture without " +
-		"having access to a real working system and thus cannot and does not test the implementation for defects and vulnerabilities. " +
-		"These kinds of checks would only be possible with a separate code review and penetration test against " +
-		"a working system and not via a threat model." +
-		"<br><br>" +
+	disclaimer.WriteString(parsedModel.Author.Name + " conducted this threat analysis using the open-source Threagile " +
+		"toolkit on the applications and systems that were modeled as of this report's date. Information security threats " +
+		"are continually changing, with new vulnerabilities discovered on a daily basis, and no application can ever be " +
+		"100% secure no matter how much threat modeling is conducted. It is recommended to execute threat modeling and " +
+		"also penetration testing on a regular basis (for example yearly) to ensure a high ongoing level of security and " +
+		"constantly check for new attack vectors. <br><br>This report cannot and does not protect against personal or " +
+		"business loss as the result of use of the " +
+		"applications or systems described. " + parsedModel.Author.Name + " and the Threagile toolkit offers no " +
+		"warranties, representations or legal certifications concerning the applications or systems it tests. All software " +
+		"includes defects: nothing in this document is intended to represent or warrant that threat modeling was complete " +
+		"and without error, nor does this document represent or warrant that the architecture analyzed is suitable to " +
+		"task, free of other defects than reported, fully compliant with any industry standards, or fully compatible with " +
+		"any operating system, hardware, or other application. Threat modeling tries to analyze the modeled architecture " +
+		"without having access to a real working system and thus cannot and does not test the implementation for defects " +
+		"and vulnerabilities. These kinds of checks would only be possible with a separate code review and penetration " +
+		"test against a working system and not via a threat model.<br><br>" +
 		"By using the resulting information you agree that " + parsedModel.Author.Name + " and the Threagile toolkit " +
-		"shall be held harmless in any event." +
-		"<br><br>" +
-		"This report is confidential and intended for internal, confidential use by the client. The recipient " +
-		"is obligated to ensure the highly confidential contents are kept secret. The recipient assumes responsibility " +
-		"for further distribution of this document." +
-		"<br><br>" +
-		"In this particular project, a time box approach was used to define the analysis effort. This means that the " +
-		"author allotted a prearranged amount of time to identify and document threats. Because of this, there " +
-		"is no guarantee that all possible threats and risks are discovered. Furthermore, the analysis " +
-		"applies to a snapshot of the current state of the modeled architecture (based on the architecture information provided " +
-		"by the customer) at the examination time." +
-		"<br><br><br>" +
-		"<b>Report Distribution</b>" +
-		"<br><br>" +
-		"Distribution of this report (in full or in part like diagrams or risk findings) requires that this disclaimer " +
-		"as well as the chapter about the Threagile toolkit and method used is kept intact as part of the " +
+		"shall be held harmless in any event.<br><br>This report is confidential and intended for internal, confidential " +
+		"use by the client. The recipient is obligated to ensure the highly confidential contents are kept secret. The " +
+		"recipient assumes responsibility for further distribution of this document.<br><br>In this particular project, a " +
+		"time box approach was used to define the analysis effort. This means that the author allotted a prearranged " +
+		"amount of time to identify and document threats. Because of this, there is no guarantee that all possible threats " +
+		"and risks are discovered. Furthermore, the analysis applies to a snapshot of the current state of the modeled " +
+		"architecture (based on the architecture information provided by the customer) at the examination " +
+		"time.<br><br><br><b>Report Distribution</b><br><br>Distribution of this report (in full or in part like diagrams " +
+		"or risk findings) requires that this disclaimer as well as the chapter about the Threagile toolkit and method " +
+		"used is kept intact as part of the " +
 		"distributed report or referenced from the distributed parts.")
 	html := r.pdf.HTMLBasicNew()
 	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
@@ -794,18 +792,17 @@ func (r *pdfReporter) createManagementSummary(parsedModel *types.Model, tempFold
 	// the wording does not switch between singular and plural (risk/s, category/ies, has/have)
 	html.Write(5, "Threagile toolkit was used to model the architecture of \""+uni(parsedModel.Title)+"\" "+
 		"and derive risks by analyzing the components and data flows. The risks identified during this analysis are shown "+
-		"in the following chapters. Identified risks during threat modeling do not necessarily mean that the "+
-		"vulnerability associated with this risk actually exists: it is more to be seen as a list of potential risks and "+
-		"threats, which should be individually reviewed and reduced by removing false positives. For the remaining risks it should "+
+		"in the following chapters. Identified risks during threat modeling do not necessarily mean that the vulnerability "+
+		"associated with this risk actually exists: it is more to be seen as a list of potential risks and threats, which "+
+		"should be individually reviewed and reduced by removing false positives. For the remaining risks it should "+
 		"be checked in the design and implementation of \""+uni(parsedModel.Title)+"\" whether the mitigation advices "+
-		"have been applied or not."+
-		"<br><br>"+
-		"Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. "+
-		"The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden "+
-		"the application in a Defense-in-Depth approach. Additionally, for each risk finding a "+
-		"link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given."+
-		"<br><br>"+
-		"In total <b>"+strconv.Itoa(totalRiskCount(parsedModel))+" initial risks</b> in <b>"+strconv.Itoa(len(parsedModel.GeneratedRisksByCategory))+" categories</b> have "+
+		"have been applied or not.<br><br>Each risk finding references a chapter of the OWASP ASVS (Application Security "+
+		"Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by "+
+		"architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each "+
+		"risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement "+
+		"a mitigation is given.<br><br>"+
+		"In total <b>"+strconv.Itoa(totalRiskCount(parsedModel))+" initial risks</b> in <b>"+
+		strconv.Itoa(len(parsedModel.GeneratedRisksByCategory))+" categories</b> have "+
 		"been identified during the threat modeling process:<br><br>")
 
 	r.pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -987,7 +984,8 @@ func (r *pdfReporter) createRiskMitigationStatus(parsedModel *types.Model, tempF
 	r.currentChapterTitleBreadcrumb = title
 
 	html := r.pdf.HTMLBasicNew()
-	html.Write(5, "The following chart gives a high-level overview of the risk tracking status (including mitigated risks):")
+	html.Write(5, "The following chart gives a high-level overview of the risk tracking status (including mitigated "+
+		"risks):")
 
 	risksCritical := filteredBySeverity(parsedModel, types.CriticalSeverity)
 	risksHigh := filteredBySeverity(parsedModel, types.HighSeverity)
@@ -1531,7 +1529,9 @@ func (r *pdfReporter) createAssetRegister(parsedModel *types.Model) {
 }
 
 // CAUTION: Long labels might cause endless loop, then remove labels and render them manually later inside the PDF.
-func (r *pdfReporter) embedStackedBarChart(sbcChart chart.StackedBarChart, x float64, y float64, tempFolder string) error {
+func (r *pdfReporter) embedStackedBarChart(sbcChart chart.StackedBarChart, x float64, y float64,
+	tempFolder string,
+) error {
 	tmpFilePNG, err := os.CreateTemp(tempFolder, "chart-*-.png")
 	if err != nil {
 		return fmt.Errorf("error creating temporary file for chart: %w", err)
@@ -1589,7 +1589,8 @@ func (r *pdfReporter) renderImpactAnalysis(parsedModel *types.Model, initialRisk
 	r.pdf.SetTextColor(0, 0, 0)
 	count, catCount := totalRiskCount(parsedModel), len(parsedModel.GeneratedRisksByCategory)
 	if !initialRisks {
-		count, catCount = len(filteredByStillAtRisk(parsedModel)), len(reduceToOnlyStillAtRisk(parsedModel.GeneratedRisksByCategoryWithCurrentStatus()))
+		count, catCount = len(filteredByStillAtRisk(parsedModel)),
+			len(reduceToOnlyStillAtRisk(parsedModel.GeneratedRisksByCategoryWithCurrentStatus()))
 	}
 	riskStr, catStr := textRisks, textCategories
 	if count == 1 {
@@ -1599,12 +1600,14 @@ func (r *pdfReporter) renderImpactAnalysis(parsedModel *types.Model, initialRisk
 		catStr = textCategory
 	}
 	if initialRisks {
-		chapTitle := "Impact Analysis of " + strconv.Itoa(count) + " Initial " + riskStr + " in " + strconv.Itoa(catCount) + " " + catStr
+		chapTitle := "Impact Analysis of " + strconv.Itoa(count) + " Initial " + riskStr + " in " + strconv.Itoa(catCount) +
+			" " + catStr
 		r.addHeadline(chapTitle, false)
 		r.defineLinkTarget("{impact-analysis-initial-risks}")
 		r.currentChapterTitleBreadcrumb = chapTitle
 	} else {
-		chapTitle := "Impact Analysis of " + strconv.Itoa(count) + " Remaining " + riskStr + " in " + strconv.Itoa(catCount) + " " + catStr
+		chapTitle := "Impact Analysis of " + strconv.Itoa(count) + " Remaining " + riskStr + " in " + strconv.Itoa(catCount) +
+			" " + catStr
 		r.addHeadline(chapTitle, false)
 		r.defineLinkTarget("{impact-analysis-remaining-risks}")
 		r.currentChapterTitleBreadcrumb = chapTitle
@@ -1630,15 +1633,25 @@ func (r *pdfReporter) renderImpactAnalysis(parsedModel *types.Model, initialRisk
 	html.Write(5, "Risk finding paragraphs are clickable and link to the corresponding chapter.")
 	r.pdf.SetFont("Helvetica", "", fontSizeBody)
 
-	r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(parsedModel.GeneratedRisksByCategory, initialRisks, types.CriticalSeverity)),
+	r.addCategories(parsedModel,
+		getRiskCategories(parsedModel,
+			reduceToSeverityRisk(parsedModel.GeneratedRisksByCategory, initialRisks, types.CriticalSeverity)),
 		types.CriticalSeverity, false, initialRisks, true, false)
-	r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(parsedModel.GeneratedRisksByCategory, initialRisks, types.HighSeverity)),
+	r.addCategories(parsedModel,
+		getRiskCategories(parsedModel,
+			reduceToSeverityRisk(parsedModel.GeneratedRisksByCategory, initialRisks, types.HighSeverity)),
 		types.HighSeverity, false, initialRisks, true, false)
-	r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(parsedModel.GeneratedRisksByCategory, initialRisks, types.ElevatedSeverity)),
+	r.addCategories(parsedModel,
+		getRiskCategories(parsedModel,
+			reduceToSeverityRisk(parsedModel.GeneratedRisksByCategory, initialRisks, types.ElevatedSeverity)),
 		types.ElevatedSeverity, false, initialRisks, true, false)
-	r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(parsedModel.GeneratedRisksByCategory, initialRisks, types.MediumSeverity)),
+	r.addCategories(parsedModel,
+		getRiskCategories(parsedModel,
+			reduceToSeverityRisk(parsedModel.GeneratedRisksByCategory, initialRisks, types.MediumSeverity)),
 		types.MediumSeverity, false, initialRisks, true, false)
-	r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(parsedModel.GeneratedRisksByCategory, initialRisks, types.LowSeverity)),
+	r.addCategories(parsedModel,
+		getRiskCategories(parsedModel,
+			reduceToSeverityRisk(parsedModel.GeneratedRisksByCategory, initialRisks, types.LowSeverity)),
 		types.LowSeverity, false, initialRisks, true, false)
 
 	r.pdf.SetDrawColor(0, 0, 0)
@@ -1720,7 +1733,8 @@ func (r *pdfReporter) createModelFailures(parsedModel *types.Model) {
 	if countStillAtRisk > 0 {
 		colorModelFailure(r.pdf)
 	}
-	chapTitle := "Potential Model Failures: " + strconv.Itoa(countStillAtRisk) + " / " + strconv.Itoa(count) + " " + risksStr
+	chapTitle := "Potential Model Failures: " + strconv.Itoa(countStillAtRisk) + " / " + strconv.Itoa(count) + " " +
+		risksStr
 	r.addHeadline(chapTitle, false)
 	r.defineLinkTarget("{model-failures}")
 	r.currentChapterTitleBreadcrumb = chapTitle
@@ -1743,15 +1757,20 @@ func (r *pdfReporter) createModelFailures(parsedModel *types.Model) {
 		r.pdfColorGray()
 		html.Write(5, "<br><br>No potential model failures have been identified.")
 	} else {
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(modelFailuresByCategory, true, types.CriticalSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(modelFailuresByCategory, true, types.CriticalSeverity)),
 			types.CriticalSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(modelFailuresByCategory, true, types.HighSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(modelFailuresByCategory, true, types.HighSeverity)),
 			types.HighSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(modelFailuresByCategory, true, types.ElevatedSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(modelFailuresByCategory, true, types.ElevatedSeverity)),
 			types.ElevatedSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(modelFailuresByCategory, true, types.MediumSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(modelFailuresByCategory, true, types.MediumSeverity)),
 			types.MediumSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(modelFailuresByCategory, true, types.LowSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(modelFailuresByCategory, true, types.LowSeverity)),
 			types.LowSeverity, true, true, false, true)
 	}
 
@@ -1848,7 +1867,8 @@ func createDataRiskQuickWins() {
 	var strBuilder strings.Builder
 	strBuilder.WriteString("For each technical asset it was checked how many data assets at risk might " +
 		"get their risk-rating reduced (partly or fully) when the risks of the technical asset are mitigated. " +
-		"In general, that means the higher the quick win value is, the more data assets (left side of the Data Risk Mapping diagram) " +
+		"In general, that means the higher the quick win value is, the more data assets " +
+		"(left side of the Data Risk Mapping diagram) " +
 		"turn from red to amber or from amber to blue by mitigating the technical asset's risks. " +
 		"This list can be used to prioritize on efforts with the greatest effects of reducing data asset risks:<br>")
 	html.Write(5, strBuilder.String())
@@ -1981,9 +2001,11 @@ func (r *pdfReporter) addCategories(parsedModel *types.Model, riskCategories []*
 		}
 		suffix += " - Exploitation likelihood is <i>"
 		if initialRisks {
-			suffix += highestExploitationLikelihood(risksStr).Title() + "</i> with <i>" + highestExploitationImpact(risksStr).Title() + "</i> impact."
+			suffix += highestExploitationLikelihood(risksStr).Title() + "</i> with <i>" +
+				highestExploitationImpact(risksStr).Title() + "</i> impact."
 		} else {
-			suffix += highestExploitationLikelihood(remainingRisks).Title() + "</i> with <i>" + highestExploitationImpact(remainingRisks).Title() + "</i> impact."
+			suffix += highestExploitationLikelihood(remainingRisks).Title() + "</i> with <i>" +
+				highestExploitationImpact(remainingRisks).Title() + "</i> impact."
 		}
 		strBuilder.WriteString(suffix + "<br>")
 		html.Write(5, strBuilder.String())
@@ -2010,8 +2032,10 @@ func (r *pdfReporter) createAssignmentByFunction(parsedModel *types.Model) {
 	r.defineLinkTarget("{function-assignment}")
 	r.currentChapterTitleBreadcrumb = title
 
-	risksBusinessSideFunction := reduceToFunctionRisk(parsedModel, parsedModel.GeneratedRisksByCategory, types.BusinessSide)
-	risksArchitectureFunction := reduceToFunctionRisk(parsedModel, parsedModel.GeneratedRisksByCategory, types.Architecture)
+	risksBusinessSideFunction := reduceToFunctionRisk(parsedModel, parsedModel.GeneratedRisksByCategory,
+		types.BusinessSide)
+	risksArchitectureFunction := reduceToFunctionRisk(parsedModel, parsedModel.GeneratedRisksByCategory,
+		types.Architecture)
 	risksDevelopmentFunction := reduceToFunctionRisk(parsedModel, parsedModel.GeneratedRisksByCategory, types.Development)
 	risksOperationFunction := reduceToFunctionRisk(parsedModel, parsedModel.GeneratedRisksByCategory, types.Operations)
 
@@ -2022,8 +2046,10 @@ func (r *pdfReporter) createAssignmentByFunction(parsedModel *types.Model) {
 	var intro strings.Builder
 	intro.WriteString("This chapter clusters and assigns the risks by functions which are most likely able to " +
 		"check and mitigate them: " +
-		"In total <b>" + strconv.Itoa(totalRiskCount(parsedModel)) + " potential risks</b> have been identified during the threat modeling process " +
-		"of which <b>" + strconv.Itoa(countBusinessSideFunction) + " should be checked by " + types.BusinessSide.Title() + "</b>, " +
+		"In total <b>" + strconv.Itoa(totalRiskCount(parsedModel)) + " potential risks</b> have been identified during the " +
+		"threat modeling process " +
+		"of which <b>" + strconv.Itoa(countBusinessSideFunction) + " should be checked by " + types.BusinessSide.Title() +
+		"</b>, " +
 		"<b>" + strconv.Itoa(countArchitectureFunction) + " should be checked by " + types.Architecture.Title() + "</b>, " +
 		"<b>" + strconv.Itoa(countDevelopmentFunction) + " should be checked by " + types.Development.Title() + "</b>, " +
 		"and <b>" + strconv.Itoa(countOperationFunction) + " should be checked by " + types.Operations.Title() + "</b>.<br>")
@@ -2051,15 +2077,20 @@ func (r *pdfReporter) createAssignmentByFunction(parsedModel *types.Model) {
 		r.pdf.SetTextColor(150, 150, 150)
 		html.Write(5, "<br><br>n/a")
 	} else {
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksBusinessSideFunction, true, types.CriticalSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksBusinessSideFunction, true, types.CriticalSeverity)),
 			types.CriticalSeverity, true, true, false, false)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksBusinessSideFunction, true, types.HighSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksBusinessSideFunction, true, types.HighSeverity)),
 			types.HighSeverity, true, true, false, false)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksBusinessSideFunction, true, types.ElevatedSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksBusinessSideFunction, true, types.ElevatedSeverity)),
 			types.ElevatedSeverity, true, true, false, false)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksBusinessSideFunction, true, types.MediumSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksBusinessSideFunction, true, types.MediumSeverity)),
 			types.MediumSeverity, true, true, false, false)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksBusinessSideFunction, true, types.LowSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksBusinessSideFunction, true, types.LowSeverity)),
 			types.LowSeverity, true, true, false, false)
 	}
 	r.pdf.SetLeftMargin(oldLeft)
@@ -2078,15 +2109,20 @@ func (r *pdfReporter) createAssignmentByFunction(parsedModel *types.Model) {
 		r.pdf.SetTextColor(150, 150, 150)
 		html.Write(5, "<br><br>n/a")
 	} else {
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksArchitectureFunction, true, types.CriticalSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksArchitectureFunction, true, types.CriticalSeverity)),
 			types.CriticalSeverity, true, true, false, false)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksArchitectureFunction, true, types.HighSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksArchitectureFunction, true, types.HighSeverity)),
 			types.HighSeverity, true, true, false, false)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksArchitectureFunction, true, types.ElevatedSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksArchitectureFunction, true, types.ElevatedSeverity)),
 			types.ElevatedSeverity, true, true, false, false)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksArchitectureFunction, true, types.MediumSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksArchitectureFunction, true, types.MediumSeverity)),
 			types.MediumSeverity, true, true, false, false)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksArchitectureFunction, true, types.LowSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksArchitectureFunction, true, types.LowSeverity)),
 			types.LowSeverity, true, true, false, false)
 	}
 	r.pdf.SetLeftMargin(oldLeft)
@@ -2105,15 +2141,20 @@ func (r *pdfReporter) createAssignmentByFunction(parsedModel *types.Model) {
 		r.pdf.SetTextColor(150, 150, 150)
 		html.Write(5, "<br><br>n/a")
 	} else {
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksDevelopmentFunction, true, types.CriticalSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksDevelopmentFunction, true, types.CriticalSeverity)),
 			types.CriticalSeverity, true, true, false, false)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksDevelopmentFunction, true, types.HighSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksDevelopmentFunction, true, types.HighSeverity)),
 			types.HighSeverity, true, true, false, false)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksDevelopmentFunction, true, types.ElevatedSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksDevelopmentFunction, true, types.ElevatedSeverity)),
 			types.ElevatedSeverity, true, true, false, false)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksDevelopmentFunction, true, types.MediumSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksDevelopmentFunction, true, types.MediumSeverity)),
 			types.MediumSeverity, true, true, false, false)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksDevelopmentFunction, true, types.LowSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksDevelopmentFunction, true, types.LowSeverity)),
 			types.LowSeverity, true, true, false, false)
 	}
 	r.pdf.SetLeftMargin(oldLeft)
@@ -2132,15 +2173,20 @@ func (r *pdfReporter) createAssignmentByFunction(parsedModel *types.Model) {
 		r.pdf.SetTextColor(150, 150, 150)
 		html.Write(5, "<br><br>n/a")
 	} else {
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksOperationFunction, true, types.CriticalSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksOperationFunction, true, types.CriticalSeverity)),
 			types.CriticalSeverity, true, true, false, false)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksOperationFunction, true, types.HighSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksOperationFunction, true, types.HighSeverity)),
 			types.HighSeverity, true, true, false, false)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksOperationFunction, true, types.ElevatedSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksOperationFunction, true, types.ElevatedSeverity)),
 			types.ElevatedSeverity, true, true, false, false)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksOperationFunction, true, types.MediumSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksOperationFunction, true, types.MediumSeverity)),
 			types.MediumSeverity, true, true, false, false)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksOperationFunction, true, types.LowSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksOperationFunction, true, types.LowSeverity)),
 			types.LowSeverity, true, true, false, false)
 	}
 	r.pdf.SetLeftMargin(oldLeft)
@@ -2159,9 +2205,12 @@ func (r *pdfReporter) createSTRIDE(parsedModel *types.Model) {
 	risksSTRIDESpoofing := reduceToSTRIDERisk(parsedModel, parsedModel.GeneratedRisksByCategory, types.Spoofing)
 	risksSTRIDETampering := reduceToSTRIDERisk(parsedModel, parsedModel.GeneratedRisksByCategory, types.Tampering)
 	risksSTRIDERepudiation := reduceToSTRIDERisk(parsedModel, parsedModel.GeneratedRisksByCategory, types.Repudiation)
-	risksSTRIDEInformationDisclosure := reduceToSTRIDERisk(parsedModel, parsedModel.GeneratedRisksByCategory, types.InformationDisclosure)
-	risksSTRIDEDenialOfService := reduceToSTRIDERisk(parsedModel, parsedModel.GeneratedRisksByCategory, types.DenialOfService)
-	risksSTRIDEElevationOfPrivilege := reduceToSTRIDERisk(parsedModel, parsedModel.GeneratedRisksByCategory, types.ElevationOfPrivilege)
+	risksSTRIDEInformationDisclosure := reduceToSTRIDERisk(parsedModel, parsedModel.GeneratedRisksByCategory,
+		types.InformationDisclosure)
+	risksSTRIDEDenialOfService := reduceToSTRIDERisk(parsedModel, parsedModel.GeneratedRisksByCategory,
+		types.DenialOfService)
+	risksSTRIDEElevationOfPrivilege := reduceToSTRIDERisk(parsedModel, parsedModel.GeneratedRisksByCategory,
+		types.ElevationOfPrivilege)
 
 	countSTRIDESpoofing := countRisks(risksSTRIDESpoofing)
 	countSTRIDETampering := countRisks(risksSTRIDETampering)
@@ -2171,13 +2220,16 @@ func (r *pdfReporter) createSTRIDE(parsedModel *types.Model) {
 	countSTRIDEElevationOfPrivilege := countRisks(risksSTRIDEElevationOfPrivilege)
 	var intro strings.Builder
 	intro.WriteString("This chapter clusters and classifies the risks by STRIDE categories: " +
-		"In total <b>" + strconv.Itoa(totalRiskCount(parsedModel)) + " potential risks</b> have been identified during the threat modeling process " +
+		"In total <b>" + strconv.Itoa(totalRiskCount(parsedModel)) + " potential risks</b> have been identified during the " +
+		"threat modeling process " +
 		"of which <b>" + strconv.Itoa(countSTRIDESpoofing) + " in the " + types.Spoofing.Title() + "</b> category, " +
 		"<b>" + strconv.Itoa(countSTRIDETampering) + " in the " + types.Tampering.Title() + "</b> category, " +
 		"<b>" + strconv.Itoa(countSTRIDERepudiation) + " in the " + types.Repudiation.Title() + "</b> category, " +
-		"<b>" + strconv.Itoa(countSTRIDEInformationDisclosure) + " in the " + types.InformationDisclosure.Title() + "</b> category, " +
+		"<b>" + strconv.Itoa(countSTRIDEInformationDisclosure) + " in the " + types.InformationDisclosure.Title() + "</b> " +
+		"category, " +
 		"<b>" + strconv.Itoa(countSTRIDEDenialOfService) + " in the " + types.DenialOfService.Title() + "</b> category, " +
-		"and <b>" + strconv.Itoa(countSTRIDEElevationOfPrivilege) + " in the " + types.ElevationOfPrivilege.Title() + "</b> category.<br>")
+		"and <b>" + strconv.Itoa(countSTRIDEElevationOfPrivilege) + " in the " + types.ElevationOfPrivilege.Title() +
+		"</b> category.<br>")
 	html := r.pdf.HTMLBasicNew()
 	html.Write(5, intro.String())
 	intro.Reset()
@@ -2202,15 +2254,20 @@ func (r *pdfReporter) createSTRIDE(parsedModel *types.Model) {
 		r.pdf.SetTextColor(150, 150, 150)
 		html.Write(5, "<br><br>n/a")
 	} else {
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDESpoofing, true, types.CriticalSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDESpoofing, true, types.CriticalSeverity)),
 			types.CriticalSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDESpoofing, true, types.HighSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDESpoofing, true, types.HighSeverity)),
 			types.HighSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDESpoofing, true, types.ElevatedSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDESpoofing, true, types.ElevatedSeverity)),
 			types.ElevatedSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDESpoofing, true, types.MediumSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDESpoofing, true, types.MediumSeverity)),
 			types.MediumSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDESpoofing, true, types.LowSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDESpoofing, true, types.LowSeverity)),
 			types.LowSeverity, true, true, false, true)
 	}
 	r.pdf.SetLeftMargin(oldLeft)
@@ -2229,15 +2286,20 @@ func (r *pdfReporter) createSTRIDE(parsedModel *types.Model) {
 		r.pdf.SetTextColor(150, 150, 150)
 		html.Write(5, "<br><br>n/a")
 	} else {
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDETampering, true, types.CriticalSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDETampering, true, types.CriticalSeverity)),
 			types.CriticalSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDETampering, true, types.HighSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDETampering, true, types.HighSeverity)),
 			types.HighSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDETampering, true, types.ElevatedSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDETampering, true, types.ElevatedSeverity)),
 			types.ElevatedSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDETampering, true, types.MediumSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDETampering, true, types.MediumSeverity)),
 			types.MediumSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDETampering, true, types.LowSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDETampering, true, types.LowSeverity)),
 			types.LowSeverity, true, true, false, true)
 	}
 	r.pdf.SetLeftMargin(oldLeft)
@@ -2256,15 +2318,20 @@ func (r *pdfReporter) createSTRIDE(parsedModel *types.Model) {
 		r.pdf.SetTextColor(150, 150, 150)
 		html.Write(5, "<br><br>n/a")
 	} else {
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDERepudiation, true, types.CriticalSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDERepudiation, true, types.CriticalSeverity)),
 			types.CriticalSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDERepudiation, true, types.HighSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDERepudiation, true, types.HighSeverity)),
 			types.HighSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDERepudiation, true, types.ElevatedSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDERepudiation, true, types.ElevatedSeverity)),
 			types.ElevatedSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDERepudiation, true, types.MediumSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDERepudiation, true, types.MediumSeverity)),
 			types.MediumSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDERepudiation, true, types.LowSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDERepudiation, true, types.LowSeverity)),
 			types.LowSeverity, true, true, false, true)
 	}
 	r.pdf.SetLeftMargin(oldLeft)
@@ -2283,15 +2350,20 @@ func (r *pdfReporter) createSTRIDE(parsedModel *types.Model) {
 		r.pdf.SetTextColor(150, 150, 150)
 		html.Write(5, "<br><br>n/a")
 	} else {
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEInformationDisclosure, true, types.CriticalSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEInformationDisclosure, true, types.CriticalSeverity)),
 			types.CriticalSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEInformationDisclosure, true, types.HighSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEInformationDisclosure, true, types.HighSeverity)),
 			types.HighSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEInformationDisclosure, true, types.ElevatedSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEInformationDisclosure, true, types.ElevatedSeverity)),
 			types.ElevatedSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEInformationDisclosure, true, types.MediumSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEInformationDisclosure, true, types.MediumSeverity)),
 			types.MediumSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEInformationDisclosure, true, types.LowSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEInformationDisclosure, true, types.LowSeverity)),
 			types.LowSeverity, true, true, false, true)
 	}
 	r.pdf.SetLeftMargin(oldLeft)
@@ -2310,15 +2382,20 @@ func (r *pdfReporter) createSTRIDE(parsedModel *types.Model) {
 		r.pdf.SetTextColor(150, 150, 150)
 		html.Write(5, "<br><br>n/a")
 	} else {
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEDenialOfService, true, types.CriticalSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEDenialOfService, true, types.CriticalSeverity)),
 			types.CriticalSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEDenialOfService, true, types.HighSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEDenialOfService, true, types.HighSeverity)),
 			types.HighSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEDenialOfService, true, types.ElevatedSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEDenialOfService, true, types.ElevatedSeverity)),
 			types.ElevatedSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEDenialOfService, true, types.MediumSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEDenialOfService, true, types.MediumSeverity)),
 			types.MediumSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEDenialOfService, true, types.LowSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEDenialOfService, true, types.LowSeverity)),
 			types.LowSeverity, true, true, false, true)
 	}
 	r.pdf.SetLeftMargin(oldLeft)
@@ -2337,15 +2414,20 @@ func (r *pdfReporter) createSTRIDE(parsedModel *types.Model) {
 		r.pdf.SetTextColor(150, 150, 150)
 		html.Write(5, "<br><br>n/a")
 	} else {
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEElevationOfPrivilege, true, types.CriticalSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEElevationOfPrivilege, true, types.CriticalSeverity)),
 			types.CriticalSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEElevationOfPrivilege, true, types.HighSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEElevationOfPrivilege, true, types.HighSeverity)),
 			types.HighSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEElevationOfPrivilege, true, types.ElevatedSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEElevationOfPrivilege, true, types.ElevatedSeverity)),
 			types.ElevatedSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEElevationOfPrivilege, true, types.MediumSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEElevationOfPrivilege, true, types.MediumSeverity)),
 			types.MediumSeverity, true, true, false, true)
-		r.addCategories(parsedModel, getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEElevationOfPrivilege, true, types.LowSeverity)),
+		r.addCategories(parsedModel,
+			getRiskCategories(parsedModel, reduceToSeverityRisk(risksSTRIDEElevationOfPrivilege, true, types.LowSeverity)),
 			types.LowSeverity, true, true, false, true)
 	}
 	r.pdf.SetLeftMargin(oldLeft)
@@ -2428,7 +2510,8 @@ func (r *pdfReporter) createQuestions(parsedModel *types.Model) {
 	if questionsUnanswered(parsedModel) > 0 {
 		colorModelFailure(r.pdf)
 	}
-	chapTitle := "Questions: " + strconv.Itoa(questionsUnanswered(parsedModel)) + " / " + strconv.Itoa(count) + " " + questions
+	chapTitle := "Questions: " + strconv.Itoa(questionsUnanswered(parsedModel)) + " / " + strconv.Itoa(count) + " " +
+		questions
 	r.addHeadline(chapTitle, false)
 	r.defineLinkTarget("{questions}")
 	r.currentChapterTitleBreadcrumb = chapTitle
@@ -2543,14 +2626,15 @@ func (r *pdfReporter) createRiskCategories(parsedModel *types.Model) {
 	r.defineLinkTarget("{intro-risks-by-vulnerability-category}")
 	html := r.pdf.HTMLBasicNew()
 	var text strings.Builder
-	text.WriteString("In total <b>" + strconv.Itoa(totalRiskCount(parsedModel)) + " potential risks</b> have been identified during the threat modeling process " +
-		"of which " +
+	text.WriteString("In total <b>" + strconv.Itoa(totalRiskCount(parsedModel)) + " potential risks</b> have been " +
+		"identified during the threat modeling process of which " +
 		"<b>" + strconv.Itoa(len(filteredBySeverity(parsedModel, types.CriticalSeverity))) + " are rated as critical</b>, " +
 		"<b>" + strconv.Itoa(len(filteredBySeverity(parsedModel, types.HighSeverity))) + " as high</b>, " +
 		"<b>" + strconv.Itoa(len(filteredBySeverity(parsedModel, types.ElevatedSeverity))) + " as elevated</b>, " +
 		"<b>" + strconv.Itoa(len(filteredBySeverity(parsedModel, types.MediumSeverity))) + " as medium</b>, " +
 		"and <b>" + strconv.Itoa(len(filteredBySeverity(parsedModel, types.LowSeverity))) + " as low</b>. " +
-		"<br><br>These risks are distributed across <b>" + strconv.Itoa(len(parsedModel.GeneratedRisksByCategory)) + " vulnerability categories</b>. ")
+		"<br><br>These risks are distributed across <b>" + strconv.Itoa(len(parsedModel.GeneratedRisksByCategory)) +
+		" vulnerability categories</b>. ")
 	// a longer explanation could follow here
 	text.WriteString("The following sub-chapters of this section describe each identified risk category.")
 	html.Write(5, text.String())
@@ -2620,7 +2704,8 @@ func (r *pdfReporter) createRiskCategories(parsedModel *types.Model) {
 		if len(asvsChapter) == 0 {
 			text.WriteString("<br><br>ASVS Chapter: n/a")
 		} else {
-			text.WriteString("<br><br>ASVS Chapter: <a href=\"https://owasp.org/www-project-application-security-verification-standard/\">" + asvsChapter + "</a>")
+			text.WriteString("<br><br>ASVS Chapter: <a " +
+				"href=\"https://owasp.org/www-project-application-security-verification-standard/\">" + asvsChapter + "</a>")
 		}
 
 		cheatSheetLink := category.CheatSheet
@@ -2652,8 +2737,9 @@ func (r *pdfReporter) createRiskCategories(parsedModel *types.Model) {
 		if len(risksStr) > 1 {
 			times += "s"
 		}
-		text.WriteString("The risk <b>" + category.Title + "</b> was found <b>" + times + "</b> in the analyzed architecture to be " +
-			"potentially possible. Each spot should be checked individually by reviewing the implementation whether all " +
+		text.WriteString("The risk <b>" + category.Title + "</b> was found <b>" + times + "</b> in the analyzed " +
+			"architecture to be potentially possible. Each spot should be checked individually by reviewing the " +
+			"implementation whether all " +
 			"controls have been applied properly in order to mitigate each risk.<br>")
 		html.Write(5, text.String())
 		text.Reset()
@@ -2662,7 +2748,8 @@ func (r *pdfReporter) createRiskCategories(parsedModel *types.Model) {
 		html.Write(5, "Risk finding paragraphs are clickable and link to the corresponding chapter.<br>")
 		r.pdf.SetFont("Helvetica", "", fontSizeBody)
 		oldLeft := r.leftMargin()
-		headlineCriticalWritten, headlineHighWritten, headlineElevatedWritten, headlineMediumWritten, headlineLowWritten := false, false, false, false, false
+		headlineCriticalWritten, headlineHighWritten, headlineElevatedWritten, headlineMediumWritten,
+			headlineLowWritten := false, false, false, false, false
 		for _, risk := range risksStr {
 			text.WriteString("<br>")
 			html.Write(5, text.String())
@@ -2731,7 +2818,8 @@ func (r *pdfReporter) createRiskCategories(parsedModel *types.Model) {
 			posY := r.pdf.GetY()
 			r.pdf.SetLeftMargin(oldLeft + 10)
 			r.pdf.SetFont("Helvetica", "", fontSizeBody)
-			text.WriteString(uni(risk.Title) + ": Exploitation likelihood is <i>" + risk.ExploitationLikelihood.Title() + "</i> with <i>" + risk.ExploitationImpact.Title() + "</i> impact.")
+			text.WriteString(uni(risk.Title) + ": Exploitation likelihood is <i>" + risk.ExploitationLikelihood.Title() +
+				"</i> with <i>" + risk.ExploitationImpact.Title() + "</i> impact.")
 			text.WriteString("<br>")
 			html.Write(5, text.String())
 			text.Reset()
@@ -2812,18 +2900,20 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 	r.defineLinkTarget("{intro-risks-by-technical-asset}")
 	html := r.pdf.HTMLBasicNew()
 	var text strings.Builder
-	text.WriteString("In total <b>" + strconv.Itoa(totalRiskCount(parsedModel)) + " potential risks</b> have been identified during the threat modeling process " +
-		"of which " +
+	text.WriteString("In total <b>" + strconv.Itoa(totalRiskCount(parsedModel)) + " potential risks</b> have been " +
+		"identified during the threat modeling process of which " +
 		"<b>" + strconv.Itoa(len(filteredBySeverity(parsedModel, types.CriticalSeverity))) + " are rated as critical</b>, " +
 		"<b>" + strconv.Itoa(len(filteredBySeverity(parsedModel, types.HighSeverity))) + " as high</b>, " +
 		"<b>" + strconv.Itoa(len(filteredBySeverity(parsedModel, types.ElevatedSeverity))) + " as elevated</b>, " +
 		"<b>" + strconv.Itoa(len(filteredBySeverity(parsedModel, types.MediumSeverity))) + " as medium</b>, " +
 		"and <b>" + strconv.Itoa(len(filteredBySeverity(parsedModel, types.LowSeverity))) + " as low</b>. " +
-		"<br><br>These risks are distributed across <b>" + strconv.Itoa(len(parsedModel.InScopeTechnicalAssets())) + " in-scope technical assets</b>. ")
+		"<br><br>These risks are distributed across <b>" + strconv.Itoa(len(parsedModel.InScopeTechnicalAssets())) +
+		" in-scope technical assets</b>. ")
 	// a longer explanation could follow here
 	text.WriteString("The following sub-chapters of this section describe each identified risk " +
 		"grouped by technical asset. ")
-	text.WriteString("The RAA value of a technical asset is the calculated \"Relative Attacker Attractiveness\" value in percent.")
+	text.WriteString("The RAA value of a technical asset is the calculated \"Relative Attacker Attractiveness\" value " +
+		"in percent.")
 	html.Write(5, text.String())
 	text.Reset()
 	r.currentChapterTitleBreadcrumb = title
@@ -2897,7 +2987,8 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 				r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(185, 6, strconv.Itoa(len(risksStr))+" risksStr in total were identified", "0", 0, "", false, 0, "")
 			*/
-			headlineCriticalWritten, headlineHighWritten, headlineElevatedWritten, headlineMediumWritten, headlineLowWritten := false, false, false, false, false
+			headlineCriticalWritten, headlineHighWritten, headlineElevatedWritten, headlineMediumWritten,
+				headlineLowWritten := false, false, false, false, false
 			r.pdf.Ln(-1)
 			for _, risk := range risksStr {
 				text.WriteString("<br>")
@@ -2957,7 +3048,8 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 				posY := r.pdf.GetY()
 				r.pdf.SetLeftMargin(oldLeft + 10)
 				r.pdf.SetFont("Helvetica", "", fontSizeBody)
-				text.WriteString(uni(risk.Title) + ": Exploitation likelihood is <i>" + risk.ExploitationLikelihood.Title() + "</i> with <i>" + risk.ExploitationImpact.Title() + "</i> impact.")
+				text.WriteString(uni(risk.Title) + ": Exploitation likelihood is <i>" + risk.ExploitationLikelihood.Title() +
+					"</i> with <i>" + risk.ExploitationImpact.Title() + "</i> impact.")
 				text.WriteString("<br>")
 				html.Write(5, text.String())
 				text.Reset()
@@ -3281,7 +3373,8 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 			}
 			r.pdfColorBlack()
 			r.pdf.SetFont("Helvetica", "B", fontSizeBody)
-			r.pdf.CellFormat(190, 6, "Outgoing Communication Links: "+strconv.Itoa(len(technicalAsset.CommunicationLinks)), "0", 0, "", false, 0, "")
+			r.pdf.CellFormat(190, 6, "Outgoing Communication Links: "+
+				strconv.Itoa(len(technicalAsset.CommunicationLinks)), "0", 0, "", false, 0, "")
 			r.pdf.SetFont("Helvetica", "", fontSizeSmall)
 			r.pdfColorGray()
 			html.Write(5, "Target technical asset names are clickable and link to the corresponding chapter.")
@@ -3451,7 +3544,8 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 			}
 			r.pdfColorBlack()
 			r.pdf.SetFont("Helvetica", "B", fontSizeBody)
-			r.pdf.CellFormat(190, 6, "Incoming Communication Links: "+strconv.Itoa(len(incomingCommLinks)), "0", 0, "", false, 0, "")
+			r.pdf.CellFormat(190, 6, "Incoming Communication Links: "+
+				strconv.Itoa(len(incomingCommLinks)), "0", 0, "", false, 0, "")
 			r.pdf.SetFont("Helvetica", "", fontSizeSmall)
 			r.pdfColorGray()
 			html.Write(5, "Source technical asset names are clickable and link to the corresponding chapter.")
@@ -3623,8 +3717,8 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 	r.addHeadline(title, false)
 	r.defineLinkTarget("{intro-risks-by-data-asset}")
 	html := r.pdf.HTMLBasicNew()
-	html.Write(5, "In total <b>"+strconv.Itoa(totalRiskCount(parsedModel))+" potential risks</b> have been identified during the threat modeling process "+
-		"of which "+
+	html.Write(5, "In total <b>"+strconv.Itoa(totalRiskCount(parsedModel))+" potential risks</b> have been identified "+
+		"during the threat modeling process of which "+
 		"<b>"+strconv.Itoa(len(filteredBySeverity(parsedModel, types.CriticalSeverity)))+" are rated as critical</b>, "+
 		"<b>"+strconv.Itoa(len(filteredBySeverity(parsedModel, types.HighSeverity)))+" as high</b>, "+
 		"<b>"+strconv.Itoa(len(filteredBySeverity(parsedModel, types.ElevatedSeverity)))+" as elevated</b>, "+
@@ -3940,7 +4034,8 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 				r.pdf.CellFormat(10, 6, "", "0", 0, "", false, 0, "")
 				posY := r.pdf.GetY()
 				r.pdf.SetFont("Helvetica", "", fontSizeVerySmall)
-				r.pdf.MultiCell(185, 5, dataBreachRisk.DataBreachProbability.Title()+": "+uni(dataBreachRisk.SyntheticId), "0", "0", false)
+				r.pdf.MultiCell(185, 5, dataBreachRisk.DataBreachProbability.Title()+": "+
+					uni(dataBreachRisk.SyntheticId), "0", "0", false)
 				r.pdf.SetFont("Helvetica", "", fontSizeBody)
 				r.pdf.Link(20, posY, 180, r.pdf.GetY()-posY, r.tocLinkIdByAssetId[dataBreachRisk.CategoryId])
 			}
@@ -4172,9 +4267,12 @@ func (r *pdfReporter) createRiskRulesChecked(parsedModel *types.Model, modelFile
 	strBuilder.Reset()
 	r.pdfColorBlack()
 	r.pdf.SetFont("Helvetica", "", fontSizeBody)
-	strBuilder.WriteString("<br><br>Threagile (see <a href=\"https://threagile.io\">https://threagile.io</a> for more details) is an open-source toolkit for agile threat modeling, created by Christian Schneider (<a href=\"https://christian-schneider.net\">https://christian-schneider.net</a>): It allows to model an architecture with its assets in an agile fashion as a YAML file " +
-		"directly inside the IDE. Upon execution of the Threagile toolkit all standard risk rules (as well as individual custom rules if present) " +
-		"are checked against the architecture model. At the time the Threagile toolkit was executed on the model input file " +
+	strBuilder.WriteString("<br><br>Threagile (see <a href=\"https://threagile.io\">https://threagile.io</a> for more " +
+		"details) is an open-source toolkit for agile threat modeling, created by Christian Schneider (<a " +
+		"href=\"https://christian-schneider.net\">https://christian-schneider.net</a>): It allows to model an architecture " +
+		"with its assets in an agile fashion as a YAML file directly inside the IDE. Upon execution of the Threagile " +
+		"toolkit all standard risk rules (as well as individual custom rules if present) are checked against the " +
+		"architecture model. At the time the Threagile toolkit was executed on the model input file " +
 		"the following risk rules were checked:")
 	html.Write(5, strBuilder.String())
 	strBuilder.Reset()
@@ -4398,7 +4496,9 @@ func (r *pdfReporter) createTargetDescription(parsedModel *types.Model, baseFold
 	return nil
 }
 
-func (r *pdfReporter) addCustomImages(customImages []map[string]string, baseFolder string, html gofpdf.HTMLBasicType) error {
+func (r *pdfReporter) addCustomImages(customImages []map[string]string, baseFolder string,
+	html gofpdf.HTMLBasicType,
+) error {
 	var text strings.Builder
 	for _, customImage := range customImages {
 		for _, imageFilename := range slices.Sorted(maps.Keys(customImage)) {
@@ -4551,10 +4651,10 @@ func (r *pdfReporter) embedDataRiskMapping(diagramFilenamePNG string, tempFolder
 
 	var intro strings.Builder
 	intro.WriteString("The following diagram was generated by Threagile based on the model input and gives a high-level " +
-		"distribution of data assets across technical assets. The color matches the identified data breach probability and risk level " +
-		"(see the \"Data Breach Probabilities\" chapter for more details). " +
-		"A solid line stands for <i>data is stored by the asset</i> and a dashed one means " +
-		"<i>data is processed by the asset</i>. For a full high-resolution version of this diagram please refer to the PNG image " +
+		"distribution of data assets across technical assets. The color matches the identified data breach probability and " +
+		"risk level (see the \"Data Breach Probabilities\" chapter for more details). A solid line stands for <i>data is " +
+		"stored by the asset</i> and a dashed one means <i>data is processed by the asset</i>. For a full high-resolution " +
+		"version of this diagram please refer to the PNG image " +
 		"file alongside this report.")
 
 	html := r.pdf.HTMLBasicNew()
