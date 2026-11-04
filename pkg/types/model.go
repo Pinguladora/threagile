@@ -13,10 +13,8 @@ import (
 	"strings"
 )
 
-// TODO: move model out of types package and
-// rename model to model or something like this to emphasize that it's just a model
-// maybe
-
+// Model is the parsed threat model. It could move out of the types package, under a name that makes
+// clearer that it is just the model.
 type Model struct {
 	ThreagileVersion                              string                        `json:"threagile_version,omitempty"                                  yaml:"threagile_version,omitempty"`
 	Includes                                      []string                      `json:"includes,omitempty"                                           yaml:"includes,omitempty"`
@@ -50,7 +48,7 @@ type Model struct {
 	DiagramTweakInvisibleConnectionsBetweenAssets []string                      `json:"diagram_tweak_invisible_connections_between_assets,omitempty" yaml:"diagram_tweak_invisible_connections_between_assets,omitempty"`
 	DiagramTweakSameRankAssets                    []string                      `json:"diagram_tweak_same_rank_assets,omitempty"                     yaml:"diagram_tweak_same_rank_assets,omitempty"`
 
-	// TODO: those are generated based on items above and needs to be private
+	// The fields below are generated from the ones above; they would better be private.
 	IncomingTechnicalCommunicationLinksMappedByTargetId   map[string][]*CommunicationLink `json:"incoming_technical_communication_links_mapped_by_target_id,omitempty"    yaml:"incoming_technical_communication_links_mapped_by_target_id,omitempty"`
 	DirectContainingTrustBoundaryMappedByTechnicalAssetId map[string]*TrustBoundary       `json:"direct_containing_trust_boundary_mapped_by_technical_asset_id,omitempty" yaml:"direct_containing_trust_boundary_mapped_by_technical_asset_id,omitempty"`
 	GeneratedRisksByCategory                              map[string][]*Risk              `json:"generated_risks_by_category,omitempty"                                   yaml:"generated_risks_by_category,omitempty"`
@@ -873,14 +871,17 @@ func (model *Model) GeneratedRisks(what *TechnicalAsset) []*Risk {
 	return resultingRisks
 }
 
-func (model *Model) GetRiskTracking(what *Risk) *RiskTracking { // TODO: Unify function naming regarding Get etc.
+// GetRiskTracking returns the tracking of the risk, or nil. The accessors of the model do not use the Get
+// prefix consistently.
+func (model *Model) GetRiskTracking(what *Risk) *RiskTracking {
 	if riskTracking, ok := model.RiskTracking[what.SyntheticId]; ok {
 		return riskTracking
 	}
 	return nil
 }
 
-func (model *Model) GetRiskTrackingWithDefault(what *Risk) RiskTracking { // TODO: Unify function naming regarding Get etc.
+// GetRiskTrackingWithDefault returns the tracking of the risk, or an empty tracking.
+func (model *Model) GetRiskTrackingWithDefault(what *Risk) RiskTracking {
 	if riskTracking, ok := model.RiskTracking[what.SyntheticId]; ok {
 		return *riskTracking
 	}
