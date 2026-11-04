@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"maps"
+	"os"
 	"slices"
 	"strings"
 	"testing"
@@ -176,6 +177,34 @@ func TestSchemaValidatorFindsProblems(t *testing.T) {
 		if !strings.Contains(problems, want) {
 			t.Errorf("want a problem %q, got:\n%s", want, problems)
 		}
+	}
+}
+
+// TestSchemaDescribesVia validates the model with a via list that the risk rules are tested with
+// (threagile#15), and a via list that is not a list of asset ids.
+func TestSchemaDescribesVia(t *testing.T) {
+	schema := readSchema(t)
+
+	data, err := os.ReadFile("pkg/risks/testdata/via-links/threagile.yaml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document any
+	if err := yaml.Unmarshal(data, &document); err != nil {
+		t.Fatalf("parsing the model: %v", err)
+	}
+	for _, problem := range validateSchema(schema, schema, document, "") {
+		t.Error(problem)
+	}
+
+	broken := map[string]any{"technical_assets": map[string]any{
+		"Asset": map[string]any{"communication_links": map[string]any{
+			"Link": map[string]any{"via": "waf"},
+		}},
+	}}
+	problems := strings.Join(validateSchema(schema, schema, broken, ""), "\n")
+	if want := "/technical_assets/Asset/communication_links/Link/via:"; !strings.Contains(problems, want) {
+		t.Errorf("want a problem %q, got:\n%s", want, problems)
 	}
 }
 
