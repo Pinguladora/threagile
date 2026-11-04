@@ -5,7 +5,18 @@ import (
 
 	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
+
+// decimalOf returns the decimal a value holds, failing the test when the value holds something else.
+func decimalOf(t *testing.T, value Value) decimal.Decimal {
+	t.Helper()
+
+	number, ok := value.Value().(decimal.Decimal)
+	require.True(t, ok, "expected a decimal, got %T", value.Value())
+
+	return number
+}
 
 func TestCastValue_Confidentiality(t *testing.T) {
 	val := SomeStringValue("confidential", nil)
@@ -13,7 +24,7 @@ func TestCastValue_Confidentiality(t *testing.T) {
 
 	assert.NoError(t, err)
 	// confidential is index 3
-	assert.True(t, decimal.NewFromInt(3).Equal(result.Value().(decimal.Decimal)))
+	assert.True(t, decimal.NewFromInt(3).Equal(decimalOf(t, result)))
 }
 
 func TestCastValue_Criticality(t *testing.T) {
@@ -22,7 +33,7 @@ func TestCastValue_Criticality(t *testing.T) {
 
 	assert.NoError(t, err)
 	// critical is index 3
-	assert.True(t, decimal.NewFromInt(3).Equal(result.Value().(decimal.Decimal)))
+	assert.True(t, decimal.NewFromInt(3).Equal(decimalOf(t, result)))
 }
 
 func TestCastValue_Impact(t *testing.T) {
@@ -31,7 +42,7 @@ func TestCastValue_Impact(t *testing.T) {
 
 	assert.NoError(t, err)
 	// medium is index 1
-	assert.True(t, decimal.NewFromInt(1).Equal(result.Value().(decimal.Decimal)))
+	assert.True(t, decimal.NewFromInt(1).Equal(decimalOf(t, result)))
 }
 
 func TestCastValue_Likelihood(t *testing.T) {
@@ -40,7 +51,7 @@ func TestCastValue_Likelihood(t *testing.T) {
 
 	assert.NoError(t, err)
 	// unlikely is index 0
-	assert.True(t, decimal.NewFromInt(0).Equal(result.Value().(decimal.Decimal)))
+	assert.True(t, decimal.NewFromInt(0).Equal(decimalOf(t, result)))
 }
 
 func TestCastValue_UnknownType(t *testing.T) {
@@ -64,5 +75,5 @@ func TestCastValue_IntPassthrough(t *testing.T) {
 	result, err := CastValue(val, "confidentiality")
 
 	assert.NoError(t, err)
-	assert.True(t, decimal.NewFromInt(2).Equal(result.Value().(decimal.Decimal)))
+	assert.True(t, decimal.NewFromInt(2).Equal(decimalOf(t, result)))
 }

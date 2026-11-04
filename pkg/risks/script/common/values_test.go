@@ -46,7 +46,7 @@ func TestValues_Copy_DecimalValue(t *testing.T) {
 
 	copied, err := v.Copy()
 	assert.NoError(t, err)
-	assert.True(t, decimal.NewFromInt(42).Equal(copied["num"].Value().(decimal.Decimal)))
+	assert.True(t, decimal.NewFromInt(42).Equal(decimalOf(t, copied["num"])))
 }
 
 func TestValues_Copy_ArrayValue(t *testing.T) {
