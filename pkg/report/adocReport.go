@@ -50,7 +50,8 @@ func writeFile(destination string, data []byte) error {
 }
 
 func copyFile(source string, destination string) error {
-	/* #nosec source is not tainted (see caller restricting it to files we created ourself or are legitimate to be copied) */
+	/* #nosec source is not tainted (see caller restricting it to files we created ourself
+	or are legitimate to be copied) */
 	src, err := os.Open(source)
 	if err != nil {
 		return fmt.Errorf("unable to open %q: %w", source, err)
@@ -353,7 +354,8 @@ func (adoc adocReport) WriteReport(model *types.Model,
 		return fmt.Errorf("error creating shared runtimes: %w", err)
 	}
 	if val := hideChapters[RiskRulesCheckedByThreagile]; !val {
-		err = adoc.writeRiskRulesChecked(modelFilename, skipRiskRules, buildTimestamp, threagileVersion, modelHash, customRiskRules)
+		err = adoc.writeRiskRulesChecked(modelFilename, skipRiskRules, buildTimestamp, threagileVersion, modelHash,
+			customRiskRules)
 		if err != nil {
 			return fmt.Errorf("error creating risk rules checked: %w", err)
 		}
@@ -426,7 +428,8 @@ func (adoc adocReport) writeManagementSummery() error {
 
 	writeLine(ms, "= Management Summary")
 	writeLine(ms, "")
-	writeLine(ms, "Threagile toolkit was used to model the architecture of \""+adoc.model.Title+"\" and derive risks by analyzing the components and data flows.")
+	writeLine(ms, "Threagile toolkit was used to model the architecture of \""+adoc.model.Title+"\" and derive risks by "+
+		"analyzing the components and data flows.")
 	if contributors := contributorsLine(adoc.model); contributors != "" {
 		writeLine(ms, contributors+".")
 	}
@@ -434,13 +437,19 @@ func (adoc adocReport) writeManagementSummery() error {
 	writeLine(ms, "Identified risks during threat modeling do not necessarily mean that the "+
 		"vulnerability associated with this risk actually exists: it is more to be seen as a list"+
 		" of potential risks and threats, which should be individually reviewed and reduced by removing false positives.")
-	writeLine(ms, "For the remaining risks it should be checked in the design and implementation of \""+adoc.model.Title+"\" whether the mitigation advices have been applied or not.")
+	writeLine(ms, "For the remaining risks it should be checked in the design and implementation of \""+adoc.model.Title+
+		"\" whether the mitigation advices have been applied or not.")
 	writeLine(ms, "\n\n")
-	writeLine(ms, "Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist.")
-	writeLine(ms, "The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach.")
-	writeLine(ms, "Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.")
+	writeLine(ms, "Each risk finding references a chapter of the OWASP ASVS (Application Security Verification "+
+		"Standard) audit checklist.")
+	writeLine(ms, "The OWASP ASVS checklist should be considered as an inspiration by architects and developers to "+
+		"further harden the application in a Defense-in-Depth approach.")
+	writeLine(ms, "Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with "+
+		"technical details about how to implement a mitigation is given.")
 	writeLine(ms, "\n\n")
-	writeLine(ms, "In total *"+strconv.Itoa(totalRiskCount(adoc.model))+" initial risks* in *"+strconv.Itoa(len(adoc.model.GeneratedRisksByCategory))+" categories* have been identified during the threat modeling process:")
+	writeLine(ms, "In total *"+strconv.Itoa(totalRiskCount(adoc.model))+" initial risks* in *"+
+		strconv.Itoa(len(adoc.model.GeneratedRisksByCategory))+" categories* have been identified during the threat "+
+		"modeling process:")
 	writeLine(ms, "\n\n")
 
 	countCritical := len(filteredBySeverity(adoc.model, types.CriticalSeverity))
@@ -461,7 +470,9 @@ func (adoc adocReport) writeManagementSummery() error {
 |
 [mermaid]
 ....
-%%{init: {'pie' : {'textPosition' : 0.5}, 'theme': 'base', 'themeVariables': { 'pie1': '` + rgbHexColorCriticalRisk() + `', 'pie2': '` + rgbHexColorHighRisk() + `', 'pie3': '` + rgbHexColorElevatedRisk() + `', 'pie4': '` + rgbHexColorMediumRisk() + `', 'pie5': '` + rgbHexColorLowRisk() + `'}}}%%
+%%{init: {'pie' : {'textPosition' : 0.5}, 'theme': 'base', 'themeVariables': { 'pie1': '` + rgbHexColorCriticalRisk() +
+		`', 'pie2': '` + rgbHexColorHighRisk() + `', 'pie3': '` + rgbHexColorElevatedRisk() + `', 'pie4': '` +
+		rgbHexColorMediumRisk() + `', 'pie5': '` + rgbHexColorLowRisk() + `'}}}%%
 pie showData
   "critical risk" : ` + strconv.Itoa(countCritical) + `
   "high risk" : ` + strconv.Itoa(countHigh) + `
@@ -473,7 +484,10 @@ pie showData
 |
 [mermaid]
 ....
-%%{init: {'pie' : {'textPosition' : 0.5}, 'theme': 'base', 'themeVariables': { 'pie1': '` + RgbHexColorRiskStatusUnchecked() + `', 'pie2': '` + rgbHexColorRiskStatusInDiscussion() + `', 'pie3': '` + rgbHexColorRiskStatusAccepted() + `', 'pie4': '` + rgbHexColorRiskStatusInProgress() + `', 'pie5': '` + rgbHexColorRiskStatusMitigated() + `', 'pie5': '` + rgbHexColorRiskStatusFalsePositive() + `'}}}%%
+%%{init: {'pie' : {'textPosition' : 0.5}, 'theme': 'base', 'themeVariables': { 'pie1': '` +
+		RgbHexColorRiskStatusUnchecked() + `', 'pie2': '` + rgbHexColorRiskStatusInDiscussion() + `', 'pie3': '` +
+		rgbHexColorRiskStatusAccepted() + `', 'pie4': '` + rgbHexColorRiskStatusInProgress() + `', 'pie5': '` +
+		rgbHexColorRiskStatusMitigated() + `', 'pie5': '` + rgbHexColorRiskStatusFalsePositive() + `'}}}%%
 pie showData
   "unchecked" : ` + strconv.Itoa(countStatusUnchecked) + `
   "in discussion" : ` + strconv.Itoa(countStatusInDiscussion) + `
@@ -578,9 +592,11 @@ func (adoc adocReport) addCategories(f *os.File, risksByCategory map[string][]*t
 		}
 		suffix += " - Exploitation likelihood is _"
 		if initialRisks {
-			suffix += highestExploitationLikelihood(risksStr).Title() + "_ with _" + highestExploitationImpact(risksStr).Title() + "_ impact."
+			suffix += highestExploitationLikelihood(risksStr).Title() + "_ with _" +
+				highestExploitationImpact(risksStr).Title() + "_ impact."
 		} else {
-			suffix += highestExploitationLikelihood(remainingRisks).Title() + "_ with _" + highestExploitationImpact(remainingRisks).Title() + "_ impact."
+			suffix += highestExploitationLikelihood(remainingRisks).Title() + "_ with _" +
+				highestExploitationImpact(remainingRisks).Title() + "_ impact."
 		}
 
 		fullLine += suffix + colorSuffix + ">>::"
@@ -622,20 +638,26 @@ func (adoc adocReport) impactAnalysis(f *os.File, initialRisks bool) int {
 	}
 
 	titleCaser := cases.Title(language.English)
-	chapTitle := titleCaser.String("= Impact Analysis of " + strconv.Itoa(count) + " " + initialStr + " " + riskText + " in " + strconv.Itoa(catCount) + " " + catText)
+	chapTitle := titleCaser.String("= Impact Analysis of " + strconv.Itoa(count) + " " + initialStr + " " + riskText +
+		" in " + strconv.Itoa(catCount) + " " + catText)
 	writeLine(f, chapTitle)
-	writeLine(f, ":fn-risk-findings: footnote:riskfinding[Risk finding paragraphs are clickable and link to the corresponding chapter.]")
+	writeLine(f, adocFootnoteRiskFindings)
 
 	writeLine(f,
 		"The most prevalent impacts of the *"+strconv.Itoa(count)+" "+initialStr+" "+riskText+"*"+
 			" (distributed over *"+strconv.Itoa(catCount)+" risk categories*) are "+
 			"(taking the severity ratings into account and using the highest for each category)!{fn-risk-findings}")
 	writeLine(f, "")
-	adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, types.CriticalSeverity, false, false)
-	adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, types.HighSeverity, false, false)
-	adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, types.ElevatedSeverity, false, false)
-	adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, types.MediumSeverity, false, false)
-	adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, types.LowSeverity, false, false)
+	adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, types.CriticalSeverity,
+		false, false)
+	adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, types.HighSeverity, false,
+		false)
+	adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, types.ElevatedSeverity,
+		false, false)
+	adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, types.MediumSeverity,
+		false, false)
+	adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, types.LowSeverity, false,
+		false)
 
 	return count
 }
@@ -656,7 +678,8 @@ func (adoc adocReport) writeImpactInitialRisks() error {
 
 func (adoc adocReport) riskMitigationStatus(f *os.File) {
 	writeLine(f, "= Risk Mitigation")
-	writeLine(f, "The following chart gives a high-level overview of the risk tracking status (including mitigated risks):")
+	writeLine(f, "The following chart gives a high-level overview of the risk tracking status (including mitigated "+
+		"risks):")
 
 	risksCritical := filteredBySeverity(adoc.model, types.CriticalSeverity)
 	risksHigh := filteredBySeverity(adoc.model, types.HighSeverity)
@@ -684,40 +707,83 @@ func (adoc adocReport) riskMitigationStatus(f *os.File) {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
   "data": {
     "values": [
-      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.Unchecked))) + `, "status": "Unchecked", "color": "` + RgbHexColorRiskStatusUnchecked() + `"},
-      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.InDiscussion))) + `, "status": "InDiscussion", "color": "` + rgbHexColorRiskStatusInDiscussion() + `"},
-      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.Accepted))) + `, "status": "Accepted", "color": "` + rgbHexColorRiskStatusAccepted() + `"},
-      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.InProgress))) + `, "status": "InProgress", "color": "` + rgbHexColorRiskStatusInProgress() + `"},
-      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.Mitigated))) + `, "status": "Mitigated", "color": "` + rgbHexColorRiskStatusMitigated() + `"},
-      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.FalsePositive))) + `, "status": "FalsePositive", "color": "` + rgbHexColorRiskStatusFalsePositive() + `"},
+      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.Unchecked))) +
+		`, "status": "Unchecked", "color": "` + RgbHexColorRiskStatusUnchecked() + `"},
+      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.InDiscussion))) +
+		`, "status": "InDiscussion", "color": "` + rgbHexColorRiskStatusInDiscussion() + `"},
+      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.Accepted))) +
+		`, "status": "Accepted", "color": "` + rgbHexColorRiskStatusAccepted() + `"},
+      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.InProgress))) +
+		`, "status": "InProgress", "color": "` + rgbHexColorRiskStatusInProgress() + `"},
+      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.Mitigated))) +
+		`, "status": "Mitigated", "color": "` + rgbHexColorRiskStatusMitigated() + `"},
+      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.FalsePositive))) +
+		`, "status": "FalsePositive", "color": "` + rgbHexColorRiskStatusFalsePositive() + `"},
 
-      {"risk": "` + medTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.Unchecked))) + `, "status": "Unchecked", "color": "` + RgbHexColorRiskStatusUnchecked() + `"},
-      {"risk": "` + medTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.InDiscussion))) + `, "status": "InDiscussion", "color": "` + rgbHexColorRiskStatusInDiscussion() + `"},
-      {"risk": "` + medTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.Accepted))) + `, "status": "Accepted", "color": "` + rgbHexColorRiskStatusAccepted() + `"},
-      {"risk": "` + medTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.InProgress))) + `, "status": "InProgress", "color": "` + rgbHexColorRiskStatusInProgress() + `"},
-      {"risk": "` + medTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.Mitigated))) + `, "status": "Mitigated", "color": "` + rgbHexColorRiskStatusMitigated() + `"},
-      {"risk": "` + medTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.FalsePositive))) + `, "status": "FalsePositive", "color": "` + rgbHexColorRiskStatusFalsePositive() + `"},
+      {"risk": "` + medTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.Unchecked))) +
+		`, "status": "Unchecked", "color": "` + RgbHexColorRiskStatusUnchecked() + `"},
+      {"risk": "` + medTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.InDiscussion))) +
+		`, "status": "InDiscussion", "color": "` + rgbHexColorRiskStatusInDiscussion() + `"},
+      {"risk": "` + medTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.Accepted))) +
+		`, "status": "Accepted", "color": "` + rgbHexColorRiskStatusAccepted() + `"},
+      {"risk": "` + medTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.InProgress))) +
+		`, "status": "InProgress", "color": "` + rgbHexColorRiskStatusInProgress() + `"},
+      {"risk": "` + medTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.Mitigated))) +
+		`, "status": "Mitigated", "color": "` + rgbHexColorRiskStatusMitigated() + `"},
+      {"risk": "` + medTitle + `", "value": ` +
+		strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.FalsePositive))) + `, "status": "FalsePositive", "color": "` +
+		rgbHexColorRiskStatusFalsePositive() + `"},
 
-      {"risk": "` + elevatedTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.Unchecked))) + `, "status": "Unchecked", "color": "` + RgbHexColorRiskStatusUnchecked() + `"},
-      {"risk": "` + elevatedTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.InDiscussion))) + `, "status": "InDiscussion", "color": "` + rgbHexColorRiskStatusInDiscussion() + `"},
-      {"risk": "` + elevatedTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.Accepted))) + `, "status": "Accepted", "color": "` + rgbHexColorRiskStatusAccepted() + `"},
-      {"risk": "` + elevatedTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.InProgress))) + `, "status": "InProgress", "color": "` + rgbHexColorRiskStatusInProgress() + `"},
-      {"risk": "` + elevatedTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.Mitigated))) + `, "status": "Mitigated", "color": "` + rgbHexColorRiskStatusMitigated() + `"},
-      {"risk": "` + elevatedTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.FalsePositive))) + `, "status": "FalsePositive", "color": "` + rgbHexColorRiskStatusFalsePositive() + `"},
+      {"risk": "` + elevatedTitle + `", "value": ` +
+		strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.Unchecked))) + `, "status": "Unchecked", "color": "` +
+		RgbHexColorRiskStatusUnchecked() + `"},
+      {"risk": "` + elevatedTitle + `", "value": ` +
+		strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.InDiscussion))) + `, "status": "InDiscussion", "color": "` +
+		rgbHexColorRiskStatusInDiscussion() + `"},
+      {"risk": "` + elevatedTitle + `", "value": ` +
+		strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.Accepted))) + `, "status": "Accepted", "color": "` +
+		rgbHexColorRiskStatusAccepted() + `"},
+      {"risk": "` + elevatedTitle + `", "value": ` +
+		strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.InProgress))) + `, "status": "InProgress", "color": "` +
+		rgbHexColorRiskStatusInProgress() + `"},
+      {"risk": "` + elevatedTitle + `", "value": ` +
+		strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.Mitigated))) + `, "status": "Mitigated", "color": "` +
+		rgbHexColorRiskStatusMitigated() + `"},
+      {"risk": "` + elevatedTitle + `", "value": ` +
+		strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.FalsePositive))) +
+		`, "status": "FalsePositive", "color": "` + rgbHexColorRiskStatusFalsePositive() + `"},
 
-      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.Unchecked))) + `, "status": "Unchecked", "color": "` + RgbHexColorRiskStatusUnchecked() + `"},
-      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.InDiscussion))) + `, "status": "InDiscussion", "color": "` + rgbHexColorRiskStatusInDiscussion() + `"},
-      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.Accepted))) + `, "status": "Accepted", "color": "` + rgbHexColorRiskStatusAccepted() + `"},
-      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.InProgress))) + `, "status": "InProgress", "color": "` + rgbHexColorRiskStatusInProgress() + `"},
-      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.Mitigated))) + `, "status": "Mitigated", "color": "` + rgbHexColorRiskStatusMitigated() + `"},
-      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.FalsePositive))) + `, "status": "FalsePositive", "color": "` + rgbHexColorRiskStatusFalsePositive() + `"},
+      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.Unchecked))) +
+		`, "status": "Unchecked", "color": "` + RgbHexColorRiskStatusUnchecked() + `"},
+      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.InDiscussion))) +
+		`, "status": "InDiscussion", "color": "` + rgbHexColorRiskStatusInDiscussion() + `"},
+      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.Accepted))) +
+		`, "status": "Accepted", "color": "` + rgbHexColorRiskStatusAccepted() + `"},
+      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.InProgress))) +
+		`, "status": "InProgress", "color": "` + rgbHexColorRiskStatusInProgress() + `"},
+      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.Mitigated))) +
+		`, "status": "Mitigated", "color": "` + rgbHexColorRiskStatusMitigated() + `"},
+      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.FalsePositive))) +
+		`, "status": "FalsePositive", "color": "` + rgbHexColorRiskStatusFalsePositive() + `"},
 
-      {"risk": "` + criticalTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.Unchecked))) + `, "status": "Unchecked", "color": "` + RgbHexColorRiskStatusUnchecked() + `"},
-      {"risk": "` + criticalTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.InDiscussion))) + `, "status": "InDiscussion", "color": "` + rgbHexColorRiskStatusInDiscussion() + `"},
-      {"risk": "` + criticalTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.Accepted))) + `, "status": "Accepted", "color": "` + rgbHexColorRiskStatusAccepted() + `"},
-      {"risk": "` + criticalTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.InProgress))) + `, "status": "InProgress", "color": "` + rgbHexColorRiskStatusInProgress() + `"},
-      {"risk": "` + criticalTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.Mitigated))) + `, "status": "Mitigated", "color": "` + rgbHexColorRiskStatusMitigated() + `"},
-      {"risk": "` + criticalTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.FalsePositive))) + `, "status": "FalsePositive", "color": "` + rgbHexColorRiskStatusFalsePositive() + `"}
+      {"risk": "` + criticalTitle + `", "value": ` +
+		strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.Unchecked))) + `, "status": "Unchecked", "color": "` +
+		RgbHexColorRiskStatusUnchecked() + `"},
+      {"risk": "` + criticalTitle + `", "value": ` +
+		strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.InDiscussion))) + `, "status": "InDiscussion", "color": "` +
+		rgbHexColorRiskStatusInDiscussion() + `"},
+      {"risk": "` + criticalTitle + `", "value": ` +
+		strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.Accepted))) + `, "status": "Accepted", "color": "` +
+		rgbHexColorRiskStatusAccepted() + `"},
+      {"risk": "` + criticalTitle + `", "value": ` +
+		strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.InProgress))) + `, "status": "InProgress", "color": "` +
+		rgbHexColorRiskStatusInProgress() + `"},
+      {"risk": "` + criticalTitle + `", "value": ` +
+		strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.Mitigated))) + `, "status": "Mitigated", "color": "` +
+		rgbHexColorRiskStatusMitigated() + `"},
+      {"risk": "` + criticalTitle + `", "value": ` +
+		strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.FalsePositive))) +
+		`, "status": "FalsePositive", "color": "` + rgbHexColorRiskStatusFalsePositive() + `"}
     ]
   },
   "mark": {"type": "bar", "cornerRadiusTopLeft": 3, "cornerRadiusTopRight": 3},
@@ -732,7 +798,9 @@ func (adoc adocReport) riskMitigationStatus(f *os.File) {
       "field": "status",
       "scale": {
         "domain": ["Unchecked", "InDiscussion", "Accepted", "InProgress", "Mitigated", "FalsePositive"],
-        "range": ["` + RgbHexColorRiskStatusUnchecked() + `", "` + rgbHexColorRiskStatusInDiscussion() + `", "` + rgbHexColorRiskStatusAccepted() + `", "` + rgbHexColorRiskStatusInProgress() + `", "` + rgbHexColorRiskStatusMitigated() + `", "` + rgbHexColorRiskStatusFalsePositive() + `"]
+        "range": ["` + RgbHexColorRiskStatusUnchecked() + `", "` + rgbHexColorRiskStatusInDiscussion() + `", "` +
+		rgbHexColorRiskStatusAccepted() + `", "` + rgbHexColorRiskStatusInProgress() + `", "` +
+		rgbHexColorRiskStatusMitigated() + `", "` + rgbHexColorRiskStatusFalsePositive() + `"]
       },
       "legend" : {
         "title": "",
@@ -776,7 +844,9 @@ func (adoc adocReport) riskMitigationStatus(f *os.File) {
 |
 [mermaid]
 ....
-%%{init: {'pie' : {'textPosition' : 0.5}, 'theme': 'base', 'themeVariables': { 'pie1': '` + rgbHexColorCriticalRisk() + `', 'pie2': '` + rgbHexColorHighRisk() + `', 'pie3': '` + rgbHexColorElevatedRisk() + `', 'pie4': '` + rgbHexColorMediumRisk() + `', 'pie5': '` + rgbHexColorLowRisk() + `'}}}%%
+%%{init: {'pie' : {'textPosition' : 0.5}, 'theme': 'base', 'themeVariables': { 'pie1': '` + rgbHexColorCriticalRisk() +
+			`', 'pie2': '` + rgbHexColorHighRisk() + `', 'pie3': '` + rgbHexColorElevatedRisk() + `', 'pie4': '` +
+			rgbHexColorMediumRisk() + `', 'pie5': '` + rgbHexColorLowRisk() + `'}}}%%
 pie showData
   "unmitigated critical risk" : ` + strconv.Itoa(countCritical) + `
   "unmitigated high risk" : ` + strconv.Itoa(countHigh) + `
@@ -788,7 +858,9 @@ pie showData
 |
 [mermaid]
 ....
-%%{init: {'pie' : {'textPosition' : 0.5}, 'theme': 'base', 'themeVariables': { 'pie1': '` + rgbHexColorBusiness() + `', 'pie2': '` + rgbHexColorArchitecture() + `', 'pie3': '` + rgbHexColorDevelopment() + `', 'pie4': '` + rgbHexColorOperation() + `'}}}%%
+%%{init: {'pie' : {'textPosition' : 0.5}, 'theme': 'base', 'themeVariables': { 'pie1': '` + rgbHexColorBusiness() +
+			`', 'pie2': '` + rgbHexColorArchitecture() + `', 'pie3': '` + rgbHexColorDevelopment() + `', 'pie4': '` +
+			rgbHexColorOperation() + `'}}}%%
 pie showData
   "business side related" : ` + strconv.Itoa(countBusinessSide) + `
   "architecture related" : ` + strconv.Itoa(countArchitecture) + `
@@ -933,7 +1005,8 @@ func (adoc adocReport) dataFlowDiagram(f *os.File, diagramFilenamePNG string) {
 	writeLine(f, "= Data-Flow Diagram")
 	// intermediate newlines are ignored in asciidoctor
 	writeLine(f, `
-The following diagram was generated by Threagile based on the model input and gives a high-level overview of the data-flow
+The following diagram was generated by Threagile based on the model input and gives a high-level overview of the `+
+		`data-flow
 between technical assets. The RAA value is the calculated _Relative Attacker Attractiveness_ in percent.
 For a full high-resolution version of this diagram please refer to the PNG image file alongside this report.
 	`)
@@ -1117,17 +1190,26 @@ func (adoc adocReport) writeTagListing() error {
 	return nil
 }
 
+// The footnotes that the AsciiDoc chapters attach to their clickable paragraphs.
+const (
+	adocFootnoteRiskFindings = ":fn-risk-findings: footnote:riskfinding[Risk finding paragraphs are clickable " +
+		"and link to the corresponding chapter.]"
+	adocFootnoteTechAssets = ":fn-tech-assets: footnote:techAssets[Technical asset paragraphs are clickable " +
+		"and link to the corresponding chapter.]"
+)
+
 func (adoc adocReport) stride(f *os.File) {
 	writeLine(f, "= STRIDE Classification of Identified Risks")
-	writeLine(f, ":fn-risk-findings: footnote:riskfinding[Risk finding paragraphs are clickable and link to the corresponding chapter.]")
+	writeLine(f, adocFootnoteRiskFindings)
 	writeLine(f, "")
 
-	risksSTRIDESpoofing := reduceToSTRIDERisk(adoc.model, adoc.model.GeneratedRisksByCategory, types.Spoofing)
-	risksSTRIDETampering := reduceToSTRIDERisk(adoc.model, adoc.model.GeneratedRisksByCategory, types.Tampering)
-	risksSTRIDERepudiation := reduceToSTRIDERisk(adoc.model, adoc.model.GeneratedRisksByCategory, types.Repudiation)
-	risksSTRIDEInformationDisclosure := reduceToSTRIDERisk(adoc.model, adoc.model.GeneratedRisksByCategory, types.InformationDisclosure)
-	risksSTRIDEDenialOfService := reduceToSTRIDERisk(adoc.model, adoc.model.GeneratedRisksByCategory, types.DenialOfService)
-	risksSTRIDEElevationOfPrivilege := reduceToSTRIDERisk(adoc.model, adoc.model.GeneratedRisksByCategory, types.ElevationOfPrivilege)
+	risksByCategory := adoc.model.GeneratedRisksByCategory
+	risksSTRIDESpoofing := reduceToSTRIDERisk(adoc.model, risksByCategory, types.Spoofing)
+	risksSTRIDETampering := reduceToSTRIDERisk(adoc.model, risksByCategory, types.Tampering)
+	risksSTRIDERepudiation := reduceToSTRIDERisk(adoc.model, risksByCategory, types.Repudiation)
+	risksSTRIDEInformationDisclosure := reduceToSTRIDERisk(adoc.model, risksByCategory, types.InformationDisclosure)
+	risksSTRIDEDenialOfService := reduceToSTRIDERisk(adoc.model, risksByCategory, types.DenialOfService)
+	risksSTRIDEElevationOfPrivilege := reduceToSTRIDERisk(adoc.model, risksByCategory, types.ElevationOfPrivilege)
 
 	countSTRIDESpoofing := countRisks(risksSTRIDESpoofing)
 	countSTRIDETampering := countRisks(risksSTRIDETampering)
@@ -1137,13 +1219,15 @@ func (adoc adocReport) stride(f *os.File) {
 	countSTRIDEElevationOfPrivilege := countRisks(risksSTRIDEElevationOfPrivilege)
 
 	writeLine(f, "This chapter clusters and classifies the risks by STRIDE categories: "+
-		"In total *"+strconv.Itoa(totalRiskCount(adoc.model))+" potential risks* have been identified during the threat modeling process "+
+		"In total *"+strconv.Itoa(totalRiskCount(adoc.model))+" potential risks* have been identified during the threat "+
+		"modeling process "+
 		"of which *"+strconv.Itoa(countSTRIDESpoofing)+" in the "+types.Spoofing.Title()+"* category, "+
 		"*"+strconv.Itoa(countSTRIDETampering)+" in the "+types.Tampering.Title()+"* category, "+
 		"*"+strconv.Itoa(countSTRIDERepudiation)+" in the "+types.Repudiation.Title()+"* category, "+
 		"*"+strconv.Itoa(countSTRIDEInformationDisclosure)+" in the "+types.InformationDisclosure.Title()+"* category, "+
 		"*"+strconv.Itoa(countSTRIDEDenialOfService)+" in the "+types.DenialOfService.Title()+"* category, "+
-		"and *"+strconv.Itoa(countSTRIDEElevationOfPrivilege)+" in the "+types.ElevationOfPrivilege.Title()+"* category.{fn-risk-findings}")
+		"and *"+strconv.Itoa(countSTRIDEElevationOfPrivilege)+" in the "+types.ElevationOfPrivilege.Title()+"* "+
+		"category.{fn-risk-findings}")
 	writeLine(f, "")
 
 	reverseRiskSeverity := []types.RiskSeverity{
@@ -1192,7 +1276,7 @@ func (adoc adocReport) writeSTRIDE() error {
 
 func (adoc adocReport) assignmentByFunction(f *os.File) {
 	writeLine(f, "= Assignment by Function")
-	writeLine(f, ":fn-risk-findings: footnote:riskfinding[Risk finding paragraphs are clickable and link to the corresponding chapter.]")
+	writeLine(f, adocFootnoteRiskFindings)
 	writeLine(f, "")
 
 	risksBusinessSideFunction := reduceToFunctionRisk(adoc.model, adoc.model.GeneratedRisksByCategory, types.BusinessSide)
@@ -1206,7 +1290,8 @@ func (adoc adocReport) assignmentByFunction(f *os.File) {
 	countOperationFunction := countRisks(risksOperationFunction)
 	writeLine(f, "This chapter clusters and assigns the risks by functions which are most likely able to "+
 		"check and mitigate them: "+
-		"In total *"+strconv.Itoa(totalRiskCount(adoc.model))+" potential risks* have been identified during the threat modeling process "+
+		"In total *"+strconv.Itoa(totalRiskCount(adoc.model))+" potential risks* have been identified during the threat "+
+		"modeling process "+
 		"of which *"+strconv.Itoa(countBusinessSideFunction)+" should be checked by "+types.BusinessSide.Title()+"*, "+
 		"*"+strconv.Itoa(countArchitectureFunction)+" should be checked by "+types.Architecture.Title()+"*, "+
 		"*"+strconv.Itoa(countDevelopmentFunction)+" should be checked by "+types.Development.Title()+"*, "+
@@ -1229,7 +1314,8 @@ func (adoc adocReport) assignmentByFunction(f *os.File) {
 
 	for _, riskFunctionValue := range riskFunctionValues {
 		writeLine(f, "== "+riskFunctionValue.Title())
-		risksFunction := reduceToFunctionRisk(adoc.model, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), riskFunctionValue)
+		risksFunction := reduceToFunctionRisk(adoc.model, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(),
+			riskFunctionValue)
 		for _, critValue := range reverseRiskSeverity {
 			adoc.addCategories(f, risksFunction, true, critValue, true, false)
 		}
@@ -1253,7 +1339,7 @@ func (adoc adocReport) writeAssignmentByFunction() error {
 
 func (adoc adocReport) raa(f *os.File, introTextRAA string) {
 	writeLine(f, "= RAA Analysis")
-	writeLine(f, ":fn-risk-findings: footnote:riskfinding[Risk finding paragraphs are clickable and link to the corresponding chapter.]")
+	writeLine(f, adocFootnoteRiskFindings)
 	writeLine(f, "")
 	writeLine(f, fixBasicHtml(introTextRAA)+"{fn-risk-findings}")
 	writeLine(f, "")
@@ -1350,11 +1436,12 @@ func (adoc adocReport) outOfScopeAssets(f *os.File) {
 		assets += "s"
 	}
 	writeLine(f, "= Out-of-Scope Assets: "+strconv.Itoa(count)+" "+assets)
-	writeLine(f, ":fn-tech-assets: footnote:techAssets[Technical asset paragraphs are clickable and link to the corresponding chapter.]")
+	writeLine(f, adocFootnoteTechAssets)
 	writeLine(f, "")
 	writeLine(f, `
 This chapter lists all technical assets that have been defined as out-of-scope.
-Each one should be checked in the model whether it should better be included in the overall risk analysis{fn-tech-assets}:
+Each one should be checked in the model whether it should better be included in the overall risk `+
+		`analysis{fn-tech-assets}:
 `)
 	writeLine(f, "")
 
@@ -1393,7 +1480,8 @@ func (adoc adocReport) writeOutOfScopeAssets() error {
 }
 
 func (adoc adocReport) modelFailures(f *os.File) {
-	modelFailures := flattenRiskSlice(filterByModelFailures(adoc.model, adoc.model.GeneratedRisksByCategoryWithCurrentStatus()))
+	modelFailures := flattenRiskSlice(filterByModelFailures(adoc.model,
+		adoc.model.GeneratedRisksByCategoryWithCurrentStatus()))
 	count := len(modelFailures)
 	countStillAtRisk := len(types.ReduceToOnlyStillAtRisk(modelFailures))
 	colorPrefix := ""
@@ -1404,7 +1492,7 @@ func (adoc adocReport) modelFailures(f *os.File) {
 	}
 	suffix := riskSuffix(countStillAtRisk, count)
 	writeLine(f, "= "+colorPrefix+"Potential Model Failures: "+suffix+colorSuffix)
-	writeLine(f, ":fn-risk-findings: footnote:riskfinding[Risk finding paragraphs are clickable and link to the corresponding chapter.]")
+	writeLine(f, adocFootnoteRiskFindings)
 	writeLine(f, "")
 
 	writeLine(f, `
@@ -1451,7 +1539,8 @@ func (adoc adocReport) questions(f *os.File) int {
 		colorPrefix = "[ModelFailure]#"
 		colorSuffix = "#"
 	}
-	writeLine(f, "= "+colorPrefix+"Questions: "+strconv.Itoa(questionsUnanswered(adoc.model))+" / "+strconv.Itoa(count)+" "+questionStr+colorSuffix)
+	writeLine(f, "= "+colorPrefix+"Questions: "+strconv.Itoa(questionsUnanswered(adoc.model))+" / "+strconv.Itoa(count)+
+		" "+questionStr+colorSuffix)
 	writeLine(f, "")
 	writeLine(f, "This chapter lists custom questions that arose during the threat modeling process.")
 	writeLine(f, "")
@@ -1552,14 +1641,15 @@ func (adoc adocReport) riskTrackingStatus(f *os.File, risk *types.Risk) {
 
 func (adoc adocReport) riskCategories(f *os.File) {
 	writeLine(f, "= Identified Risks by Vulnerability category")
-	writeLine(f, "In total *"+strconv.Itoa(totalRiskCount(adoc.model))+" potential risks* have been identified during the threat modeling process "+
-		"of which "+
+	writeLine(f, "In total *"+strconv.Itoa(totalRiskCount(adoc.model))+" potential risks* have been identified during "+
+		"the threat modeling process of which "+
 		"*"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.CriticalSeverity)))+" are rated as critical*, "+
 		"*"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.HighSeverity)))+" as high*, "+
 		"*"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.ElevatedSeverity)))+" as elevated*, "+
 		"*"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.MediumSeverity)))+" as medium*, "+
 		"and *"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.LowSeverity)))+" as low*. "+
-		"\n\nThese risks are distributed across *"+strconv.Itoa(len(adoc.model.GeneratedRisksByCategory))+" vulnerability categories*. ")
+		"\n\nThese risks are distributed across *"+strconv.Itoa(len(adoc.model.GeneratedRisksByCategory))+" vulnerability "+
+		"categories*. ")
 	// a longer explanation could follow here
 	writeLine(f, "The following sub-chapters of this section describe each identified risk category.")
 	writeLine(f, "")
@@ -1638,7 +1728,7 @@ func (adoc adocReport) riskCategories(f *os.File) {
 		// risk details
 		writeLine(f, "")
 		writeLine(f, "=== Risk Findings")
-		writeLine(f, ":fn-risk-findings: footnote:riskfinding[Risk finding paragraphs are clickable and link to the corresponding chapter.]")
+		writeLine(f, adocFootnoteRiskFindings)
 		times := strconv.Itoa(len(risksStr)) + " time"
 		if len(risksStr) > 1 {
 			times += "s"
@@ -1664,7 +1754,8 @@ func (adoc adocReport) riskCategories(f *os.File) {
 				colorPrefix = ""
 				colorSuffix = ""
 			}
-			writeLine(f, colorPrefix+fixBasicHtml(risk.Title)+": Exploitation likelihood is _"+risk.ExploitationLikelihood.Title()+"_ with _"+risk.ExploitationImpact.Title()+"_ impact."+colorSuffix)
+			writeLine(f, colorPrefix+fixBasicHtml(risk.Title)+": Exploitation likelihood is _"+
+				risk.ExploitationLikelihood.Title()+"_ with _"+risk.ExploitationImpact.Title()+"_ impact."+colorSuffix)
 			linkId := ""
 			switch {
 			case len(risk.MostRelevantSharedRuntimeId) > 0:
@@ -1742,17 +1833,19 @@ func communicationLinkTitleOrNone(links []*types.CommunicationLink, noneValue st
 
 func (adoc adocReport) technicalAssets(f *os.File) {
 	writeLine(f, "= Identified Risks by Technical Asset")
-	writeLine(f, "In total *"+strconv.Itoa(totalRiskCount(adoc.model))+" potential risks* have been identified during the threat modeling process "+
-		"of which "+
+	writeLine(f, "In total *"+strconv.Itoa(totalRiskCount(adoc.model))+" potential risks* have been identified during "+
+		"the threat modeling process of which "+
 		"*"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.CriticalSeverity)))+" are rated as critical*, "+
 		"*"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.HighSeverity)))+" as high*, "+
 		"*"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.ElevatedSeverity)))+" as elevated*, "+
 		"*"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.MediumSeverity)))+" as medium*, "+
 		"and *"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.LowSeverity)))+" as low*. "+
-		"\n\nThese risks are distributed across *"+strconv.Itoa(len(adoc.model.InScopeTechnicalAssets()))+" in-scope technical assets*. ")
+		"\n\nThese risks are distributed across *"+strconv.Itoa(len(adoc.model.InScopeTechnicalAssets()))+" in-scope "+
+		"technical assets*. ")
 	// a longer explanation could follow here
 	writeLine(f, "The following sub-chapters of this section describe each identified risk grouped by technical asset. ")
-	writeLine(f, "The RAA value of a technical asset is the calculated \"Relative Attacker Attractiveness\" value in percent.")
+	writeLine(f, "The RAA value of a technical asset is the calculated \"Relative Attacker Attractiveness\" value in "+
+		"percent.")
 
 	for _, technicalAsset := range sortedTechnicalAssetsByRiskSeverityAndTitle(adoc.model) {
 		risksStr := adoc.model.GeneratedRisks(technicalAsset)
@@ -1780,7 +1873,7 @@ func (adoc adocReport) technicalAssets(f *os.File) {
 		// and more metadata of asset in tabular view
 		writeLine(f, "=== Identified Risks of Asset")
 		if len(risksStr) > 0 {
-			writeLine(f, ":fn-risk-findings: footnote:riskfinding[Risk finding paragraphs are clickable and link to the corresponding chapter.]")
+			writeLine(f, adocFootnoteRiskFindings)
 			for _, risk := range risksStr {
 				colorPrefix, colorSuffix = colorPrefixBySeverity(types.HighestSeverityStillAtRisk(risksStr), false)
 				if !risk.RiskStatus.IsStillAtRisk() {
@@ -1788,7 +1881,8 @@ func (adoc adocReport) technicalAssets(f *os.File) {
 					colorSuffix = ""
 				}
 				writeLine(f, "\n==== "+colorPrefix+titleOfSeverity(risk.Severity)+colorSuffix+"\n")
-				writeLine(f, colorPrefix+fixBasicHtml(risk.Title)+": Exploitation likelihood is _"+risk.ExploitationLikelihood.Title()+"_ with _"+risk.ExploitationImpact.Title()+"_ impact."+colorSuffix)
+				writeLine(f, colorPrefix+fixBasicHtml(risk.Title)+": Exploitation likelihood is _"+
+					risk.ExploitationLikelihood.Title()+"_ with _"+risk.ExploitationImpact.Title()+"_ impact."+colorSuffix)
 				writeLine(f, "")
 
 				writeLine(f, "<<"+risk.CategoryId+",[SmallGrey]#"+risk.SyntheticId+"#>>")
@@ -1815,7 +1909,8 @@ func (adoc adocReport) technicalAssets(f *os.File) {
 		tagsUsedText := joinedOrNoneString(technicalAsset.Tags, "")
 		dataAssetsProcessedText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsProcessedSorted(technicalAsset))
 		dataAssetsStoredText := dataAssetListTitleJoinOrNone(adoc.model.DataAssetsStoredSorted(technicalAsset))
-		formatsAcceptedText := dataFormatTitleJoinOrNone(technicalAsset.DataFormatsAcceptedSorted(), "[GrayText]#none of the special data formats accepted#")
+		formatsAcceptedText := dataFormatTitleJoinOrNone(technicalAsset.DataFormatsAcceptedSorted(), "[GrayText]#none of "+
+			"the special data formats accepted#")
 
 		writeLine(f, `
 [cols="h,1,h,1",frame=none,grid=none]
@@ -1825,9 +1920,12 @@ func (adoc adocReport) technicalAssets(f *os.File) {
 | RAA:              | `+textRAA+`| Size: | `+technicalAsset.Size.String()+`
 | Technology:       | `+technicalAsset.Technologies.String()+`| Tags: | `+tagsUsedText+`
 | Internet:         | `+strconv.FormatBool(technicalAsset.Internet)+`| Machine: | `+technicalAsset.Machine.String()+`
-| Encryption:       | `+technicalAsset.Encryption.String()+`| Multi-Tenant: | `+strconv.FormatBool(technicalAsset.MultiTenant)+`
-| Redundant:        | `+strconv.FormatBool(technicalAsset.Redundant)+`| Custom-Developed: | `+strconv.FormatBool(technicalAsset.CustomDevelopedParts)+`
-| Client by Human:  | `+strconv.FormatBool(technicalAsset.UsedAsClientByHuman)+`| Formats Accepted: | `+formatsAcceptedText+`
+| Encryption:       | `+technicalAsset.Encryption.String()+`| Multi-Tenant: | `+
+			strconv.FormatBool(technicalAsset.MultiTenant)+`
+| Redundant:        | `+strconv.FormatBool(technicalAsset.Redundant)+`| Custom-Developed: | `+
+			strconv.FormatBool(technicalAsset.CustomDevelopedParts)+`
+| Client by Human:  | `+strconv.FormatBool(technicalAsset.UsedAsClientByHuman)+`| Formats Accepted: | `+
+			formatsAcceptedText+`
 | Data Processed: 3+| `+dataAssetsProcessedText+`
 | Data Stored:    3+| `+dataAssetsStoredText+`
 |===
@@ -1860,11 +1958,15 @@ func (adoc adocReport) technicalAssets(f *os.File) {
 				writeLine(f, `
 [cols="h,1,h,1",frame=none,grid=none]
 |===
-| Target:         | <<`+outgoingCommLink.TargetId+`,`+adoc.model.TechnicalAssets[outgoingCommLink.TargetId].Title+`>>| Protocol:       | `+outgoingCommLink.Protocol.String()+`
-| Encrypted:      | `+strconv.FormatBool(outgoingCommLink.Protocol.IsEncrypted())+`| Authentication: | `+outgoingCommLink.Authentication.String()+`
-| Authorization:  | `+outgoingCommLink.Authorization.String()+`| Read-Only:      | `+strconv.FormatBool(outgoingCommLink.Readonly)+`
+| Target:         | <<`+outgoingCommLink.TargetId+`,`+adoc.model.TechnicalAssets[outgoingCommLink.TargetId].Title+
+					`>>| Protocol:       | `+outgoingCommLink.Protocol.String()+`
+| Encrypted:      | `+strconv.FormatBool(outgoingCommLink.Protocol.IsEncrypted())+`| Authentication: | `+
+					outgoingCommLink.Authentication.String()+`
+| Authorization:  | `+outgoingCommLink.Authorization.String()+`| Read-Only:      | `+
+					strconv.FormatBool(outgoingCommLink.Readonly)+`
 | Usage:          | `+outgoingCommLink.Usage.String()+`| Tags:           | `+tagsUsedText+`
-| VPN:            | `+strconv.FormatBool(outgoingCommLink.VPN)+`| IP-Filtered:    | `+strconv.FormatBool(outgoingCommLink.IpFiltered)+`
+| VPN:            | `+strconv.FormatBool(outgoingCommLink.VPN)+`| IP-Filtered:    | `+
+					strconv.FormatBool(outgoingCommLink.IpFiltered)+`
 | Data Sent:      | `+dataAssetsSentText+`| Data Received:  | `+dataAssetsReceivedText+`
 |===
 `)
@@ -1885,11 +1987,15 @@ func (adoc adocReport) technicalAssets(f *os.File) {
 				writeLine(f, `
 [cols="h,1,h,1",frame=none,grid=none]
 |===
-| Source:         | <<`+incomingCommLink.SourceId+`,`+adoc.model.TechnicalAssets[incomingCommLink.SourceId].Title+`>>| Protocol:       | `+incomingCommLink.Protocol.String()+`
-| Encrypted:      | `+strconv.FormatBool(incomingCommLink.Protocol.IsEncrypted())+`| Authentication: | `+incomingCommLink.Authentication.String()+`
-| Authorization:  | `+incomingCommLink.Authorization.String()+`| Read-Only:      | `+strconv.FormatBool(incomingCommLink.Readonly)+`
+| Source:         | <<`+incomingCommLink.SourceId+`,`+adoc.model.TechnicalAssets[incomingCommLink.SourceId].Title+
+					`>>| Protocol:       | `+incomingCommLink.Protocol.String()+`
+| Encrypted:      | `+strconv.FormatBool(incomingCommLink.Protocol.IsEncrypted())+`| Authentication: | `+
+					incomingCommLink.Authentication.String()+`
+| Authorization:  | `+incomingCommLink.Authorization.String()+`| Read-Only:      | `+
+					strconv.FormatBool(incomingCommLink.Readonly)+`
 | Usage:          | `+incomingCommLink.Usage.String()+`| Tags:           | `+tagsUsedText+`
-| VPN:            | `+strconv.FormatBool(incomingCommLink.VPN)+`| IP-Filtered:    | `+strconv.FormatBool(incomingCommLink.IpFiltered)+`
+| VPN:            | `+strconv.FormatBool(incomingCommLink.VPN)+`| IP-Filtered:    | `+
+					strconv.FormatBool(incomingCommLink.IpFiltered)+`
 | Data Sent:      | `+dataAssetsSentText+`| Data Received:  | `+dataAssetsReceivedText+`
 |===
 `)
@@ -1914,8 +2020,8 @@ func (adoc adocReport) writeTechnicalAssets() error {
 
 func (adoc adocReport) dataAssets(f *os.File) {
 	writeLine(f, "= Identified Data Breach Probabilities by Data Asset")
-	writeLine(f, "In total *"+strconv.Itoa(totalRiskCount(adoc.model))+" potential risks* have been identified during the threat modeling process "+
-		"of which "+
+	writeLine(f, "In total *"+strconv.Itoa(totalRiskCount(adoc.model))+" potential risks* have been identified during "+
+		"the threat modeling process of which "+
 		"*"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.CriticalSeverity)))+" are rated as critical*, "+
 		"*"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.HighSeverity)))+" as high*, "+
 		"*"+strconv.Itoa(len(filteredBySeverity(adoc.model, types.ElevatedSeverity)))+" as elevated*, "+
@@ -1971,8 +2077,10 @@ func (adoc adocReport) dataAssets(f *os.File) {
 | ID:                3+| `+dataAsset.Id+`
 | Usage:               | `+dataAsset.Usage.String()+`| Quantity:          | `+dataAsset.Quantity.String()+`
 | Tags:                | `+tagsUsedText+`| Origin:            | `+dataAsset.Origin+`
-| Owner:               | `+dataAsset.Owner+`| Confidentiality:   | `+dataAsset.Confidentiality.String()+`<<ref-confidentiality-values,*>>
-| Integrity:           | `+dataAsset.Integrity.String()+`<<ref-criticality-values,*>>| Availability:      | `+dataAsset.Availability.String()+`<<ref-criticality-values,*>>
+| Owner:               | `+dataAsset.Owner+`| Confidentiality:   | `+dataAsset.Confidentiality.String()+
+			`<<ref-confidentiality-values,*>>
+| Integrity:           | `+dataAsset.Integrity.String()+`<<ref-criticality-values,*>>| Availability:      | `+
+			dataAsset.Availability.String()+`<<ref-criticality-values,*>>
 | CIA-Justification: 3+| `+dataAsset.JustificationCiaRating+`
 | Processed by:      3+| `+processedByText+`
 | Stored by:         3+| `+storedByText+`
@@ -2121,9 +2229,11 @@ func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRi
 |===
 `)
 	writeLine(f, "\n\n")
-	writeLine(f, "Threagile (see https://threagile.io[] for more details) is an open-source toolkit for agile threat modeling, created by Christian Schneider (https://christian-schneider.net[]): It allows to model an architecture with its assets in an agile fashion as a YAML file "+
-		"directly inside the IDE. Upon execution of the Threagile toolkit all standard risk rules (as well as individual custom rules if present) "+
-		"are checked against the architecture model. At the time the Threagile toolkit was executed on the model input file "+
+	writeLine(f, "Threagile (see https://threagile.io[] for more details) is an open-source toolkit for agile threat "+
+		"modeling, created by Christian Schneider (https://christian-schneider.net[]): It allows to model an architecture "+
+		"with its assets in an agile fashion as a YAML file directly inside the IDE. Upon execution of the Threagile "+
+		"toolkit all standard risk rules (as well as individual custom rules if present) are checked against the "+
+		"architecture model. At the time the Threagile toolkit was executed on the model input file "+
 		"the following risk rules were checked:")
 	writeLine(f, "")
 
@@ -2191,7 +2301,9 @@ func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRi
 	}
 }
 
-func (adoc adocReport) writeRiskRulesChecked(modelFilename string, skipRiskRules []string, buildTimestamp string, threagileVersion string, modelHash string, customRiskRules types.RiskRules) error {
+func (adoc adocReport) writeRiskRulesChecked(modelFilename string, skipRiskRules []string, buildTimestamp string,
+	threagileVersion string, modelHash string, customRiskRules types.RiskRules,
+) error {
 	filename := "220_RiskRulesChecked.adoc"
 	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
@@ -2272,23 +2384,23 @@ func (adoc adocReport) disclaimer(f *os.File) {
 
 	writeLine(f, disclaimerColor+
 		adoc.model.Author.Name+" conducted this threat analysis using the open-source Threagile toolkit "+
-		"on the applications and systems that were modeled as of this report's date. "+
-		"Information security threats are continually changing, with new "+
-		"vulnerabilities discovered on a daily basis, and no application can ever be 100% secure no matter how much "+
-		"threat modeling is conducted. It is recommended to execute threat modeling and also penetration testing on a regular basis "+
-		"(for example yearly) to ensure a high ongoing level of security and constantly check for new attack vectors. "+
+		"on the applications and systems that were modeled as of this report's date. Information security threats are "+
+		"continually changing, with new vulnerabilities discovered on a daily basis, and no application can ever be 100% "+
+		"secure no matter how much threat modeling is conducted. It is recommended to execute threat modeling and also "+
+		"penetration testing on a regular basis (for example yearly) to ensure a high ongoing level of security and "+
+		"constantly check for new attack vectors. "+
 		"\n\n"+
 		disclaimerColor+
 		"This report cannot and does not protect against personal or business loss as the result of use of the "+
-		"applications or systems described. "+adoc.model.Author.Name+" and the Threagile toolkit offers no warranties, representations or "+
-		"legal certifications concerning the applications or systems it tests. All software includes defects: nothing "+
-		"in this document is intended to represent or warrant that threat modeling was complete and without error, "+
-		"nor does this document represent or warrant that the architecture analyzed is suitable to task, free of other "+
-		"defects than reported, fully compliant with any industry standards, or fully compatible with any operating "+
-		"system, hardware, or other application. Threat modeling tries to analyze the modeled architecture without "+
-		"having access to a real working system and thus cannot and does not test the implementation for defects and vulnerabilities. "+
-		"These kinds of checks would only be possible with a separate code review and penetration test against "+
-		"a working system and not via a threat model."+
+		"applications or systems described. "+adoc.model.Author.Name+" and the Threagile toolkit offers no warranties, "+
+		"representations or legal certifications concerning the applications or systems it tests. All software includes "+
+		"defects: nothing in this document is intended to represent or warrant that threat modeling was complete and "+
+		"without error, nor does this document represent or warrant that the architecture analyzed is suitable to task, "+
+		"free of other defects than reported, fully compliant with any industry standards, or fully compatible with any "+
+		"operating system, hardware, or other application. Threat modeling tries to analyze the modeled architecture "+
+		"without having access to a real working system and thus cannot and does not test the implementation for defects "+
+		"and vulnerabilities. These kinds of checks would only be possible with a separate code review and penetration test "+
+		"against a working system and not via a threat model."+
 		"\n\n"+
 		disclaimerColor+
 		"By using the resulting information you agree that "+adoc.model.Author.Name+" and the Threagile toolkit "+
@@ -2300,11 +2412,11 @@ func (adoc adocReport) disclaimer(f *os.File) {
 		"for further distribution of this document."+
 		"\n\n"+
 		disclaimerColor+
-		"In this particular project, a time box approach was used to define the analysis effort. This means that the "+
-		"author allotted a prearranged amount of time to identify and document threats. Because of this, there "+
-		"is no guarantee that all possible threats and risks are discovered. Furthermore, the analysis "+
-		"applies to a snapshot of the current state of the modeled architecture (based on the architecture information provided "+
-		"by the customer) at the examination time."+
+		"In this particular project, a time box approach was used to define the analysis effort. This means that the author "+
+		"allotted a prearranged amount of time to identify and document threats. Because of this, there is no guarantee "+
+		"that all possible threats and risks are discovered. Furthermore, the analysis applies to a snapshot of the current "+
+		"state of the modeled architecture (based on the architecture information provided by the customer) at the "+
+		"examination time."+
 		"\n\n"+
 		"== Report Distribution"+
 		disclaimerColor+
