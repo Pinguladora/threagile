@@ -280,43 +280,43 @@ peripheries=1
 color="#CC0000"
   ]; 
 
-  3084865311 -> 2943509451 [ color="#CC0000"  style="solid" penwidth="2.500000" arrowtail="odot" arrowhead="empty" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ldap" fontcolor="#AF780E"  ];
+  3084865311 -> 2943509451 [ color="#CC0000"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="empty" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ldap" fontcolor="#AF780E"  ];
 
-  219064102 -> 3084865311 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="odot" arrowhead="empty" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="http" fontcolor="#444444"  ];
+  219064102 -> 3084865311 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="none" arrowhead="empty" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="http" fontcolor="#444444"  ];
 
-  219064102 -> 828271551 [ color="#CC0000"  style="solid" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="http" fontcolor="#AF780E"  ];
+  219064102 -> 828271551 [ color="#CC0000"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="http" fontcolor="#AF780E"  ];
 
-  3672894744 -> 828271551 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ssh" fontcolor="#CC0000"  ];
+  3672894744 -> 828271551 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="none" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ssh" fontcolor="#CC0000"  ];
 
-  3672894744 -> 3084865311 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ssh" fontcolor="#444444"  ];
+  3672894744 -> 3084865311 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="none" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ssh" fontcolor="#444444"  ];
 
-  3672894744 -> 3786194998 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="odot" arrowhead="empty" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ssh" fontcolor="#CC0000"  ];
+  3672894744 -> 3786194998 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="none" arrowhead="empty" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ssh" fontcolor="#CC0000"  ];
 
-  513618175 -> 2943509451 [ color="#CC0000"  style="solid" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ldaps" fontcolor="#AF780E"  ];
+  513618175 -> 2943509451 [ color="#CC0000"  style="solid" penwidth="2.500000" arrowtail="none" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ldaps" fontcolor="#AF780E"  ];
 
-  212448500 -> 3786194998 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ssh" fontcolor="#CC0000"  ];
+  212448500 -> 3786194998 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ssh" fontcolor="#CC0000"  ];
 
-  212448500 -> 3786194998 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#CC0000"  ];
+  212448500 -> 3786194998 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#CC0000"  ];
 
-  212448500 -> 3672894744 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
+  212448500 -> 3672894744 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
 
-  2252878724 -> 4009840091 [ color="#CC0000"  style="solid" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="jdbc" fontcolor="#AF780E"  ];
+  2252878724 -> 4009840091 [ color="#CC0000"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="jdbc" fontcolor="#AF780E"  ];
 
-  2252878724 -> 3681547760 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="nfs" fontcolor="#AF780E"  ];
+  2252878724 -> 3681547760 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="nfs" fontcolor="#AF780E"  ];
 
-  2219774459 -> 219064102 [ color="#CC0000"  style="solid" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
+  2219774459 -> 219064102 [ color="#CC0000"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
 
-  1531714662 -> 2252878724 [ color="#000060"  style="solid" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
+  1531714662 -> 2252878724 [ color="#000060"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
 
-  1531714662 -> 3084865311 [ color="#000060"  style="solid" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#444444"  ];
+  1531714662 -> 3084865311 [ color="#000060"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#444444"  ];
 
-  3582160343 -> 4009840091 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ssh" fontcolor="#AF780E"  ];
+  3582160343 -> 4009840091 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ssh" fontcolor="#AF780E"  ];
 
-  3582160343 -> 2252878724 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
+  3582160343 -> 2252878724 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
 
-  3582160343 -> 2943509451 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ldaps" fontcolor="#AF780E"  ];
+  3582160343 -> 2943509451 [ color="#999999"  style="dashed" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="ldaps" fontcolor="#AF780E"  ];
 
-  828271551 -> 513618175 [ color="#CC0000"  style="solid" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
+  828271551 -> 513618175 [ color="#CC0000"  style="solid" penwidth="2.500000" arrowtail="none" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
 
-  828271551 -> 2252878724 [ color="#CC0000"  style="solid" penwidth="2.500000" arrowtail="dot" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
+  828271551 -> 2252878724 [ color="#CC0000"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
 }

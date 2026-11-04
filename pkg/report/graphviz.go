@@ -68,6 +68,20 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 		dotContent.WriteString(makeLegendNode("custom_developed_part", "Custom developed part", "0", "black", "box", "solid", "filled", "2.0", CustomDevelopedParts, "1", Black))
 		dotContent.WriteString(makeLegendNode("other_assets", "Other assets", "0", "black", "box", "solid", "filled", "2.0", VeryLightGray, "1", Black))
 		dotContent.WriteString("} \n")
+
+		dotContent.WriteString("subgraph cluster_arrow_legend { \n")
+		dotContent.WriteString("  label=\"Arrow legend" +
+			" (an arrow points from the asset that initiates the connection to its target)\"; \n")
+		dotContent.WriteString("  color=\"lightgrey\"; \n")
+		dotContent.WriteString("  style=\"dashed\"; \n")
+		dotContent.WriteString(makeLegendArrow("read_write_link", "Filled arrowhead at the target: read/write link",
+			&types.CommunicationLink{DataAssetsSent: []string{"sent"}}))
+		dotContent.WriteString(makeLegendArrow("readonly_link", "Hollow arrowhead at the target: read-only link",
+			&types.CommunicationLink{Readonly: true, DataAssetsReceived: []string{"received"}}))
+		dotContent.WriteString(makeLegendArrow("bidirectional_link",
+			"Double hollow arrowhead at the initiator: data is also received back",
+			&types.CommunicationLink{DataAssetsSent: []string{"sent"}, DataAssetsReceived: []string{"received"}}))
+		dotContent.WriteString("} \n")
 	}
 
 	// Metadata init ===============================================================================
@@ -78,7 +92,6 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 	if parsedModel.DiagramTweakRanksep > 0 {
 		tweaks += "\n		ranksep=\"" + strconv.Itoa(parsedModel.DiagramTweakRanksep) + "\""
 	}
-	suppressBidirectionalArrows := true
 	drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks := true
 	splines := "ortho"
 	if len(parsedModel.DiagramTweakEdgeLayout) > 0 {
@@ -91,7 +104,6 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 			drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks = false
 		case "ortho":
 			splines = "ortho"
-			suppressBidirectionalArrows = true
 		case "curved":
 			splines = "curved"
 			drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks = false
@@ -257,21 +269,11 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 			sourceId := technicalAsset.Id
 			targetId := dataFlow.TargetId
 			// log.Println("About to add link from", sourceId, "to", targetId, "with id", dataFlow.ID)
-			var arrowStyle, arrowColor, readOrWriteHead, readOrWriteTail string
-			if dataFlow.Readonly {
-				readOrWriteHead = "empty"
-				readOrWriteTail = "odot"
-			} else {
-				readOrWriteHead = "normal"
-				readOrWriteTail = "dot"
-			}
-			dir := "forward"
-			if dataFlow.IsBidirectional() {
-				if !suppressBidirectionalArrows { // as it does not work as bug in graphviz with ortho: https://gitlab.com/graphviz/graphviz/issues/144
-					dir = "both"
-				}
-			}
-			arrowStyle = ` style="` + determineArrowLineStyle(dataFlow) + `" penwidth="` + determineArrowPenWidth(dataFlow, parsedModel) + `" arrowtail="` + readOrWriteTail + `" arrowhead="` + readOrWriteHead + `" dir="` + dir + `" arrowsize="2.0" `
+			var arrowStyle, arrowColor string
+			dir, arrowHead, arrowTail := dataFlowArrows(dataFlow)
+			arrowStyle = ` style="` + determineArrowLineStyle(dataFlow) +
+				`" penwidth="` + determineArrowPenWidth(dataFlow, parsedModel) +
+				`" arrowtail="` + arrowTail + `" arrowhead="` + arrowHead + `" dir="` + dir + `" arrowsize="2.0" `
 			arrowColor = ` color="` + determineArrowColor(dataFlow, parsedModel) + `"`
 			tweaks := ""
 			if dataFlow.DiagramTweakWeight > 0 {
@@ -320,6 +322,45 @@ label=<<table border="0" cellborder="` + compartmentBorder + `" cellpadding="2" 
 shape=` + shape + ` style="` + borderLineStyle + `,` + shapeStyle + `" penwidth="` + borderPenWidth + `" fillcolor="` + shapeFillColor + `"
 peripheries=` + shapePeripheries + `
 color="` + shapeBorderColor + "\"\n  ]; "
+}
+
+// Arrows:
+
+// receivedBackArrowTail is the arrow at the source of a link that also receives data back. It
+// must differ from both arrowheads at the target, the hollow read-only one included, so that the
+// end that initiates the connection stays recognisable.
+const receivedBackArrowTail = "onormalonormal"
+
+// noArrow is the arrowtail of a one-way link, which dir=forward does not draw anyway.
+const noArrow = "none"
+
+// dataFlowArrows returns the dir, arrowhead and arrowtail of a communication link's edge. The
+// arrowhead at the target marks the direction in which the source initiates the connection,
+// filled for a read/write link and hollow for a read-only one. A link that sends data and also
+// receives data back is drawn with dir=both and the hollow receivedBackArrowTail at the source.
+// A link that only receives data stays one-way: its arrow still points from the initiator.
+// The embedded Graphviz (12.1.2) draws dir=both edges correctly with ortho splines as well, so
+// the workaround for https://gitlab.com/graphviz/graphviz/issues/144 is gone.
+func dataFlowArrows(dataFlow *types.CommunicationLink) (dir, arrowHead, arrowTail string) {
+	arrowHead = "normal"
+	if dataFlow.Readonly {
+		arrowHead = "empty"
+	}
+	if dataFlow.IsBidirectional() {
+		return "both", arrowHead, receivedBackArrowTail
+	}
+	return "forward", arrowHead, noArrow
+}
+
+// makeLegendArrow draws the arrows of the given link between an initiator node and a target
+// node that is labelled with the title.
+func makeLegendArrow(id, title string, dataFlow *types.CommunicationLink) string {
+	dir, arrowHead, arrowTail := dataFlowArrows(dataFlow)
+	node := ` shape=box style="solid,filled" fillcolor="` + VeryLightGray + `" color="` + Black + `"];` + "\n"
+	return "  " + id + `_initiator [label="Initiator"` + node +
+		"  " + id + `_target [label="` + encode(title) + `"` + node +
+		"  " + id + "_initiator -> " + id + `_target [color="` + Black + `" style="solid" penwidth="1.5"` +
+		` arrowtail="` + arrowTail + `" arrowhead="` + arrowHead + `" dir="` + dir + `" arrowsize="2.0"];` + "\n"
 }
 
 // Pen Widths:
