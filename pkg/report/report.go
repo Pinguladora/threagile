@@ -71,11 +71,12 @@ func (r *pdfReporter) WriteReportPDF(reportFilename string,
 	tempFolder string,
 	model *types.Model,
 	hideChapters map[ChaptersToShowHide]bool,
-) error {
+) (reportError error) {
 	defer func() {
 		value := recover()
 		if value != nil {
-			fmt.Printf("error creating PDF report: %v", value)
+			// gofpdf panics on some errors; report them instead of a PDF that was never written
+			reportError = fmt.Errorf("error creating PDF report: %v", value)
 		}
 	}()
 
@@ -101,14 +102,20 @@ func (r *pdfReporter) WriteReportPDF(reportFilename string,
 	if err != nil {
 		return fmt.Errorf("error creating target description: %w", err)
 	}
-	r.embedDataFlowDiagram(dataFlowDiagramFilenamePNG, tempFolder)
+	err = r.embedDataFlowDiagram(dataFlowDiagramFilenamePNG, tempFolder)
+	if err != nil {
+		return err
+	}
 	r.createSecurityRequirements(model)
 	r.createAbuseCases(model)
 	r.createTagListing(model)
 	r.createSTRIDE(model)
 	r.createAssignmentByFunction(model)
 	r.createRAA(model, introTextRAA)
-	r.embedDataRiskMapping(dataAssetDiagramFilenamePNG, tempFolder)
+	err = r.embedDataRiskMapping(dataAssetDiagramFilenamePNG, tempFolder)
+	if err != nil {
+		return err
+	}
 	// createDataRiskQuickWins()
 	r.createOutOfScopeAssets(model)
 	r.createModelFailures(model)
@@ -4687,7 +4694,7 @@ func getHeightWhenWidthIsFix(imageFullFilename string, width float64) (float64, 
 	return float64(img.Height) / (float64(img.Width) / width), nil
 }
 
-func (r *pdfReporter) embedDataFlowDiagram(diagramFilenamePNG string, tempFolder string) {
+func (r *pdfReporter) embedDataFlowDiagram(diagramFilenamePNG string, tempFolder string) error {
 	r.pdf.SetTextColor(0, 0, 0)
 	title := "Data-Flow Diagram"
 	r.addHeadline(title, false)
@@ -4704,52 +4711,20 @@ func (r *pdfReporter) embedDataFlowDiagram(diagramFilenamePNG string, tempFolder
 	html.Write(5, intro.String())
 
 	// check to rotate the image if it is wider than high
-	/* #nosec diagramFilenamePNG is not tainted */
-	imagePath, _ := os.Open(diagramFilenamePNG)
-	defer func() { _ = imagePath.Close() }()
-	srcImage, _, _ := image.Decode(imagePath)
-	srcDimensions := srcImage.Bounds()
+	srcDimensions, err := diagramSize(diagramFilenamePNG)
+	if err != nil {
+		return fmt.Errorf("unable to embed the data-flow diagram: %w", err)
+	}
 	// wider than high?
-	muchWiderThanHigh := srcDimensions.Dx() > int(float64(srcDimensions.Dy())*1.25)
+	muchWiderThanHigh := srcDimensions.X > int(float64(srcDimensions.Y)*1.25)
 	// fresh page (eventually landscape)?
 	r.isLandscapePage = false
 	_ = tempFolder
-	/*
-		pinnedWidth, pinnedHeight := 190.0, 210.0
-		if dataFlowDiagramFullscreen {
-			pinnedHeight = 235.0
-			if muchWiderThanHigh {
-				if allowedPdfLandscapePages {
-					pinnedWidth = 275.0
-					isLandscapePage = true
-					r.pdf.AddPageFormat("L", r.pdf.GetPageSizeStr("A4"))
-				} else {
-					// so rotate the image left by 90 degrees
-				// ok, use temp PNG then
-				// now rotate left by 90 degrees
-				rotatedFile, err := os.CreateTemp(tempFolder, "diagram-*-.png")
-				checkErr(err)
-				defer os.Remove(rotatedFile.Title())
-				dstImage := image.NewRGBA(image.Rect(0, 0, srcDimensions.Dy(), srcDimensions.Dx()))
-				err = graphics.Rotate(dstImage, srcImage, &graphics.RotateOptions{-1 * math.Pi / 2.0})
-				checkErr(err)
-				newImage, _ := os.Create(rotatedFile.Title())
-					defer newImage.Close()
-					err = png.Encode(newImage, dstImage)
-					checkErr(err)
-					diagramFilenamePNG = rotatedFile.Title()
-				}
-			} else {
-				r.pdf.AddPage()
-			}
-		} else {
-			r.pdf.Ln(10)
-		}*/
 	// embed in PDF
 	var options gofpdf.ImageOptions
 	options.ImageType = ""
 	r.pdf.RegisterImage(diagramFilenamePNG, "")
-	var maxWidth, maxHeight, newWidth int
+	var maxWidth, maxHeight float64
 	var embedWidth, embedHeight float64
 	if allowedPdfLandscapePages && muchWiderThanHigh {
 		maxWidth, maxHeight = 275, 150
@@ -4759,11 +4734,13 @@ func (r *pdfReporter) embedDataFlowDiagram(diagramFilenamePNG string, tempFolder
 		r.pdf.Ln(10)
 		maxWidth, maxHeight = 190, 200 // reduced height as a text paragraph is above
 	}
-	newWidth = srcDimensions.Dx() / (srcDimensions.Dy() / maxHeight)
+	// the width the diagram gets at maxHeight; in floating point, as an integer pixels-per-millimetre
+	// ratio is 0 for a diagram lower than maxHeight pixels (threagile#164)
+	newWidth := float64(srcDimensions.X) * maxHeight / float64(srcDimensions.Y)
 	if newWidth <= maxWidth {
-		embedWidth, embedHeight = 0, float64(maxHeight)
+		embedWidth, embedHeight = 0, maxHeight
 	} else {
-		embedWidth, embedHeight = float64(maxWidth), 0
+		embedWidth, embedHeight = maxWidth, 0
 	}
 	r.pdf.ImageOptions(diagramFilenamePNG, 10, r.pdf.GetY(), embedWidth, embedHeight, true, options, 0, "")
 	r.isLandscapePage = false
@@ -4773,9 +4750,33 @@ func (r *pdfReporter) embedDataFlowDiagram(diagramFilenamePNG string, tempFolder
 		r.pdf.AddPage()
 		gofpdi.UseImportedTemplate(r.pdf, r.diagramLegendTemplateId, 0, 0, 0, 300)
 	}
+
+	return nil
 }
 
-func (r *pdfReporter) embedDataRiskMapping(diagramFilenamePNG string, tempFolder string) {
+// diagramSize returns the size in pixels of a rendered diagram, which is never empty.
+func diagramSize(diagramFilenamePNG string) (image.Point, error) {
+	/* #nosec diagramFilenamePNG is not tainted */
+	file, err := os.Open(diagramFilenamePNG)
+	if err != nil {
+		return image.Point{}, fmt.Errorf("error opening diagram image: %w", err)
+	}
+	defer func() { _ = file.Close() }()
+
+	imageConfig, _, err := image.DecodeConfig(file)
+	if err != nil {
+		return image.Point{}, fmt.Errorf("error decoding diagram image %q: %w", filepath.Base(diagramFilenamePNG), err)
+	}
+
+	if imageConfig.Width <= 0 || imageConfig.Height <= 0 {
+		return image.Point{}, fmt.Errorf("diagram image %q is empty (%dx%d pixels)",
+			filepath.Base(diagramFilenamePNG), imageConfig.Width, imageConfig.Height)
+	}
+
+	return image.Point{X: imageConfig.Width, Y: imageConfig.Height}, nil
+}
+
+func (r *pdfReporter) embedDataRiskMapping(diagramFilenamePNG string, tempFolder string) error {
 	r.pdf.SetTextColor(0, 0, 0)
 	title := "Data Mapping"
 	r.addHeadline(title, false)
@@ -4795,48 +4796,16 @@ func (r *pdfReporter) embedDataRiskMapping(diagramFilenamePNG string, tempFolder
 
 	// TODO dedupe with code from other diagram embedding (almost same code)
 	// check to rotate the image if it is wider than high
-	/* #nosec diagramFilenamePNG is not tainted */
-	imagePath, _ := os.Open(diagramFilenamePNG)
-	defer func() { _ = imagePath.Close() }()
-	srcImage, _, _ := image.Decode(imagePath)
-	srcDimensions := srcImage.Bounds()
+	srcDimensions, err := diagramSize(diagramFilenamePNG)
+	if err != nil {
+		return fmt.Errorf("unable to embed the data asset diagram: %w", err)
+	}
 	// wider than high?
-	widerThanHigh := srcDimensions.Dx() > srcDimensions.Dy()
+	widerThanHigh := srcDimensions.X > srcDimensions.Y
 	pinnedWidth, pinnedHeight := 190.0, 195.0
 	// fresh page (eventually landscape)?
 	r.isLandscapePage = false
 	_ = tempFolder
-	/*
-		if dataFlowDiagramFullscreen {
-			pinnedHeight = 235.0
-			if widerThanHigh {
-				if allowedPdfLandscapePages {
-					pinnedWidth = 275.0
-					isLandscapePage = true
-					r.pdf.AddPageFormat("L", r.pdf.GetPageSizeStr("A4"))
-				} else {
-					// so rotate the image left by 90 degrees
-					// ok, use temp PNG then
-				// now rotate left by 90 degrees
-				rotatedFile, err := os.CreateTemp(tempFolder, "diagram-*-.png")
-				checkErr(err)
-				defer os.Remove(rotatedFile.Title())
-				dstImage := image.NewRGBA(image.Rect(0, 0, srcDimensions.Dy(), srcDimensions.Dx()))
-				err = graphics.Rotate(dstImage, srcImage, &graphics.RotateOptions{-1 * math.Pi / 2.0})
-				checkErr(err)
-				newImage, _ := os.Create(rotatedFile.Title())
-				defer newImage.Close()
-					err = png.Encode(newImage, dstImage)
-					checkErr(err)
-					diagramFilenamePNG = rotatedFile.Title()
-				}
-			} else {
-				r.pdf.AddPage()
-			}
-		} else {
-			r.pdf.Ln(10)
-		}
-	*/
 	// embed in PDF
 	r.pdf.Ln(10)
 	var options gofpdf.ImageOptions
@@ -4849,6 +4818,8 @@ func (r *pdfReporter) embedDataRiskMapping(diagramFilenamePNG string, tempFolder
 	}
 	r.pdf.ImageOptions(diagramFilenamePNG, 10, r.pdf.GetY(), pinnedWidth, pinnedHeight, true, options, 0, "")
 	r.isLandscapePage = false
+
+	return nil
 }
 
 func (r *pdfReporter) writeReportToFile(reportFilename string) error {

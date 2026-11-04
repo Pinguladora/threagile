@@ -1,0 +1,28 @@
+technical_assets:
+
+  Customer Service:
+    id: customer-service
+    description: Service holding the customer data
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: web-service-rest
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: important
+    availability: operational
+    justification_cia_rating: Processes customer data
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed:
+      - customer-data
+    data_assets_stored:
+      - customer-data
+    data_formats_accepted:
+      - json

@@ -1,0 +1,24 @@
+# A minimal model split with includes (threagile#164): the root file lists its
+# sections without values and the included files hold the assets.
+threagile_version: 1.0.0
+
+title: Minimal Split Model
+
+date: 2024-01-01
+
+author:
+  name: John Doe
+
+business_criticality: important
+
+tags_available:
+
+data_assets:
+
+technical_assets:
+
+risk_tracking:
+
+includes:
+  - assets/data-assets.yaml
+  - assets/technical-assets.yaml

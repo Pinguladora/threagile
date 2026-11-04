@@ -1,0 +1,13 @@
+data_assets:
+
+  Customer Data:
+    id: customer-data
+    description: Customer contact details
+    usage: business
+    origin: Customer
+    owner: Some Company
+    quantity: few
+    confidentiality: confidential
+    integrity: important
+    availability: operational
+    justification_cia_rating: Personal data of customers
