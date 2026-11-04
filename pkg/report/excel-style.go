@@ -105,6 +105,21 @@ func (what *ExcelStyles) Init(excel *excelize.File, config reportConfigReader) (
 	}
 
 	// the styles are created in this order, as their ids are numbered in it
+	colorRiskStatusMitigated := what.initRiskStyles(newStyle, textColor)
+	what.initTextStyles(newStyle, textColor, colorRiskStatusMitigated)
+
+	what.headCenterBoldItalic = newHeadStyle(14, true)
+	what.headCenterBold = newHeadStyle(14, true)
+	what.headCenter = newHeadStyle(14, false)
+
+	return what, creator.Error
+}
+
+// initRiskStyles creates the styles of the risk severities and risk tracking statuses. It returns
+// the text colour of mitigated risks.
+func (what *ExcelStyles) initRiskStyles(newStyle func(horizontal string, color string, size float64, bold bool) int,
+	textColor func(color func() string) string,
+) string {
 	colorCriticalRisk := textColor(rgbHexColorCriticalRisk)
 	what.severityCriticalBold = newStyle(excelAlignCenter, colorCriticalRisk, 12, true)
 	what.severityCriticalCenter = newStyle(excelAlignCenter, colorCriticalRisk, 12, false)
@@ -133,7 +148,13 @@ func (what *ExcelStyles) Init(excel *excelize.File, config reportConfigReader) (
 	what.yellowCenter = newStyle(excelAlignCenter, textColor(rgbHexColorRiskStatusAccepted), 12, false)
 	what.orangeCenter = newStyle(excelAlignCenter, textColor(rgbHexColorRiskStatusInDiscussion), 12, false)
 	what.grayCenter = newStyle(excelAlignCenter, textColor(rgbHexColorRiskStatusFalsePositive), 12, false)
+	return colorRiskStatusMitigated
+}
 
+// initTextStyles creates the styles of the other cells.
+func (what *ExcelStyles) initTextStyles(newStyle func(horizontal string, color string, size float64, bold bool) int,
+	textColor func(color func() string) string, colorRiskStatusMitigated string,
+) {
 	what.blackLeft = newStyle("left", Black, 12, false)
 	what.blackCenter = newStyle(excelAlignCenter, Black, 12, false)
 	what.blackRight = newStyle("right", Black, 12, false)
@@ -142,12 +163,6 @@ func (what *ExcelStyles) Init(excel *excelize.File, config reportConfigReader) (
 	what.blackBold = newStyle(excelAlignCenter, Black, 12, true)
 	what.blackLeftBold = newStyle("left", Black, 12, true)
 	what.mitigation = newStyle("", colorRiskStatusMitigated, 10, false)
-
-	what.headCenterBoldItalic = newHeadStyle(14, true)
-	what.headCenterBold = newHeadStyle(14, true)
-	what.headCenter = newHeadStyle(14, false)
-
-	return what, creator.Error
 }
 
 func (what *ExcelStyles) Get(column string, status types.RiskStatus, severity types.RiskSeverity) int {
