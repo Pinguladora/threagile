@@ -15,7 +15,8 @@ import (
 
 // These tests keep support/schema.json, which editors use to validate and complete models, in
 // line with what threagile itself accepts. go.mod has no JSON-schema validator, so
-// validateSchema below implements the keywords the schema uses.
+// validateSchema below implements the keywords the schema uses, and those of the OTM schema that
+// otm_schema_test.go checks the OTM output against.
 
 const draft07MetaSchema = "http://json-schema.org/draft-07/schema#"
 
@@ -178,6 +179,27 @@ func TestSchemaValidatorFindsProblems(t *testing.T) {
 	}
 }
 
+func TestSchemaValidatorChecksOneOf(t *testing.T) {
+	var schema map[string]any
+	if err := json.Unmarshal([]byte(`{"type": "object", "oneOf": [{"required": ["a"]}, {"required": ["b"]}]}`), &schema); err != nil {
+		t.Fatal(err)
+	}
+
+	for _, check := range []struct {
+		document map[string]any
+		want     string
+	}{
+		{map[string]any{"a": 1}, ""},
+		{map[string]any{"b": 1}, ""},
+		{map[string]any{}, "/: matches 0 of oneOf, want exactly 1"},
+		{map[string]any{"a": 1, "b": 1}, "/: matches 2 of oneOf, want exactly 1"},
+	} {
+		if got := strings.Join(validateSchema(schema, schema, check.document, ""), "\n"); got != check.want {
+			t.Errorf("%v: got %q, want %q", check.document, got, check.want)
+		}
+	}
+}
+
 func readSchema(t *testing.T) map[string]any {
 	t.Helper()
 
@@ -267,6 +289,19 @@ func validateSchema(root map[string]any, node map[string]any, document any, inst
 		return len(validateSchema(root, subSchema, document, instancePath)) == 0
 	}) {
 		problems = append(problems, location+": matches none of anyOf")
+	}
+
+	if oneOf := schemaList(node["oneOf"]); len(oneOf) > 0 {
+		matches := 0
+		for _, subSchema := range oneOf {
+			if len(validateSchema(root, subSchema, document, instancePath)) == 0 {
+				matches++
+			}
+		}
+
+		if matches != 1 {
+			problems = append(problems, fmt.Sprintf("%s: matches %d of oneOf, want exactly 1", location, matches))
+		}
 	}
 
 	switch value := document.(type) {

@@ -1,0 +1,15 @@
+SPDX-FileCopyrightText: IriusRisk and the Open Threat Model contributors
+SPDX-License-Identifier: Apache-2.0
+
+otm_schema.json is the JSON schema of the Open Threat Model (OTM) 0.2.0, copied unchanged from
+https://github.com/iriusrisk/OpenThreatModel/blob/c88c5a7b4115f0f025e28d5682a2b0d790b389e4/otm_schema.json
+
+The schema states in its "$comment" that it is published under the Apache License 2.0,
+https://www.apache.org/licenses/LICENSE-2.0. The rest of that repository, the specification
+text and examples, is licensed under CC BY-SA 4.0 and is not copied here.
+
+This copy is taken from the main branch rather than the 0.2.0 tag: the tagged file lacks the
+"items" level of the representations and assets arrays, so it does not describe the assets that
+the specification defines. Both declare the version 0.2.0.
+
+Threagile only uses the schema in tests, to validate the OTM files it writes.
