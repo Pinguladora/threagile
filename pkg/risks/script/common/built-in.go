@@ -59,5 +59,8 @@ func calculateSeverityFunc(parameters []Value) (Value, error) {
 	}
 	impactDecimal := impactDecimalValue.IntPart()
 
-	return SomeStringValue(types.CalculateSeverity(types.RiskExploitationLikelihood(likelihoodDecimal), types.RiskExploitationImpact(impactDecimal)).String(), nil), nil
+	severity := types.CalculateSeverity(
+		types.RiskExploitationLikelihood(likelihoodDecimal), types.RiskExploitationImpact(impactDecimal),
+	)
+	return SomeStringValue(severity.String(), nil), nil
 }
