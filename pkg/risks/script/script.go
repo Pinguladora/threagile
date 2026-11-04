@@ -117,7 +117,8 @@ func (what *Script) ParseCategory(script map[string]any) (*Script, error) {
 				return what.ParseScript(castValue)
 
 			default:
-				return what, fmt.Errorf("failed to parse %q: unexpected script type %T\nscript:\n%v", key, value, what.formatter.AddLineNumbers(value))
+				return what, fmt.Errorf("failed to parse %q: unexpected script type %T\nscript:\n%v", key, value,
+					what.formatter.AddLineNumbers(value))
 			}
 		}
 	}
@@ -232,7 +233,8 @@ func (what *Script) GenerateRisks(scope *common.Scope) ([]*types.Risk, string, e
 	risks := make([]*types.Risk, 0)
 	for _, techAssetName := range slices.Sorted(maps.Keys(techAssets)) {
 		techAsset := techAssets[techAssetName]
-		techAssetValue := common.SomeValue(techAsset, common.NewEvent(common.NewValueProperty(techAsset), common.NewPath(fmt.Sprintf("technical asset '%v'", techAssetName))))
+		techAssetPath := common.NewPath(fmt.Sprintf("technical asset '%v'", techAssetName))
+		techAssetValue := common.SomeValue(techAsset, common.NewEvent(common.NewValueProperty(techAsset), techAssetPath))
 		isMatch, errorMatchLiteral, matchError := what.matchRisk(scope, techAssetValue)
 		if matchError != nil {
 			return nil, errorMatchLiteral, matchError
@@ -431,7 +433,9 @@ func (what *Script) Explain(history []*common.Event) []string {
 	return text
 }
 
-func (what *Script) getRiskID(outerScope *common.Scope, techAsset common.Value, risk *types.Risk) (string, string, error) {
+func (what *Script) getRiskID(
+	outerScope *common.Scope, techAsset common.Value, risk *types.Risk,
+) (string, string, error) {
 	if len(what.id) == 0 {
 		return "", "", errors.New("no ID expression")
 	}
