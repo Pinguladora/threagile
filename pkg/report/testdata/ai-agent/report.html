@@ -509,16 +509,16 @@ footer {
 <h2>Management Summary</h2>
 <p>Threagile toolkit was used to model the architecture of "AI Support Assistant" and derive risks by analyzing the components and data flows. The risks identified during this analysis are shown in the following chapters. Identified risks during threat modeling do not necessarily mean that the vulnerability associated with this risk actually exists: it is more to be seen as a list of potential risks and threats, which should be individually reviewed and reduced by removing false positives. For the remaining risks it should be checked in the design and implementation of "AI Support Assistant" whether the mitigation advices have been applied or not.</p>
 <p>Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.</p>
-<p>In total <strong>68 initial risks</strong> in <strong>29 categories</strong> have been identified during the threat modeling process:</p>
+<p>In total <strong>67 initial risks</strong> in <strong>29 categories</strong> have been identified during the threat modeling process:</p>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Severity</th><th scope="col" class="number">Risks</th><th scope="col">Status</th><th scope="col" class="number">Risks</th></tr></thead>
 <tbody>
-<tr><th scope="row"><span class="badge sev-critical">Critical</span></th><td class="number">0</td><th scope="row"><span class="badge status-unchecked">Unchecked</span></th><td class="number">67</td></tr>
+<tr><th scope="row"><span class="badge sev-critical">Critical</span></th><td class="number">0</td><th scope="row"><span class="badge status-unchecked">Unchecked</span></th><td class="number">66</td></tr>
 <tr><th scope="row"><span class="badge sev-high">High</span></th><td class="number">0</td><th scope="row"><span class="badge status-in-discussion">In Discussion</span></th><td class="number">0</td></tr>
 <tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">30</td><th scope="row"><span class="badge status-accepted">Accepted</span></th><td class="number">0</td></tr>
 <tr><th scope="row"><span class="badge sev-medium">Medium</span></th><td class="number">29</td><th scope="row"><span class="badge status-in-progress">In Progress</span></th><td class="number">1</td></tr>
-<tr><th scope="row"><span class="badge sev-low">Low</span></th><td class="number">9</td><th scope="row"><span class="badge status-mitigated">Mitigated</span></th><td class="number">0</td></tr>
+<tr><th scope="row"><span class="badge sev-low">Low</span></th><td class="number">8</td><th scope="row"><span class="badge status-mitigated">Mitigated</span></th><td class="number">0</td></tr>
 <tr><td></td><td></td><th scope="row"><span class="badge status-false-positive">False Positive</span></th><td class="number">0</td></tr>
 </tbody>
 </table>
@@ -529,7 +529,7 @@ footer {
 
 <section class="chapter" id="initial-risks">
 <h2>Impact Analysis of the Initial Risks</h2>
-<p>The most prevalent impacts of the <strong>68 initial risks</strong> (distributed over <strong>29 risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
+<p>The most prevalent impacts of the <strong>67 initial risks</strong> (distributed over <strong>29 risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
 <dl class="entries">
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-confused-deputy-agent">Confused Deputy Agent</a>: <span class="summary">1 Initial Risk, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>If this risk is unmitigated, users and attackers who steer the agent might read or change the data of other users through it.</dd>
@@ -557,7 +557,7 @@ footer {
 <dd>If this risk is unmitigated, attackers might plant content that misleads the model, injects instructions into its prompts or makes it disclose data, persistently and for every user.</dd>
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-container-baseimage-backdooring">Container Base Image Backdooring</a>: <span class="summary">10 Initial Risks, exploitation likelihood is <em>Unlikely</em> with <em>Medium</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might be able to deeply persist in the target system by executing code in deployed containers.</dd>
-<dt><span class="badge sev-medium">Medium</span> <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>: <span class="summary">2 Initial Risks, exploitation likelihood is <em>Very Likely</em> with <em>Low</em> impact</span></dt>
+<dt><span class="badge sev-medium">Medium</span> <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>: <span class="summary">1 Initial Risk, exploitation likelihood is <em>Very Likely</em> with <em>Low</em> impact</span></dt>
 <dd>If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.</dd>
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-long-lived-credentials">Long-Lived Credentials</a>: <span class="summary">1 Initial Risk, exploitation likelihood is <em>Unlikely</em> with <em>Medium</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.</dd>
@@ -581,8 +581,6 @@ footer {
 <dd>If this risk is unmitigated, attackers might be able to directly attack sensitive systems without any hardening components in-between due to them being directly exposed on the internet.</dd>
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-model-supply-chain">Unverified Model Supply Chain</a>: <span class="summary">2 Initial Risks, exploitation likelihood is <em>Unlikely</em> with <em>Medium</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might deploy a backdoored or tampered model that answers as they want, leaks data or runs code on the systems that load it.</dd>
-<dt><span class="badge sev-low">Low</span> <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>: <span class="summary">2 Initial Risks, exploitation likelihood is <em>Very Likely</em> with <em>Low</em> impact</span></dt>
-<dd>If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.</dd>
 <dt><span class="badge sev-low">Low</span> <a href="#category-dos-risky-access-across-trust-boundary">DoS-risky Access Across Trust-Boundary</a>: <span class="summary">2 Initial Risks, exploitation likelihood is <em>Unlikely</em> with <em>Low</em> impact</span></dt>
 <dd>If this risk remains unmitigated, attackers might be able to disturb the availability of important parts of the system.</dd>
 <dt><span class="badge sev-low">Low</span> <a href="#category-missing-network-segmentation">Missing Network Segmentation</a>: <span class="summary">3 Initial Risks, exploitation likelihood is <em>Unlikely</em> with <em>Low</em> impact</span></dt>
@@ -609,21 +607,21 @@ footer {
 <td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="100.00" height="10"></rect></svg></td></tr>
 <tr><th scope="row"><span class="badge sev-medium">Medium</span></th><td class="number">29</td><td class="number">28</td><td class="number">0</td><td class="number">0</td><td class="number">1</td><td class="number">0</td><td class="number">0</td>
 <td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="93.33" height="10"></rect><rect class="status-in-progress" x="93.33" width="3.33" height="10"></rect></svg></td></tr>
-<tr><th scope="row"><span class="badge sev-low">Low</span></th><td class="number">9</td><td class="number">9</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td>
-<td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="30.00" height="10"></rect></svg></td></tr>
+<tr><th scope="row"><span class="badge sev-low">Low</span></th><td class="number">8</td><td class="number">8</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td>
+<td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="26.67" height="10"></rect></svg></td></tr>
 </tbody>
 </table>
 </div>
-<p>After removal of risks with status <em>mitigated</em> and <em>false positive</em> the following <strong>68 remain unmitigated</strong>:</p>
+<p>After removal of risks with status <em>mitigated</em> and <em>false positive</em> the following <strong>67 remain unmitigated</strong>:</p>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Severity</th><th scope="col" class="number">Unmitigated risks</th><th scope="col">To be checked by</th><th scope="col" class="number">Unmitigated risks</th></tr></thead>
 <tbody>
 <tr><th scope="row"><span class="badge sev-critical">Critical</span></th><td class="number">0</td><th scope="row">Business Side</th><td class="number">1</td></tr>
 <tr><th scope="row"><span class="badge sev-high">High</span></th><td class="number">0</td><th scope="row">Architecture</th><td class="number">12</td></tr>
-<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">30</td><th scope="row">Development</th><td class="number">23</td></tr>
+<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">30</td><th scope="row">Development</th><td class="number">22</td></tr>
 <tr><th scope="row"><span class="badge sev-medium">Medium</span></th><td class="number">29</td><th scope="row">Operations</th><td class="number">32</td></tr>
-<tr><th scope="row"><span class="badge sev-low">Low</span></th><td class="number">9</td><td></td><td></td></tr>
+<tr><th scope="row"><span class="badge sev-low">Low</span></th><td class="number">8</td><td></td><td></td></tr>
 </tbody>
 </table>
 </div>
@@ -631,7 +629,7 @@ footer {
 
 <section class="chapter" id="remaining-risks">
 <h2>Impact Analysis of the Remaining Risks</h2>
-<p>The most prevalent impacts of the <strong>68 remaining risks</strong> (distributed over <strong>29 risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
+<p>The most prevalent impacts of the <strong>67 remaining risks</strong> (distributed over <strong>29 risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
 <dl class="entries">
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-confused-deputy-agent">Confused Deputy Agent</a>: <span class="summary">1 Remaining Risk, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>If this risk is unmitigated, users and attackers who steer the agent might read or change the data of other users through it.</dd>
@@ -659,7 +657,7 @@ footer {
 <dd>If this risk is unmitigated, attackers might plant content that misleads the model, injects instructions into its prompts or makes it disclose data, persistently and for every user.</dd>
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-container-baseimage-backdooring">Container Base Image Backdooring</a>: <span class="summary">10 Remaining Risks, exploitation likelihood is <em>Unlikely</em> with <em>Medium</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might be able to deeply persist in the target system by executing code in deployed containers.</dd>
-<dt><span class="badge sev-medium">Medium</span> <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>: <span class="summary">2 Remaining Risks, exploitation likelihood is <em>Very Likely</em> with <em>Low</em> impact</span></dt>
+<dt><span class="badge sev-medium">Medium</span> <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>: <span class="summary">1 Remaining Risk, exploitation likelihood is <em>Very Likely</em> with <em>Low</em> impact</span></dt>
 <dd>If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.</dd>
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-long-lived-credentials">Long-Lived Credentials</a>: <span class="summary">1 Remaining Risk, exploitation likelihood is <em>Unlikely</em> with <em>Medium</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.</dd>
@@ -683,8 +681,6 @@ footer {
 <dd>If this risk is unmitigated, attackers might be able to directly attack sensitive systems without any hardening components in-between due to them being directly exposed on the internet.</dd>
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-model-supply-chain">Unverified Model Supply Chain</a>: <span class="summary">2 Remaining Risks, exploitation likelihood is <em>Unlikely</em> with <em>Medium</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might deploy a backdoored or tampered model that answers as they want, leaks data or runs code on the systems that load it.</dd>
-<dt><span class="badge sev-low">Low</span> <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>: <span class="summary">2 Remaining Risks, exploitation likelihood is <em>Very Likely</em> with <em>Low</em> impact</span></dt>
-<dd>If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.</dd>
 <dt><span class="badge sev-low">Low</span> <a href="#category-dos-risky-access-across-trust-boundary">DoS-risky Access Across Trust-Boundary</a>: <span class="summary">2 Remaining Risks, exploitation likelihood is <em>Unlikely</em> with <em>Low</em> impact</span></dt>
 <dd>If this risk remains unmitigated, attackers might be able to disturb the availability of important parts of the system.</dd>
 <dt><span class="badge sev-low">Low</span> <a href="#category-missing-network-segmentation">Missing Network Segmentation</a>: <span class="summary">3 Remaining Risks, exploitation likelihood is <em>Unlikely</em> with <em>Low</em> impact</span></dt>
@@ -698,7 +694,7 @@ footer {
 
 <section class="chapter" id="risks-by-severity">
 <h2>Risks by Severity</h2>
-<p>All <strong>68 risks</strong> by severity, with their tracking status. Each risk links to its details in the chapter of its category.</p>
+<p>All <strong>67 risks</strong> by severity, with their tracking status. Each risk links to its details in the chapter of its category.</p>
 <h3>Critical <span class="summary">0 risks</span></h3>
 <p class="muted">No risks.</p>
 <h3>High <span class="summary">0 risks</span></h3>
@@ -778,12 +774,11 @@ footer {
 </tbody>
 </table>
 </div>
-<h3>Low <span class="summary">9 risks</span></h3>
+<h3>Low <span class="summary">8 risks</span></h3>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Severity</th><th scope="col">Risk</th><th scope="col">Category</th><th scope="col">Most relevant</th><th scope="col">Status</th></tr></thead>
 <tbody>
-<tr><td><span class="badge sev-low">Low</span></td><td><a href="#risk-cross-site-request-forgery_40knowledge-cms_40ingestion-pipeline_3earticle-export"><b>Cross-Site Request Forgery (CSRF)</b> risk at <b>Knowledge CMS</b> via <b>Article Export</b> from <b>Ingestion Pipeline</b></a></td><td><a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a></td><td><a href="#asset-knowledge-cms">Knowledge CMS</a>, <a href="#link-ingestion-pipeline_3earticle-export">Article Export</a></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
 <tr><td><span class="badge sev-low">Low</span></td><td><a href="#risk-dos-risky-access-across-trust-boundary_40order-service_40support-tools_40support-tools_3eorder-api-_3e"><b>Denial-of-Service</b> risky access of <b>Order Service</b> by <b>Support Tools</b> via <b>Order API</b></a></td><td><a href="#category-dos-risky-access-across-trust-boundary">DoS-risky Access Across Trust-Boundary</a></td><td><a href="#asset-order-service">Order Service</a>, <a href="#link-support-tools_3eorder-api">Order API</a></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
 <tr><td><span class="badge sev-low">Low</span></td><td><a href="#risk-dos-risky-access-across-trust-boundary_40support-agent_40chat-frontend_40chat-frontend_3eassistant-request-_3e"><b>Denial-of-Service</b> risky access of <b>Support Agent</b> by <b>Chat Frontend</b> via <b>Assistant Request</b></a></td><td><a href="#category-dos-risky-access-across-trust-boundary">DoS-risky Access Across Trust-Boundary</a></td><td><a href="#asset-support-agent">Support Agent</a>, <a href="#link-chat-frontend_3eassistant-request">Assistant Request</a></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
 <tr><td><span class="badge sev-low">Low</span></td><td><a href="#risk-missing-network-segmentation_40knowledge-index"><b>Missing Network Segmentation</b> to further encapsulate and protect <b>Knowledge Index</b> against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers</a></td><td><a href="#category-missing-network-segmentation">Missing Network Segmentation</a></td><td><a href="#asset-knowledge-index">Knowledge Index</a></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
@@ -903,20 +898,18 @@ footer {
 
 <section class="chapter" id="stride">
 <h2>STRIDE Classification of Identified Risks</h2>
-<p>This chapter clusters and classifies the risks by STRIDE categories: in total <strong>68 potential risks</strong> have been identified during the threat modeling process.</p>
-<h3>Spoofing <span class="summary">5 risks</span></h3>
+<p>This chapter clusters and classifies the risks by STRIDE categories: in total <strong>67 potential risks</strong> have been identified during the threat modeling process.</p>
+<h3>Spoofing <span class="summary">4 risks</span></h3>
 <p class="muted">Spoofing - Authenticity</p>
 <dl class="entries">
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-unauthenticated-mcp-server">Unauthenticated MCP Server</a>: <span class="summary">1/1 unmitigated Risk, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>An MCP server, or another server exposing tools to AI agents, acts on the systems behind its tools with its own permissions. When it does not authenticate its callers, anyone who can reach it can call those tools, and it cannot tell one agent or user from another to limit what each may do.</dd>
-<dt><span class="badge sev-medium">Medium</span> <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>: <span class="summary">2/2 unmitigated Risks, exploitation likelihood is <em>Very Likely</em> with <em>Low</em> impact</span></dt>
+<dt><span class="badge sev-medium">Medium</span> <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>: <span class="summary">1/1 unmitigated Risk, exploitation likelihood is <em>Very Likely</em> with <em>Low</em> impact</span></dt>
 <dd>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</dd>
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-long-lived-credentials">Long-Lived Credentials</a>: <span class="summary">1/1 unmitigated Risk, exploitation likelihood is <em>Unlikely</em> with <em>Medium</em> impact</span></dt>
 <dd>Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it.</dd>
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-missing-identity-store">Missing Identity Store</a>: <span class="summary">1/1 unmitigated Risk, exploitation likelihood is <em>Unlikely</em> with <em>Medium</em> impact</span></dt>
 <dd>The modeled architecture does not contain an identity store, which might be the risk of a model missing critical assets (and thus not seeing their risks).</dd>
-<dt><span class="badge sev-low">Low</span> <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>: <span class="summary">2/2 unmitigated Risks, exploitation likelihood is <em>Very Likely</em> with <em>Low</em> impact</span></dt>
-<dd>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</dd>
 </dl>
 <h3>Tampering <span class="summary">30 risks</span></h3>
 <p class="muted">Tampering - Integrity</p>
@@ -992,7 +985,7 @@ footer {
 
 <section class="chapter" id="functions">
 <h2>Assignment by Function</h2>
-<p>This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total <strong>68 potential risks</strong> have been identified during the threat modeling process.</p>
+<p>This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total <strong>67 potential risks</strong> have been identified during the threat modeling process.</p>
 <h3>Business Side <span class="summary">1 risk</span></h3>
 <p class="muted">Business</p>
 <dl class="entries">
@@ -1025,7 +1018,7 @@ footer {
 <dt><span class="badge sev-low">Low</span> <a href="#category-unchecked-deployment">Unchecked Deployment</a>: <span class="summary">1/1 unmitigated Risk, exploitation likelihood is <em>Unlikely</em> with <em>Low</em> impact</span></dt>
 <dd>Apply DevSecOps best-practices and use scanning tools to identify vulnerabilities in source- or byte-code,dependencies, container layers, and optionally also via dynamic scans against running test systems.</dd>
 </dl>
-<h3>Development <span class="summary">23 risks</span></h3>
+<h3>Development <span class="summary">22 risks</span></h3>
 <p class="muted">Development</p>
 <dl class="entries">
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-cross-site-scripting">Cross-Site Scripting (XSS)</a>: <span class="summary">2/2 unmitigated Risks, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
@@ -1038,9 +1031,7 @@ footer {
 <dd>Try to use parameter binding to be safe from injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-server-side-request-forgery">Server-Side Request Forgery (SSRF)</a>: <span class="summary">11/11 unmitigated Risks, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.</dd>
-<dt><span class="badge sev-medium">Medium</span> <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>: <span class="summary">2/2 unmitigated Risks, exploitation likelihood is <em>Very Likely</em> with <em>Low</em> impact</span></dt>
-<dd>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.</dd>
-<dt><span class="badge sev-low">Low</span> <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>: <span class="summary">2/2 unmitigated Risks, exploitation likelihood is <em>Very Likely</em> with <em>Low</em> impact</span></dt>
+<dt><span class="badge sev-medium">Medium</span> <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>: <span class="summary">1/1 unmitigated Risk, exploitation likelihood is <em>Very Likely</em> with <em>Low</em> impact</span></dt>
 <dd>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.</dd>
 </dl>
 <h3>Operations <span class="summary">32 risks</span></h3>
@@ -1148,7 +1139,7 @@ footer {
 
 <section class="chapter" id="risk-categories">
 <h2>Identified Risks by Vulnerability Category</h2>
-<p>In total <strong>68 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>29 vulnerability categories</strong>. The following sections describe each identified risk category and its risks.</p>
+<p>In total <strong>67 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>29 vulnerability categories</strong>. The following sections describe each identified risk category and its risks.</p>
 <section class="item" id="category-confused-deputy-agent">
 <h3>Confused Deputy Agent <span class="badge sev-elevated">Elevated</span> <span class="summary">1/1 unmitigated Risk</span></h3>
 <p class="id">confused-deputy-agent</p>
@@ -1750,7 +1741,7 @@ footer {
 </div>
 </section>
 <section class="item" id="category-cross-site-request-forgery">
-<h3>Cross-Site Request Forgery (CSRF) <span class="badge sev-medium">Medium</span> <span class="summary">2/2 unmitigated Risks</span></h3>
+<h3>Cross-Site Request Forgery (CSRF) <span class="badge sev-medium">Medium</span> <span class="summary">1/1 unmitigated Risk</span></h3>
 <p class="id">cross-site-request-forgery</p>
 <div class="table-wrap">
 <table class="props">
@@ -1770,24 +1761,22 @@ footer {
 <h4>Impact</h4>
 <div class="text">If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.</div>
 <h4>Detection Logic</h4>
-<div class="text">In-scope web applications accessed via typical web access protocols.</div>
+<div class="text">In-scope web applications accessed via typical web access protocols by a caller used by humans or a browser, directly or through technical assets forwarding the traffic, like load balancers, reverse proxies and WAFs. Requests of other callers, like a backend or a batch job, come from no browser a forged request could use, and are skipped.</div>
 <h4>Risk Rating</h4>
 <div class="text">The risk rating depends on the integrity rating of the data sent across the communication link. The attack is very likely, likely for DevOps usage, and unlikely when the link is authenticated with a token (<i>token</i>, <i>short-lived-token</i> or <i>long-lived-token</i>), which a browser does not send on its own like a cookie.</div>
 <h4>False Positives</h4>
-<div class="text">Web applications passing the authentication state via custom headers instead of cookies can eventually be false positives; model their links with a token authentication. Also when the web application is not accessed via a browser-like component (i.e not by a human user initiating the request that gets passed through all components until it reaches the web application) this can be considered a false positive.</div>
+<div class="text">Web applications passing the authentication state via custom headers instead of cookies can eventually be false positives; model their links with a token authentication. Clients used by humans that are no browser and render no web content, like a command-line tool, can be considered as false positives after individual review.</div>
 <h4>Mitigation</h4>
 <div class="text">Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.</div>
 <h4>Check</h4>
 <div class="text">Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?</div>
 <h4>Risk Findings</h4>
-<p>The risk <strong>Cross-Site Request Forgery (CSRF)</strong> was found <strong>2 times</strong> in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.</p>
+<p>The risk <strong>Cross-Site Request Forgery (CSRF)</strong> was found <strong>1 time</strong> in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.</p>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Severity</th><th scope="col">Risk</th><th scope="col">Likelihood</th><th scope="col">Impact</th><th scope="col">Most relevant</th><th scope="col">Status</th><th scope="col">Tracking</th></tr></thead>
 <tbody>
 <tr id="risk-cross-site-request-forgery_40chat-frontend_40customer-browser_3esupport-chat"><td><span class="badge sev-medium">Medium</span></td><td><b>Cross-Site Request Forgery (CSRF)</b> risk at <b>Chat Frontend</b> via <b>Support Chat</b> from <b>Customer Browser</b><br><span class="id">cross-site-request-forgery@chat-frontend@customer-browser&gt;support-chat</span></td><td>Very Likely</td><td>Low</td><td><a href="#asset-chat-frontend">Chat Frontend</a>, <a href="#link-customer-browser_3esupport-chat">Support Chat</a></td><td><span class="badge status-unchecked">Unchecked</span></td>
-<td><span class="muted">not tracked</span></td></tr>
-<tr id="risk-cross-site-request-forgery_40knowledge-cms_40ingestion-pipeline_3earticle-export"><td><span class="badge sev-low">Low</span></td><td><b>Cross-Site Request Forgery (CSRF)</b> risk at <b>Knowledge CMS</b> via <b>Article Export</b> from <b>Ingestion Pipeline</b><br><span class="id">cross-site-request-forgery@knowledge-cms@ingestion-pipeline&gt;article-export</span></td><td>Unlikely</td><td>Low</td><td><a href="#asset-knowledge-cms">Knowledge CMS</a>, <a href="#link-ingestion-pipeline_3earticle-export">Article Export</a></td><td><span class="badge status-unchecked">Unchecked</span></td>
 <td><span class="muted">not tracked</span></td></tr>
 </tbody>
 </table>
@@ -2446,7 +2435,7 @@ footer {
 
 <section class="chapter" id="technical-assets">
 <h2>Identified Risks by Technical Asset</h2>
-<p>In total <strong>68 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>10 in-scope technical assets</strong>. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.</p>
+<p>In total <strong>67 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>10 in-scope technical assets</strong>. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.</p>
 <section class="item" id="asset-chat-frontend">
 <h3>Chat Frontend <span class="badge sev-elevated">Elevated</span> <span class="summary">6/6 unmitigated Risks</span></h3>
 <p class="id">chat-frontend</p>
@@ -2602,14 +2591,13 @@ footer {
 </div>
 </section>
 <section class="item" id="asset-knowledge-cms">
-<h3>Knowledge CMS <span class="badge sev-elevated">Elevated</span> <span class="summary">4/4 unmitigated Risks</span></h3>
+<h3>Knowledge CMS <span class="badge sev-elevated">Elevated</span> <span class="summary">3/3 unmitigated Risks</span></h3>
 <p class="id">knowledge-cms</p>
 <div class="text">Where the support team writes and reviews the articles</div>
 <h4>Identified Risks of the Asset</h4>
 <ul>
 <li><span class="badge sev-elevated">Elevated</span> <a href="#risk-cross-site-scripting_40knowledge-cms"><b>Cross-Site Scripting (XSS)</b> risk at <b>Knowledge CMS</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li><span class="badge sev-medium">Medium</span> <a href="#risk-container-baseimage-backdooring_40knowledge-cms"><b>Container Base Image Backdooring</b> risk at <b>Knowledge CMS</b></a> <span class="badge status-unchecked">Unchecked</span></li>
-<li><span class="badge sev-low">Low</span> <a href="#risk-cross-site-request-forgery_40knowledge-cms_40ingestion-pipeline_3earticle-export"><b>Cross-Site Request Forgery (CSRF)</b> risk at <b>Knowledge CMS</b> via <b>Article Export</b> from <b>Ingestion Pipeline</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li><span class="badge sev-low">Low</span> <a href="#risk-missing-waf_40knowledge-cms"><b>Missing Web Application Firewall (WAF)</b> risk at <b>Knowledge CMS</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 </ul>
 <h4>Asset Information</h4>
@@ -3113,7 +3101,7 @@ footer {
 
 <section class="chapter" id="data-assets">
 <h2>Identified Data Breach Probabilities by Data Asset</h2>
-<p>In total <strong>68 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>6 data assets</strong>. The following sections describe the derived data breach probabilities grouped by data asset.</p>
+<p>In total <strong>67 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>6 data assets</strong>. The following sections describe the derived data breach probabilities grouped by data asset.</p>
 <section class="item" id="data-asset-chat-transcripts">
 <h3>Chat Transcripts <span class="badge sev-high">Probable</span> <span class="summary">40/40 unmitigated Risks</span></h3>
 <p class="id">chat-transcripts</p>
@@ -3246,7 +3234,7 @@ footer {
 </ul>
 </section>
 <section class="item" id="data-asset-knowledge-articles">
-<h3>Knowledge Articles <span class="badge sev-high">Probable</span> <span class="summary">34/34 unmitigated Risks</span></h3>
+<h3>Knowledge Articles <span class="badge sev-high">Probable</span> <span class="summary">33/33 unmitigated Risks</span></h3>
 <p class="id">knowledge-articles</p>
 <div class="text">The support articles the assistant answers from</div>
 <div class="table-wrap">
@@ -3270,7 +3258,7 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 34 remaining risks:</p>
+<p>This data asset has data breach potential because of 33 remaining risks:</p>
 <ul>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-confused-deputy-agent_40support-agent"><b>Confused Deputy Agent</b> risk at <b>Support Agent</b> reaching <b>Knowledge Index</b> with its own identity</a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-container-baseimage-backdooring_40ingestion-pipeline"><b>Container Base Image Backdooring</b> risk at <b>Ingestion Pipeline</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -3297,7 +3285,6 @@ footer {
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-server-side-request-forgery_40support-agent_40support-tools_40support-agent_3etool-calls"><b>Server-Side Request Forgery (SSRF)</b> risk at <b>Support Agent</b> server-side web-requesting the target <b>Support Tools</b> via <b>Tool Calls</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-server-side-request-forgery_40support-tools_40order-service_40support-tools_3eorder-api"><b>Server-Side Request Forgery (SSRF)</b> risk at <b>Support Tools</b> server-side web-requesting the target <b>Order Service</b> via <b>Order API</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-server-side-request-forgery_40support-tools_40search-api_40support-tools_3eweb-search"><b>Server-Side Request Forgery (SSRF)</b> risk at <b>Support Tools</b> server-side web-requesting the target <b>Search API</b> via <b>Web Search</b></a> <span class="badge status-unchecked">Unchecked</span></li>
-<li>Improbable: <span class="badge sev-low">Low</span> <a href="#risk-cross-site-request-forgery_40knowledge-cms_40ingestion-pipeline_3earticle-export"><b>Cross-Site Request Forgery (CSRF)</b> risk at <b>Knowledge CMS</b> via <b>Article Export</b> from <b>Ingestion Pipeline</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Improbable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-ai-monitoring_40support-agent"><b>Missing AI Monitoring</b> risk at <b>Support Agent</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Improbable: <span class="badge sev-medium">Medium</span> <a href="#risk-missing-hardening_40knowledge-index"><b>Missing Hardening</b> risk at <b>Knowledge Index</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Improbable: <span class="badge sev-medium">Medium</span> <a href="#risk-missing-hardening_40support-agent"><b>Missing Hardening</b> risk at <b>Support Agent</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -3872,7 +3859,7 @@ footer {
 
 <section class="chapter" id="risk-tracking">
 <h2>Risk Tracking</h2>
-<p><strong>1 of 68 risks</strong> are tracked in the model; the others are unchecked.</p>
+<p><strong>1 of 67 risks</strong> are tracked in the model; the others are unchecked.</p>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Risk</th><th scope="col">Severity</th><th scope="col">Status</th><th scope="col">Date</th><th scope="col">Checked by</th><th scope="col">Ticket</th><th scope="col">Justification</th></tr></thead>
@@ -3892,7 +3879,7 @@ footer {
 <table>
 <thead><tr><th scope="col">Entry</th><th scope="col">Risk rules</th><th scope="col">Risks</th></tr></thead>
 <tbody>
-<tr><th scope="row"><span class="id">A01</span> Broken Access Control</th><td><a href="#category-confused-deputy-agent">Confused Deputy Agent</a>, Cross-Account Takeover, <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>, Missing Identity Propagation, <a href="#category-missing-object-level-authorization">Missing Object-Level Authorization</a>, Path-Traversal, Public Cloud Asset Access, <a href="#category-server-side-request-forgery">Server-Side Request Forgery (SSRF)</a></td><td>16/16 unmitigated Risks</td></tr>
+<tr><th scope="row"><span class="id">A01</span> Broken Access Control</th><td><a href="#category-confused-deputy-agent">Confused Deputy Agent</a>, Cross-Account Takeover, <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>, Missing Identity Propagation, <a href="#category-missing-object-level-authorization">Missing Object-Level Authorization</a>, Path-Traversal, Public Cloud Asset Access, <a href="#category-server-side-request-forgery">Server-Side Request Forgery (SSRF)</a></td><td>15/15 unmitigated Risks</td></tr>
 <tr><th scope="row"><span class="id">A02</span> Security Misconfiguration</th><td>Container Platform Escape, <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>, <a href="#category-missing-hardening">Missing Hardening</a>, Public Cloud Asset Access, <a href="#category-public-cloud-snapshot">Publicly Shared Cloud Snapshot</a>, XML External Entity (XXE)</td><td>8/8 unmitigated Risks</td></tr>
 <tr><th scope="row"><span class="id">A03</span> Software Supply Chain Failures</th><td>Code Backdooring, <a href="#category-container-baseimage-backdooring">Container Base Image Backdooring</a>, <a href="#category-unchecked-deployment">Unchecked Deployment</a></td><td>11/11 unmitigated Risks</td></tr>
 <tr><th scope="row"><span class="id">A04</span> Cryptographic Failures</th><td>Unencrypted Communication, <a href="#category-unencrypted-asset">Unencrypted Technical Assets</a></td><td>2/2 unmitigated Risks</td></tr>
@@ -4023,7 +4010,7 @@ footer {
 <tr><th scope="row">Container Base Image Backdooring<br><span class="id">container-baseimage-backdooring</span></th><td>Tampering</td><td>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors.</td><td>In-scope technical assets running as containers.</td><td>The risk rating depends on the sensitivity of the technical asset itself and of the data assets.</td></tr>
 <tr><th scope="row">Container Platform Escape<br><span class="id">container-platform-escape</span></th><td>Elevation of Privilege</td><td>Container platforms are especially interesting targets for attackers as they host big parts of a containerized runtime infrastructure. When not configured and operated with security best practices in mind, attackers might exploit a vulnerability inside an container and escape towards the platform as highly privileged users. These scenarios might give attackers capabilities to attack every other container as owning the container platform (via container escape attacks) equals to owning every container.</td><td>In-scope container platforms.</td><td>The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.</td></tr>
 <tr><th scope="row">Cross-Account Takeover<br><span class="id">cross-account-takeover</span></th><td>Elevation of Privilege</td><td>Cloud accounts, subscriptions, projects and VPCs isolate workloads and tenants from each other. Access from one of them into another (account A to account B) is granted by cross-account roles, trust policies or resource policies, and a misconfigured grant (too broad principals or rights, or no condition on the calling account) breaks that isolation.</td><td>Communication links into in-scope technical assets from technical assets in another cloud account, i.e. where the innermost trust boundaries of type network-cloud-provider around the source and the target differ.</td><td>The risk rating depends on the sensitivity of the target technical asset itself and of the data assets it processes and stores. The likelihood rises when the source or the target is multi-tenant, as another tenant can then try to abuse the cross-account access.</td></tr>
-<tr><th scope="row">Cross-Site Request Forgery (CSRF)<br><span class="id">cross-site-request-forgery</span></th><td>Spoofing</td><td>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</td><td>In-scope web applications accessed via typical web access protocols.</td><td>The risk rating depends on the integrity rating of the data sent across the communication link. The attack is very likely, likely for DevOps usage, and unlikely when the link is authenticated with a token (<i>token</i>, <i>short-lived-token</i> or <i>long-lived-token</i>), which a browser does not send on its own like a cookie.</td></tr>
+<tr><th scope="row">Cross-Site Request Forgery (CSRF)<br><span class="id">cross-site-request-forgery</span></th><td>Spoofing</td><td>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</td><td>In-scope web applications accessed via typical web access protocols by a caller used by humans or a browser, directly or through technical assets forwarding the traffic, like load balancers, reverse proxies and WAFs. Requests of other callers, like a backend or a batch job, come from no browser a forged request could use, and are skipped.</td><td>The risk rating depends on the integrity rating of the data sent across the communication link. The attack is very likely, likely for DevOps usage, and unlikely when the link is authenticated with a token (<i>token</i>, <i>short-lived-token</i> or <i>long-lived-token</i>), which a browser does not send on its own like a cookie.</td></tr>
 <tr><th scope="row">Cross-Site Scripting (XSS)<br><span class="id">cross-site-scripting</span></th><td>Tampering</td><td>For each web application Cross-Site Scripting (XSS) risks might arise. In terms of the overall risk level take other applications running on the same domain into account as well.</td><td>In-scope web applications.</td><td>The risk rating depends on the sensitivity of the data processed in the web application.</td></tr>
 <tr><th scope="row">Direct IT/OT Communication<br><span class="id">direct-it-ot-communication</span></th><td>Elevation of Privilege</td><td>Controllers, field devices, HMIs, SCADA servers and engineering workstations of an industrial control system belong into control zones that IT assets reach only through an industrial DMZ. A direct communication link between an IT asset and an asset of a control zone lets attackers who compromise the IT side, which is far more exposed, move straight into the control of the physical process.</td><td>In-scope OT technical assets (plc, rtu, safety-controller, field-device, hmi, scada-server, engineering-workstation) with a communication link, in either direction, with a technical asset that is neither an OT asset nor in the industrial DMZ (a historian or an asset tagged with <i>industrial-dmz</i>).</td><td>The risk rating depends on the integrity and availability of the OT asset, and is the highest for safety controllers. The attack is very likely when the other asset is on the internet, and likely otherwise.</td></tr>
 <tr><th scope="row">DoS-risky Access Across Trust-Boundary<br><span class="id">dos-risky-access-across-trust-boundary</span></th><td>Denial of Service</td><td>Assets accessed across trust boundaries with critical or mission-critical availability rating are more prone to Denial-of-Service (DoS) risks.</td><td>In-scope technical assets (excluding load-balancer) with availability rating of critical or higher which have incoming data-flows across a network trust-boundary (excluding devops usage).</td><td>Matching technical assets with availability rating of critical or higher are at low risk. When the availability rating is mission-critical and neither a VPN nor IP filter for the incoming data-flow nor redundancy for the asset is applied, the risk-rating is considered medium.</td></tr>

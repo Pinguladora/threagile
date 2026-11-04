@@ -1373,16 +1373,6 @@
       ],
       "threats": [
         {
-          "threat": "cross-site-request-forgery",
-          "state": "exposed",
-          "mitigations": [
-            {
-              "mitigation": "cross-site-request-forgery-mitigation",
-              "state": "recommended"
-            }
-          ]
-        },
-        {
           "threat": "long-lived-credentials",
           "state": "exposed",
           "mitigations": [
@@ -1426,16 +1416,6 @@
         "internal-business-data"
       ],
       "threats": [
-        {
-          "threat": "cross-site-request-forgery",
-          "state": "exposed",
-          "mitigations": [
-            {
-              "mitigation": "cross-site-request-forgery-mitigation",
-              "state": "recommended"
-            }
-          ]
-        },
         {
           "threat": "dos-risky-access-across-trust-boundary",
           "state": "exposed",

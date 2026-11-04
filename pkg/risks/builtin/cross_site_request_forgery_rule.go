@@ -26,18 +26,21 @@ func (*CrossSiteRequestForgeryRule) Category() *types.RiskCategory {
 			"the same-site flag. " +
 			"When a third-party product is used instead of custom developed software, check if the product applies the proper " +
 			"mitigation and ensure a reasonable patch-level.",
-		Check:          checkCheatSheetAndASVS,
-		Function:       types.Development,
-		STRIDE:         types.Spoofing,
-		DetectionLogic: "In-scope web applications accessed via typical web access protocols.",
+		Check:    checkCheatSheetAndASVS,
+		Function: types.Development,
+		STRIDE:   types.Spoofing,
+		DetectionLogic: "In-scope web applications accessed via typical web access protocols by a caller used by " +
+			"humans or a browser, directly or through technical assets forwarding the traffic, like load balancers, " +
+			"reverse proxies and WAFs. Requests of other callers, like a backend or a batch job, come from no browser " +
+			"a forged request could use, and are skipped.",
 		RiskAssessment: "The risk rating depends on the integrity rating of the data sent across the communication link. " +
 			"The attack is very likely, likely for DevOps usage, and unlikely when the link is authenticated with a token " +
 			"(<i>" + types.Token.String() + "</i>, <i>" + types.ShortLivedToken.String() + "</i> or <i>" +
 			types.LongLivedToken.String() + "</i>), which a browser does not send on its own like a cookie.",
 		FalsePositives: "Web applications passing the authentication state via custom headers instead of cookies can " +
-			"eventually be false positives; model their links with a token authentication. Also when the web application " +
-			"is not accessed via a browser-like component (i.e not by a human user initiating the request that " +
-			"gets passed through all components until it reaches the web application) this can be considered a false positive.",
+			"eventually be false positives; model their links with a token authentication. Clients used by humans that are " +
+			"no browser and render no web content, like a command-line tool, can be considered as false positives " +
+			"after individual review.",
 		ModelFailurePossibleReason: false,
 		CWE:                        cweCrossSiteRequestForgery,
 		References:                 []string{owaspBrokenAccessControl},
@@ -57,13 +60,39 @@ func (r *CrossSiteRequestForgeryRule) GenerateRisks(parsedModel *types.Model) ([
 		}
 		incomingFlows := parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id]
 		for _, incomingFlow := range incomingFlows {
-			if !incomingFlow.Protocol.IsPotentialWebAccessProtocol() {
+			if !incomingFlow.Protocol.IsPotentialWebAccessProtocol() ||
+				!r.comesFromBrowser(parsedModel, incomingFlow, make(map[string]bool)) {
 				continue
 			}
 			risks = append(risks, r.createRisk(parsedModel, technicalAsset, incomingFlow))
 		}
 	}
 	return risks, nil
+}
+
+// comesFromBrowser reports whether the requests of the link can come from the browser of a user, which a forged
+// request needs: its caller is used by humans or is a browser, or forwards the web requests of such a caller, like a
+// load balancer or a reverse proxy does.
+func (r *CrossSiteRequestForgeryRule) comesFromBrowser(
+	parsedModel *types.Model, link *types.CommunicationLink, visited map[string]bool,
+) bool {
+	caller, ok := parsedModel.TechnicalAssets[link.SourceId]
+	if !ok || visited[caller.Id] {
+		return false
+	}
+	if caller.UsedAsClientByHuman || caller.Technologies.GetAttribute(types.Browser) {
+		return true
+	}
+	if !caller.Technologies.GetAttribute(types.IsTrafficForwarding) {
+		return false
+	}
+	visited[caller.Id] = true
+	for _, forwarded := range parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[caller.Id] {
+		if forwarded.Protocol.IsPotentialWebAccessProtocol() && r.comesFromBrowser(parsedModel, forwarded, visited) {
+			return true
+		}
+	}
+	return false
 }
 
 func (csrf *CrossSiteRequestForgeryRule) skipAsset(technicalAsset *types.TechnicalAsset) bool {

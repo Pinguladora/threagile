@@ -42,22 +42,22 @@ Threagile toolkit was used to model the architecture of "AI Support Assistant" a
 
 Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.
 
-In total **68 initial risks** in **29 categories** have been identified during the threat modeling process:
+In total **67 initial risks** in **29 categories** have been identified during the threat modeling process:
 
 | Severity | Risks | Status | Risks |
 | --- | ---: | --- | ---: |
-| Critical | 0 | Unchecked | 67 |
+| Critical | 0 | Unchecked | 66 |
 | High | 0 | In Discussion | 0 |
 | Elevated | 30 | Accepted | 0 |
 | Medium | 29 | In Progress | 1 |
-| Low | 9 | Mitigated | 0 |
+| Low | 8 | Mitigated | 0 |
 |  |  | False Positive | 0 |
 
 The assistant acts for the customers: besides answering, it changes orders and issues refunds.
 
 ## Impact Analysis of the Initial Risks
 
-The most prevalent impacts of the **68 initial risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **67 initial risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Confused Deputy Agent](#confused-deputy-agent): 1 Initial Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -111,7 +111,7 @@ The most prevalent impacts of the **68 initial risks** (distributed over **29 ri
 
     If this risk is unmitigated, attackers might be able to deeply persist in the target system by executing code in deployed containers.
 
-- **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 2 Initial Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
+- **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 1 Initial Risk, exploitation likelihood is _Very Likely_ with _Low_ impact
 
     If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.
 
@@ -159,10 +159,6 @@ The most prevalent impacts of the **68 initial risks** (distributed over **29 ri
 
     If this risk is unmitigated, attackers might deploy a backdoored or tampered model that answers as they want, leaks data or runs code on the systems that load it.
 
-- **Low**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 2 Initial Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
-
-    If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.
-
 - **Low**: [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary): 2 Initial Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
 
     If this risk remains unmitigated, attackers might be able to disturb the availability of important parts of the system.
@@ -189,21 +185,21 @@ The following table gives a high-level overview of the risk tracking status (inc
 | High | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Elevated | 30 | 30 | 0 | 0 | 0 | 0 | 0 |
 | Medium | 29 | 28 | 0 | 0 | 1 | 0 | 0 |
-| Low | 9 | 9 | 0 | 0 | 0 | 0 | 0 |
+| Low | 8 | 8 | 0 | 0 | 0 | 0 | 0 |
 
-After removal of risks with status _mitigated_ and _false positive_ the following **68 remain unmitigated**:
+After removal of risks with status _mitigated_ and _false positive_ the following **67 remain unmitigated**:
 
 | Severity | Unmitigated risks | To be checked by | Unmitigated risks |
 | --- | ---: | --- | ---: |
 | Critical | 0 | Business Side | 1 |
 | High | 0 | Architecture | 12 |
-| Elevated | 30 | Development | 23 |
+| Elevated | 30 | Development | 22 |
 | Medium | 29 | Operations | 32 |
-| Low | 9 |  |  |
+| Low | 8 |  |  |
 
 ## Impact Analysis of the Remaining Risks
 
-The most prevalent impacts of the **68 remaining risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **67 remaining risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Confused Deputy Agent](#confused-deputy-agent): 1 Remaining Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -257,7 +253,7 @@ The most prevalent impacts of the **68 remaining risks** (distributed over **29 
 
     If this risk is unmitigated, attackers might be able to deeply persist in the target system by executing code in deployed containers.
 
-- **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 2 Remaining Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
+- **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 1 Remaining Risk, exploitation likelihood is _Very Likely_ with _Low_ impact
 
     If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.
 
@@ -305,10 +301,6 @@ The most prevalent impacts of the **68 remaining risks** (distributed over **29 
 
     If this risk is unmitigated, attackers might deploy a backdoored or tampered model that answers as they want, leaks data or runs code on the systems that load it.
 
-- **Low**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 2 Remaining Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
-
-    If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.
-
 - **Low**: [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary): 2 Remaining Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
 
     If this risk remains unmitigated, attackers might be able to disturb the availability of important parts of the system.
@@ -327,7 +319,7 @@ The most prevalent impacts of the **68 remaining risks** (distributed over **29 
 
 ## Risks by Severity
 
-All **68 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
+All **67 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
 
 ### Critical
 
@@ -416,11 +408,10 @@ _No risks._
 
 ### Low
 
-**9 risks**
+**8 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
-| Low | [**Cross-Site Request Forgery (CSRF)** risk at **Knowledge CMS** via **Article Export** from **Ingestion Pipeline**](#cross-site-request-forgery-csrf) | [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf) | [Knowledge CMS](#knowledge-cms), [Article Export](#article-export) | Unchecked |
 | Low | [**Denial-of-Service** risky access of **Order Service** by **Support Tools** via **Order API**](#dos-risky-access-across-trust-boundary) | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | [Order Service](#order-service), [Order API](#order-api) | Unchecked |
 | Low | [**Denial-of-Service** risky access of **Support Agent** by **Chat Frontend** via **Assistant Request**](#dos-risky-access-across-trust-boundary) | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | [Support Agent](#support-agent), [Assistant Request](#assistant-request) | Unchecked |
 | Low | [**Missing Network Segmentation** to further encapsulate and protect **Knowledge Index** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) | [Missing Network Segmentation](#missing-network-segmentation) | [Knowledge Index](#knowledge-index) | Unchecked |
@@ -612,11 +603,11 @@ _This list is not complete and regulatory or law relevant abuse cases have to be
 
 ## STRIDE Classification of Identified Risks
 
-This chapter clusters and classifies the risks by STRIDE categories: in total **68 potential risks** have been identified during the threat modeling process.
+This chapter clusters and classifies the risks by STRIDE categories: in total **67 potential risks** have been identified during the threat modeling process.
 
 ### Spoofing
 
-**5 risks**
+**4 risks**
 
 Spoofing - Authenticity
 
@@ -624,7 +615,7 @@ Spoofing - Authenticity
 
     An MCP server, or another server exposing tools to AI agents, acts on the systems behind its tools with its own permissions. When it does not authenticate its callers, anyone who can reach it can call those tools, and it cannot tell one agent or user from another to limit what each may do.
 
-- **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 2/2 unmitigated Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
+- **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 1/1 unmitigated Risk, exploitation likelihood is _Very Likely_ with _Low_ impact
 
     When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.
 
@@ -635,10 +626,6 @@ Spoofing - Authenticity
 - **Medium**: [Missing Identity Store](#missing-identity-store): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     The modeled architecture does not contain an identity store, which might be the risk of a model missing critical assets (and thus not seeing their risks).
-
-- **Low**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 2/2 unmitigated Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
-
-    When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.
 
 ### Tampering
 
@@ -772,7 +759,7 @@ Elevation of privilege - Authorization
 
 ## Assignment by Function
 
-This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **68 potential risks** have been identified during the threat modeling process.
+This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **67 potential risks** have been identified during the threat modeling process.
 
 ### Business Side
 
@@ -836,7 +823,7 @@ Architecture
 
 ### Development
 
-**23 risks**
+**22 risks**
 
 Development
 
@@ -860,11 +847,7 @@ Development
 
     Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
 
-- **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 2/2 unmitigated Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
-
-    Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
-
-- **Low**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 2/2 unmitigated Risks, exploitation likelihood is _Very Likely_ with _Low_ impact
+- **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 1/1 unmitigated Risk, exploitation likelihood is _Very Likely_ with _Low_ impact
 
     Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
 
@@ -1054,7 +1037,7 @@ This chapter lists custom questions that arose during the threat modeling proces
 
 ## Identified Risks by Vulnerability Category
 
-In total **68 potential risks** have been identified during the threat modeling process, distributed across **29 vulnerability categories**. The following sections describe each identified risk category and its risks.
+In total **67 potential risks** have been identified during the threat modeling process, distributed across **29 vulnerability categories**. The following sections describe each identified risk category and its risks.
 
 ### Confused Deputy Agent
 
@@ -1737,7 +1720,7 @@ The risk **Container Base Image Backdooring** was found **10 times** in the anal
 
 ### Cross-Site Request Forgery (CSRF)
 
-**Medium** · 2/2 unmitigated Risks · `cross-site-request-forgery`
+**Medium** · 1/1 unmitigated Risk · `cross-site-request-forgery`
 
 | Property | Value |
 | --- | --- |
@@ -1759,7 +1742,7 @@ If this risk remains unmitigated, attackers might be able to trick logged-in vic
 
 **Detection Logic**
 
-In-scope web applications accessed via typical web access protocols.
+In-scope web applications accessed via typical web access protocols by a caller used by humans or a browser, directly or through technical assets forwarding the traffic, like load balancers, reverse proxies and WAFs. Requests of other callers, like a backend or a batch job, come from no browser a forged request could use, and are skipped.
 
 **Risk Rating**
 
@@ -1767,7 +1750,7 @@ The risk rating depends on the integrity rating of the data sent across the comm
 
 **False Positives**
 
-Web applications passing the authentication state via custom headers instead of cookies can eventually be false positives; model their links with a token authentication. Also when the web application is not accessed via a browser-like component (i.e not by a human user initiating the request that gets passed through all components until it reaches the web application) this can be considered a false positive.
+Web applications passing the authentication state via custom headers instead of cookies can eventually be false positives; model their links with a token authentication. Clients used by humans that are no browser and render no web content, like a command-line tool, can be considered as false positives after individual review.
 
 **Mitigation**
 
@@ -1779,12 +1762,11 @@ Are recommendations from the linked cheat sheet and referenced ASVS chapter appl
 
 **Risk Findings**
 
-The risk **Cross-Site Request Forgery (CSRF)** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+The risk **Cross-Site Request Forgery (CSRF)** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Medium | **Cross-Site Request Forgery (CSRF)** risk at **Chat Frontend** via **Support Chat** from **Customer Browser** | `cross-site-request-forgery@chat-frontend@customer-browser>support-chat` | Very Likely | Low | [Chat Frontend](#chat-frontend), [Support Chat](#support-chat) | Unchecked | _not tracked_ |
-| Low | **Cross-Site Request Forgery (CSRF)** risk at **Knowledge CMS** via **Article Export** from **Ingestion Pipeline** | `cross-site-request-forgery@knowledge-cms@ingestion-pipeline>article-export` | Unlikely | Low | [Knowledge CMS](#knowledge-cms), [Article Export](#article-export) | Unchecked | _not tracked_ |
 
 ### Long-Lived Credentials
 
@@ -2562,7 +2544,7 @@ The risk **Unchecked Deployment** was found **1 time** in the analyzed architect
 
 ## Identified Risks by Technical Asset
 
-In total **68 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
+In total **67 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
 
 ### Chat Frontend
 
@@ -2711,7 +2693,7 @@ Embeds the published support articles into the index
 
 ### Knowledge CMS
 
-**Elevated** · 4/4 unmitigated Risks · `knowledge-cms`
+**Elevated** · 3/3 unmitigated Risks · `knowledge-cms`
 
 Where the support team writes and reviews the articles
 
@@ -2719,7 +2701,6 @@ Where the support team writes and reviews the articles
 
 - **Elevated**: [**Cross-Site Scripting (XSS)** risk at **Knowledge CMS**](#cross-site-scripting-xss) (Unchecked)
 - **Medium**: [**Container Base Image Backdooring** risk at **Knowledge CMS**](#container-base-image-backdooring) (Unchecked)
-- **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Knowledge CMS** via **Article Export** from **Ingestion Pipeline**](#cross-site-request-forgery-csrf) (Unchecked)
 - **Low**: [**Missing Web Application Firewall (WAF)** risk at **Knowledge CMS**](#missing-web-application-firewall-waf) (Unchecked)
 
 **Asset Information**
@@ -3195,7 +3176,7 @@ _The asset was defined as out-of-scope._
 
 ## Identified Data Breach Probabilities by Data Asset
 
-In total **68 potential risks** have been identified during the threat modeling process, distributed across **6 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
+In total **67 potential risks** have been identified during the threat modeling process, distributed across **6 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
 
 ### Chat Transcripts
 
@@ -3328,7 +3309,7 @@ This data asset has data breach potential because of 33 remaining risks:
 
 ### Knowledge Articles
 
-**Probable** · 34/34 unmitigated Risks · `knowledge-articles`
+**Probable** · 33/33 unmitigated Risks · `knowledge-articles`
 
 The support articles the assistant answers from
 
@@ -3351,7 +3332,7 @@ The support articles the assistant answers from
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 34 remaining risks:
+This data asset has data breach potential because of 33 remaining risks:
 
 - Probable, **Elevated**: [**Confused Deputy Agent** risk at **Support Agent** reaching **Knowledge Index** with its own identity](#confused-deputy-agent) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Ingestion Pipeline**](#container-base-image-backdooring) (Unchecked)
@@ -3378,7 +3359,6 @@ This data asset has data breach potential because of 34 remaining risks:
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Support Tools** via **Tool Calls**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Tools** server-side web-requesting the target **Order Service** via **Order API**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Tools** server-side web-requesting the target **Search API** via **Web Search**](#server-side-request-forgery-ssrf) (Unchecked)
-- Improbable, **Low**: [**Cross-Site Request Forgery (CSRF)** risk at **Knowledge CMS** via **Article Export** from **Ingestion Pipeline**](#cross-site-request-forgery-csrf) (Unchecked)
 - Improbable, **Elevated**: [**Missing AI Monitoring** risk at **Support Agent**](#missing-ai-monitoring) (Unchecked)
 - Improbable, **Medium**: [**Missing Hardening** risk at **Knowledge Index**](#missing-hardening) (Unchecked)
 - Improbable, **Medium**: [**Missing Hardening** risk at **Support Agent**](#missing-hardening) (Unchecked)
@@ -3910,7 +3890,7 @@ Looks up orders and issues refunds
 
 ## Risk Tracking
 
-**1 of 68 risks** are tracked in the model; the others are unchecked.
+**1 of 67 risks** are tracked in the model; the others are unchecked.
 
 | Risk | ID | Severity | Status | Date | Checked by | Ticket | Justification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -3926,7 +3906,7 @@ The risk rules checked **10 of 10** entries of the [OWASP Top 10:2025](https://t
 
 | Entry | Risk rules | Risks |
 | --- | --- | --- |
-| `A01` Broken Access Control | [Confused Deputy Agent](#confused-deputy-agent), Cross-Account Takeover, [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf), Missing Identity Propagation, [Missing Object-Level Authorization](#missing-object-level-authorization), Path-Traversal, Public Cloud Asset Access, [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 16/16 unmitigated Risks |
+| `A01` Broken Access Control | [Confused Deputy Agent](#confused-deputy-agent), Cross-Account Takeover, [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf), Missing Identity Propagation, [Missing Object-Level Authorization](#missing-object-level-authorization), Path-Traversal, Public Cloud Asset Access, [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 15/15 unmitigated Risks |
 | `A02` Security Misconfiguration | Container Platform Escape, [Missing Cloud Hardening](#missing-cloud-hardening), [Missing Hardening](#missing-hardening), Public Cloud Asset Access, [Publicly Shared Cloud Snapshot](#publicly-shared-cloud-snapshot), XML External Entity (XXE) | 8/8 unmitigated Risks |
 | `A03` Software Supply Chain Failures | Code Backdooring, [Container Base Image Backdooring](#container-base-image-backdooring), [Unchecked Deployment](#unchecked-deployment) | 11/11 unmitigated Risks |
 | `A04` Cryptographic Failures | Unencrypted Communication, [Unencrypted Technical Assets](#unencrypted-technical-assets) | 2/2 unmitigated Risks |
@@ -4039,7 +4019,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Container Base Image Backdooring | `container-baseimage-backdooring` | Tampering | When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors. | In-scope technical assets running as containers. | The risk rating depends on the sensitivity of the technical asset itself and of the data assets. |
 | Container Platform Escape | `container-platform-escape` | Elevation of Privilege | Container platforms are especially interesting targets for attackers as they host big parts of a containerized runtime infrastructure. When not configured and operated with security best practices in mind, attackers might exploit a vulnerability inside an container and escape towards the platform as highly privileged users. These scenarios might give attackers capabilities to attack every other container as owning the container platform (via container escape attacks) equals to owning every container. | In-scope container platforms. | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. |
 | Cross-Account Takeover | `cross-account-takeover` | Elevation of Privilege | Cloud accounts, subscriptions, projects and VPCs isolate workloads and tenants from each other. Access from one of them into another (account A to account B) is granted by cross-account roles, trust policies or resource policies, and a misconfigured grant (too broad principals or rights, or no condition on the calling account) breaks that isolation. | Communication links into in-scope technical assets from technical assets in another cloud account, i.e. where the innermost trust boundaries of type network-cloud-provider around the source and the target differ. | The risk rating depends on the sensitivity of the target technical asset itself and of the data assets it processes and stores. The likelihood rises when the source or the target is multi-tenant, as another tenant can then try to abuse the cross-account access. |
-| Cross-Site Request Forgery (CSRF) | `cross-site-request-forgery` | Spoofing | When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise. | In-scope web applications accessed via typical web access protocols. | The risk rating depends on the integrity rating of the data sent across the communication link. The attack is very likely, likely for DevOps usage, and unlikely when the link is authenticated with a token (_token_, _short-lived-token_ or _long-lived-token_), which a browser does not send on its own like a cookie. |
+| Cross-Site Request Forgery (CSRF) | `cross-site-request-forgery` | Spoofing | When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise. | In-scope web applications accessed via typical web access protocols by a caller used by humans or a browser, directly or through technical assets forwarding the traffic, like load balancers, reverse proxies and WAFs. Requests of other callers, like a backend or a batch job, come from no browser a forged request could use, and are skipped. | The risk rating depends on the integrity rating of the data sent across the communication link. The attack is very likely, likely for DevOps usage, and unlikely when the link is authenticated with a token (_token_, _short-lived-token_ or _long-lived-token_), which a browser does not send on its own like a cookie. |
 | Cross-Site Scripting (XSS) | `cross-site-scripting` | Tampering | For each web application Cross-Site Scripting (XSS) risks might arise. In terms of the overall risk level take other applications running on the same domain into account as well. | In-scope web applications. | The risk rating depends on the sensitivity of the data processed in the web application. |
 | Direct IT/OT Communication | `direct-it-ot-communication` | Elevation of Privilege | Controllers, field devices, HMIs, SCADA servers and engineering workstations of an industrial control system belong into control zones that IT assets reach only through an industrial DMZ. A direct communication link between an IT asset and an asset of a control zone lets attackers who compromise the IT side, which is far more exposed, move straight into the control of the physical process. | In-scope OT technical assets (plc, rtu, safety-controller, field-device, hmi, scada-server, engineering-workstation) with a communication link, in either direction, with a technical asset that is neither an OT asset nor in the industrial DMZ (a historian or an asset tagged with _industrial-dmz_). | The risk rating depends on the integrity and availability of the OT asset, and is the highest for safety controllers. The attack is very likely when the other asset is on the internet, and likely otherwise. |
 | DoS-risky Access Across Trust-Boundary | `dos-risky-access-across-trust-boundary` | Denial of Service | Assets accessed across trust boundaries with critical or mission-critical availability rating are more prone to Denial-of-Service (DoS) risks. | In-scope technical assets (excluding load-balancer) with availability rating of critical or higher which have incoming data-flows across a network trust-boundary (excluding devops usage). | Matching technical assets with availability rating of critical or higher are at low risk. When the availability rating is mission-critical and neither a VPN nor IP filter for the incoming data-flow nor redundancy for the asset is applied, the risk-rating is considered medium. |
