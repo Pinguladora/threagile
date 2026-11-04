@@ -91,15 +91,17 @@ type fileMigration struct {
 
 func (what *fileMigration) migrateTechnicalAssets(technicalAssets *yaml.Node) {
 	for _, asset := range mappingPairs(technicalAssets) {
+		usedByHumans := mappingValue(asset.value, "used_as_client_by_human")
 		for _, link := range mappingPairs(mappingValue(asset.value, "communication_links")) {
 			where := fmt.Sprintf("%s: technical asset %q communication link %q", what.name, asset.key.Value,
 				link.key.Value)
-			what.migrateLink(where, link.value)
+			what.migrateLink(where, link.value, usedByHumans != nil && usedByHumans.Value == "true")
 		}
 	}
 }
 
-func (what *fileMigration) migrateLink(where string, link *yaml.Node) {
+// migrateLink migrates a communication link of a technical asset, which may be a client that humans use.
+func (what *fileMigration) migrateLink(where string, link *yaml.Node, usedByHumans bool) {
 	if link == nil || link.Kind != yaml.MappingNode {
 		return
 	}
@@ -122,6 +124,10 @@ func (what *fileMigration) migrateLink(where string, link *yaml.Node) {
 		what.migration.Changes = append(what.migration.Changes, fmt.Sprintf("%s: authorization %s is now identity "+
 			"%s, authorization unknown", where, authorization.value.Value, identity))
 		what.migration.identitiesMoved++
+		if usedByHumans && identity == types.ServiceAccount {
+			what.migration.Notes = append(what.migration.Notes, where+": the caller is used by humans, set the "+
+				"identity to end-user if they sign in with their own accounts")
+		}
 	}
 }
 
