@@ -543,9 +543,8 @@ func colorPrefixByDataBreachProbability(probability types.DataBreachProbability,
 }
 
 func (adoc AdocReport) addCategories(f *os.File, risksByCategory map[string][]*types.Risk, initialRisks bool,
-	severity types.RiskSeverity, bothInitialAndRemainingRisks bool, describeDescription bool,
+	severity types.RiskSeverity, bothInitialAndRemainingRisks bool, describeImpact bool, describeDescription bool,
 ) {
-	describeImpact := true
 	riskCategories := getRiskCategories(adoc.model, reduceToSeverityRisk(risksByCategory, initialRisks, severity))
 	sort.Sort(types.ByRiskCategoryTitleSort(riskCategories))
 	for _, riskCategory := range riskCategories {
@@ -664,7 +663,8 @@ func (adoc AdocReport) impactAnalysis(f *os.File, initialRisks bool) int {
 	for _, severity := range []types.RiskSeverity{
 		types.CriticalSeverity, types.HighSeverity, types.ElevatedSeverity, types.MediumSeverity, types.LowSeverity,
 	} {
-		adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, severity, false, false)
+		adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, severity, false, true,
+			false)
 	}
 
 	return count
@@ -1176,7 +1176,7 @@ func (adoc AdocReport) stride(f *os.File) {
 		risksSTRIDE := reduceToSTRIDERisk(adoc.model, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), strideValue)
 		if len(risksSTRIDE) > 0 {
 			for _, critValue := range reverseRiskSeverity {
-				adoc.addCategories(f, risksSTRIDE, true, critValue, true, true)
+				adoc.addCategories(f, risksSTRIDE, true, critValue, true, false, true)
 			}
 		} else {
 			writeLine(f, "No risk identified.")
@@ -1242,7 +1242,7 @@ func (adoc AdocReport) assignmentByFunction(f *os.File) {
 		risksFunction := reduceToFunctionRisk(adoc.model, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(),
 			riskFunctionValue)
 		for _, critValue := range reverseRiskSeverity {
-			adoc.addCategories(f, risksFunction, true, critValue, true, false)
+			adoc.addCategories(f, risksFunction, true, critValue, true, false, false)
 		}
 		writeLine(f, "")
 	}
@@ -1430,11 +1430,11 @@ in the model against the architecture design:{fn-risk-findings}`)
 	if len(modelFailuresByCategory) == 0 {
 		writeLine(f, "No potential model failures have been identified.")
 	} else {
-		adoc.addCategories(f, modelFailuresByCategory, true, types.CriticalSeverity, true, true)
-		adoc.addCategories(f, modelFailuresByCategory, true, types.HighSeverity, true, true)
-		adoc.addCategories(f, modelFailuresByCategory, true, types.ElevatedSeverity, true, true)
-		adoc.addCategories(f, modelFailuresByCategory, true, types.MediumSeverity, true, true)
-		adoc.addCategories(f, modelFailuresByCategory, true, types.LowSeverity, true, true)
+		adoc.addCategories(f, modelFailuresByCategory, true, types.CriticalSeverity, true, false, true)
+		adoc.addCategories(f, modelFailuresByCategory, true, types.HighSeverity, true, false, true)
+		adoc.addCategories(f, modelFailuresByCategory, true, types.ElevatedSeverity, true, false, true)
+		adoc.addCategories(f, modelFailuresByCategory, true, types.MediumSeverity, true, false, true)
+		adoc.addCategories(f, modelFailuresByCategory, true, types.LowSeverity, true, false, true)
 	}
 }
 
