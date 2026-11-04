@@ -1,6 +1,7 @@
 package builtin
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/Pinguladora/threagile/pkg/types"
@@ -258,4 +259,32 @@ func TestAccidentalSecretLeakRuleGenerateRisksAssetWithMayContainSecretsTrueButN
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(risks))
 	assert.Equal(t, types.LowImpact, risks[0].ExploitationImpact)
+}
+
+func TestAccidentalSecretLeakRuleExplainRiskGivesTheMediumImpactReasons(t *testing.T) {
+	rule := NewAccidentalSecretLeakRule()
+	model := &types.Model{
+		TechnicalAssets: map[string]*types.TechnicalAsset{
+			"ta1": {
+				Id: "ta1",
+				Technologies: types.TechnologyList{
+					{
+						Name:       "custom-repository",
+						Attributes: map[string]bool{types.MayContainSecrets: true},
+					},
+				},
+				Confidentiality: types.Confidential,
+				Integrity:       types.Critical,
+			},
+		},
+	}
+
+	risks, err := rule.GenerateRisks(model)
+	assert.Nil(t, err)
+	assert.Len(t, risks, 1)
+
+	explanation := strings.Join(rule.ExplainRisk(model, risks[0].SyntheticId), "\n")
+	assert.Contains(t, explanation, "impact is medium")
+	assert.Contains(t, explanation, "highest confidentiality: confidential (>=confidential)")
+	assert.Contains(t, explanation, "highest integrity: critical (>=critical)")
 }

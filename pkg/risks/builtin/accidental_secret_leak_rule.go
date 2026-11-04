@@ -125,8 +125,7 @@ func (r *AccidentalSecretLeakRule) ExplainRisk(parsedModel *types.Model, risk st
 	for _, id := range parsedModel.SortedTechnicalAssetIDs() {
 		techAsset := parsedModel.TechnicalAssets[id]
 		if strings.EqualFold(risk, categoryId+"@"+techAsset.Id) || strings.EqualFold(risk, categoryId+"@*") {
-			if !techAsset.OutOfScope && (techAsset.Technologies.GetAttribute(types.SourcecodeRepository) ||
-				techAsset.Technologies.GetAttribute(types.ArtifactRegistry)) {
+			if !r.skipAsset(techAsset) {
 				riskExplanation := r.explainRisk(parsedModel, techAsset)
 				if riskExplanation != nil {
 					if len(explanation) > 0 {
@@ -136,10 +135,7 @@ func (r *AccidentalSecretLeakRule) ExplainRisk(parsedModel *types.Model, risk st
 					explanation = append(explanation, []string{
 						fmt.Sprintf("technical asset %q", techAsset.Id),
 						fmt.Sprintf("  - out of scope: %v (=false)", techAsset.OutOfScope),
-						fmt.Sprintf(
-							"  - technology: %v (has either [%q, %q])", techAsset.Technologies.String(), types.SourcecodeRepository,
-							types.ArtifactRegistry,
-						),
+						fmt.Sprintf("  - technology: %v (has %q)", techAsset.Technologies.String(), types.MayContainSecrets),
 					}...)
 
 					if techAsset.IsTaggedWithAny("git") {
@@ -198,19 +194,19 @@ func explainMediumSecretLeakImpact(
 	confidentiality types.Confidentiality, integrity types.Criticality, availability types.Criticality,
 ) []string {
 	explanation := []string{fmt.Sprintf("    - impact is %v because", types.MediumImpact)}
-	if confidentiality == types.StrictlyConfidential {
+	if confidentiality >= types.Confidential {
 		explanation = append(explanation,
 			fmt.Sprintf("     =>  highest confidentiality: %v (>=%v)", confidentiality, types.Confidential),
 		)
 	}
-	if integrity == types.MissionCritical {
+	if integrity >= types.Critical {
 		explanation = append(explanation,
-			fmt.Sprintf("     =>  highest integrity: %v (==%v)", integrity, types.Critical),
+			fmt.Sprintf("     =>  highest integrity: %v (>=%v)", integrity, types.Critical),
 		)
 	}
-	if availability == types.MissionCritical {
+	if availability >= types.Critical {
 		explanation = append(explanation,
-			fmt.Sprintf("     =>  highest availability: %v (==%v)", availability, types.Critical),
+			fmt.Sprintf("     =>  highest availability: %v (>=%v)", availability, types.Critical),
 		)
 	}
 	return explanation
