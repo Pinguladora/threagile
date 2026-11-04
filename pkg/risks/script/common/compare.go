@@ -81,46 +81,50 @@ func compare(firstValue Value, secondValue Value) (*Event, error) {
 		}
 
 	case nil:
-		switch second := secondValue.(type) {
-		case *ArrayValue:
-			if len(second.ArrayValue()) == 0 {
-				return NewEventFrom(NewEqualProperty(second), first, second), nil
-			}
-
-			return NewEventFrom(NewNotEqualProperty(second), first, second), nil
-
-		case *BoolValue:
-			if !second.BoolValue() {
-				return NewEventFrom(NewEqualProperty(second), first, second), nil
-			}
-
-			return NewEventFrom(NewNotEqualProperty(second), first, second), nil
-
-		case *DecimalValue:
-			if second.DecimalValue().IsZero() {
-				return NewEventFrom(NewEqualProperty(second), first, second), nil
-			}
-
-			return NewEventFrom(NewNotEqualProperty(second), first, second), nil
-
-		case *StringValue:
-			if len(second.StringValue()) == 0 {
-				return NewEventFrom(NewEqualProperty(second), first, second), nil
-			}
-
-			return NewEventFrom(NewNotEqualProperty(second), first, second), nil
-
-		case *AnyValue:
-			if second.Value() == nil {
-				return NewEvent(NewEqualProperty(nil), nil), nil
-			}
-
-		case nil:
-			return NewEvent(NewEqualProperty(nil), nil), nil
+		if event, isComparable := compareToNil(secondValue); isComparable {
+			return event, nil
 		}
 	}
 
 	return nil, fmt.Errorf("can't compare %T to %T", firstValue, secondValue)
+}
+
+// compareToNil compares nothing to a value, which nothing equals when it is empty, false, zero or nothing as well.
+func compareToNil(secondValue Value) (*Event, bool) {
+	var isEmpty bool
+	switch second := secondValue.(type) {
+	case *ArrayValue:
+		isEmpty = len(second.ArrayValue()) == 0
+
+	case *BoolValue:
+		isEmpty = !second.BoolValue()
+
+	case *DecimalValue:
+		isEmpty = second.DecimalValue().IsZero()
+
+	case *StringValue:
+		isEmpty = len(second.StringValue()) == 0
+
+	case *AnyValue:
+		if second.Value() != nil {
+			return nil, false
+		}
+
+		return NewEvent(NewEqualProperty(nil), nil), true
+
+	case nil:
+		return NewEvent(NewEqualProperty(nil), nil), true
+
+	default:
+		return nil, false
+	}
+
+	var first Value
+	if isEmpty {
+		return NewEventFrom(NewEqualProperty(secondValue), first, secondValue), true
+	}
+
+	return NewEventFrom(NewNotEqualProperty(secondValue), first, secondValue), true
 }
 
 func compareArrays(firstValue *ArrayValue, secondValue *ArrayValue) (*Event, error) {
