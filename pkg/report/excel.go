@@ -17,6 +17,68 @@ func WriteRisksExcelToFile(parsedModel *types.Model, filename string, config rep
 	excel := excelize.NewFile()
 	sheetName := parsedModel.Title
 
+	sheetIndex, err := setUpRisksSheet(excel, parsedModel, sheetName, columns)
+	if err != nil {
+		return err
+	}
+
+	cellStyles, createCellStylesError := new(ExcelStyles).Init(excel, config)
+	if createCellStylesError != nil {
+		return fmt.Errorf("unable to create cell styles: %w", createCellStylesError)
+	}
+
+	riskItems := risksExcelItems(parsedModel)
+
+	// group risks
+	groupedRisk, groupedRiskError := new(RiskGroup).Make(riskItems, columns, config.GetRiskExcelConfigSortByColumns())
+	if groupedRiskError != nil {
+		return fmt.Errorf("failed to group risks: %w", groupedRiskError)
+	}
+
+	// write data
+	writeError := groupedRisk.Write(excel, sheetName, cellStyles)
+	if writeError != nil {
+		return fmt.Errorf("failed to write data: %w", writeError)
+	}
+
+	// set header style
+	setCellStyleError := excel.SetCellStyle(sheetName, "A1", "T1", cellStyles.headCenterBoldItalic)
+	if setCellStyleError != nil {
+		return fmt.Errorf("unable to set cell style: %w", setCellStyleError)
+	}
+
+	err = formatRisksColumns(excel, sheetName, columns, config)
+	if err != nil {
+		return err
+	}
+
+	excel.SetActiveSheet(sheetIndex)
+
+	lastColumn, err := excelize.ColumnNumberToName(len(columns))
+	if err != nil {
+		return fmt.Errorf("failed to get last column name: %w", err)
+	}
+	lastRow := len(riskItems) + 1
+	filterRange := fmt.Sprintf("A1:%s%d", lastColumn, lastRow)
+	err = excel.AutoFilter(sheetName, filterRange, []excelize.AutoFilterOptions{})
+	if err != nil {
+		return fmt.Errorf("failed to add autofilter: %w", err)
+	}
+
+	// save file
+	saveAsError := excel.SaveAs(filename)
+	if saveAsError != nil {
+		return fmt.Errorf("unable to save excel file: %w", saveAsError)
+	}
+
+	return nil
+}
+
+// setUpRisksSheet sets the document properties, adds the risks sheet with its page layout,
+// header and footer, and writes its header row. It returns the index of the sheet.
+func setUpRisksSheet(excel *excelize.File, parsedModel *types.Model, sheetName string,
+	columns ExcelColumns,
+) (int, error) {
 	setDocPropsError := excel.SetDocProps(&excelize.DocProperties{
 		Category:       "Threat Model Risks Summary",
 		ContentStatus:  "Final",
@@ -32,17 +94,17 @@ func WriteRisksExcelToFile(parsedModel *types.Model, filename string, config rep
 		Version:        "1.0.0",
 	})
 	if setDocPropsError != nil {
-		return fmt.Errorf("failed to set doc properties: %w", setDocPropsError)
+		return 0, fmt.Errorf("failed to set doc properties: %w", setDocPropsError)
 	}
 
 	sheetIndex, newSheetError := excel.NewSheet(sheetName)
 	if newSheetError != nil {
-		return fmt.Errorf("failed to add sheet: %w", newSheetError)
+		return 0, fmt.Errorf("failed to add sheet: %w", newSheetError)
 	}
 
 	deleteSheetError := excel.DeleteSheet("Sheet1")
 	if deleteSheetError != nil {
-		return fmt.Errorf("failed to delete sheet: %w", deleteSheetError)
+		return 0, fmt.Errorf("failed to delete sheet: %w", deleteSheetError)
 	}
 
 	orientation := "landscape"
@@ -50,7 +112,7 @@ func WriteRisksExcelToFile(parsedModel *types.Model, filename string, config rep
 	setPageLayoutError := excel.SetPageLayout(sheetName,
 		&excelize.PageLayoutOptions{Orientation: &orientation, Size: &size})
 	if setPageLayoutError != nil {
-		return fmt.Errorf("unable to set page layout: %w", setPageLayoutError)
+		return 0, fmt.Errorf("unable to set page layout: %w", setPageLayoutError)
 	}
 
 	setHeaderFooterError := excel.SetHeaderFooter(sheetName, &excelize.HeaderFooterOptions{
@@ -63,23 +125,21 @@ func WriteRisksExcelToFile(parsedModel *types.Model, filename string, config rep
 		FirstHeader:      `&Threat Model &"-,` + parsedModel.Title + `"Bold&"-,Regular"Risks Summary+000A&D`,
 	})
 	if setHeaderFooterError != nil {
-		return fmt.Errorf("unable to set header/footer: %w", setHeaderFooterError)
+		return 0, fmt.Errorf("unable to set header/footer: %w", setHeaderFooterError)
 	}
 
 	// set header row (in column order: the shared strings table numbers the strings as they are first written)
 	for _, columnLetter := range columns.SortedLetters() {
 		setCellValueError := excel.SetCellValue(sheetName, columnLetter+"1", columns[columnLetter].Title)
 		if setCellValueError != nil {
-			return fmt.Errorf("unable to set cell value: %w", setCellValueError)
+			return 0, fmt.Errorf("unable to set cell value: %w", setCellValueError)
 		}
 	}
+	return sheetIndex, nil
+}
 
-	cellStyles, createCellStylesError := new(ExcelStyles).Init(excel, config)
-	if createCellStylesError != nil {
-		return fmt.Errorf("unable to create cell styles: %w", createCellStylesError)
-	}
-
-	// get sorted risks
+// risksExcelItems returns a row of the risks sheet for each risk, sorted by category.
+func risksExcelItems(parsedModel *types.Model) []RiskItem {
 	riskItems := make([]RiskItem, 0)
 	for _, category := range parsedModel.SortedRiskCategories() {
 		risks := parsedModel.SortedRisksOfCategory(category)
@@ -113,25 +173,12 @@ func WriteRisksExcelToFile(parsedModel *types.Model, filename string, config rep
 			})
 		}
 	}
+	return riskItems
+}
 
-	// group risks
-	groupedRisk, groupedRiskError := new(RiskGroup).Make(riskItems, columns, config.GetRiskExcelConfigSortByColumns())
-	if groupedRiskError != nil {
-		return fmt.Errorf("failed to group risks: %w", groupedRiskError)
-	}
-
-	// write data
-	writeError := groupedRisk.Write(excel, sheetName, cellStyles)
-	if writeError != nil {
-		return fmt.Errorf("failed to write data: %w", writeError)
-	}
-
-	// set header style
-	setCellStyleError := excel.SetCellStyle(sheetName, "A1", "T1", cellStyles.headCenterBoldItalic)
-	if setCellStyleError != nil {
-		return fmt.Errorf("unable to set cell style: %w", setCellStyleError)
-	}
-
+// formatRisksColumns sets the column widths of the risks sheet, hides the columns that are
+// configured to be hidden and freezes the header row.
+func formatRisksColumns(excel *excelize.File, sheetName string, columns ExcelColumns, config reportConfigReader) error {
 	// fix column width
 	cols, colsError := excel.GetCols(sheetName)
 	if colsError == nil {
@@ -141,49 +188,7 @@ func WriteRisksExcelToFile(parsedModel *types.Model, filename string, config rep
 				return fmt.Errorf("failed to get column name of column %d: %w", colIndex+1, columnNumberToNameError)
 			}
 
-			var minWidth float64 = 0
-			width, widthOk := config.GetRiskExcelConfigWidthOfColumns()[columns[name].Title]
-			if widthOk {
-				minWidth = width
-			} else {
-				var largestWidth float64 = 0
-				for rowIndex, rowCell := range col {
-					cellWidth := float64(utf8.RuneCountInString(rowCell) + 2) // + 2 for margin
-
-					cellName, coordinateError := excelize.CoordinatesToCellName(colIndex+1, rowIndex+1)
-					if coordinateError == nil {
-						style, styleError := excel.GetCellStyle(sheetName, cellName)
-						if styleError == nil {
-							styleDetails, detailsError := excel.GetStyle(style)
-							if detailsError == nil {
-								if styleDetails.Font != nil && styleDetails.Font.Size > 0 {
-									cellWidth *= styleDetails.Font.Size / 14.
-								}
-							}
-						}
-					}
-
-					cellWidth += 5 // add some extra width for auto filter
-
-					if cellWidth > largestWidth {
-						largestWidth = cellWidth
-					}
-				}
-
-				for columnLetter := range columns {
-					if strings.EqualFold(columnLetter, name) {
-						minWidth = columns[columnLetter].Width
-					}
-				}
-
-				if largestWidth < 100 {
-					minWidth = largestWidth
-				}
-
-				if minWidth < 8 {
-					minWidth = 8
-				}
-			}
+			minWidth := risksColumnWidth(excel, sheetName, columns, config, colIndex, name, col)
 
 			setColWidthError := excel.SetColWidth(sheetName, name, name, minWidth)
 			if setColWidthError != nil {
@@ -216,27 +221,65 @@ func WriteRisksExcelToFile(parsedModel *types.Model, filename string, config rep
 	if freezeError != nil {
 		return fmt.Errorf("unable to freeze header: %w", freezeError)
 	}
-
-	excel.SetActiveSheet(sheetIndex)
-
-	lastColumn, err := excelize.ColumnNumberToName(len(columns))
-	if err != nil {
-		return fmt.Errorf("failed to get last column name: %w", err)
-	}
-	lastRow := len(riskItems) + 1
-	filterRange := fmt.Sprintf("A1:%s%d", lastColumn, lastRow)
-	err = excel.AutoFilter(sheetName, filterRange, []excelize.AutoFilterOptions{})
-	if err != nil {
-		return fmt.Errorf("failed to add autofilter: %w", err)
-	}
-
-	// save file
-	saveAsError := excel.SaveAs(filename)
-	if saveAsError != nil {
-		return fmt.Errorf("unable to save excel file: %w", saveAsError)
-	}
-
 	return nil
+}
+
+// risksColumnWidth returns the width of the named column of the risks sheet: the configured
+// one, or else one that fits the cells of the column.
+func risksColumnWidth(excel *excelize.File, sheetName string, columns ExcelColumns, config reportConfigReader,
+	colIndex int, name string, col []string,
+) float64 {
+	var minWidth float64 = 0
+	width, widthOk := config.GetRiskExcelConfigWidthOfColumns()[columns[name].Title]
+	if widthOk {
+		minWidth = width
+	} else {
+		var largestWidth float64 = 0
+		for rowIndex, rowCell := range col {
+			cellWidth := risksCellWidth(excel, sheetName, colIndex, rowIndex, rowCell)
+
+			cellWidth += 5 // add some extra width for auto filter
+
+			if cellWidth > largestWidth {
+				largestWidth = cellWidth
+			}
+		}
+
+		for columnLetter := range columns {
+			if strings.EqualFold(columnLetter, name) {
+				minWidth = columns[columnLetter].Width
+			}
+		}
+
+		if largestWidth < 100 {
+			minWidth = largestWidth
+		}
+
+		if minWidth < 8 {
+			minWidth = 8
+		}
+	}
+	return minWidth
+}
+
+// risksCellWidth returns the width that the text of a cell of the risks sheet needs, scaled by
+// the font size of the cell.
+func risksCellWidth(excel *excelize.File, sheetName string, colIndex int, rowIndex int, rowCell string) float64 {
+	cellWidth := float64(utf8.RuneCountInString(rowCell) + 2) // + 2 for margin
+
+	cellName, coordinateError := excelize.CoordinatesToCellName(colIndex+1, rowIndex+1)
+	if coordinateError == nil {
+		style, styleError := excel.GetCellStyle(sheetName, cellName)
+		if styleError == nil {
+			styleDetails, detailsError := excel.GetStyle(style)
+			if detailsError == nil {
+				if styleDetails.Font != nil && styleDetails.Font.Size > 0 {
+					cellWidth *= styleDetails.Font.Size / 14.
+				}
+			}
+		}
+	}
+	return cellWidth
 }
 
 // WriteTagsExcelToFile writes the tag matrix of the model as an Excel sheet. A model
@@ -245,78 +288,16 @@ func WriteTagsExcelToFile(parsedModel *types.Model, filename string, config repo
 	excelRow := 0
 	excel := excelize.NewFile()
 	sheetName := parsedModel.Title
-	err := excel.SetDocProps(&excelize.DocProperties{
-		Category:       "Tag Matrix",
-		ContentStatus:  "Final",
-		Creator:        parsedModel.Author.Name,
-		Description:    sheetName + " via Threagile",
-		Identifier:     "xlsx",
-		Keywords:       "Tag Matrix",
-		LastModifiedBy: parsedModel.Author.Name,
-		Revision:       "0",
-		Subject:        sheetName,
-		Title:          sheetName,
-		Language:       "en-US",
-		Version:        "1.0.0",
-	})
+	sheetIndex, err := setUpTagsSheet(excel, parsedModel, sheetName)
 	if err != nil {
-		return fmt.Errorf("failed to set doc properties: %w", err)
-	}
-
-	sheetIndex, _ := excel.NewSheet(sheetName)
-	_ = excel.DeleteSheet("Sheet1")
-	orientation := "landscape"
-	size := 9
-	err = excel.SetPageLayout(sheetName, &excelize.PageLayoutOptions{Orientation: &orientation, Size: &size}) // A4
-	if err != nil {
-		return fmt.Errorf("unable to set page layout: %w", err)
-	}
-
-	err = excel.SetHeaderFooter(sheetName, &excelize.HeaderFooterOptions{
-		DifferentFirst:   false,
-		DifferentOddEven: false,
-		OddHeader:        "&R&P",
-		OddFooter:        "&C&F",
-		EvenHeader:       "&L&P",
-		EvenFooter:       "&L&D&R&T",
-		FirstHeader:      `&Tag Matrix &"-,` + parsedModel.Title + `"Bold&"-,Regular"Summary+000A&D`,
-	})
-	if err != nil {
-		return fmt.Errorf("unable to set header/footer: %w", err)
-	}
-
-	// "Element" is a generic name for assets, links, trust boundaries etc.; a separate
-	// "type of element" column (e.g. "technical asset", "data asset") could be added.
-	err = excel.SetCellValue(sheetName, "A1", "Element")
-	if err != nil {
-		return fmt.Errorf("unable to set cell value: %w", err)
+		return err
 	}
 
 	sortedTagsAvailable := parsedModel.TagsActuallyUsed()
 	sort.Strings(sortedTagsAvailable)
-	for i, tag := range sortedTagsAvailable {
-		cellName, coordinatesToCellNameError := excelize.CoordinatesToCellName(i+2, 1)
-		if coordinatesToCellNameError != nil {
-			return fmt.Errorf("failed to get cell coordinates from [%d, %d]: %w", i+2, 1, coordinatesToCellNameError)
-		}
-
-		err = excel.SetCellValue(sheetName, cellName, tag)
-		if err != nil {
-			return fmt.Errorf("unable to set cell value: %w", err)
-		}
-	}
-
-	err = excel.SetColWidth(sheetName, "A", "A", 60)
+	lastColumn, err := writeTagsHeader(excel, sheetName, sortedTagsAvailable)
 	if err != nil {
-		return fmt.Errorf("unable to set column width: %w", err)
-	}
-
-	lastColumn, _ := excelize.ColumnNumberToName(len(sortedTagsAvailable) + 2)
-	if len(sortedTagsAvailable) > 0 {
-		err = excel.SetColWidth(sheetName, "B", lastColumn, 35)
-	}
-	if err != nil {
-		return fmt.Errorf("unable to set column width: %w", err)
+		return err
 	}
 
 	cellStyles, createCellStylesError := new(ExcelStyles).Init(excel, config)
@@ -326,40 +307,9 @@ func WriteTagsExcelToFile(parsedModel *types.Model, filename string, config repo
 
 	excelRow++ // as we have a header line
 	if len(sortedTagsAvailable) > 0 {
-		for _, techAsset := range sortedTechnicalAssetsByTitle(parsedModel) {
-			err := writeRow(excel, &excelRow, sheetName, lastColumn, cellStyles.blackLeftBold, cellStyles.blackCenter,
-				sortedTagsAvailable, techAsset.Title, techAsset.Tags)
-			if err != nil {
-				return fmt.Errorf("unable to write row: %w", err)
-			}
-			for _, commLink := range techAsset.CommunicationLinksSorted() {
-				err := writeRow(excel, &excelRow, sheetName, lastColumn, cellStyles.blackLeftBold, cellStyles.blackCenter,
-					sortedTagsAvailable, commLink.Title, commLink.Tags)
-				if err != nil {
-					return fmt.Errorf("unable to write row: %w", err)
-				}
-			}
-		}
-		for _, dataAsset := range sortedDataAssetsByTitle(parsedModel) {
-			err := writeRow(excel, &excelRow, sheetName, lastColumn, cellStyles.blackLeftBold, cellStyles.blackCenter,
-				sortedTagsAvailable, dataAsset.Title, dataAsset.Tags)
-			if err != nil {
-				return fmt.Errorf("unable to write row: %w", err)
-			}
-		}
-		for _, trustBoundary := range sortedTrustBoundariesByTitle(parsedModel) {
-			err := writeRow(excel, &excelRow, sheetName, lastColumn, cellStyles.blackLeftBold, cellStyles.blackCenter,
-				sortedTagsAvailable, trustBoundary.Title, trustBoundary.Tags)
-			if err != nil {
-				return fmt.Errorf("unable to write row: %w", err)
-			}
-		}
-		for _, sharedRuntime := range sortedSharedRuntimesByTitle(parsedModel) {
-			err := writeRow(excel, &excelRow, sheetName, lastColumn, cellStyles.blackLeftBold, cellStyles.blackCenter,
-				sortedTagsAvailable, sharedRuntime.Title, sharedRuntime.Tags)
-			if err != nil {
-				return fmt.Errorf("unable to write row: %w", err)
-			}
+		err = writeTagRows(excel, &excelRow, sheetName, lastColumn, cellStyles, parsedModel, sortedTagsAvailable)
+		if err != nil {
+			return err
 		}
 	}
 
@@ -379,8 +329,132 @@ func WriteTagsExcelToFile(parsedModel *types.Model, filename string, config repo
 	return nil
 }
 
-func writeRow(excel *excelize.File, excelRow *int, sheetName string, _ string, styleBlackLeftBold int, styleBlackCenter int,
-	sortedTags []string, assetTitle string, tagsUsed []string,
+// setUpTagsSheet sets the document properties and adds the tags sheet with its page layout,
+// header and footer. It returns the index of the sheet.
+func setUpTagsSheet(excel *excelize.File, parsedModel *types.Model, sheetName string) (int, error) {
+	err := excel.SetDocProps(&excelize.DocProperties{
+		Category:       "Tag Matrix",
+		ContentStatus:  "Final",
+		Creator:        parsedModel.Author.Name,
+		Description:    sheetName + " via Threagile",
+		Identifier:     "xlsx",
+		Keywords:       "Tag Matrix",
+		LastModifiedBy: parsedModel.Author.Name,
+		Revision:       "0",
+		Subject:        sheetName,
+		Title:          sheetName,
+		Language:       "en-US",
+		Version:        "1.0.0",
+	})
+	if err != nil {
+		return 0, fmt.Errorf("failed to set doc properties: %w", err)
+	}
+
+	sheetIndex, _ := excel.NewSheet(sheetName)
+	_ = excel.DeleteSheet("Sheet1")
+	orientation := "landscape"
+	size := 9
+	err = excel.SetPageLayout(sheetName, &excelize.PageLayoutOptions{Orientation: &orientation, Size: &size}) // A4
+	if err != nil {
+		return 0, fmt.Errorf("unable to set page layout: %w", err)
+	}
+
+	err = excel.SetHeaderFooter(sheetName, &excelize.HeaderFooterOptions{
+		DifferentFirst:   false,
+		DifferentOddEven: false,
+		OddHeader:        "&R&P",
+		OddFooter:        "&C&F",
+		EvenHeader:       "&L&P",
+		EvenFooter:       "&L&D&R&T",
+		FirstHeader:      `&Tag Matrix &"-,` + parsedModel.Title + `"Bold&"-,Regular"Summary+000A&D`,
+	})
+	if err != nil {
+		return 0, fmt.Errorf("unable to set header/footer: %w", err)
+	}
+	return sheetIndex, nil
+}
+
+// writeTagsHeader writes the header row of the tags sheet and sets the column widths. It returns
+// the name of the last column.
+func writeTagsHeader(excel *excelize.File, sheetName string, sortedTagsAvailable []string) (string, error) {
+	// "Element" is a generic name for assets, links, trust boundaries etc.; a separate
+	// "type of element" column (e.g. "technical asset", "data asset") could be added.
+	err := excel.SetCellValue(sheetName, "A1", "Element")
+	if err != nil {
+		return "", fmt.Errorf("unable to set cell value: %w", err)
+	}
+
+	for i, tag := range sortedTagsAvailable {
+		cellName, coordinatesToCellNameError := excelize.CoordinatesToCellName(i+2, 1)
+		if coordinatesToCellNameError != nil {
+			return "", fmt.Errorf("failed to get cell coordinates from [%d, %d]: %w", i+2, 1, coordinatesToCellNameError)
+		}
+
+		err = excel.SetCellValue(sheetName, cellName, tag)
+		if err != nil {
+			return "", fmt.Errorf("unable to set cell value: %w", err)
+		}
+	}
+
+	err = excel.SetColWidth(sheetName, "A", "A", 60)
+	if err != nil {
+		return "", fmt.Errorf("unable to set column width: %w", err)
+	}
+
+	lastColumn, _ := excelize.ColumnNumberToName(len(sortedTagsAvailable) + 2)
+	if len(sortedTagsAvailable) > 0 {
+		err = excel.SetColWidth(sheetName, "B", lastColumn, 35)
+	}
+	if err != nil {
+		return "", fmt.Errorf("unable to set column width: %w", err)
+	}
+	return lastColumn, nil
+}
+
+// writeTagRows writes a row of the tags sheet for each technical asset with its communication
+// links, each data asset, trust boundary and shared runtime.
+func writeTagRows(excel *excelize.File, excelRow *int, sheetName string, lastColumn string, cellStyles *ExcelStyles,
+	parsedModel *types.Model, sortedTagsAvailable []string,
+) error {
+	for _, row := range tagRows(parsedModel) {
+		err := writeRow(excel, excelRow, sheetName, lastColumn, cellStyles.blackLeftBold, cellStyles.blackCenter,
+			sortedTagsAvailable, row.title, row.tags)
+		if err != nil {
+			return fmt.Errorf("unable to write row: %w", err)
+		}
+	}
+	return nil
+}
+
+// tagRow is the title and the tags of a model element in the tags sheet.
+type tagRow struct {
+	title string
+	tags  []string
+}
+
+// tagRows returns the rows of the tags sheet in the order they are written.
+func tagRows(parsedModel *types.Model) []tagRow {
+	rows := make([]tagRow, 0)
+	for _, techAsset := range sortedTechnicalAssetsByTitle(parsedModel) {
+		rows = append(rows, tagRow{techAsset.Title, techAsset.Tags})
+		for _, commLink := range techAsset.CommunicationLinksSorted() {
+			rows = append(rows, tagRow{commLink.Title, commLink.Tags})
+		}
+	}
+	for _, dataAsset := range sortedDataAssetsByTitle(parsedModel) {
+		rows = append(rows, tagRow{dataAsset.Title, dataAsset.Tags})
+	}
+	for _, trustBoundary := range sortedTrustBoundariesByTitle(parsedModel) {
+		rows = append(rows, tagRow{trustBoundary.Title, trustBoundary.Tags})
+	}
+	for _, sharedRuntime := range sortedSharedRuntimesByTitle(parsedModel) {
+		rows = append(rows, tagRow{sharedRuntime.Title, sharedRuntime.Tags})
+	}
+	return rows
+}
+
+func writeRow(excel *excelize.File, excelRow *int, sheetName string, _ string,
+	styleBlackLeftBold int, styleBlackCenter int, sortedTags []string, assetTitle string, tagsUsed []string,
 ) error {
 	*excelRow++
 
@@ -394,18 +468,9 @@ func writeRow(excel *excelize.File, excelRow *int, sheetName string, _ string, s
 		return fmt.Errorf("unable to write row: %w", err)
 	}
 
-	for i, tag := range sortedTags {
-		if contains(tagsUsed, tag) {
-			cellName, coordinatesToCellNameError := excelize.CoordinatesToCellName(i+2, *excelRow)
-			if coordinatesToCellNameError != nil {
-				return fmt.Errorf("failed to get cell coordinates from [%d, %d]: %w", i+2, *excelRow, coordinatesToCellNameError)
-			}
-
-			err = excel.SetCellValue(sheetName, cellName, "X")
-			if err != nil {
-				return fmt.Errorf("unable to write row: %w", err)
-			}
-		}
+	err = markUsedTags(excel, *excelRow, sheetName, sortedTags, tagsUsed)
+	if err != nil {
+		return err
 	}
 
 	err = excel.SetCellStyle(sheetName, firstCellName, firstCellName, styleBlackLeftBold)
@@ -429,6 +494,24 @@ func writeRow(excel *excelize.File, excelRow *int, sheetName string, _ string, s
 		return fmt.Errorf("unable to write row: %w", err)
 	}
 
+	return nil
+}
+
+// markUsedTags writes an X into the cell of each tag of the row that is in use.
+func markUsedTags(excel *excelize.File, excelRow int, sheetName string, sortedTags []string, tagsUsed []string) error {
+	for i, tag := range sortedTags {
+		if contains(tagsUsed, tag) {
+			cellName, coordinatesToCellNameError := excelize.CoordinatesToCellName(i+2, excelRow)
+			if coordinatesToCellNameError != nil {
+				return fmt.Errorf("failed to get cell coordinates from [%d, %d]: %w", i+2, excelRow, coordinatesToCellNameError)
+			}
+
+			err := excel.SetCellValue(sheetName, cellName, "X")
+			if err != nil {
+				return fmt.Errorf("unable to write row: %w", err)
+			}
+		}
+	}
 	return nil
 }
 
