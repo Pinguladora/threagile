@@ -1,6 +1,7 @@
 package macros
 
 import (
+	"slices"
 	"strings"
 
 	"github.com/Pinguladora/threagile/pkg/input"
@@ -231,7 +232,7 @@ func (change *vaultChange) logChange(text string) {
 }
 
 func (change *vaultChange) addConfigurationSecrets() {
-	if _, exists := change.parsedModel.DataAssets["Configuration Secrets"]; exists {
+	if _, exists := change.parsedModel.DataAssets[configurationSecretsDataAsset]; exists {
 		return
 	}
 	dataAsset := input.DataAsset{
@@ -419,6 +420,9 @@ func (change *vaultChange) addClientAccess(clientID string, authentication strin
 	}
 	// don't forget to also add the "configuration-secrets" data asset as processed on the client
 	assetsProcessed := change.modelInput.TechnicalAssets[clientAssetTitle].DataAssetsProcessed
+	if slices.Contains(assetsProcessed, configurationSecretsDataAsset) {
+		return
+	}
 	mergedArrays := make([]string, 0, len(assetsProcessed)+1)
 	mergedArrays = append(mergedArrays, assetsProcessed...)
 	mergedArrays = append(mergedArrays, configurationSecretsDataAsset)

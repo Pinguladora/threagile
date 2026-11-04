@@ -78,3 +78,21 @@ func TestAddVaultToAClientWithoutLinks(t *testing.T) {
 		t.Errorf("processed %q", app.DataAssetsProcessed)
 	}
 }
+
+func TestAddVaultKeepsTheConfigurationSecrets(t *testing.T) {
+	modelInput, parsedModel := vaultModel()
+	modelInput.DataAssets["Configuration Secrets"] = input.DataAsset{ID: configurationSecretsDataAsset, Description: "ours"}
+	parsedModel.DataAssets[configurationSecretsDataAsset] = &types.DataAsset{Id: configurationSecretsDataAsset}
+	app := modelInput.TechnicalAssets["App"]
+	app.DataAssetsProcessed = []string{configurationSecretsDataAsset}
+	modelInput.TechnicalAssets["App"] = app
+
+	addVault(t, modelInput, parsedModel)
+
+	if description := modelInput.DataAssets["Configuration Secrets"].Description; description != "ours" {
+		t.Errorf("the configuration secrets were replaced: %q", description)
+	}
+	if processed := modelInput.TechnicalAssets["App"].DataAssetsProcessed; len(processed) != 1 {
+		t.Errorf("processed %q", processed)
+	}
+}
