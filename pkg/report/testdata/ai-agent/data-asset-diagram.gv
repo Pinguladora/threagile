@@ -1,0 +1,120 @@
+digraph generatedModel { concentrate=true 
+	graph [
+		dpi=100
+		fontname="Verdana"
+		labelloc="c"
+		fontsize="20"
+		splines=false
+		rankdir="LR"
+		nodesep=1.0
+		ranksep=3.0
+        outputorder="nodesfirst"
+	];
+	node [
+		fontcolor="white"
+		fontname="Verdana"
+		fontsize="20"
+	];
+	edge [
+		shape="none"
+		fontname="Verdana"
+		fontsize="18"
+	];
+  351167582 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Support Tools</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  1299996772 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Support Agent</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  967243492 [ shape="box" style="filled" fillcolor="#7F7F7F"
+				label=<<b>Search API</b>> penwidth="3.0" color="#7F7F7F" ];
+				
+  1312838741 [ shape="box" style="filled" fillcolor="#C87832"
+				label=<<b>Orders Database</b>> penwidth="3.0" color="#C87832" ];
+				
+  1556212517 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Order Service</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  1251095166 [ shape="box" style="filled" fillcolor="#C87832"
+				label=<<b>Model Registry</b>> penwidth="3.0" color="#C87832" ];
+				
+  752644550 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Knowledge Index</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  1305071387 [ shape="box" style="filled" fillcolor="#C87832"
+				label=<<b>Knowledge CMS</b>> penwidth="3.0" color="#C87832" ];
+				
+  1505061542 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Ingestion Pipeline</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  2062127004 [ shape="box" style="filled" fillcolor="#7F7F7F"
+				label=<<b>Hosted LLM</b>> penwidth="3.0" color="#7F7F7F" ];
+				
+  981300970 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Guardrail Model</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  2799826308 [ shape="box" style="filled" fillcolor="#7F7F7F"
+				label=<<b>Customer Browser</b>> penwidth="3.0" color="#7F7F7F" ];
+				
+  1593086170 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Chat Frontend</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  1483139401 [ label=<<b>Chat Transcripts</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  3261121732 [ label=<<b>Customer Data</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  1347841121 [ label=<<b>Knowledge Articles</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  1321031310 [ label=<<b>Model Weights</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  2917860942 [ label=<<b>Order Data</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  2166819553 [ label=<<b>Web Content</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+
+2917860942 -> 351167582 [ color="#666666" style="dashed" ];
+
+3261121732 -> 351167582 [ color="#666666" style="dashed" ];
+
+2166819553 -> 351167582 [ color="#666666" style="dashed" ];
+
+1483139401 -> 1299996772 [ color="#666666" style="dashed" ];
+
+3261121732 -> 1299996772 [ color="#666666" style="dashed" ];
+
+2917860942 -> 1299996772 [ color="#666666" style="dashed" ];
+
+1347841121 -> 1299996772 [ color="#666666" style="dashed" ];
+
+2166819553 -> 967243492 [ color="#666666" style="dashed" ];
+
+2917860942 -> 1312838741 [ color="blue" style="solid" ];
+
+3261121732 -> 1312838741 [ color="blue" style="solid" ];
+
+2917860942 -> 1556212517 [ color="#666666" style="dashed" ];
+
+3261121732 -> 1556212517 [ color="#666666" style="dashed" ];
+
+1321031310 -> 1251095166 [ color="blue" style="solid" ];
+
+1347841121 -> 752644550 [ color="blue" style="solid" ];
+
+1483139401 -> 752644550 [ color="blue" style="solid" ];
+
+1347841121 -> 1305071387 [ color="blue" style="solid" ];
+
+1347841121 -> 1505061542 [ color="#666666" style="dashed" ];
+
+1483139401 -> 2062127004 [ color="#666666" style="dashed" ];
+
+3261121732 -> 2062127004 [ color="#666666" style="dashed" ];
+
+1483139401 -> 981300970 [ color="#666666" style="dashed" ];
+
+1321031310 -> 981300970 [ color="#666666" style="dashed" ];
+
+1483139401 -> 2799826308 [ color="#666666" style="dashed" ];
+
+1483139401 -> 1593086170 [ color="#666666" style="dashed" ];
+}

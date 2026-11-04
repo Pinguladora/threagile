@@ -5,3 +5,6 @@ package threagile
 var ValidateSchema = func(schema map[string]any, document any) []string {
 	return validateSchema(schema, schema, document, "")
 }
+
+// DemoModels lets the tests of package threagile_test read the demo models.
+var DemoModels = demoModels

@@ -1,0 +1,771 @@
+{
+  "chat-frontend": {
+    "id": "chat-frontend",
+    "title": "Chat Frontend",
+    "description": "The support chat page and its backend for frontend",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "web-application",
+        "description": "A web application",
+        "aliases": [
+          "web-app"
+        ],
+        "attributes": {
+          "http_internet_access_ok": true,
+          "less_protected_type": true,
+          "processing_end_user_requests": true,
+          "propagate_identity_to_outgoing_targets": true,
+          "web-application": true,
+          "web_application": true
+        }
+      }
+    ],
+    "machine": "container",
+    "custom_developed_parts": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "important",
+    "availability": "important",
+    "justification_cia_rating": "Handles the conversations of the customers",
+    "data_assets_processed": [
+      "chat-transcripts"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "chat-frontend\u003eassistant-request",
+        "source_id": "chat-frontend",
+        "target_id": "support-agent",
+        "title": "Assistant Request",
+        "description": "Forwards the messages of a customer to the assistant",
+        "protocol": "https",
+        "authentication": "token",
+        "authorization": "end-user-identity-propagation",
+        "data_assets_sent": [
+          "chat-transcripts"
+        ],
+        "data_assets_received": [
+          "chat-transcripts"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 25.134935207005064
+  },
+  "customer-browser": {
+    "id": "customer-browser",
+    "title": "Customer Browser",
+    "description": "The web browsers of the customers using the support chat",
+    "usage": "business",
+    "type": "external-entity",
+    "size": "system",
+    "technologies": [
+      {
+        "name": "browser",
+        "description": "A web browser",
+        "aliases": [
+          "web-browser"
+        ],
+        "attributes": {
+          "browser": true,
+          "client": true,
+          "frontend_related": true,
+          "less_protected_type": true,
+          "propagate_identity_to_outgoing_targets": true
+        }
+      }
+    ],
+    "machine": "physical",
+    "internet": true,
+    "out_of_scope": true,
+    "used_as_client_by_human": true,
+    "encryption": "none",
+    "justification_out_of_scope": "Owned and managed by the customers",
+    "owner": "Customers",
+    "confidentiality": "confidential",
+    "integrity": "important",
+    "availability": "important",
+    "justification_cia_rating": "Devices of the customers",
+    "data_assets_processed": [
+      "chat-transcripts"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "customer-browser\u003esupport-chat",
+        "source_id": "customer-browser",
+        "target_id": "chat-frontend",
+        "title": "Support Chat",
+        "description": "The customers chat with the assistant",
+        "protocol": "https",
+        "authentication": "session-id",
+        "authorization": "end-user-identity-propagation",
+        "data_assets_sent": [
+          "chat-transcripts"
+        ],
+        "data_assets_received": [
+          "chat-transcripts"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 1
+  },
+  "guardrail-model": {
+    "id": "guardrail-model",
+    "title": "Guardrail Model",
+    "description": "A small self-hosted model fine-tuned to classify harmful content",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "llm",
+        "description": "A large language model (LLM), self-hosted or used as a service",
+        "aliases": [
+          "large-language-model",
+          "foundation-model",
+          "llm-service",
+          "llm-api"
+        ],
+        "attributes": {
+          "ai": true,
+          "backend_related": true,
+          "llm": true
+        }
+      }
+    ],
+    "machine": "container",
+    "custom_developed_parts": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "critical",
+    "availability": "important",
+    "justification_cia_rating": "Lets requests and answers through or blocks them",
+    "data_assets_processed": [
+      "chat-transcripts",
+      "model-weights"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "guardrail-model\u003emodel-pull",
+        "source_id": "guardrail-model",
+        "target_id": "model-registry",
+        "title": "Model Pull",
+        "description": "Loads the current model version at start",
+        "protocol": "https",
+        "readonly": true,
+        "authentication": "token",
+        "authorization": "technical-user",
+        "data_assets_received": [
+          "model-weights"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 26.23574144486692
+  },
+  "hosted-llm": {
+    "id": "hosted-llm",
+    "title": "Hosted LLM",
+    "description": "The language model of a provider, used through its API",
+    "usage": "business",
+    "type": "external-entity",
+    "size": "system",
+    "technologies": [
+      {
+        "name": "llm",
+        "description": "A large language model (LLM), self-hosted or used as a service",
+        "aliases": [
+          "large-language-model",
+          "foundation-model",
+          "llm-service",
+          "llm-api"
+        ],
+        "attributes": {
+          "ai": true,
+          "backend_related": true,
+          "llm": true
+        }
+      }
+    ],
+    "machine": "virtual",
+    "internet": true,
+    "out_of_scope": true,
+    "encryption": "none",
+    "justification_out_of_scope": "Operated by the model provider under contract",
+    "owner": "Model Provider",
+    "confidentiality": "confidential",
+    "integrity": "critical",
+    "availability": "important",
+    "justification_cia_rating": "Sees the conversations",
+    "data_assets_processed": [
+      "chat-transcripts",
+      "customer-data"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 1
+  },
+  "ingestion-pipeline": {
+    "id": "ingestion-pipeline",
+    "title": "Ingestion Pipeline",
+    "description": "Embeds the published support articles into the index",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "batch-processing",
+        "description": "A set of tools automatically processing data",
+        "attributes": {
+          "backend_related": true,
+          "batch-processing": true
+        }
+      }
+    ],
+    "machine": "container",
+    "custom_developed_parts": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "internal",
+    "integrity": "important",
+    "availability": "important",
+    "justification_cia_rating": "Fills the knowledge index",
+    "data_assets_processed": [
+      "knowledge-articles"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "ingestion-pipeline\u003earticle-export",
+        "source_id": "ingestion-pipeline",
+        "target_id": "knowledge-cms",
+        "title": "Article Export",
+        "description": "Reads the published articles",
+        "protocol": "https",
+        "readonly": true,
+        "authentication": "token",
+        "authorization": "technical-user",
+        "data_assets_received": [
+          "knowledge-articles"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      },
+      {
+        "id": "ingestion-pipeline\u003eembedding-upsert",
+        "source_id": "ingestion-pipeline",
+        "target_id": "knowledge-index",
+        "title": "Embedding Upsert",
+        "description": "Writes the embeddings of the articles",
+        "protocol": "https",
+        "authentication": "token",
+        "authorization": "technical-user",
+        "data_assets_sent": [
+          "knowledge-articles"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 16.263547735739035
+  },
+  "knowledge-cms": {
+    "id": "knowledge-cms",
+    "title": "Knowledge CMS",
+    "description": "Where the support team writes and reviews the articles",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "cms",
+        "description": "Content Management System",
+        "aliases": [
+          "content-management-system"
+        ],
+        "attributes": {
+          "cms": true,
+          "frontend_related": true,
+          "less_protected_type": true,
+          "propagate_identity_to_outgoing_targets": true,
+          "web_application": true
+        }
+      }
+    ],
+    "machine": "container",
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "internal",
+    "integrity": "important",
+    "availability": "important",
+    "justification_cia_rating": "Source of the articles",
+    "data_assets_processed": [
+      "knowledge-articles"
+    ],
+    "data_assets_stored": [
+      "knowledge-articles"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 14.353612167300382
+  },
+  "knowledge-index": {
+    "id": "knowledge-index",
+    "title": "Knowledge Index",
+    "description": "Embeddings of the support articles and the memory of the agent",
+    "usage": "business",
+    "type": "datastore",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "vector-database",
+        "description": "A database of embeddings for semantic search and retrieval-augmented generation (RAG)",
+        "aliases": [
+          "vector-store",
+          "vector-db",
+          "embedding-store"
+        ],
+        "attributes": {
+          "backend_related": true,
+          "vector-database": true
+        }
+      }
+    ],
+    "machine": "container",
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "important",
+    "availability": "important",
+    "justification_cia_rating": "Holds summaries of conversations",
+    "data_assets_processed": [
+      "knowledge-articles",
+      "chat-transcripts"
+    ],
+    "data_assets_stored": [
+      "knowledge-articles",
+      "chat-transcripts"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 68.8212927756654
+  },
+  "model-registry": {
+    "id": "model-registry",
+    "title": "Model Registry",
+    "description": "Stores the versions of the guardrail model",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "model-registry",
+        "description": "A registry to store and distribute machine learning models",
+        "aliases": [
+          "ml-model-registry",
+          "model-hub",
+          "model-repository"
+        ],
+        "attributes": {
+          "development_relevant": true,
+          "less_protected_type": true,
+          "model-registry": true
+        }
+      }
+    ],
+    "machine": "container",
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "critical",
+    "availability": "important",
+    "justification_cia_rating": "Holds the model weights",
+    "data_assets_processed": [
+      "model-weights"
+    ],
+    "data_assets_stored": [
+      "model-weights"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 20.912547528517113
+  },
+  "order-service": {
+    "id": "order-service",
+    "title": "Order Service",
+    "description": "Manages orders and refunds",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "web-service-rest",
+        "description": "A REST web service (API)",
+        "aliases": [
+          "rest-api"
+        ],
+        "attributes": {
+          "backend_related": true,
+          "less_protected_type": true,
+          "processing_end_user_requests": true,
+          "propagate_identity_to_outgoing_targets": true,
+          "web-service-rest": true,
+          "web_service": true
+        }
+      }
+    ],
+    "machine": "container",
+    "custom_developed_parts": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "critical",
+    "availability": "critical",
+    "justification_cia_rating": "Moves money",
+    "data_assets_processed": [
+      "order-data",
+      "customer-data"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "order-service\u003eorder-storage",
+        "source_id": "order-service",
+        "target_id": "orders-db",
+        "title": "Order Storage",
+        "description": "Reads and writes the orders",
+        "protocol": "jdbc-encrypted",
+        "authentication": "credentials",
+        "authorization": "technical-user",
+        "data_assets_sent": [
+          "order-data"
+        ],
+        "data_assets_received": [
+          "order-data",
+          "customer-data"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 46.06157864553967
+  },
+  "orders-db": {
+    "id": "orders-db",
+    "title": "Orders Database",
+    "description": "Orders, payments and customers",
+    "usage": "business",
+    "type": "datastore",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "database",
+        "description": "A database",
+        "aliases": [
+          "db"
+        ],
+        "attributes": {
+          "backend_related": true,
+          "database": true,
+          "storing_end_user_data": true,
+          "vulnerable_to_query_injection": true
+        }
+      }
+    ],
+    "machine": "container",
+    "encryption": "transparent",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "critical",
+    "availability": "critical",
+    "justification_cia_rating": "Holds the orders and the customer data",
+    "data_assets_processed": [
+      "order-data",
+      "customer-data"
+    ],
+    "data_assets_stored": [
+      "order-data",
+      "customer-data"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 100
+  },
+  "search-api": {
+    "id": "search-api",
+    "title": "Search API",
+    "description": "A web search service",
+    "usage": "business",
+    "type": "external-entity",
+    "size": "system",
+    "technologies": [
+      {
+        "name": "web-service-rest",
+        "description": "A REST web service (API)",
+        "aliases": [
+          "rest-api"
+        ],
+        "attributes": {
+          "backend_related": true,
+          "less_protected_type": true,
+          "processing_end_user_requests": true,
+          "propagate_identity_to_outgoing_targets": true,
+          "web-service-rest": true,
+          "web_service": true
+        }
+      }
+    ],
+    "machine": "virtual",
+    "internet": true,
+    "out_of_scope": true,
+    "encryption": "none",
+    "justification_out_of_scope": "Operated by the search provider",
+    "owner": "Search Provider",
+    "confidentiality": "public",
+    "integrity": "operational",
+    "availability": "operational",
+    "justification_cia_rating": "Public web content",
+    "data_assets_processed": [
+      "web-content"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 1
+  },
+  "support-agent": {
+    "id": "support-agent",
+    "title": "Support Agent",
+    "description": "Answers support questions, looks up orders and issues refunds through its tools",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "ai-agent",
+        "description": "An AI agent that plans with a language model and acts through tools",
+        "aliases": [
+          "agent",
+          "agentic-ai",
+          "llm-agent",
+          "autonomous-agent"
+        ],
+        "attributes": {
+          "ai": true,
+          "ai-agent": true,
+          "backend_related": true,
+          "processing_end_user_requests": true,
+          "propagate_identity_to_outgoing_targets": true
+        }
+      }
+    ],
+    "machine": "container",
+    "custom_developed_parts": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "critical",
+    "availability": "critical",
+    "justification_cia_rating": "Acts on orders and refunds",
+    "data_assets_processed": [
+      "chat-transcripts",
+      "customer-data",
+      "order-data",
+      "knowledge-articles"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "support-agent\u003ecompletion",
+        "source_id": "support-agent",
+        "target_id": "hosted-llm",
+        "title": "Completion",
+        "description": "Plans the next step and writes the answers",
+        "protocol": "https",
+        "authentication": "credentials",
+        "authorization": "technical-user",
+        "data_assets_sent": [
+          "chat-transcripts",
+          "customer-data"
+        ],
+        "data_assets_received": [
+          "chat-transcripts"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      },
+      {
+        "id": "support-agent\u003ememory-write",
+        "source_id": "support-agent",
+        "target_id": "knowledge-index",
+        "title": "Memory Write",
+        "description": "Stores summaries of resolved conversations as memory",
+        "protocol": "https",
+        "authentication": "token",
+        "authorization": "technical-user",
+        "data_assets_sent": [
+          "chat-transcripts"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      },
+      {
+        "id": "support-agent\u003emoderation",
+        "source_id": "support-agent",
+        "target_id": "guardrail-model",
+        "title": "Moderation",
+        "description": "Checks requests and answers for harmful content",
+        "protocol": "https",
+        "authentication": "token",
+        "authorization": "technical-user",
+        "data_assets_sent": [
+          "chat-transcripts"
+        ],
+        "data_assets_received": [
+          "chat-transcripts"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      },
+      {
+        "id": "support-agent\u003eretrieval",
+        "source_id": "support-agent",
+        "target_id": "knowledge-index",
+        "title": "Retrieval",
+        "description": "Retrieves the articles matching a question",
+        "protocol": "https",
+        "readonly": true,
+        "authentication": "token",
+        "authorization": "technical-user",
+        "data_assets_received": [
+          "knowledge-articles"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      },
+      {
+        "id": "support-agent\u003etool-calls",
+        "source_id": "support-agent",
+        "target_id": "support-tools",
+        "title": "Tool Calls",
+        "description": "Calls the order, refund and web search tools",
+        "protocol": "https",
+        "data_assets_sent": [
+          "order-data"
+        ],
+        "data_assets_received": [
+          "order-data",
+          "customer-data"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 87.3574144486692
+  },
+  "support-tools": {
+    "id": "support-tools",
+    "title": "Support Tools",
+    "description": "MCP server exposing the order, refund and web search tools to the agent",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "mcp-server",
+        "description": "A Model Context Protocol (MCP) server or another server exposing tools to AI agents",
+        "aliases": [
+          "model-context-protocol-server",
+          "tool-server",
+          "agent-tool-server"
+        ],
+        "attributes": {
+          "backend_related": true,
+          "mcp-server": true
+        }
+      }
+    ],
+    "machine": "container",
+    "custom_developed_parts": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "critical",
+    "availability": "critical",
+    "justification_cia_rating": "Changes orders and issues refunds",
+    "data_assets_processed": [
+      "order-data",
+      "customer-data",
+      "web-content"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "support-tools\u003eorder-api",
+        "source_id": "support-tools",
+        "target_id": "order-service",
+        "title": "Order API",
+        "description": "Looks up orders and issues refunds",
+        "protocol": "https",
+        "authentication": "token",
+        "authorization": "technical-user",
+        "data_assets_sent": [
+          "order-data"
+        ],
+        "data_assets_received": [
+          "order-data",
+          "customer-data"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      },
+      {
+        "id": "support-tools\u003eweb-search",
+        "source_id": "support-tools",
+        "target_id": "search-api",
+        "title": "Web Search",
+        "description": "Searches the web for product information",
+        "protocol": "https",
+        "readonly": true,
+        "authentication": "credentials",
+        "authorization": "technical-user",
+        "data_assets_received": [
+          "web-content"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 49.334600760456276
+  }
+}

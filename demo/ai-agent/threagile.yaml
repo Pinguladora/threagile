@@ -1,0 +1,699 @@
+threagile_version: 1.0.0
+
+# An AI support assistant: an agent that answers customers from a knowledge index (RAG), remembers resolved
+# conversations, and acts on orders through the tools of an MCP server. It shows the AI technologies (llm,
+# ai-agent, vector-database, mcp-server and model-registry) and the risks the AI rules find for them.
+
+title: AI Support Assistant
+
+date: 2026-11-04
+
+author:
+  name: John Doe
+  homepage: www.example.com
+
+management_summary_comment: >
+  The assistant acts for the customers: besides answering, it changes orders and issues refunds.
+
+business_criticality: critical
+
+business_overview:
+  description: Customers get answers and refunds in the support chat at any time, without waiting for an agent.
+  images: []
+
+technical_overview:
+  description: >
+    The support agent plans with a hosted language model, checks requests and answers with a self-hosted guardrail
+    model, retrieves articles from a vector index and calls tools through an MCP server.
+  images: []
+
+questions:
+  Which actions of the agent need a human approval?: ""
+  How is the knowledge index kept free of untrusted content?: ""
+
+abuse_cases:
+  Refund Fraud: >
+    As a customer I want to talk the assistant into refunding an order I have received, to keep the goods and
+    get the money back.
+  Data Theft: >
+    As an attacker I want to make the assistant reveal the orders and addresses of other customers.
+  Memory Poisoning: >
+    As an attacker I want to plant instructions in the memory of the agent, so that it follows them in the
+    conversations of other customers.
+
+security_requirements:
+  Least Agency: The agent may only act on the orders of the customer it talks to.
+  Human Approval: Refunds above a limit need the approval of a support employee.
+
+tags_available:
+  - human-in-the-loop
+
+data_assets:
+
+  Chat Transcripts:
+    id: chat-transcripts
+    description: The conversations of the customers with the assistant
+    usage: business
+    tags: []
+    origin: Customers
+    owner: Some Company
+    quantity: many
+    confidentiality: confidential
+    integrity: important
+    availability: important
+    justification_cia_rating: Customers share personal details and order problems in the chat
+
+  Customer Data:
+    id: customer-data
+    description: Names, addresses and contact details of the customers
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: confidential
+    integrity: critical
+    availability: important
+    justification_cia_rating: Personal data of the customers
+
+  Order Data:
+    id: order-data
+    description: Orders, payments and refunds
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Refunds move money, so wrong order data costs the company directly
+
+  Knowledge Articles:
+    id: knowledge-articles
+    description: The support articles the assistant answers from
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Wrong articles make the assistant give wrong answers
+
+  Web Content:
+    id: web-content
+    description: Product information found on the web
+    usage: business
+    tags: []
+    origin: The internet
+    owner: Some Company
+    quantity: many
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Public pages
+
+  Model Weights:
+    id: model-weights
+    description: The weights of the self-hosted guardrail model
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: few
+    confidentiality: confidential
+    integrity: critical
+    availability: important
+    justification_cia_rating: A tampered guardrail model lets harmful requests and answers through
+
+technical_assets:
+
+  Customer Browser:
+    id: customer-browser
+    description: The web browsers of the customers using the support chat
+    type: external-entity
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: true
+    justification_out_of_scope: Owned and managed by the customers
+    size: system
+    technology: browser
+    tags: []
+    internet: true
+    machine: physical
+    encryption: none
+    owner: Customers
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Devices of the customers
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [chat-transcripts]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Support Chat:
+        target: chat-frontend
+        description: The customers chat with the assistant
+        protocol: https
+        authentication: session-id
+        authorization: end-user-identity-propagation
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chat-transcripts]
+        data_assets_received: [chat-transcripts]
+
+  Chat Frontend:
+    id: chat-frontend
+    description: The support chat page and its backend for frontend
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: web-application
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: important
+    availability: important
+    justification_cia_rating: Handles the conversations of the customers
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chat-transcripts]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Assistant Request:
+        target: support-agent
+        description: Forwards the messages of a customer to the assistant
+        protocol: https
+        authentication: token
+        authorization: end-user-identity-propagation
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chat-transcripts]
+        data_assets_received: [chat-transcripts]
+
+  Support Agent:
+    id: support-agent
+    description: Answers support questions, looks up orders and issues refunds through its tools
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: ai-agent
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: important
+    justification_cia_rating: Acts on orders and refunds
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chat-transcripts, customer-data, order-data, knowledge-articles]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Completion:
+        target: hosted-llm
+        description: Plans the next step and writes the answers
+        protocol: https
+        authentication: credentials
+        authorization: technical-user
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chat-transcripts, customer-data]
+        data_assets_received: [chat-transcripts]
+      Moderation:
+        target: guardrail-model
+        description: Checks requests and answers for harmful content
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chat-transcripts]
+        data_assets_received: [chat-transcripts]
+      Retrieval:
+        target: knowledge-index
+        description: Retrieves the articles matching a question
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: []
+        data_assets_received: [knowledge-articles]
+      Memory Write:
+        target: knowledge-index
+        description: Stores summaries of resolved conversations as memory
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chat-transcripts]
+        data_assets_received: []
+      Tool Calls:
+        target: support-tools
+        description: Calls the order, refund and web search tools
+        protocol: https
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [order-data]
+        data_assets_received: [order-data, customer-data]
+
+  Hosted LLM:
+    id: hosted-llm
+    description: The language model of a provider, used through its API
+    type: external-entity
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: true
+    justification_out_of_scope: Operated by the model provider under contract
+    size: system
+    technology: llm
+    tags: []
+    internet: true
+    machine: virtual
+    encryption: none
+    owner: Model Provider
+    confidentiality: confidential
+    integrity: important
+    availability: important
+    justification_cia_rating: Sees the conversations
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [chat-transcripts, customer-data]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Guardrail Model:
+    id: guardrail-model
+    description: A small self-hosted model fine-tuned to classify harmful content
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: llm
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: important
+    justification_cia_rating: Lets requests and answers through or blocks them
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chat-transcripts]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Model Pull:
+        target: model-registry
+        description: Loads the current model version at start
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: []
+        data_assets_received: [model-weights]
+
+  Model Registry:
+    id: model-registry
+    description: Stores the versions of the guardrail model
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: model-registry
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: important
+    justification_cia_rating: Holds the model weights
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: [model-weights]
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Knowledge Index:
+    id: knowledge-index
+    description: Embeddings of the support articles and the memory of the agent
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: vector-database
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: important
+    availability: important
+    justification_cia_rating: Holds summaries of conversations
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: [knowledge-articles, chat-transcripts]
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Ingestion Pipeline:
+    id: ingestion-pipeline
+    description: Embeds the published support articles into the index
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: batch-processing
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Fills the knowledge index
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [knowledge-articles]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Article Export:
+        target: knowledge-cms
+        description: Reads the published articles
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: []
+        data_assets_received: [knowledge-articles]
+      Embedding Upsert:
+        target: knowledge-index
+        description: Writes the embeddings of the articles
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [knowledge-articles]
+        data_assets_received: []
+
+  Knowledge CMS:
+    id: knowledge-cms
+    description: Where the support team writes and reviews the articles
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: cms
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Source of the articles
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: [knowledge-articles]
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Support Tools:
+    id: support-tools
+    description: MCP server exposing the order, refund and web search tools to the agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: mcp-server
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: important
+    justification_cia_rating: Changes orders and issues refunds
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [order-data, customer-data, web-content]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Order API:
+        target: order-service
+        description: Looks up orders and issues refunds
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [order-data]
+        data_assets_received: [order-data, customer-data]
+      Web Search:
+        target: search-api
+        description: Searches the web for product information
+        protocol: https
+        authentication: credentials
+        authorization: technical-user
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: []
+        data_assets_received: [web-content]
+
+  Search API:
+    id: search-api
+    description: A web search service
+    type: external-entity
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: true
+    justification_out_of_scope: Operated by the search provider
+    size: system
+    technology: web-service-rest
+    tags: []
+    internet: true
+    machine: virtual
+    encryption: none
+    owner: Search Provider
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Public web content
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [web-content]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Order Service:
+    id: order-service
+    description: Manages orders and refunds
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: web-service-rest
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Moves money
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [order-data, customer-data]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Order Storage:
+        target: orders-db
+        description: Reads and writes the orders
+        protocol: jdbc-encrypted
+        authentication: credentials
+        authorization: technical-user
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [order-data]
+        data_assets_received: [order-data, customer-data]
+
+  Orders Database:
+    id: orders-db
+    description: Orders, payments and customers
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: database
+    tags: []
+    internet: false
+    machine: container
+    encryption: transparent
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Holds the orders and the customer data
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: [order-data, customer-data]
+    data_formats_accepted: [json]
+    communication_links: {}
+
+trust_boundaries:
+
+  Cloud Account:
+    id: cloud-account
+    description: The cloud account of the support system
+    type: network-cloud-provider
+    tags: []
+    technical_assets_inside: []
+    trust_boundaries_nested:
+      - frontend-subnet
+      - agent-subnet
+      - backend-subnet
+
+  Frontend Subnet:
+    id: frontend-subnet
+    description: Reachable from the internet through the load balancer
+    type: network-cloud-security-group
+    tags: []
+    technical_assets_inside:
+      - chat-frontend
+    trust_boundaries_nested: []
+
+  Agent Subnet:
+    id: agent-subnet
+    description: The assistant and its models, index and tools
+    type: network-cloud-security-group
+    tags: []
+    technical_assets_inside:
+      - support-agent
+      - guardrail-model
+      - model-registry
+      - knowledge-index
+      - ingestion-pipeline
+      - support-tools
+    trust_boundaries_nested: []
+
+  Backend Subnet:
+    id: backend-subnet
+    description: The order system and the content management
+    type: network-cloud-security-group
+    tags: []
+    technical_assets_inside:
+      - order-service
+      - orders-db
+      - knowledge-cms
+    trust_boundaries_nested: []
+
+shared_runtimes: {}
+
+risk_tracking:
+
+  model-supply-chain@guardrail-model:
+    status: in-progress
+    justification: Signing the model versions in the training pipeline and verifying them at start
+    ticket: AI-42
+    date: 2026-11-04
+    checked_by: John Doe

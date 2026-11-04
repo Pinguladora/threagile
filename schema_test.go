@@ -133,9 +133,9 @@ func TestSchemaEnumsMatchGoTypes(t *testing.T) {
 func TestBundledModelsMatchSchema(t *testing.T) {
 	schema := readSchema(t)
 
-	for _, model := range []Asset{ExampleModel, StubModel} {
+	for model, content := range demoModels(t) {
 		var document any
-		if err := yaml.Unmarshal(model.Bytes(), &document); err != nil {
+		if err := yaml.Unmarshal(content, &document); err != nil {
 			t.Fatalf("parsing %s: %v", model, err)
 		}
 
@@ -152,6 +152,23 @@ func TestBundledModelsMatchSchema(t *testing.T) {
 				t.Errorf("%s: key %q is not in the schema", model, key)
 			}
 		}
+	}
+}
+
+// aiAgentModel is the demo model of an AI system, which is not bundled into the binary.
+const aiAgentModel = "demo/ai-agent/threagile.yaml"
+
+// demoModels returns the content of the demo models by name: the bundled ones and the AI agent demo.
+func demoModels(t *testing.T) map[string][]byte {
+	t.Helper()
+	aiAgent, err := os.ReadFile(aiAgentModel)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return map[string][]byte{
+		string(ExampleModel): ExampleModel.Bytes(),
+		string(StubModel):    StubModel.Bytes(),
+		aiAgentModel:         aiAgent,
 	}
 }
 

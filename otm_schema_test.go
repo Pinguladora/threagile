@@ -26,9 +26,9 @@ func TestOTMOutputMatchesSchema(t *testing.T) {
 		t.Fatalf("the schema is %v, want %v, the version threagile writes", schema["$id"], want)
 	}
 
-	for _, bundled := range []root.Asset{root.ExampleModel, root.StubModel} {
+	for bundled, content := range root.DemoModels(t) {
 		modelFile := filepath.Join(t.TempDir(), "threagile.yaml")
-		if err := os.WriteFile(modelFile, bundled.Bytes(), 0o600); err != nil {
+		if err := os.WriteFile(modelFile, content, 0o600); err != nil {
 			t.Fatal(err)
 		}
 

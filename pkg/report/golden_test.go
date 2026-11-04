@@ -26,9 +26,19 @@ import (
 // update rewrites the golden files from the current output: go test ./pkg/report -run TestGoldenOutputs -update.
 var update = flag.Bool("update", false, "rewrite the golden files under testdata")
 
+// goldenModel is a demo model whose outputs are compared against the golden files in its folder under testdata.
+type goldenModel struct {
+	file string
+	dir  string
+}
+
+var (
+	exampleModel = goldenModel{file: "../../demo/example/threagile.yaml", dir: "testdata/example"}
+	aiAgentModel = goldenModel{file: "../../demo/ai-agent/threagile.yaml", dir: "testdata/ai-agent"}
+	goldenModels = []goldenModel{exampleModel, aiAgentModel}
+)
+
 const (
-	exampleModelFile = "../../demo/example/threagile.yaml"
-	goldenDir        = "testdata/example"
 	// determinismRuns is how many times the determinism test generates the outputs; Go picks a
 	// new map iteration order every time, so more runs catch an unsorted map more reliably.
 	determinismRuns = 4
@@ -50,7 +60,16 @@ var goldenFiles = []string{
 var executionTimestamp = regexp.MustCompile(`(Threagile Execution Timestamp: *\| )\d{14}`)
 
 func TestGoldenOutputs(t *testing.T) {
-	outputs := generateOutputs(t)
+	for _, golden := range goldenModels {
+		t.Run(filepath.Base(golden.dir), func(t *testing.T) {
+			testGoldenOutputs(t, golden)
+		})
+	}
+}
+
+func testGoldenOutputs(t *testing.T, golden goldenModel) {
+	t.Helper()
+	outputs := generateOutputs(t, golden)
 
 	for _, name := range goldenFiles {
 		t.Run(name, func(t *testing.T) {
@@ -60,9 +79,9 @@ func TestGoldenOutputs(t *testing.T) {
 				got = indentJSON(t, got)
 			}
 
-			goldenFile := filepath.Join(goldenDir, name)
+			goldenFile := filepath.Join(golden.dir, name)
 			if *update {
-				require.NoError(t, os.MkdirAll(goldenDir, 0o750))
+				require.NoError(t, os.MkdirAll(golden.dir, 0o750))
 				require.NoError(t, os.WriteFile(goldenFile, got, 0o600))
 				return
 			}
@@ -76,11 +95,20 @@ func TestGoldenOutputs(t *testing.T) {
 
 // TestOutputsAreDeterministic catches nondeterminism even when the golden files get regenerated.
 func TestOutputsAreDeterministic(t *testing.T) {
-	first := generateOutputs(t)
+	for _, golden := range goldenModels {
+		t.Run(filepath.Base(golden.dir), func(t *testing.T) {
+			testOutputsAreDeterministic(t, golden)
+		})
+	}
+}
+
+func testOutputsAreDeterministic(t *testing.T, golden goldenModel) {
+	t.Helper()
+	first := generateOutputs(t, golden)
 	require.NotEmpty(t, first)
 
 	for run := 2; run <= determinismRuns; run++ {
-		next := generateOutputs(t)
+		next := generateOutputs(t, golden)
 		require.Equal(t, slices.Sorted(maps.Keys(first)), slices.Sorted(maps.Keys(next)), "run %d wrote other files than run 1", run)
 		for _, name := range slices.Sorted(maps.Keys(first)) {
 			if !bytes.Equal(first[name], next[name]) {
@@ -90,10 +118,10 @@ func TestOutputsAreDeterministic(t *testing.T) {
 	}
 }
 
-// generateOutputs analyzes the example model and writes every output but the PDF report and the
+// generateOutputs analyzes a demo model and writes every output but the PDF report and the
 // PNG diagrams, the same way report.Generate does. It returns the written files by path relative
 // to the output folder, with the execution timestamp of the AsciiDoc report normalised.
-func generateOutputs(t *testing.T) map[string][]byte {
+func generateOutputs(t *testing.T, golden goldenModel) map[string][]byte {
 	t.Helper()
 	// the HTML and Markdown reports record when they were generated
 	t.Setenv("SOURCE_DATE_EPOCH", "1700000000")
@@ -103,7 +131,7 @@ func generateOutputs(t *testing.T) map[string][]byte {
 	config := new(threagile.Config).Defaults("")
 	config.SetAppFolder(t.TempDir())
 	config.SetPluginFolder(t.TempDir())
-	config.SetInputFile(exampleModelFile)
+	config.SetInputFile(golden.file)
 	config.SetOutputFolder(outputDir)
 	config.SetTempFolder(t.TempDir())
 	config.SetIgnoreOrphanedRiskTracking(true)

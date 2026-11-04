@@ -1,0 +1,268 @@
+digraph generatedModel { concentrate=false 
+	graph [ 
+		labelloc=t
+		fontname="Verdana"
+		fontsize=40
+        outputorder="nodesfirst"
+		dpi=100
+		splines=ortho
+		rankdir="TB"
+
+		nodesep="2"
+		ranksep="2"
+	];
+	node [
+		fontname="Verdana"
+		fontsize="20"
+	];
+	edge [
+		shape="none"
+		fontname="Verdana"
+		fontsize="18"
+	];
+
+ subgraph cluster_space_boundary_for_layout_only_14149435864 {
+	graph [
+                                              dpi=100
+											  label=<<table border="0" cellborder="0" cellpadding="0" bgcolor="#FFFFFF55"><tr><td><b> </b></td></tr></table>>
+											  fontsize="21"
+											  style="invis"
+											  color="green"
+											  fontcolor="green"
+											  margin="50.0"
+											  penwidth="6.5"
+                                              outputorder="nodesfirst"
+											];
+ subgraph cluster_4149435864 {
+	graph [
+      dpi=100
+      label=<<table border="0" cellborder="0" cellpadding="0"><tr><td><b>Cloud Account</b> (network-cloud-provider)</td></tr></table>>
+      fontsize="21"
+      style="dashed"
+      color="#3A52C8"
+      bgcolor="#FAFAFA"
+      fontcolor="#3A52C8"
+      fontname="Verdana"
+      penwidth="5.500000"
+      forcelabels=true
+      outputorder="nodesfirst"
+	  margin="50.0"
+    ];
+ //nested:
+ subgraph cluster_space_boundary_for_layout_only_12222860772 {
+	graph [
+                                              dpi=100
+											  label=<<table border="0" cellborder="0" cellpadding="0" bgcolor="#FFFFFF55"><tr><td><b> </b></td></tr></table>>
+											  fontsize="21"
+											  style="invis"
+											  color="green"
+											  fontcolor="green"
+											  margin="50.0"
+											  penwidth="6.5"
+                                              outputorder="nodesfirst"
+											];
+ subgraph cluster_2222860772 {
+	graph [
+      dpi=100
+      label=<<table border="0" cellborder="0" cellpadding="0"><tr><td><b>Agent Subnet</b> (network-cloud-security-group)</td></tr></table>>
+      fontsize="21"
+      style="dashed"
+      color="#3A52C8"
+      bgcolor="#F1F1F1"
+      fontcolor="#3A52C8"
+      fontname="Verdana"
+      penwidth="4.500000"
+      forcelabels=true
+      outputorder="nodesfirst"
+	  margin="50.0"
+    ];
+981300970;
+1505061542;
+752644550;
+1251095166;
+1299996772;
+351167582;
+ }
+
+ }
+
+
+ //nested:
+ subgraph cluster_space_boundary_for_layout_only_13691562735 {
+	graph [
+                                              dpi=100
+											  label=<<table border="0" cellborder="0" cellpadding="0" bgcolor="#FFFFFF55"><tr><td><b> </b></td></tr></table>>
+											  fontsize="21"
+											  style="invis"
+											  color="green"
+											  fontcolor="green"
+											  margin="50.0"
+											  penwidth="6.5"
+                                              outputorder="nodesfirst"
+											];
+ subgraph cluster_3691562735 {
+	graph [
+      dpi=100
+      label=<<table border="0" cellborder="0" cellpadding="0"><tr><td><b>Backend Subnet</b> (network-cloud-security-group)</td></tr></table>>
+      fontsize="21"
+      style="dashed"
+      color="#3A52C8"
+      bgcolor="#F1F1F1"
+      fontcolor="#3A52C8"
+      fontname="Verdana"
+      penwidth="4.500000"
+      forcelabels=true
+      outputorder="nodesfirst"
+	  margin="50.0"
+    ];
+1305071387;
+1556212517;
+1312838741;
+ }
+
+ }
+
+
+ //nested:
+ subgraph cluster_space_boundary_for_layout_only_1257759733 {
+	graph [
+                                              dpi=100
+											  label=<<table border="0" cellborder="0" cellpadding="0" bgcolor="#FFFFFF55"><tr><td><b> </b></td></tr></table>>
+											  fontsize="21"
+											  style="invis"
+											  color="green"
+											  fontcolor="green"
+											  margin="50.0"
+											  penwidth="6.5"
+                                              outputorder="nodesfirst"
+											];
+ subgraph cluster_257759733 {
+	graph [
+      dpi=100
+      label=<<table border="0" cellborder="0" cellpadding="0"><tr><td><b>Frontend Subnet</b> (network-cloud-security-group)</td></tr></table>>
+      fontsize="21"
+      style="dashed"
+      color="#3A52C8"
+      bgcolor="#F1F1F1"
+      fontcolor="#3A52C8"
+      fontname="Verdana"
+      penwidth="4.500000"
+      forcelabels=true
+      outputorder="nodesfirst"
+	  margin="50.0"
+    ];
+1593086170;
+ }
+
+ }
+
+
+ }
+
+ }
+
+  351167582 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">mcp-server</font><br/><font point-size="15" color="#666666">service</font></td></tr><tr><td><b><font color="#AF780E">Support Tools</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 49 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="3.000000" fillcolor="#ffffb7"
+peripheries=1
+color="#AF780E"
+  ]; 
+  1299996772 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">ai-agent</font><br/><font point-size="15" color="#666666">service</font></td></tr><tr><td><b><font color="#AF780E">Support Agent</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 87 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="3.000000" fillcolor="#ffffb7"
+peripheries=1
+color="#AF780E"
+  ]; 
+  967243492 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">web-service-rest</font><br/><font point-size="15" color="#666666">system</font></td></tr><tr><td><b><font color="#000000">Search API</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: out of scope</font></td></tr></table>>
+shape=box style="dotted,filled" penwidth="2.000000" fillcolor="#DDFFFF"
+peripheries=1
+color="#000000"
+  ]; 
+  1312838741 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">database</font><br/><font point-size="15" color="#666666">service</font></td></tr><tr><td><b><font color="#AF780E">Orders Database</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 100 %</font></td></tr></table>>
+shape=cylinder style="solid,filled" penwidth="3.000000" fillcolor="#ffffff"
+peripheries=1
+color="#AF780E"
+  ]; 
+  1556212517 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">web-service-rest</font><br/><font point-size="15" color="#666666">service</font></td></tr><tr><td><b><font color="#AF780E">Order Service</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 46 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="3.000000" fillcolor="#ffffb7"
+peripheries=1
+color="#AF780E"
+  ]; 
+  1251095166 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">model-registry</font><br/><font point-size="15" color="#666666">service</font></td></tr><tr><td><b><font color="#AF780E">Model Registry</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 21 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="3.000000" fillcolor="#ffffff"
+peripheries=1
+color="#AF780E"
+  ]; 
+  752644550 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">vector-database</font><br/><font point-size="15" color="#666666">service</font></td></tr><tr><td><b><font color="#000000">Knowledge Index</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 69 %</font></td></tr></table>>
+shape=cylinder style="solid,filled" penwidth="3.000000" fillcolor="#ffffff"
+peripheries=1
+color="#AF780E"
+  ]; 
+  1305071387 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">cms</font><br/><font point-size="15" color="#666666">service</font></td></tr><tr><td><b><font color="#000000">Knowledge CMS</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 14 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="2.000000" fillcolor="#ffffff"
+peripheries=1
+color="#000000"
+  ]; 
+  1505061542 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">batch-processing</font><br/><font point-size="15" color="#666666">service</font></td></tr><tr><td><b><font color="#000000">Ingestion Pipeline</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 16 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="2.000000" fillcolor="#ffffb7"
+peripheries=1
+color="#000000"
+  ]; 
+  2062127004 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">llm</font><br/><font point-size="15" color="#666666">system</font></td></tr><tr><td><b><font color="#AF780E">Hosted LLM</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: out of scope</font></td></tr></table>>
+shape=box style="dotted,filled" penwidth="3.000000" fillcolor="#DDFFFF"
+peripheries=1
+color="#AF780E"
+  ]; 
+  981300970 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">llm</font><br/><font point-size="15" color="#666666">service</font></td></tr><tr><td><b><font color="#AF780E">Guardrail Model</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 26 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="3.000000" fillcolor="#ffffb7"
+peripheries=1
+color="#AF780E"
+  ]; 
+  2799826308 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">browser</font><br/><font point-size="15" color="#666666">system</font></td></tr><tr><td><b><font color="#000000">Customer Browser</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: out of scope</font></td></tr></table>>
+shape=octagon style="dotted,filled" penwidth="3.000000" fillcolor="#bddfdf"
+peripheries=1
+color="#AF780E"
+  ]; 
+  1593086170 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">web-application</font><br/><font point-size="15" color="#666666">service</font></td></tr><tr><td><b><font color="#000000">Chat Frontend</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 25 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="3.000000" fillcolor="#ffffb7"
+peripheries=1
+color="#AF780E"
+  ]; 
+
+  351167582 -> 1556212517 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
+
+  351167582 -> 967243492 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="none" arrowhead="empty" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#444444"  ];
+
+  1299996772 -> 2062127004 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
+
+  1299996772 -> 752644550 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="none" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#444444"  ];
+
+  1299996772 -> 981300970 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#444444"  ];
+
+  1299996772 -> 752644550 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="none" arrowhead="empty" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#444444"  ];
+
+  1299996772 -> 351167582 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
+
+  1556212517 -> 1312838741 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="jdbc-encrypted" fontcolor="#AF780E"  ];
+
+  1505061542 -> 1305071387 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="none" arrowhead="empty" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#444444"  ];
+
+  1505061542 -> 752644550 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="none" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#444444"  ];
+
+  981300970 -> 1251095166 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="none" arrowhead="empty" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
+
+  2799826308 -> 1593086170 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#444444"  ];
+
+  1593086170 -> 1299996772 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#444444"  ];
+}
