@@ -292,6 +292,7 @@ Used by `technologies` of technical assets.
 | `client-system` | `client` | A client system |
 | `cms` | `content-management-system` | Content Management System |
 | `code-inspection-platform` | `code-inspection`, `code-analysis` | (Static) Code Analysis) |
+| `code-interpreter` | `code-execution`, `code-runner`, `code-execution-tool`, `python-repl`, `notebook-kernel`, `jupyter-kernel` | Runs code that a language model or an AI agent writes, as a service or inside the agent |
 | `container-platform` | `container`, `docker`, `kubernetes` | A platform for hosting and executing containers |
 | `data-lake` |  | A huge database |
 | `database` | `db` | A database |

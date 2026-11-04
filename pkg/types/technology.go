@@ -6,6 +6,7 @@ const (
 	AI                     = "ai"
 	AIAgent                = "ai-agent"
 	AIGuardrail            = "ai-guardrail"
+	CodeInterpreter        = "code-interpreter"
 	ApplicationServer      = "application-server"
 	ArtifactRegistry       = "artifact-registry"
 	LLM                    = "llm"
