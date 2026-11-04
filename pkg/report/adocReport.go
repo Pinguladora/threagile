@@ -20,7 +20,8 @@ import (
 	"golang.org/x/text/language"
 )
 
-type adocReport struct {
+// AdocReport writes the AsciiDoc report of a model into an adocReport folder.
+type AdocReport struct {
 	targetDirectory string
 	model           *types.Model
 	mainFile        *os.File
@@ -96,8 +97,8 @@ func fixBasicHtml(inputWithHtml string) string {
 	return result
 }
 
-func NewAdocReport(targetDirectory string, riskRules types.RiskRules, hideEmptyChapter bool) adocReport {
-	adoc := adocReport{
+func NewAdocReport(targetDirectory string, riskRules types.RiskRules, hideEmptyChapter bool) AdocReport {
+	adoc := AdocReport{
 		targetDirectory:  filepath.Join(targetDirectory, "adocReport"),
 		iconsType:        "font",
 		tocDepth:         2,
@@ -115,7 +116,7 @@ func writeLine(file *os.File, line string) {
 	}
 }
 
-func (adoc adocReport) writeDefaultTheme(logoImagePath string) error {
+func (adoc AdocReport) writeDefaultTheme(logoImagePath string) error {
 	err := os.MkdirAll(filepath.Join(adoc.targetDirectory, "theme"), 0o750)
 	if err != nil {
 		return fmt.Errorf("unable to create the theme folder: %w", err)
@@ -156,7 +157,7 @@ title-page:
 
 // writeThemeLogo copies the logo of the report, if there is one, into the theme folder and
 // returns its path relative to the theme.
-func (adoc adocReport) writeThemeLogo(logoImagePath string) (string, error) {
+func (adoc AdocReport) writeThemeLogo(logoImagePath string) (string, error) {
 	adocLogoPath := ""
 	if logoImagePath != "" {
 		logo, err := reportLogo(logoImagePath)
@@ -179,7 +180,7 @@ func (adoc adocReport) writeThemeLogo(logoImagePath string) (string, error) {
 }
 
 // themeHeaderAndFooter returns the header and footer of the PDF theme.
-func (adoc adocReport) themeHeaderAndFooter() string {
+func (adoc AdocReport) themeHeaderAndFooter() string {
 	return `header:
   height: 2cm
   line-height: 1
@@ -252,11 +253,11 @@ func themeRoles() string {
 `
 }
 
-func (adoc adocReport) writeMainLine(line string) {
+func (adoc AdocReport) writeMainLine(line string) {
 	writeLine(adoc.mainFile, line)
 }
 
-func (adoc adocReport) WriteReport(model *types.Model,
+func (adoc AdocReport) WriteReport(model *types.Model,
 	dataFlowDiagramFilenamePNG string,
 	dataAssetDiagramFilenamePNG string,
 	modelFilename string,
@@ -316,7 +317,7 @@ type adocChapter struct {
 }
 
 // chapters returns the chapters of the AsciiDoc report in the order they are written.
-func (adoc adocReport) chapters(
+func (adoc AdocReport) chapters(
 	dataFlowDiagramFilenamePNG string,
 	dataAssetDiagramFilenamePNG string,
 	modelFilename string,
@@ -366,7 +367,7 @@ func (adoc adocReport) chapters(
 }
 
 // createFile creates (or truncates) the named file in the target directory.
-func (adoc adocReport) createFile(filename string) (*os.File, error) {
+func (adoc AdocReport) createFile(filename string) (*os.File, error) {
 	/* #nosec filename is not tainted (see callers passing fixed chapter file names only) */
 	f, err := os.Create(filepath.Join(adoc.targetDirectory, filename))
 	if err != nil {
@@ -376,7 +377,7 @@ func (adoc adocReport) createFile(filename string) (*os.File, error) {
 }
 
 // initReport recreates the target directory and returns the newly created main file.
-func (adoc adocReport) initReport() (*os.File, error) {
+func (adoc AdocReport) initReport() (*os.File, error) {
 	_ = os.RemoveAll(adoc.targetDirectory)
 	err := os.MkdirAll(adoc.targetDirectory, 0o750)
 	if err != nil {
@@ -390,7 +391,7 @@ func (adoc adocReport) initReport() (*os.File, error) {
 	return mainFile, nil
 }
 
-func (adoc adocReport) writeTitleAndPreamble() {
+func (adoc AdocReport) writeTitleAndPreamble() {
 	adoc.writeMainLine("= Threat Model Report: " + adoc.model.Title)
 	adoc.writeMainLine(":title-page:")
 	adoc.writeMainLine(":author: " + adoc.model.Author.Name)
@@ -411,7 +412,7 @@ func (adoc adocReport) writeTitleAndPreamble() {
 	adoc.writeMainLine("")
 }
 
-func (adoc adocReport) writeManagementSummery() error {
+func (adoc AdocReport) writeManagementSummery() error {
 	filename := "010_ManagementSummary.adoc"
 	ms, err := adoc.createFile(filename)
 	defer func() { _ = ms.Close() }()
@@ -457,7 +458,7 @@ func (adoc adocReport) writeManagementSummery() error {
 
 // managementSummaryPieCharts returns the pie charts of all risks by severity and by risk
 // tracking status.
-func (adoc adocReport) managementSummaryPieCharts() string {
+func (adoc AdocReport) managementSummaryPieCharts() string {
 	countCritical := len(filteredBySeverity(adoc.model, types.CriticalSeverity))
 	countHigh := len(filteredBySeverity(adoc.model, types.HighSeverity))
 	countElevated := len(filteredBySeverity(adoc.model, types.ElevatedSeverity))
@@ -541,7 +542,7 @@ func colorPrefixByDataBreachProbability(probability types.DataBreachProbability,
 	}
 }
 
-func (adoc adocReport) addCategories(f *os.File, risksByCategory map[string][]*types.Risk, initialRisks bool,
+func (adoc AdocReport) addCategories(f *os.File, risksByCategory map[string][]*types.Risk, initialRisks bool,
 	severity types.RiskSeverity, bothInitialAndRemainingRisks bool, describeDescription bool,
 ) {
 	describeImpact := true
@@ -626,7 +627,7 @@ func severityPrefix(severity types.RiskSeverity) string {
 	}
 }
 
-func (adoc adocReport) impactAnalysis(f *os.File, initialRisks bool) int {
+func (adoc AdocReport) impactAnalysis(f *os.File, initialRisks bool) int {
 	count := 0
 	catCount := 0
 	initialStr := ""
@@ -669,7 +670,7 @@ func (adoc adocReport) impactAnalysis(f *os.File, initialRisks bool) int {
 	return count
 }
 
-func (adoc adocReport) writeImpactInitialRisks() error {
+func (adoc AdocReport) writeImpactInitialRisks() error {
 	filename := "020_ImpactIntialRisks.adoc"
 	ir, err := adoc.createFile(filename)
 	defer func() { _ = ir.Close() }()
@@ -683,7 +684,7 @@ func (adoc adocReport) writeImpactInitialRisks() error {
 	return nil
 }
 
-func (adoc adocReport) riskMitigationStatus(f *os.File) {
+func (adoc AdocReport) riskMitigationStatus(f *os.File) {
 	writeLine(f, "= Risk Mitigation")
 	writeLine(f, "The following chart gives a high-level overview of the risk tracking status (including mitigated "+
 		"risks):")
@@ -704,7 +705,7 @@ func (adoc adocReport) riskMitigationStatus(f *os.File) {
 }
 
 // riskStatusChart returns the bar chart of the risk tracking status of the risks by severity.
-func (adoc adocReport) riskStatusChart() string {
+func (adoc AdocReport) riskStatusChart() string {
 	countStatusUnchecked := len(filteredByRiskStatus(adoc.model, types.Unchecked))
 	countStatusInDiscussion := len(filteredByRiskStatus(adoc.model, types.InDiscussion))
 	countStatusAccepted := len(filteredByRiskStatus(adoc.model, types.Accepted))
@@ -766,7 +767,7 @@ func (adoc adocReport) riskStatusChart() string {
 
 // riskStatusChartValues returns the data values of the risk tracking status chart for the risks
 // of one severity, one value per risk status.
-func (adoc adocReport) riskStatusChartValues(severity types.RiskSeverity) string {
+func (adoc AdocReport) riskStatusChartValues(severity types.RiskSeverity) string {
 	risks := filteredBySeverity(adoc.model, severity)
 	title := severity.Title() + " (" + strconv.Itoa(len(risks)) + ")"
 	statuses := []struct {
@@ -792,7 +793,7 @@ func (adoc adocReport) riskStatusChartValues(severity types.RiskSeverity) string
 
 // unmitigatedRisksPieCharts returns the pie charts of the risks still at risk by severity and by
 // function.
-func (adoc adocReport) unmitigatedRisksPieCharts() string {
+func (adoc AdocReport) unmitigatedRisksPieCharts() string {
 	countCritical := len(types.ReduceToOnlyStillAtRisk(filteredBySeverity(adoc.model, types.CriticalSeverity)))
 	countHigh := len(types.ReduceToOnlyStillAtRisk(filteredBySeverity(adoc.model, types.HighSeverity)))
 	countElevated := len(types.ReduceToOnlyStillAtRisk(filteredBySeverity(adoc.model, types.ElevatedSeverity)))
@@ -836,7 +837,7 @@ pie showData
 `
 }
 
-func (adoc adocReport) writeRiskMitigationStatus() error {
+func (adoc AdocReport) writeRiskMitigationStatus() error {
 	filename := "030_RiskMitigationStatus.adoc"
 	rms, err := adoc.createFile(filename)
 	defer func() { _ = rms.Close() }()
@@ -850,7 +851,7 @@ func (adoc adocReport) writeRiskMitigationStatus() error {
 	return nil
 }
 
-func (adoc adocReport) assetRegister(f *os.File) {
+func (adoc AdocReport) assetRegister(f *os.File) {
 	writeLine(f, "= Asset Register")
 	writeLine(f, "")
 
@@ -876,7 +877,7 @@ func (adoc adocReport) assetRegister(f *os.File) {
 	}
 }
 
-func (adoc adocReport) writeAssetRegister() error {
+func (adoc AdocReport) writeAssetRegister() error {
 	filename := "035_AssetRegister.adoc"
 	ar, err := adoc.createFile(filename)
 	defer func() { _ = ar.Close() }()
@@ -890,7 +891,7 @@ func (adoc adocReport) writeAssetRegister() error {
 	return nil
 }
 
-func (adoc adocReport) writeImpactRemainingRisks() error {
+func (adoc AdocReport) writeImpactRemainingRisks() error {
 	filename := "040_ImpactRemainingRisks.adoc"
 	irr, err := adoc.createFile(filename)
 	defer func() { _ = irr.Close() }()
@@ -917,7 +918,7 @@ func addCustomImages(f *os.File, customImages []map[string]string, baseFolder st
 	}
 }
 
-func (adoc adocReport) targetDescription(f *os.File, baseFolder string) {
+func (adoc AdocReport) targetDescription(f *os.File, baseFolder string) {
 	writeLine(f, "= Application Overview")
 	writeLine(f, "== Business Criticality\n")
 	writeLine(f, "The overall business criticality of \""+adoc.model.Title+"\" was rated as:\n")
@@ -950,7 +951,7 @@ func (adoc adocReport) targetDescription(f *os.File, baseFolder string) {
 	addCustomImages(f, adoc.model.TechnicalOverview.Images, baseFolder)
 }
 
-func (adoc adocReport) writeTargetDescription(baseFolder string) error {
+func (adoc AdocReport) writeTargetDescription(baseFolder string) error {
 	filename := "050_TargetDescription.adoc"
 	td, err := adoc.createFile(filename)
 	defer func() { _ = td.Close() }()
@@ -964,7 +965,7 @@ func (adoc adocReport) writeTargetDescription(baseFolder string) error {
 	return nil
 }
 
-func (adoc adocReport) dataFlowDiagram(f *os.File, diagramFilenamePNG string) {
+func (adoc AdocReport) dataFlowDiagram(f *os.File, diagramFilenamePNG string) {
 	writeLine(f, "= Data-Flow Diagram")
 	// intermediate newlines are ignored in asciidoctor
 	writeLine(f, `
@@ -991,7 +992,7 @@ func imageIsWiderThanHigh(diagramFilenamePNG string) bool {
 	return muchWiderThanHigh
 }
 
-func (adoc adocReport) writeDataFlowDiagram(diagramFilenamePNG string) error {
+func (adoc AdocReport) writeDataFlowDiagram(diagramFilenamePNG string) error {
 	filename := "060_DataFlowDiagram.adoc"
 	dfd, err := adoc.createFile(filename)
 	defer func() { _ = dfd.Close() }()
@@ -1015,7 +1016,7 @@ func (adoc adocReport) writeDataFlowDiagram(diagramFilenamePNG string) error {
 	return nil
 }
 
-func (adoc adocReport) securityRequirements(f *os.File) int {
+func (adoc AdocReport) securityRequirements(f *os.File) int {
 	writeLine(f, "= Security Requirements")
 	writeLine(f, "This chapter lists the custom security requirements which have been defined for the modeled target.")
 
@@ -1033,7 +1034,7 @@ func (adoc adocReport) securityRequirements(f *os.File) int {
 	return len(requirements)
 }
 
-func (adoc adocReport) writeSecurityRequirements() error {
+func (adoc AdocReport) writeSecurityRequirements() error {
 	filename := "070_SecurityRequirements.adoc"
 	sr, err := adoc.createFile(filename)
 	defer func() { _ = sr.Close() }()
@@ -1049,7 +1050,7 @@ func (adoc adocReport) writeSecurityRequirements() error {
 	return nil
 }
 
-func (adoc adocReport) abuseCases(f *os.File) int {
+func (adoc AdocReport) abuseCases(f *os.File) int {
 	writeLine(f, "= Abuse Cases")
 	writeLine(f, "This chapter lists the custom abuse cases which have been defined for the modeled target.")
 	writeLine(f, "\n")
@@ -1066,7 +1067,7 @@ func (adoc adocReport) abuseCases(f *os.File) int {
 	return len(cases)
 }
 
-func (adoc adocReport) writeAbuseCases() error {
+func (adoc AdocReport) writeAbuseCases() error {
 	filename := "080_AbuseCases.adoc"
 	ac, err := adoc.createFile(filename)
 	defer func() { _ = ac.Close() }()
@@ -1082,7 +1083,7 @@ func (adoc adocReport) writeAbuseCases() error {
 	return nil
 }
 
-func (adoc adocReport) tagListing(f *os.File) {
+func (adoc AdocReport) tagListing(f *os.File) {
 	writeLine(f, "= Tag Listing")
 
 	writeLine(f, "This chapter lists what tags are used by which elements.")
@@ -1100,7 +1101,7 @@ func (adoc adocReport) tagListing(f *os.File) {
 	}
 }
 
-func (adoc adocReport) writeTagListing() error {
+func (adoc AdocReport) writeTagListing() error {
 	filename := "090_TagListing.adoc"
 	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
@@ -1122,7 +1123,7 @@ const (
 		"and link to the corresponding chapter.]"
 )
 
-func (adoc adocReport) stride(f *os.File) {
+func (adoc AdocReport) stride(f *os.File) {
 	writeLine(f, "= STRIDE Classification of Identified Risks")
 	writeLine(f, adocFootnoteRiskFindings)
 	writeLine(f, "")
@@ -1184,7 +1185,7 @@ func (adoc adocReport) stride(f *os.File) {
 	}
 }
 
-func (adoc adocReport) writeSTRIDE() error {
+func (adoc AdocReport) writeSTRIDE() error {
 	filename := "100_STRIDE.adoc"
 	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
@@ -1198,7 +1199,7 @@ func (adoc adocReport) writeSTRIDE() error {
 	return nil
 }
 
-func (adoc adocReport) assignmentByFunction(f *os.File) {
+func (adoc AdocReport) assignmentByFunction(f *os.File) {
 	writeLine(f, "= Assignment by Function")
 	writeLine(f, adocFootnoteRiskFindings)
 	writeLine(f, "")
@@ -1247,7 +1248,7 @@ func (adoc adocReport) assignmentByFunction(f *os.File) {
 	}
 }
 
-func (adoc adocReport) writeAssignmentByFunction() error {
+func (adoc AdocReport) writeAssignmentByFunction() error {
 	filename := "110_AssignmentByFunction.adoc"
 	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
@@ -1261,7 +1262,7 @@ func (adoc adocReport) writeAssignmentByFunction() error {
 	return nil
 }
 
-func (adoc adocReport) raa(f *os.File, introTextRAA string) {
+func (adoc AdocReport) raa(f *os.File, introTextRAA string) {
 	writeLine(f, "= RAA Analysis")
 	writeLine(f, adocFootnoteRiskFindings)
 	writeLine(f, "")
@@ -1303,7 +1304,7 @@ func (adoc adocReport) raa(f *os.File, introTextRAA string) {
 	}
 }
 
-func (adoc adocReport) writeRAA(introTextRAA string) error {
+func (adoc AdocReport) writeRAA(introTextRAA string) error {
 	filename := "120_RAA.adoc"
 	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
@@ -1317,7 +1318,7 @@ func (adoc adocReport) writeRAA(introTextRAA string) error {
 	return nil
 }
 
-func (adoc adocReport) dataRiskMapping(f *os.File, diagramFilenamePNG string) {
+func (adoc AdocReport) dataRiskMapping(f *os.File, diagramFilenamePNG string) {
 	writeLine(f, "= Data Mapping")
 
 	writeLine(f, `
@@ -1329,7 +1330,7 @@ refer to the PNG image file alongside this report.`)
 	writeLine(f, "\nimage::"+diagramFilenamePNG+"[]")
 }
 
-func (adoc adocReport) writeDataRiskMapping(dataAssetDiagramFilenamePNG string) error {
+func (adoc AdocReport) writeDataRiskMapping(dataAssetDiagramFilenamePNG string) error {
 	filename := "130_DataRiskMapping.adoc"
 	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
@@ -1353,7 +1354,7 @@ func (adoc adocReport) writeDataRiskMapping(dataAssetDiagramFilenamePNG string) 
 	return nil
 }
 
-func (adoc adocReport) outOfScopeAssets(f *os.File) {
+func (adoc AdocReport) outOfScopeAssets(f *os.File) {
 	assets := textAsset
 	count := len(adoc.model.OutOfScopeTechnicalAssets())
 	if count > 1 {
@@ -1389,7 +1390,7 @@ Each one should be checked in the model whether it should better be included in 
 	}
 }
 
-func (adoc adocReport) writeOutOfScopeAssets() error {
+func (adoc AdocReport) writeOutOfScopeAssets() error {
 	filename := "140_OutOfScopeAssets.adoc"
 	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
@@ -1403,7 +1404,7 @@ func (adoc adocReport) writeOutOfScopeAssets() error {
 	return nil
 }
 
-func (adoc adocReport) modelFailures(f *os.File) {
+func (adoc AdocReport) modelFailures(f *os.File) {
 	modelFailures := flattenRiskSlice(filterByModelFailures(adoc.model,
 		adoc.model.GeneratedRisksByCategoryWithCurrentStatus()))
 	count := len(modelFailures)
@@ -1437,7 +1438,7 @@ in the model against the architecture design:{fn-risk-findings}`)
 	}
 }
 
-func (adoc adocReport) writeModelFailures() error {
+func (adoc AdocReport) writeModelFailures() error {
 	filename := "150_ModelFailures.adoc"
 	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
@@ -1451,7 +1452,7 @@ func (adoc adocReport) writeModelFailures() error {
 	return nil
 }
 
-func (adoc adocReport) questions(f *os.File) int {
+func (adoc AdocReport) questions(f *os.File) int {
 	questionStr := textQuestion
 	count := len(adoc.model.Questions)
 	if count > 1 {
@@ -1490,7 +1491,7 @@ func (adoc adocReport) questions(f *os.File) int {
 	return len(questions)
 }
 
-func (adoc adocReport) writeQuestions() error {
+func (adoc AdocReport) writeQuestions() error {
 	filename := "160_Questions.adoc"
 	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
@@ -1527,7 +1528,7 @@ func riskStatusRole(status types.RiskStatus) string {
 	}
 }
 
-func (adoc adocReport) riskTrackingStatus(f *os.File, risk *types.Risk) {
+func (adoc AdocReport) riskTrackingStatus(f *os.File, risk *types.Risk) {
 	tracking := adoc.model.GetRiskTrackingWithDefault(risk)
 
 	colorName := riskStatusRole(tracking.Status)
@@ -1567,7 +1568,7 @@ func (adoc adocReport) riskTrackingStatus(f *os.File, risk *types.Risk) {
 	}
 }
 
-func (adoc adocReport) riskCategories(f *os.File) {
+func (adoc AdocReport) riskCategories(f *os.File) {
 	writeLine(f, "= Identified Risks by Vulnerability category")
 	writeLine(f, "In total *"+strconv.Itoa(totalRiskCount(adoc.model))+" potential risks* have been identified during "+
 		"the threat modeling process of which "+
@@ -1673,7 +1674,7 @@ func adocCheatSheetLink(cheatSheetLink string) string {
 }
 
 // writeRiskCategoryFindings writes the risks of a risk category.
-func (adoc adocReport) writeRiskCategoryFindings(f *os.File, category *types.RiskCategory, risksStr []*types.Risk) {
+func (adoc AdocReport) writeRiskCategoryFindings(f *os.File, category *types.RiskCategory, risksStr []*types.Risk) {
 	// risk details
 	writeLine(f, "")
 	writeLine(f, "=== Risk Findings")
@@ -1728,7 +1729,7 @@ func mostRelevantLinkId(risk *types.Risk) string {
 	return linkId
 }
 
-func (adoc adocReport) writeRiskCategories() error {
+func (adoc AdocReport) writeRiskCategories() error {
 	filename := "170_RiskCategories.adoc"
 	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
@@ -1786,7 +1787,7 @@ func communicationLinkTitleOrNone(links []*types.CommunicationLink, noneValue st
 	return joinedOrNoneString(titles, noneValue)
 }
 
-func (adoc adocReport) technicalAssets(f *os.File) {
+func (adoc AdocReport) technicalAssets(f *os.File) {
 	writeLine(f, "= Identified Risks by Technical Asset")
 	writeLine(f, "In total *"+strconv.Itoa(totalRiskCount(adoc.model))+" potential risks* have been identified during "+
 		"the threat modeling process of which "+
@@ -1846,7 +1847,7 @@ func writeTechnicalAssetHeading(f *os.File, technicalAsset *types.TechnicalAsset
 }
 
 // writeTechnicalAssetRisks writes the description and the risks of a technical asset.
-func (adoc adocReport) writeTechnicalAssetRisks(f *os.File, technicalAsset *types.TechnicalAsset,
+func (adoc AdocReport) writeTechnicalAssetRisks(f *os.File, technicalAsset *types.TechnicalAsset,
 	risksStr []*types.Risk,
 ) {
 	// asset description
@@ -1882,7 +1883,7 @@ func (adoc adocReport) writeTechnicalAssetRisks(f *os.File, technicalAsset *type
 }
 
 // writeTechnicalAssetInformation writes the information and the rating of a technical asset.
-func (adoc adocReport) writeTechnicalAssetInformation(f *os.File, technicalAsset *types.TechnicalAsset) {
+func (adoc AdocReport) writeTechnicalAssetInformation(f *os.File, technicalAsset *types.TechnicalAsset) {
 	// ASSET INFORMATION
 	writeLine(f, "")
 	writeLine(f, "<<<")
@@ -1935,7 +1936,7 @@ func (adoc adocReport) writeTechnicalAssetInformation(f *os.File, technicalAsset
 
 // writeCommunicationLink writes the details of an outgoing or incoming communication link of a
 // technical asset, with the technical asset at its other end.
-func (adoc adocReport) writeCommunicationLink(f *os.File, commLink *types.CommunicationLink, direction string,
+func (adoc AdocReport) writeCommunicationLink(f *os.File, commLink *types.CommunicationLink, direction string,
 	peerLabel string, peerId string,
 ) {
 	writeLine(f, "==== "+commLink.Title+" ("+direction+")")
@@ -1962,7 +1963,7 @@ func (adoc adocReport) writeCommunicationLink(f *os.File, commLink *types.Commun
 `)
 }
 
-func (adoc adocReport) writeTechnicalAssets() error {
+func (adoc AdocReport) writeTechnicalAssets() error {
 	filename := "180_TechnicalAssets.adoc"
 	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
@@ -1976,7 +1977,7 @@ func (adoc adocReport) writeTechnicalAssets() error {
 	return nil
 }
 
-func (adoc adocReport) dataAssets(f *os.File) {
+func (adoc AdocReport) dataAssets(f *os.File) {
 	writeLine(f, "= Identified Data Breach Probabilities by Data Asset")
 	writeLine(f, "In total *"+strconv.Itoa(totalRiskCount(adoc.model))+" potential risks* have been identified during "+
 		"the threat modeling process of which "+
@@ -1996,7 +1997,7 @@ func (adoc adocReport) dataAssets(f *os.File) {
 }
 
 // writeDataAsset writes the details of a data asset with its data breach probability.
-func (adoc adocReport) writeDataAsset(f *os.File, dataAsset *types.DataAsset) {
+func (adoc AdocReport) writeDataAsset(f *os.File, dataAsset *types.DataAsset) {
 	dataBreachProbability := identifiedDataBreachProbabilityStillAtRisk(adoc.model, dataAsset)
 	colorPrefix, colorSuffix := colorPrefixByDataBreachProbability(dataBreachProbability, false)
 	if !isDataBreachPotentialStillAtRisk(adoc.model, dataAsset) {
@@ -2080,7 +2081,7 @@ func writeDataBreachRiskRows(f *os.File, dataBreachRisksStillAtRisk []*types.Ris
 	}
 }
 
-func (adoc adocReport) writeDataAssets() error {
+func (adoc AdocReport) writeDataAssets() error {
 	filename := "190_DataAssets.adoc"
 	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
@@ -2094,7 +2095,7 @@ func (adoc adocReport) writeDataAssets() error {
 	return nil
 }
 
-func (adoc adocReport) trustBoundaries(f *os.File) {
+func (adoc AdocReport) trustBoundaries(f *os.File) {
 	writeLine(f, "= Trust Boundaries")
 
 	word := textHas
@@ -2132,7 +2133,7 @@ func (adoc adocReport) trustBoundaries(f *os.File) {
 	}
 }
 
-func (adoc adocReport) writeTrustBoundaries() error {
+func (adoc AdocReport) writeTrustBoundaries() error {
 	filename := "200_TrustBoundaries.adoc"
 	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
@@ -2146,7 +2147,7 @@ func (adoc adocReport) writeTrustBoundaries() error {
 	return nil
 }
 
-func (adoc adocReport) sharedRuntimes(f *os.File) {
+func (adoc AdocReport) sharedRuntimes(f *os.File) {
 	writeLine(f, "= Shared Runtimes")
 	word, runtime := textHas, "runtime"
 	if len(adoc.model.SharedRuntimes) > 1 {
@@ -2174,7 +2175,7 @@ func (adoc adocReport) sharedRuntimes(f *os.File) {
 	}
 }
 
-func (adoc adocReport) writeSharedRuntimes() error {
+func (adoc AdocReport) writeSharedRuntimes() error {
 	filename := "210_SharedRuntimes.adoc"
 	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
@@ -2188,7 +2189,7 @@ func (adoc adocReport) writeSharedRuntimes() error {
 	return nil
 }
 
-func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRiskRules []string,
+func (adoc AdocReport) riskRulesChecked(f *os.File, modelFilename string, skipRiskRules []string,
 	buildTimestamp string, threagileVersion string, modelHash string, customRiskRules types.RiskRules,
 ) {
 	writeLine(f, "= Risk Rules Checked by Threagile")
@@ -2218,7 +2219,7 @@ func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRi
 
 // writeCheckedRiskRules writes the custom risk rules, the individual risk categories of the model
 // and the built-in risk rules, marking the skipped ones.
-func (adoc adocReport) writeCheckedRiskRules(f *os.File, skipRiskRules []string, customRiskRules types.RiskRules) {
+func (adoc AdocReport) writeCheckedRiskRules(f *os.File, skipRiskRules []string, customRiskRules types.RiskRules) {
 	// The risk rules are listed explicitly here rather than discovered through the run system:
 	skipped := ""
 
@@ -2273,7 +2274,7 @@ func writeRiskRuleTable(f *os.File, category *types.RiskCategory) {
 `)
 }
 
-func (adoc adocReport) writeRiskRulesChecked(modelFilename string, skipRiskRules []string, buildTimestamp string,
+func (adoc AdocReport) writeRiskRulesChecked(modelFilename string, skipRiskRules []string, buildTimestamp string,
 	threagileVersion string, modelHash string, customRiskRules types.RiskRules,
 ) error {
 	filename := "220_RiskRulesChecked.adoc"
@@ -2289,7 +2290,7 @@ func (adoc adocReport) writeRiskRulesChecked(modelFilename string, skipRiskRules
 	return nil
 }
 
-func (adoc adocReport) appendixRating(f *os.File) {
+func (adoc AdocReport) appendixRating(f *os.File) {
 	writeLine(f, "[appendix]")
 	writeLine(f, "= Ratings")
 
@@ -2334,7 +2335,7 @@ func (adoc adocReport) appendixRating(f *os.File) {
 	writeLine(f, "|===")
 }
 
-func (adoc adocReport) writeAppendixRating() error {
+func (adoc AdocReport) writeAppendixRating() error {
 	filename := "400_AppendixRating.adoc"
 	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
@@ -2348,7 +2349,7 @@ func (adoc adocReport) writeAppendixRating() error {
 	return nil
 }
 
-func (adoc adocReport) disclaimer(f *os.File) {
+func (adoc AdocReport) disclaimer(f *os.File) {
 	writeLine(f, "[appendix]")
 	writeLine(f, "= Disclaimer")
 
@@ -2397,7 +2398,7 @@ func (adoc adocReport) disclaimer(f *os.File) {
 		"distributed report or referenced from the distributed parts.")
 }
 
-func (adoc adocReport) writeDisclaimer() error {
+func (adoc AdocReport) writeDisclaimer() error {
 	filename := "500_Disclaimer.adoc"
 	f, err := adoc.createFile(filename)
 	defer func() { _ = f.Close() }()
