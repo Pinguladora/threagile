@@ -111,6 +111,9 @@ model itself. A language model on the internet is no source of internet content:
 responses come from the model. Mark agents whose actions a human approves, or the single links that
 need an approval, with the `human-in-the-loop` tag, and add it to `tags_available`.
 
+[`demo/ai-agent/threagile.yaml`](../demo/ai-agent/threagile.yaml) models an AI
+support assistant with all five AI technologies; analyze it to see the AI rules at work.
+
 ## Risk ids of Push instead of Pull Deployment
 
 Push instead of Pull Deployment creates one risk per deployment target, with the id

@@ -78,7 +78,7 @@ func TestMarkdownReportOfAHostileModelIsInert(t *testing.T) {
 // golden file: every risk is in it, every link goes to a heading as GitHub names its anchor, and
 // the diagrams are well-formed.
 func TestMarkdownReportOfTheExample(t *testing.T) {
-	outputs := generateOutputs(t)
+	outputs := generateOutputs(t, exampleModel)
 	source := outputs["THREAT_MODEL.md"]
 	require.NotEmpty(t, source)
 
