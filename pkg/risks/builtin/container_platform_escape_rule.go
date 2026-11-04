@@ -62,7 +62,7 @@ func (r *ContainerPlatformEscapeRule) GenerateRisks(parsedModel *types.Model) ([
 	return risks, nil
 }
 
-func (asl ContainerPlatformEscapeRule) skipAsset(techAsset *types.TechnicalAsset) bool {
+func (asl *ContainerPlatformEscapeRule) skipAsset(techAsset *types.TechnicalAsset) bool {
 	return techAsset.OutOfScope
 }
 

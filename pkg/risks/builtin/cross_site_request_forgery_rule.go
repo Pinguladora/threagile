@@ -60,7 +60,7 @@ func (r *CrossSiteRequestForgeryRule) GenerateRisks(parsedModel *types.Model) ([
 	return risks, nil
 }
 
-func (csrf CrossSiteRequestForgeryRule) skipAsset(technicalAsset *types.TechnicalAsset) bool {
+func (csrf *CrossSiteRequestForgeryRule) skipAsset(technicalAsset *types.TechnicalAsset) bool {
 	return technicalAsset.OutOfScope || !technicalAsset.Technologies.GetAttribute(types.WebApplication)
 }
 

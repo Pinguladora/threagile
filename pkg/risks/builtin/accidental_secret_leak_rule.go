@@ -63,7 +63,7 @@ func (r *AccidentalSecretLeakRule) GenerateRisks(parsedModel *types.Model) ([]*t
 	return risks, nil
 }
 
-func (asl AccidentalSecretLeakRule) skipAsset(techAsset *types.TechnicalAsset) bool {
+func (asl *AccidentalSecretLeakRule) skipAsset(techAsset *types.TechnicalAsset) bool {
 	return techAsset.OutOfScope || !techAsset.Technologies.GetAttribute(types.MayContainSecrets)
 }
 
