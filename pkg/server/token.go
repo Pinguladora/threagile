@@ -231,6 +231,7 @@ func (s *server) checkTokenToFolderName(ginContext *gin.Context) (folderNameOfKe
 			return folderNameOfKey, key, false
 		}
 		timeoutStruct.lastAccessedNanoTime = time.Now().UnixNano()
+		s.mapTokenHashToTimeoutStruct[tokenHash] = timeoutStruct
 		return folderNameOfKey, key, true
 	} else {
 		respondError(ginContext, http.StatusNotFound, "token not found")
