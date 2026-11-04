@@ -1,6 +1,7 @@
 package common
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/Pinguladora/threagile/pkg/types"
@@ -27,12 +28,12 @@ func (what *Scope) Init(risk *types.RiskCategory, methods map[string]Statement) 
 	if risk != nil {
 		data, marshalError := yaml.Marshal(risk)
 		if marshalError != nil {
-			return marshalError
+			return fmt.Errorf("failed to marshal the risk category: %w", marshalError)
 		}
 
 		unmarshalError := yaml.Unmarshal(data, &what.Risk)
 		if unmarshalError != nil {
-			return unmarshalError
+			return fmt.Errorf("failed to unmarshal the risk category: %w", unmarshalError)
 		}
 	}
 
@@ -46,12 +47,12 @@ func (what *Scope) SetModel(model *types.Model) error {
 	if model != nil {
 		data, marshalError := yaml.Marshal(model)
 		if marshalError != nil {
-			return marshalError
+			return fmt.Errorf("failed to marshal the model: %w", marshalError)
 		}
 
 		unmarshalError := yaml.Unmarshal(data, &what.Model)
 		if unmarshalError != nil {
-			return unmarshalError
+			return fmt.Errorf("failed to unmarshal the model: %w", unmarshalError)
 		}
 	}
 
