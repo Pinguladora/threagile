@@ -57,7 +57,7 @@ func (what *Threagile) explainRisk(cmd *cobra.Command, args []string) error {
 
 	progressReporter := DefaultProgressReporter{Verbose: what.config.GetVerbose()}
 
-	// todo: reuse model if already loaded
+	// the model is read and analyzed again, even if it is loaded already
 
 	result, runError := model.ReadAndAnalyzeModel(what.config, risks.GetBuiltInRiskRules(), progressReporter)
 	if runError != nil {
@@ -65,7 +65,7 @@ func (what *Threagile) explainRisk(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to read and analyze model: %w", runError)
 	}
 
-	// todo: implement this
+	// explaining a single risk is not implemented yet
 
 	_ = result
 	return errors.New("not implemented yet")
@@ -106,7 +106,7 @@ func (what *Threagile) explainMacros(cmd *cobra.Command, args []string) {
 	cmd.Println(Logo + "\n\n" + fmt.Sprintf(VersionText, what.buildTimestamp))
 	cmd.Println("Explanation for the model macros:")
 	cmd.Println()
-	/* TODO finish plugin stuff
+	/* custom model macros are not supported yet; once they are, explain them like this:
 	cmd.Println("Custom model macros:")
 	for _, macros := range macros.ListCustomMacros() {
 		details := macros.GetMacroDetails()

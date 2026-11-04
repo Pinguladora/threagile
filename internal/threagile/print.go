@@ -30,7 +30,7 @@ func (what *Threagile) initPrint() *Threagile {
 
 			cmd.Println(Logo + "\n\n" + fmt.Sprintf(VersionText, what.buildTimestamp))
 			if appDir != filepath.Clean(appDir) {
-				// TODO: do we need this check here?
+				// it is not clear whether this check is still needed
 				cmd.Printf("weird app folder %v", appDir)
 				return errors.New("weird app folder")
 			}
