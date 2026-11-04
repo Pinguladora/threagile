@@ -81,7 +81,8 @@ func (what *MethodStatement) Run(scope *common.Scope) (string, error) {
 	defer what.runDeferred(scope)
 
 	if len(what.parameters) != len(scope.Args) {
-		return what.Literal(), fmt.Errorf("failed to run method-statement: expected %d parameters, got %d", len(what.parameters), len(scope.Args))
+		return what.Literal(),
+			fmt.Errorf("failed to run method-statement: expected %d parameters, got %d", len(what.parameters), len(scope.Args))
 	}
 
 	for n, name := range what.parameters {
