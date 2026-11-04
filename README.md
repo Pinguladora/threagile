@@ -8,7 +8,8 @@ agile threat modeling:
 
 It allows to model an architecture with its assets in an agile fashion as a YAML file directly inside the IDE.
 Upon execution of the Threagile toolkit all standard risk rules (as well as individual custom rules if present)
-are checked against the architecture model. You can find more information about model schema [here](./docs/model.md).
+are checked against the architecture model. You can find more information about model schema [here](./docs/model.md),
+the values of its fields in [types](./docs/types.md), and how to read the diagrams in [diagrams](./docs/diagrams.md).
 
 The tool have various [commands](./docs/commands.md) and is highly configurable via [flags](./docs/flags.md) and [config](./docs/config.md).
 
@@ -16,6 +17,7 @@ We know that modifying yaml file via text editor may be tough and to simplify it
 
 - [includes](./docs/includes.md)
 - [macros](./docs/macros.md)
+- [editor support](./docs/model.md#editor-support) for validation and completion with the schema
 
 Custom risk rules can be written as YAML scripts without compiling Go code. See the [script language reference](./docs/scripts/language-reference.md), the [guide for writing custom risk rules](./docs/scripts/guide.md), and how to [test your scripts](./docs/scripts/testing.md).
 

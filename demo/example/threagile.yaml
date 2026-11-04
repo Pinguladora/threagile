@@ -337,7 +337,7 @@ technical_assets:
           - client-application-code
           - marketing-material
         #diagram_tweak_weight: 1
-        #diagram_tweak_constraint: false
+        #diagram_tweak_constraint: true # true keeps the link from affecting the ranks of the assets
 
 
   Backoffice Client:
@@ -389,7 +389,7 @@ technical_assets:
           - customer-contracts
           - internal-business-data
         #diagram_tweak_weight: 1
-        #diagram_tweak_constraint: false
+        #diagram_tweak_constraint: true # true keeps the link from affecting the ranks of the assets
       Marketing CMS Editing:
         target: marketing-cms
         description: Link to the CMS for editing content
@@ -406,7 +406,7 @@ technical_assets:
         data_assets_received: # sequence of IDs to reference
           - marketing-material
         #diagram_tweak_weight: 1
-        #diagram_tweak_constraint: false
+        #diagram_tweak_constraint: true # true keeps the link from affecting the ranks of the assets
 
 
   Backend Admin Client:
@@ -454,7 +454,7 @@ technical_assets:
         data_assets_received: # sequence of IDs to reference
           - erp-logs
         #diagram_tweak_weight: 1
-        #diagram_tweak_constraint: false
+        #diagram_tweak_constraint: true # true keeps the link from affecting the ranks of the assets
       DB Update Access:
         target: sql-database
         description: Link to the database (JDBC tunneled via SSH)
@@ -474,7 +474,7 @@ technical_assets:
           - customer-accounts
           - customer-operational-data
         #diagram_tweak_weight: 1
-        #diagram_tweak_constraint: false
+        #diagram_tweak_constraint: true # true keeps the link from affecting the ranks of the assets
       User Management Access:
         target: ldap-auth-server
         description: Link to the LDAP auth server for managing users
@@ -491,7 +491,7 @@ technical_assets:
         data_assets_received: # sequence of IDs to reference
           - customer-accounts
         #diagram_tweak_weight: 1
-        #diagram_tweak_constraint: false
+        #diagram_tweak_constraint: true # true keeps the link from affecting the ranks of the assets
 
 
   Load Balancer:
@@ -549,7 +549,7 @@ technical_assets:
           - customer-contracts
           - client-application-code
         #diagram_tweak_weight: 5
-        #diagram_tweak_constraint: false
+        #diagram_tweak_constraint: true # true keeps the link from affecting the ranks of the assets
       CMS Content Traffic:
         target: marketing-cms
         description: Link to the CMS server
@@ -565,7 +565,7 @@ technical_assets:
         data_assets_received: # sequence of IDs to reference
           - marketing-material
         #diagram_tweak_weight: 5
-        #diagram_tweak_constraint: false
+        #diagram_tweak_constraint: true # true keeps the link from affecting the ranks of the assets
 
 
   Apache Webserver:
@@ -630,7 +630,7 @@ technical_assets:
           - customer-contracts
           - internal-business-data
         #diagram_tweak_weight: 5
-        #diagram_tweak_constraint: false
+        #diagram_tweak_constraint: true # true keeps the link from affecting the ranks of the assets
       Auth Credential Check Traffic:
         target: identity-provider
         description: Link to the identity provider server
@@ -776,7 +776,7 @@ technical_assets:
         data_assets_received: # sequence of IDs to reference
           - customer-accounts
         #diagram_tweak_weight: 5
-        #diagram_tweak_constraint: false
+        #diagram_tweak_constraint: true # true keeps the link from affecting the ranks of the assets
 
 
   Backoffice ERP System:
@@ -838,7 +838,7 @@ technical_assets:
           - customer-operational-data
           - internal-business-data
         #diagram_tweak_weight: 1
-        #diagram_tweak_constraint: false
+        #diagram_tweak_constraint: true # true keeps the link from affecting the ranks of the assets
       NFS Filesystem Access:
         target: contract-file-server
         description: Link to the file system
@@ -855,7 +855,7 @@ technical_assets:
         data_assets_received: # sequence of IDs to reference
           - customer-contracts
         #diagram_tweak_weight: 1
-        #diagram_tweak_constraint: false
+        #diagram_tweak_constraint: true # true keeps the link from affecting the ranks of the assets
 
 
   Contract File Server:
@@ -984,7 +984,7 @@ technical_assets:
           - client-application-code
           - server-application-code
         #diagram_tweak_weight: 1
-        #diagram_tweak_constraint: false
+        #diagram_tweak_constraint: true # true keeps the link from affecting the ranks of the assets
       Git-Repo Web-UI Access:
         target: git-repo
         description: Link to the Git repo
@@ -1003,7 +1003,7 @@ technical_assets:
           - client-application-code
           - server-application-code
         #diagram_tweak_weight: 1
-        #diagram_tweak_constraint: false
+        #diagram_tweak_constraint: true # true keeps the link from affecting the ranks of the assets
       Jenkins Web-UI Access:
         target: jenkins-build-server
         description: Link to the Jenkins build server
@@ -1020,7 +1020,7 @@ technical_assets:
         data_assets_received: # sequence of IDs to reference
           - build-job-config
         #diagram_tweak_weight: 1
-        #diagram_tweak_constraint: false
+        #diagram_tweak_constraint: true # true keeps the link from affecting the ranks of the assets
 
 
   Git Repository:
@@ -1119,7 +1119,7 @@ technical_assets:
           - client-application-code
           - server-application-code
         #diagram_tweak_weight: 1
-        #diagram_tweak_constraint: false
+        #diagram_tweak_constraint: true # true keeps the link from affecting the ranks of the assets
       Application Deployment:
         target: apache-webserver
         description: Link to the Apache webserver

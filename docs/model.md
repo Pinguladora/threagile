@@ -1,6 +1,8 @@
 # Model
 
-Threagile model is defined in `yaml` and comply to [schema](../support/schema.json).
+Threagile model is defined in `yaml` and comply to [schema](../support/schema.json). The values the fields take,
+like protocols and technologies, are listed in [types](./types.md), and what the diagrams show in
+[diagrams](./diagrams.md).
 
 The most important field from where analysis is starting is `technical_assets`. Another type of assets is `data_assets` which is modelling which data assets will be stored, processed, sent by technical asset.
 
@@ -25,6 +27,28 @@ one part of the id between the `@` characters, and a key covers the whole id: `u
 `unencrypted-asset` risk of every asset, `dos-risky-access-across-trust-boundary@*@*@*` the four-part ids of
 that rule, and `*@orders-db` the risks of `orders-db` but not those of `orders-db-replica`. To see which risks a
 key tracks, run `threagile explain risk '<key>'`.
+
+## Editor support
+
+The [schema](../support/schema.json) gives editors validation and completion of the model, including the values
+of every type. With the YAML extension of Red Hat in VS Code, or any other editor using the YAML language server,
+add this line at the top of a model:
+
+```yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Pinguladora/threagile/main/support/schema.json
+```
+
+or map the schema to the model files in the settings:
+
+```json
+"yaml.schemas": {
+  "https://raw.githubusercontent.com/Pinguladora/threagile/main/support/schema.json": "threagile*.yaml"
+}
+```
+
+In JetBrains IDEs, add the URL under *Settings > Languages & Frameworks > Schemas and DTDs > JSON Schema
+Mappings*. To work offline, `threagile create-editing-support --output .` writes the schema of the binary, and
+live templates for the model, into the current folder.
 
 ## Connections through proxies (`via`)
 
