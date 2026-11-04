@@ -145,6 +145,27 @@
           "backend_related": true,
           "llm": true
         }
+      },
+      {
+        "name": "ai-guardrail",
+        "description": "A guardrail that screens the input and output of language models and AI agents for prompt injection, jailbreaks and data that must not pass, as a service in their path or as a library inside them",
+        "aliases": [
+          "guardrail",
+          "llm-guardrail",
+          "ai-firewall",
+          "llm-firewall",
+          "prompt-guard",
+          "llama-guard",
+          "nemo-guardrails",
+          "guardrails-ai",
+          "bedrock-guardrails",
+          "azure-content-safety"
+        ],
+        "attributes": {
+          "ai": true,
+          "ai-guardrail": true,
+          "security_control_related": true
+        }
       }
     ],
     "machine": "container",

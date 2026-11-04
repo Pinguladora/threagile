@@ -344,6 +344,7 @@
         "threagile:machine": "container",
         "threagile:owner": "Some Company",
         "threagile:size": "service",
+        "threagile:technologies": "llm,ai-guardrail",
         "threagile:type": "process",
         "threagile:usage": "business"
       }
@@ -1026,16 +1027,6 @@
           "mitigations": [
             {
               "mitigation": "dos-risky-access-across-trust-boundary-mitigation",
-              "state": "recommended"
-            }
-          ]
-        },
-        {
-          "threat": "missing-ai-guardrail",
-          "state": "exposed",
-          "mitigations": [
-            {
-              "mitigation": "missing-ai-guardrail-mitigation",
               "state": "recommended"
             }
           ]
@@ -1751,30 +1742,6 @@
       }
     },
     {
-      "id": "missing-ai-guardrail",
-      "name": "Missing AI Guardrail",
-      "description": "A guardrail screens what reaches a language model or an agent, and what comes back from it, for prompt injection, jailbreaks and data that must not pass, independently of the model. Without one, the instructions of the system prompt are the only defense, and a model follows whatever content convinces it.",
-      "categories": [
-        "Elevation of Privilege",
-        "MAESTRO Layer 6: Security and Compliance",
-        "OWASP LLM01:2025 Prompt Injection",
-        "OWASP ASI01:2026 Agent Goal Hijack"
-      ],
-      "cwes": [
-        "CWE-1427"
-      ],
-      "risk": {
-        "likelihood": 25,
-        "impact": 50,
-        "impactComment": "If this risk is unmitigated, prompt injections and jailbreaks reach the model or the agent unchecked, and harmful or confidential output leaves it unchecked."
-      },
-      "attributes": {
-        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
-        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html",
-        "threagile:function": "architecture"
-      }
-    },
-    {
       "id": "missing-ai-monitoring",
       "name": "Missing AI Monitoring",
       "description": "What an AI agent or a language model does depends on what it reads, so it cannot be tested in full before it runs. Without a record of its prompts, its tool calls and its answers in a monitoring system, nobody sees a prompt injection, an agent going astray or a model that drifts, nor can tell afterwards what it did.",
@@ -2319,15 +2286,6 @@
       "id": "long-lived-credentials-mitigation",
       "name": "Short-Lived Credentials",
       "description": "Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity \u003ci\u003eworkload\u003c/i\u003e or the authentication \u003ci\u003eshort-lived-token\u003c/i\u003e. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.",
-      "riskReduction": 100,
-      "attributes": {
-        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
-      }
-    },
-    {
-      "id": "missing-ai-guardrail-mitigation",
-      "name": "AI Guardrails",
-      "description": "Screen the untrusted input of the model or agent, and its output, with a guardrail like a prompt injection classifier, a content safety service or a policy framework for agents, and block or flag what it finds. Model a guardrail service as an ai-guardrail technical asset in the path of the untrusted content, or one the agent asks, and a guardrail library inside the agent by adding ai-guardrail to the technologies of the agent. A guardrail lowers the risk of prompt injection, but does not remove it.",
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
