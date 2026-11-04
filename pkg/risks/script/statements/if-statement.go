@@ -92,7 +92,7 @@ func (what *IfStatement) Run(scope *common.Scope) (string, error) {
 
 	value, errorLiteral, evalError := what.expression.EvalBool(scope)
 	if evalError != nil {
-		return errorLiteral, evalError
+		return errorLiteral, fmt.Errorf("failed to eval the condition of if-statement: %w", evalError)
 	}
 
 	if value.BoolValue() {
@@ -100,14 +100,14 @@ func (what *IfStatement) Run(scope *common.Scope) (string, error) {
 			scope.PushCall(common.NewEventFrom(common.NewTrueProperty(), value))
 			defer scope.PopCall()
 
-			return what.yesPath.Run(scope)
+			return runIfPath(scope, common.Then, what.yesPath)
 		}
 	} else {
 		if what.noPath != nil {
 			scope.PushCall(common.NewEventFrom(common.NewFalseProperty(), value))
 			defer scope.PopCall()
 
-			return what.noPath.Run(scope)
+			return runIfPath(scope, common.Else, what.noPath)
 		}
 	}
 
@@ -116,4 +116,14 @@ func (what *IfStatement) Run(scope *common.Scope) (string, error) {
 
 func (what *IfStatement) Literal() string {
 	return what.literal
+}
+
+// runIfPath runs the "then" or "else" path of an if-statement.
+func runIfPath(scope *common.Scope, key string, path common.Statement) (string, error) {
+	errorLiteral, runError := path.Run(scope)
+	if runError != nil {
+		return errorLiteral, fmt.Errorf("failed to run %q of if-statement: %w", key, runError)
+	}
+
+	return errorLiteral, nil
 }

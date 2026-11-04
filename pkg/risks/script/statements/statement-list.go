@@ -54,14 +54,14 @@ func (what *StatementList) Run(scope *common.Scope) (string, error) {
 		return "", nil
 	}
 
-	for _, statement := range what.statements {
+	for index, statement := range what.statements {
 		if scope.HasReturned {
 			return "", nil
 		}
 
 		errorLiteral, statementError := statement.Run(scope)
 		if statementError != nil {
-			return errorLiteral, statementError
+			return errorLiteral, fmt.Errorf("failed to run statement #%v of statement list: %w", index+1, statementError)
 		}
 	}
 
