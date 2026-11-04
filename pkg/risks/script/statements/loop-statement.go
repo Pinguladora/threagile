@@ -18,49 +18,44 @@ type LoopStatement struct {
 func (what *LoopStatement) Parse(script any) (common.Statement, any, error) {
 	what.literal = common.ToLiteral(script)
 
-	switch script.(type) {
-	case map[string]any:
-		for key, value := range script.(map[string]any) {
-			switch key {
-			case common.In:
-				item, errorExpression, itemError := new(expressions.ValueExpression).ParseValue(value)
-				if itemError != nil {
-					return nil, errorExpression, fmt.Errorf("failed to parse %q of loop-statement: %w", key, itemError)
-				}
-
-				what.in = item
-
-			case common.Item:
-				text, ok := value.(string)
-				if !ok {
-					return nil, value, fmt.Errorf("failed to parse %q of loop-statement: expected string, got %T", key, value)
-				}
-
-				what.item = text
-
-			case common.Index:
-				text, ok := value.(string)
-				if !ok {
-					return nil, value, fmt.Errorf("failed to parse %q of loop-statement: expected string, got %T", key, value)
-				}
-
-				what.index = text
-
-			case common.Do:
-				item, errorScript, itemError := new(StatementList).Parse(value)
-				if itemError != nil {
-					return nil, errorScript, fmt.Errorf("failed to parse %q of loop-statement: %w", key, itemError)
-				}
-
-				what.body = item
-
-			default:
-				return nil, script, fmt.Errorf("failed to parse loop-statement: unexpected keyword %q", key)
-			}
-		}
-
-	default:
+	castScript, ok := script.(map[string]any)
+	if !ok {
 		return nil, script, fmt.Errorf("failed to parse loop-statement: expected map[string]any, got %T", script)
+	}
+
+	for key, value := range castScript {
+		switch key {
+		case common.In:
+			item, errorExpression, itemError := new(expressions.ValueExpression).ParseValue(value)
+			if itemError != nil {
+				return nil, errorExpression, fmt.Errorf("failed to parse %q of loop-statement: %w", key, itemError)
+			}
+
+			what.in = item
+
+		case common.Item, common.Index:
+			text, ok := value.(string)
+			if !ok {
+				return nil, value, fmt.Errorf("failed to parse %q of loop-statement: expected string, got %T", key, value)
+			}
+
+			if key == common.Item {
+				what.item = text
+			} else {
+				what.index = text
+			}
+
+		case common.Do:
+			item, errorScript, itemError := new(StatementList).Parse(value)
+			if itemError != nil {
+				return nil, errorScript, fmt.Errorf("failed to parse %q of loop-statement: %w", key, itemError)
+			}
+
+			what.body = item
+
+		default:
+			return nil, script, fmt.Errorf("failed to parse loop-statement: unexpected keyword %q", key)
+		}
 	}
 
 	return what, nil, nil
