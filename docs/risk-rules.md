@@ -79,3 +79,13 @@ To opt an asset into the key deletion rule, model the key management service as 
 `vault` asset in the cloud that the encrypted asset communicates with, or tag the
 encrypted asset (or its trust boundary) with `aws:kms`, `azure:keyvault` or
 `gcp:kms`. Add the tags you use to `tags_available`.
+
+## Risk ids of Push instead of Pull Deployment
+
+Push instead of Pull Deployment creates one risk per deployment target, with the id
+`push-instead-of-pull-deployment@<build pipeline>@<deployment target>`. Earlier
+versions gave all risks of a build pipeline the same id,
+`push-instead-of-pull-deployment@<build pipeline>`, so a `risk_tracking` entry for
+that id now matches no risk and is reported as orphaned. Replace it with one entry
+per target, or with `push-instead-of-pull-deployment@<build pipeline>@*` to track
+all of the pipeline's targets at once.
