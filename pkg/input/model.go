@@ -19,7 +19,9 @@ import (
 
 // === Model Type Stuff ======================================
 
-type Model struct { // TODO: Eventually remove this and directly use ParsedModelRoot? But then the error messages for model errors are not quite as good anymore...
+// Model is the model as written in the YAML input. It is kept apart from types.Model, which the parsed
+// model would otherwise be read into directly, because it gives better error messages for model errors.
+type Model struct {
 	ThreagileVersion                              string                    `json:"threagile_version,omitempty"                                  yaml:"threagile_version,omitempty"`
 	Includes                                      []string                  `json:"includes,omitempty"                                           yaml:"includes,omitempty"`
 	Title                                         string                    `json:"title,omitempty"                                              yaml:"title,omitempty"`
