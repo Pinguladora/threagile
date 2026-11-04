@@ -84,24 +84,7 @@ func (r *pdfReporter) WriteReportPDF(reportFilename string,
 	r.parseBackgroundTemplate(templateFilename)
 	r.createCover(model)
 	r.createTableOfContents(model)
-	err := r.createManagementSummary(model, tempFolder)
-	if err != nil {
-		return fmt.Errorf("error creating management summary: %w", err)
-	}
-	r.createImpactInitialRisks(model)
-	err = r.createRiskMitigationStatus(model, tempFolder)
-	if err != nil {
-		return fmt.Errorf("error creating risk mitigation status: %w", err)
-	}
-	if val := hideChapters[AssetRegister]; !val {
-		r.createAssetRegister(model)
-	}
-	r.createImpactRemainingRisks(model)
-	err = r.createTargetDescription(model, filepath.Dir(modelFilename))
-	if err != nil {
-		return fmt.Errorf("error creating target description: %w", err)
-	}
-	err = r.embedDataFlowDiagram(dataFlowDiagramFilenamePNG, tempFolder)
+	err := r.createOverviewChapters(model, modelFilename, dataFlowDiagramFilenamePNG, tempFolder, hideChapters)
 	if err != nil {
 		return err
 	}
@@ -132,6 +115,35 @@ func (r *pdfReporter) WriteReportPDF(reportFilename string,
 	err = r.writeReportToFile(reportFilename)
 	if err != nil {
 		return fmt.Errorf("error writing report to file: %w", err)
+	}
+	return nil
+}
+
+// createOverviewChapters creates the chapters from the management summary to the data-flow
+// diagram.
+func (r *pdfReporter) createOverviewChapters(model *types.Model, modelFilename string,
+	dataFlowDiagramFilenamePNG string, tempFolder string, hideChapters map[ChaptersToShowHide]bool,
+) error {
+	err := r.createManagementSummary(model, tempFolder)
+	if err != nil {
+		return fmt.Errorf("error creating management summary: %w", err)
+	}
+	r.createImpactInitialRisks(model)
+	err = r.createRiskMitigationStatus(model, tempFolder)
+	if err != nil {
+		return fmt.Errorf("error creating risk mitigation status: %w", err)
+	}
+	if val := hideChapters[AssetRegister]; !val {
+		r.createAssetRegister(model)
+	}
+	r.createImpactRemainingRisks(model)
+	err = r.createTargetDescription(model, filepath.Dir(modelFilename))
+	if err != nil {
+		return fmt.Errorf("error creating target description: %w", err)
+	}
+	err = r.embedDataFlowDiagram(dataFlowDiagramFilenamePNG, tempFolder)
+	if err != nil {
+		return err
 	}
 	return nil
 }
