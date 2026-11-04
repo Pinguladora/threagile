@@ -515,6 +515,16 @@
           ]
         },
         {
+          "threat": "public-cloud-asset-access",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "public-cloud-asset-access-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "something-strange",
           "state": "exposed",
           "mitigations": [
@@ -2272,6 +2282,27 @@
       }
     },
     {
+      "id": "public-cloud-asset-access",
+      "name": "Public Cloud Asset Access",
+      "description": "Cloud storage and messaging services like object storage buckets or message queues are governed by resource policies and access control lists. A policy with wildcards (like a principal of \u003ci\u003e\"*\"\u003c/i\u003e) or an ACL granting access to all users makes the asset public.",
+      "categories": [
+        "Information Disclosure"
+      ],
+      "cwes": [
+        "CWE-732"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 75,
+        "impactComment": "If this risk is unmitigated, anyone on the internet might read (data leakage), alter or delete (tampering) the data held by the cloud asset."
+      },
+      "attributes": {
+        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Secure_Cloud_Architecture_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
       "id": "push-instead-of-pull-deployment",
       "name": "Push instead of Pull Deployment",
       "description": "When comparing push-based vs. pull-based deployments from a security perspective, pull-based deployments improve the overall security of the deployment targets. Every exposed interface of a production system to accept a deployment increases the attack surface of the production system, thus a pull-based approach exposes less attack surface relevant interfaces.",
@@ -2604,6 +2635,15 @@
       "id": "path-traversal-mitigation",
       "name": "Path-Traversal Prevention",
       "description": "Before accessing the file cross-check that it resides in the expected folder and is of the expected type and filename/suffix. Try to use a mapping if possible instead of directly accessing by a filename which is (partly or fully) provided by the caller. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "public-cloud-asset-access-mitigation",
+      "name": "Cloud Access Policies",
+      "description": "Audit the resource policies and ACLs of the cloud asset regularly and reduce the granted rights to the bare minimum: no wildcard principals or actions, and conditions that pin access to the expected accounts, VPCs or endpoints. Label the assets that have to be public and isolate them from the non-public ones. \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Turn on \u003ci\u003eS3 Block Public Access\u003c/i\u003e at the account level (see \u003ca href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html\"\u003ehttps://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html\u003c/a\u003e) and review the public and cross-account findings of \u003ci\u003eIAM Access Analyzer\u003c/i\u003e, which covers S3 buckets, SQS queues and further resource types (see \u003ca href=\"https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html\"\u003ehttps://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html\u003c/a\u003e).",
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"

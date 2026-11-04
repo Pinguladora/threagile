@@ -37,6 +37,7 @@ func GetBuiltInRiskRules() types.RiskRules {
 		builtin.NewMissingWafRule(),
 		builtin.NewMixedTargetsOnSharedRuntimeRule(),
 		builtin.NewPathTraversalRule(),
+		builtin.NewPublicCloudAssetAccessRule(),
 		builtin.NewPushInsteadPullDeploymentRule(),
 		builtin.NewSearchQueryInjectionRule(),
 		builtin.NewServerSideRequestForgeryRule(),
