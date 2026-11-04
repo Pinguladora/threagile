@@ -46,9 +46,7 @@ func (s *server) createNewModel(ginContext *gin.Context) {
 	aUuid := uuid.New().String()
 	err := os.Mkdir(folderNameForModel(folderNameOfKey, aUuid), 0o700)
 	if err != nil {
-		ginContext.JSON(http.StatusInternalServerError, gin.H{
-			"error": "unable to create model",
-		})
+		respondError(ginContext, http.StatusInternalServerError, "unable to create model")
 		return
 	}
 
@@ -85,9 +83,8 @@ diagram_tweak_same_rank_assets: []`
 
 	ok = s.writeModelYAML(ginContext, aYaml, key, folderNameForModel(folderNameOfKey, aUuid), "New Model Creation", true)
 	if ok {
-		ginContext.JSON(http.StatusCreated, gin.H{
-			"message": "model created",
-			"id":      aUuid,
+		respondMessage(ginContext, http.StatusCreated, "model created", gin.H{
+			"id": aUuid,
 		})
 	}
 }
@@ -112,9 +109,7 @@ func (s *server) listModels(ginContext *gin.Context) {
 	modelFolders, err := os.ReadDir(folderNameOfKey)
 	if err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "token not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "token not found")
 		return
 	}
 	for _, dirEntry := range modelFolders {
@@ -122,9 +117,7 @@ func (s *server) listModels(ginContext *gin.Context) {
 			modelStat, err := os.Stat(filepath.Join(folderNameOfKey, dirEntry.Name(), s.config.GetInputFile()))
 			if err != nil {
 				log.Println(err)
-				ginContext.JSON(http.StatusNotFound, gin.H{
-					"error": "unable to list model",
-				})
+				respondError(ginContext, http.StatusNotFound, "unable to list model")
 				return
 			}
 			aModel, _, ok := s.readModel(ginContext, dirEntry.Name(), key, folderNameOfKey)
@@ -134,9 +127,7 @@ func (s *server) listModels(ginContext *gin.Context) {
 			fileInfo, err := dirEntry.Info()
 			if err != nil {
 				log.Println(err)
-				ginContext.JSON(http.StatusNotFound, gin.H{
-					"error": "unable to get file info",
-				})
+				respondError(ginContext, http.StatusNotFound, "unable to get file info")
 				return
 			}
 			result = append(result, payloadModels{
@@ -160,21 +151,15 @@ func (s *server) deleteModel(ginContext *gin.Context) {
 	folder, ok := s.checkModelFolder(ginContext, ginContext.Param("model-id"), folderNameOfKey)
 	if ok {
 		if folder != filepath.Clean(folder) {
-			ginContext.JSON(http.StatusInternalServerError, gin.H{
-				"error": "model-id is weird",
-			})
+			respondError(ginContext, http.StatusInternalServerError, "model-id is weird")
 			return
 		}
 		err := os.RemoveAll(folder)
 		if err != nil {
-			ginContext.JSON(http.StatusNotFound, gin.H{
-				"error": "model not found",
-			})
+			respondError(ginContext, http.StatusNotFound, "model not found")
 			return
 		}
-		ginContext.JSON(http.StatusOK, gin.H{
-			"message": "model deleted",
-		})
+		respondMessage(ginContext, http.StatusOK, "model deleted", nil)
 	}
 }
 
@@ -196,9 +181,7 @@ func (s *server) setCover(ginContext *gin.Context) {
 		payload := payloadCover{}
 		err := ginContext.BindJSON(&payload)
 		if err != nil {
-			ginContext.JSON(http.StatusBadRequest, gin.H{
-				"error": "unable to parse request payload",
-			})
+			respondError(ginContext, http.StatusBadRequest, "unable to parse request payload")
 			return
 		}
 		modelInput.Title = payload.Title
@@ -209,9 +192,7 @@ func (s *server) setCover(ginContext *gin.Context) {
 		modelInput.Author.Homepage = payload.Author.Homepage
 		ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Cover Update")
 		if ok {
-			ginContext.JSON(http.StatusOK, gin.H{
-				"message": "model updated",
-			})
+			respondMessage(ginContext, http.StatusOK, "model updated", nil)
 		}
 	}
 }
@@ -253,9 +234,7 @@ func (s *server) setOverview(ginContext *gin.Context) {
 		err := ginContext.BindJSON(&payload)
 		if err != nil {
 			log.Println(err)
-			ginContext.JSON(http.StatusBadRequest, gin.H{
-				"error": "unable to parse request payload",
-			})
+			respondError(ginContext, http.StatusBadRequest, "unable to parse request payload")
 			return
 		}
 		criticality, err := types.ParseCriticality(payload.BusinessCriticality)
@@ -271,9 +250,7 @@ func (s *server) setOverview(ginContext *gin.Context) {
 		modelInput.TechnicalOverview.Images = payload.TechnicalOverview.Images
 		ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Overview Update")
 		if ok {
-			ginContext.JSON(http.StatusOK, gin.H{
-				"message": "model updated",
-			})
+			respondMessage(ginContext, http.StatusOK, "model updated", nil)
 		}
 	}
 }
@@ -311,17 +288,13 @@ func (s *server) setAbuseCases(ginContext *gin.Context) {
 		err := ginContext.BindJSON(&payload)
 		if err != nil {
 			log.Println(err)
-			ginContext.JSON(http.StatusBadRequest, gin.H{
-				"error": "unable to parse request payload",
-			})
+			respondError(ginContext, http.StatusBadRequest, "unable to parse request payload")
 			return
 		}
 		modelInput.AbuseCases = payload
 		ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Abuse Cases Update")
 		if ok {
-			ginContext.JSON(http.StatusOK, gin.H{
-				"message": "model updated",
-			})
+			respondMessage(ginContext, http.StatusOK, "model updated", nil)
 		}
 	}
 }
@@ -354,17 +327,13 @@ func (s *server) setSecurityRequirements(ginContext *gin.Context) {
 		err := ginContext.BindJSON(&payload)
 		if err != nil {
 			log.Println(err)
-			ginContext.JSON(http.StatusBadRequest, gin.H{
-				"error": "unable to parse request payload",
-			})
+			respondError(ginContext, http.StatusBadRequest, "unable to parse request payload")
 			return
 		}
 		modelInput.SecurityRequirements = payload
 		ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Security Requirements Update")
 		if ok {
-			ginContext.JSON(http.StatusOK, gin.H{
-				"message": "model updated",
-			})
+			respondMessage(ginContext, http.StatusOK, "model updated", nil)
 		}
 	}
 }
@@ -428,9 +397,7 @@ func (s *server) getDataAsset(ginContext *gin.Context) {
 				return
 			}
 		}
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "data asset not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "data asset not found")
 	}
 }
 
@@ -522,8 +489,7 @@ func (s *server) deleteDataAsset(ginContext *gin.Context) {
 				delete(modelInput.DataAssets, title)
 				ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Data Asset Deletion")
 				if ok {
-					ginContext.JSON(http.StatusOK, gin.H{
-						"message":            "data asset deleted",
+					respondMessage(ginContext, http.StatusOK, "data asset deleted", gin.H{
 						"id":                 dataAsset.ID,
 						"references_deleted": referencesDeleted, // in order to signal to clients, that other model parts might've been deleted as well
 					})
@@ -531,9 +497,7 @@ func (s *server) deleteDataAsset(ginContext *gin.Context) {
 				return
 			}
 		}
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "data asset not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "data asset not found")
 	}
 }
 
@@ -553,9 +517,7 @@ func (s *server) setDataAsset(ginContext *gin.Context) {
 				err := ginContext.BindJSON(&payload)
 				if err != nil {
 					log.Println(err)
-					ginContext.JSON(http.StatusBadRequest, gin.H{
-						"error": "unable to parse request payload",
-					})
+					respondError(ginContext, http.StatusBadRequest, "unable to parse request payload")
 					return
 				}
 				dataAssetInput, ok := s.populateDataAsset(ginContext, payload)
@@ -616,8 +578,7 @@ func (s *server) setDataAsset(ginContext *gin.Context) {
 				}
 				ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Data Asset Update")
 				if ok {
-					ginContext.JSON(http.StatusOK, gin.H{
-						"message":    "data asset updated",
+					respondMessage(ginContext, http.StatusOK, "data asset updated", gin.H{
 						"id":         dataAssetInput.ID,
 						"id_changed": idChanged, // in order to signal to clients, that other model parts might've received updates as well and should be reloaded
 					})
@@ -625,9 +586,7 @@ func (s *server) setDataAsset(ginContext *gin.Context) {
 				return
 			}
 		}
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "data asset not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "data asset not found")
 	}
 }
 
@@ -644,24 +603,18 @@ func (s *server) createNewDataAsset(ginContext *gin.Context) {
 		err := ginContext.BindJSON(&payload)
 		if err != nil {
 			log.Println(err)
-			ginContext.JSON(http.StatusBadRequest, gin.H{
-				"error": "unable to parse request payload",
-			})
+			respondError(ginContext, http.StatusBadRequest, "unable to parse request payload")
 			return
 		}
 		// yes, here keyed by title in YAML for better readability in the YAML file itself
 		if _, exists := modelInput.DataAssets[payload.Title]; exists {
-			ginContext.JSON(http.StatusConflict, gin.H{
-				"error": "data asset with this title already exists",
-			})
+			respondError(ginContext, http.StatusConflict, "data asset with this title already exists")
 			return
 		}
 		// but later it will in memory keyed by its "id", so do this uniqueness check also
 		for _, asset := range modelInput.DataAssets {
 			if asset.ID == payload.Id {
-				ginContext.JSON(http.StatusConflict, gin.H{
-					"error": "data asset with this id already exists",
-				})
+				respondError(ginContext, http.StatusConflict, "data asset with this id already exists")
 				return
 			}
 		}
@@ -675,9 +628,8 @@ func (s *server) createNewDataAsset(ginContext *gin.Context) {
 		modelInput.DataAssets[payload.Title] = dataAssetInput
 		ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Data Asset Creation")
 		if ok {
-			ginContext.JSON(http.StatusOK, gin.H{
-				"message": "data asset created",
-				"id":      dataAssetInput.ID,
+			respondMessage(ginContext, http.StatusOK, "data asset created", gin.H{
+				"id": dataAssetInput.ID,
 			})
 		}
 	}
@@ -762,9 +714,7 @@ func (s *server) setSharedRuntime(ginContext *gin.Context) {
 				err := ginContext.BindJSON(&payload)
 				if err != nil {
 					log.Println(err)
-					ginContext.JSON(http.StatusBadRequest, gin.H{
-						"error": "unable to parse request payload",
-					})
+					respondError(ginContext, http.StatusBadRequest, "unable to parse request payload")
 					return
 				}
 				sharedRuntimeInput, ok := populateSharedRuntime(ginContext, payload)
@@ -790,8 +740,7 @@ func (s *server) setSharedRuntime(ginContext *gin.Context) {
 				}
 				ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Shared Runtime Update")
 				if ok {
-					ginContext.JSON(http.StatusOK, gin.H{
-						"message":    "shared runtime updated",
+					respondMessage(ginContext, http.StatusOK, "shared runtime updated", gin.H{
 						"id":         sharedRuntimeInput.ID,
 						"id_changed": idChanged, // in order to signal to clients, that other model parts might've received updates as well and should be reloaded
 					})
@@ -799,9 +748,7 @@ func (s *server) setSharedRuntime(ginContext *gin.Context) {
 				return
 			}
 		}
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "shared runtime not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "shared runtime not found")
 	}
 }
 
@@ -823,9 +770,7 @@ func (s *server) getSharedRuntime(ginContext *gin.Context) {
 				return
 			}
 		}
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "shared runtime not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "shared runtime not found")
 	}
 }
 
@@ -842,31 +787,23 @@ func (s *server) createNewSharedRuntime(ginContext *gin.Context) {
 		err := ginContext.BindJSON(&payload)
 		if err != nil {
 			log.Println(err)
-			ginContext.JSON(http.StatusBadRequest, gin.H{
-				"error": "unable to parse request payload",
-			})
+			respondError(ginContext, http.StatusBadRequest, "unable to parse request payload")
 			return
 		}
 		// yes, here keyed by title in YAML for better readability in the YAML file itself
 		if _, exists := modelInput.SharedRuntimes[payload.Title]; exists {
-			ginContext.JSON(http.StatusConflict, gin.H{
-				"error": "shared runtime with this title already exists",
-			})
+			respondError(ginContext, http.StatusConflict, "shared runtime with this title already exists")
 			return
 		}
 		// but later it will in memory keyed by its "id", so do this uniqueness check also
 		for _, sharedRuntime := range modelInput.SharedRuntimes {
 			if sharedRuntime.ID == payload.Id {
-				ginContext.JSON(http.StatusConflict, gin.H{
-					"error": "shared runtime with this id already exists",
-				})
+				respondError(ginContext, http.StatusConflict, "shared runtime with this id already exists")
 				return
 			}
 		}
 		if !checkTechnicalAssetsExisting(modelInput, payload.TechnicalAssetsRunning) {
-			ginContext.JSON(http.StatusBadRequest, gin.H{
-				"error": "referenced technical asset does not exist",
-			})
+			respondError(ginContext, http.StatusBadRequest, "referenced technical asset does not exist")
 			return
 		}
 		sharedRuntimeInput, ok := populateSharedRuntime(ginContext, payload)
@@ -879,9 +816,8 @@ func (s *server) createNewSharedRuntime(ginContext *gin.Context) {
 		modelInput.SharedRuntimes[payload.Title] = sharedRuntimeInput
 		ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Shared Runtime Creation")
 		if ok {
-			ginContext.JSON(http.StatusOK, gin.H{
-				"message": "shared runtime created",
-				"id":      sharedRuntimeInput.ID,
+			respondMessage(ginContext, http.StatusOK, "shared runtime created", gin.H{
+				"id": sharedRuntimeInput.ID,
 			})
 		}
 	}
@@ -943,8 +879,7 @@ func (s *server) deleteSharedRuntime(ginContext *gin.Context) {
 				delete(modelInput.SharedRuntimes, title)
 				ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Shared Runtime Deletion")
 				if ok {
-					ginContext.JSON(http.StatusOK, gin.H{
-						"message":            "shared runtime deleted",
+					respondMessage(ginContext, http.StatusOK, "shared runtime deleted", gin.H{
 						"id":                 sharedRuntime.ID,
 						"references_deleted": referencesDeleted, // in order to signal to clients, that other model parts might've been deleted as well
 					})
@@ -952,9 +887,7 @@ func (s *server) deleteSharedRuntime(ginContext *gin.Context) {
 				return
 			}
 		}
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "shared runtime not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "shared runtime not found")
 	}
 }
 
@@ -980,26 +913,20 @@ func (s *server) readModel(ginContext *gin.Context, modelUUID string, key []byte
 	block, err := aes.NewCipher(cryptoKey)
 	if err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusInternalServerError, gin.H{
-			"error": "unable to open model",
-		})
+		respondError(ginContext, http.StatusInternalServerError, "unable to open model")
 		return modelInputResult, yamlText, false
 	}
 	aesGcm, err := cipher.NewGCM(block)
 	if err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusInternalServerError, gin.H{
-			"error": "unable to open model",
-		})
+		respondError(ginContext, http.StatusInternalServerError, "unable to open model")
 		return modelInputResult, yamlText, false
 	}
 
 	fileBytes, err := os.ReadFile(filepath.Clean(filepath.Join(modelFolder, s.config.GetInputFile())))
 	if err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusInternalServerError, gin.H{
-			"error": "unable to open model",
-		})
+		respondError(ginContext, http.StatusInternalServerError, "unable to open model")
 		return modelInputResult, yamlText, false
 	}
 
@@ -1008,18 +935,14 @@ func (s *server) readModel(ginContext *gin.Context, modelUUID string, key []byte
 	plaintext, err := aesGcm.Open(nil, nonce, ciphertext, nil) // #nosec G407 // false positive The nounce is read from file for decryption not encryption
 	if err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusInternalServerError, gin.H{
-			"error": "unable to open model",
-		})
+		respondError(ginContext, http.StatusInternalServerError, "unable to open model")
 		return modelInputResult, yamlText, false
 	}
 
 	r, err := gzip.NewReader(bytes.NewReader(plaintext))
 	if err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusInternalServerError, gin.H{
-			"error": "unable to open model",
-		})
+		respondError(ginContext, http.StatusInternalServerError, "unable to open model")
 		return modelInputResult, yamlText, false
 	}
 	buf := new(bytes.Buffer)
@@ -1029,9 +952,7 @@ func (s *server) readModel(ginContext *gin.Context, modelUUID string, key []byte
 	err = yaml.Unmarshal(yamlBytes, &modelInput)
 	if err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusInternalServerError, gin.H{
-			"error": "unable to open model",
-		})
+		respondError(ginContext, http.StatusInternalServerError, "unable to open model")
 		return modelInputResult, yamlText, false
 	}
 	return *modelInput, string(yamlBytes), true
@@ -1044,9 +965,7 @@ func (s *server) writeModel(ginContext *gin.Context, key []byte, folderNameOfKey
 		yamlBytes, err := yaml.Marshal(modelInput)
 		if err != nil {
 			log.Println(err)
-			ginContext.JSON(http.StatusInternalServerError, gin.H{
-				"error": "unable to write model",
-			})
+			respondError(ginContext, http.StatusInternalServerError, "unable to write model")
 			return false
 		}
 		/*
@@ -1060,16 +979,12 @@ func (s *server) writeModel(ginContext *gin.Context, key []byte, folderNameOfKey
 func (s *server) checkModelFolder(ginContext *gin.Context, modelUUID string, folderNameOfKey string) (modelFolder string, ok bool) {
 	uuidParsed, err := uuid.Parse(modelUUID)
 	if err != nil {
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "model not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "model not found")
 		return modelFolder, false
 	}
 	modelFolder = folderNameForModel(folderNameOfKey, uuidParsed.String())
 	if _, err := os.Stat(modelFolder); os.IsNotExist(err) {
-		ginContext.JSON(http.StatusNotFound, gin.H{
-			"error": "model not found",
-		})
+		respondError(ginContext, http.StatusNotFound, "model not found")
 		return modelFolder, false
 	}
 	return modelFolder, true
@@ -1092,9 +1007,7 @@ func (s *server) getModel(ginContext *gin.Context) {
 		err = os.WriteFile(tmpResultFile.Name(), []byte(yamlText), 0o400) // #nosec G703
 		if err != nil {
 			log.Println(err)
-			ginContext.JSON(http.StatusInternalServerError, gin.H{
-				"error": "unable to stream model file",
-			})
+			respondError(ginContext, http.StatusInternalServerError, "unable to stream model file")
 			return
 		}
 		defer func() { _ = os.Remove(tmpResultFile.Name()) }() // #nosec G703
@@ -1120,9 +1033,7 @@ func (s *server) importModel(ginContext *gin.Context) {
 			// if we're here, then no problem was raised, so ok to proceed
 			ok = s.writeModelYAML(ginContext, string(yamlContent), key, folderNameForModel(folderNameOfKey, aUuid), "Model Import", false)
 			if ok {
-				ginContext.JSON(http.StatusCreated, gin.H{
-					"message": "model imported",
-				})
+				respondMessage(ginContext, http.StatusCreated, "model imported", nil)
 			}
 		}
 	}
@@ -1143,9 +1054,7 @@ func (s *server) analyzeModelOnServerDirectly(ginContext *gin.Context) {
 				log.Println(err)
 			}
 			log.Println(err)
-			ginContext.JSON(http.StatusBadRequest, gin.H{
-				"error": strings.TrimSpace(err.Error()),
-			})
+			respondError(ginContext, http.StatusBadRequest, strings.TrimSpace(err.Error()))
 			ok = false
 		}
 	}()
@@ -1232,26 +1141,20 @@ func (s *server) writeModelYAML(ginContext *gin.Context, yaml string, key []byte
 	block, err := aes.NewCipher(cryptoKey)
 	if err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusInternalServerError, gin.H{
-			"error": "unable to write model",
-		})
+		respondError(ginContext, http.StatusInternalServerError, "unable to write model")
 		return false
 	}
 	// Never use more than 2^32 random nonces with a given key because of the risk of a repeat.
 	nonce := make([]byte, nonceSize)
 	if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusInternalServerError, gin.H{
-			"error": "unable to write model",
-		})
+		respondError(ginContext, http.StatusInternalServerError, "unable to write model")
 		return false
 	}
 	aesGcm, err := cipher.NewGCM(block)
 	if err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusInternalServerError, gin.H{
-			"error": "unable to write model",
-		})
+		respondError(ginContext, http.StatusInternalServerError, "unable to write model")
 		return false
 	}
 	ciphertext := aesGcm.Seal(nil, nonce, plaintext, nil) // #nosec G407 // The nounce is read from random so it shoul be random each run
@@ -1259,18 +1162,14 @@ func (s *server) writeModelYAML(ginContext *gin.Context, yaml string, key []byte
 		err = s.backupModelToHistory(modelFolder, changeReasonForHistory)
 		if err != nil {
 			log.Println(err)
-			ginContext.JSON(http.StatusInternalServerError, gin.H{
-				"error": "unable to write model",
-			})
+			respondError(ginContext, http.StatusInternalServerError, "unable to write model")
 			return false
 		}
 	}
 	f, err := os.Create(filepath.Clean(filepath.Join(modelFolder, s.config.GetInputFile())))
 	if err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusInternalServerError, gin.H{
-			"error": "unable to write model",
-		})
+		respondError(ginContext, http.StatusInternalServerError, "unable to write model")
 		return false
 	}
 	_, _ = f.Write(nonce)

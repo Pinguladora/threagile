@@ -30,9 +30,7 @@ func (s *server) analyze(ginContext *gin.Context) {
 func (s *server) check(ginContext *gin.Context) {
 	_, ok := s.execute(ginContext, true)
 	if ok {
-		ginContext.JSON(http.StatusOK, gin.H{
-			"message": "model is ok",
-		})
+		respondMessage(ginContext, http.StatusOK, "model is ok", nil)
 	}
 }
 
@@ -49,9 +47,7 @@ func (s *server) execute(ginContext *gin.Context, dryRun bool) (yamlContent []by
 			s.errorCount++
 			err = panicError(r)
 			log.Println(err)
-			ginContext.JSON(http.StatusBadRequest, gin.H{
-				"error": strings.TrimSpace(err.Error()),
-			})
+			respondError(ginContext, http.StatusBadRequest, strings.TrimSpace(err.Error()))
 			ok = false
 		}
 	}()
@@ -71,9 +67,7 @@ func (s *server) execute(ginContext *gin.Context, dryRun bool) (yamlContent []by
 	if header.Size > maxModelUploadSize {
 		msg := "maximum model upload file size exceeded (denial-of-service protection)"
 		log.Println(msg)
-		ginContext.JSON(http.StatusRequestEntityTooLarge, gin.H{
-			"error": msg,
-		})
+		respondError(ginContext, http.StatusRequestEntityTooLarge, msg)
 		return yamlContent, false
 	}
 
@@ -258,17 +252,13 @@ func (s *server) editModelAnalyze(ginContext *gin.Context) {
 			s.errorCount++
 			err = panicError(r)
 			log.Println(err)
-			ginContext.JSON(http.StatusBadRequest, gin.H{
-				"error": strings.TrimSpace(err.Error()),
-			})
+			respondError(ginContext, http.StatusBadRequest, strings.TrimSpace(err.Error()))
 		}
 	}()
 
 	var modelInput input.Model
 	if err := ginContext.ShouldBindJSON(&modelInput); err != nil {
-		ginContext.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid JSON provided",
-		})
+		respondError(ginContext, http.StatusBadRequest, "Invalid JSON provided")
 		return
 	}
 	log.Printf("Received JSON: %+v\n", modelInput)
@@ -282,14 +272,11 @@ func (s *server) editModelAnalyze(ginContext *gin.Context) {
 
 	result, err := model.AnalyzeModel(&modelInput, s.config, builtinRiskRules, customRiskRules, progressReporter)
 	if err != nil {
-		ginContext.JSON(http.StatusBadRequest, gin.H{
-			"error": "Unable to analyze model: " + err.Error(),
-		})
+		respondError(ginContext, http.StatusBadRequest, "Unable to analyze model: "+err.Error())
 		return
 	}
 
-	ginContext.JSON(http.StatusOK, gin.H{
-		"message": "Analyzed successfully",
-		"data":    result,
+	respondMessage(ginContext, http.StatusOK, "Analyzed successfully", gin.H{
+		"data": result,
 	})
 }

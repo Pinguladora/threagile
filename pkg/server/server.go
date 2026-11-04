@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"html/template"
 	"log"
+	"maps"
 	"mime"
 	"net/http"
 	"os"
@@ -98,9 +99,7 @@ func RunServer(config serverConfigReader, builtinRiskRules types.RiskRules) {
 	s.addStaticRoutes(router)
 
 	router.GET("/meta/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
+		respondMessage(c, http.StatusOK, "pong", nil)
 	})
 	router.GET("/meta/version", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
@@ -343,9 +342,7 @@ func (s *server) stats(ginContext *gin.Context) {
 	keyFolders, err := os.ReadDir(filepath.Join(s.config.GetServerFolder(), s.config.GetKeyFolder()))
 	if err != nil {
 		log.Println(err)
-		ginContext.JSON(http.StatusInternalServerError, gin.H{
-			"error": "unable to collect stats",
-		})
+		respondError(ginContext, http.StatusInternalServerError, "unable to collect stats")
 		return
 	}
 	for _, keyFolder := range keyFolders {
@@ -353,17 +350,13 @@ func (s *server) stats(ginContext *gin.Context) {
 		if len(keyFolder.Name()) == sha512HexLength {
 			keyCount++
 			if keyFolder.Name() != filepath.Clean(keyFolder.Name()) {
-				ginContext.JSON(http.StatusInternalServerError, gin.H{
-					"error": "weird file path",
-				})
+				respondError(ginContext, http.StatusInternalServerError, "weird file path")
 				return
 			}
 			modelFolders, err := os.ReadDir(filepath.Join(s.config.GetServerFolder(), s.config.GetKeyFolder(), keyFolder.Name()))
 			if err != nil {
 				log.Println(err)
-				ginContext.JSON(http.StatusInternalServerError, gin.H{
-					"error": "unable to collect stats",
-				})
+				respondError(ginContext, http.StatusInternalServerError, "unable to collect stats")
 				return
 			}
 			for _, modelFolder := range modelFolders {
@@ -385,9 +378,7 @@ func (s *server) stats(ginContext *gin.Context) {
 
 func handleErrorInServiceCall(err error, ginContext *gin.Context) {
 	log.Println(err)
-	ginContext.JSON(http.StatusBadRequest, gin.H{
-		"error": strings.TrimSpace(err.Error()),
-	})
+	respondError(ginContext, http.StatusBadRequest, strings.TrimSpace(err.Error()))
 }
 
 // panicError is the error a handler panicked with. A panic with anything else goes on to the recovery of
@@ -398,4 +389,20 @@ func panicError(r any) error {
 		panic(r)
 	}
 	return err
+}
+
+// respondError answers a request with an error.
+func respondError(ginContext *gin.Context, status int, message string) {
+	ginContext.JSON(status, gin.H{
+		"error": message,
+	})
+}
+
+// respondMessage answers a request with a message and the given fields, if any.
+func respondMessage(ginContext *gin.Context, status int, message string, fields gin.H) {
+	response := gin.H{
+		"message": message,
+	}
+	maps.Copy(response, fields)
+	ginContext.JSON(status, response)
 }
