@@ -277,6 +277,7 @@ func newThreat(category *types.RiskCategory, risks []*types.Risk) Threat {
 		Description: category.Description,
 		STRIDE:      category.STRIDE,
 		CWE:         category.CWE,
+		References:  category.References,
 		ImpactText:  category.Impact,
 		Mitigation: Mitigation{
 			Name:        category.Action,

@@ -1663,6 +1663,9 @@ func writeRiskCategoryDetails(f *os.File, category *types.RiskCategory) {
 	writeLine(f, "")
 	writeLine(f, "* [RiskStatusMitigated]#ASVS Chapter#: "+asvsLink)
 	writeLine(f, "* [RiskStatusMitigated]#Cheat Sheet#: "+cheatSheetLink)
+	if len(category.References) > 0 {
+		writeLine(f, "* [RiskStatusMitigated]#References#: "+strings.Join(category.References, "; "))
+	}
 	writeLine(f, "\n\n*Check*\n")
 	writeLine(f, category.Check)
 }

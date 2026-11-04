@@ -24,6 +24,14 @@
           "description": "CWE",
           "type": "integer"
         },
+        "references": {
+          "description": "Entries of other threat catalogs the risk category matches, like \"OWASP LLM01:2025 Prompt Injection\"",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
         "description": {
           "description": "Description",
           "type": [

@@ -96,7 +96,8 @@ type Threat struct {
 	Name        string
 	Description string
 	STRIDE      types.STRIDE
-	CWE         int // 0 when the category names no CWE
+	CWE         int      // 0 when the category names no CWE
+	References  []string // entries of other threat catalogs the category matches
 	// Likelihood and Impact are the highest of the risks of the category.
 	Likelihood types.RiskExploitationLikelihood
 	Impact     types.RiskExploitationImpact

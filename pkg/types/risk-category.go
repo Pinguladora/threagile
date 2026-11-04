@@ -19,6 +19,9 @@ type RiskCategory struct {
 	FalsePositives             string       `json:"false_positives,omitempty"               yaml:"false_positives,omitempty"`
 	ModelFailurePossibleReason bool         `json:"model_failure_possible_reason,omitempty" yaml:"model_failure_possible_reason,omitempty"`
 	CWE                        int          `json:"cwe,omitempty"                           yaml:"cwe,omitempty"`
+	// References name the entries of other threat catalogs that the category matches, like
+	// "OWASP LLM01:2025 Prompt Injection".
+	References []string `json:"references,omitempty" yaml:"references,omitempty"`
 }
 
 type RiskCategories []*RiskCategory

@@ -347,6 +347,9 @@ that may carry threagile's basic markup go through markup, which keeps only that
 <tr><th scope="row">Action</th><td>{{.Category.Action}}</td></tr>
 <tr><th scope="row">ASVS chapter</th><td>{{if .Category.ASVS}}{{.Category.ASVS}}{{else}}n/a{{end}}</td></tr>
 <tr><th scope="row">Cheat sheet</th><td>{{if .CheatSheet.Anchor}}<a href="{{.CheatSheet.Anchor}}" rel="noopener noreferrer">{{.CheatSheet.Title}}</a>{{else}}n/a{{end}}</td></tr>
+{{- if .Category.References}}
+<tr><th scope="row">References</th><td>{{range $index, $reference := .Category.References}}{{if $index}}; {{end}}{{$reference}}{{end}}</td></tr>
+{{- end}}
 </tbody>
 </table>
 </div>

@@ -22,6 +22,7 @@ type RiskCategory struct {
 	FalsePositives             string                    `json:"false_positives,omitempty"               yaml:"false_positives,omitempty"`
 	ModelFailurePossibleReason bool                      `json:"model_failure_possible_reason,omitempty" yaml:"model_failure_possible_reason,omitempty"`
 	CWE                        int                       `json:"cwe,omitempty"                           yaml:"cwe,omitempty"`
+	References                 []string                  `json:"references,omitempty"                    yaml:"references,omitempty"`
 	RisksIdentified            map[string]RiskIdentified `json:"risks_identified,omitempty"              yaml:"risks_identified,omitempty"`
 }
 
@@ -53,6 +54,8 @@ func (what *RiskCategory) Merge(other RiskCategory) error {
 	if what.CWE == 0 {
 		what.CWE = other.CWE
 	}
+
+	what.References = new(Strings).MergeUniqueSlice(what.References, other.References)
 
 	what.RisksIdentified, mergeError = new(RiskIdentified).MergeMap(what.RisksIdentified, other.RisksIdentified)
 	if mergeError != nil {
