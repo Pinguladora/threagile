@@ -24,43 +24,51 @@ func (what *Value) Negated() bool {
 }
 
 func (what *Value) Text() []string {
-	text := make([]string, 0)
-	switch castValue := what.value.(type) {
-	case Texter:
+	lines, isList := listText(what.value)
+	if !isList {
 		if what.negated {
-			text = append(text, "not")
+			return []string{fmt.Sprintf("not %v", what.value)}
 		}
 
-		for _, value := range castValue.Text() {
-			text = append(text, fmt.Sprintf("  %v", value))
-		}
-
-	case []any:
-		if what.negated {
-			text = append(text, "not")
-		}
-
-		for _, item := range castValue {
-			text = append(text, fmt.Sprintf("  - %v", item))
-		}
-
-	case map[string]any:
-		if what.negated {
-			text = append(text, "not")
-		}
-
-		for _, name := range slices.Sorted(maps.Keys(castValue)) {
-			item := castValue[name]
-			text = append(text, fmt.Sprintf("  %v: %v", name, item))
-		}
-
-	default:
-		if what.negated {
-			text = append(text, fmt.Sprintf("not %v", castValue))
-		} else {
-			text = append(text, fmt.Sprintf("%v", castValue))
-		}
+		return []string{fmt.Sprintf("%v", what.value)}
 	}
 
-	return text
+	text := make([]string, 0, len(lines)+1)
+	if what.negated {
+		text = append(text, "not")
+	}
+
+	return append(text, lines...)
+}
+
+// listText returns the lines of a value that shows as a list: a texter, a slice or a map (sorted by its keys).
+func listText(value any) ([]string, bool) {
+	switch castValue := value.(type) {
+	case Texter:
+		lines := make([]string, 0)
+		for _, line := range castValue.Text() {
+			lines = append(lines, fmt.Sprintf("  %v", line))
+		}
+
+		return lines, true
+
+	case []any:
+		lines := make([]string, 0, len(castValue))
+		for _, item := range castValue {
+			lines = append(lines, fmt.Sprintf("  - %v", item))
+		}
+
+		return lines, true
+
+	case map[string]any:
+		lines := make([]string, 0, len(castValue))
+		for _, name := range slices.Sorted(maps.Keys(castValue)) {
+			item := castValue[name]
+			lines = append(lines, fmt.Sprintf("  %v: %v", name, item))
+		}
+
+		return lines, true
+	}
+
+	return nil, false
 }
