@@ -1,6 +1,8 @@
 package types
 
 import (
+	"os"
+	"strconv"
 	"time"
 
 	"gopkg.in/yaml.v3"
@@ -9,7 +11,24 @@ import (
 const (
 	jsonDateFormat = `"2006-01-02"`
 	yamlDateFormat = `2006-01-02`
+
+	// sourceDateEpochEnv is the reproducible-builds variable holding a Unix
+	// timestamp, see https://reproducible-builds.org/specs/source-date-epoch/.
+	sourceDateEpochEnv = "SOURCE_DATE_EPOCH"
 )
+
+// Now returns the time that reports are stamped with. When SOURCE_DATE_EPOCH
+// holds a Unix timestamp it is used (in UTC), so the same model always gives the
+// same reports; otherwise, or if the value does not parse, it is the current time.
+func Now() time.Time {
+	if epoch, ok := os.LookupEnv(sourceDateEpochEnv); ok {
+		if seconds, err := strconv.ParseInt(epoch, 10, 64); err == nil {
+			return time.Unix(seconds, 0).UTC()
+		}
+	}
+
+	return time.Now()
+}
 
 type Date struct {
 	time.Time

@@ -33,7 +33,7 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 		return nil, fmt.Errorf("unknown 'business_criticality' value of application: %v", modelInput.BusinessCriticality)
 	}
 
-	reportDate := time.Now()
+	reportDate := types.Now()
 	if len(modelInput.Date) > 0 {
 		var parseError error
 		reportDate, parseError = time.Parse("2006-01-02", modelInput.Date)
