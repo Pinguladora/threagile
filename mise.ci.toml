@@ -1,16 +1,6 @@
-[settings]
-experimental = true
-env_cache = true
-env_cache_ttl = "9h"
-minimum_release_age = "7d"
-pin = true
-lockfile = true
-locked = false
-prefer_offline = true
-disable_default_registry = true
-disable_backends = ["asdf", "vfox", "ubi"]
+# CI-only tools and tasks, layered onto mise.toml when MISE_ENV=ci. The settings
+# come from mise.toml, so they are not repeated here.
 
-# CI-only tools, layered onto mise.toml's toolchain when MISE_ENV=ci.
 [tools]
 # Full aqua path (not the short alias) so mise resolves it with the default
 # registry disabled and Renovate can track slsa-framework/slsa-verifier releases.
