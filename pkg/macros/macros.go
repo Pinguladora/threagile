@@ -77,7 +77,7 @@ func ExecuteModelMacro(modelInput *input.Model, inputFile string, parsedModel *t
 	for {
 		nextQuestion, err := macros.GetNextQuestion(parsedModel)
 		if err != nil {
-			return err
+			return fmt.Errorf("unable to get the next question: %w", err)
 		}
 		if nextQuestion.NoMoreQuestions() {
 			break
@@ -113,7 +113,7 @@ func ExecuteModelMacro(modelInput *input.Model, inputFile string, parsedModel *t
 					// convert CRLF to LF
 					answer = strings.TrimSpace(strings.ReplaceAll(answer, "\n", ""))
 					if err != nil {
-						return err
+						return fmt.Errorf("unable to read the answer: %w", err)
 					}
 					if val, err := strconv.Atoi(answer); err == nil { // flip selection
 						if val == 0 {
@@ -154,7 +154,7 @@ func ExecuteModelMacro(modelInput *input.Model, inputFile string, parsedModel *t
 			// convert CRLF to LF
 			answer = strings.TrimSpace(strings.ReplaceAll(answer, "\n", ""))
 			if err != nil {
-				return err
+				return fmt.Errorf("unable to read the answer: %w", err)
 			}
 			if len(answer) == 0 && len(nextQuestion.DefaultAnswer) > 0 { // accepting the default
 				answer = nextQuestion.DefaultAnswer
@@ -185,7 +185,7 @@ func ExecuteModelMacro(modelInput *input.Model, inputFile string, parsedModel *t
 			message, validResult, _ = macros.ApplyAnswer(nextQuestion.ID, resultingMultiValueSelection...)
 		}
 		if err != nil {
-			return err
+			return fmt.Errorf("unable to get the next question: %w", err)
 		}
 		if !validResult {
 			fmt.Println()
@@ -207,7 +207,7 @@ func ExecuteModelMacro(modelInput *input.Model, inputFile string, parsedModel *t
 
 		changes, message, validResult, err := macros.GetFinalChangeImpact(modelInput, parsedModel)
 		if err != nil {
-			return err
+			return fmt.Errorf("unable to get the changes of the model macro: %w", err)
 		}
 		for _, change := range changes {
 			fmt.Println(" -", change)
@@ -224,7 +224,7 @@ func ExecuteModelMacro(modelInput *input.Model, inputFile string, parsedModel *t
 		// convert CRLF to LF
 		answer = strings.TrimSpace(strings.ReplaceAll(answer, "\n", ""))
 		if err != nil {
-			return err
+			return fmt.Errorf("unable to read the answer: %w", err)
 		}
 		answer = strings.ToLower(answer)
 		fmt.Println()
@@ -233,7 +233,7 @@ func ExecuteModelMacro(modelInput *input.Model, inputFile string, parsedModel *t
 		case "yes", "y":
 			message, validResult, err = macros.Execute(modelInput, parsedModel)
 			if err != nil {
-				return err
+				return fmt.Errorf("unable to apply the changes of the model macro: %w", err)
 			}
 			if !validResult {
 				fmt.Println()
@@ -250,7 +250,7 @@ func ExecuteModelMacro(modelInput *input.Model, inputFile string, parsedModel *t
 			fmt.Println("Updating model")
 			yamlBytes, err := yaml.Marshal(modelInput)
 			if err != nil {
-				return err
+				return fmt.Errorf("unable to encode the model: %w", err)
 			}
 			/*
 				yamlBytes = model.ReformatYAML(yamlBytes)
@@ -258,7 +258,7 @@ func ExecuteModelMacro(modelInput *input.Model, inputFile string, parsedModel *t
 			fmt.Println("Writing model file:", inputFile)
 			err = os.WriteFile(inputFile, yamlBytes, 0o400)
 			if err != nil {
-				return err
+				return fmt.Errorf("unable to write the model file: %w", err)
 			}
 			fmt.Println("Model file successfully updated")
 			return nil
@@ -284,7 +284,7 @@ func printBorder(length int, bold bool) {
 func copyFile(src, dst string) (int64, error) {
 	sourceFileStat, err := os.Stat(src)
 	if err != nil {
-		return 0, err
+		return 0, fmt.Errorf("unable to check the file to copy: %w", err)
 	}
 
 	if !sourceFileStat.Mode().IsRegular() {
@@ -293,17 +293,20 @@ func copyFile(src, dst string) (int64, error) {
 
 	source, err := os.Open(filepath.Clean(src))
 	if err != nil {
-		return 0, err
+		return 0, fmt.Errorf("unable to open the file to copy: %w", err)
 	}
 	defer func() { _ = source.Close() }()
 
 	destination, err := os.Create(filepath.Clean(dst))
 	if err != nil {
-		return 0, err
+		return 0, fmt.Errorf("unable to create the copy: %w", err)
 	}
 	defer func() { _ = destination.Close() }()
 	nBytes, err := io.Copy(destination, source)
-	return nBytes, err
+	if err != nil {
+		return nBytes, fmt.Errorf("unable to copy the file: %w", err)
+	}
+	return nBytes, nil
 }
 
 type MacroDetails struct {
