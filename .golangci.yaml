@@ -34,7 +34,6 @@ linters:
     - gosec
     - govet
     - ineffassign
-    - interfacebloat
     - intrange
     - lll
     - mnd
@@ -71,8 +70,11 @@ linters:
       min-occurrences: 3
     godox:
       keywords: [TODO, BUG, FIXME, OPTIMIZE, HACK]
-    interfacebloat:
-      max: 5
+    # Errors from threagile's own packages already carry curated messages (the model
+    # checks, the config and macro errors); wrapping them again only repeats context.
+    wrapcheck:
+      ignore-package-globs:
+        - github.com/Pinguladora/threagile/*
     nolintlint:
       require-explanation: false
       require-specific: true
@@ -127,6 +129,29 @@ linters:
       # line limit; the two linters cannot both be satisfied on those lines.
       - linters: [lll]
         source: '`(json|yaml):"'
+      # The (un)marshalling of the model types returns the encoding/json, yaml and
+      # time errors as they are: wrapping them changes the model load errors users
+      # see and hides encoding/json's field context (it asserts *UnmarshalTypeError).
+      - linters: [wrapcheck]
+        path: ^pkg/types/
+      # The zip handlers' errors are the REST response bodies; wrapping changes them.
+      - linters: [wrapcheck]
+        path: ^pkg/server/zip\.go$
+      # The enum types are parallel tables of names and descriptions by design.
+      - linters: [goconst, dupl]
+        path: ^pkg/types/
+      # The comparison expressions of the script language are parallel per operator.
+      - linters: [dupl]
+        path: ^pkg/risks/script/expressions/
+      # Two PDF layout functions are flat sequences of drawing calls (legend rows,
+      # chart literals); splitting them further would only scatter the layout.
+      - linters: [funlen]
+        path: ^pkg/report/report\.go$
+      # These marshal structs without tags on purpose: the CLI config embeds getter
+      # interfaces, and types.Author and types.Overview are written with their
+      # default keys; adding tags would rename keys in existing files.
+      - linters: [musttag]
+        path: ^(cmd/|internal/threagile/|pkg/risks/script/)
     paths: [third_party$, builtin$, examples$]
 formatters:
   enable: [gci, gofumpt, goimports]
