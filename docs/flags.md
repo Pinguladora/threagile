@@ -37,6 +37,8 @@ This flags is used when application run in [analyze mode](./mode-analyze.md)
 | `-generate-report-adoc`           | bool                 | specify if adoc report with the analysis  shall be generated       | true                      |
 | `-report-html`                    | string(path to file) | file name of the self-contained [HTML report](./html-report.md)    | report.html               |
 | `-skip-report-html`               | bool                 | skip generating the [HTML report](./html-report.md)                | false                     |
+| `-report-md`                      | string(path to file) | file name of the self-contained [Markdown report](./markdown-report.md) | THREAT_MODEL.md           |
+| `-skip-report-md`                 | bool                 | skip generating the [Markdown report](./markdown-report.md)        | false                     |
 | `-fail-on`                        | string(severity)     | exit with status 2 when unchecked risks of this severity or higher remain, see [Failing CI on unchecked risks](./mode-analyze.md#failing-ci-on-unchecked-risks) | (off)                     |
 
 ## Import flags
