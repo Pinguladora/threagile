@@ -5,6 +5,7 @@ import (
 
 	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestExpressionList_ParseExpression_DispatchesTrue(t *testing.T) {
@@ -97,7 +98,8 @@ func TestExpressionList_EvalAny_SingleExpression_EvaluatesIt(t *testing.T) {
 	_ = scope.Init(nil, nil)
 
 	valueExpr := new(ValueExpression)
-	_, _, _ = valueExpr.ParseAny("hello")
+	_, _, parseErr := valueExpr.ParseAny("hello")
+	require.NoError(t, parseErr)
 
 	el := &ExpressionList{
 		expressions: []common.Expression{valueExpr},
@@ -114,9 +116,11 @@ func TestExpressionList_EvalAny_MultipleExpressions_ReturnsArray(t *testing.T) {
 	_ = scope.Init(nil, nil)
 
 	expr1 := new(ValueExpression)
-	_, _, _ = expr1.ParseAny("first")
+	_, _, parseErr := expr1.ParseAny("first")
+	require.NoError(t, parseErr)
 	expr2 := new(ValueExpression)
-	_, _, _ = expr2.ParseAny("second")
+	_, _, parseErr = expr2.ParseAny("second")
+	require.NoError(t, parseErr)
 
 	el := &ExpressionList{
 		expressions: []common.Expression{expr1, expr2},

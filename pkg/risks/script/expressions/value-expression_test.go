@@ -6,6 +6,7 @@ import (
 	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestValueExpression_ParseValue_StoresScriptValue(t *testing.T) {
@@ -67,7 +68,8 @@ func TestValueExpression_EvalString_PlainString(t *testing.T) {
 	_ = scope.Init(nil, nil)
 
 	expr := new(ValueExpression)
-	_, _, _ = expr.ParseString("hello")
+	_, _, parseErr := expr.ParseString("hello")
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalString(scope)
 	assert.NoError(t, err)
@@ -80,7 +82,8 @@ func TestValueExpression_EvalBool_TrueString(t *testing.T) {
 	_ = scope.Init(nil, nil)
 
 	expr := new(ValueExpression)
-	_, _, _ = expr.ParseBool("true")
+	_, _, parseErr := expr.ParseBool("true")
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalBool(scope)
 	assert.NoError(t, err)
@@ -93,7 +96,8 @@ func TestValueExpression_EvalBool_FalseString(t *testing.T) {
 	_ = scope.Init(nil, nil)
 
 	expr := new(ValueExpression)
-	_, _, _ = expr.ParseBool("false")
+	_, _, parseErr := expr.ParseBool("false")
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalBool(scope)
 	assert.NoError(t, err)
@@ -106,7 +110,8 @@ func TestValueExpression_EvalBool_BoolValue(t *testing.T) {
 	_ = scope.Init(nil, nil)
 
 	expr := new(ValueExpression)
-	_, _, _ = expr.ParseBool(true)
+	_, _, parseErr := expr.ParseBool(true)
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalBool(scope)
 	assert.NoError(t, err)
@@ -120,7 +125,8 @@ func TestValueExpression_EvalDecimal_DecimalValue(t *testing.T) {
 
 	expr := new(ValueExpression)
 	dec := decimal.NewFromInt(42)
-	_, _, _ = expr.ParseDecimal(dec)
+	_, _, parseErr := expr.ParseDecimal(dec)
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalDecimal(scope)
 	assert.NoError(t, err)
@@ -133,7 +139,8 @@ func TestValueExpression_EvalAny_StringReturnsString(t *testing.T) {
 	_ = scope.Init(nil, nil)
 
 	expr := new(ValueExpression)
-	_, _, _ = expr.ParseAny("hello")
+	_, _, parseErr := expr.ParseAny("hello")
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalAny(scope)
 	assert.NoError(t, err)
@@ -146,7 +153,8 @@ func TestValueExpression_EvalAny_BoolReturnsBool(t *testing.T) {
 	_ = scope.Init(nil, nil)
 
 	expr := new(ValueExpression)
-	_, _, _ = expr.ParseAny(true)
+	_, _, parseErr := expr.ParseAny(true)
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalAny(scope)
 	assert.NoError(t, err)
@@ -159,7 +167,8 @@ func TestValueExpression_EvalDecimal_StringNumber(t *testing.T) {
 	_ = scope.Init(nil, nil)
 
 	expr := new(ValueExpression)
-	_, _, _ = expr.ParseDecimal("3.14")
+	_, _, parseErr := expr.ParseDecimal("3.14")
+	require.NoError(t, parseErr)
 
 	result, _, err := expr.EvalDecimal(scope)
 	assert.NoError(t, err)
@@ -173,7 +182,8 @@ func TestValueExpression_EvalArray_ArrayInput(t *testing.T) {
 
 	input := []any{"a", "b", "c"}
 	expr := new(ValueExpression)
-	_, _, _ = expr.ParseArray(input)
+	_, _, parseErr := expr.ParseArray(input)
+	require.NoError(t, parseErr)
 
 	result, _, err := expr.EvalArray(scope)
 	assert.NoError(t, err)
@@ -187,7 +197,8 @@ func TestValueExpression_EvalString_VariableReference(t *testing.T) {
 	scope.Set("varname", common.SomeStringValue("resolved", nil))
 
 	expr := new(ValueExpression)
-	_, _, _ = expr.ParseString("{varname}")
+	_, _, parseErr := expr.ParseString("{varname}")
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalString(scope)
 	assert.NoError(t, err)
@@ -201,7 +212,8 @@ func TestValueExpression_EvalAny_VariableReference(t *testing.T) {
 	scope.Set("myvar", common.SomeStringValue("myvalue", nil))
 
 	expr := new(ValueExpression)
-	_, _, _ = expr.ParseAny("{myvar}")
+	_, _, parseErr := expr.ParseAny("{myvar}")
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalAny(scope)
 	assert.NoError(t, err)
@@ -214,7 +226,8 @@ func TestValueExpression_EvalAny_VariableNotFound_ReturnsNil(t *testing.T) {
 	_ = scope.Init(nil, nil)
 
 	expr := new(ValueExpression)
-	_, _, _ = expr.ParseAny("{nonexistent}")
+	_, _, parseErr := expr.ParseAny("{nonexistent}")
+	require.NoError(t, parseErr)
 
 	result, _, err := expr.EvalAny(scope)
 	assert.NoError(t, err)
@@ -231,7 +244,8 @@ func TestValueExpression_EvalAny_MethodCall(t *testing.T) {
 	_ = scope.Init(nil, methods)
 
 	expr := new(ValueExpression)
-	_, _, _ = expr.ParseAny("methodname(arg)")
+	_, _, parseErr := expr.ParseAny("methodname(arg)")
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalAny(scope)
 	assert.NoError(t, err)
@@ -244,7 +258,8 @@ func TestValueExpression_EvalAny_BuiltInCalculateSeverity(t *testing.T) {
 	_ = scope.Init(nil, nil)
 
 	expr := new(ValueExpression)
-	_, _, _ = expr.ParseAny("calculate_severity(unlikely, low)")
+	_, _, parseErr := expr.ParseAny("calculate_severity(unlikely, low)")
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalAny(scope)
 	assert.NoError(t, err)

@@ -5,6 +5,7 @@ import (
 
 	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestGreaterExpression_ParseBool_WithAs(t *testing.T) {
@@ -33,7 +34,8 @@ func TestGreaterExpression_EvalBool_FirstGreater_ReturnsTrue(t *testing.T) {
 		"as":     "criticality",
 	}
 	expr := new(GreaterExpression)
-	_, _, _ = expr.ParseBool(script)
+	_, _, parseErr := expr.ParseBool(script)
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalBool(scope)
 	assert.NoError(t, err)
@@ -51,7 +53,8 @@ func TestGreaterExpression_EvalBool_FirstLessOrEqual_ReturnsFalse(t *testing.T) 
 		"as":     "criticality",
 	}
 	expr := new(GreaterExpression)
-	_, _, _ = expr.ParseBool(script)
+	_, _, parseErr := expr.ParseBool(script)
+	require.NoError(t, parseErr)
 
 	result, errorLiteral, err := expr.EvalBool(scope)
 	assert.NoError(t, err)

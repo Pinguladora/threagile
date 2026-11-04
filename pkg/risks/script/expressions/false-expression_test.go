@@ -5,6 +5,7 @@ import (
 
 	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestFalseExpression_ParseBool_FalseString(t *testing.T) {
@@ -21,7 +22,8 @@ func TestFalseExpression_EvalBool_VariableIsTrue_ReturnsFalse(t *testing.T) {
 	scope.Set("flag", common.SomeBoolValue(true, nil))
 
 	innerExpr := new(ValueExpression)
-	_, _, _ = innerExpr.ParseBool("{flag}")
+	_, _, parseErr := innerExpr.ParseBool("{flag}")
+	require.NoError(t, parseErr)
 
 	expr := &FalseExpression{
 		expression: innerExpr,
@@ -39,7 +41,8 @@ func TestFalseExpression_EvalBool_VariableIsFalse_ReturnsTrue(t *testing.T) {
 	scope.Set("flag", common.SomeBoolValue(false, nil))
 
 	innerExpr := new(ValueExpression)
-	_, _, _ = innerExpr.ParseBool("{flag}")
+	_, _, parseErr := innerExpr.ParseBool("{flag}")
+	require.NoError(t, parseErr)
 
 	expr := &FalseExpression{
 		expression: innerExpr,
