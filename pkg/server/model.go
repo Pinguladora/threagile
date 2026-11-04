@@ -74,8 +74,8 @@ trust_boundaries: {}
 shared_runtimes: {}
 custom_risk_categories: []
 risk_tracking: {}
-diagram_tweak_nodesep: ""
-diagram_tweak_ranksep: ""
+diagram_tweak_nodesep: 0
+diagram_tweak_ranksep: 0
 diagram_tweak_edge_layout: ""
 diagram_tweak_suppress_edge_labels: false
 diagram_tweak_invisible_connections_between_assets: []
