@@ -31,7 +31,9 @@ func (*PrettyPrintMacro) GoBack() (message string, validResult bool, err error) 
 	return cannotGoBackFurther, false, nil
 }
 
-func (*PrettyPrintMacro) GetFinalChangeImpact(_ *input.Model, _ *types.Model) (changes []string, message string, validResult bool, err error) {
+func (*PrettyPrintMacro) GetFinalChangeImpact(
+	_ *input.Model, _ *types.Model,
+) (changes []string, message string, validResult bool, err error) {
 	return []string{"pretty-printing the model file"}, changesetValid, true, err
 }
 

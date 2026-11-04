@@ -16,9 +16,10 @@ func NewSeedRiskTracking() *SeedRiskTrackingMacro {
 
 func (*SeedRiskTrackingMacro) GetMacroDetails() MacroDetails {
 	return MacroDetails{
-		ID:          "seed-risk-tracking",
-		Title:       "Seed Risk Tracking",
-		Description: "This model macro simply seeds the model file with initial risk tracking entries for all untracked risks.",
+		ID:    "seed-risk-tracking",
+		Title: "Seed Risk Tracking",
+		Description: "This model macro simply seeds the model file with initial risk tracking entries for all " +
+			"untracked risks.",
 	}
 }
 
@@ -34,12 +35,16 @@ func (*SeedRiskTrackingMacro) GoBack() (message string, validResult bool, err er
 	return cannotGoBackFurther, false, nil
 }
 
-func (*SeedRiskTrackingMacro) GetFinalChangeImpact(_ *input.Model, _ *types.Model) (changes []string, message string, validResult bool, err error) {
+func (*SeedRiskTrackingMacro) GetFinalChangeImpact(
+	_ *input.Model, _ *types.Model,
+) (changes []string, message string, validResult bool, err error) {
 	changes = []string{"seed the model file with initial risk tracking entries for all untracked risks"}
 	return changes, changesetValid, true, err
 }
 
-func (*SeedRiskTrackingMacro) Execute(modelInput *input.Model, parsedModel *types.Model) (message string, validResult bool, err error) {
+func (*SeedRiskTrackingMacro) Execute(
+	modelInput *input.Model, parsedModel *types.Model,
+) (message string, validResult bool, err error) {
 	syntheticRiskIDsToCreateTrackingFor := make([]string, 0)
 	for id, risk := range parsedModel.GeneratedRisksBySyntheticId {
 		if !parsedModel.IsRiskTracked(risk) {
@@ -59,5 +64,6 @@ func (*SeedRiskTrackingMacro) Execute(modelInput *input.Model, parsedModel *type
 			CheckedBy:     "",
 		}
 	}
-	return "Model file seeding with " + strconv.Itoa(len(syntheticRiskIDsToCreateTrackingFor)) + " initial risk tracking successful", true, nil
+	return "Model file seeding with " + strconv.Itoa(len(syntheticRiskIDsToCreateTrackingFor)) +
+		" initial risk tracking successful", true, nil
 }

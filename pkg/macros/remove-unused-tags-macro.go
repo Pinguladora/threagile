@@ -35,11 +35,15 @@ func (*removeUnusedTagsMacro) GoBack() (message string, validResult bool, err er
 	return cannotGoBackFurther, false, nil
 }
 
-func (*removeUnusedTagsMacro) GetFinalChangeImpact(_ *input.Model, _ *types.Model) (changes []string, message string, validResult bool, err error) {
+func (*removeUnusedTagsMacro) GetFinalChangeImpact(
+	_ *input.Model, _ *types.Model,
+) (changes []string, message string, validResult bool, err error) {
 	return []string{"remove unused tags from the model file"}, changesetValid, true, err
 }
 
-func (*removeUnusedTagsMacro) Execute(modelInput *input.Model, parsedModel *types.Model) (message string, validResult bool, err error) {
+func (*removeUnusedTagsMacro) Execute(
+	modelInput *input.Model, parsedModel *types.Model,
+) (message string, validResult bool, err error) {
 	modelInput.TagsAvailable = parsedModel.TagsAvailable
 	for _, asset := range parsedModel.DataAssets {
 		modelInput.TagsAvailable = append(modelInput.TagsAvailable, asset.Tags...)
@@ -59,5 +63,6 @@ func (*removeUnusedTagsMacro) Execute(modelInput *input.Model, parsedModel *type
 	count := len(modelInput.TagsAvailable)
 	unique.Strings(&modelInput.TagsAvailable)
 	sort.Strings(modelInput.TagsAvailable)
-	return "Model file removal of " + strconv.Itoa(count-len(modelInput.TagsAvailable)) + " unused tags successful", true, nil
+	return "Model file removal of " + strconv.Itoa(count-len(modelInput.TagsAvailable)) + " unused tags successful",
+		true, nil
 }
