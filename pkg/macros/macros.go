@@ -10,6 +10,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -39,14 +40,12 @@ func ListBuiltInMacros() []Macros {
 }
 
 func ListCustomMacros() []Macros {
-	// TODO: implement
+	// custom macros are not supported yet
 	return []Macros{}
 }
 
 func GetMacroByID(id string) (Macros, error) {
-	builtinMacros := ListBuiltInMacros()
-	customMacros := ListCustomMacros()
-	allMacros := append(builtinMacros, customMacros...)
+	allMacros := slices.Concat(ListBuiltInMacros(), ListCustomMacros())
 	for _, macro := range allMacros {
 		if macro.GetMacroDetails().ID == id {
 			return macro, nil
@@ -61,8 +60,17 @@ func ExecuteModelMacro(modelInput *input.Model, inputFile string, parsedModel *t
 		return err
 	}
 
-	macroDetails := macros.GetMacroDetails()
+	printMacroHeader(macros.GetMacroDetails())
+	reader := bufio.NewReader(os.Stdin)
+	quit, err := askQuestions(macros, parsedModel, reader)
+	if err != nil || quit {
+		return err
+	}
 
+	return confirmAndExecute(macros, modelInput, inputFile, parsedModel, reader)
+}
+
+func printMacroHeader(macroDetails MacroDetails) {
 	fmt.Println("Executing model macro:", macroDetails.ID)
 	fmt.Println()
 	fmt.Println()
@@ -73,127 +81,191 @@ func ExecuteModelMacro(modelInput *input.Model, inputFile string, parsedModel *t
 		fmt.Println(macroDetails.Description)
 	}
 	fmt.Println()
-	reader := bufio.NewReader(os.Stdin)
+}
+
+// askQuestions asks the questions of the macro until it has no more; it reports whether the user quit.
+func askQuestions(macros Macros, parsedModel *types.Model, reader *bufio.Reader) (bool, error) {
 	for {
 		nextQuestion, err := macros.GetNextQuestion(parsedModel)
 		if err != nil {
-			return fmt.Errorf("unable to get the next question: %w", err)
+			return false, fmt.Errorf("unable to get the next question: %w", err)
 		}
 		if nextQuestion.NoMoreQuestions() {
-			break
+			return false, nil
 		}
-		fmt.Println()
-		printBorder(len(nextQuestion.Title), false)
-		fmt.Println(nextQuestion.Title)
-		printBorder(len(nextQuestion.Title), false)
-		if len(nextQuestion.Description) > 0 {
-			fmt.Println(nextQuestion.Description)
+
+		quit, err := askQuestion(macros, nextQuestion, reader)
+		if err != nil || quit {
+			return quit, err
 		}
-		resultingMultiValueSelection := make([]string, 0)
-		if nextQuestion.IsValueConstrained() {
-			if nextQuestion.MultiSelect {
-				selectedValues := make(map[string]bool)
-				for {
-					fmt.Println("Please select (multiple executions possible) from the following values (use number to select/deselect):")
-					fmt.Println("    0:", "SELECTION PROCESS FINISHED: CONTINUE TO NEXT QUESTION")
-					for i, val := range nextQuestion.PossibleAnswers {
-						number := i + 1
-						padding, selected := "", " "
-						if number < 10 {
-							padding = " "
-						}
-						if val, exists := selectedValues[val]; exists && val {
-							selected = "*"
-						}
-						fmt.Println(" "+selected+" "+padding+strconv.Itoa(number)+":", val)
-					}
-					fmt.Println()
-					fmt.Print("Enter number to select/deselect (or 0 when finished): ")
-					answer, err := reader.ReadString('\n')
-					// convert CRLF to LF
-					answer = strings.TrimSpace(strings.ReplaceAll(answer, "\n", ""))
-					if err != nil {
-						return fmt.Errorf("unable to read the answer: %w", err)
-					}
-					if val, err := strconv.Atoi(answer); err == nil { // flip selection
-						if val == 0 {
-							for key, selected := range selectedValues {
-								if selected {
-									resultingMultiValueSelection = append(resultingMultiValueSelection, key)
-								}
-							}
-							break
-						} else if val > 0 && val <= len(nextQuestion.PossibleAnswers) {
-							selectedValues[nextQuestion.PossibleAnswers[val-1]] = !selectedValues[nextQuestion.PossibleAnswers[val-1]]
-						}
-					}
-				}
-			} else {
-				fmt.Println("Please choose from the following values (enter value directly or use number):")
-				for i, val := range nextQuestion.PossibleAnswers {
-					number := i + 1
-					padding := ""
-					if number < 10 {
-						padding = " "
-					}
-					fmt.Println("   "+padding+strconv.Itoa(number)+":", val)
-				}
-			}
-		}
-		message := ""
-		validResult := true
-		if !nextQuestion.IsValueConstrained() || !nextQuestion.MultiSelect {
-			fmt.Println()
-			fmt.Println("Enter your answer (use 'BACK' to go one step back or 'QUIT' to quit without executing the model macro)")
-			fmt.Print("Answer")
-			if len(nextQuestion.DefaultAnswer) > 0 {
-				fmt.Print(" (default '" + nextQuestion.DefaultAnswer + "')")
-			}
-			fmt.Print(": ")
-			answer, err := reader.ReadString('\n')
-			// convert CRLF to LF
-			answer = strings.TrimSpace(strings.ReplaceAll(answer, "\n", ""))
-			if err != nil {
-				return fmt.Errorf("unable to read the answer: %w", err)
-			}
-			if len(answer) == 0 && len(nextQuestion.DefaultAnswer) > 0 { // accepting the default
-				answer = nextQuestion.DefaultAnswer
-			} else if nextQuestion.IsValueConstrained() { // convert number to value
-				if val, err := strconv.Atoi(answer); err == nil {
-					if val > 0 && val <= len(nextQuestion.PossibleAnswers) {
-						answer = nextQuestion.PossibleAnswers[val-1]
-					}
-				}
-			}
-			if strings.ToLower(answer) == "quit" {
-				fmt.Println("Quitting without executing the model macro")
-				return nil
-			} else if strings.ToLower(answer) == "back" {
-				message, validResult, _ = macros.GoBack()
-			} else if len(answer) > 0 { // individual answer
-				if nextQuestion.IsValueConstrained() {
-					if !nextQuestion.IsMatchingValueConstraint(answer) {
-						fmt.Println()
-						fmt.Println(">>> INVALID <<<")
-						fmt.Println("Answer does not match any allowed value. Please try again:")
-						continue
-					}
-				}
-				message, validResult, _ = macros.ApplyAnswer(nextQuestion.ID, answer)
-			}
-		} else {
-			message, validResult, _ = macros.ApplyAnswer(nextQuestion.ID, resultingMultiValueSelection...)
-		}
+	}
+}
+
+// askQuestion asks a question and applies the answer, or goes back for the answer BACK; it reports whether
+// the user quit.
+func askQuestion(macros Macros, question MacroQuestion, reader *bufio.Reader) (bool, error) {
+	printQuestion(question)
+
+	if question.IsValueConstrained() && question.MultiSelect {
+		resultingMultiValueSelection, err := selectValues(question, reader)
 		if err != nil {
-			return fmt.Errorf("unable to get the next question: %w", err)
+			return false, err
 		}
-		if !validResult {
+		message, validResult, _ := macros.ApplyAnswer(question.ID, resultingMultiValueSelection...)
+		printAnswerResult(message, validResult)
+		return false, nil
+	}
+
+	if question.IsValueConstrained() {
+		printChoices(question)
+	}
+	answer, err := readAnswer(question, reader)
+	if err != nil {
+		return false, err
+	}
+
+	message := ""
+	validResult := true
+	switch {
+	case strings.ToLower(answer) == "quit":
+		fmt.Println("Quitting without executing the model macro")
+		return true, nil
+	case strings.ToLower(answer) == "back":
+		message, validResult, _ = macros.GoBack()
+	case len(answer) > 0: // individual answer
+		if !question.IsMatchingValueConstraint(answer) {
 			fmt.Println()
 			fmt.Println(">>> INVALID <<<")
+			fmt.Println("Answer does not match any allowed value. Please try again:")
+			return false, nil
 		}
-		fmt.Println(message)
-		fmt.Println()
+		message, validResult, _ = macros.ApplyAnswer(question.ID, answer)
 	}
+	printAnswerResult(message, validResult)
+	return false, nil
+}
+
+func printQuestion(question MacroQuestion) {
+	fmt.Println()
+	printBorder(len(question.Title), false)
+	fmt.Println(question.Title)
+	printBorder(len(question.Title), false)
+	if len(question.Description) > 0 {
+		fmt.Println(question.Description)
+	}
+}
+
+func printAnswerResult(message string, validResult bool) {
+	if !validResult {
+		fmt.Println()
+		fmt.Println(">>> INVALID <<<")
+	}
+	fmt.Println(message)
+	fmt.Println()
+}
+
+// firstTwoDigitNumber is the first number of a list of answers that does not get padded to two digits.
+const firstTwoDigitNumber = 10
+
+func numberPadding(number int) string {
+	if number < firstTwoDigitNumber {
+		return " "
+	}
+	return ""
+}
+
+// selectValues lets the user select and deselect the answers of a multi-select question until they are done.
+func selectValues(question MacroQuestion, reader *bufio.Reader) ([]string, error) {
+	selectedValues := make(map[string]bool)
+	for {
+		printSelection(question, selectedValues)
+		answer, err := readLine(reader)
+		if err != nil {
+			return nil, err
+		}
+		val, err := strconv.Atoi(answer)
+		if err != nil {
+			continue
+		}
+		if val == 0 {
+			resultingMultiValueSelection := make([]string, 0)
+			for key, selected := range selectedValues {
+				if selected {
+					resultingMultiValueSelection = append(resultingMultiValueSelection, key)
+				}
+			}
+			return resultingMultiValueSelection, nil
+		}
+		if val > 0 && val <= len(question.PossibleAnswers) { // flip selection
+			selectedValues[question.PossibleAnswers[val-1]] = !selectedValues[question.PossibleAnswers[val-1]]
+		}
+	}
+}
+
+func printSelection(question MacroQuestion, selectedValues map[string]bool) {
+	fmt.Println("Please select (multiple executions possible) from the following values (use number to select/deselect):")
+	fmt.Println("    0:", "SELECTION PROCESS FINISHED: CONTINUE TO NEXT QUESTION")
+	for i, val := range question.PossibleAnswers {
+		number := i + 1
+		selected := " "
+		if val, exists := selectedValues[val]; exists && val {
+			selected = "*"
+		}
+		fmt.Println(" "+selected+" "+numberPadding(number)+strconv.Itoa(number)+":", val)
+	}
+	fmt.Println()
+	fmt.Print("Enter number to select/deselect (or 0 when finished): ")
+}
+
+func printChoices(question MacroQuestion) {
+	fmt.Println("Please choose from the following values (enter value directly or use number):")
+	for i, val := range question.PossibleAnswers {
+		number := i + 1
+		fmt.Println("   "+numberPadding(number)+strconv.Itoa(number)+":", val)
+	}
+}
+
+// readAnswer reads the answer to a question that is not a multi-select one: an empty answer takes the
+// default, and a number picks one of the possible answers.
+func readAnswer(question MacroQuestion, reader *bufio.Reader) (string, error) {
+	fmt.Println()
+	fmt.Println("Enter your answer (use 'BACK' to go one step back or 'QUIT' to quit without executing the model macro)")
+	fmt.Print("Answer")
+	if len(question.DefaultAnswer) > 0 {
+		fmt.Print(" (default '" + question.DefaultAnswer + "')")
+	}
+	fmt.Print(": ")
+	answer, err := readLine(reader)
+	if err != nil {
+		return "", err
+	}
+	if len(answer) == 0 && len(question.DefaultAnswer) > 0 { // accepting the default
+		return question.DefaultAnswer, nil
+	}
+	if question.IsValueConstrained() { // convert number to value
+		if val, err := strconv.Atoi(answer); err == nil && val > 0 && val <= len(question.PossibleAnswers) {
+			return question.PossibleAnswers[val-1], nil
+		}
+	}
+	return answer, nil
+}
+
+// readLine reads a line of input without its line break.
+func readLine(reader *bufio.Reader) (string, error) {
+	answer, err := reader.ReadString('\n')
+	// convert CRLF to LF
+	answer = strings.TrimSpace(strings.ReplaceAll(answer, "\n", ""))
+	if err != nil {
+		return answer, fmt.Errorf("unable to read the answer: %w", err)
+	}
+	return answer, nil
+}
+
+// confirmAndExecute shows the changes the macro would make and asks whether to make them, until the user
+// says yes or no.
+func confirmAndExecute(
+	macros Macros, modelInput *input.Model, inputFile string, parsedModel *types.Model, reader *bufio.Reader,
+) error {
 	for {
 		fmt.Println()
 		fmt.Println()
@@ -202,8 +274,6 @@ func ExecuteModelMacro(modelInput *input.Model, inputFile string, parsedModel *t
 		fmt.Println("#################################################################")
 		fmt.Println()
 		fmt.Println("The following changes will be applied:")
-		var changes []string
-		message := ""
 
 		changes, message, validResult, err := macros.GetFinalChangeImpact(modelInput, parsedModel)
 		if err != nil {
@@ -220,54 +290,58 @@ func ExecuteModelMacro(modelInput *input.Model, inputFile string, parsedModel *t
 		fmt.Println(message)
 		fmt.Println()
 		fmt.Print("Apply these changes to the model file?\nType Yes or No: ")
-		answer, err := reader.ReadString('\n')
-		// convert CRLF to LF
-		answer = strings.TrimSpace(strings.ReplaceAll(answer, "\n", ""))
+		answer, err := readLine(reader)
 		if err != nil {
-			return fmt.Errorf("unable to read the answer: %w", err)
+			return err
 		}
 		answer = strings.ToLower(answer)
 		fmt.Println()
 
 		switch answer {
 		case "yes", "y":
-			message, validResult, err = macros.Execute(modelInput, parsedModel)
-			if err != nil {
-				return fmt.Errorf("unable to apply the changes of the model macro: %w", err)
-			}
-			if !validResult {
-				fmt.Println()
-				fmt.Println(">>> INVALID <<<")
-			}
-			fmt.Println(message)
-			fmt.Println()
-			backupFilename := inputFile + ".backup"
-			fmt.Println("Creating backup model file:", backupFilename) // TODO add random files in /dev/shm space?
-			_, err = copyFile(inputFile, backupFilename)
-			if err != nil {
-				return err
-			}
-			fmt.Println("Updating model")
-			yamlBytes, err := yaml.Marshal(modelInput)
-			if err != nil {
-				return fmt.Errorf("unable to encode the model: %w", err)
-			}
-			/*
-				yamlBytes = model.ReformatYAML(yamlBytes)
-			*/
-			fmt.Println("Writing model file:", inputFile)
-			err = os.WriteFile(inputFile, yamlBytes, 0o400)
-			if err != nil {
-				return fmt.Errorf("unable to write the model file: %w", err)
-			}
-			fmt.Println("Model file successfully updated")
-			return nil
+			return executeMacro(macros, modelInput, inputFile, parsedModel)
 
 		case "no", "n":
 			fmt.Println("Quitting without executing the model macro")
 			return nil
 		}
 	}
+}
+
+// executeMacro makes the changes of the macro and writes the model file, after backing it up.
+func executeMacro(macros Macros, modelInput *input.Model, inputFile string, parsedModel *types.Model) error {
+	message, validResult, err := macros.Execute(modelInput, parsedModel)
+	if err != nil {
+		return fmt.Errorf("unable to apply the changes of the model macro: %w", err)
+	}
+	if !validResult {
+		fmt.Println()
+		fmt.Println(">>> INVALID <<<")
+	}
+	fmt.Println(message)
+	fmt.Println()
+	backupFilename := inputFile + ".backup"
+	// the backup goes next to the model file rather than into a random file in /dev/shm
+	fmt.Println("Creating backup model file:", backupFilename)
+	_, err = copyFile(inputFile, backupFilename)
+	if err != nil {
+		return err
+	}
+	fmt.Println("Updating model")
+	yamlBytes, err := yaml.Marshal(modelInput)
+	if err != nil {
+		return fmt.Errorf("unable to encode the model: %w", err)
+	}
+	/*
+		yamlBytes = model.ReformatYAML(yamlBytes)
+	*/
+	fmt.Println("Writing model file:", inputFile)
+	err = os.WriteFile(inputFile, yamlBytes, 0o400)
+	if err != nil {
+		return fmt.Errorf("unable to write the model file: %w", err)
+	}
+	fmt.Println("Model file successfully updated")
+	return nil
 }
 
 func printBorder(length int, bold bool) {
