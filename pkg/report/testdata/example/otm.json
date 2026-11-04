@@ -1433,6 +1433,7 @@
         }
       ],
       "attributes": {
+        "threagile:account": "erp-db-owner",
         "threagile:authentication": "client-certificate",
         "threagile:authorization": "function-level",
         "threagile:data_assets_received": "db-dumps,erp-logs,customer-accounts,customer-operational-data",
@@ -1455,16 +1456,6 @@
       ],
       "threats": [
         {
-          "threat": "human-use-of-machine-identity",
-          "state": "exposed",
-          "mitigations": [
-            {
-              "mitigation": "human-use-of-machine-identity-mitigation",
-              "state": "recommended"
-            }
-          ]
-        },
-        {
           "threat": "missing-authentication-second-factor",
           "state": "mitigated",
           "mitigations": [
@@ -1480,7 +1471,7 @@
         "threagile:authorization": "function-level",
         "threagile:data_assets_received": "erp-logs",
         "threagile:data_assets_sent": "erp-customizing",
-        "threagile:identity": "service-account",
+        "threagile:identity": "end-user",
         "threagile:protocol": "https",
         "threagile:usage": "devops"
       }
@@ -1497,16 +1488,6 @@
       ],
       "threats": [
         {
-          "threat": "human-use-of-machine-identity",
-          "state": "exposed",
-          "mitigations": [
-            {
-              "mitigation": "human-use-of-machine-identity-mitigation",
-              "state": "recommended"
-            }
-          ]
-        },
-        {
           "threat": "missing-authentication-second-factor",
           "state": "mitigated",
           "mitigations": [
@@ -1522,7 +1503,7 @@
         "threagile:authorization": "function-level",
         "threagile:data_assets_received": "customer-accounts",
         "threagile:data_assets_sent": "customer-accounts",
-        "threagile:identity": "service-account",
+        "threagile:identity": "end-user",
         "threagile:protocol": "ldaps",
         "threagile:usage": "devops"
       }
@@ -1665,6 +1646,16 @@
           ]
         },
         {
+          "threat": "shared-machine-account",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "shared-machine-account-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "sql-nosql-injection",
           "state": "exposed",
           "mitigations": [
@@ -1686,6 +1677,7 @@
         }
       ],
       "attributes": {
+        "threagile:account": "erp-db-owner",
         "threagile:authentication": "credentials",
         "threagile:authorization": "function-level",
         "threagile:data_assets_received": "customer-accounts,customer-operational-data,internal-business-data",
@@ -1760,16 +1752,6 @@
       ],
       "threats": [
         {
-          "threat": "human-use-of-machine-identity",
-          "state": "exposed",
-          "mitigations": [
-            {
-              "mitigation": "human-use-of-machine-identity-mitigation",
-              "state": "recommended"
-            }
-          ]
-        },
-        {
           "threat": "missing-authentication-second-factor",
           "state": "mitigated",
           "mitigations": [
@@ -1795,7 +1777,7 @@
         "threagile:authorization": "function-level",
         "threagile:data_assets_received": "client-application-code,server-application-code",
         "threagile:data_assets_sent": "client-application-code,server-application-code",
-        "threagile:identity": "service-account",
+        "threagile:identity": "end-user",
         "threagile:protocol": "ssh",
         "threagile:usage": "devops"
       }
@@ -1812,16 +1794,6 @@
         "server-application-code"
       ],
       "threats": [
-        {
-          "threat": "human-use-of-machine-identity",
-          "state": "exposed",
-          "mitigations": [
-            {
-              "mitigation": "human-use-of-machine-identity-mitigation",
-              "state": "recommended"
-            }
-          ]
-        },
         {
           "threat": "long-lived-credentials",
           "state": "exposed",
@@ -1858,7 +1830,7 @@
         "threagile:authorization": "function-level",
         "threagile:data_assets_received": "client-application-code,server-application-code",
         "threagile:data_assets_sent": "client-application-code,server-application-code",
-        "threagile:identity": "service-account",
+        "threagile:identity": "end-user",
         "threagile:protocol": "https",
         "threagile:usage": "devops"
       }
@@ -1874,16 +1846,6 @@
         "build-job-config"
       ],
       "threats": [
-        {
-          "threat": "human-use-of-machine-identity",
-          "state": "exposed",
-          "mitigations": [
-            {
-              "mitigation": "human-use-of-machine-identity-mitigation",
-              "state": "recommended"
-            }
-          ]
-        },
         {
           "threat": "missing-authentication-second-factor",
           "state": "mitigated",
@@ -1910,7 +1872,7 @@
         "threagile:authorization": "function-level",
         "threagile:data_assets_received": "build-job-config",
         "threagile:data_assets_sent": "build-job-config",
-        "threagile:identity": "service-account",
+        "threagile:identity": "end-user",
         "threagile:protocol": "https",
         "threagile:usage": "devops"
       }
@@ -2646,6 +2608,29 @@
       }
     },
     {
+      "id": "shared-machine-account",
+      "name": "Shared Machine Account",
+      "description": "Several technical assets that call others with one service account, API key or workload identity share all of its permissions: each can do what any of them needs, and the targets cannot tell them apart.",
+      "categories": [
+        "Elevation of Privilege",
+        "OWASP NHI9:2025 NHI Reuse",
+        "OWASP ASI03:2026 Identity and Privilege Abuse"
+      ],
+      "cwes": [
+        "CWE-653"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 75,
+        "impactComment": "If this risk is unmitigated, attackers who compromise any one of the callers might use the shared account to access everything the other callers can, and the logs would not show which caller acted."
+      },
+      "attributes": {
+        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
       "id": "something-strange",
       "name": "Some Individual Risk Example",
       "description": "Some text describing the risk category...",
@@ -3008,6 +2993,15 @@
       "id": "server-side-request-forgery-mitigation",
       "name": "SSRF Prevention",
       "description": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "shared-machine-account-mitigation",
+      "name": "One Account per Workload",
+      "description": "Give each technical asset an account of its own, preferably a workload identity issued by the platform, with only the permissions it needs, so that its compromise stays contained and its actions can be told apart.",
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"

@@ -29,8 +29,8 @@ digraph generatedModel { concentrate=true
   219064102 [ shape="box" style="filled" fillcolor="#FF8E00"
 				label=<<b>Load Balancer</b>> penwidth="3.0" color="#FF8E00" ];
 				
-  2943509451 [ shape="box" style="filled" fillcolor="#FF8E00"
-				label=<<b>LDAP Auth Server</b>> penwidth="3.0" color="#FF8E00" ];
+  2943509451 [ shape="box" style="filled" fillcolor="#C87832"
+				label=<<b>LDAP Auth Server</b>> penwidth="3.0" color="#C87832" ];
 				
   3672894744 [ shape="box" style="filled" fillcolor="#FF8E00"
 				label=<<b>Jenkins Build Server</b>> penwidth="3.0" color="#FF8E00" ];
