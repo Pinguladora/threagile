@@ -40,7 +40,7 @@ func (s *server) execute(ginContext *gin.Context, dryRun bool) (yamlContent []by
 		var err error
 		if r := recover(); r != nil {
 			s.errorCount++
-			err = r.(error)
+			err = panicError(r)
 			log.Println(err)
 			ginContext.JSON(http.StatusBadRequest, gin.H{
 				"error": strings.TrimSpace(err.Error()),
@@ -249,7 +249,7 @@ func (s *server) editModelAnalyze(ginContext *gin.Context) {
 		var err error
 		if r := recover(); r != nil {
 			s.errorCount++
-			err = r.(error)
+			err = panicError(r)
 			log.Println(err)
 			ginContext.JSON(http.StatusBadRequest, gin.H{
 				"error": strings.TrimSpace(err.Error()),
