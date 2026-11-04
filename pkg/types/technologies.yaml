@@ -10,6 +10,19 @@ ai:
   attributes:
     ai: true
     less_protected_type: true
+ai-agent:
+  aliases:
+    - agent
+    - agentic-ai
+    - llm-agent
+    - autonomous-agent
+  description: An AI agent that plans with a language model and acts through tools
+  attributes:
+    ai-agent: true
+    ai: true
+    backend_related: true
+    processing_end_user_requests: true
+    propagate_identity_to_outgoing_targets: true
 application-server:
   aliases:
     - app-server
@@ -285,6 +298,17 @@ library:
     library: true
     embedded_component: true
     propagate_identity_to_outgoing_targets: true
+llm:
+  aliases:
+    - large-language-model
+    - foundation-model
+    - llm-service
+    - llm-api
+  description: A large language model (LLM), self-hosted or used as a service
+  attributes:
+    llm: true
+    ai: true
+    backend_related: true
 load-balancer:
   aliases:
     - lb
@@ -319,6 +343,15 @@ mainframe:
     mainframe: true
     backend_related: true
     less_protected_type: true
+mcp-server:
+  aliases:
+    - model-context-protocol-server
+    - tool-server
+    - agent-tool-server
+  description: A Model Context Protocol (MCP) server or another server exposing tools to AI agents
+  attributes:
+    mcp-server: true
+    backend_related: true
 message-queue:
   aliases:
     - mq
@@ -336,6 +369,16 @@ mobile-app:
     frontend_related: true
     less_protected_type: true
     propagate_identity_to_outgoing_targets: true
+model-registry:
+  aliases:
+    - ml-model-registry
+    - model-hub
+    - model-repository
+  description: A registry to store and distribute machine learning models
+  attributes:
+    model-registry: true
+    development_relevant: true
+    less_protected_type: true
 monitoring:
   aliases:
     - siem
@@ -443,6 +486,15 @@ vault:
     vault: true
     backend_related: true
     security_control_related: true
+vector-database:
+  aliases:
+    - vector-store
+    - vector-db
+    - embedding-store
+  description: A database of embeddings for semantic search and retrieval-augmented generation (RAG)
+  attributes:
+    vector-database: true
+    backend_related: true
 waf:
   aliases:
     - web-application-firewall

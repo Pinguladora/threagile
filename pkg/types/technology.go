@@ -4,8 +4,13 @@ import "strings"
 
 const (
 	AI                     = "ai"
+	AIAgent                = "ai-agent"
 	ApplicationServer      = "application-server"
 	ArtifactRegistry       = "artifact-registry"
+	LLM                    = "llm"
+	MCPServer              = "mcp-server"
+	ModelRegistry          = "model-registry"
+	VectorDatabase         = "vector-database"
 	BatchProcessing        = "batch-processing"
 	BigDataPlatform        = "big-data-platform"
 	BlockStorage           = "block-storage"

@@ -1137,7 +1137,12 @@
                 "scheduler",
                 "mainframe",
                 "block-storage",
-                "library"
+                "library",
+                "llm",
+                "ai-agent",
+                "vector-database",
+                "mcp-server",
+                "model-registry"
               ],
               "type": "string"
             },
@@ -1206,7 +1211,12 @@
               "scheduler",
               "mainframe",
               "block-storage",
-              "library"
+              "library",
+              "llm",
+              "ai-agent",
+              "vector-database",
+              "mcp-server",
+              "model-registry"
             ],
             "type": "string"
           },
