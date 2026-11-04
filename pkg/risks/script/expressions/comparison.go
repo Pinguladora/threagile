@@ -43,7 +43,25 @@ func parseComparison[T common.Expression](
 		}
 	}
 
+	if missingError := checkComparisonValues(name, firstKey, *first, secondKey, *second); missingError != nil {
+		return none, script, missingError
+	}
+
 	return what, nil, nil
+}
+
+// checkComparisonValues fails unless a comparison expression has both of its values.
+func checkComparisonValues(
+	name string, firstKey string, first common.ValueExpression, secondKey string, second common.ValueExpression,
+) error {
+	if first == nil {
+		return fmt.Errorf("failed to parse %v: missing %q", name, firstKey)
+	}
+	if second == nil {
+		return fmt.Errorf("failed to parse %v: missing %q", name, secondKey)
+	}
+
+	return nil
 }
 
 // parseAsString returns a parser for the "as" of a comparison expression that must be a string.
