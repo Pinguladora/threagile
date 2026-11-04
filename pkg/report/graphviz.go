@@ -112,20 +112,11 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 	splines := "ortho"
 	if len(parsedModel.DiagramTweakEdgeLayout) > 0 {
 		switch parsedModel.DiagramTweakEdgeLayout {
-		case "spline":
-			splines = "spline"
-			drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks = false
-		case "polyline":
-			splines = "polyline"
+		case "spline", "polyline", "curved", "false":
+			splines = parsedModel.DiagramTweakEdgeLayout
 			drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks = false
 		case "ortho":
-			splines = "ortho"
-		case "curved":
-			splines = "curved"
-			drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks = false
-		case "false":
-			splines = "false"
-			drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks = false
+			// the default
 		default:
 			return nil, fmt.Errorf("unknown value for diagram_tweak_suppress_edge_labels (spline, polyline, ortho, curved, false): %s", parsedModel.DiagramTweakEdgeLayout)
 		}
@@ -200,7 +191,7 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 				fontColor, bgColor = "#222222", "#DFF4FF"
 			}
 			if trustBoundary.Type == types.ExecutionEnvironment {
-				fontColor, bgColor, style = "#555555", "#FFFFF0", "dotted"
+				fontColor, bgColor, style = "#555555", "#FFFFF0", lineStyleDotted
 			}
 			snippet.WriteString(`	graph [
       dpi=` + strconv.Itoa(dpi) + `
@@ -427,9 +418,15 @@ func determineLabelColor(cl *types.CommunicationLink, parsedModel *types.Model) 
 	return Gray
 }
 
+// lineStyleDotted is the line style of edges, nodes and clusters that look like a model forgery
+// attempt, and of execution environments.
+const lineStyleDotted = "dotted"
+
 func determineArrowLineStyle(cl *types.CommunicationLink) string {
 	if len(cl.DataAssetsSent) == 0 && len(cl.DataAssetsReceived) == 0 {
-		return "dotted" // dotted, because it's strange when too many technical communication links transfer no data... some ok, but many in a diagram ist a sign of model forgery...
+		// dotted, because it's strange when too many technical communication links transfer no data...
+		// some ok, but many in a diagram ist a sign of model forgery...
+		return lineStyleDotted
 	}
 	if cl.Usage == types.DevOps {
 		return "dashed"
@@ -646,10 +643,10 @@ func makeDataAssetNode(parsedModel *types.Model, dataAsset *types.DataAsset) str
 	case types.Improbable:
 		color = rgbHexColorLowRisk()
 	default:
-		color = "#444444" // since black is too dark here as fill color
+		color = Gray // since black is too dark here as fill color
 	}
 	if !isDataBreachPotentialStillAtRisk(parsedModel, dataAsset) {
-		color = "#444444" // since black is too dark here as fill color
+		color = Gray // since black is too dark here as fill color
 	}
 	return "  " + hash(dataAsset.Id) + ` [ label=<<b>` + encode(dataAsset.Title) + `</b>> penwidth="3.0" style="filled" fillcolor="` + color + `" color="` + color + "\"\n  ]; "
 }
@@ -671,10 +668,10 @@ func makeTechAssetNode(parsedModel *types.Model, technicalAsset *types.Technical
 			case types.LowSeverity:
 				color = rgbHexColorLowRisk()
 			default:
-				color = "#444444" // since black is too dark here as fill color
+				color = Gray // since black is too dark here as fill color
 			}
 			if len(types.ReduceToOnlyStillAtRisk(generatedRisks)) == 0 {
-				color = "#444444" // since black is too dark here as fill color
+				color = Gray // since black is too dark here as fill color
 			}
 		}
 		return "  " + hash(technicalAsset.Id) + ` [ shape="box" style="filled" fillcolor="` + color + `"
@@ -807,7 +804,9 @@ func determineShapePeripheries(ta *types.TechnicalAsset) int {
 // dotted when model forgery attempt (i.e. nothing being processed or stored).
 func determineShapeBorderLineStyle(ta *types.TechnicalAsset) string {
 	if len(ta.DataAssetsProcessed) == 0 || ta.OutOfScope {
-		return "dotted" // dotted, because it's strange when too many technical communication links transfer no data... some ok, but many in a diagram ist a sign of model forgery...
+		// dotted, because it's strange when too many technical communication links transfer no data...
+		// some ok, but many in a diagram ist a sign of model forgery...
+		return lineStyleDotted
 	}
 	return "solid"
 }
