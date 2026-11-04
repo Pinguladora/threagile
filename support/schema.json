@@ -742,7 +742,7 @@
                   "type": "string"
                 },
                 "authorization": {
-                  "description": "Authorization",
+                  "description": "Authorization (Threagile also reads enduser-identity-propagation, the spelling of releases up to 0.9, as end-user-identity-propagation)",
                   "enum": [
                     "none",
                     "technical-user",
@@ -965,7 +965,7 @@
             "type": "integer"
           },
           "encryption": {
-            "description": "Specifies whether and how data handled by a technical asset is protected using encryption. It helps evaluate the risk of data exposure by indicating if encryption is applied for data at rest, in transit, or both.",
+            "description": "Specifies whether and how data handled by a technical asset is protected using encryption. It helps evaluate the risk of data exposure by indicating if encryption is applied for data at rest, in transit, or both. Threagile also reads data-with-enduser-individual-key, the spelling of releases up to 0.9, as data-with-end-user-individual-key.",
             "enum": [
               "none",
               "transparent",
