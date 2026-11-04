@@ -117,6 +117,24 @@ func TestUnencryptedAssetRuleGenerateRisks(t *testing.T) {
 			riskCreated:    true,
 			expectedImpact: types.MediumImpact,
 		},
+		"only confidentiality sensitive no encryption": {
+			storedAnyData:       true,
+			dataConfidentiality: types.Confidential,
+			dataIntegrity:       types.Operational,
+			encryption:          types.NoneEncryption,
+
+			riskCreated:    true,
+			expectedImpact: types.MediumImpact,
+		},
+		"only integrity sensitive no encryption": {
+			storedAnyData:       true,
+			dataConfidentiality: types.Restricted,
+			dataIntegrity:       types.Critical,
+			encryption:          types.NoneEncryption,
+
+			riskCreated:    true,
+			expectedImpact: types.MediumImpact,
+		},
 		"very sensitive strictly confidential no encryption": {
 			outOfScope:          false,
 			isNoStorageAtRest:   false,

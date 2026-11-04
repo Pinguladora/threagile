@@ -88,7 +88,7 @@ func skipUnencryptedAsset(
 	if len(technicalAsset.DataAssetsStored) == 0 {
 		return true
 	}
-	return highestStoredConfidentiality < types.Confidential || highestStoredIntegrity < types.Critical
+	return highestStoredConfidentiality < types.Confidential && highestStoredIntegrity < types.Critical
 }
 
 // Simple routing assets like 'Reverse Proxy' or 'Load Balancer' usually don't have their own storage and thus have no
