@@ -1,0 +1,574 @@
+threagile_version: 1.0.0
+
+# Exercises the OT rules: what they find and what they skip.
+
+title: OT Rules
+
+date: 2026-11-04
+
+author:
+  name: John Doe
+
+business_criticality: critical
+
+business_overview:
+  description: OT rules test
+  images: []
+
+technical_overview:
+  description: OT rules test
+  images: []
+
+tags_available:
+  - industrial-dmz
+
+data_assets:
+
+  Commands:
+    id: commands
+    description: Control commands
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: internal
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Commands of the process
+
+technical_assets:
+
+  Vendor:
+    id: vendor
+    description: A vendor on the internet
+    type: external-entity
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: true
+    justification_out_of_scope: External
+    size: service
+    technology: desktop
+    tags: []
+    internet: true
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: External
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [commands]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Vendor Write:
+        target: plc-a
+        description: Vendor Write
+        protocol: modbus
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [commands]
+        data_assets_received: []
+
+  Office PC:
+    id: office-pc
+    description: A PC in the office
+    type: process
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: false
+    size: service
+    technology: desktop
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Office
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Report:
+        target: historian
+        description: Report
+        protocol: https
+        authentication: credentials
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: [commands]
+        data_assets_received: []
+      Jump:
+        target: jump-server
+        description: Jump
+        protocol: ssh
+        authentication: credentials
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [commands]
+        data_assets_received: []
+
+  Jump Server:
+    id: jump-server
+    description: A jump server in the DMZ
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: gateway
+    tags: [industrial-dmz]
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: DMZ
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Remote Desktop:
+        target: shared-ews
+        description: Remote Desktop
+        protocol: binary-encrypted
+        authentication: credentials
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [commands]
+        data_assets_received: []
+
+  Historian:
+    id: historian
+    description: The historian
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: historian
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Archive
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: [commands]
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  SCADA:
+    id: scada
+    description: The SCADA server
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: scada-server
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: critical
+    availability: important
+    justification_cia_rating: Supervises
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [commands]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Secure Write:
+        target: plc-a
+        description: Secure Write
+        protocol: opc-ua-encrypted
+        authentication: credentials
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [commands]
+        data_assets_received: []
+      Write B:
+        target: plc-b
+        description: Write B
+        protocol: ethernet-ip
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [commands]
+        data_assets_received: []
+      Poll B:
+        target: plc-b
+        description: Poll B
+        protocol: modbus
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: [commands]
+        data_assets_received: []
+      Archive:
+        target: historian
+        description: Archive
+        protocol: https
+        authentication: credentials
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [commands]
+        data_assets_received: []
+
+  HMI:
+    id: hmi
+    description: The operator screen
+    type: process
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: false
+    size: service
+    technology: hmi
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Operators
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Safety Status:
+        target: sis
+        description: Safety Status
+        protocol: modbus
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: [commands]
+        data_assets_received: []
+
+  Shared EWS:
+    id: shared-ews
+    description: Programs PLC A and the SIS
+    type: process
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: false
+    size: service
+    technology: engineering-workstation
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Engineering
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Program A:
+        target: plc-a
+        description: Program A
+        protocol: s7comm
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [commands]
+        data_assets_received: []
+      Program SIS:
+        target: sis
+        description: Program SIS
+        protocol: s7comm
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [commands]
+        data_assets_received: []
+
+  Safety EWS:
+    id: safety-ews
+    description: Programs the SIS only
+    type: process
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: false
+    size: service
+    technology: engineering-workstation
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Safety engineering
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Program SIS Dedicated:
+        target: sis
+        description: Program SIS Dedicated
+        protocol: s7comm
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [commands]
+        data_assets_received: []
+      Read A:
+        target: plc-a
+        description: Read A
+        protocol: s7comm
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: [commands]
+        data_assets_received: []
+
+  PLC A:
+    id: plc-a
+    description: A PLC
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: component
+    technology: plc
+    tags: []
+    internet: false
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: mission-critical
+    availability: mission-critical
+    justification_cia_rating: Controls
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [commands]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Actuate:
+        target: valve
+        description: Actuate
+        protocol: profinet
+        authentication: none
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [commands]
+        data_assets_received: []
+
+  PLC B:
+    id: plc-b
+    description: Another PLC
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: component
+    technology: plc
+    tags: []
+    internet: false
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: critical
+    availability: mission-critical
+    justification_cia_rating: Controls
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [commands]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  SIS:
+    id: sis
+    description: The safety controller
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: component
+    technology: safety-controller
+    tags: []
+    internet: false
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: mission-critical
+    availability: mission-critical
+    justification_cia_rating: Safety
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [commands]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Valve:
+    id: valve
+    description: A valve
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: component
+    technology: field-device
+    tags: []
+    internet: false
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: critical
+    availability: mission-critical
+    justification_cia_rating: Actuates
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [commands]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+trust_boundaries:
+
+  Office:
+    id: office
+    description: The office
+    type: network-on-prem
+    tags: []
+    technical_assets_inside:
+      - office-pc
+    trust_boundaries_nested: []
+
+  DMZ:
+    id: dmz
+    description: The industrial DMZ
+    type: network-on-prem
+    tags: []
+    technical_assets_inside:
+      - jump-server
+      - historian
+    trust_boundaries_nested: []
+
+  Plant:
+    id: plant
+    description: The plant network
+    type: network-on-prem
+    tags: []
+    technical_assets_inside:
+      - scada
+      - hmi
+      - shared-ews
+      - safety-ews
+      - plc-a
+      - plc-b
+      - sis
+      - valve
+    trust_boundaries_nested: []
+
+shared_runtimes: {}
