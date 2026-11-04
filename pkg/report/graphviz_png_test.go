@@ -55,6 +55,43 @@ func TestRenderDiagramPNG(t *testing.T) {
 	}
 }
 
+// The edge has a filled arrowhead at b and a hollow arrowtail at a; Graphviz places the tail
+// arrow between y=-142.25 and -122.25 and the head arrow between y=-57.6 and -37.6, which are
+// pixel rows 41.75 to 61.75 and 126.4 to 146.4 after the translation by (4, 184).
+const testBidirectionalDiagramDOT = `digraph test {
+	graph [dpi=72 splines=ortho ranksep=1.5];
+	node [shape=box];
+	a -> b [color="#0000FF" dir=both arrowhead=normal arrowtail=empty arrowsize=2.0];
+}`
+
+func TestRenderDiagramPNGArrowTail(t *testing.T) {
+	data, err := renderDiagramPNG([]byte(testBidirectionalDiagramDOT))
+	if err != nil {
+		t.Fatalf("rendering failed: %v", err)
+	}
+	img, err := png.Decode(bytes.NewReader(data))
+	if err != nil {
+		t.Fatalf("decoding the PNG failed: %v", err)
+	}
+	if size := img.Bounds().Size(); size.X != 62 || size.Y != 188 {
+		t.Fatalf("unexpected size %v, the arrow positions below assume 62x188", size)
+	}
+
+	// Inside each arrow, near its base and off the spline, which ends at the base.
+	for _, x := range []int{29, 31, 33} {
+		if r, g, b := rgb(img, x, 57); r < 200 || g < 200 || b < 200 {
+			t.Errorf("hollow arrowtail at (%d,57) is (%d,%d,%d), want white", x, r, g, b)
+		}
+		if r, g, b := rgb(img, x, 131); r > 50 || g > 50 || b < 200 {
+			t.Errorf("filled arrowhead at (%d,131) is (%d,%d,%d), want blue", x, r, g, b)
+		}
+	}
+	// The outline of the hollow arrowtail is still drawn: its base is at row 61.75.
+	if r, _, b := rgb(img, 31, 62); b < 128 || r > 128 {
+		t.Errorf("the base of the hollow arrowtail is (%d,_,%d), want blue", r, b)
+	}
+}
+
 func TestRenderDiagramPNGInvalidSource(t *testing.T) {
 	if _, err := renderDiagramPNG([]byte("digraph {")); err == nil {
 		t.Fatal("expected an error for an invalid diagram source")
