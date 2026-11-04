@@ -14,7 +14,7 @@
       "in-discussion": 0,
       "in-progress": 1,
       "mitigated": 0,
-      "unchecked": 20
+      "unchecked": 22
     },
     "high": {
       "accepted": 0,
@@ -38,7 +38,7 @@
       "in-discussion": 0,
       "in-progress": 0,
       "mitigated": 0,
-      "unchecked": 18
+      "unchecked": 19
     }
   }
 }

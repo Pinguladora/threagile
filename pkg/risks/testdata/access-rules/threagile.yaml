@@ -1,0 +1,458 @@
+threagile_version: 1.0.0
+
+# Exercises the rules on credentials and authorization: what they find and what they skip.
+
+title: Access Rules
+
+date: 2026-11-04
+
+author:
+  name: John Doe
+
+business_criticality: critical
+
+business_overview:
+  description: Access rules test
+  images: []
+
+technical_overview:
+  description: Access rules test
+  images: []
+
+data_assets:
+
+  Orders:
+    id: orders
+    description: Orders
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Orders of the customers
+
+technical_assets:
+
+  Browser:
+    id: browser
+    description: Browser
+    type: external-entity
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: true
+    justification_out_of_scope: External
+    size: service
+    technology: browser
+    tags: []
+    internet: true
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Shop Use:
+        target: shop-api
+        description: Shop Use
+        protocol: https
+        authentication: short-lived-token
+        identity: end-user
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Admin Console:
+    id: admin-console
+    description: Admin Console
+    type: process
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: false
+    size: service
+    technology: desktop
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Admin Use:
+        target: shop-api
+        description: Admin Use
+        protocol: https
+        authentication: session-id
+        identity: end-user
+        authorization: authenticated-only
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Staff Login:
+        target: shop-api
+        description: Staff Login
+        protocol: https
+        authentication: credentials
+        identity: end-user
+        authorization: object-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Partner:
+    id: partner
+    description: Partner
+    type: external-entity
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: true
+    justification_out_of_scope: External
+    size: service
+    technology: web-service-rest
+    tags: []
+    internet: true
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Partner Feed:
+        target: shop-api
+        description: Partner Feed
+        protocol: https
+        authentication: long-lived-token
+        identity: service-account
+        authorization: object-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Batch Job:
+    id: batch-job
+    description: Batch Job
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: batch-processing
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Batch Sync:
+        target: shop-api
+        description: Batch Sync
+        protocol: https
+        authentication: long-lived-token
+        identity: workload
+        authorization: object-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Reporting:
+    id: reporting
+    description: Reporting
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: batch-processing
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Report Pull:
+        target: shop-api
+        description: Report Pull
+        protocol: https
+        authentication: token
+        identity: service-account
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Shop API:
+    id: shop-api
+    description: Shop API
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: web-service-rest
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Order Storage:
+        target: orders-db
+        description: Order Storage
+        protocol: jdbc-encrypted
+        authentication: credentials
+        identity: service-account
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Shop Decisions:
+        target: policy-engine
+        description: Shop Decisions
+        protocol: https
+        authentication: client-certificate
+        identity: workload
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Shop Backup Decisions:
+        target: backup-policy-engine
+        description: Shop Backup Decisions
+        protocol: https
+        authentication: client-certificate
+        identity: workload
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Orders Database:
+    id: orders-db
+    description: Orders Database
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: database
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: [orders]
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Legacy Service:
+    id: legacy-service
+    description: Legacy Service
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: web-service-rest
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Legacy Decisions:
+        target: policy-engine
+        description: Legacy Decisions
+        protocol: http
+        authentication: none
+        identity: service-account
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Policy Engine:
+    id: policy-engine
+    description: Policy Engine
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: policy-decision-point
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Backup Policy Engine:
+    id: backup-policy-engine
+    description: Backup Policy Engine
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: policy-decision-point
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: true
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+trust_boundaries:
+
+  Shop Network:
+    id: shop-network
+    description: The shop
+    type: network-cloud-security-group
+    tags: []
+    technical_assets_inside: [admin-console, batch-job, reporting, shop-api, orders-db, policy-engine, backup-policy-engine]
+    trust_boundaries_nested: []
+
+  Legacy Network:
+    id: legacy-network
+    description: The legacy systems
+    type: network-on-prem
+    tags: []
+    technical_assets_inside: [legacy-service]
+    trust_boundaries_nested: []
+
+shared_runtimes: {}

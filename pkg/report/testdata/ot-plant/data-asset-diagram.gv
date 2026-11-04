@@ -44,8 +44,8 @@ digraph generatedModel { concentrate=true
   398759625 [ shape="box" style="filled" fillcolor="#444444"
 				label=<<b>Historian Replica</b>> penwidth="3.0" color="#444444" ];
 				
-  3748139475 [ shape="box" style="filled" fillcolor="#C87832"
-				label=<<b>Filter PLC</b>> penwidth="3.0" color="#C87832" ];
+  3748139475 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Filter PLC</b>> penwidth="3.0" color="#FF8E00" ];
 				
   3408973806 [ shape="box" style="filled" fillcolor="#FF8E00"
 				label=<<b>Engineering Workstation</b>> penwidth="3.0" color="#FF8E00" ];

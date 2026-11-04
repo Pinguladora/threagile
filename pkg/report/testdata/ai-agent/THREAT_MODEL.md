@@ -41,14 +41,14 @@ Threagile toolkit was used to model the architecture of "AI Support Assistant" a
 
 Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.
 
-In total **59 initial risks** in **25 categories** have been identified during the threat modeling process:
+In total **60 initial risks** in **26 categories** have been identified during the threat modeling process:
 
 | Severity | Risks | Status | Risks |
 | --- | ---: | --- | ---: |
-| Critical | 0 | Unchecked | 58 |
+| Critical | 0 | Unchecked | 59 |
 | High | 0 | In Discussion | 0 |
 | Elevated | 24 | Accepted | 0 |
-| Medium | 28 | In Progress | 1 |
+| Medium | 29 | In Progress | 1 |
 | Low | 7 | Mitigated | 0 |
 |  |  | False Positive | 0 |
 
@@ -56,7 +56,7 @@ The assistant acts for the customers: besides answering, it changes orders and i
 
 ## Impact Analysis of the Initial Risks
 
-The most prevalent impacts of the **59 initial risks** (distributed over **25 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **60 initial risks** (distributed over **26 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Cross-Site Scripting (XSS)](#cross-site-scripting-xss): 1 Initial Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -101,6 +101,10 @@ The most prevalent impacts of the **59 initial risks** (distributed over **25 ri
 - **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 1 Initial Risk, exploitation likelihood is _Very Likely_ with _Low_ impact
 
     If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.
+
+- **Medium**: [Long-Lived Credentials](#long-lived-credentials): 1 Initial Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.
 
 - **Medium**: [Missing Build Infrastructure](#missing-build-infrastructure): 1 Initial Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -167,22 +171,22 @@ The following table gives a high-level overview of the risk tracking status (inc
 | Critical | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | High | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Elevated | 24 | 24 | 0 | 0 | 0 | 0 | 0 |
-| Medium | 28 | 27 | 0 | 0 | 1 | 0 | 0 |
+| Medium | 29 | 28 | 0 | 0 | 1 | 0 | 0 |
 | Low | 7 | 7 | 0 | 0 | 0 | 0 | 0 |
 
-After removal of risks with status _mitigated_ and _false positive_ the following **59 remain unmitigated**:
+After removal of risks with status _mitigated_ and _false positive_ the following **60 remain unmitigated**:
 
 | Severity | Unmitigated risks | To be checked by | Unmitigated risks |
 | --- | ---: | --- | ---: |
 | Critical | 0 | Business Side | 1 |
 | High | 0 | Architecture | 11 |
 | Elevated | 24 | Development | 19 |
-| Medium | 28 | Operations | 28 |
+| Medium | 29 | Operations | 29 |
 | Low | 7 |  |  |
 
 ## Impact Analysis of the Remaining Risks
 
-The most prevalent impacts of the **59 remaining risks** (distributed over **25 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **60 remaining risks** (distributed over **26 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Cross-Site Scripting (XSS)](#cross-site-scripting-xss): 1 Remaining Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -227,6 +231,10 @@ The most prevalent impacts of the **59 remaining risks** (distributed over **25 
 - **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 1 Remaining Risk, exploitation likelihood is _Very Likely_ with _Low_ impact
 
     If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.
+
+- **Medium**: [Long-Lived Credentials](#long-lived-credentials): 1 Remaining Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.
 
 - **Medium**: [Missing Build Infrastructure](#missing-build-infrastructure): 1 Remaining Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -286,7 +294,7 @@ The most prevalent impacts of the **59 remaining risks** (distributed over **25 
 
 ## Risks by Severity
 
-All **59 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
+All **60 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
 
 ### Critical
 
@@ -333,7 +341,7 @@ _No risks._
 
 ### Medium
 
-**28 risks**
+**29 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
@@ -348,6 +356,7 @@ _No risks._
 | Medium | [**Container Base Image Backdooring** risk at **Support Agent**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Support Agent](#support-agent) | Unchecked |
 | Medium | [**Container Base Image Backdooring** risk at **Support Tools**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Support Tools](#support-tools) | Unchecked |
 | Medium | [**Cross-Site Request Forgery (CSRF)** risk at **Chat Frontend** via **Support Chat** from **Customer Browser**](#cross-site-request-forgery-csrf) | [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf) | [Chat Frontend](#chat-frontend), [Support Chat](#support-chat) | Unchecked |
+| Medium | [**Long-Lived Credentials** risk at **Orders Database** used by **Order Service** (credentials)](#long-lived-credentials) | [Long-Lived Credentials](#long-lived-credentials) | [Orders Database](#orders-database), [Order Storage](#order-storage) | Unchecked |
 | Medium | [**Missing Multi-Factor Authentication** covering communication link **Support Chat** from **Customer Browser** to **Chat Frontend**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [Chat Frontend](#chat-frontend), [Support Chat](#support-chat) | Unchecked |
 | Medium | [**Missing Build Infrastructure** in the threat model (referencing asset **Order Service** as an example)](#missing-build-infrastructure) | [Missing Build Infrastructure](#missing-build-infrastructure) | [Order Service](#order-service) | Unchecked |
 | Medium | [**Missing Cloud Hardening** risk at **Agent Subnet**](#missing-cloud-hardening) | [Missing Cloud Hardening](#missing-cloud-hardening) | none | Unchecked |
@@ -562,11 +571,11 @@ _This list is not complete and regulatory or law relevant abuse cases have to be
 
 ## STRIDE Classification of Identified Risks
 
-This chapter clusters and classifies the risks by STRIDE categories: in total **59 potential risks** have been identified during the threat modeling process.
+This chapter clusters and classifies the risks by STRIDE categories: in total **60 potential risks** have been identified during the threat modeling process.
 
 ### Spoofing
 
-**3 risks**
+**4 risks**
 
 Spoofing - Authenticity
 
@@ -577,6 +586,10 @@ Spoofing - Authenticity
 - **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 1/1 unmitigated Risk, exploitation likelihood is _Very Likely_ with _Low_ impact
 
     When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.
+
+- **Medium**: [Long-Lived Credentials](#long-lived-credentials): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it.
 
 - **Medium**: [Missing Identity Store](#missing-identity-store): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -704,7 +717,7 @@ Elevation of privilege - Authorization
 
 ## Assignment by Function
 
-This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **59 potential risks** have been identified during the threat modeling process.
+This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **60 potential risks** have been identified during the threat modeling process.
 
 ### Business Side
 
@@ -790,13 +803,17 @@ Development
 
 ### Operations
 
-**28 risks**
+**29 risks**
 
 Operations
 
 - **Medium**: [Container Base Image Backdooring](#container-base-image-backdooring): 10/10 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     Apply hardening of all container infrastructures (see for example the _CIS-Benchmarks for Docker and Kubernetes_ and the _Docker Bench for Security_). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's _Distroless_ base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.
+
+- **Medium**: [Long-Lived Credentials](#long-lived-credentials): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity _workload_ or the authentication _short-lived-token_. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.
 
 - **Medium**: [Missing Cloud Hardening](#missing-cloud-hardening): 4/4 unmitigated Risks, exploitation likelihood is _Unlikely_ with _High_ impact
 
@@ -962,7 +979,7 @@ This chapter lists custom questions that arose during the threat modeling proces
 
 ## Identified Risks by Vulnerability Category
 
-In total **59 potential risks** have been identified during the threat modeling process, distributed across **25 vulnerability categories**. The following sections describe each identified risk category and its risks.
+In total **60 potential risks** have been identified during the threat modeling process, distributed across **26 vulnerability categories**. The following sections describe each identified risk category and its risks.
 
 ### Cross-Site Scripting (XSS)
 
@@ -1533,6 +1550,56 @@ The risk **Cross-Site Request Forgery (CSRF)** was found **1 time** in the analy
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Medium | **Cross-Site Request Forgery (CSRF)** risk at **Chat Frontend** via **Support Chat** from **Customer Browser** | `cross-site-request-forgery@chat-frontend@customer-browser>support-chat` | Very Likely | Low | [Chat Frontend](#chat-frontend), [Support Chat](#support-chat) | Unchecked | _not tracked_ |
+
+### Long-Lived Credentials
+
+**Medium** · 1/1 unmitigated Risk · `long-lived-credentials`
+
+| Property | Value |
+| --- | --- |
+| STRIDE | Spoofing |
+| CWE | [CWE 522](https://cwe.mitre.org/data/definitions/522.html) |
+| Function | Operations |
+| Action | Short-Lived Credentials |
+| ASVS chapter | V2 - Authentication Verification Requirements |
+| Cheat sheet | [Secrets_Management_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) |
+| References | OWASP NHI7:2025 Long-Lived Secrets; OWASP NHI2:2025 Secret Leakage |
+
+**Description**
+
+Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it.
+
+**Impact**
+
+If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.
+
+**Detection Logic**
+
+In-scope technical assets processing or storing data rated at least as confidential or critical with an incoming communication link that is not process-local and is authenticated with _long-lived-token_, or with _credentials_ by a caller not used by humans, unless the identity of the link is _workload_. Links authenticated with _token_ are skipped, as the lifetime of the token is not modelled.
+
+**Risk Rating**
+
+The risk rating depends on the sensitivity of the data processed or stored by the target. The attack is likely when the caller is on the internet, is used by humans or calls across a network trust boundary, where secrets leak more easily, and unlikely otherwise.
+
+**False Positives**
+
+Secrets that are rotated automatically within hours can be considered as false positives after individual review.
+
+**Mitigation**
+
+Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity _workload_ or the authentication _short-lived-token_. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.
+
+**Check**
+
+Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
+
+**Risk Findings**
+
+The risk **Long-Lived Credentials** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+
+| Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Medium | **Long-Lived Credentials** risk at **Orders Database** used by **Order Service** (credentials) | `long-lived-credentials@orders-db@order-service>order-storage` | Unlikely | Medium | [Orders Database](#orders-database), [Order Storage](#order-storage) | Unchecked | _not tracked_ |
 
 ### Missing Build Infrastructure
 
@@ -2249,7 +2316,7 @@ The risk **Unchecked Deployment** was found **1 time** in the analyzed architect
 
 ## Identified Risks by Technical Asset
 
-In total **59 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
+In total **60 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
 
 ### Chat Frontend
 
@@ -2691,7 +2758,7 @@ Stores the versions of the guardrail model
 
 ### Orders Database
 
-**Medium** · 4/4 unmitigated Risks · `orders-db`
+**Medium** · 5/5 unmitigated Risks · `orders-db`
 
 Orders, payments and customers
 
@@ -2699,6 +2766,7 @@ Orders, payments and customers
 
 - **Medium**: [**Publicly Shared Cloud Snapshot** risk at **Orders Database**](#publicly-shared-cloud-snapshot) (Unchecked)
 - **Medium**: [**Container Base Image Backdooring** risk at **Orders Database**](#container-base-image-backdooring) (Unchecked)
+- **Medium**: [**Long-Lived Credentials** risk at **Orders Database** used by **Order Service** (credentials)](#long-lived-credentials) (Unchecked)
 - **Medium**: [**Missing Hardening** risk at **Orders Database**](#missing-hardening) (Unchecked)
 - **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Orders Database** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 
@@ -2873,7 +2941,7 @@ _The asset was defined as out-of-scope._
 
 ## Identified Data Breach Probabilities by Data Asset
 
-In total **59 potential risks** have been identified during the threat modeling process, distributed across **6 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
+In total **60 potential risks** have been identified during the threat modeling process, distributed across **6 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
 
 ### Chat Transcripts
 
@@ -2941,7 +3009,7 @@ This data asset has data breach potential because of 36 remaining risks:
 
 ### Customer Data
 
-**Probable** · 29/29 unmitigated Risks · `customer-data`
+**Probable** · 30/30 unmitigated Risks · `customer-data`
 
 Names, addresses and contact details of the customers
 
@@ -2964,7 +3032,7 @@ Names, addresses and contact details of the customers
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 29 remaining risks:
+This data asset has data breach potential because of 30 remaining risks:
 
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Order Service**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Orders Database**](#container-base-image-backdooring) (Unchecked)
@@ -2976,6 +3044,7 @@ This data asset has data breach potential because of 29 remaining risks:
 - Probable, **Medium**: [**Publicly Shared Cloud Snapshot** risk at **Orders Database**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Order Service** against database **Orders Database** via **Order Storage**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Support Agent**](#sensitive-data-disclosure-through-model-output) (Unchecked)
+- Possible, **Medium**: [**Long-Lived Credentials** risk at **Orders Database** used by **Order Service** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Elevated**: [**Missing Authentication** covering communication link **Tool Calls** from **Support Agent** to **Support Tools**](#missing-authentication) (Unchecked)
 - Possible, **Elevated**: [**Prompt Injection** risk at **Support Agent**](#prompt-injection) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Guardrail Model** server-side web-requesting the target **Model Registry** via **Model Pull**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -3102,7 +3171,7 @@ This data asset has data breach potential because of 20 remaining risks:
 
 ### Order Data
 
-**Probable** · 29/29 unmitigated Risks · `order-data`
+**Probable** · 30/30 unmitigated Risks · `order-data`
 
 Orders, payments and refunds
 
@@ -3125,7 +3194,7 @@ Orders, payments and refunds
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 29 remaining risks:
+This data asset has data breach potential because of 30 remaining risks:
 
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Order Service**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Orders Database**](#container-base-image-backdooring) (Unchecked)
@@ -3137,6 +3206,7 @@ This data asset has data breach potential because of 29 remaining risks:
 - Probable, **Medium**: [**Publicly Shared Cloud Snapshot** risk at **Orders Database**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Order Service** against database **Orders Database** via **Order Storage**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Support Agent**](#sensitive-data-disclosure-through-model-output) (Unchecked)
+- Possible, **Medium**: [**Long-Lived Credentials** risk at **Orders Database** used by **Order Service** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Elevated**: [**Missing Authentication** covering communication link **Tool Calls** from **Support Agent** to **Support Tools**](#missing-authentication) (Unchecked)
 - Possible, **Elevated**: [**Prompt Injection** risk at **Support Agent**](#prompt-injection) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Guardrail Model** server-side web-requesting the target **Model Registry** via **Model Pull**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -3569,7 +3639,7 @@ Looks up orders and issues refunds
 
 ## Risk Tracking
 
-**1 of 59 risks** are tracked in the model; the others are unchecked.
+**1 of 60 risks** are tracked in the model; the others are unchecked.
 
 | Risk | ID | Severity | Status | Date | Checked by | Ticket | Justification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -3603,6 +3673,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Incomplete Model | `incomplete-model` | Information Disclosure | When the threat model contains unknown technologies or transfers data over unknown protocols, this is an indicator for an incomplete model. | All technical assets and communication links with technology type or protocol type specified as unknown. | low |
 | Insecure Control Protocol | `insecure-control-protocol` | Tampering | Most industrial control protocols, like Modbus, DNP3, S7comm, EtherNet/IP or PROFINET, were designed for closed networks: a controller or field device executes every command it receives, without checking who sent it or whether it was changed on the way. Anyone who can send packets to it can write setpoints and outputs, stop it or download a new program. | In-scope controllers (plc, rtu, safety-controller) and field-device technical assets with an incoming non-readonly communication link over an industrial control protocol without a secure variant in use (all of them except modbus-security, dnp3-encrypted and opc-ua-encrypted). | The risk rating depends on the integrity and availability of the controlled process, and is the highest for safety controllers. The attack is very likely when the sender is on the internet, likely when it is an IT asset, reaches IT or calls across a network trust boundary, and unlikely otherwise. |
 | LDAP-Injection | `ldap-injection` | Tampering | When an LDAP server is accessed LDAP-Injection risks might arise. The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed. | In-scope clients accessing LDAP servers via typical LDAP access protocols. | The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed. |
+| Long-Lived Credentials | `long-lived-credentials` | Spoofing | Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it. | In-scope technical assets processing or storing data rated at least as confidential or critical with an incoming communication link that is not process-local and is authenticated with _long-lived-token_, or with _credentials_ by a caller not used by humans, unless the identity of the link is _workload_. Links authenticated with _token_ are skipped, as the lifetime of the token is not modelled. | The risk rating depends on the sensitivity of the data processed or stored by the target. The attack is likely when the caller is on the internet, is used by humans or calls across a network trust boundary, where secrets leak more easily, and unlikely otherwise. |
 | Missing Authentication | `missing-authentication` | Elevation of Privilege | Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes sensitive data. | In-scope technical assets (except load-balancer, reverse-proxy, service-registry, waf, ids, and ips and in-process calls) should authenticate incoming requests when the asset processes sensitive data. This is especially the case for all multi-tenant assets (there even non-sensitive ones). Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. | The risk rating (medium or high) depends on the sensitivity of the data sent across the communication link. Monitoring callers are exempted from this risk. |
 | Missing Multi-Factor Authentication (MFA) | `missing-authentication-second-factor` | Elevation of Privilege | Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans. | In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via multi-factor authentication (MFA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. | medium |
 | Missing Build Infrastructure | `missing-build-infrastructure` | Tampering | The modeled architecture does not contain a build infrastructure (devops-client, sourcecode-repo, build-pipeline, etc.), which might be the risk of a model missing critical assets (and thus not seeing their risks). If the architecture contains custom-developed parts, the pipeline where code gets developed and built needs to be part of the model. | Models with in-scope custom-developed parts missing in-scope development (code creation) and build infrastructure components (devops-client, sourcecode-repo, build-pipeline, etc.). | The risk rating depends on the highest sensitivity of the in-scope assets running custom-developed parts. |
@@ -3613,6 +3684,8 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Missing Identity Provider Isolation | `missing-identity-provider-isolation` | Elevation of Privilege | Highly sensitive identity provider assets and their identity data stores should be isolated from other assets by their own network segmentation trust-boundary (execution-environment boundaries do not count as network isolation). | In-scope identity provider assets and their identity data stores when surrounded by other (not identity-related) assets (without a network trust-boundary in-between). This risk is especially prevalent when other non-identity related assets are within the same execution environment (i.e. same database or same application server). | Default is high impact. The impact is increased to very-high when the asset missing the trust-boundary protection is rated as strictly-confidential or mission-critical. |
 | Missing Identity Store | `missing-identity-store` | Spoofing | The modeled architecture does not contain an identity store, which might be the risk of a model missing critical assets (and thus not seeing their risks). | Models with authenticated data-flows authorized via end user identity missing an in-scope identity store. | The risk rating depends on the sensitivity of the end user-identity authorized technical assets and their data assets processed. |
 | Missing Network Segmentation | `missing-network-segmentation` | Elevation of Privilege | Highly sensitive assets and/or data stores residing in the same network segment than other lower sensitive assets (like webservers or content management systems etc.) should be better protected by a network segmentation trust-boundary. | In-scope technical assets with high sensitivity and RAA values as well as data stores when surrounded by assets (without a network trust-boundary in-between) which are of type client-system, web-server, web-application, cms, web-service-rest, web-service-soap, build-pipeline, sourcecode-repository, monitoring, or similar and there is no direct connection between these (hence no requirement to be so close to each other). | Default is low risk. The risk is increased to medium when the asset missing the trust-boundary protection is rated as strictly-confidential or mission-critical. |
+| Missing Object-Level Authorization | `missing-object-level-authorization` | Elevation of Privilege | A service that acts for its users must check in each request that the user may access the object at hand, like the order or the account the request names. Checking only that the caller is logged in, or that its role may call the operation, lets any user read or change the objects of others by changing an id in the request (BOLA, also known as IDOR). | In-scope technical assets other than datastores, processing or storing data rated at least as confidential or critical, with an incoming communication link whose authorization is _none_, _authenticated-only_ or _function-level_, and whose identity is _end-user_ or whose caller is used by humans. Links whose authorization is _unknown_ are skipped. | The risk rating depends on the sensitivity of the data processed or stored by the target, one step higher when the link has no function-level authorization either. The attack is very likely when the caller is on the internet, and likely otherwise. |
+| Missing Policy Decision Point Redundancy | `missing-policy-decision-point-redundancy` | Denial of Service | Services that externalize their authorization to a policy decision point, for example through the AuthZEN Authorization API, cannot decide a request without it. When it fails, they either deny every request and stop working, or, when they fail open, allow every request. | In-scope policy-decision-point technical assets that are not redundant and that in-scope technical assets ask for decisions through communication links that are not process-local. | The risk rating depends on the highest availability rating of the services that ask the policy decision point. |
 | Missing Safety System Independence | `missing-safety-system-independence` | Elevation of Privilege | A safety instrumented system brings the process into a safe state when the basic process control fails or is attacked. It only does so when it is independent of that control: when assets other than a dedicated safety engineering workstation can change its program, setpoints or outputs, one compromise can disable the control and the safety function together, as the TRITON attack did. | In-scope safety-controller technical assets with an incoming non-readonly communication link that is not process-local, from a technical asset other than an engineering-workstation that has no non-readonly communication links to other controllers. | The impact is very high, as the safety function protects people. The attack is very likely when the sender is on the internet, likely when it is an IT asset, reaches IT or calls across a network trust boundary, and unlikely otherwise. |
 | Missing Vault (Secret Storage) | `missing-vault` | Information Disclosure | In order to avoid the risk of secret leakage via config files (when attacked through vulnerabilities being able to read files like Path-Traversal and others), it is best practice to use a separate hardened process with proper authentication, authorization, and audit logging to access config secrets (like credentials, private keys, client certificates, etc.). This component is usually some kind of Vault. | Models without a Vault (Secret Storage). | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. |
 | Missing Vault Isolation | `missing-vault-isolation` | Elevation of Privilege | Highly sensitive vault assets and their data stores should be isolated from other assets by their own network segmentation trust-boundary (execution-environment boundaries do not count as network isolation). | In-scope vault assets when surrounded by other (not vault-related) assets (without a network trust-boundary in-between). This risk is especially prevalent when other non-vault related assets are within the same execution environment (i.e. same database or same application server). | Default is medium impact. The impact is increased to high when the asset missing the trust-boundary protection is rated as strictly-confidential or mission-critical. |
@@ -3639,6 +3712,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Unnecessary Data Asset | `unnecessary-data-asset` | Elevation of Privilege | When a data asset is not processed by any data assets and also not transferred by any communication links, this is an indicator for an unnecessary data asset (or for an incomplete model). | Modelled data assets not processed by any data assets and also not transferred by any communication links. | low |
 | Unnecessary Data Transfer | `unnecessary-data-transfer` | Elevation of Privilege | When a technical asset sends or receives data assets, which it neither processes or stores this is an indicator for unnecessarily transferred data (or for an incomplete model). When the unnecessarily transferred data assets are sensitive, this poses an unnecessary risk of an increased attack surface. | In-scope technical assets sending or receiving sensitive data assets which are neither processed nor stored by the technical asset are flagged with this risk. The risk rating (low or medium) depends on the confidentiality, integrity, and availability rating of the technical asset. Monitoring data is exempted from this risk. | The risk assessment is depending on the confidentiality and integrity rating of the transferred data asset either low or medium. |
 | Unnecessary Technical Asset | `unnecessary-technical-asset` | Elevation of Privilege | When a technical asset does not process any data assets, this is an indicator for an unnecessary technical asset (or for an incomplete model). This is also the case if the asset has no communication links (either outgoing or incoming). | Technical assets not processing or storing any data assets. | low |
+| Unprotected Authorization Decisions | `unprotected-authorization-decisions` | Tampering | A service that asks a policy decision point whether to allow a request trusts the answer it gets. When the link to the decision point is unauthenticated or unencrypted, attackers in the network can answer in its place or change its answers, and so allow themselves anything the service can do. | In-scope technical assets with a communication link to a policy-decision-point technical asset that is not process-local and is unauthenticated or uses a protocol that is not encrypted. | The risk rating depends on the sensitivity of the data processed or stored by the service that asks. The attack is likely when the link crosses a network trust boundary, and unlikely otherwise. |
 | Untrusted Deserialization | `untrusted-deserialization` | Tampering | When a technical asset accepts data in a specific serialized form (like Java or .NET serialization), Untrusted Deserialization risks might arise. | In-scope technical assets accepting serialization data formats (including EJB and RMI protocols). | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. |
 | Vector Store Poisoning | `vector-store-poisoning` | Tampering | Language models and agents answer and act on what they retrieve from vector stores, for retrieval-augmented generation (RAG) or as the memory of an agent. Whoever can write into the store decides what the model believes: a poisoned document or memory entry carries false facts or hidden instructions into every answer that retrieves it, long after it was written. | In-scope vector-database technical assets that an llm or ai-agent technical asset communicates with. | The risk rating depends on the sensitivity of the data processed by the models and agents that use the store. The attack is likely when the store is written by an asset that takes untrusted input or sits across a network trust boundary, and unlikely otherwise. |
 | Wrong Communication Link Content | `wrong-communication-link-content` | Information Disclosure | When a communication link is defined as readonly, but does not receive any data asset, or when it is defined as not readonly, but does not send any data asset, it is likely to be a model failure. | Communication links with inconsistent data assets being sent/received not matching their readonly flag or otherwise inconsistent protocols not matching the target technology type. | low |
