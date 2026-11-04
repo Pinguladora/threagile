@@ -1,0 +1,268 @@
+# A small AWS model that exercises the cloud risk rules end to end:
+# public-cloud-asset-access (threagile#26), public-cloud-snapshot (#27),
+# cross-account-takeover (#28) and encryption-key-deletion (#29).
+threagile_version: 1.0.0
+
+title: Cloud Rules Model
+
+date: 2026-11-04
+
+author:
+  name: John Doe
+
+business_criticality: important
+
+tags_available:
+  - aws
+  - aws:s3
+  - aws:sqs
+  - aws:rds
+  - aws:kms
+
+data_assets:
+
+  Customer Records:
+    id: customer-records
+    description: Customer master data and orders
+    usage: business
+    origin: Customer
+    owner: Some Company
+    quantity: many
+    confidentiality: strictly-confidential
+    integrity: critical
+    availability: mission-critical
+    justification_cia_rating: Personal and payment data of customers
+
+  Product Images:
+    id: product-images
+    description: Images shown in the shop
+    usage: business
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: public
+    integrity: important
+    availability: important
+    justification_cia_rating: Public marketing content
+
+technical_assets:
+
+  Customer Browser:
+    id: customer-browser
+    description: The customers' web browser
+    type: external-entity
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: true
+    justification_out_of_scope: Owned and managed by the customers
+    size: system
+    technology: browser
+    internet: true
+    machine: physical
+    encryption: none
+    owner: Customer
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Customer devices
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed:
+      - product-images
+    communication_links:
+      Image Download:
+        target: image-bucket
+        description: Loads the product images
+        protocol: https
+        authentication: none
+        authorization: none
+        usage: business
+        readonly: true
+        data_assets_received:
+          - product-images
+
+  Image Bucket:
+    id: image-bucket
+    description: S3 bucket serving the product images
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: component
+    technology: file-server
+    tags:
+      - aws:s3
+    internet: false
+    machine: serverless
+    encryption: transparent
+    owner: Some Company
+    confidentiality: public
+    integrity: important
+    availability: important
+    justification_cia_rating: Public marketing content
+    multi_tenant: false
+    redundant: true
+    custom_developed_parts: false
+    data_assets_stored:
+      - product-images
+    data_formats_accepted:
+      - file
+
+  Order Queue:
+    id: order-queue
+    description: SQS queue handing new orders to the order database
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: component
+    technology: message-queue
+    tags:
+      - aws:sqs
+    internet: false
+    machine: serverless
+    encryption: transparent
+    owner: Some Company
+    confidentiality: strictly-confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Carries customer orders
+    multi_tenant: false
+    redundant: true
+    custom_developed_parts: false
+    data_assets_processed:
+      - customer-records
+    data_formats_accepted:
+      - json
+    communication_links:
+      Order Delivery:
+        target: customer-database
+        description: Writes new orders
+        protocol: jdbc-encrypted
+        authentication: credentials
+        authorization: technical-user
+        usage: business
+        data_assets_sent:
+          - customer-records
+
+  Customer Database:
+    id: customer-database
+    description: RDS database with the customer records, encrypted with a KMS key
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: component
+    technology: database
+    tags:
+      - aws:rds
+    internet: false
+    machine: serverless
+    encryption: transparent
+    owner: Some Company
+    confidentiality: strictly-confidential
+    integrity: critical
+    availability: mission-critical
+    justification_cia_rating: Holds all customer records
+    multi_tenant: false
+    redundant: true
+    custom_developed_parts: false
+    data_assets_processed:
+      - customer-records
+    data_assets_stored:
+      - customer-records
+    data_formats_accepted:
+      - json
+    communication_links:
+      Data Key Decryption:
+        target: key-management
+        description: Decrypts the data key of the database
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        usage: business
+
+  Key Management:
+    id: key-management
+    description: AWS KMS holding the customer managed key of the database
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: vault
+    tags:
+      - aws:kms
+    internet: false
+    machine: serverless
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: mission-critical
+    justification_cia_rating: Holds the key of the customer database
+    multi_tenant: false
+    redundant: true
+    custom_developed_parts: false
+
+  Analytics Job:
+    id: analytics-job
+    description: Shared analytics job in the analytics account that reads the customer records
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: application
+    technology: batch-processing
+    internet: false
+    machine: container
+    encryption: none
+    owner: Analytics Team
+    confidentiality: strictly-confidential
+    integrity: important
+    availability: operational
+    justification_cia_rating: Processes customer records
+    multi_tenant: true
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed:
+      - customer-records
+    data_formats_accepted:
+      - json
+    communication_links:
+      Records Export:
+        target: customer-database
+        description: Reads the customer records through a cross-account role
+        protocol: jdbc-encrypted
+        authentication: credentials
+        authorization: technical-user
+        usage: business
+        readonly: true
+        data_assets_received:
+          - customer-records
+
+trust_boundaries:
+
+  Workload Account:
+    id: workload-account
+    description: AWS account of the shop
+    type: network-cloud-provider
+    tags:
+      - aws
+    technical_assets_inside:
+      - image-bucket
+      - order-queue
+      - customer-database
+      - key-management
+
+  Analytics Account:
+    id: analytics-account
+    description: AWS account of the analytics team
+    type: network-cloud-provider
+    tags:
+      - aws
+    technical_assets_inside:
+      - analytics-job
+
+risk_tracking:
