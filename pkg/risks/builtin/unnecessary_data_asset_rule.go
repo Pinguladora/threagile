@@ -41,7 +41,6 @@ func (*UnnecessaryDataAssetRule) SupportedTags() []string {
 }
 
 func (r *UnnecessaryDataAssetRule) GenerateRisks(input *types.Model) ([]*types.Risk, error) {
-	risks := make([]*types.Risk, 0)
 	// first create them in memory - otherwise in Go ranging over map is random order
 	// range over them in sorted (hence re-producible) way:
 	unusedDataAssetIDs := make(map[string]bool)
@@ -64,11 +63,12 @@ func (r *UnnecessaryDataAssetRule) GenerateRisks(input *types.Model) ([]*types.R
 			}
 		}
 	}
-	var keys []string
+	keys := make([]string, 0, len(unusedDataAssetIDs))
 	for k := range unusedDataAssetIDs {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
+	risks := make([]*types.Risk, 0, len(keys))
 	for _, unusedDataAssetID := range keys {
 		risks = append(risks, r.createRisk(input, unusedDataAssetID))
 	}

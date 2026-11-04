@@ -61,14 +61,12 @@ var (
 )
 
 func (*MissingCloudHardeningRule) SupportedTags() []string {
-	res := []string{
+	return slices.Concat([]string{
 		"aws",   // Amazon AWS
 		"azure", // Microsoft Azure
 		"gcp",   // Google Cloud Platform
 		"ocp",   // Oracle Cloud Platform
-	}
-	res = append(res, specificSubTagsAWS...)
-	return res
+	}, specificSubTagsAWS)
 }
 
 type CloudAssets struct {
@@ -81,7 +79,6 @@ func (r *MissingCloudHardeningRule) GenerateRisks(input *types.Model) ([]*types.
 	cloudAssets := initCloudAssets([]string{providerAWS, providerAzure, providerGCP, providerOCP, "Unspecified"})
 	techAssetIDsWithSubtagSpecificCloudRisks := make(map[string]struct{})
 
-	risks := make([]*types.Risk, 0)
 	addedFlags := map[string]*bool{
 		providerAWS:   new(bool),
 		providerAzure: new(bool),
@@ -92,10 +89,17 @@ func (r *MissingCloudHardeningRule) GenerateRisks(input *types.Model) ([]*types.
 	r.collectCloudAssets(input, cloudAssets, techAssetIDsWithSubtagSpecificCloudRisks)
 	r.deduplicateUnspecifiedAssets(cloudAssets)
 
-	risks = append(risks, r.generateSharedRuntimeRisks(input, cloudAssets, addedFlags)...)
-	risks = append(risks, r.generateTrustBoundaryRisks(input, cloudAssets, addedFlags)...)
-	risks = append(risks, r.addFallbackAssetRisks(input, cloudAssets, addedFlags)...)
-	risks = append(risks, r.addSubtagSpecificRisks(input, techAssetIDsWithSubtagSpecificCloudRisks)...)
+	sharedRuntimeRisks := r.generateSharedRuntimeRisks(input, cloudAssets, addedFlags)
+	trustBoundaryRisks := r.generateTrustBoundaryRisks(input, cloudAssets, addedFlags)
+	fallbackAssetRisks := r.addFallbackAssetRisks(input, cloudAssets, addedFlags)
+	subtagSpecificRisks := r.addSubtagSpecificRisks(input, techAssetIDsWithSubtagSpecificCloudRisks)
+
+	risks := make([]*types.Risk, 0,
+		len(sharedRuntimeRisks)+len(trustBoundaryRisks)+len(fallbackAssetRisks)+len(subtagSpecificRisks))
+	risks = append(risks, sharedRuntimeRisks...)
+	risks = append(risks, trustBoundaryRisks...)
+	risks = append(risks, fallbackAssetRisks...)
+	risks = append(risks, subtagSpecificRisks...)
 
 	return risks, nil
 }
@@ -359,7 +363,7 @@ func isTaggedWithBaseTag(tags []string, baseTag string) bool {
 
 func findMostSensitiveTechnicalAsset(input *types.Model, techAssets map[string]struct{}) *types.TechnicalAsset {
 	// MaxFunc returns the first of several equally sensitive assets, so collect them in id order
-	var candidates []*types.TechnicalAsset
+	candidates := make([]*types.TechnicalAsset, 0, len(techAssets))
 	for _, id := range slices.Sorted(maps.Keys(techAssets)) {
 		candidates = append(candidates, input.TechnicalAssets[id])
 	}
