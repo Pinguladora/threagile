@@ -44,6 +44,11 @@ var EncryptionStyleTypeDescription = [...]TypeDescription{
 	{"data-with-end-user-individual-key", "The key is (managed) by the end user"},
 }
 
+// legacyEncryptionStyleNames are the spellings that releases up to 0.9 accepted (threagile#92).
+var legacyEncryptionStyleNames = map[string]EncryptionStyle{
+	"data-with-enduser-individual-key": DataWithEndUserIndividualKey,
+}
+
 func (what EncryptionStyle) String() string {
 	// NOTE: maintain list also in schema.json for validation in IDEs
 	return EncryptionStyleTypeDescription[what].Name
@@ -62,6 +67,10 @@ func (what EncryptionStyle) Find(value string) (EncryptionStyle, error) {
 		if strings.EqualFold(value, description.Name) {
 			return EncryptionStyle(index), nil
 		}
+	}
+
+	if legacy, ok := legacyEncryptionStyleNames[strings.ToLower(value)]; ok {
+		return legacy, nil
 	}
 
 	return EncryptionStyle(0), fmt.Errorf("unknown encryption style value %q", value)

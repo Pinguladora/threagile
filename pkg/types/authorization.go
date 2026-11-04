@@ -34,6 +34,11 @@ var AuthorizationTypeDescription = [...]TypeDescription{
 	{"end-user-identity-propagation", "Identity of end user propagates to this service"},
 }
 
+// legacyAuthorizationNames are the spellings that releases up to 0.9 accepted (threagile#92).
+var legacyAuthorizationNames = map[string]Authorization{
+	"enduser-identity-propagation": EndUserIdentityPropagation,
+}
+
 func ParseAuthorization(value string) (authorization Authorization, err error) {
 	return Authorization(0).Find(value)
 }
@@ -52,6 +57,10 @@ func (what Authorization) Find(value string) (Authorization, error) {
 		if strings.EqualFold(value, description.Name) {
 			return Authorization(index), nil
 		}
+	}
+
+	if legacy, ok := legacyAuthorizationNames[strings.ToLower(value)]; ok {
+		return legacy, nil
 	}
 
 	return Authorization(0), fmt.Errorf("unknown authorization value %q", value)
