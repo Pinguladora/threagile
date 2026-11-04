@@ -189,19 +189,34 @@ func (what Protocol) Explain() string {
 }
 
 func (what Protocol) IsProcessLocal() bool {
-	return what == InProcessLibraryCall || what == InterProcessCommunication || what == LocalFileAccess || what == ContainerSpawning
+	switch what {
+	case InProcessLibraryCall, InterProcessCommunication, LocalFileAccess, ContainerSpawning:
+		return true
+	default:
+		return false
+	}
 }
 
 func (what Protocol) IsEncrypted() bool {
-	return what == HTTPS || what == WSS || what == JdbcEncrypted || what == OdbcEncrypted ||
-		what == NosqlAccessProtocolEncrypted || what == SqlAccessProtocolEncrypted || what == BinaryEncrypted || what == TextEncrypted || what == SSH || what == SshTunnel ||
-		what == FTPS || what == SFTP || what == SCP || what == LDAPS || what == ReverseProxyWebProtocolEncrypted ||
-		what == IiopEncrypted || what == JrmpEncrypted || what == SmbEncrypted || what == SmtpEncrypted || what == Pop3Encrypted || what == ImapEncrypted
+	switch what {
+	case HTTPS, WSS, JdbcEncrypted, OdbcEncrypted,
+		NosqlAccessProtocolEncrypted, SqlAccessProtocolEncrypted, BinaryEncrypted, TextEncrypted, SSH, SshTunnel,
+		FTPS, SFTP, SCP, LDAPS, ReverseProxyWebProtocolEncrypted,
+		IiopEncrypted, JrmpEncrypted, SmbEncrypted, SmtpEncrypted, Pop3Encrypted, ImapEncrypted:
+		return true
+	default:
+		return false
+	}
 }
 
 func (what Protocol) IsPotentialDatabaseAccessProtocol() bool {
-	return what == JdbcEncrypted || what == OdbcEncrypted ||
-		what == NosqlAccessProtocolEncrypted || what == SqlAccessProtocolEncrypted || what == JDBC || what == ODBC || what == NosqlAccessProtocol || what == SqlAccessProtocol
+	switch what {
+	case JdbcEncrypted, OdbcEncrypted, NosqlAccessProtocolEncrypted, SqlAccessProtocolEncrypted,
+		JDBC, ODBC, NosqlAccessProtocol, SqlAccessProtocol:
+		return true
+	default:
+		return false
+	}
 }
 
 func (what Protocol) IsPotentialLaxDatabaseAccessProtocol() bool {
@@ -210,7 +225,12 @@ func (what Protocol) IsPotentialLaxDatabaseAccessProtocol() bool {
 }
 
 func (what Protocol) IsPotentialWebAccessProtocol() bool {
-	return what == HTTP || what == HTTPS || what == WS || what == WSS || what == ReverseProxyWebProtocol || what == ReverseProxyWebProtocolEncrypted
+	switch what {
+	case HTTP, HTTPS, WS, WSS, ReverseProxyWebProtocol, ReverseProxyWebProtocolEncrypted:
+		return true
+	default:
+		return false
+	}
 }
 
 func (what Protocol) MarshalJSON() ([]byte, error) {
