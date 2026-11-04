@@ -541,7 +541,9 @@ func colorPrefixByDataBreachProbability(probability types.DataBreachProbability,
 	}
 }
 
-func (adoc adocReport) addCategories(f *os.File, risksByCategory map[string][]*types.Risk, initialRisks bool, severity types.RiskSeverity, bothInitialAndRemainingRisks bool, describeDescription bool) {
+func (adoc adocReport) addCategories(f *os.File, risksByCategory map[string][]*types.Risk, initialRisks bool,
+	severity types.RiskSeverity, bothInitialAndRemainingRisks bool, describeDescription bool,
+) {
 	describeImpact := true
 	riskCategories := getRiskCategories(adoc.model, reduceToSeverityRisk(risksByCategory, initialRisks, severity))
 	sort.Sort(types.ByRiskCategoryTitleSort(riskCategories))
@@ -554,52 +556,7 @@ func (adoc adocReport) addCategories(f *os.File, risksByCategory map[string][]*t
 			continue
 		}
 
-		var prefix string
-		colorPrefix, colorSuffix := colorPrefixBySeverity(severity, false)
-		switch severity {
-		case types.CriticalSeverity:
-			prefix = "Critical: "
-		case types.HighSeverity:
-			prefix = "High: "
-		case types.ElevatedSeverity:
-			prefix = "Elevated: "
-		case types.MediumSeverity:
-			prefix = "Medium: "
-		case types.LowSeverity:
-			prefix = "Low: "
-		default:
-			prefix = ""
-		}
-		if len(types.ReduceToOnlyStillAtRisk(risksStr)) == 0 {
-			colorPrefix = ""
-			colorSuffix = ""
-		}
-		fullLine := "<<" + riskCategory.ID + "," + colorPrefix + prefix + "*" + riskCategory.Title + "*: "
-
-		count := len(risksStr)
-		initialStr := "Initial"
-		if !initialRisks {
-			initialStr = "Remaining"
-		}
-		remainingRisks := types.ReduceToOnlyStillAtRisk(risksStr)
-		suffix := strconv.Itoa(count) + " " + initialStr + " Risk"
-		if count != 1 {
-			suffix += "s"
-		}
-		if bothInitialAndRemainingRisks {
-			suffix = riskSuffix(len(remainingRisks), count)
-		}
-		suffix += " - Exploitation likelihood is _"
-		if initialRisks {
-			suffix += highestExploitationLikelihood(risksStr).Title() + "_ with _" +
-				highestExploitationImpact(risksStr).Title() + "_ impact."
-		} else {
-			suffix += highestExploitationLikelihood(remainingRisks).Title() + "_ with _" +
-				highestExploitationImpact(remainingRisks).Title() + "_ impact."
-		}
-
-		fullLine += suffix + colorSuffix + ">>::"
-		writeLine(f, fullLine)
+		writeLine(f, categoryLine(riskCategory, risksStr, initialRisks, severity, bothInitialAndRemainingRisks))
 
 		switch {
 		case describeImpact:
@@ -610,6 +567,62 @@ func (adoc adocReport) addCategories(f *os.File, risksByCategory map[string][]*t
 			writeLine(f, firstParagraph(riskCategory.Mitigation))
 		}
 		writeLine(f, "")
+	}
+}
+
+// categoryLine returns the line of a risk category in an impact analysis: a link to the category
+// with the number of its risks and their highest exploitation likelihood and impact.
+func categoryLine(riskCategory *types.RiskCategory, risksStr []*types.Risk, initialRisks bool,
+	severity types.RiskSeverity, bothInitialAndRemainingRisks bool,
+) string {
+	colorPrefix, colorSuffix := colorPrefixBySeverity(severity, false)
+	prefix := severityPrefix(severity)
+	if len(types.ReduceToOnlyStillAtRisk(risksStr)) == 0 {
+		colorPrefix = ""
+		colorSuffix = ""
+	}
+	fullLine := "<<" + riskCategory.ID + "," + colorPrefix + prefix + "*" + riskCategory.Title + "*: "
+
+	count := len(risksStr)
+	initialStr := "Initial"
+	if !initialRisks {
+		initialStr = "Remaining"
+	}
+	remainingRisks := types.ReduceToOnlyStillAtRisk(risksStr)
+	suffix := strconv.Itoa(count) + " " + initialStr + " Risk"
+	if count != 1 {
+		suffix += "s"
+	}
+	if bothInitialAndRemainingRisks {
+		suffix = riskSuffix(len(remainingRisks), count)
+	}
+	suffix += " - Exploitation likelihood is _"
+	if initialRisks {
+		suffix += highestExploitationLikelihood(risksStr).Title() + "_ with _" +
+			highestExploitationImpact(risksStr).Title() + "_ impact."
+	} else {
+		suffix += highestExploitationLikelihood(remainingRisks).Title() + "_ with _" +
+			highestExploitationImpact(remainingRisks).Title() + "_ impact."
+	}
+
+	return fullLine + suffix + colorSuffix + ">>::"
+}
+
+// severityPrefix returns the severity in front of a risk category in an impact analysis.
+func severityPrefix(severity types.RiskSeverity) string {
+	switch severity {
+	case types.CriticalSeverity:
+		return "Critical: "
+	case types.HighSeverity:
+		return "High: "
+	case types.ElevatedSeverity:
+		return "Elevated: "
+	case types.MediumSeverity:
+		return "Medium: "
+	case types.LowSeverity:
+		return "Low: "
+	default:
+		return ""
 	}
 }
 
@@ -647,16 +660,11 @@ func (adoc adocReport) impactAnalysis(f *os.File, initialRisks bool) int {
 			" (distributed over *"+strconv.Itoa(catCount)+" risk categories*) are "+
 			"(taking the severity ratings into account and using the highest for each category)!{fn-risk-findings}")
 	writeLine(f, "")
-	adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, types.CriticalSeverity,
-		false, false)
-	adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, types.HighSeverity, false,
-		false)
-	adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, types.ElevatedSeverity,
-		false, false)
-	adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, types.MediumSeverity,
-		false, false)
-	adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, types.LowSeverity, false,
-		false)
+	for _, severity := range []types.RiskSeverity{
+		types.CriticalSeverity, types.HighSeverity, types.ElevatedSeverity, types.MediumSeverity, types.LowSeverity,
+	} {
+		adoc.addCategories(f, adoc.model.GeneratedRisksByCategoryWithCurrentStatus(), initialRisks, severity, false, false)
+	}
 
 	return count
 }
