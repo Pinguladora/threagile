@@ -788,11 +788,11 @@
                   ]
                 },
                 "diagram_tweak_constraint": {
-                  "description": "diagram tweak constraint",
+                  "description": "true keeps the link from affecting the ranks of the assets in the data-flow diagram",
                   "type": "boolean"
                 },
                 "diagram_tweak_weight": {
-                  "description": "diagram tweak weight",
+                  "description": "weight of the link in the layout of the data-flow diagram; heavier links are drawn shorter and straighter",
                   "type": "integer"
                 },
                 "ip_filtered": {
