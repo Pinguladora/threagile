@@ -32,9 +32,10 @@
 23. [Shared Runtimes](#shared-runtimes)
 24. [Communication Links](#communication-links)
 25. [Risk Tracking](#risk-tracking)
-26. [Risk Rules Checked by Threagile](#risk-rules-checked-by-threagile)
-27. [Ratings](#ratings)
-28. [Disclaimer](#disclaimer)
+26. [Threat Catalog Coverage](#threat-catalog-coverage)
+27. [Risk Rules Checked by Threagile](#risk-rules-checked-by-threagile)
+28. [Ratings](#ratings)
+29. [Disclaimer](#disclaimer)
 
 ## Management Summary
 
@@ -4700,6 +4701,61 @@ Link to the LDAP auth server
 | [**Denial-of-Service** risky access of **Backoffice ERP System** by **Apache Webserver** via **ERP System Traffic**](#dos-risky-access-across-trust-boundary) | `dos-risky-access-across-trust-boundary@erp-system@apache-webserver@apache-webserver>erp-system-traffic->` | Low | In Progress | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures are being implemented and checked |
 | [**Denial-of-Service** risky access of **Backoffice ERP System** by **Backoffice Client** via **ERP Internal Access**](#dos-risky-access-across-trust-boundary) | `dos-risky-access-across-trust-boundary@erp-system@backoffice-client@backoffice-client>erp-internal-access->` | Low | In Progress | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures are being implemented and checked |
 | [**Denial-of-Service** risky access of **Marketing CMS** by **Backoffice Client** via **Marketing CMS Editing**](#dos-risky-access-across-trust-boundary) | `dos-risky-access-across-trust-boundary@marketing-cms@backoffice-client@backoffice-client>marketing-cms-editing->` | Low | In Progress | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures are being implemented and checked |
+
+## Threat Catalog Coverage
+
+The risk rules reference the entries of threat catalogs. For each entry of the catalogs that the risks of this model fall into, the tables list the risk rules that checked it and the risks they found. An entry that no risk rule checks needs a review of its own.
+
+### OWASP API Security Top 10 2023
+
+The risk rules checked **2 of 10** entries of the [OWASP API Security Top 10 2023](https://owasp.org/API-Security/editions/2023/en/0x11-t10/).
+
+| Entry | Risk rules | Risks |
+| --- | --- | --- |
+| `API1` Broken Object Level Authorization | [Missing Object-Level Authorization](#missing-object-level-authorization) | 1 mitigated Risk |
+| `API2` Broken Authentication | none | _not checked by any risk rule_ |
+| `API3` Broken Object Property Level Authorization | none | _not checked by any risk rule_ |
+| `API4` Unrestricted Resource Consumption | none | _not checked by any risk rule_ |
+| `API5` Broken Function Level Authorization | [Missing Object-Level Authorization](#missing-object-level-authorization) | 1 mitigated Risk |
+| `API6` Unrestricted Access to Sensitive Business Flows | none | _not checked by any risk rule_ |
+| `API7` Server Side Request Forgery | none | _not checked by any risk rule_ |
+| `API8` Security Misconfiguration | none | _not checked by any risk rule_ |
+| `API9` Improper Inventory Management | none | _not checked by any risk rule_ |
+| `API10` Unsafe Consumption of APIs | none | _not checked by any risk rule_ |
+
+### OWASP Top 10 for Agentic Applications 2026
+
+The risk rules checked **9 of 10** entries of the [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/).
+
+| Entry | Risk rules | Risks |
+| --- | --- | --- |
+| `ASI01` Agent Goal Hijack | Missing AI Guardrail, Prompt Injection | _no risks found_ |
+| `ASI02` Tool Misuse and Exploitation | Excessive Agency, Unauthenticated MCP Server | _no risks found_ |
+| `ASI03` Identity and Privilege Abuse | Confused Deputy Agent, Excessive Agency, [Human Use of Machine Identity](#human-use-of-machine-identity), [Shared Machine Account](#shared-machine-account), Unauthenticated MCP Server | 2/2 unmitigated Risks |
+| `ASI04` Agentic Supply Chain Vulnerabilities | Unverified Model Supply Chain | _no risks found_ |
+| `ASI05` Unexpected Code Execution | Unsandboxed Code Execution | _no risks found_ |
+| `ASI06` Memory and Context Poisoning | Vector Store Poisoning | _no risks found_ |
+| `ASI07` Insecure Inter-Agent Communication | Insecure Inter-Agent Communication | _no risks found_ |
+| `ASI08` Cascading Failures | Insecure Inter-Agent Communication | _no risks found_ |
+| `ASI09` Human-Agent Trust Exploitation | none | _not checked by any risk rule_ |
+| `ASI10` Rogue Agents | Missing AI Monitoring | _no risks found_ |
+
+### OWASP Non-Human Identities Top 10 2025
+
+The risk rules checked **4 of 10** entries of the [OWASP Non-Human Identities Top 10 2025](https://owasp.org/www-project-non-human-identities-top-10/2025/).
+
+| Entry | Risk rules | Risks |
+| --- | --- | --- |
+| `NHI1` Improper Offboarding | none | _not checked by any risk rule_ |
+| `NHI2` Secret Leakage | [Long-Lived Credentials](#long-lived-credentials) | 6/6 unmitigated Risks |
+| `NHI3` Vulnerable Third-Party NHI | none | _not checked by any risk rule_ |
+| `NHI4` Insecure Authentication | none | _not checked by any risk rule_ |
+| `NHI5` Overprivileged NHI | none | _not checked by any risk rule_ |
+| `NHI6` Insecure Cloud Deployment Configurations | none | _not checked by any risk rule_ |
+| `NHI7` Long-Lived Secrets | [Long-Lived Credentials](#long-lived-credentials) | 6/6 unmitigated Risks |
+| `NHI8` Environment Isolation | none | _not checked by any risk rule_ |
+| `NHI9` NHI Reuse | Confused Deputy Agent, [Shared Machine Account](#shared-machine-account) | 1/1 unmitigated Risk |
+| `NHI10` Human Use of NHI | [Human Use of Machine Identity](#human-use-of-machine-identity) | 1/1 unmitigated Risk |
 
 ## Risk Rules Checked by Threagile
 

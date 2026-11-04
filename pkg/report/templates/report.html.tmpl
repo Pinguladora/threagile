@@ -581,6 +581,27 @@ that may carry threagile's basic markup go through markup, which keeps only that
 </div>
 {{- end}}
 </section>
+{{- if .Shows "catalog-coverage"}}
+
+<section class="chapter" id="catalog-coverage">
+<h2>Threat Catalog Coverage</h2>
+<p>{{catalogCoverageIntro}}</p>
+{{- range .Catalogs}}
+<h3 id="{{.Anchor}}">{{.Title}}</h3>
+<p>The risk rules checked <strong>{{.Checked}} of {{len .Entries}}</strong> entries of the <a href="{{.Link}}" rel="noopener noreferrer">{{.Title}}</a>.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Entry</th><th scope="col">Risk rules</th><th scope="col">Risks</th></tr></thead>
+<tbody>
+{{- range .Entries}}
+<tr><th scope="row"><span class="id">{{.ID}}</span> {{.Title}}</th><td>{{template "refs" .Rules}}</td><td>{{if .Risks}}{{.Summary}}{{else}}<span class="muted">{{.Summary}}</span>{{end}}</td></tr>
+{{- end}}
+</tbody>
+</table>
+</div>
+{{- end}}
+</section>
+{{- end}}
 {{- if .Shows "risk-rules"}}
 
 <section class="chapter" id="risk-rules">

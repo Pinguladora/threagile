@@ -498,6 +498,7 @@ footer {
 <li><a href="#shared-runtimes">Shared Runtimes</a></li>
 <li><a href="#communication-links">Communication Links</a></li>
 <li><a href="#risk-tracking">Risk Tracking</a></li>
+<li><a href="#catalog-coverage">Threat Catalog Coverage</a></li>
 <li><a href="#risk-rules">Risk Rules Checked by Threagile</a></li>
 <li><a href="#ratings">Ratings</a></li>
 <li><a href="#disclaimer">Disclaimer</a></li>
@@ -4627,6 +4628,68 @@ footer {
 <tr><td><a href="#risk-dos-risky-access-across-trust-boundary_40erp-system_40apache-webserver_40apache-webserver_3eerp-system-traffic-_3e"><b>Denial-of-Service</b> risky access of <b>Backoffice ERP System</b> by <b>Apache Webserver</b> via <b>ERP System Traffic</b></a><br><span class="id">dos-risky-access-across-trust-boundary@erp-system@apache-webserver@apache-webserver&gt;erp-system-traffic-&gt;</span></td><td><span class="badge sev-low">Low</span></td><td><span class="badge status-in-progress">In Progress</span></td><td>2020-01-04</td><td>John Doe</td><td>XYZ-1234</td><td>The hardening measures are being implemented and checked</td></tr>
 <tr><td><a href="#risk-dos-risky-access-across-trust-boundary_40erp-system_40backoffice-client_40backoffice-client_3eerp-internal-access-_3e"><b>Denial-of-Service</b> risky access of <b>Backoffice ERP System</b> by <b>Backoffice Client</b> via <b>ERP Internal Access</b></a><br><span class="id">dos-risky-access-across-trust-boundary@erp-system@backoffice-client@backoffice-client&gt;erp-internal-access-&gt;</span></td><td><span class="badge sev-low">Low</span></td><td><span class="badge status-in-progress">In Progress</span></td><td>2020-01-04</td><td>John Doe</td><td>XYZ-1234</td><td>The hardening measures are being implemented and checked</td></tr>
 <tr><td><a href="#risk-dos-risky-access-across-trust-boundary_40marketing-cms_40backoffice-client_40backoffice-client_3emarketing-cms-editing-_3e"><b>Denial-of-Service</b> risky access of <b>Marketing CMS</b> by <b>Backoffice Client</b> via <b>Marketing CMS Editing</b></a><br><span class="id">dos-risky-access-across-trust-boundary@marketing-cms@backoffice-client@backoffice-client&gt;marketing-cms-editing-&gt;</span></td><td><span class="badge sev-low">Low</span></td><td><span class="badge status-in-progress">In Progress</span></td><td>2020-01-04</td><td>John Doe</td><td>XYZ-1234</td><td>The hardening measures are being implemented and checked</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section class="chapter" id="catalog-coverage">
+<h2>Threat Catalog Coverage</h2>
+<p>The risk rules reference the entries of threat catalogs. For each entry of the catalogs that the risks of this model fall into, the tables list the risk rules that checked it and the risks they found. An entry that no risk rule checks needs a review of its own.</p>
+<h3 id="catalog-owasp-api-2023">OWASP API Security Top 10 2023</h3>
+<p>The risk rules checked <strong>2 of 10</strong> entries of the <a href="https://owasp.org/API-Security/editions/2023/en/0x11-t10/" rel="noopener noreferrer">OWASP API Security Top 10 2023</a>.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Entry</th><th scope="col">Risk rules</th><th scope="col">Risks</th></tr></thead>
+<tbody>
+<tr><th scope="row"><span class="id">API1</span> Broken Object Level Authorization</th><td><a href="#category-missing-object-level-authorization">Missing Object-Level Authorization</a></td><td>1 mitigated Risk</td></tr>
+<tr><th scope="row"><span class="id">API2</span> Broken Authentication</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
+<tr><th scope="row"><span class="id">API3</span> Broken Object Property Level Authorization</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
+<tr><th scope="row"><span class="id">API4</span> Unrestricted Resource Consumption</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
+<tr><th scope="row"><span class="id">API5</span> Broken Function Level Authorization</th><td><a href="#category-missing-object-level-authorization">Missing Object-Level Authorization</a></td><td>1 mitigated Risk</td></tr>
+<tr><th scope="row"><span class="id">API6</span> Unrestricted Access to Sensitive Business Flows</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
+<tr><th scope="row"><span class="id">API7</span> Server Side Request Forgery</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
+<tr><th scope="row"><span class="id">API8</span> Security Misconfiguration</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
+<tr><th scope="row"><span class="id">API9</span> Improper Inventory Management</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
+<tr><th scope="row"><span class="id">API10</span> Unsafe Consumption of APIs</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="catalog-owasp-agentic-2026">OWASP Top 10 for Agentic Applications 2026</h3>
+<p>The risk rules checked <strong>9 of 10</strong> entries of the <a href="https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/" rel="noopener noreferrer">OWASP Top 10 for Agentic Applications 2026</a>.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Entry</th><th scope="col">Risk rules</th><th scope="col">Risks</th></tr></thead>
+<tbody>
+<tr><th scope="row"><span class="id">ASI01</span> Agent Goal Hijack</th><td>Missing AI Guardrail, Prompt Injection</td><td><span class="muted">no risks found</span></td></tr>
+<tr><th scope="row"><span class="id">ASI02</span> Tool Misuse and Exploitation</th><td>Excessive Agency, Unauthenticated MCP Server</td><td><span class="muted">no risks found</span></td></tr>
+<tr><th scope="row"><span class="id">ASI03</span> Identity and Privilege Abuse</th><td>Confused Deputy Agent, Excessive Agency, <a href="#category-human-use-of-machine-identity">Human Use of Machine Identity</a>, <a href="#category-shared-machine-account">Shared Machine Account</a>, Unauthenticated MCP Server</td><td>2/2 unmitigated Risks</td></tr>
+<tr><th scope="row"><span class="id">ASI04</span> Agentic Supply Chain Vulnerabilities</th><td>Unverified Model Supply Chain</td><td><span class="muted">no risks found</span></td></tr>
+<tr><th scope="row"><span class="id">ASI05</span> Unexpected Code Execution</th><td>Unsandboxed Code Execution</td><td><span class="muted">no risks found</span></td></tr>
+<tr><th scope="row"><span class="id">ASI06</span> Memory and Context Poisoning</th><td>Vector Store Poisoning</td><td><span class="muted">no risks found</span></td></tr>
+<tr><th scope="row"><span class="id">ASI07</span> Insecure Inter-Agent Communication</th><td>Insecure Inter-Agent Communication</td><td><span class="muted">no risks found</span></td></tr>
+<tr><th scope="row"><span class="id">ASI08</span> Cascading Failures</th><td>Insecure Inter-Agent Communication</td><td><span class="muted">no risks found</span></td></tr>
+<tr><th scope="row"><span class="id">ASI09</span> Human-Agent Trust Exploitation</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
+<tr><th scope="row"><span class="id">ASI10</span> Rogue Agents</th><td>Missing AI Monitoring</td><td><span class="muted">no risks found</span></td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="catalog-owasp-nhi-2025">OWASP Non-Human Identities Top 10 2025</h3>
+<p>The risk rules checked <strong>4 of 10</strong> entries of the <a href="https://owasp.org/www-project-non-human-identities-top-10/2025/" rel="noopener noreferrer">OWASP Non-Human Identities Top 10 2025</a>.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Entry</th><th scope="col">Risk rules</th><th scope="col">Risks</th></tr></thead>
+<tbody>
+<tr><th scope="row"><span class="id">NHI1</span> Improper Offboarding</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
+<tr><th scope="row"><span class="id">NHI2</span> Secret Leakage</th><td><a href="#category-long-lived-credentials">Long-Lived Credentials</a></td><td>6/6 unmitigated Risks</td></tr>
+<tr><th scope="row"><span class="id">NHI3</span> Vulnerable Third-Party NHI</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
+<tr><th scope="row"><span class="id">NHI4</span> Insecure Authentication</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
+<tr><th scope="row"><span class="id">NHI5</span> Overprivileged NHI</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
+<tr><th scope="row"><span class="id">NHI6</span> Insecure Cloud Deployment Configurations</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
+<tr><th scope="row"><span class="id">NHI7</span> Long-Lived Secrets</th><td><a href="#category-long-lived-credentials">Long-Lived Credentials</a></td><td>6/6 unmitigated Risks</td></tr>
+<tr><th scope="row"><span class="id">NHI8</span> Environment Isolation</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
+<tr><th scope="row"><span class="id">NHI9</span> NHI Reuse</th><td>Confused Deputy Agent, <a href="#category-shared-machine-account">Shared Machine Account</a></td><td>1/1 unmitigated Risk</td></tr>
+<tr><th scope="row"><span class="id">NHI10</span> Human Use of NHI</th><td><a href="#category-human-use-of-machine-identity">Human Use of Machine Identity</a></td><td>1/1 unmitigated Risk</td></tr>
 </tbody>
 </table>
 </div>

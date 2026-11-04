@@ -74,6 +74,7 @@ type reportView struct {
 	SharedRuntimes     []viewSharedRuntime
 	CommunicationLinks []viewCommunicationLink
 	RiskRules          []viewRiskRule
+	Catalogs           []viewCatalog
 	Confidentiality    []viewRating
 	Criticality        []viewRating
 }
@@ -167,6 +168,7 @@ func newReportView(parsedModel *types.Model, options ReportOptions) *reportView 
 	report.addRiskChapters(parsedModel, risks)
 	report.addAssetChapters(parsedModel, risks)
 	report.RiskRules = viewRiskRules(parsedModel, options)
+	report.Catalogs = viewCatalogs(report.RiskRules, report.Categories)
 	report.Confidentiality, report.Criticality = viewRatings()
 	report.Sections = report.sections(options)
 	report.sectionShown = make(map[string]bool)
@@ -189,6 +191,7 @@ func (what *reportView) sections(options ReportOptions) []viewSection {
 		chapterAbuseCases:           len(what.AbuseCases) > 0,
 		chapterTags:                 len(what.Tags) > 0,
 		chapterQuestions:            len(what.Questions) > 0,
+		chapterCatalogCoverage:      len(what.Catalogs) > 0,
 		chapterRiskRules:            !options.HideChapters[RiskRulesCheckedByThreagile],
 	}
 	sections := make([]viewSection, 0, len(viewChapters))
@@ -208,6 +211,7 @@ const (
 	chapterAbuseCases           = "abuse-cases"
 	chapterTags                 = "tags"
 	chapterQuestions            = "questions"
+	chapterCatalogCoverage      = "catalog-coverage"
 	chapterRiskRules            = "risk-rules"
 )
 
@@ -241,6 +245,7 @@ var viewChapters = []viewSection{
 	{"shared-runtimes", "Shared Runtimes"},
 	{"communication-links", "Communication Links"},
 	{"risk-tracking", "Risk Tracking"},
+	{chapterCatalogCoverage, "Threat Catalog Coverage"},
 	{chapterRiskRules, "Risk Rules Checked by Threagile"},
 	{"ratings", "Ratings"},
 	{"disclaimer", "Disclaimer"},
