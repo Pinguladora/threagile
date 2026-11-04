@@ -274,6 +274,126 @@
     "tracking_checked_by": "John Doe"
   },
   {
+    "category": "long-lived-credentials",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eLong-Lived Credentials\u003c/b\u003e risk at \u003cb\u003eCustomer Contract Database\u003c/b\u003e used by \u003cb\u003eBackoffice ERP System\u003c/b\u003e (credentials)",
+    "synthetic_id": "long-lived-credentials@sql-database@erp-system\u003edatabase-traffic",
+    "most_relevant_technical_asset": "sql-database",
+    "most_relevant_communication_link": "erp-system\u003edatabase-traffic",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "sql-database"
+    ],
+    "plain_title": "Long-Lived Credentials risk at Customer Contract Database used by Backoffice ERP System (credentials)",
+    "category_title": "Long-Lived Credentials",
+    "stride": "spoofing",
+    "function": "operations",
+    "cwe": 522,
+    "references": [
+      "OWASP NHI7:2025 Long-Lived Secrets",
+      "OWASP NHI2:2025 Secret Leakage"
+    ],
+    "action": "Short-Lived Credentials",
+    "mitigation": "Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity \u003ci\u003eworkload\u003c/i\u003e or the authentication \u003ci\u003eshort-lived-token\u003c/i\u003e. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Customer Contract Database",
+    "most_relevant_technical_asset_raa": 100,
+    "most_relevant_communication_link_title": "Database Traffic"
+  },
+  {
+    "category": "long-lived-credentials",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eLong-Lived Credentials\u003c/b\u003e risk at \u003cb\u003eIdentity Provider\u003c/b\u003e used by \u003cb\u003eApache Webserver\u003c/b\u003e (credentials)",
+    "synthetic_id": "long-lived-credentials@identity-provider@apache-webserver\u003eauth-credential-check-traffic",
+    "most_relevant_technical_asset": "identity-provider",
+    "most_relevant_communication_link": "apache-webserver\u003eauth-credential-check-traffic",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "identity-provider"
+    ],
+    "plain_title": "Long-Lived Credentials risk at Identity Provider used by Apache Webserver (credentials)",
+    "category_title": "Long-Lived Credentials",
+    "stride": "spoofing",
+    "function": "operations",
+    "cwe": 522,
+    "references": [
+      "OWASP NHI7:2025 Long-Lived Secrets",
+      "OWASP NHI2:2025 Secret Leakage"
+    ],
+    "action": "Short-Lived Credentials",
+    "mitigation": "Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity \u003ci\u003eworkload\u003c/i\u003e or the authentication \u003ci\u003eshort-lived-token\u003c/i\u003e. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Identity Provider",
+    "most_relevant_technical_asset_raa": 40.999362954246536,
+    "most_relevant_communication_link_title": "Auth Credential Check Traffic"
+  },
+  {
+    "category": "long-lived-credentials",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eLong-Lived Credentials\u003c/b\u003e risk at \u003cb\u003eLDAP Auth Server\u003c/b\u003e used by \u003cb\u003eIdentity Provider\u003c/b\u003e (credentials)",
+    "synthetic_id": "long-lived-credentials@ldap-auth-server@identity-provider\u003eldap-credential-check-traffic",
+    "most_relevant_technical_asset": "ldap-auth-server",
+    "most_relevant_communication_link": "identity-provider\u003eldap-credential-check-traffic",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "ldap-auth-server"
+    ],
+    "plain_title": "Long-Lived Credentials risk at LDAP Auth Server used by Identity Provider (credentials)",
+    "category_title": "Long-Lived Credentials",
+    "stride": "spoofing",
+    "function": "operations",
+    "cwe": 522,
+    "references": [
+      "OWASP NHI7:2025 Long-Lived Secrets",
+      "OWASP NHI2:2025 Secret Leakage"
+    ],
+    "action": "Short-Lived Credentials",
+    "mitigation": "Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity \u003ci\u003eworkload\u003c/i\u003e or the authentication \u003ci\u003eshort-lived-token\u003c/i\u003e. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "LDAP Auth Server",
+    "most_relevant_technical_asset_raa": 51.34381338742393,
+    "most_relevant_communication_link_title": "LDAP Credential Check Traffic"
+  },
+  {
+    "category": "long-lived-credentials",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eLong-Lived Credentials\u003c/b\u003e risk at \u003cb\u003eLDAP Auth Server\u003c/b\u003e used by \u003cb\u003eMarketing CMS\u003c/b\u003e (credentials)",
+    "synthetic_id": "long-lived-credentials@ldap-auth-server@marketing-cms\u003eauth-traffic",
+    "most_relevant_technical_asset": "ldap-auth-server",
+    "most_relevant_communication_link": "marketing-cms\u003eauth-traffic",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "ldap-auth-server"
+    ],
+    "plain_title": "Long-Lived Credentials risk at LDAP Auth Server used by Marketing CMS (credentials)",
+    "category_title": "Long-Lived Credentials",
+    "stride": "spoofing",
+    "function": "operations",
+    "cwe": 522,
+    "references": [
+      "OWASP NHI7:2025 Long-Lived Secrets",
+      "OWASP NHI2:2025 Secret Leakage"
+    ],
+    "action": "Short-Lived Credentials",
+    "mitigation": "Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity \u003ci\u003eworkload\u003c/i\u003e or the authentication \u003ci\u003eshort-lived-token\u003c/i\u003e. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "LDAP Auth Server",
+    "most_relevant_technical_asset_raa": 51.34381338742393,
+    "most_relevant_communication_link_title": "Auth Traffic"
+  },
+  {
     "category": "missing-authentication",
     "risk_status": "unchecked",
     "severity": "elevated",

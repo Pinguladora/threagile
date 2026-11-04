@@ -4,6 +4,7 @@ import (
 	"embed"
 	"fmt"
 	"io/fs"
+	"slices"
 
 	"github.com/Pinguladora/threagile/pkg/risks/builtin"
 	"github.com/Pinguladora/threagile/pkg/risks/script"
@@ -35,6 +36,42 @@ func GetBuiltInRiskRules() types.RiskRules {
 }
 
 func builtInRiskRules() []types.RiskRule {
+	return slices.Concat(coreRiskRules(), aiRiskRules(), otRiskRules(), accessRiskRules())
+}
+
+// aiRiskRules are the rules of systems built on language models and agents.
+func aiRiskRules() []types.RiskRule {
+	return []types.RiskRule{
+		builtin.NewExcessiveAgencyRule(),
+		builtin.NewModelOutputDisclosureRule(),
+		builtin.NewModelSupplyChainRule(),
+		builtin.NewPromptInjectionRule(),
+		builtin.NewUnauthenticatedMCPServerRule(),
+		builtin.NewVectorStorePoisoningRule(),
+	}
+}
+
+// otRiskRules are the rules of industrial control systems.
+func otRiskRules() []types.RiskRule {
+	return []types.RiskRule{
+		builtin.NewDirectITOTCommunicationRule(),
+		builtin.NewInsecureControlProtocolRule(),
+		builtin.NewMissingSafetySystemIndependenceRule(),
+	}
+}
+
+// accessRiskRules are the rules on the credentials, identities and authorization of communication links.
+func accessRiskRules() []types.RiskRule {
+	return []types.RiskRule{
+		builtin.NewLongLivedCredentialsRule(),
+		builtin.NewMissingObjectLevelAuthorizationRule(),
+		builtin.NewMissingPolicyDecisionPointRedundancyRule(),
+		builtin.NewUnprotectedAuthorizationDecisionsRule(),
+	}
+}
+
+// coreRiskRules are the rules of every model.
+func coreRiskRules() []types.RiskRule {
 	return []types.RiskRule{
 		builtin.NewAccidentalSecretLeakRule(),
 		builtin.NewCodeBackdooringRule(),
@@ -45,18 +82,9 @@ func builtInRiskRules() []types.RiskRule {
 		builtin.NewCrossSiteScriptingRule(),
 		builtin.NewDosRiskyAccessAcrossTrustBoundaryRule(),
 		builtin.NewEncryptionKeyDeletionRule(),
-		builtin.NewExcessiveAgencyRule(),
 		builtin.NewIncompleteModelRule(),
 		builtin.NewLdapInjectionRule(),
 		builtin.NewMissingAuthenticationRule(),
-		builtin.NewModelOutputDisclosureRule(),
-		builtin.NewModelSupplyChainRule(),
-		builtin.NewPromptInjectionRule(),
-		builtin.NewUnauthenticatedMCPServerRule(),
-		builtin.NewVectorStorePoisoningRule(),
-		builtin.NewDirectITOTCommunicationRule(),
-		builtin.NewInsecureControlProtocolRule(),
-		builtin.NewMissingSafetySystemIndependenceRule(),
 		builtin.NewMissingAuthenticationSecondFactorRule(builtin.NewMissingAuthenticationRule()),
 		builtin.NewMissingBuildInfrastructureRule(),
 		builtin.NewMissingCloudHardeningRule(),

@@ -368,6 +368,36 @@
     "most_relevant_communication_link_title": "Tool Calls"
   },
   {
+    "category": "long-lived-credentials",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eLong-Lived Credentials\u003c/b\u003e risk at \u003cb\u003eOrders Database\u003c/b\u003e used by \u003cb\u003eOrder Service\u003c/b\u003e (credentials)",
+    "synthetic_id": "long-lived-credentials@orders-db@order-service\u003eorder-storage",
+    "most_relevant_technical_asset": "orders-db",
+    "most_relevant_communication_link": "order-service\u003eorder-storage",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "orders-db"
+    ],
+    "plain_title": "Long-Lived Credentials risk at Orders Database used by Order Service (credentials)",
+    "category_title": "Long-Lived Credentials",
+    "stride": "spoofing",
+    "function": "operations",
+    "cwe": 522,
+    "references": [
+      "OWASP NHI7:2025 Long-Lived Secrets",
+      "OWASP NHI2:2025 Secret Leakage"
+    ],
+    "action": "Short-Lived Credentials",
+    "mitigation": "Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity \u003ci\u003eworkload\u003c/i\u003e or the authentication \u003ci\u003eshort-lived-token\u003c/i\u003e. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Orders Database",
+    "most_relevant_technical_asset_raa": 100,
+    "most_relevant_communication_link_title": "Order Storage"
+  },
+  {
     "category": "missing-authentication",
     "risk_status": "unchecked",
     "severity": "elevated",

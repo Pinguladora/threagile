@@ -21,7 +21,7 @@ func (*ExcessiveAgencyRule) Category() *types.RiskCategory {
 		Impact: "If this risk is unmitigated, attackers who steer the agent, or the agent's own mistakes, might " +
 			"change or delete critical data and trigger actions with real-world effects.",
 		ASVS:       asvsAccessControl,
-		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+		CheatSheet: cheatSheetAuthorization,
 		Action:     "Least Agency",
 		Mitigation: "Give the agent only the tools and the permissions its task needs, read-only where possible, " +
 			"and with the identity of the user it acts for rather than a broad technical one. Require a human " +

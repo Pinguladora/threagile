@@ -419,6 +419,96 @@
     "most_relevant_communication_link_title": "Dosing Pump Control"
   },
   {
+    "category": "long-lived-credentials",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eLong-Lived Credentials\u003c/b\u003e risk at \u003cb\u003eEngineering Workstation\u003c/b\u003e used by \u003cb\u003eJump Host\u003c/b\u003e (credentials)",
+    "synthetic_id": "long-lived-credentials@engineering-workstation@jump-host\u003eremote-desktop",
+    "most_relevant_technical_asset": "engineering-workstation",
+    "most_relevant_communication_link": "jump-host\u003eremote-desktop",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "engineering-workstation"
+    ],
+    "plain_title": "Long-Lived Credentials risk at Engineering Workstation used by Jump Host (credentials)",
+    "category_title": "Long-Lived Credentials",
+    "stride": "spoofing",
+    "function": "operations",
+    "cwe": 522,
+    "references": [
+      "OWASP NHI7:2025 Long-Lived Secrets",
+      "OWASP NHI2:2025 Secret Leakage"
+    ],
+    "action": "Short-Lived Credentials",
+    "mitigation": "Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity \u003ci\u003eworkload\u003c/i\u003e or the authentication \u003ci\u003eshort-lived-token\u003c/i\u003e. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Engineering Workstation",
+    "most_relevant_technical_asset_raa": 54.639731262327416,
+    "most_relevant_communication_link_title": "Remote Desktop"
+  },
+  {
+    "category": "long-lived-credentials",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eLong-Lived Credentials\u003c/b\u003e risk at \u003cb\u003eFilter PLC\u003c/b\u003e used by \u003cb\u003eSCADA Server\u003c/b\u003e (credentials)",
+    "synthetic_id": "long-lived-credentials@filter-plc@scada-server\u003efilter-control",
+    "most_relevant_technical_asset": "filter-plc",
+    "most_relevant_communication_link": "scada-server\u003efilter-control",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "filter-plc"
+    ],
+    "plain_title": "Long-Lived Credentials risk at Filter PLC used by SCADA Server (credentials)",
+    "category_title": "Long-Lived Credentials",
+    "stride": "spoofing",
+    "function": "operations",
+    "cwe": 522,
+    "references": [
+      "OWASP NHI7:2025 Long-Lived Secrets",
+      "OWASP NHI2:2025 Secret Leakage"
+    ],
+    "action": "Short-Lived Credentials",
+    "mitigation": "Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity \u003ci\u003eworkload\u003c/i\u003e or the authentication \u003ci\u003eshort-lived-token\u003c/i\u003e. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Filter PLC",
+    "most_relevant_technical_asset_raa": 46.394230769230774,
+    "most_relevant_communication_link_title": "Filter Control"
+  },
+  {
+    "category": "long-lived-credentials",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eLong-Lived Credentials\u003c/b\u003e risk at \u003cb\u003ePlant Historian\u003c/b\u003e used by \u003cb\u003eSCADA Server\u003c/b\u003e (credentials)",
+    "synthetic_id": "long-lived-credentials@plant-historian@scada-server\u003earchiving",
+    "most_relevant_technical_asset": "plant-historian",
+    "most_relevant_communication_link": "scada-server\u003earchiving",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "plant-historian"
+    ],
+    "plain_title": "Long-Lived Credentials risk at Plant Historian used by SCADA Server (credentials)",
+    "category_title": "Long-Lived Credentials",
+    "stride": "spoofing",
+    "function": "operations",
+    "cwe": 522,
+    "references": [
+      "OWASP NHI7:2025 Long-Lived Secrets",
+      "OWASP NHI2:2025 Secret Leakage"
+    ],
+    "action": "Short-Lived Credentials",
+    "mitigation": "Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity \u003ci\u003eworkload\u003c/i\u003e or the authentication \u003ci\u003eshort-lived-token\u003c/i\u003e. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Plant Historian",
+    "most_relevant_technical_asset_raa": 63.46153846153846,
+    "most_relevant_communication_link_title": "Archiving"
+  },
+  {
     "category": "missing-authentication-second-factor",
     "risk_status": "unchecked",
     "severity": "medium",

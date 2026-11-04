@@ -42,14 +42,14 @@ Threagile toolkit was used to model the architecture of "Water Treatment Plant" 
 
 Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.
 
-In total **39 initial risks** in **12 categories** have been identified during the threat modeling process:
+In total **42 initial risks** in **13 categories** have been identified during the threat modeling process:
 
 | Severity | Risks | Status | Risks |
 | --- | ---: | --- | ---: |
-| Critical | 0 | Unchecked | 38 |
+| Critical | 0 | Unchecked | 41 |
 | High | 0 | In Discussion | 0 |
-| Elevated | 21 | Accepted | 0 |
-| Medium | 18 | In Progress | 1 |
+| Elevated | 23 | Accepted | 0 |
+| Medium | 19 | In Progress | 1 |
 | Low | 0 | Mitigated | 0 |
 |  |  | False Positive | 0 |
 
@@ -57,7 +57,7 @@ The plant supplies the drinking water of the town; a failure of the dosing or of
 
 ## Impact Analysis of the Initial Risks
 
-The most prevalent impacts of the **39 initial risks** (distributed over **12 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **42 initial risks** (distributed over **13 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Direct IT/OT Communication](#direct-itot-communication): 1 Initial Risk, exploitation likelihood is _Likely_ with _High_ impact
 
@@ -66,6 +66,10 @@ The most prevalent impacts of the **39 initial risks** (distributed over **12 ri
 - **Elevated**: [Insecure Control Protocol](#insecure-control-protocol): 6 Initial Risks, exploitation likelihood is _Likely_ with _Very High_ impact
 
     If this risk is unmitigated, attackers in the network might send commands that change, stop or damage the physical process, or alter the commands and readings exchanged with the controller.
+
+- **Elevated**: [Long-Lived Credentials](#long-lived-credentials): 3 Initial Risks, exploitation likelihood is _Likely_ with _High_ impact
+
+    If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.
 
 - **Elevated**: [Missing Hardening](#missing-hardening): 3 Initial Risks, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -94,6 +98,10 @@ The most prevalent impacts of the **39 initial risks** (distributed over **12 ri
 - **Medium**: [Insecure Control Protocol](#insecure-control-protocol): 6 Initial Risks, exploitation likelihood is _Likely_ with _Very High_ impact
 
     If this risk is unmitigated, attackers in the network might send commands that change, stop or damage the physical process, or alter the commands and readings exchanged with the controller.
+
+- **Medium**: [Long-Lived Credentials](#long-lived-credentials): 3 Initial Risks, exploitation likelihood is _Likely_ with _High_ impact
+
+    If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.
 
 - **Medium**: [Missing Hardening](#missing-hardening): 3 Initial Risks, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -127,23 +135,23 @@ The following table gives a high-level overview of the risk tracking status (inc
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Critical | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | High | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Elevated | 21 | 20 | 0 | 0 | 1 | 0 | 0 |
-| Medium | 18 | 18 | 0 | 0 | 0 | 0 | 0 |
+| Elevated | 23 | 22 | 0 | 0 | 1 | 0 | 0 |
+| Medium | 19 | 19 | 0 | 0 | 0 | 0 | 0 |
 | Low | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
-After removal of risks with status _mitigated_ and _false positive_ the following **39 remain unmitigated**:
+After removal of risks with status _mitigated_ and _false positive_ the following **42 remain unmitigated**:
 
 | Severity | Unmitigated risks | To be checked by | Unmitigated risks |
 | --- | ---: | --- | ---: |
 | Critical | 0 | Business Side | 1 |
 | High | 0 | Architecture | 12 |
-| Elevated | 21 | Development | 5 |
-| Medium | 18 | Operations | 21 |
+| Elevated | 23 | Development | 5 |
+| Medium | 19 | Operations | 24 |
 | Low | 0 |  |  |
 
 ## Impact Analysis of the Remaining Risks
 
-The most prevalent impacts of the **39 remaining risks** (distributed over **12 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **42 remaining risks** (distributed over **13 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Direct IT/OT Communication](#direct-itot-communication): 1 Remaining Risk, exploitation likelihood is _Likely_ with _High_ impact
 
@@ -152,6 +160,10 @@ The most prevalent impacts of the **39 remaining risks** (distributed over **12 
 - **Elevated**: [Insecure Control Protocol](#insecure-control-protocol): 6 Remaining Risks, exploitation likelihood is _Likely_ with _Very High_ impact
 
     If this risk is unmitigated, attackers in the network might send commands that change, stop or damage the physical process, or alter the commands and readings exchanged with the controller.
+
+- **Elevated**: [Long-Lived Credentials](#long-lived-credentials): 3 Remaining Risks, exploitation likelihood is _Likely_ with _High_ impact
+
+    If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.
 
 - **Elevated**: [Missing Hardening](#missing-hardening): 3 Remaining Risks, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -181,6 +193,10 @@ The most prevalent impacts of the **39 remaining risks** (distributed over **12 
 
     If this risk is unmitigated, attackers in the network might send commands that change, stop or damage the physical process, or alter the commands and readings exchanged with the controller.
 
+- **Medium**: [Long-Lived Credentials](#long-lived-credentials): 3 Remaining Risks, exploitation likelihood is _Likely_ with _High_ impact
+
+    If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.
+
 - **Medium**: [Missing Hardening](#missing-hardening): 3 Remaining Risks, exploitation likelihood is _Likely_ with _Medium_ impact
 
     If this risk remains unmitigated, attackers might be able to easier attack high-value targets.
@@ -207,7 +223,7 @@ The most prevalent impacts of the **39 remaining risks** (distributed over **12 
 
 ## Risks by Severity
 
-All **39 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
+All **42 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
 
 ### Critical
 
@@ -223,7 +239,7 @@ _No risks._
 
 ### Elevated
 
-**21 risks**
+**23 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
@@ -233,6 +249,8 @@ _No risks._
 | Elevated | [**Insecure Control Protocol** risk at **Dosing PLC** over **modbus** from **SCADA Server**](#insecure-control-protocol) | [Insecure Control Protocol](#insecure-control-protocol) | [Dosing PLC](#dosing-plc), [Dosing Control](#dosing-control) | Unchecked |
 | Elevated | [**Insecure Control Protocol** risk at **Dosing PLC** over **s7comm** from **Engineering Workstation**](#insecure-control-protocol) | [Insecure Control Protocol](#insecure-control-protocol) | [Dosing PLC](#dosing-plc), [Dosing Programming](#dosing-programming) | Unchecked |
 | Elevated | [**Insecure Control Protocol** risk at **Pump Station RTU** over **dnp3** from **SCADA Server**](#insecure-control-protocol) | [Insecure Control Protocol](#insecure-control-protocol) | [Pump Station RTU](#pump-station-rtu), [Pump Station Telemetry](#pump-station-telemetry) | In Progress |
+| Elevated | [**Long-Lived Credentials** risk at **Engineering Workstation** used by **Jump Host** (credentials)](#long-lived-credentials) | [Long-Lived Credentials](#long-lived-credentials) | [Engineering Workstation](#engineering-workstation), [Remote Desktop](#remote-desktop) | Unchecked |
+| Elevated | [**Long-Lived Credentials** risk at **Filter PLC** used by **SCADA Server** (credentials)](#long-lived-credentials) | [Long-Lived Credentials](#long-lived-credentials) | [Filter PLC](#filter-plc), [Filter Control](#filter-control) | Unchecked |
 | Elevated | [**Missing Hardening** risk at **Dosing PLC**](#missing-hardening) | [Missing Hardening](#missing-hardening) | [Dosing PLC](#dosing-plc) | Unchecked |
 | Elevated | [**Missing Hardening** risk at **SCADA Server**](#missing-hardening) | [Missing Hardening](#missing-hardening) | [SCADA Server](#scada-server) | Unchecked |
 | Elevated | [**Missing Safety System Independence** risk at **Chlorine Safety Controller** changed by **Engineering Workstation**](#missing-safety-system-independence) | [Missing Safety System Independence](#missing-safety-system-independence) | [Chlorine Safety Controller](#chlorine-safety-controller), [Safety Programming](#safety-programming) | Unchecked |
@@ -251,7 +269,7 @@ _No risks._
 
 ### Medium
 
-**18 risks**
+**19 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
@@ -264,6 +282,7 @@ _No risks._
 | Medium | [**Denial-of-Service** risky access of **Pump Station RTU** by **SCADA Server** via **Pump Station Telemetry**](#dos-risky-access-across-trust-boundary) | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | [Pump Station RTU](#pump-station-rtu), [Pump Station Telemetry](#pump-station-telemetry) | Unchecked |
 | Medium | [**Denial-of-Service** risky access of **SCADA Server** by **Office Workstation** via **Live Dashboard**](#dos-risky-access-across-trust-boundary) | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | [SCADA Server](#scada-server), [Live Dashboard](#live-dashboard) | Unchecked |
 | Medium | [**Insecure Control Protocol** risk at **Dosing Pump** over **profinet** from **Dosing PLC**](#insecure-control-protocol) | [Insecure Control Protocol](#insecure-control-protocol) | [Dosing Pump](#dosing-pump), [Dosing Pump Control](#dosing-pump-control) | Unchecked |
+| Medium | [**Long-Lived Credentials** risk at **Plant Historian** used by **SCADA Server** (credentials)](#long-lived-credentials) | [Long-Lived Credentials](#long-lived-credentials) | [Plant Historian](#plant-historian), [Archiving](#archiving) | Unchecked |
 | Medium | [**Missing Multi-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [SCADA Server](#scada-server), [Operation](#operation) | Unchecked |
 | Medium | [**Missing Hardening** risk at **Plant Historian**](#missing-hardening) | [Missing Hardening](#missing-hardening) | [Plant Historian](#plant-historian) | Unchecked |
 | Medium | [**Missing Identity Store** in the threat model (referencing asset **Engineering Workstation** as an example)](#missing-identity-store) | [Missing Identity Store](#missing-identity-store) | [Engineering Workstation](#engineering-workstation) | Unchecked |
@@ -372,6 +391,10 @@ Data-flow diagram of "Water Treatment Plant". A box is an external entity, a sta
 
     Programs the PLCs, the RTU and the safety controller
 
+- [Filter PLC](#filter-plc)
+
+    Runs the filters and their backwash
+
 - [Jump Host](#jump-host)
 
     The only way into the plant network for remote access
@@ -399,10 +422,6 @@ Data-flow diagram of "Water Treatment Plant". A box is an external entity, a sta
 - [Dosing Pump](#dosing-pump)
 
     The pump dosing the chlorine
-
-- [Filter PLC](#filter-plc)
-
-    Runs the filters and their backwash
 
 - [Chlorine Analyzer](#chlorine-analyzer)
 
@@ -482,13 +501,21 @@ This chapter lists what tags are used by which elements.
 
 ## STRIDE Classification of Identified Risks
 
-This chapter clusters and classifies the risks by STRIDE categories: in total **39 potential risks** have been identified during the threat modeling process.
+This chapter clusters and classifies the risks by STRIDE categories: in total **42 potential risks** have been identified during the threat modeling process.
 
 ### Spoofing
 
-**1 risk**
+**4 risks**
 
 Spoofing - Authenticity
+
+- **Elevated**: [Long-Lived Credentials](#long-lived-credentials): 3/3 unmitigated Risks, exploitation likelihood is _Likely_ with _High_ impact
+
+    Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it.
+
+- **Medium**: [Long-Lived Credentials](#long-lived-credentials): 3/3 unmitigated Risks, exploitation likelihood is _Likely_ with _High_ impact
+
+    Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it.
 
 - **Medium**: [Missing Identity Store](#missing-identity-store): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -584,7 +611,7 @@ Elevation of privilege - Authorization
 
 ## Assignment by Function
 
-This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **39 potential risks** have been identified during the threat modeling process.
+This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **42 potential risks** have been identified during the threat modeling process.
 
 ### Business Side
 
@@ -646,9 +673,13 @@ Development
 
 ### Operations
 
-**21 risks**
+**24 risks**
 
 Operations
+
+- **Elevated**: [Long-Lived Credentials](#long-lived-credentials): 3/3 unmitigated Risks, exploitation likelihood is _Likely_ with _High_ impact
+
+    Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity _workload_ or the authentication _short-lived-token_. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.
 
 - **Elevated**: [Missing Hardening](#missing-hardening): 3/3 unmitigated Risks, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -661,6 +692,10 @@ Operations
 - **Medium**: [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary): 8/8 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.
+
+- **Medium**: [Long-Lived Credentials](#long-lived-credentials): 3/3 unmitigated Risks, exploitation likelihood is _Likely_ with _High_ impact
+
+    Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity _workload_ or the authentication _short-lived-token_. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.
 
 - **Medium**: [Missing Hardening](#missing-hardening): 3/3 unmitigated Risks, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -700,7 +735,7 @@ The following lists all technical assets sorted by their RAA value from highest 
 
     Closes the chlorine supply when a leak or an overdose is detected
 
-- [Filter PLC](#filter-plc): RAA 46 %, highest severity still at risk: **Medium**
+- [Filter PLC](#filter-plc): RAA 46 %, highest severity still at risk: **Elevated**
 
     Runs the filters and their backwash
 
@@ -799,7 +834,7 @@ This chapter lists custom questions that arose during the threat modeling proces
 
 ## Identified Risks by Vulnerability Category
 
-In total **39 potential risks** have been identified during the threat modeling process, distributed across **12 vulnerability categories**. The following sections describe each identified risk category and its risks.
+In total **42 potential risks** have been identified during the threat modeling process, distributed across **13 vulnerability categories**. The following sections describe each identified risk category and its risks.
 
 ### Direct IT/OT Communication
 
@@ -905,6 +940,58 @@ The risk **Insecure Control Protocol** was found **6 times** in the analyzed arc
 | Elevated | **Insecure Control Protocol** risk at **Dosing PLC** over **s7comm** from **Engineering Workstation** | `insecure-control-protocol@dosing-plc@engineering-workstation>dosing-programming` | Likely | High | [Dosing PLC](#dosing-plc), [Dosing Programming](#dosing-programming) | Unchecked | _not tracked_ |
 | Elevated | **Insecure Control Protocol** risk at **Pump Station RTU** over **dnp3** from **SCADA Server** | `insecure-control-protocol@pump-station-rtu@scada-server>pump-station-telemetry` | Likely | High | [Pump Station RTU](#pump-station-rtu), [Pump Station Telemetry](#pump-station-telemetry) | In Progress | 2026-11-04; by John Doe; ticket OT-17; Moving the pump station to DNP3 over TLS with the next RTU firmware |
 | Medium | **Insecure Control Protocol** risk at **Dosing Pump** over **profinet** from **Dosing PLC** | `insecure-control-protocol@dosing-pump@dosing-plc>dosing-pump-control` | Unlikely | High | [Dosing Pump](#dosing-pump), [Dosing Pump Control](#dosing-pump-control) | Unchecked | _not tracked_ |
+
+### Long-Lived Credentials
+
+**Elevated** · 3/3 unmitigated Risks · `long-lived-credentials`
+
+| Property | Value |
+| --- | --- |
+| STRIDE | Spoofing |
+| CWE | [CWE 522](https://cwe.mitre.org/data/definitions/522.html) |
+| Function | Operations |
+| Action | Short-Lived Credentials |
+| ASVS chapter | V2 - Authentication Verification Requirements |
+| Cheat sheet | [Secrets_Management_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) |
+| References | OWASP NHI7:2025 Long-Lived Secrets; OWASP NHI2:2025 Secret Leakage |
+
+**Description**
+
+Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it.
+
+**Impact**
+
+If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.
+
+**Detection Logic**
+
+In-scope technical assets processing or storing data rated at least as confidential or critical with an incoming communication link that is not process-local and is authenticated with _long-lived-token_, or with _credentials_ by a caller not used by humans, unless the identity of the link is _workload_. Links authenticated with _token_ are skipped, as the lifetime of the token is not modelled.
+
+**Risk Rating**
+
+The risk rating depends on the sensitivity of the data processed or stored by the target. The attack is likely when the caller is on the internet, is used by humans or calls across a network trust boundary, where secrets leak more easily, and unlikely otherwise.
+
+**False Positives**
+
+Secrets that are rotated automatically within hours can be considered as false positives after individual review.
+
+**Mitigation**
+
+Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity _workload_ or the authentication _short-lived-token_. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.
+
+**Check**
+
+Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
+
+**Risk Findings**
+
+The risk **Long-Lived Credentials** was found **3 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+
+| Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Elevated | **Long-Lived Credentials** risk at **Engineering Workstation** used by **Jump Host** (credentials) | `long-lived-credentials@engineering-workstation@jump-host>remote-desktop` | Likely | High | [Engineering Workstation](#engineering-workstation), [Remote Desktop](#remote-desktop) | Unchecked | _not tracked_ |
+| Elevated | **Long-Lived Credentials** risk at **Filter PLC** used by **SCADA Server** (credentials) | `long-lived-credentials@filter-plc@scada-server>filter-control` | Likely | High | [Filter PLC](#filter-plc), [Filter Control](#filter-control) | Unchecked | _not tracked_ |
+| Medium | **Long-Lived Credentials** risk at **Plant Historian** used by **SCADA Server** (credentials) | `long-lived-credentials@plant-historian@scada-server>archiving` | Unlikely | High | [Plant Historian](#plant-historian), [Archiving](#archiving) | Unchecked | _not tracked_ |
 
 ### Missing Hardening
 
@@ -1421,7 +1508,7 @@ The risk **Server-Side Request Forgery (SSRF)** was found **2 times** in the ana
 
 ## Identified Risks by Technical Asset
 
-In total **39 potential risks** have been identified during the threat modeling process, distributed across **14 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
+In total **42 potential risks** have been identified during the threat modeling process, distributed across **14 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
 
 ### Chlorine Safety Controller
 
@@ -1527,12 +1614,13 @@ Doses chlorine into the treated water
 
 ### Engineering Workstation
 
-**Elevated** · 3/3 unmitigated Risks · `engineering-workstation`
+**Elevated** · 4/4 unmitigated Risks · `engineering-workstation`
 
 Programs the PLCs, the RTU and the safety controller
 
 **Identified Risks of the Asset**
 
+- **Elevated**: [**Long-Lived Credentials** risk at **Engineering Workstation** used by **Jump Host** (credentials)](#long-lived-credentials) (Unchecked)
 - **Elevated**: [**Unencrypted Communication** named **Dosing Programming** between **Engineering Workstation** and **Dosing PLC**](#unencrypted-communication) (Unchecked)
 - **Elevated**: [**Unencrypted Communication** named **Safety Programming** between **Engineering Workstation** and **Chlorine Safety Controller**](#unencrypted-communication) (Unchecked)
 - **Medium**: [**Missing Identity Store** in the threat model (referencing asset **Engineering Workstation** as an example)](#missing-identity-store) (Unchecked)
@@ -1570,6 +1658,51 @@ Programs the PLCs, the RTU and the safety controller
 | Integrity | mission-critical |
 | Availability | important |
 | CIA justification | Can change every controller |
+
+### Filter PLC
+
+**Elevated** · 2/2 unmitigated Risks · `filter-plc`
+
+Runs the filters and their backwash
+
+**Identified Risks of the Asset**
+
+- **Elevated**: [**Long-Lived Credentials** risk at **Filter PLC** used by **SCADA Server** (credentials)](#long-lived-credentials) (Unchecked)
+- **Medium**: [**Denial-of-Service** risky access of **Filter PLC** by **SCADA Server** via **Filter Control**](#dos-risky-access-across-trust-boundary) (Unchecked)
+
+**Asset Information**
+
+| Property | Value |
+| --- | --- |
+| Type | process |
+| Usage | business |
+| RAA | 46 % |
+| Size | component |
+| Technology | plc |
+| Tags | none |
+| Trust boundary | [Control LAN](#control-lan) |
+| Internet | no |
+| Machine | physical |
+| Encryption | none |
+| Multi-tenant | no |
+| Redundant | no |
+| Custom-developed | no |
+| Client used by a human | no |
+| Data formats accepted | JSON |
+| Data processed | [Control Commands](#control-commands), [Controller Programs](#controller-programs), [Process Values](#process-values) |
+| Data stored | none |
+| Outgoing communication links | none |
+| Incoming communication links | [Filter Control](#filter-control) |
+
+**Asset Rating**
+
+| Property | Value |
+| --- | --- |
+| Owner | Some Company |
+| Confidentiality | confidential |
+| Integrity | mission-critical |
+| Availability | mission-critical |
+| CIA justification | Failing filters let contaminated water through |
 
 ### Jump Host
 
@@ -1706,13 +1839,14 @@ The screens the operators run the plant with
 
 ### Plant Historian
 
-**Elevated** · 3/3 unmitigated Risks · `plant-historian`
+**Elevated** · 4/4 unmitigated Risks · `plant-historian`
 
 Archives the process values of the plant
 
 **Identified Risks of the Asset**
 
 - **Elevated**: [**SQL/NoSQL-Injection** risk at **Plant Historian** against database **Historian Replica** via **Replication**](#sqlnosql-injection) (Unchecked)
+- **Medium**: [**Long-Lived Credentials** risk at **Plant Historian** used by **SCADA Server** (credentials)](#long-lived-credentials) (Unchecked)
 - **Medium**: [**Missing Hardening** risk at **Plant Historian**](#missing-hardening) (Unchecked)
 - **Medium**: [**Server-Side Request Forgery (SSRF)** risk at **Plant Historian** server-side web-requesting the target **Historian Replica** via **Replication**](#server-side-request-forgery-ssrf) (Unchecked)
 
@@ -1890,50 +2024,6 @@ The pump dosing the chlorine
 | Integrity | mission-critical |
 | Availability | mission-critical |
 | CIA justification | Doses the chlorine |
-
-### Filter PLC
-
-**Medium** · 1/1 unmitigated Risk · `filter-plc`
-
-Runs the filters and their backwash
-
-**Identified Risks of the Asset**
-
-- **Medium**: [**Denial-of-Service** risky access of **Filter PLC** by **SCADA Server** via **Filter Control**](#dos-risky-access-across-trust-boundary) (Unchecked)
-
-**Asset Information**
-
-| Property | Value |
-| --- | --- |
-| Type | process |
-| Usage | business |
-| RAA | 46 % |
-| Size | component |
-| Technology | plc |
-| Tags | none |
-| Trust boundary | [Control LAN](#control-lan) |
-| Internet | no |
-| Machine | physical |
-| Encryption | none |
-| Multi-tenant | no |
-| Redundant | no |
-| Custom-developed | no |
-| Client used by a human | no |
-| Data formats accepted | JSON |
-| Data processed | [Control Commands](#control-commands), [Controller Programs](#controller-programs), [Process Values](#process-values) |
-| Data stored | none |
-| Outgoing communication links | none |
-| Incoming communication links | [Filter Control](#filter-control) |
-
-**Asset Rating**
-
-| Property | Value |
-| --- | --- |
-| Owner | Some Company |
-| Confidentiality | confidential |
-| Integrity | mission-critical |
-| Availability | mission-critical |
-| CIA justification | Failing filters let contaminated water through |
 
 ### Chlorine Analyzer
 
@@ -2114,11 +2204,11 @@ _The asset was defined as out-of-scope._
 
 ## Identified Data Breach Probabilities by Data Asset
 
-In total **39 potential risks** have been identified during the threat modeling process, distributed across **5 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
+In total **42 potential risks** have been identified during the threat modeling process, distributed across **5 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
 
 ### Historical Process Data
 
-**Probable** · 10/10 unmitigated Risks · `historical-process-data`
+**Probable** · 11/11 unmitigated Risks · `historical-process-data`
 
 Archived process values for reports and compliance
 
@@ -2141,12 +2231,13 @@ Archived process values for reports and compliance
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 10 remaining risks:
+This data asset has data breach potential because of 11 remaining risks:
 
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Office Workstation** against database **Historian Replica** via **Report Access**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Plant Historian** against database **Historian Replica** via **Replication**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **SCADA Server** against database **Plant Historian** via **Archiving**](#sqlnosql-injection) (Unchecked)
 - Possible, **Elevated**: [**Direct IT/OT Communication** risk at **SCADA Server** with **Office Workstation**](#direct-itot-communication) (Unchecked)
+- Possible, **Medium**: [**Long-Lived Credentials** risk at **Plant Historian** used by **SCADA Server** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-multi-factor-authentication-mfa) (Unchecked)
 - Possible, **Medium**: [**Server-Side Request Forgery (SSRF)** risk at **Plant Historian** server-side web-requesting the target **Historian Replica** via **Replication**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Medium**: [**Server-Side Request Forgery (SSRF)** risk at **SCADA Server** server-side web-requesting the target **Plant Historian** via **Archiving**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -2156,7 +2247,7 @@ This data asset has data breach potential because of 10 remaining risks:
 
 ### Process Values
 
-**Probable** · 24/24 unmitigated Risks · `process-values`
+**Probable** · 26/26 unmitigated Risks · `process-values`
 
 Measurements of flow, level, pressure and chlorine concentration
 
@@ -2179,10 +2270,12 @@ Measurements of flow, level, pressure and chlorine concentration
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 24 remaining risks:
+This data asset has data breach potential because of 26 remaining risks:
 
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **SCADA Server** against database **Plant Historian** via **Archiving**](#sqlnosql-injection) (Unchecked)
 - Possible, **Elevated**: [**Direct IT/OT Communication** risk at **SCADA Server** with **Office Workstation**](#direct-itot-communication) (Unchecked)
+- Possible, **Elevated**: [**Long-Lived Credentials** risk at **Filter PLC** used by **SCADA Server** (credentials)](#long-lived-credentials) (Unchecked)
+- Possible, **Medium**: [**Long-Lived Credentials** risk at **Plant Historian** used by **SCADA Server** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-multi-factor-authentication-mfa) (Unchecked)
 - Possible, **Medium**: [**Server-Side Request Forgery (SSRF)** risk at **Plant Historian** server-side web-requesting the target **Historian Replica** via **Replication**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Medium**: [**Server-Side Request Forgery (SSRF)** risk at **SCADA Server** server-side web-requesting the target **Plant Historian** via **Archiving**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -2208,7 +2301,7 @@ This data asset has data breach potential because of 24 remaining risks:
 
 ### Control Commands
 
-**Possible** · 21/21 unmitigated Risks · `control-commands`
+**Possible** · 22/22 unmitigated Risks · `control-commands`
 
 Setpoints, start and stop commands and outputs to pumps and valves
 
@@ -2231,9 +2324,10 @@ Setpoints, start and stop commands and outputs to pumps and valves
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 21 remaining risks:
+This data asset has data breach potential because of 22 remaining risks:
 
 - Possible, **Elevated**: [**Direct IT/OT Communication** risk at **SCADA Server** with **Office Workstation**](#direct-itot-communication) (Unchecked)
+- Possible, **Elevated**: [**Long-Lived Credentials** risk at **Filter PLC** used by **SCADA Server** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-multi-factor-authentication-mfa) (Unchecked)
 - Possible, **Medium**: [**Server-Side Request Forgery (SSRF)** risk at **SCADA Server** server-side web-requesting the target **Plant Historian** via **Archiving**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Unencrypted Communication** named **Dosing Control** between **SCADA Server** and **Dosing PLC**](#unencrypted-communication) (Unchecked)
@@ -2257,7 +2351,7 @@ This data asset has data breach potential because of 21 remaining risks:
 
 ### Controller Programs
 
-**Possible** · 6/6 unmitigated Risks · `controller-programs`
+**Possible** · 8/8 unmitigated Risks · `controller-programs`
 
 The logic and configuration of the PLCs and the RTU
 
@@ -2280,8 +2374,10 @@ The logic and configuration of the PLCs and the RTU
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 6 remaining risks:
+This data asset has data breach potential because of 8 remaining risks:
 
+- Possible, **Elevated**: [**Long-Lived Credentials** risk at **Engineering Workstation** used by **Jump Host** (credentials)](#long-lived-credentials) (Unchecked)
+- Possible, **Elevated**: [**Long-Lived Credentials** risk at **Filter PLC** used by **SCADA Server** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Elevated**: [**Unencrypted Communication** named **Dosing Control** between **SCADA Server** and **Dosing PLC**](#unencrypted-communication) (Unchecked)
 - Possible, **Elevated**: [**Unencrypted Communication** named **Dosing Programming** between **Engineering Workstation** and **Dosing PLC**](#unencrypted-communication) (Unchecked)
 - Possible, **Elevated**: [**Unguarded Access from Internet** of **Jump Host** by **Vendor Laptop** via **Remote Support**](#unguarded-access-from-internet) (Unchecked)
@@ -2291,7 +2387,7 @@ This data asset has data breach potential because of 6 remaining risks:
 
 ### Safety Logic
 
-**Possible** · 7/7 unmitigated Risks · `safety-logic`
+**Possible** · 8/8 unmitigated Risks · `safety-logic`
 
 The program of the chlorine safety controller
 
@@ -2314,8 +2410,9 @@ The program of the chlorine safety controller
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 7 remaining risks:
+This data asset has data breach potential because of 8 remaining risks:
 
+- Possible, **Elevated**: [**Long-Lived Credentials** risk at **Engineering Workstation** used by **Jump Host** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Elevated**: [**Unencrypted Communication** named **Safety Programming** between **Engineering Workstation** and **Chlorine Safety Controller**](#unencrypted-communication) (Unchecked)
 - Possible, **Elevated**: [**Unencrypted Communication** named **Safety Reset** between **SCADA Server** and **Chlorine Safety Controller**](#unencrypted-communication) (Unchecked)
 - Possible, **Elevated**: [**Unencrypted Communication** named **Safety Status** between **Operator HMI** and **Chlorine Safety Controller**](#unencrypted-communication) (Unchecked)
@@ -2813,7 +2910,7 @@ The vendor connects to the jump host over a VPN
 
 ## Risk Tracking
 
-**1 of 39 risks** are tracked in the model; the others are unchecked.
+**1 of 42 risks** are tracked in the model; the others are unchecked.
 
 | Risk | ID | Severity | Status | Date | Checked by | Ticket | Justification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -2847,6 +2944,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Incomplete Model | `incomplete-model` | Information Disclosure | When the threat model contains unknown technologies or transfers data over unknown protocols, this is an indicator for an incomplete model. | All technical assets and communication links with technology type or protocol type specified as unknown. | low |
 | Insecure Control Protocol | `insecure-control-protocol` | Tampering | Most industrial control protocols, like Modbus, DNP3, S7comm, EtherNet/IP or PROFINET, were designed for closed networks: a controller or field device executes every command it receives, without checking who sent it or whether it was changed on the way. Anyone who can send packets to it can write setpoints and outputs, stop it or download a new program. | In-scope controllers (plc, rtu, safety-controller) and field-device technical assets with an incoming non-readonly communication link over an industrial control protocol without a secure variant in use (all of them except modbus-security, dnp3-encrypted and opc-ua-encrypted). | The risk rating depends on the integrity and availability of the controlled process, and is the highest for safety controllers. The attack is very likely when the sender is on the internet, likely when it is an IT asset, reaches IT or calls across a network trust boundary, and unlikely otherwise. |
 | LDAP-Injection | `ldap-injection` | Tampering | When an LDAP server is accessed LDAP-Injection risks might arise. The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed. | In-scope clients accessing LDAP servers via typical LDAP access protocols. | The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed. |
+| Long-Lived Credentials | `long-lived-credentials` | Spoofing | Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it. | In-scope technical assets processing or storing data rated at least as confidential or critical with an incoming communication link that is not process-local and is authenticated with _long-lived-token_, or with _credentials_ by a caller not used by humans, unless the identity of the link is _workload_. Links authenticated with _token_ are skipped, as the lifetime of the token is not modelled. | The risk rating depends on the sensitivity of the data processed or stored by the target. The attack is likely when the caller is on the internet, is used by humans or calls across a network trust boundary, where secrets leak more easily, and unlikely otherwise. |
 | Missing Authentication | `missing-authentication` | Elevation of Privilege | Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes sensitive data. | In-scope technical assets (except load-balancer, reverse-proxy, service-registry, waf, ids, and ips and in-process calls) should authenticate incoming requests when the asset processes sensitive data. This is especially the case for all multi-tenant assets (there even non-sensitive ones). Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. | The risk rating (medium or high) depends on the sensitivity of the data sent across the communication link. Monitoring callers are exempted from this risk. |
 | Missing Multi-Factor Authentication (MFA) | `missing-authentication-second-factor` | Elevation of Privilege | Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans. | In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via multi-factor authentication (MFA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. | medium |
 | Missing Build Infrastructure | `missing-build-infrastructure` | Tampering | The modeled architecture does not contain a build infrastructure (devops-client, sourcecode-repo, build-pipeline, etc.), which might be the risk of a model missing critical assets (and thus not seeing their risks). If the architecture contains custom-developed parts, the pipeline where code gets developed and built needs to be part of the model. | Models with in-scope custom-developed parts missing in-scope development (code creation) and build infrastructure components (devops-client, sourcecode-repo, build-pipeline, etc.). | The risk rating depends on the highest sensitivity of the in-scope assets running custom-developed parts. |
@@ -2857,6 +2955,8 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Missing Identity Provider Isolation | `missing-identity-provider-isolation` | Elevation of Privilege | Highly sensitive identity provider assets and their identity data stores should be isolated from other assets by their own network segmentation trust-boundary (execution-environment boundaries do not count as network isolation). | In-scope identity provider assets and their identity data stores when surrounded by other (not identity-related) assets (without a network trust-boundary in-between). This risk is especially prevalent when other non-identity related assets are within the same execution environment (i.e. same database or same application server). | Default is high impact. The impact is increased to very-high when the asset missing the trust-boundary protection is rated as strictly-confidential or mission-critical. |
 | Missing Identity Store | `missing-identity-store` | Spoofing | The modeled architecture does not contain an identity store, which might be the risk of a model missing critical assets (and thus not seeing their risks). | Models with authenticated data-flows authorized via end user identity missing an in-scope identity store. | The risk rating depends on the sensitivity of the end user-identity authorized technical assets and their data assets processed. |
 | Missing Network Segmentation | `missing-network-segmentation` | Elevation of Privilege | Highly sensitive assets and/or data stores residing in the same network segment than other lower sensitive assets (like webservers or content management systems etc.) should be better protected by a network segmentation trust-boundary. | In-scope technical assets with high sensitivity and RAA values as well as data stores when surrounded by assets (without a network trust-boundary in-between) which are of type client-system, web-server, web-application, cms, web-service-rest, web-service-soap, build-pipeline, sourcecode-repository, monitoring, or similar and there is no direct connection between these (hence no requirement to be so close to each other). | Default is low risk. The risk is increased to medium when the asset missing the trust-boundary protection is rated as strictly-confidential or mission-critical. |
+| Missing Object-Level Authorization | `missing-object-level-authorization` | Elevation of Privilege | A service that acts for its users must check in each request that the user may access the object at hand, like the order or the account the request names. Checking only that the caller is logged in, or that its role may call the operation, lets any user read or change the objects of others by changing an id in the request (BOLA, also known as IDOR). | In-scope technical assets other than datastores, processing or storing data rated at least as confidential or critical, with an incoming communication link whose authorization is _none_, _authenticated-only_ or _function-level_, and whose identity is _end-user_ or whose caller is used by humans. Links whose authorization is _unknown_ are skipped. | The risk rating depends on the sensitivity of the data processed or stored by the target, one step higher when the link has no function-level authorization either. The attack is very likely when the caller is on the internet, and likely otherwise. |
+| Missing Policy Decision Point Redundancy | `missing-policy-decision-point-redundancy` | Denial of Service | Services that externalize their authorization to a policy decision point, for example through the AuthZEN Authorization API, cannot decide a request without it. When it fails, they either deny every request and stop working, or, when they fail open, allow every request. | In-scope policy-decision-point technical assets that are not redundant and that in-scope technical assets ask for decisions through communication links that are not process-local. | The risk rating depends on the highest availability rating of the services that ask the policy decision point. |
 | Missing Safety System Independence | `missing-safety-system-independence` | Elevation of Privilege | A safety instrumented system brings the process into a safe state when the basic process control fails or is attacked. It only does so when it is independent of that control: when assets other than a dedicated safety engineering workstation can change its program, setpoints or outputs, one compromise can disable the control and the safety function together, as the TRITON attack did. | In-scope safety-controller technical assets with an incoming non-readonly communication link that is not process-local, from a technical asset other than an engineering-workstation that has no non-readonly communication links to other controllers. | The impact is very high, as the safety function protects people. The attack is very likely when the sender is on the internet, likely when it is an IT asset, reaches IT or calls across a network trust boundary, and unlikely otherwise. |
 | Missing Vault (Secret Storage) | `missing-vault` | Information Disclosure | In order to avoid the risk of secret leakage via config files (when attacked through vulnerabilities being able to read files like Path-Traversal and others), it is best practice to use a separate hardened process with proper authentication, authorization, and audit logging to access config secrets (like credentials, private keys, client certificates, etc.). This component is usually some kind of Vault. | Models without a Vault (Secret Storage). | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. |
 | Missing Vault Isolation | `missing-vault-isolation` | Elevation of Privilege | Highly sensitive vault assets and their data stores should be isolated from other assets by their own network segmentation trust-boundary (execution-environment boundaries do not count as network isolation). | In-scope vault assets when surrounded by other (not vault-related) assets (without a network trust-boundary in-between). This risk is especially prevalent when other non-vault related assets are within the same execution environment (i.e. same database or same application server). | Default is medium impact. The impact is increased to high when the asset missing the trust-boundary protection is rated as strictly-confidential or mission-critical. |
@@ -2883,6 +2983,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Unnecessary Data Asset | `unnecessary-data-asset` | Elevation of Privilege | When a data asset is not processed by any data assets and also not transferred by any communication links, this is an indicator for an unnecessary data asset (or for an incomplete model). | Modelled data assets not processed by any data assets and also not transferred by any communication links. | low |
 | Unnecessary Data Transfer | `unnecessary-data-transfer` | Elevation of Privilege | When a technical asset sends or receives data assets, which it neither processes or stores this is an indicator for unnecessarily transferred data (or for an incomplete model). When the unnecessarily transferred data assets are sensitive, this poses an unnecessary risk of an increased attack surface. | In-scope technical assets sending or receiving sensitive data assets which are neither processed nor stored by the technical asset are flagged with this risk. The risk rating (low or medium) depends on the confidentiality, integrity, and availability rating of the technical asset. Monitoring data is exempted from this risk. | The risk assessment is depending on the confidentiality and integrity rating of the transferred data asset either low or medium. |
 | Unnecessary Technical Asset | `unnecessary-technical-asset` | Elevation of Privilege | When a technical asset does not process any data assets, this is an indicator for an unnecessary technical asset (or for an incomplete model). This is also the case if the asset has no communication links (either outgoing or incoming). | Technical assets not processing or storing any data assets. | low |
+| Unprotected Authorization Decisions | `unprotected-authorization-decisions` | Tampering | A service that asks a policy decision point whether to allow a request trusts the answer it gets. When the link to the decision point is unauthenticated or unencrypted, attackers in the network can answer in its place or change its answers, and so allow themselves anything the service can do. | In-scope technical assets with a communication link to a policy-decision-point technical asset that is not process-local and is unauthenticated or uses a protocol that is not encrypted. | The risk rating depends on the sensitivity of the data processed or stored by the service that asks. The attack is likely when the link crosses a network trust boundary, and unlikely otherwise. |
 | Untrusted Deserialization | `untrusted-deserialization` | Tampering | When a technical asset accepts data in a specific serialized form (like Java or .NET serialization), Untrusted Deserialization risks might arise. | In-scope technical assets accepting serialization data formats (including EJB and RMI protocols). | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. |
 | Vector Store Poisoning | `vector-store-poisoning` | Tampering | Language models and agents answer and act on what they retrieve from vector stores, for retrieval-augmented generation (RAG) or as the memory of an agent. Whoever can write into the store decides what the model believes: a poisoned document or memory entry carries false facts or hidden instructions into every answer that retrieves it, long after it was written. | In-scope vector-database technical assets that an llm or ai-agent technical asset communicates with. | The risk rating depends on the sensitivity of the data processed by the models and agents that use the store. The attack is likely when the store is written by an asset that takes untrusted input or sits across a network trust boundary, and unlikely otherwise. |
 | Wrong Communication Link Content | `wrong-communication-link-content` | Information Disclosure | When a communication link is defined as readonly, but does not receive any data asset, or when it is defined as not readonly, but does not send any data asset, it is likely to be a model failure. | Communication links with inconsistent data assets being sent/received not matching their readonly flag or otherwise inconsistent protocols not matching the target technology type. | low |

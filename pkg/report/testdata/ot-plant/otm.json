@@ -891,6 +891,18 @@
       "assets": [
         "controller-programs"
       ],
+      "threats": [
+        {
+          "threat": "long-lived-credentials",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "long-lived-credentials-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
       "attributes": {
         "threagile:authentication": "credentials",
         "threagile:data_assets_received": "controller-programs",
@@ -1103,6 +1115,16 @@
       ],
       "threats": [
         {
+          "threat": "long-lived-credentials",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "long-lived-credentials-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "server-side-request-forgery",
           "state": "exposed",
           "mitigations": [
@@ -1201,6 +1223,16 @@
           "mitigations": [
             {
               "mitigation": "dos-risky-access-across-trust-boundary-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "long-lived-credentials",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "long-lived-credentials-mitigation",
               "state": "recommended"
             }
           ]
@@ -1436,6 +1468,29 @@
       }
     },
     {
+      "id": "long-lived-credentials",
+      "name": "Long-Lived Credentials",
+      "description": "Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it.",
+      "categories": [
+        "Spoofing",
+        "OWASP NHI7:2025 Long-Lived Secrets",
+        "OWASP NHI2:2025 Secret Leakage"
+      ],
+      "cwes": [
+        "CWE-522"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 75,
+        "impactComment": "If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller."
+      },
+      "attributes": {
+        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
       "id": "missing-authentication-second-factor",
       "name": "Missing Multi-Factor Authentication (MFA)",
       "description": "Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.",
@@ -1656,6 +1711,15 @@
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "Are the recommendations of NIST SP 800-82 and the referenced IEC 62443 requirements applied?"
+      }
+    },
+    {
+      "id": "long-lived-credentials-mitigation",
+      "name": "Short-Lived Credentials",
+      "description": "Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity \u003ci\u003eworkload\u003c/i\u003e or the authentication \u003ci\u003eshort-lived-token\u003c/i\u003e. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
       }
     },
     {
