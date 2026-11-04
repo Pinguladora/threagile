@@ -1176,7 +1176,6 @@ func (r *pdfReporter) createRiskMitigationStatus(parsedModel *types.Model, tempF
 }
 
 func (r *pdfReporter) createAssetRegister(parsedModel *types.Model) {
-	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
 	r.pdf.SetTextColor(0, 0, 0)
 	chapTitle := "Asset Register"
 	r.addHeadline(chapTitle, false)
@@ -1184,38 +1183,13 @@ func (r *pdfReporter) createAssetRegister(parsedModel *types.Model) {
 	r.currentChapterTitleBreadcrumb = chapTitle
 
 	html := r.pdf.HTMLBasicNew()
-	var strBuilder strings.Builder
 	r.pdf.SetFont("Helvetica", "", fontSizeBody)
 
 	subTitle := "Technical Assets"
 	r.addHeadline(subTitle, true)
 	r.currentChapterTitleBreadcrumb = subTitle
 	for _, technicalAsset := range sortedTechnicalAssetsByTitle(parsedModel) {
-		if r.pdf.GetY() > 250 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		} else {
-			strBuilder.WriteString("<br><br>")
-		}
-
-		r.pdf.SetTextColor(0, 0, 0)
-
-		html.Write(5, strBuilder.String())
-		strBuilder.Reset()
-		posY := r.pdf.GetY()
-		strBuilder.WriteString("<b>")
-		strBuilder.WriteString(uni(technicalAsset.Title))
-		strBuilder.WriteString("</b>")
-		if technicalAsset.OutOfScope {
-			strBuilder.WriteString(": out-of-scope")
-		}
-		strBuilder.WriteString("<br>")
-		html.Write(5, strBuilder.String())
-		strBuilder.Reset()
-		strBuilder.WriteString(uni(technicalAsset.Description))
-		html.Write(5, strBuilder.String())
-		strBuilder.Reset()
-		r.pdf.Link(9, posY, 190, r.pdf.GetY()-posY+4, r.tocLinkIdByAssetId[technicalAsset.Id])
+		r.registeredTechnicalAsset(technicalAsset, html)
 	}
 
 	subTitle = "Data Assets"
@@ -1223,32 +1197,70 @@ func (r *pdfReporter) createAssetRegister(parsedModel *types.Model) {
 	r.currentChapterTitleBreadcrumb = subTitle
 
 	for _, dataAsset := range sortedDataAssetsByTitle(parsedModel) {
-		if r.pdf.GetY() > 250 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		} else {
-			strBuilder.WriteString("<br><br>")
-		}
-
-		r.pdf.SetTextColor(0, 0, 0)
-
-		html.Write(5, strBuilder.String())
-		strBuilder.Reset()
-		posY := r.pdf.GetY()
-		strBuilder.WriteString("<b>")
-		strBuilder.WriteString(uni(dataAsset.Title))
-		strBuilder.WriteString("</b>")
-		strBuilder.WriteString("<br>")
-		html.Write(5, strBuilder.String())
-		strBuilder.Reset()
-		strBuilder.WriteString(uni(dataAsset.Description))
-		html.Write(5, strBuilder.String())
-		strBuilder.Reset()
-		r.pdf.Link(9, posY, 190, r.pdf.GetY()-posY+4, r.tocLinkIdByAssetId[dataAsset.Id])
+		r.registeredDataAsset(dataAsset, html)
 	}
 
 	r.pdf.SetDrawColor(0, 0, 0)
 	r.pdf.SetDashPattern([]float64{}, 0)
+}
+
+// registeredDataAsset writes a data asset with its description into the asset register.
+func (r *pdfReporter) registeredDataAsset(dataAsset *types.DataAsset, html gofpdf.HTMLBasicType) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	var strBuilder strings.Builder
+	if r.pdf.GetY() > 250 {
+		r.pageBreak()
+		r.pdf.SetY(36)
+	} else {
+		strBuilder.WriteString("<br><br>")
+	}
+
+	r.pdf.SetTextColor(0, 0, 0)
+
+	html.Write(5, strBuilder.String())
+	strBuilder.Reset()
+	posY := r.pdf.GetY()
+	strBuilder.WriteString("<b>")
+	strBuilder.WriteString(uni(dataAsset.Title))
+	strBuilder.WriteString("</b>")
+	strBuilder.WriteString("<br>")
+	html.Write(5, strBuilder.String())
+	strBuilder.Reset()
+	strBuilder.WriteString(uni(dataAsset.Description))
+	html.Write(5, strBuilder.String())
+	strBuilder.Reset()
+	r.pdf.Link(9, posY, 190, r.pdf.GetY()-posY+4, r.tocLinkIdByAssetId[dataAsset.Id])
+}
+
+// registeredTechnicalAsset writes a technical asset with its description into the asset register.
+func (r *pdfReporter) registeredTechnicalAsset(technicalAsset *types.TechnicalAsset, html gofpdf.HTMLBasicType) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	var strBuilder strings.Builder
+	if r.pdf.GetY() > 250 {
+		r.pageBreak()
+		r.pdf.SetY(36)
+	} else {
+		strBuilder.WriteString("<br><br>")
+	}
+
+	r.pdf.SetTextColor(0, 0, 0)
+
+	html.Write(5, strBuilder.String())
+	strBuilder.Reset()
+	posY := r.pdf.GetY()
+	strBuilder.WriteString("<b>")
+	strBuilder.WriteString(uni(technicalAsset.Title))
+	strBuilder.WriteString("</b>")
+	if technicalAsset.OutOfScope {
+		strBuilder.WriteString(": out-of-scope")
+	}
+	strBuilder.WriteString("<br>")
+	html.Write(5, strBuilder.String())
+	strBuilder.Reset()
+	strBuilder.WriteString(uni(technicalAsset.Description))
+	html.Write(5, strBuilder.String())
+	strBuilder.Reset()
+	r.pdf.Link(9, posY, 190, r.pdf.GetY()-posY+4, r.tocLinkIdByAssetId[technicalAsset.Id])
 }
 
 // CAUTION: Long labels might cause endless loop, then remove labels and render them manually later inside the PDF.
@@ -1370,7 +1382,6 @@ func (r *pdfReporter) renderImpactAnalysis(parsedModel *types.Model, initialRisk
 }
 
 func (r *pdfReporter) createOutOfScopeAssets(parsedModel *types.Model) {
-	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
 	r.pdf.SetTextColor(0, 0, 0)
 	assets := "Assets"
 	count := len(parsedModel.OutOfScopeTechnicalAssets())
@@ -1398,28 +1409,7 @@ func (r *pdfReporter) createOutOfScopeAssets(parsedModel *types.Model) {
 	for _, technicalAsset := range sortedTechnicalAssetsByRAAAndTitle(parsedModel) {
 		if technicalAsset.OutOfScope {
 			outOfScopeAssetCount++
-			if r.pdf.GetY() > 250 {
-				r.pageBreak()
-				r.pdf.SetY(36)
-			} else {
-				strBuilder.WriteString("<br><br>")
-			}
-			html.Write(5, strBuilder.String())
-			strBuilder.Reset()
-			posY := r.pdf.GetY()
-			r.pdfColorOutOfScope()
-			strBuilder.WriteString("<b>")
-			strBuilder.WriteString(uni(technicalAsset.Title))
-			strBuilder.WriteString("</b>")
-			strBuilder.WriteString(": out-of-scope")
-			strBuilder.WriteString("<br>")
-			html.Write(5, strBuilder.String())
-			strBuilder.Reset()
-			r.pdf.SetTextColor(0, 0, 0)
-			strBuilder.WriteString(uni(technicalAsset.JustificationOutOfScope))
-			html.Write(5, strBuilder.String())
-			strBuilder.Reset()
-			r.pdf.Link(9, posY, 190, r.pdf.GetY()-posY+4, r.tocLinkIdByAssetId[technicalAsset.Id])
+			r.outOfScopeAsset(technicalAsset, html)
 		}
 	}
 
@@ -1430,6 +1420,34 @@ func (r *pdfReporter) createOutOfScopeAssets(parsedModel *types.Model) {
 
 	r.pdf.SetDrawColor(0, 0, 0)
 	r.pdf.SetDashPattern([]float64{}, 0)
+}
+
+// outOfScopeAsset writes an out-of-scope technical asset with the justification.
+func (r *pdfReporter) outOfScopeAsset(technicalAsset *types.TechnicalAsset, html gofpdf.HTMLBasicType) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	var strBuilder strings.Builder
+	if r.pdf.GetY() > 250 {
+		r.pageBreak()
+		r.pdf.SetY(36)
+	} else {
+		strBuilder.WriteString("<br><br>")
+	}
+	html.Write(5, strBuilder.String())
+	strBuilder.Reset()
+	posY := r.pdf.GetY()
+	r.pdfColorOutOfScope()
+	strBuilder.WriteString("<b>")
+	strBuilder.WriteString(uni(technicalAsset.Title))
+	strBuilder.WriteString("</b>")
+	strBuilder.WriteString(": out-of-scope")
+	strBuilder.WriteString("<br>")
+	html.Write(5, strBuilder.String())
+	strBuilder.Reset()
+	r.pdf.SetTextColor(0, 0, 0)
+	strBuilder.WriteString(uni(technicalAsset.JustificationOutOfScope))
+	html.Write(5, strBuilder.String())
+	strBuilder.Reset()
+	r.pdf.Link(9, posY, 190, r.pdf.GetY()-posY+4, r.tocLinkIdByAssetId[technicalAsset.Id])
 }
 
 func (r *pdfReporter) createModelFailures(parsedModel *types.Model) {
@@ -1476,7 +1494,6 @@ func (r *pdfReporter) createModelFailures(parsedModel *types.Model) {
 }
 
 func (r *pdfReporter) createRAA(parsedModel *types.Model, introTextRAA string) {
-	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
 	r.pdf.SetTextColor(0, 0, 0)
 	chapTitle := "RAA Analysis"
 	r.addHeadline(chapTitle, false)
@@ -1495,55 +1512,64 @@ func (r *pdfReporter) createRAA(parsedModel *types.Model, introTextRAA string) {
 	r.pdf.SetFont("Helvetica", "", fontSizeBody)
 
 	for _, technicalAsset := range sortedTechnicalAssetsByRAAAndTitle(parsedModel) {
-		if technicalAsset.OutOfScope {
-			continue
-		}
-		if r.pdf.GetY() > 250 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		} else {
-			strBuilder.WriteString("<br><br>")
-		}
-		newRisksStr := parsedModel.GeneratedRisks(technicalAsset)
-		switch types.HighestSeverityStillAtRisk(newRisksStr) {
-		case types.HighSeverity:
-			colorHighRisk(r.pdf)
-		case types.MediumSeverity:
-			colorMediumRisk(r.pdf)
-		case types.LowSeverity:
-			colorLowRisk(r.pdf)
-		default:
-			r.pdfColorBlack()
-		}
-		if len(types.ReduceToOnlyStillAtRisk(newRisksStr)) == 0 {
-			r.pdfColorBlack()
-		}
-
-		html.Write(5, strBuilder.String())
-		strBuilder.Reset()
-		posY := r.pdf.GetY()
-		strBuilder.WriteString("<b>")
-		strBuilder.WriteString(uni(technicalAsset.Title))
-		strBuilder.WriteString("</b>")
-		if technicalAsset.OutOfScope {
-			strBuilder.WriteString(": out-of-scope")
-		} else {
-			strBuilder.WriteString(": RAA ")
-			fmt.Fprintf(&strBuilder, "%.0f", technicalAsset.RAA)
-			strBuilder.WriteString("%")
-		}
-		strBuilder.WriteString("<br>")
-		html.Write(5, strBuilder.String())
-		strBuilder.Reset()
-		r.pdf.SetTextColor(0, 0, 0)
-		strBuilder.WriteString(uni(technicalAsset.Description))
-		html.Write(5, strBuilder.String())
-		strBuilder.Reset()
-		r.pdf.Link(9, posY, 190, r.pdf.GetY()-posY+4, r.tocLinkIdByAssetId[technicalAsset.Id])
+		r.raaTechnicalAsset(parsedModel, technicalAsset, html)
 	}
 
 	r.pdf.SetDrawColor(0, 0, 0)
 	r.pdf.SetDashPattern([]float64{}, 0)
+}
+
+// raaTechnicalAsset writes a technical asset in scope with its RAA value.
+func (r *pdfReporter) raaTechnicalAsset(parsedModel *types.Model, technicalAsset *types.TechnicalAsset,
+	html gofpdf.HTMLBasicType,
+) {
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	var strBuilder strings.Builder
+	if technicalAsset.OutOfScope {
+		return
+	}
+	if r.pdf.GetY() > 250 {
+		r.pageBreak()
+		r.pdf.SetY(36)
+	} else {
+		strBuilder.WriteString("<br><br>")
+	}
+	newRisksStr := parsedModel.GeneratedRisks(technicalAsset)
+	switch types.HighestSeverityStillAtRisk(newRisksStr) {
+	case types.HighSeverity:
+		colorHighRisk(r.pdf)
+	case types.MediumSeverity:
+		colorMediumRisk(r.pdf)
+	case types.LowSeverity:
+		colorLowRisk(r.pdf)
+	default:
+		r.pdfColorBlack()
+	}
+	if len(types.ReduceToOnlyStillAtRisk(newRisksStr)) == 0 {
+		r.pdfColorBlack()
+	}
+
+	html.Write(5, strBuilder.String())
+	strBuilder.Reset()
+	posY := r.pdf.GetY()
+	strBuilder.WriteString("<b>")
+	strBuilder.WriteString(uni(technicalAsset.Title))
+	strBuilder.WriteString("</b>")
+	if technicalAsset.OutOfScope {
+		strBuilder.WriteString(": out-of-scope")
+	} else {
+		strBuilder.WriteString(": RAA ")
+		fmt.Fprintf(&strBuilder, "%.0f", technicalAsset.RAA)
+		strBuilder.WriteString("%")
+	}
+	strBuilder.WriteString("<br>")
+	html.Write(5, strBuilder.String())
+	strBuilder.Reset()
+	r.pdf.SetTextColor(0, 0, 0)
+	strBuilder.WriteString(uni(technicalAsset.Description))
+	html.Write(5, strBuilder.String())
+	strBuilder.Reset()
+	r.pdf.Link(9, posY, 190, r.pdf.GetY()-posY+4, r.tocLinkIdByAssetId[technicalAsset.Id])
 }
 
 /*
