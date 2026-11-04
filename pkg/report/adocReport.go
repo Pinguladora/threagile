@@ -250,10 +250,11 @@ func (adoc adocReport) WriteReport(model *types.Model,
 	hideChapters map[ChaptersToShowHide]bool,
 ) error {
 	adoc.model = model
-	err := adoc.initReport()
+	mainFile, err := adoc.initReport()
 	if err != nil {
 		return err
 	}
+	adoc.mainFile = mainFile
 	err = adoc.writeDefaultTheme(logoImagePath)
 	if err != nil {
 		return err
@@ -368,18 +369,19 @@ func (adoc adocReport) WriteReport(model *types.Model,
 	return nil
 }
 
-func (adoc *adocReport) initReport() error {
+// initReport recreates the target directory and returns the newly created main file.
+func (adoc adocReport) initReport() (*os.File, error) {
 	_ = os.RemoveAll(adoc.targetDirectory)
 	err := os.MkdirAll(adoc.targetDirectory, 0o750)
 	if err != nil {
-		return err
+		return nil, fmt.Errorf("unable to create %q: %w", adoc.targetDirectory, err)
 	}
-	adoc.mainFile, err = os.Create(filepath.Join(adoc.targetDirectory, "000_main.adoc"))
+	mainFile, err := os.Create(filepath.Join(adoc.targetDirectory, "000_main.adoc"))
 	if err != nil {
-		return err
+		return nil, fmt.Errorf("unable to create the main AsciiDoc file: %w", err)
 	}
 
-	return nil
+	return mainFile, nil
 }
 
 func (adoc adocReport) writeTitleAndPreamble() {
