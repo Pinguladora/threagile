@@ -12,7 +12,6 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"time"
 	"unicode/utf8"
 
 	"github.com/Pinguladora/threagile/pkg/types"
@@ -132,6 +131,11 @@ func (r *pdfReporter) WriteReportPDF(reportFilename string,
 
 func (r *pdfReporter) createPdfAndInitMetadata(model *types.Model) {
 	r.pdf = gofpdf.New("P", "mm", "A4", "")
+	// Stamp the document with the report clock and keep its internal catalogs in
+	// a stable order, so SOURCE_DATE_EPOCH yields a byte-identical PDF.
+	r.pdf.SetCreationDate(types.Now())
+	r.pdf.SetModificationDate(types.Now())
+	r.pdf.SetCatalogSort(true)
 	r.pdf.SetCreator(model.Author.Homepage, true)
 	r.pdf.SetAuthor(model.Author.Name, true)
 	r.pdf.SetTitle("Threat Model Report: "+model.Title, true)
@@ -199,7 +203,7 @@ func (r *pdfReporter) createCover(parsedModel *types.Model) {
 	r.pdf.SetFont("Helvetica", "", 12)
 	reportDate := parsedModel.Date
 	if reportDate.IsZero() {
-		reportDate = types.Date{Time: time.Now()}
+		reportDate = types.Date{Time: types.Now()}
 	}
 	r.pdf.Text(40.7, 145, reportDate.Format("2 January 2006"))
 	r.pdf.Text(40.7, 153, uni(parsedModel.Author.Name))
@@ -4375,7 +4379,7 @@ func (r *pdfReporter) createRiskRulesChecked(parsedModel *types.Model, modelFile
 	var strBuilder strings.Builder
 	r.pdfColorGray()
 	r.pdf.SetFont("Helvetica", "", fontSizeSmall)
-	timestamp := time.Now()
+	timestamp := types.Now()
 	strBuilder.WriteString("<b>Threagile Version:</b> " + threagileVersion)
 	strBuilder.WriteString("<br><b>Threagile Build Timestamp:</b> " + buildTimestamp)
 	strBuilder.WriteString("<br><b>Threagile Execution Timestamp:</b> " + timestamp.Format("20060102150405"))

@@ -14,7 +14,6 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/Pinguladora/threagile/pkg/types"
 	"golang.org/x/text/cases"
@@ -390,7 +389,7 @@ func (adoc adocReport) writeTitleAndPreamble() {
 	adoc.writeMainLine(":icons: " + adoc.iconsType)
 	reportDate := adoc.model.Date
 	if reportDate.IsZero() {
-		reportDate = types.Date{Time: time.Now()}
+		reportDate = types.Date{Time: types.Now()}
 	}
 	adoc.writeMainLine(":revdate: " + reportDate.Format("2 January 2006"))
 	adoc.writeMainLine("")
@@ -2120,7 +2119,7 @@ func (adoc adocReport) writeSharedRuntimes() error {
 func (adoc adocReport) riskRulesChecked(f *os.File, modelFilename string, skipRiskRules []string, buildTimestamp string, threagileVersion string, modelHash string, customRiskRules types.RiskRules) {
 	writeLine(f, "= Risk Rules Checked by Threagile")
 	writeLine(f, "")
-	timestamp := time.Now()
+	timestamp := types.Now()
 	writeLine(f, `
 [cols="h,1",frame=none,grid=none]
 |===
