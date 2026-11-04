@@ -1137,7 +1137,7 @@ func (s *server) analyzeModelOnServerDirectly(ginContext *gin.Context) {
 		s.unlockFolder(folderNameOfKey)
 		var err error
 		if r := recover(); r != nil {
-			err = r.(error)
+			err = panicError(r)
 			if s.config.GetVerbose() {
 				log.Println(err)
 			}

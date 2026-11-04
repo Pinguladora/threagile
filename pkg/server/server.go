@@ -379,3 +379,13 @@ func handleErrorInServiceCall(err error, ginContext *gin.Context) {
 		"error": strings.TrimSpace(err.Error()),
 	})
 }
+
+// panicError is the error a handler panicked with. A panic with anything else goes on to the recovery of
+// gin, as the unchecked assertion to error made it do before.
+func panicError(r any) error {
+	err, isError := r.(error)
+	if !isError {
+		panic(r)
+	}
+	return err
+}
