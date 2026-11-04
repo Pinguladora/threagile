@@ -3898,7 +3898,7 @@ Looks up orders and issues refunds
 
 ## Threat Catalog Coverage
 
-The risk rules reference the entries of threat catalogs. For each entry of the catalogs that the risks of this model fall into, the tables list the risk rules that checked it and the risks they found. An entry that no risk rule checks needs a review of its own.
+The risk rules reference the entries of threat catalogs. For each entry of the catalogs that the risks of this model fall into, the report lists the risk rules that checked it and the risks they found. An entry that no risk rule checks needs a review of its own.
 
 ### OWASP Top 10:2025
 

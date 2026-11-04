@@ -245,7 +245,7 @@ var viewChapters = []viewSection{
 	{"shared-runtimes", "Shared Runtimes"},
 	{"communication-links", "Communication Links"},
 	{"risk-tracking", "Risk Tracking"},
-	{chapterCatalogCoverage, "Threat Catalog Coverage"},
+	{chapterCatalogCoverage, textCatalogCoverage},
 	{chapterRiskRules, "Risk Rules Checked by Threagile"},
 	{"ratings", "Ratings"},
 	{"disclaimer", "Disclaimer"},

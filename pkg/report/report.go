@@ -38,6 +38,7 @@ type pdfReporter struct {
 	currentChapterTitleBreadcrumb string
 
 	riskRules types.RiskRules
+	catalogs  []viewCatalog // the coverage of the threat catalogs, for the table of contents and its chapter
 }
 
 func newPdfReporter(riskRules types.RiskRules) *pdfReporter {
@@ -80,6 +81,9 @@ func (r *pdfReporter) WriteReportPDF(reportFilename string,
 	}()
 
 	r.initReport()
+	r.catalogs = modelCatalogs(model, ReportOptions{
+		SkipRiskRules: skipRiskRules, RiskRules: r.riskRules, CustomRiskRules: customRiskRules,
+	})
 	r.createPdfAndInitMetadata(model)
 	r.parseBackgroundTemplate(templateFilename)
 	r.createCover(model)
@@ -107,6 +111,7 @@ func (r *pdfReporter) WriteReportPDF(reportFilename string,
 	r.createDataAssets(model)
 	r.createTrustBoundaries(model)
 	r.createSharedRuntimes(model)
+	r.createCatalogCoverage()
 	if val := hideChapters[RiskRulesCheckedByThreagile]; !val {
 		r.createRiskRulesChecked(model, modelFilename, skipRiskRules, buildTimestamp, threagileVersion, modelHash,
 			customRiskRules)
@@ -577,6 +582,11 @@ func (r *pdfReporter) tocAboutThreagile(y float64) {
 	r.pdf.SetFont("Helvetica", "B", fontSizeBody)
 	r.pdf.Text(11, y, "About Threagile")
 	r.pdf.SetFont("Helvetica", "", fontSizeBody)
+	if len(r.catalogs) > 0 {
+		y += 6
+		y = r.tocPageBreakBelow(y, 275)
+		r.tocEntry(y, textCatalogCoverage, "{catalog-coverage}")
+	}
 	y += 6
 	y = r.tocPageBreakBelow(y, 275)
 	r.tocEntry(y, "Risk Rules Checked by Threagile", "{risk-rules-checked}")
@@ -3092,6 +3102,47 @@ func (r *pdfReporter) createSharedRuntimes(parsedModel *types.Model) {
 		}
 		r.attributeListRow("Assets running:", assetsInsideText, textNone, uni)
 	}
+}
+
+// createCatalogCoverage writes the coverage of the threat catalogs that risks of the model fall into, if any.
+func (r *pdfReporter) createCatalogCoverage() {
+	if len(r.catalogs) == 0 {
+		return
+	}
+	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
+	r.pdfColorBlack()
+	r.addHeadline(textCatalogCoverage, false)
+	r.defineLinkTarget("{catalog-coverage}")
+	r.currentChapterTitleBreadcrumb = textCatalogCoverage
+
+	html := r.pdf.HTMLBasicNew()
+	html.Write(5, catalogCoverageIntro)
+	for _, threatCatalog := range r.catalogs {
+		r.pdfColorBlack()
+		if r.pdf.GetY() > 250 {
+			r.pageBreak()
+			r.pdf.SetY(36)
+		} else {
+			html.Write(5, "<br><br><br>")
+		}
+		html.Write(5, "<b>"+uni(threatCatalog.Title)+"</b><br>")
+		html.Write(5, "The risk rules checked <b>"+strconv.Itoa(threatCatalog.Checked)+" of "+
+			strconv.Itoa(len(threatCatalog.Entries))+"</b> entries of the catalog ("+threatCatalog.Link+").<br><br>")
+		for _, entry := range threatCatalog.Entries {
+			r.pageBreakBelow(270)
+			r.pdfColorBlack()
+			r.pdf.SetFont("Helvetica", "B", fontSizeBody)
+			r.pdf.MultiCell(190, 5, uni(entry.ID+" "+entry.Title), "0", "0", false)
+			r.pdf.SetFont("Helvetica", "", fontSizeBody)
+			if entry.Risks == 0 {
+				r.pdfColorGray()
+			}
+			r.pdf.CellFormat(5, 5, "", "0", 0, "", false, 0, "")
+			r.pdf.MultiCell(185, 5, uni(catalogEntryLine(entry)), "0", "0", false)
+			r.pdf.Ln(1)
+		}
+	}
+	r.pdfColorBlack()
 }
 
 func (r *pdfReporter) createRiskRulesChecked(parsedModel *types.Model, modelFilename string, skipRiskRules []string,

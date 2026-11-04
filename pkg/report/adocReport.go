@@ -360,6 +360,9 @@ func (adoc AdocReport) chapters(
 		{"error creating data assets", adoc.writeDataAssets, false},
 		{"error creating trust boundaries", adoc.writeTrustBoundaries, false},
 		{"error creating shared runtimes", adoc.writeSharedRuntimes, false},
+		{"error creating threat catalog coverage", func() error {
+			return adoc.writeCatalogCoverage(skipRiskRules, customRiskRules)
+		}, false},
 		{"error creating risk rules checked", func() error {
 			return adoc.writeRiskRulesChecked(modelFilename, skipRiskRules, buildTimestamp, threagileVersion, modelHash,
 				customRiskRules)
@@ -2300,6 +2303,60 @@ func (adoc AdocReport) writeRiskRulesChecked(modelFilename string, skipRiskRules
 
 	adoc.riskRulesChecked(f, modelFilename, skipRiskRules, buildTimestamp, threagileVersion, modelHash, customRiskRules)
 	return nil
+}
+
+// writeCatalogCoverage writes the coverage of the threat catalogs that risks of the model fall into, if any.
+func (adoc AdocReport) writeCatalogCoverage(skipRiskRules []string, customRiskRules types.RiskRules) error {
+	catalogs := modelCatalogs(adoc.model, ReportOptions{
+		SkipRiskRules: skipRiskRules, RiskRules: adoc.riskRules, CustomRiskRules: customRiskRules,
+	})
+	if len(catalogs) == 0 {
+		return nil
+	}
+	filename := "215_CatalogCoverage.adoc"
+	f, err := adoc.createFile(filename)
+	defer func() { _ = f.Close() }()
+	if err != nil {
+		return err
+	}
+	adoc.writeMainLine("<<<")
+	adoc.writeMainLine("include::" + filename + "[leveloffset=+1]")
+
+	adoc.catalogCoverage(f, catalogs)
+	return nil
+}
+
+func (adoc AdocReport) catalogCoverage(f *os.File, catalogs []viewCatalog) {
+	writeLine(f, "= "+textCatalogCoverage)
+	writeLine(f, "")
+	writeLine(f, catalogCoverageIntro)
+	for _, threatCatalog := range catalogs {
+		writeLine(f, "")
+		writeLine(f, "== "+threatCatalog.Title)
+		writeLine(f, "")
+		writeLine(f, "The risk rules checked *"+strconv.Itoa(threatCatalog.Checked)+" of "+
+			strconv.Itoa(len(threatCatalog.Entries))+"* entries of the "+threatCatalog.Link+"["+threatCatalog.Title+"].")
+		writeLine(f, "")
+		writeLine(f, `[%header,cols="3,5,2"]`)
+		writeLine(f, "|===")
+		writeLine(f, "| Entry | Risk rules | Risks")
+		for _, entry := range threatCatalog.Entries {
+			rules := make([]string, 0, len(entry.Rules))
+			for index, rule := range entry.Rules {
+				if rule.Anchor != "" { // the rule found risks, so its category has a section
+					rules = append(rules, "<<"+entry.RuleIDs[index]+","+rule.Title+">>")
+				} else {
+					rules = append(rules, rule.Title)
+				}
+			}
+			summary := entry.Summary
+			if entry.Risks == 0 {
+				summary = "[SmallGrey]#" + summary + "#"
+			}
+			writeLine(f, "| `"+entry.ID+"` "+entry.Title+" | "+strings.Join(rules, ", ")+" | "+summary)
+		}
+		writeLine(f, "|===")
+	}
 }
 
 func (adoc AdocReport) appendixRating(f *os.File) {

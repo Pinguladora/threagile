@@ -56,3 +56,29 @@ func (what *testRiskRule) Category() *types.RiskCategory { return what.category 
 func (what *testRiskRule) SupportedTags() []string { return nil }
 
 func (what *testRiskRule) GenerateRisks(*types.Model) ([]*types.Risk, error) { return nil, nil }
+
+// TestCatalogCoverageIsWrittenToThePDF checks the coverage chapter of the PDF report: a headline in the outline, and
+// an entry with the risk rules that checked it.
+func TestCatalogCoverageIsWrittenToThePDF(t *testing.T) {
+	r := newTestPdfReporter()
+	r.pdf.SetCompression(false)
+	r.catalogs = []viewCatalog{{
+		Title: "OWASP Top 10 for LLM Applications 2025", Link: "https://genai.owasp.org/llm-top-10/", Checked: 1,
+		Entries: []viewCatalogEntry{
+			{
+				ID: "LLM01", Title: "Prompt Injection", Rules: []viewRef{{Title: "Prompt Injection"}},
+				RuleIDs: []string{"prompt-injection"}, Risks: 2, Summary: "2/2 unmitigated Risks",
+			},
+			{ID: "LLM07", Title: "System Prompt Leakage", Summary: textNotChecked},
+		},
+	}}
+
+	r.createCatalogCoverage()
+
+	var pdf bytes.Buffer
+	require.NoError(t, r.pdf.Output(&pdf))
+	assert.Contains(t, pdf.String(), "/Title (Threat Catalog Coverage)")
+	assert.Contains(t, pdf.String(), "(LLM01 Prompt Injection)")
+	assert.Contains(t, pdf.String(), "(Prompt Injection: 2/2 unmitigated Risks)")
+	assert.Contains(t, pdf.String(), "(not checked by any risk rule)")
+}

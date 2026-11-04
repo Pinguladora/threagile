@@ -33,7 +33,8 @@ func TestViewCatalogsShowsTheCatalogsOfTheRisks(t *testing.T) {
 	assert.Equal(t, 1, llm.Checked, "a skipped rule checks nothing")
 	assert.Equal(t, viewCatalogEntry{
 		ID: "LLM01", Title: "Prompt Injection", Risks: 2, StillAtRisk: true, Summary: "1/2 unmitigated Risks",
-		Rules: []viewRef{{Title: "Guardrail"}, {Anchor: "category-prompt-injection", Title: "Prompt Injection"}},
+		Rules:   []viewRef{{Title: "Guardrail"}, {Anchor: "category-prompt-injection", Title: "Prompt Injection"}},
+		RuleIDs: []string{"guardrail", "prompt-injection"},
 	}, llm.Entries[0])
 	assert.Equal(t, textNotChecked, llm.Entries[5].Summary)
 }

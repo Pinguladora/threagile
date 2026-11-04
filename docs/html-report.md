@@ -7,8 +7,8 @@ checked. `--report-html` names the file and `--skip-report-html` skips it; the c
 `AssetRegister` and `RiskRulesCheckedByThreagile` chapters as in the PDF report, and chapters the
 model has nothing for, such as questions or abuse cases, are left out.
 
-Beyond the PDF report, the page and the [Markdown report](./markdown-report.md) have a chapter on
-the coverage of threat catalogs: for each entry of the OWASP Top 10, the OWASP API Security Top 10,
+The page, the [Markdown report](./markdown-report.md), the PDF report and the AsciiDoc report have a
+chapter on the coverage of threat catalogs: for each entry of the OWASP Top 10, the OWASP API Security Top 10,
 the OWASP Top 10 for LLM Applications, the OWASP Top 10 for Agentic Applications, CSA MAESTRO and the
 OWASP Non-Human Identities Top 10, the risk rules that checked it, by the `references` of their categories, and the
 risks they found. It shows the catalogs that risks of the model fall into, and marks the entries that
