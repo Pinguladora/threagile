@@ -1,6 +1,7 @@
 package interchange_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/Pinguladora/threagile/internal/threagile"
@@ -177,6 +178,28 @@ func TestToInputReadsIdentityFromLegacyAuthorization(t *testing.T) {
 	assert.Equal(t, interchange.DefaultAuthorization, links["Legacy"].Authorization)
 	assert.Equal(t, "end-user", links["Current"].Identity)
 	assert.Equal(t, "object-level", links["Current"].Authorization)
+}
+
+// TestToInputReadsAccount imports the account of flows, and drops the account of a flow whose identity has none.
+func TestToInputReadsAccount(t *testing.T) {
+	elements := foreignModel()
+	elements.Flows = []interchange.Flow{
+		{
+			ID: "f1", Name: "Service Account", SourceID: "web", DestinationID: "db",
+			Properties: interchange.Properties{"identity": "service-account", "account": "erp-sync"},
+		},
+		{
+			ID: "f2", Name: "End User", SourceID: "web", DestinationID: "db",
+			Properties: interchange.Properties{"identity": "end-user", "account": "user-42"},
+		},
+	}
+
+	result, notes := interchange.ToInput(elements, technologies(t))
+
+	links := result.TechnicalAssets["Web"].CommunicationLinks
+	assert.Equal(t, "erp-sync", links["Service Account"].Account)
+	assert.Empty(t, links["End User"].Account)
+	assert.Contains(t, strings.Join(notes, "\n"), `account "user-42" of a flow with the identity end-user is dropped`)
 }
 
 func technologies(t *testing.T) types.TechnologyMap {

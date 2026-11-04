@@ -52,7 +52,7 @@ live templates for the model, into the current folder.
 
 ## Authentication, identity and authorization of links
 
-Three fields of a communication link describe how its target controls access:
+These fields of a communication link describe how its target controls access:
 
 ```yaml
 communication_links:
@@ -72,6 +72,9 @@ communication_links:
   roles, Kubernetes service account tokens, SPIFFE), and `end-user` when the identity of the user is passed on.
   A personal access token is `long-lived-token` with `end-user`, an API key `long-lived-token` with
   `service-account`.
+- `account` optionally names the account behind a `service-account` or `workload` identity, like the name of a
+  service account, an API key or a cloud IAM role. Name it when several callers might share one: the rules then
+  see an account reused by different technical assets.
 - `authorization` is the granularity of the check: `none`, `authenticated-only` (anyone authenticated may do
   everything), `function-level` (per operation, for example by role) or `object-level` (also per object, like
   the order or the account the request names). It is `unknown` when left out, and the rules then assume nothing.

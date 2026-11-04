@@ -287,7 +287,7 @@ func (what *markdownWriter) communicationLinks(view *reportView) {
 			[]string{"Protocol", markdownText(link.Link.Protocol.String())},
 			[]string{"Encrypted", yesNo(link.Encrypted)},
 			[]string{"Authentication", markdownText(link.Link.Authentication.String())},
-			[]string{"Identity", markdownText(link.Link.Identity.String())},
+			[]string{"Identity", markdownText(linkIdentity(link.Link))},
 			[]string{"Authorization", markdownText(link.Link.Authorization.String())},
 			[]string{"Read-only", yesNo(link.Link.Readonly)},
 			[]string{columnUsage, markdownText(link.Link.Usage.String())},

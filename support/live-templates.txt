@@ -165,6 +165,7 @@ Live template for a communication link:
         protocol: $protocol$
         authentication: $authentication$
         identity: $identity$
+        account: $account$
         authorization: $authorization$
         tags: $tags$
         vpn: $vpn$

@@ -85,3 +85,37 @@ func TestParseRejectsIdentityInAuthorizationNextToIdentity(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), `'authorization' value "technical-user" is an identity, move it into 'identity'`)
 }
+
+func TestParseReadsAccount(t *testing.T) {
+	model := accessModel(map[string]input.CommunicationLink{
+		"Service Account": {Identity: "service-account", Account: " erp-sync "},
+		"Workload":        {Identity: "workload", Account: "orders-role"},
+		"No Account":      {Identity: "service-account"},
+	})
+
+	parsedModel, err := ParseModel(&mockConfig{}, model, make(types.RiskRules), make(types.RiskRules))
+	require.NoError(t, err)
+
+	got := make(map[string]string)
+	for _, link := range parsedModel.TechnicalAssets["client"].CommunicationLinks {
+		got[link.Title] = link.Account
+	}
+	assert.Equal(t, map[string]string{
+		"Service Account": "erp-sync",
+		"Workload":        "orders-role",
+		"No Account":      "",
+	}, got)
+}
+
+func TestParseRejectsAccountOfOtherIdentities(t *testing.T) {
+	for _, identity := range []string{"", "none", "end-user"} {
+		model := accessModel(map[string]input.CommunicationLink{
+			"Link": {Identity: identity, Account: "shared"},
+		})
+
+		_, err := ParseModel(&mockConfig{}, model, make(types.RiskRules), make(types.RiskRules))
+
+		require.Error(t, err, identity)
+		assert.Contains(t, err.Error(), `'account' "shared" needs the identity service-account or workload`, identity)
+	}
+}

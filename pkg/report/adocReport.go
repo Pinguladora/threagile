@@ -1966,7 +1966,7 @@ func (adoc AdocReport) writeCommunicationLink(f *os.File, commLink *types.Commun
 		`>>| Protocol:       | `+commLink.Protocol.String()+`
 | Encrypted:      | `+strconv.FormatBool(commLink.Protocol.IsEncrypted())+`| Authentication: | `+
 		commLink.Authentication.String()+`
-| Identity:       | `+commLink.Identity.String()+`| Authorization:  | `+commLink.Authorization.String()+`
+| Identity:       | `+linkIdentity(commLink)+`| Authorization:  | `+commLink.Authorization.String()+`
 | Read-Only:      | `+strconv.FormatBool(commLink.Readonly)+`| Usage:          | `+commLink.Usage.String()+`
 | Tags:           | `+tagsUsedText+`| VPN:            | `+strconv.FormatBool(commLink.VPN)+`
 | IP-Filtered:    | `+strconv.FormatBool(commLink.IpFiltered)+`| |

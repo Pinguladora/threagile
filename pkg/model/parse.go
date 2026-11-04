@@ -494,6 +494,9 @@ func newCommunicationLink(
 			title, commLinkTitle, commLink.Authentication)
 	}
 	identity, authorization, err := parseLinkAccess(withLegacyIdentityMoved(commLink))
+	if err == nil {
+		err = checkLinkAccount(identity, commLink.Account)
+	}
 	if err != nil {
 		return nil, fmt.Errorf("technical asset %q communication link %q: %w", title, commLinkTitle, err)
 	}
@@ -516,6 +519,7 @@ func newCommunicationLink(
 		Protocol:               protocol,
 		Authentication:         authentication,
 		Identity:               identity,
+		Account:                strings.TrimSpace(commLink.Account),
 		Authorization:          authorization,
 		Usage:                  usage,
 		VPN:                    commLink.VPN,

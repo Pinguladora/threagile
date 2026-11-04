@@ -227,6 +227,7 @@ func (what *importer) addCommunicationLinks(result *input.Model) {
 			Protocol:           fields.enum("protocol", DefaultProtocol, parses(types.ParseProtocol)),
 			Authentication:     fields.enum("authentication", DefaultAuthentication, parses(types.ParseAuthentication)),
 			Identity:           identity,
+			Account:            fields.account(identity),
 			Authorization:      authorization,
 			Tags:               what.useTags(flow.Tags),
 			VPN:                properties.flag("vpn"),
@@ -400,6 +401,17 @@ func (what fields) linkAccess() (identity string, authorization string) {
 	}
 	return what.enum("identity", DefaultIdentity, parses(types.ParseIdentity)),
 		what.enum("authorization", DefaultAuthorization, parses(types.ParseAuthorization))
+}
+
+// account returns the account of a flow, which only a flow with the identity of a service account or a workload
+// names.
+func (what fields) account(identity string) string {
+	account := strings.TrimSpace(what.properties["account"])
+	if account == "" || identity == types.ServiceAccount.String() || identity == types.Workload.String() {
+		return account
+	}
+	what.importer.note("%s: account %q of a flow with the identity %s is dropped", what.where, account, identity)
+	return ""
 }
 
 func (what *importer) note(format string, a ...any) {

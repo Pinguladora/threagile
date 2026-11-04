@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"maps"
 	"slices"
+	"strings"
 
 	"github.com/Pinguladora/threagile/pkg/input"
 	"github.com/Pinguladora/threagile/pkg/types"
@@ -56,4 +57,14 @@ func parseLinkAccess(commLink input.CommunicationLink) (types.Identity, types.Au
 		return 0, 0, fmt.Errorf("unknown 'authorization' value: %w", err)
 	}
 	return identity, authorization, nil
+}
+
+// checkLinkAccount checks that a communication link names an account only for an identity of the caller's own, a
+// service account or a workload: the account of an end user changes with the user.
+func checkLinkAccount(identity types.Identity, account string) error {
+	if strings.TrimSpace(account) == "" || identity == types.ServiceAccount || identity == types.Workload {
+		return nil
+	}
+	return fmt.Errorf("'account' %q needs the identity %s or %s, not %s", account, types.ServiceAccount,
+		types.Workload, identity)
 }
