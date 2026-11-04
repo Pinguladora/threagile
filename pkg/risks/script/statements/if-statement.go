@@ -65,7 +65,9 @@ func (what *IfStatement) parse(key any, value any, script any) (common.Statement
 			return nil, script, errors.New("if-statement has multiple expressions")
 		}
 
-		item, errorScript, itemError := new(expressions.ExpressionList).ParseExpression(map[string]any{fmt.Sprintf("%v", key): value})
+		item, errorScript, itemError := new(expressions.ExpressionList).ParseExpression(
+			map[string]any{fmt.Sprintf("%v", key): value},
+		)
 		if itemError != nil {
 			return nil, errorScript, fmt.Errorf("failed to parse expression of if-statement: %w", itemError)
 		}
