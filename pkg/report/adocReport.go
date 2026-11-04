@@ -129,23 +129,9 @@ func (adoc adocReport) writeDefaultTheme(logoImagePath string) error {
 	if err != nil {
 		return err
 	}
-	adocLogoPath := ""
-	if logoImagePath != "" {
-		logo, err := reportLogo(logoImagePath)
-		if err != nil {
-			return err
-		}
-
-		if logo != nil {
-			adocLogoPath = "logo" + filepath.Ext(logoImagePath)
-			logoDestPath := filepath.Join(adoc.targetDirectory, "theme", adocLogoPath)
-			err = writeFile(logoDestPath, logo)
-			if err != nil {
-				return err
-			}
-		} else {
-			log.Println("logo image path does not exist: " + logoImagePath)
-		}
+	adocLogoPath, err := adoc.writeThemeLogo(logoImagePath)
+	if err != nil {
+		return err
 	}
 
 	writeLine(theme, `extends: default
@@ -163,16 +149,46 @@ title-page:
 			`  logo:
     image: `+"image:"+adocLogoPath+`[]`)
 	}
-	writeLine(theme,
-		`header:
+	writeLine(theme, adoc.themeHeaderAndFooter()+themeRoles())
+
+	return nil
+}
+
+// writeThemeLogo copies the logo of the report, if there is one, into the theme folder and
+// returns its path relative to the theme.
+func (adoc adocReport) writeThemeLogo(logoImagePath string) (string, error) {
+	adocLogoPath := ""
+	if logoImagePath != "" {
+		logo, err := reportLogo(logoImagePath)
+		if err != nil {
+			return "", err
+		}
+
+		if logo != nil {
+			adocLogoPath = "logo" + filepath.Ext(logoImagePath)
+			logoDestPath := filepath.Join(adoc.targetDirectory, "theme", adocLogoPath)
+			err = writeFile(logoDestPath, logo)
+			if err != nil {
+				return "", err
+			}
+		} else {
+			log.Println("logo image path does not exist: " + logoImagePath)
+		}
+	}
+	return adocLogoPath, nil
+}
+
+// themeHeaderAndFooter returns the header and footer of the PDF theme.
+func (adoc adocReport) themeHeaderAndFooter() string {
+	return `header:
   height: 2cm
   line-height: 1
   recto:
     center:
-      content: "{document-title} -- `+adoc.model.Title+` -- {section-or-chapter-title}"
+      content: "{document-title} -- ` + adoc.model.Title + ` -- {section-or-chapter-title}"
   verso:
     center:
-      content: "{document-title} -- `+adoc.model.Title+` -- {section-or-chapter-title}"
+      content: "{document-title} -- ` + adoc.model.Title + ` -- {section-or-chapter-title}"
 footer:
   height: 2cm
   line-height: 1.2
@@ -190,17 +206,22 @@ footer:
       content: "Version: {DOC_VERSION}"
     right:
       content: Page {page-number} of {page-count}
-role:
+`
+}
+
+// themeRoles returns the roles of the PDF theme, which colour the text.
+func themeRoles() string {
+	return `role:
   LowRisk:
-    font-color: `+rgbHexColorLowRisk()+`
+    font-color: ` + rgbHexColorLowRisk() + `
   MediumRisk:
-    font-color: `+rgbHexColorMediumRisk()+`
+    font-color: ` + rgbHexColorMediumRisk() + `
   ElevatedRisk:
-    font-color: `+rgbHexColorElevatedRisk()+`
+    font-color: ` + rgbHexColorElevatedRisk() + `
   HighRisk:
-    font-color: `+rgbHexColorHighRisk()+`
+    font-color: ` + rgbHexColorHighRisk() + `
   CriticalRisk:
-    font-color: `+rgbHexColorCriticalRisk()+`
+    font-color: ` + rgbHexColorCriticalRisk() + `
   OutOfScope:
     font-color: #7f7f7f
   GreyText:
@@ -210,27 +231,25 @@ role:
   ModelFailure:
     font-color: #945200
   RiskStatusFalsePositive:
-    font-color: `+rgbHexColorRiskStatusFalsePositive()+`
+    font-color: ` + rgbHexColorRiskStatusFalsePositive() + `
   RiskStatusMitigated:
-    font-color: `+rgbHexColorRiskStatusMitigated()+`
+    font-color: ` + rgbHexColorRiskStatusMitigated() + `
   RiskStatusInProgress:
-    font-color: `+rgbHexColorRiskStatusInProgress()+`
+    font-color: ` + rgbHexColorRiskStatusInProgress() + `
   RiskStatusAccepted:
-    font-color: `+rgbHexColorRiskStatusAccepted()+`
+    font-color: ` + rgbHexColorRiskStatusAccepted() + `
   RiskStatusInDiscussion:
-    font-color: `+rgbHexColorRiskStatusInDiscussion()+`
+    font-color: ` + rgbHexColorRiskStatusInDiscussion() + `
   RiskStatusUnchecked:
-    font-color: `+RgbHexColorRiskStatusUnchecked()+`
+    font-color: ` + RgbHexColorRiskStatusUnchecked() + `
   Twilight:
-    font-color: `+rgbHexColorTwilight()+`
+    font-color: ` + rgbHexColorTwilight() + `
   SmallGrey:
     font-size: 0.5em
     font-color: #505050
   Silver:
     font-color: #C0C0C0
-`)
-
-	return nil
+`
 }
 
 func (adoc adocReport) writeMainLine(line string) {
@@ -267,97 +286,15 @@ func (adoc adocReport) WriteReport(model *types.Model,
 		return err
 	}
 
-	err = adoc.writeImpactInitialRisks()
-	if err != nil {
-		return fmt.Errorf("error creating impact initial risks: %w", err)
-	}
-	err = adoc.writeRiskMitigationStatus()
-	if err != nil {
-		return fmt.Errorf("error creating risk mitigation status: %w", err)
-	}
-	if val := hideChapters[AssetRegister]; !val {
-		err = adoc.writeAssetRegister()
-		if err != nil {
-			return fmt.Errorf("error creating asset register status: %w", err)
+	chapters := adoc.chapters(dataFlowDiagramFilenamePNG, dataAssetDiagramFilenamePNG, modelFilename, skipRiskRules,
+		buildTimestamp, threagileVersion, modelHash, introTextRAA, customRiskRules, hideChapters)
+	for _, chapter := range chapters {
+		if chapter.hide {
+			continue
 		}
-	}
-	err = adoc.writeImpactRemainingRisks()
-	if err != nil {
-		return fmt.Errorf("error creating impact remaining risks: %w", err)
-	}
-	err = adoc.writeTargetDescription(filepath.Dir(modelFilename))
-	if err != nil {
-		return fmt.Errorf("error creating target description: %w", err)
-	}
-	err = adoc.writeDataFlowDiagram(dataFlowDiagramFilenamePNG)
-	if err != nil {
-		return fmt.Errorf("error creating data flow diagram section: %w", err)
-	}
-	err = adoc.writeSecurityRequirements()
-	if err != nil {
-		return fmt.Errorf("error creating security requirements: %w", err)
-	}
-	err = adoc.writeAbuseCases()
-	if err != nil {
-		return fmt.Errorf("error creating abuse cases: %w", err)
-	}
-	err = adoc.writeTagListing()
-	if err != nil {
-		return fmt.Errorf("error creating tag listing: %w", err)
-	}
-	err = adoc.writeSTRIDE()
-	if err != nil {
-		return fmt.Errorf("error creating STRIDE: %w", err)
-	}
-	err = adoc.writeAssignmentByFunction()
-	if err != nil {
-		return fmt.Errorf("error creating assignment by function: %w", err)
-	}
-	err = adoc.writeRAA(introTextRAA)
-	if err != nil {
-		return fmt.Errorf("error creating RAA: %w", err)
-	}
-	err = adoc.writeDataRiskMapping(dataAssetDiagramFilenamePNG)
-	if err != nil {
-		return fmt.Errorf("error creating data risk mapping: %w", err)
-	}
-	err = adoc.writeOutOfScopeAssets()
-	if err != nil {
-		return fmt.Errorf("error creating Out of Scope Assets: %w", err)
-	}
-	err = adoc.writeModelFailures()
-	if err != nil {
-		return fmt.Errorf("error creating model failures: %w", err)
-	}
-	err = adoc.writeQuestions()
-	if err != nil {
-		return fmt.Errorf("error creating questions: %w", err)
-	}
-	err = adoc.writeRiskCategories()
-	if err != nil {
-		return fmt.Errorf("error creating risk categories: %w", err)
-	}
-	err = adoc.writeTechnicalAssets()
-	if err != nil {
-		return fmt.Errorf("error creating technical assets: %w", err)
-	}
-	err = adoc.writeDataAssets()
-	if err != nil {
-		return fmt.Errorf("error creating data assets: %w", err)
-	}
-	err = adoc.writeTrustBoundaries()
-	if err != nil {
-		return fmt.Errorf("error creating trust boundaries: %w", err)
-	}
-	err = adoc.writeSharedRuntimes()
-	if err != nil {
-		return fmt.Errorf("error creating shared runtimes: %w", err)
-	}
-	if val := hideChapters[RiskRulesCheckedByThreagile]; !val {
-		err = adoc.writeRiskRulesChecked(modelFilename, skipRiskRules, buildTimestamp, threagileVersion, modelHash,
-			customRiskRules)
+		err = chapter.write()
 		if err != nil {
-			return fmt.Errorf("error creating risk rules checked: %w", err)
+			return fmt.Errorf("%s: %w", chapter.errorContext, err)
 		}
 	}
 	err = adoc.writeAppendixRating()
@@ -369,6 +306,63 @@ func (adoc adocReport) WriteReport(model *types.Model,
 		return fmt.Errorf("error creating disclaimer: %w", err)
 	}
 	return nil
+}
+
+// adocChapter is a chapter of the AsciiDoc report between the management summary and the appendix.
+type adocChapter struct {
+	errorContext string
+	write        func() error
+	hide         bool
+}
+
+// chapters returns the chapters of the AsciiDoc report in the order they are written.
+func (adoc adocReport) chapters(
+	dataFlowDiagramFilenamePNG string,
+	dataAssetDiagramFilenamePNG string,
+	modelFilename string,
+	skipRiskRules []string,
+	buildTimestamp string,
+	threagileVersion string,
+	modelHash string,
+	introTextRAA string,
+	customRiskRules types.RiskRules,
+	hideChapters map[ChaptersToShowHide]bool,
+) []adocChapter {
+	return []adocChapter{
+		{"error creating impact initial risks", adoc.writeImpactInitialRisks, false},
+		{"error creating risk mitigation status", adoc.writeRiskMitigationStatus, false},
+		{"error creating asset register status", adoc.writeAssetRegister, hideChapters[AssetRegister]},
+		{"error creating impact remaining risks", adoc.writeImpactRemainingRisks, false},
+		{"error creating target description", func() error {
+			return adoc.writeTargetDescription(filepath.Dir(modelFilename))
+		}, false},
+		{"error creating data flow diagram section", func() error {
+			return adoc.writeDataFlowDiagram(dataFlowDiagramFilenamePNG)
+		}, false},
+		{"error creating security requirements", adoc.writeSecurityRequirements, false},
+		{"error creating abuse cases", adoc.writeAbuseCases, false},
+		{"error creating tag listing", adoc.writeTagListing, false},
+		{"error creating STRIDE", adoc.writeSTRIDE, false},
+		{"error creating assignment by function", adoc.writeAssignmentByFunction, false},
+		{"error creating RAA", func() error {
+			return adoc.writeRAA(introTextRAA)
+		}, false},
+		{"error creating data risk mapping", func() error {
+			return adoc.writeDataRiskMapping(dataAssetDiagramFilenamePNG)
+		}, false},
+		{"error creating Out of Scope Assets", adoc.writeOutOfScopeAssets, false},
+		{"error creating model failures", adoc.writeModelFailures, false},
+		{"error creating questions", adoc.writeQuestions, false},
+		{"error creating risk categories", adoc.writeRiskCategories, false},
+		{"error creating technical assets", adoc.writeTechnicalAssets, false},
+		{"error creating data assets", adoc.writeDataAssets, false},
+		{"error creating trust boundaries", adoc.writeTrustBoundaries, false},
+		{"error creating shared runtimes", adoc.writeSharedRuntimes, false},
+		{"error creating risk rules checked", func() error {
+			return adoc.writeRiskRulesChecked(modelFilename, skipRiskRules, buildTimestamp, threagileVersion, modelHash,
+				customRiskRules)
+		}, hideChapters[RiskRulesCheckedByThreagile]},
+	}
 }
 
 // createFile creates (or truncates) the named file in the target directory.
