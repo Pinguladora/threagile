@@ -1,0 +1,242 @@
+# A web shop whose customer traffic passes through a load balancer and a WAF, modelled
+# with a via list on one communication link (threagile#15), and a status page that the
+# customers reach directly.
+threagile_version: 1.0.0
+
+title: Proxy Links Model
+
+date: 2026-11-04
+
+author:
+  name: John Doe
+
+business_criticality: important
+
+tags_available:
+
+data_assets:
+
+  Customer Orders:
+    id: customer-orders
+    description: Orders the customers place in the shop
+    usage: business
+    origin: Customer
+    owner: Some Company
+    quantity: many
+    confidentiality: confidential
+    integrity: critical
+    availability: important
+    justification_cia_rating: Personal data of customers
+
+  Shop Pages:
+    id: shop-pages
+    description: Pages of the shop
+    usage: business
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: public
+    integrity: important
+    availability: important
+    justification_cia_rating: Public content
+
+technical_assets:
+
+  Customer Browser:
+    id: customer-browser
+    description: The customers' web browser
+    type: external-entity
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: true
+    justification_out_of_scope: Owned and managed by the customers
+    size: system
+    technology: browser
+    internet: true
+    machine: physical
+    encryption: none
+    owner: Customer
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Customer devices
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed:
+    data_assets_stored:
+    data_formats_accepted:
+    communication_links:
+      Shop Traffic:
+        target: shop-server
+        via:
+          - load-balancer
+          - waf
+        description: Browsing the shop and placing orders
+        protocol: https
+        authentication: session-id
+        authorization: end-user-identity-propagation
+        usage: business
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        data_assets_sent:
+          - customer-orders
+        data_assets_received:
+          - shop-pages
+      Status Check:
+        target: status-page
+        description: Checks whether the shop is up
+        protocol: https
+        authentication: none
+        authorization: none
+        usage: business
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        data_assets_received:
+          - shop-pages
+
+  Load Balancer:
+    id: load-balancer
+    description: Spreads the customer traffic over the web application firewalls
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: system
+    technology: load-balancer
+    internet: false
+    machine: virtual
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Carries the customer traffic
+    multi_tenant: false
+    redundant: true
+    custom_developed_parts: false
+    data_assets_processed:
+    data_assets_stored:
+    data_formats_accepted:
+    communication_links:
+
+  Web Application Firewall:
+    id: waf
+    description: Filters the customer traffic before it reaches the shop
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: system
+    technology: waf
+    internet: false
+    machine: virtual
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Carries the customer traffic
+    multi_tenant: false
+    redundant: true
+    custom_developed_parts: false
+    data_assets_processed:
+    data_assets_stored:
+    data_formats_accepted:
+    communication_links:
+
+  Shop Server:
+    id: shop-server
+    description: Web application of the shop
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: application
+    technology: web-application
+    internet: false
+    machine: virtual
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: important
+    justification_cia_rating: Takes the orders of the customers
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed:
+    data_assets_stored:
+      - customer-orders
+    data_formats_accepted:
+      - json
+    communication_links:
+
+  Status Page:
+    id: status-page
+    description: Web application showing whether the shop is up
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: application
+    technology: web-application
+    internet: false
+    machine: virtual
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: important
+    availability: important
+    justification_cia_rating: Public content
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed:
+      - shop-pages
+    data_assets_stored:
+    data_formats_accepted:
+      - json
+    communication_links:
+
+trust_boundaries:
+
+  Internet:
+    id: internet
+    description: Where the customers are
+    type: network-dedicated-hoster
+    technical_assets_inside:
+      - customer-browser
+    trust_boundaries_nested:
+
+  Edge Network:
+    id: edge-network
+    description: Network of the load balancer and the WAF
+    type: network-on-prem
+    technical_assets_inside:
+      - load-balancer
+      - waf
+    trust_boundaries_nested:
+
+  Application Network:
+    id: application-network
+    description: Network of the web applications
+    type: network-on-prem
+    technical_assets_inside:
+      - shop-server
+      - status-page
+    trust_boundaries_nested:
+
+shared_runtimes: {}
+
+risk_tracking:
+
+  # the id of the hop that leaves the WAF is the id of the link plus ">shop-server"
+  server-side-request-forgery@waf@shop-server@customer-browser>shop-traffic>shop-server:
+    status: accepted
+    justification: The WAF forwards only to the shop
+    ticket: XYZ-1234
+    date: 2026-11-04
+    checked_by: John Doe
