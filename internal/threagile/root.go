@@ -142,7 +142,7 @@ func (what *Threagile) initOptionFlags() {
 
 	flags.IntVar(&what.flags.ServerPortValue, serverPortFlagName, what.config.GetServerPort(), "server port")
 	flags.StringVar(&what.flags.ServerFolderValue, serverDirFlagName, what.config.GetDataFolder(),
-		"base folder for server mode (default: "+DataDir+")")
+		"base folder for server mode")
 	flags.IntVar(&what.flags.DiagramDPIValue, diagramDpiFlagName, what.config.GetDiagramDPI(),
 		"DPI used to render: maximum is "+strconv.Itoa(what.config.GetMaxGraphvizDPI()))
 	// MaxGraphvizDPIValue not available as flags
@@ -186,23 +186,24 @@ func (what *Threagile) initSkipFlags() {
 		"skip generating report markdown")
 
 	flags.BoolVar(&what.flags.generateDataFlowDiagramFlag, generateDataFlowDiagramFlagName,
-		!what.config.GetSkipDataFlowDiagram(), "(deprecated) generate generating data flow diagram")
+		!what.config.GetSkipDataFlowDiagram(), "(deprecated, use the matching --skip flag) generate data flow diagram")
 	flags.BoolVar(&what.flags.generateDataAssetDiagramFlag, generateDataAssetDiagramFlagName,
-		!what.config.GetSkipDataAssetDiagram(), "(deprecated) generate generating data asset diagram")
+		!what.config.GetSkipDataAssetDiagram(), "(deprecated, use the matching --skip flag) generate data asset diagram")
 	flags.BoolVar(&what.flags.generateRisksJSONFlag, generateRisksJSONFlagName, !what.config.GetSkipRisksJSON(),
-		"(deprecated) generate generating risks json")
+		"(deprecated, use the matching --skip flag) generate risks json")
 	flags.BoolVar(&what.flags.generateTechnicalAssetsJSONFlag, generateTechnicalAssetsJSONFlagName,
-		!what.config.GetSkipTechnicalAssetsJSON(), "(deprecated) generate generating technical assets json")
+		!what.config.GetSkipTechnicalAssetsJSON(),
+		"(deprecated, use the matching --skip flag) generate technical assets json")
 	flags.BoolVar(&what.flags.generateStatsJSONFlag, generateStatsJSONFlagName, !what.config.GetSkipStatsJSON(),
-		"(deprecated) generate generating stats json")
+		"(deprecated, use the matching --skip flag) generate stats json")
 	flags.BoolVar(&what.flags.generateRisksExcelFlag, generateRisksExcelFlagName, !what.config.GetSkipRisksExcel(),
-		"(deprecated) generate generating risks excel")
+		"(deprecated, use the matching --skip flag) generate risks excel")
 	flags.BoolVar(&what.flags.generateTagsExcelFlag, generateTagsExcelFlagName, !what.config.GetSkipTagsExcel(),
-		"(deprecated) generate generating tags excel")
+		"(deprecated, use the matching --skip flag) generate tags excel")
 	flags.BoolVar(&what.flags.generateReportPDFFlag, generateReportPDFFlagName, !what.config.GetSkipReportPDF(),
-		"(deprecated) generate generating report pdf, including diagrams")
+		"(deprecated, use the matching --skip flag) generate report pdf, including diagrams")
 	flags.BoolVar(&what.flags.generateReportADOCFlag, generateReportADOCFlagName, !what.config.GetSkipReportADOC(),
-		"(deprecated) generate generating report adoc, including diagrams")
+		"(deprecated, use the matching --skip flag) generate report adoc, including diagrams")
 }
 
 func (what *Threagile) run(thisCmd *cobra.Command, args []string) {
