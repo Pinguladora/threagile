@@ -1,0 +1,647 @@
+# A support assistant that exercises the AI risk rules end to end: prompt-injection, excessive-agency,
+# vector-store-poisoning, model-supply-chain, model-output-disclosure and unauthenticated-mcp-server.
+threagile_version: 1.0.0
+
+title: AI Rules Model
+
+date: 2026-11-04
+
+author:
+  name: John Doe
+
+business_criticality: important
+
+tags_available:
+  - human-in-the-loop
+
+data_assets:
+
+  Chat Messages:
+    id: chat-messages
+    description: Messages of the support chat
+    usage: business
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: confidential
+    integrity: important
+    availability: important
+    justification_cia_rating: Test rating
+
+  Customer Records:
+    id: customer-records
+    description: Customer master data
+    usage: business
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: confidential
+    integrity: critical
+    availability: important
+    justification_cia_rating: Test rating
+
+  Orders:
+    id: orders
+    description: Orders of the customers
+    usage: business
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: confidential
+    integrity: critical
+    availability: important
+    justification_cia_rating: Test rating
+
+  Knowledge Base Articles:
+    id: kb-articles
+    description: Reviewed support articles
+    usage: business
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Test rating
+
+  Model Weights:
+    id: model-weights
+    description: The fine-tuned support model
+    usage: business
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: confidential
+    integrity: critical
+    availability: important
+    justification_cia_rating: Test rating
+
+technical_assets:
+
+  Customer Browser:
+    id: customer-browser
+    description: The customers' web browser
+    type: external-entity
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: true
+    justification_out_of_scope: Not operated by us
+    size: service
+    technology: browser
+    internet: true
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test rating
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: []
+    communication_links:
+      Chat:
+        target: chat-app
+        description: Chat
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        readonly: false
+        usage: business
+        data_assets_sent: [chat-messages]
+        data_assets_received: [chat-messages]
+
+  Chat App:
+    id: chat-app
+    description: The support chat
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: web-application
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Test rating
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [chat-messages]
+    data_assets_stored: []
+    communication_links:
+      Assistant Request:
+        target: support-agent
+        description: Assistant Request
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        readonly: false
+        usage: business
+        data_assets_sent: [chat-messages]
+        data_assets_received: [chat-messages]
+
+  Support Agent:
+    id: support-agent
+    description: Answers support questions and acts on orders
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: ai-agent
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Test rating
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chat-messages, customer-records]
+    data_assets_stored: []
+    communication_links:
+      Completion:
+        target: inference
+        description: Completion
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        readonly: false
+        usage: business
+        data_assets_sent: [chat-messages, customer-records]
+        data_assets_received: [chat-messages]
+      Retrieval:
+        target: knowledge-base
+        description: Retrieval
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        readonly: true
+        usage: business
+        data_assets_received: [kb-articles]
+      Memory Write:
+        target: knowledge-base
+        description: Memory Write
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        readonly: false
+        usage: business
+        data_assets_sent: [chat-messages]
+      Tool Calls:
+        target: mcp-tools
+        description: Tool Calls
+        protocol: https
+        authentication: none
+        authorization: technical-user
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Hosted Completion:
+        target: hosted-model
+        description: Hosted Completion
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        readonly: false
+        usage: business
+        data_assets_sent: [chat-messages]
+        data_assets_received: [chat-messages]
+
+  Inference Server:
+    id: inference
+    description: Serves the fine-tuned support model
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: llm
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Test rating
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chat-messages, customer-records]
+    data_assets_stored: []
+    communication_links:
+      Model Pull:
+        target: model-registry
+        description: Model Pull
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        readonly: true
+        usage: business
+        data_assets_received: [model-weights]
+
+  Model Registry:
+    id: model-registry
+    description: Stores the model versions
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: model-registry
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Test rating
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: [model-weights]
+
+  Knowledge Base:
+    id: knowledge-base
+    description: Embeddings of the support articles and the agent memory
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: vector-database
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Test rating
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: [kb-articles, chat-messages]
+
+  Ingestion Job:
+    id: ingestion-job
+    description: Embeds the reviewed support articles
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: batch-processing
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Test rating
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [kb-articles]
+    data_assets_stored: []
+    communication_links:
+      Embedding Upsert:
+        target: knowledge-base
+        description: Embedding Upsert
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        readonly: false
+        usage: business
+        data_assets_sent: [kb-articles]
+      Policy Upsert:
+        target: policy-index
+        description: Policy Upsert
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        readonly: false
+        usage: business
+        data_assets_sent: [kb-articles]
+
+  Policy Index:
+    id: policy-index
+    description: Embeddings of the internal order policies
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: vector-database
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Test rating
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: [kb-articles]
+
+  Support Tools:
+    id: mcp-tools
+    description: MCP server with the order and web tools
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: mcp-server
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Test rating
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    communication_links:
+      Order Update:
+        target: orders-db
+        description: Order Update
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Web Fetch:
+        target: public-web
+        description: Web Fetch
+        protocol: https
+        authentication: none
+        authorization: none
+        readonly: true
+        usage: business
+
+  Public Web:
+    id: public-web
+    description: Web pages the agent looks up
+    type: external-entity
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: true
+    justification_out_of_scope: Not operated by us
+    size: service
+    technology: web-server
+    internet: true
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test rating
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: []
+
+  Orders Database:
+    id: orders-db
+    description: Orders and customers
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: database
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: critical
+    availability: important
+    justification_cia_rating: Test rating
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: [orders, customer-records]
+
+  Ticket Agent:
+    id: ticket-agent
+    description: Drafts order changes a clerk approves
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: ai-agent
+    tags: [human-in-the-loop]
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Test rating
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    communication_links:
+      Draft Change:
+        target: orders-db
+        description: Draft Change
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+
+  Reporting Agent:
+    id: reporting-agent
+    description: Fixes order data on a schedule
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: ai-agent
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Test rating
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    communication_links:
+      Order Fix:
+        target: orders-db
+        description: Order Fix
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+      Policy Lookup:
+        target: policy-index
+        description: Policy Lookup
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        readonly: true
+        usage: business
+        data_assets_received: [kb-articles]
+      Reviewed Fix:
+        target: orders-db
+        description: Reviewed Fix
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        readonly: false
+        usage: business
+        tags: [human-in-the-loop]
+        data_assets_sent: [orders]
+      Status Tools:
+        target: mcp-status
+        description: Status Tools
+        protocol: https
+        authentication: none
+        authorization: technical-user
+        readonly: false
+        usage: business
+
+  Status Tools:
+    id: mcp-status
+    description: MCP server reading the public status page
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: mcp-server
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Test rating
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: []
+    communication_links:
+      Status Read:
+        target: status-page
+        description: Status Read
+        protocol: https
+        authentication: token
+        authorization: technical-user
+        readonly: true
+        usage: business
+
+  Status Page:
+    id: status-page
+    description: Public service status
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: web-server
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test rating
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: []
+
+  Hosted Model API:
+    id: hosted-model
+    description: A model used as a service
+    type: external-entity
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: true
+    justification_out_of_scope: Not operated by us
+    size: service
+    technology: llm
+    internet: true
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: internal
+    integrity: important
+    availability: important
+    justification_cia_rating: Test rating
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: []
+    data_assets_stored: []
+
+trust_boundaries:
+
+  Application Network:
+    id: application-network
+    description: The network of the support system
+    type: network-cloud-provider
+    technical_assets_inside:
+      - policy-index
+      - chat-app
+      - support-agent
+      - inference
+      - model-registry
+      - knowledge-base
+      - ingestion-job
+      - mcp-tools
+      - orders-db
+      - ticket-agent
+      - reporting-agent
+      - mcp-status
+      - status-page

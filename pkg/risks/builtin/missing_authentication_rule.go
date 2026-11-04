@@ -19,7 +19,7 @@ func (*MissingAuthenticationRule) Category() *types.RiskCategory {
 		Impact: "If this risk is unmitigated, attackers might be able to access or modify sensitive data in an " +
 			"unauthenticated way.",
 		ASVS:       asvsAuthentication,
-		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+		CheatSheet: cheatSheetAuthentication,
 		Action:     "Authentication of Incoming Requests",
 		Mitigation: "Apply an authentication method to the technical asset. To protect highly sensitive data consider " +
 			"the use of two-factor authentication for human users.",

@@ -80,6 +80,37 @@ To opt an asset into the key deletion rule, model the key management service as 
 encrypted asset (or its trust boundary) with `aws:kms`, `azure:keyvault` or
 `gcp:kms`. Add the tags you use to `tags_available`.
 
+## AI rules
+
+The AI rules model the threats of systems built on language models and agents. They
+use the technologies `llm`, `ai-agent`, `vector-database`, `mcp-server` and
+`model-registry`; the generic `ai` technology matches none of them. Each AI rule lists
+the entries of the [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/),
+the OWASP Top 10 for Agentic Applications 2026 and the layers of the CSA MAESTRO
+framework it covers in its `references`, which the reports, `risks.json` and the OTM
+export show.
+
+Several rules ask whether *untrusted content* reaches an asset. It does when the asset
+is on the internet, is called across a network trust boundary, reads from an internet
+asset directly or through a tool that does (like an MCP server with a web fetch tool),
+or is sent requests by an internet asset or a client used by humans, directly or
+through other assets: content passes on along the communication links.
+
+| Rule (id) | Fires on | Tags | Rated by | References |
+|-----------|----------|------|----------|------------|
+| Prompt Injection (`prompt-injection`) | language models and agents that untrusted content reaches | none | the data the model or agent processes, one step higher for agents; very likely when it talks to the internet directly | LLM01, ASI01, MAESTRO layers 1 and 3 |
+| Excessive Agency (`excessive-agency`) | non-readonly links of agents to assets with critical data, directly or through the tools of an MCP server; calls to language models are no actions | `human-in-the-loop` on the agent or the link skips it | the integrity of what the agent can change; likely when the agent takes untrusted content | LLM06, ASI02, ASI03, MAESTRO layer 3 |
+| Vector Store Poisoning (`vector-store-poisoning`) | vector databases that a language model or agent communicates with | none | the data the models and agents using it process; likely when an asset taking untrusted content, or one across a network trust boundary, writes into it | LLM04, LLM08, ASI06, MAESTRO layer 2 |
+| Unverified Model Supply Chain (`model-supply-chain`) | model registries, and language models that are custom-developed or communicate with a model registry | none | the data the models process | LLM03, LLM04, ASI04, MAESTRO layer 1 |
+| Sensitive Data Disclosure through Model Output (`model-output-disclosure`) | language models and agents that untrusted content reaches and that process, or read from a vector database, confidential data | none | the confidentiality of what the model can read | LLM02, MAESTRO layer 1 |
+| Unauthenticated MCP Server (`unauthenticated-mcp-server`) | links without authentication into an MCP server whose tools reach confidential or critical assets | none | what the tools reach; very likely for internet callers, likely for callers taking untrusted content | ASI02, ASI03, LLM06, MAESTRO layers 4 and 7 |
+
+Model a hosted model you call as a service (like a commercial LLM API) as an
+out-of-scope `llm` asset, so that the rules judge your use of it rather than the
+model itself. A language model on the internet is no source of internet content: its
+responses come from the model. Mark agents whose actions a human approves, or the single links that
+need an approval, with the `human-in-the-loop` tag, and add it to `tags_available`.
+
 ## Risk ids of Push instead of Pull Deployment
 
 Push instead of Pull Deployment creates one risk per deployment target, with the id

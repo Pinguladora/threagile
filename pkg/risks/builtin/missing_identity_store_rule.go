@@ -19,7 +19,7 @@ func (*MissingIdentityStoreRule) Category() *types.RiskCategory {
 		Impact: "If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model in the " +
 			"identity provider/store that is currently missing in the model.",
 		ASVS:       asvsAuthentication,
-		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+		CheatSheet: cheatSheetAuthentication,
 		Action:     "Identity Store",
 		Mitigation: "Include an identity store in the model if the application has a login.",
 		Check:      checkCheatSheetAndASVS,
