@@ -1067,7 +1067,7 @@
     "function": "architecture",
     "cwe": 284,
     "action": "Identity Propagation and Resource-based Authorization",
-    "mitigation": "When processing requests for end users if possible authorize in the backend against the propagated identity of the end user. This can be achieved in passing JWTs or similar tokens and checking them in the backend services. For DevOps usages apply at least a technical-user authorization.",
+    "mitigation": "When processing requests for end users if possible authorize in the backend against the propagated identity of the end user. This can be achieved in passing JWTs or similar tokens and checking them in the backend services, and model the link with the identity \u003ci\u003eend-user\u003c/i\u003e. For DevOps usages pass at least the identity of a service account or a workload.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
     "most_relevant_technical_asset_title": "Backoffice ERP System",
     "most_relevant_technical_asset_raa": 62.062039616154216,
