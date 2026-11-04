@@ -97,7 +97,19 @@ func RunServer(config serverConfigReader, builtinRiskRules types.RiskRules) {
 	}
 	router := gin.Default()
 	s.addStaticRoutes(router)
+	s.addMetaRoutes(router, config)
+	s.addDirectRoutes(router)
+	s.addModelRoutes(router)
 
+	s.customRiskRules = model.LoadCustomRiskRules(s.config.GetPluginFolder(), s.config.GetRiskRulePlugins(),
+		config.GetProgressReporter())
+
+	fmt.Println("Threagile is running...")
+	// listen and serve on 0.0.0.0:8080 or whatever port was specified
+	_ = router.Run(":" + strconv.Itoa(s.config.GetServerPort()))
+}
+
+func (s *server) addMetaRoutes(router *gin.Engine, config serverConfigReader) {
 	router.GET("/meta/ping", func(c *gin.Context) {
 		respondMessage(c, http.StatusOK, "pong", nil)
 	})
@@ -136,7 +148,11 @@ func RunServer(config serverConfigReader, builtinRiskRules types.RiskRules) {
 	// not served yet:
 	// router.GET("/meta/risk-rules", listRiskRules)
 	// router.GET("/meta/model-macros", listModelMacros)
+}
 
+// addDirectRoutes adds the stats and the routes that analyze a model without storing it, and those of the
+// keys and tokens.
+func (s *server) addDirectRoutes(router *gin.Engine) {
 	router.GET("/meta/stats", s.stats)
 
 	router.POST("/edit-model/analyze", s.editModelAnalyze)
@@ -149,7 +165,10 @@ func RunServer(config serverConfigReader, builtinRiskRules types.RiskRules) {
 	router.DELETE("/auth/keys", s.deleteKey)
 	router.POST("/auth/tokens", s.createToken)
 	router.DELETE("/auth/tokens", s.deleteToken)
+}
 
+// addModelRoutes adds the routes of the models that the server stores.
+func (s *server) addModelRoutes(router *gin.Engine) {
 	router.POST("/models", s.createNewModel)
 	router.GET("/models", s.listModels)
 	router.DELETE("/models/:model-id", s.deleteModel)
@@ -195,11 +214,6 @@ func RunServer(config serverConfigReader, builtinRiskRules types.RiskRules) {
 	router.GET("/models/:model-id/shared-runtimes/:shared-runtime-id", s.getSharedRuntime)
 	router.PUT("/models/:model-id/shared-runtimes/:shared-runtime-id", s.setSharedRuntime)
 	router.DELETE("/models/:model-id/shared-runtimes/:shared-runtime-id", s.deleteSharedRuntime)
-
-	s.customRiskRules = model.LoadCustomRiskRules(s.config.GetPluginFolder(), s.config.GetRiskRulePlugins(), config.GetProgressReporter())
-
-	fmt.Println("Threagile is running...")
-	_ = router.Run(":" + strconv.Itoa(s.config.GetServerPort())) // listen and serve on 0.0.0.0:8080 or whatever port was specified
 }
 
 // addStaticRoutes serves the web UI and the files from the app folder. The web
@@ -307,20 +321,24 @@ func (s *server) addSupportedTags(input []byte) []byte {
 	}
 	sort.Strings(tags)
 	if s.config.GetVerbose() {
-		fmt.Print("Supported tags of all risk rules: ")
-		for i, tag := range tags {
-			if i > 0 {
-				fmt.Print(", ")
-			}
-			fmt.Print(tag)
-		}
-		fmt.Println()
+		printSupportedTags(tags)
 	}
 	replacement := "tags_available:"
 	for _, tag := range tags {
 		replacement += "\n  - " + tag
 	}
 	return []byte(strings.Replace(string(input), "tags_available:", replacement, 1))
+}
+
+func printSupportedTags(tags []string) {
+	fmt.Print("Supported tags of all risk rules: ")
+	for i, tag := range tags {
+		if i > 0 {
+			fmt.Print(", ")
+		}
+		fmt.Print(tag)
+	}
+	fmt.Println()
 }
 
 func arrayOfStringValues(values []types.TypeEnum) []string {

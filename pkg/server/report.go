@@ -5,12 +5,10 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package server
 
 import (
-	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -60,25 +58,71 @@ func (s *server) streamStatsJSON(ginContext *gin.Context) {
 	s.streamResponse(ginContext, statsJSON)
 }
 
+// streamedOutput is how streamResponse streams an output of the analysis.
+type streamedOutput struct {
+	outputs  analysisOutputs
+	filename func(serverConfigReader) string
+	mode     streamMode
+}
+
+type streamMode int
+
+const (
+	streamFile       streamMode = iota // serve the file
+	streamAttachment                   // serve the file for download
+	streamJSON                         // serve the JSON with its content type instead of as a file download
+)
+
+var streamedOutputs = map[responseType]streamedOutput{
+	dataFlowDiagram: {
+		outputs:  analysisOutputs{dataFlowDiagram: true},
+		filename: serverConfigReader.GetDataFlowDiagramFilenamePNG,
+		mode:     streamFile,
+	},
+	dataAssetDiagram: {
+		outputs:  analysisOutputs{dataAssetDiagram: true},
+		filename: serverConfigReader.GetDataAssetDiagramFilenamePNG,
+		mode:     streamFile,
+	},
+	reportPDF: {
+		outputs:  analysisOutputs{reportPDF: true},
+		filename: serverConfigReader.GetReportFilename,
+		mode:     streamAttachment,
+	},
+	risksExcel: {
+		outputs:  analysisOutputs{risksExcel: true},
+		filename: serverConfigReader.GetExcelRisksFilename,
+		mode:     streamAttachment,
+	},
+	tagsExcel: {
+		outputs:  analysisOutputs{tagsExcel: true},
+		filename: serverConfigReader.GetExcelTagsFilename,
+		mode:     streamAttachment,
+	},
+	risksJSON: {
+		outputs:  analysisOutputs{risksJSON: true},
+		filename: serverConfigReader.GetJsonRisksFilename,
+		mode:     streamJSON,
+	},
+	technicalAssetsJSON: {
+		outputs:  analysisOutputs{risksJSON: true, technicalAssetsJSON: true},
+		filename: serverConfigReader.GetJsonTechnicalAssetsFilename,
+		mode:     streamJSON,
+	},
+	statsJSON: {
+		outputs:  analysisOutputs{statsJSON: true},
+		filename: serverConfigReader.GetJsonStatsFilename,
+		mode:     streamJSON,
+	},
+}
+
 func (s *server) streamResponse(ginContext *gin.Context, responseType responseType) {
 	folderNameOfKey, key, ok := s.checkTokenToFolderName(ginContext)
 	if !ok {
 		return
 	}
 	s.lockFolder(folderNameOfKey)
-	defer func() {
-		s.unlockFolder(folderNameOfKey)
-		var err error
-		if r := recover(); r != nil {
-			err = panicError(r)
-			if s.config.GetVerbose() {
-				log.Println(err)
-			}
-			log.Println(err)
-			respondError(ginContext, http.StatusBadRequest, strings.TrimSpace(err.Error()))
-			ok = false
-		}
-	}()
+	defer func() { s.unlockFolderAndAnswerPanic(ginContext, folderNameOfKey, recover()) }()
 	dpi, err := strconv.Atoi(ginContext.DefaultQuery("dpi", strconv.Itoa(s.config.GetGraphvizDPI())))
 	if err != nil {
 		handleErrorInServiceCall(err, ginContext)
@@ -101,84 +145,33 @@ func (s *server) streamResponse(ginContext *gin.Context, responseType responseTy
 	}
 	defer func() { _ = os.RemoveAll(tmpOutputDir) }()
 	err = os.WriteFile(tmpModelFile.Name(), []byte(yamlText), 0o400)
-	switch responseType {
-	case dataFlowDiagram:
-		s.doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, true, false, false, false, false, false, false, false, dpi)
-		if err != nil {
-			handleErrorInServiceCall(err, ginContext)
-			return
-		}
-		ginContext.File(filepath.Clean(filepath.Join(tmpOutputDir, s.config.GetDataFlowDiagramFilenamePNG())))
+	output, known := streamedOutputs[responseType]
+	if !known {
+		return
+	}
+	s.doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, output.outputs, dpi)
+	if err != nil {
+		handleErrorInServiceCall(err, ginContext)
+		return
+	}
+	s.streamOutput(ginContext, tmpOutputDir, output)
+}
 
-	case dataAssetDiagram:
-		s.doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, false, true, false, false, false, false, false, false, dpi)
-		if err != nil {
-			handleErrorInServiceCall(err, ginContext)
-			return
-		}
-		ginContext.File(filepath.Clean(filepath.Join(tmpOutputDir, s.config.GetDataAssetDiagramFilenamePNG())))
+func (s *server) streamOutput(ginContext *gin.Context, tmpOutputDir string, output streamedOutput) {
+	filename := output.filename(s.config)
+	switch output.mode {
+	case streamFile:
+		ginContext.File(filepath.Clean(filepath.Join(tmpOutputDir, filename)))
 
-	case reportPDF:
-		s.doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, false, false, true, false, false, false, false, false, dpi)
-		if err != nil {
-			handleErrorInServiceCall(err, ginContext)
-			return
-		}
-		ginContext.FileAttachment(filepath.Clean(filepath.Join(tmpOutputDir, s.config.GetReportFilename())), s.config.GetReportFilename())
+	case streamAttachment:
+		ginContext.FileAttachment(filepath.Clean(filepath.Join(tmpOutputDir, filename)), filename)
 
-	case risksExcel:
-		s.doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, false, false, false, true, false, false, false, false, dpi)
+	case streamJSON:
+		jsonData, err := os.ReadFile(filepath.Clean(filepath.Join(tmpOutputDir, filename)))
 		if err != nil {
 			handleErrorInServiceCall(err, ginContext)
 			return
 		}
-		ginContext.FileAttachment(filepath.Clean(filepath.Join(tmpOutputDir, s.config.GetExcelRisksFilename())), s.config.GetExcelRisksFilename())
-
-	case tagsExcel:
-		s.doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, false, false, false, false, true, false, false, false, dpi)
-		if err != nil {
-			handleErrorInServiceCall(err, ginContext)
-			return
-		}
-		ginContext.FileAttachment(filepath.Clean(filepath.Join(tmpOutputDir, s.config.GetExcelTagsFilename())), s.config.GetExcelTagsFilename())
-
-	case risksJSON:
-		s.doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, false, false, false, false, false, true, false, false, dpi)
-		if err != nil {
-			handleErrorInServiceCall(err, ginContext)
-			return
-		}
-		jsonData, err := os.ReadFile(filepath.Clean(filepath.Join(tmpOutputDir, s.config.GetJsonRisksFilename())))
-		if err != nil {
-			handleErrorInServiceCall(err, ginContext)
-			return
-		}
-		ginContext.Data(http.StatusOK, "application/json", jsonData) // stream directly with JSON content-type in response instead of file download
-
-	case technicalAssetsJSON:
-		s.doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, false, false, false, false, false, true, true, false, dpi)
-		if err != nil {
-			handleErrorInServiceCall(err, ginContext)
-			return
-		}
-		jsonData, err := os.ReadFile(filepath.Clean(filepath.Join(tmpOutputDir, s.config.GetJsonTechnicalAssetsFilename())))
-		if err != nil {
-			handleErrorInServiceCall(err, ginContext)
-			return
-		}
-		ginContext.Data(http.StatusOK, "application/json", jsonData) // stream directly with JSON content-type in response instead of file download
-
-	case statsJSON:
-		s.doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, false, false, false, false, false, false, false, true, dpi)
-		if err != nil {
-			handleErrorInServiceCall(err, ginContext)
-			return
-		}
-		jsonData, err := os.ReadFile(filepath.Clean(filepath.Join(tmpOutputDir, s.config.GetJsonStatsFilename())))
-		if err != nil {
-			handleErrorInServiceCall(err, ginContext)
-			return
-		}
-		ginContext.Data(http.StatusOK, "application/json", jsonData) // stream directly with JSON content-type in response instead of file download
+		ginContext.Data(http.StatusOK, "application/json", jsonData)
 	}
 }

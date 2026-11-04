@@ -14,6 +14,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -58,86 +59,42 @@ func (s *server) execute(ginContext *gin.Context, dryRun bool) (yamlContent []by
 		return yamlContent, false
 	}
 
-	fileUploaded, header, err := ginContext.Request.FormFile("file")
-	if err != nil {
-		handleErrorInServiceCall(err, ginContext)
+	files := new(temporaryFiles)
+	defer files.remove()
+
+	yamlFile, ok := s.saveUploadedModel(ginContext, files)
+	if !ok {
 		return yamlContent, false
 	}
 
-	if header.Size > maxModelUploadSize {
-		msg := "maximum model upload file size exceeded (denial-of-service protection)"
-		log.Println(msg)
-		respondError(ginContext, http.StatusRequestEntityTooLarge, msg)
+	tmpOutputDir, tmpResultFile, ok := s.createResultFiles(ginContext, files)
+	if !ok {
 		return yamlContent, false
 	}
-
-	filenameUploaded := strings.TrimSpace(header.Filename)
-
-	tmpInputDir, err := os.MkdirTemp(s.config.GetTempFolder(), "threagile-input-")
-	if err != nil {
-		handleErrorInServiceCall(err, ginContext)
-		return yamlContent, false
-	}
-	defer func() { _ = os.RemoveAll(tmpInputDir) }()
-
-	tmpModelFile, err := os.CreateTemp(tmpInputDir, "threagile-model-*")
-	if err != nil {
-		handleErrorInServiceCall(err, ginContext)
-		return yamlContent, false
-	}
-	defer func() { _ = os.Remove(tmpModelFile.Name()) }()
-	_, err = io.Copy(tmpModelFile, fileUploaded)
-	if err != nil {
-		handleErrorInServiceCall(err, ginContext)
-		return yamlContent, false
-	}
-
-	yamlFile := tmpModelFile.Name()
-
-	if strings.ToLower(filepath.Ext(filenameUploaded)) == ".zip" {
-		// unzip first (including the resources like images etc.)
-		if s.config.GetVerbose() {
-			fmt.Println("Decompressing uploaded archive")
-		}
-		filenamesUnzipped, err := unzip(tmpModelFile.Name(), tmpInputDir)
-		if err != nil {
-			handleErrorInServiceCall(err, ginContext)
-			return yamlContent, false
-		}
-		found := false
-		for _, name := range filenamesUnzipped {
-			if strings.ToLower(filepath.Ext(name)) == ".yaml" {
-				yamlFile = name
-				found = true
-				break
-			}
-		}
-		if !found {
-			panic(errors.New("no yaml file found in uploaded archive"))
-		}
-	}
-
-	tmpOutputDir, err := os.MkdirTemp(s.config.GetTempFolder(), "threagile-output-")
-	if err != nil {
-		handleErrorInServiceCall(err, ginContext)
-		return yamlContent, false
-	}
-	defer func() { _ = os.RemoveAll(tmpOutputDir) }()
-
-	tmpResultFile, err := os.CreateTemp(s.config.GetTempFolder(), "threagile-result-*.zip")
-	if err != nil {
-		handleErrorInServiceCall(err, ginContext)
-		return yamlContent, false
-	}
-	defer func() { _ = os.Remove(tmpResultFile.Name()) }()
 
 	if dryRun {
-		s.doItViaRuntimeCall(yamlFile, tmpOutputDir, false, false, false, false, false, true, true, true, dryRunDPI)
+		s.doItViaRuntimeCall(yamlFile, tmpOutputDir, analysisOutputs{
+			risksJSON: true, technicalAssetsJSON: true, statsJSON: true,
+		}, dryRunDPI)
 	} else {
-		s.doItViaRuntimeCall(yamlFile, tmpOutputDir, true, true, true, true, true, true, true, true, dpi)
+		s.doItViaRuntimeCall(yamlFile, tmpOutputDir, allAnalysisOutputs, dpi)
 	}
 
-	yamlContent, err = os.ReadFile(filepath.Clean(yamlFile))
+	yamlContent, ok = s.copyModelToOutput(ginContext, yamlFile, tmpOutputDir)
+	if !ok {
+		return yamlContent, false
+	}
+
+	if !dryRun && !s.streamAnalysisResult(ginContext, tmpOutputDir, tmpResultFile) {
+		return yamlContent, false
+	}
+	s.successCount++
+	return yamlContent, true
+}
+
+// copyModelToOutput copies the analyzed model into the output folder and returns it.
+func (s *server) copyModelToOutput(ginContext *gin.Context, yamlFile string, tmpOutputDir string) ([]byte, bool) {
+	yamlContent, err := os.ReadFile(filepath.Clean(yamlFile))
 	if err != nil {
 		handleErrorInServiceCall(err, ginContext)
 		return yamlContent, false
@@ -148,44 +105,162 @@ func (s *server) execute(ginContext *gin.Context, dryRun bool) (yamlContent []by
 		handleErrorInServiceCall(err, ginContext)
 		return yamlContent, false
 	}
-
-	if !dryRun {
-		files := []string{
-			filepath.Join(tmpOutputDir, s.config.GetInputFile()),
-			filepath.Join(tmpOutputDir, s.config.GetDataFlowDiagramFilenamePNG()),
-			filepath.Join(tmpOutputDir, s.config.GetDataAssetDiagramFilenamePNG()),
-			filepath.Join(tmpOutputDir, s.config.GetReportFilename()),
-			filepath.Join(tmpOutputDir, s.config.GetReportHTMLFilename()),
-			filepath.Join(tmpOutputDir, s.config.GetExcelRisksFilename()),
-			filepath.Join(tmpOutputDir, s.config.GetExcelTagsFilename()),
-			filepath.Join(tmpOutputDir, s.config.GetJsonRisksFilename()),
-			filepath.Join(tmpOutputDir, s.config.GetJsonTechnicalAssetsFilename()),
-			filepath.Join(tmpOutputDir, s.config.GetJsonStatsFilename()),
-		}
-		if s.config.GetKeepDiagramSourceFiles() {
-			files = append(files, filepath.Join(tmpOutputDir, s.config.GetDataAssetDiagramFilenamePNG()))
-			files = append(files, filepath.Join(tmpOutputDir, s.config.GetDataAssetDiagramFilenameDOT()))
-		}
-		err = zipFiles(tmpResultFile.Name(), files)
-		if err != nil {
-			handleErrorInServiceCall(err, ginContext)
-			return yamlContent, false
-		}
-		if s.config.GetVerbose() {
-			log.Println("Streaming back result file: " + tmpResultFile.Name())
-		}
-		ginContext.FileAttachment(tmpResultFile.Name(), "threagile-result.zip")
-	}
-	s.successCount++
 	return yamlContent, true
+}
+
+// streamAnalysisResult packs the result files of the analysis of an uploaded model and streams them back.
+func (s *server) streamAnalysisResult(ginContext *gin.Context, tmpOutputDir string, tmpResultFile string) bool {
+	resultFiles := s.resultFiles(tmpOutputDir)
+	if s.config.GetKeepDiagramSourceFiles() {
+		resultFiles = append(resultFiles, filepath.Join(tmpOutputDir, s.config.GetDataAssetDiagramFilenamePNG()))
+		resultFiles = append(resultFiles, filepath.Join(tmpOutputDir, s.config.GetDataAssetDiagramFilenameDOT()))
+	}
+	if !zipResult(ginContext, tmpResultFile, resultFiles) {
+		return false
+	}
+	if s.config.GetVerbose() {
+		log.Println("Streaming back result file: " + tmpResultFile)
+	}
+	ginContext.FileAttachment(tmpResultFile, "threagile-result.zip")
+	return true
+}
+
+// temporaryFiles removes the temporary files and folders of a request, in the reverse order of their
+// creation.
+type temporaryFiles struct {
+	removals []func()
+}
+
+func (files *temporaryFiles) add(removal func()) {
+	files.removals = append(files.removals, removal)
+}
+
+func (files *temporaryFiles) remove() {
+	for _, removal := range slices.Backward(files.removals) {
+		removal()
+	}
+}
+
+// saveUploadedModel saves the uploaded model file, and unpacks it if it is an archive; it returns the
+// model YAML file.
+func (s *server) saveUploadedModel(ginContext *gin.Context, files *temporaryFiles) (string, bool) {
+	fileUploaded, header, err := ginContext.Request.FormFile("file")
+	if err != nil {
+		handleErrorInServiceCall(err, ginContext)
+		return "", false
+	}
+
+	if header.Size > maxModelUploadSize {
+		msg := "maximum model upload file size exceeded (denial-of-service protection)"
+		log.Println(msg)
+		respondError(ginContext, http.StatusRequestEntityTooLarge, msg)
+		return "", false
+	}
+
+	filenameUploaded := strings.TrimSpace(header.Filename)
+
+	tmpInputDir, err := os.MkdirTemp(s.config.GetTempFolder(), "threagile-input-")
+	if err != nil {
+		handleErrorInServiceCall(err, ginContext)
+		return "", false
+	}
+	files.add(func() { _ = os.RemoveAll(tmpInputDir) })
+
+	tmpModelFile, err := os.CreateTemp(tmpInputDir, "threagile-model-*")
+	if err != nil {
+		handleErrorInServiceCall(err, ginContext)
+		return "", false
+	}
+	files.add(func() { _ = os.Remove(tmpModelFile.Name()) })
+	_, err = io.Copy(tmpModelFile, fileUploaded)
+	if err != nil {
+		handleErrorInServiceCall(err, ginContext)
+		return "", false
+	}
+
+	if strings.ToLower(filepath.Ext(filenameUploaded)) == ".zip" {
+		return s.unzipUploadedModel(ginContext, tmpModelFile.Name(), tmpInputDir)
+	}
+	return tmpModelFile.Name(), true
+}
+
+// unzipUploadedModel unpacks an uploaded archive (including the resources like images etc.) and returns
+// its first YAML file.
+func (s *server) unzipUploadedModel(ginContext *gin.Context, archive string, tmpInputDir string) (string, bool) {
+	if s.config.GetVerbose() {
+		fmt.Println("Decompressing uploaded archive")
+	}
+	filenamesUnzipped, err := unzip(archive, tmpInputDir)
+	if err != nil {
+		handleErrorInServiceCall(err, ginContext)
+		return "", false
+	}
+	for _, name := range filenamesUnzipped {
+		if strings.ToLower(filepath.Ext(name)) == ".yaml" {
+			return name, true
+		}
+	}
+	panic(errors.New("no yaml file found in uploaded archive"))
+}
+
+// createResultFiles creates the temporary output folder and result archive of an analysis.
+func (s *server) createResultFiles(ginContext *gin.Context, files *temporaryFiles) (string, string, bool) {
+	tmpOutputDir, err := os.MkdirTemp(s.config.GetTempFolder(), "threagile-output-")
+	if err != nil {
+		handleErrorInServiceCall(err, ginContext)
+		return "", "", false
+	}
+	files.add(func() { _ = os.RemoveAll(tmpOutputDir) })
+
+	tmpResultFile, err := os.CreateTemp(s.config.GetTempFolder(), "threagile-result-*.zip")
+	if err != nil {
+		handleErrorInServiceCall(err, ginContext)
+		return "", "", false
+	}
+	files.add(func() { _ = os.Remove(tmpResultFile.Name()) })
+	return tmpOutputDir, tmpResultFile.Name(), true
+}
+
+// resultFiles are the files in the output folder of an analysis that its result archive holds.
+func (s *server) resultFiles(tmpOutputDir string) []string {
+	return []string{
+		filepath.Join(tmpOutputDir, s.config.GetInputFile()),
+		filepath.Join(tmpOutputDir, s.config.GetDataFlowDiagramFilenamePNG()),
+		filepath.Join(tmpOutputDir, s.config.GetDataAssetDiagramFilenamePNG()),
+		filepath.Join(tmpOutputDir, s.config.GetReportFilename()),
+		filepath.Join(tmpOutputDir, s.config.GetReportHTMLFilename()),
+		filepath.Join(tmpOutputDir, s.config.GetExcelRisksFilename()),
+		filepath.Join(tmpOutputDir, s.config.GetExcelTagsFilename()),
+		filepath.Join(tmpOutputDir, s.config.GetJsonRisksFilename()),
+		filepath.Join(tmpOutputDir, s.config.GetJsonTechnicalAssetsFilename()),
+		filepath.Join(tmpOutputDir, s.config.GetJsonStatsFilename()),
+	}
+}
+
+// zipResult packs the result files of an analysis into its result archive.
+func zipResult(ginContext *gin.Context, tmpResultFile string, resultFiles []string) bool {
+	err := zipFiles(tmpResultFile, resultFiles)
+	if err != nil {
+		handleErrorInServiceCall(err, ginContext)
+		return false
+	}
+	return true
+}
+
+// analysisOutputs are the outputs that an analysis generates.
+type analysisOutputs struct {
+	dataFlowDiagram, dataAssetDiagram, reportPDF, risksExcel, tagsExcel bool
+	risksJSON, technicalAssetsJSON, statsJSON                           bool
+}
+
+var allAnalysisOutputs = analysisOutputs{
+	dataFlowDiagram: true, dataAssetDiagram: true, reportPDF: true, risksExcel: true, tagsExcel: true,
+	risksJSON: true, technicalAssetsJSON: true, statsJSON: true,
 }
 
 // ultimately to avoid any in-process memory and/or data leaks by the used third party libs like PDF
 // generation: exec and quit.
-func (s *server) doItViaRuntimeCall(modelFile string, outputDir string,
-	generateDataFlowDiagram, generateDataAssetDiagram, generateReportPdf, generateRisksExcel, generateTagsExcel, generateRisksJSON, generateTechnicalAssetsJSON, generateStatsJSON bool,
-	dpi int,
-) {
+func (s *server) doItViaRuntimeCall(modelFile string, outputDir string, outputs analysisOutputs, dpi int) {
 	// Remember to also add the same args to the exec based sub-process calls!
 	var cmd *exec.Cmd
 	args := []string{
@@ -197,36 +272,25 @@ func (s *server) doItViaRuntimeCall(modelFile string, outputDir string,
 		"--skip-risk-rules", strings.Join(s.config.GetSkipRiskRules(), ","),
 		"--diagram-dpi", strconv.Itoa(dpi),
 	}
-	if s.config.GetVerbose() {
-		args = append(args, "--verbose")
-	}
-	// the outer level has these options as variables too, yet they go to the analysis as arguments
-	if s.config.GetIgnoreOrphanedRiskTracking() {
-		args = append(args, "--ignore-orphaned-risk-tracking")
-	}
-	if generateDataFlowDiagram {
-		args = append(args, "--generate-data-flow-diagram")
-	}
-	if generateDataAssetDiagram {
-		args = append(args, "--generate-data-asset-diagram")
-	}
-	if generateReportPdf {
-		args = append(args, "--generate-report-pdf")
-	}
-	if generateRisksExcel {
-		args = append(args, "--generate-risks-excel")
-	}
-	if generateTagsExcel {
-		args = append(args, "--generate-tags-excel")
-	}
-	if generateRisksJSON {
-		args = append(args, "--generate-risks-json")
-	}
-	if generateTechnicalAssetsJSON {
-		args = append(args, "--generate-technical-assets-json")
-	}
-	if generateStatsJSON {
-		args = append(args, "--generate-stats-json")
+	for _, option := range []struct {
+		given bool
+		arg   string
+	}{
+		{s.config.GetVerbose(), "--verbose"},
+		// the outer level has these options as variables too, yet they go to the analysis as arguments
+		{s.config.GetIgnoreOrphanedRiskTracking(), "--ignore-orphaned-risk-tracking"},
+		{outputs.dataFlowDiagram, "--generate-data-flow-diagram"},
+		{outputs.dataAssetDiagram, "--generate-data-asset-diagram"},
+		{outputs.reportPDF, "--generate-report-pdf"},
+		{outputs.risksExcel, "--generate-risks-excel"},
+		{outputs.tagsExcel, "--generate-tags-excel"},
+		{outputs.risksJSON, "--generate-risks-json"},
+		{outputs.technicalAssetsJSON, "--generate-technical-assets-json"},
+		{outputs.statsJSON, "--generate-stats-json"},
+	} {
+		if option.given {
+			args = append(args, option.arg)
+		}
 	}
 	self, nameError := os.Executable()
 	if nameError != nil {
