@@ -20,7 +20,17 @@
       "'Exploitation Impact' is 'high'",
       "'Data Breach Probability' is 'probable'",
       "'Severity' is 'medium'"
-    ]
+    ],
+    "plain_title": "Accidental Secret Leak(Git) risk at Git Repository: Git Leak Prevention",
+    "category_title": "Accidental Secret Leak",
+    "stride": "information-disclosure",
+    "function": "operations",
+    "cwe": 200,
+    "action": "Build Pipeline Hardening",
+    "mitigation": "Establish measures preventing accidental check-in or package-in of secrets into sourcecode repositories and artifact registries. This starts by using good .gitignore and .dockerignore files, but does not stop there. See for example tools like \u003ci\u003e\\\"git-secrets\\\"\u003c/i\u003e or \u003ci\u003e\\\"Talisman\\\"\u003c/i\u003e to have check-in preventive measures for secrets. Consider also to regularly scan your repositories for secrets accidentally checked-in using scanning tools like \u003ci\u003e\"gitleaks\"\u003c/i\u003e or \u003ci\u003e\"gitrob\"\u003c/i\u003e.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Git Repository",
+    "most_relevant_technical_asset_raa": 31.49087221095335
   },
   {
     "category": "code-backdooring",
@@ -32,7 +42,17 @@
     "data_breach_probability": "probable",
     "data_breach_technical_assets": [
       "git-repo"
-    ]
+    ],
+    "plain_title": "Code Backdooring risk at Git Repository",
+    "category_title": "Code Backdooring",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 912,
+    "action": "Build Pipeline Hardening",
+    "mitigation": "Reduce the attack surface of backdooring the build pipeline by not directly exposing the build pipeline components on the public internet and also not exposing it in front of unmanaged (out-of-scope) developer clients.Also consider the use of code signing to prevent code modifications.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Git Repository",
+    "most_relevant_technical_asset_raa": 31.49087221095335
   },
   {
     "category": "code-backdooring",
@@ -46,7 +66,17 @@
       "apache-webserver",
       "jenkins-build-server",
       "marketing-cms"
-    ]
+    ],
+    "plain_title": "Code Backdooring risk at Jenkins Build Server",
+    "category_title": "Code Backdooring",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 912,
+    "action": "Build Pipeline Hardening",
+    "mitigation": "Reduce the attack surface of backdooring the build pipeline by not directly exposing the build pipeline components on the public internet and also not exposing it in front of unmanaged (out-of-scope) developer clients.Also consider the use of code signing to prevent code modifications.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Jenkins Build Server",
+    "most_relevant_technical_asset_raa": 60.099849550227866
   },
   {
     "category": "container-baseimage-backdooring",
@@ -58,7 +88,17 @@
     "data_breach_probability": "probable",
     "data_breach_technical_assets": [
       "apache-webserver"
-    ]
+    ],
+    "plain_title": "Container Base Image Backdooring risk at Apache Webserver",
+    "category_title": "Container Base Image Backdooring",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 912,
+    "action": "Container Infrastructure Hardening",
+    "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
+    "most_relevant_technical_asset_title": "Apache Webserver",
+    "most_relevant_technical_asset_raa": 60.6120919375654
   },
   {
     "category": "container-baseimage-backdooring",
@@ -70,7 +110,17 @@
     "data_breach_probability": "probable",
     "data_breach_technical_assets": [
       "marketing-cms"
-    ]
+    ],
+    "plain_title": "Container Base Image Backdooring risk at Marketing CMS",
+    "category_title": "Container Base Image Backdooring",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 912,
+    "action": "Container Infrastructure Hardening",
+    "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
+    "most_relevant_technical_asset_title": "Marketing CMS",
+    "most_relevant_technical_asset_raa": 22.55383688062901
   },
   {
     "category": "dos-risky-access-across-trust-boundary",
@@ -78,7 +128,22 @@
     "title": "\u003cb\u003eDenial-of-Service\u003c/b\u003e risky access of \u003cb\u003eBackoffice ERP System\u003c/b\u003e by \u003cb\u003eApache Webserver\u003c/b\u003e via \u003cb\u003eERP System Traffic\u003c/b\u003e",
     "synthetic_id": "dos-risky-access-across-trust-boundary@erp-system@apache-webserver@apache-webserver\u003eerp-system-traffic-\u003e",
     "most_relevant_technical_asset": "erp-system",
-    "most_relevant_communication_link": "apache-webserver\u003eerp-system-traffic"
+    "most_relevant_communication_link": "apache-webserver\u003eerp-system-traffic",
+    "plain_title": "Denial-of-Service risky access of Backoffice ERP System by Apache Webserver via ERP System Traffic",
+    "category_title": "DoS-risky Access Across Trust-Boundary",
+    "stride": "denial-of-service",
+    "function": "operations",
+    "cwe": 400,
+    "action": "Anti-DoS Measures",
+    "mitigation": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "most_relevant_communication_link_title": "ERP System Traffic",
+    "tracking_justification": "The hardening measures are being implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "dos-risky-access-across-trust-boundary",
@@ -86,7 +151,22 @@
     "title": "\u003cb\u003eDenial-of-Service\u003c/b\u003e risky access of \u003cb\u003eBackoffice ERP System\u003c/b\u003e by \u003cb\u003eBackoffice Client\u003c/b\u003e via \u003cb\u003eERP Internal Access\u003c/b\u003e",
     "synthetic_id": "dos-risky-access-across-trust-boundary@erp-system@backoffice-client@backoffice-client\u003eerp-internal-access-\u003e",
     "most_relevant_technical_asset": "erp-system",
-    "most_relevant_communication_link": "backoffice-client\u003eerp-internal-access"
+    "most_relevant_communication_link": "backoffice-client\u003eerp-internal-access",
+    "plain_title": "Denial-of-Service risky access of Backoffice ERP System by Backoffice Client via ERP Internal Access",
+    "category_title": "DoS-risky Access Across Trust-Boundary",
+    "stride": "denial-of-service",
+    "function": "operations",
+    "cwe": 400,
+    "action": "Anti-DoS Measures",
+    "mitigation": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "most_relevant_communication_link_title": "ERP Internal Access",
+    "tracking_justification": "The hardening measures are being implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "dos-risky-access-across-trust-boundary",
@@ -94,7 +174,22 @@
     "title": "\u003cb\u003eDenial-of-Service\u003c/b\u003e risky access of \u003cb\u003eMarketing CMS\u003c/b\u003e by \u003cb\u003eBackoffice Client\u003c/b\u003e via \u003cb\u003eMarketing CMS Editing\u003c/b\u003e",
     "synthetic_id": "dos-risky-access-across-trust-boundary@marketing-cms@backoffice-client@backoffice-client\u003emarketing-cms-editing-\u003e",
     "most_relevant_technical_asset": "marketing-cms",
-    "most_relevant_communication_link": "backoffice-client\u003emarketing-cms-editing"
+    "most_relevant_communication_link": "backoffice-client\u003emarketing-cms-editing",
+    "plain_title": "Denial-of-Service risky access of Marketing CMS by Backoffice Client via Marketing CMS Editing",
+    "category_title": "DoS-risky Access Across Trust-Boundary",
+    "stride": "denial-of-service",
+    "function": "operations",
+    "cwe": 400,
+    "action": "Anti-DoS Measures",
+    "mitigation": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Marketing CMS",
+    "most_relevant_technical_asset_raa": 22.55383688062901,
+    "most_relevant_communication_link_title": "Marketing CMS Editing",
+    "tracking_justification": "The hardening measures are being implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "ldap-injection",
@@ -109,7 +204,22 @@
     "data_breach_probability": "probable",
     "data_breach_technical_assets": [
       "ldap-auth-server"
-    ]
+    ],
+    "plain_title": "LDAP-Injection risk at Identity Provider against LDAP server LDAP Auth Server via LDAP Credential Check Traffic",
+    "category_title": "LDAP-Injection",
+    "stride": "tampering",
+    "function": "development",
+    "cwe": 90,
+    "action": "LDAP-Injection Prevention",
+    "mitigation": "Try to use libraries that properly encode LDAP meta characters in searches and queries to access the LDAP server in order to stay safe from LDAP-Injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Identity Provider",
+    "most_relevant_technical_asset_raa": 40.999362954246536,
+    "most_relevant_communication_link_title": "LDAP Credential Check Traffic",
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-5678",
+    "tracking_date": "2020-01-05",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "ldap-injection",
@@ -124,7 +234,22 @@
     "data_breach_probability": "probable",
     "data_breach_technical_assets": [
       "ldap-auth-server"
-    ]
+    ],
+    "plain_title": "LDAP-Injection risk at Marketing CMS against LDAP server LDAP Auth Server via Auth Traffic",
+    "category_title": "LDAP-Injection",
+    "stride": "tampering",
+    "function": "development",
+    "cwe": 90,
+    "action": "LDAP-Injection Prevention",
+    "mitigation": "Try to use libraries that properly encode LDAP meta characters in searches and queries to access the LDAP server in order to stay safe from LDAP-Injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Marketing CMS",
+    "most_relevant_technical_asset_raa": 22.55383688062901,
+    "most_relevant_communication_link_title": "Auth Traffic",
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-5678",
+    "tracking_date": "2020-01-05",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-authentication",
@@ -138,7 +263,18 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "marketing-cms"
-    ]
+    ],
+    "plain_title": "Missing Authentication covering communication link CMS Content Traffic from Load Balancer to Marketing CMS",
+    "category_title": "Missing Authentication",
+    "stride": "elevation-of-privilege",
+    "function": "architecture",
+    "cwe": 306,
+    "action": "Authentication of Incoming Requests",
+    "mitigation": "Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of two-factor authentication for human users.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Marketing CMS",
+    "most_relevant_technical_asset_raa": 22.55383688062901,
+    "most_relevant_communication_link_title": "CMS Content Traffic"
   },
   {
     "category": "missing-authentication",
@@ -152,7 +288,18 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "contract-file-server"
-    ]
+    ],
+    "plain_title": "Missing Authentication covering communication link NFS Filesystem Access from Backoffice ERP System to Contract File Server",
+    "category_title": "Missing Authentication",
+    "stride": "elevation-of-privilege",
+    "function": "architecture",
+    "cwe": 306,
+    "action": "Authentication of Incoming Requests",
+    "mitigation": "Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of two-factor authentication for human users.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Contract File Server",
+    "most_relevant_technical_asset_raa": 33.2657200811359,
+    "most_relevant_communication_link_title": "NFS Filesystem Access"
   },
   {
     "category": "missing-authentication-second-factor",
@@ -166,7 +313,22 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "marketing-cms"
-    ]
+    ],
+    "plain_title": "Missing Two-Factor Authentication covering communication link CMS Content Traffic from Customer Web Client forwarded via Load Balancer to Marketing CMS",
+    "category_title": "Missing Two-Factor Authentication (2FA)",
+    "stride": "elevation-of-privilege",
+    "function": "business-side",
+    "cwe": 308,
+    "action": "Authentication with Second Factor (2FA)",
+    "mitigation": "Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Marketing CMS",
+    "most_relevant_technical_asset_raa": 22.55383688062901,
+    "most_relevant_communication_link_title": "CMS Content Traffic",
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-authentication-second-factor",
@@ -180,7 +342,22 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "sql-database"
-    ]
+    ],
+    "plain_title": "Missing Two-Factor Authentication covering communication link DB Update Access from Backend Admin Client to Customer Contract Database",
+    "category_title": "Missing Two-Factor Authentication (2FA)",
+    "stride": "elevation-of-privilege",
+    "function": "business-side",
+    "cwe": 308,
+    "action": "Authentication with Second Factor (2FA)",
+    "mitigation": "Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Customer Contract Database",
+    "most_relevant_technical_asset_raa": 100,
+    "most_relevant_communication_link_title": "DB Update Access",
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-authentication-second-factor",
@@ -194,7 +371,22 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "erp-system"
-    ]
+    ],
+    "plain_title": "Missing Two-Factor Authentication covering communication link ERP Internal Access from Backoffice Client to Backoffice ERP System",
+    "category_title": "Missing Two-Factor Authentication (2FA)",
+    "stride": "elevation-of-privilege",
+    "function": "business-side",
+    "cwe": 308,
+    "action": "Authentication with Second Factor (2FA)",
+    "mitigation": "Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "most_relevant_communication_link_title": "ERP Internal Access",
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-authentication-second-factor",
@@ -208,7 +400,22 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "erp-system"
-    ]
+    ],
+    "plain_title": "Missing Two-Factor Authentication covering communication link ERP Web Access from Backend Admin Client to Backoffice ERP System",
+    "category_title": "Missing Two-Factor Authentication (2FA)",
+    "stride": "elevation-of-privilege",
+    "function": "business-side",
+    "cwe": 308,
+    "action": "Authentication with Second Factor (2FA)",
+    "mitigation": "Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "most_relevant_communication_link_title": "ERP Web Access",
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-authentication-second-factor",
@@ -222,7 +429,22 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "git-repo"
-    ]
+    ],
+    "plain_title": "Missing Two-Factor Authentication covering communication link Git-Repo Code Write Access from External Development Client to Git Repository",
+    "category_title": "Missing Two-Factor Authentication (2FA)",
+    "stride": "elevation-of-privilege",
+    "function": "business-side",
+    "cwe": 308,
+    "action": "Authentication with Second Factor (2FA)",
+    "mitigation": "Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Git Repository",
+    "most_relevant_technical_asset_raa": 31.49087221095335,
+    "most_relevant_communication_link_title": "Git-Repo Code Write Access",
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-authentication-second-factor",
@@ -236,7 +458,22 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "git-repo"
-    ]
+    ],
+    "plain_title": "Missing Two-Factor Authentication covering communication link Git-Repo Web-UI Access from External Development Client to Git Repository",
+    "category_title": "Missing Two-Factor Authentication (2FA)",
+    "stride": "elevation-of-privilege",
+    "function": "business-side",
+    "cwe": 308,
+    "action": "Authentication with Second Factor (2FA)",
+    "mitigation": "Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Git Repository",
+    "most_relevant_technical_asset_raa": 31.49087221095335,
+    "most_relevant_communication_link_title": "Git-Repo Web-UI Access",
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-authentication-second-factor",
@@ -250,7 +487,22 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "jenkins-build-server"
-    ]
+    ],
+    "plain_title": "Missing Two-Factor Authentication covering communication link Jenkins Web-UI Access from External Development Client to Jenkins Build Server",
+    "category_title": "Missing Two-Factor Authentication (2FA)",
+    "stride": "elevation-of-privilege",
+    "function": "business-side",
+    "cwe": 308,
+    "action": "Authentication with Second Factor (2FA)",
+    "mitigation": "Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Jenkins Build Server",
+    "most_relevant_technical_asset_raa": 60.099849550227866,
+    "most_relevant_communication_link_title": "Jenkins Web-UI Access",
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-authentication-second-factor",
@@ -264,7 +516,22 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "ldap-auth-server"
-    ]
+    ],
+    "plain_title": "Missing Two-Factor Authentication covering communication link User Management Access from Backend Admin Client to LDAP Auth Server",
+    "category_title": "Missing Two-Factor Authentication (2FA)",
+    "stride": "elevation-of-privilege",
+    "function": "business-side",
+    "cwe": 308,
+    "action": "Authentication with Second Factor (2FA)",
+    "mitigation": "Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "LDAP Auth Server",
+    "most_relevant_technical_asset_raa": 51.34381338742393,
+    "most_relevant_communication_link_title": "User Management Access",
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-authentication-second-factor",
@@ -278,7 +545,22 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "apache-webserver"
-    ]
+    ],
+    "plain_title": "Missing Two-Factor Authentication covering communication link Web Application Traffic from Customer Web Client forwarded via Load Balancer to Apache Webserver",
+    "category_title": "Missing Two-Factor Authentication (2FA)",
+    "stride": "elevation-of-privilege",
+    "function": "business-side",
+    "cwe": 308,
+    "action": "Authentication with Second Factor (2FA)",
+    "mitigation": "Apply an authentication method to the technical asset protecting highly sensitive data via two-factor authentication for human users.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Apache Webserver",
+    "most_relevant_technical_asset_raa": 60.6120919375654,
+    "most_relevant_communication_link_title": "Web Application Traffic",
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-cloud-hardening",
@@ -296,7 +578,15 @@
       "sql-database",
       "identity-provider",
       "ldap-auth-server"
-    ]
+    ],
+    "plain_title": "Missing Cloud Hardening (AWS) risk at Application Network: CIS Benchmark for AWS",
+    "category_title": "Missing Cloud Hardening",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 1008,
+    "action": "Cloud Hardening",
+    "mitigation": "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Amazon Web Services\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", or \"Prowler AWS CIS Benchmark Tool\"\u003c/i\u003e). \u003cbr\u003eFor EC2 and other servers running Amazon Linux, follow the \u003ci\u003eCIS Benchmark for Amazon Linux\u003c/i\u003e and switch to IMDSv2. \u003cbr\u003eFor S3 buckets follow the \u003ci\u003eSecurity Best Practices for Amazon S3\u003c/i\u003e at \u003ca href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\"\u003ehttps://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\u003c/a\u003e to avoid accidental leakage. \u003cbr\u003eAlso take a look at some of these tools: \u003ca href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\"\u003ehttps://github.com/toniblyx/my-arsenal-of-aws-security-tools\u003c/a\u003e \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eMicrosoft Azure\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Microsoft Azure\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e).\u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eGoogle Cloud Platform\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Google Cloud Computing Platform\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eOracle Cloud Platform\u003c/b\u003e: Follow the hardening best practices (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\"\u003c/i\u003e).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
   },
   {
     "category": "missing-cloud-hardening",
@@ -307,7 +597,15 @@
     "data_breach_probability": "probable",
     "data_breach_technical_assets": [
       "apache-webserver"
-    ]
+    ],
+    "plain_title": "Missing Cloud Hardening (EC2) risk at Apache Webserver: CIS Benchmark for Amazon Linux",
+    "category_title": "Missing Cloud Hardening",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 1008,
+    "action": "Cloud Hardening",
+    "mitigation": "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Amazon Web Services\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", or \"Prowler AWS CIS Benchmark Tool\"\u003c/i\u003e). \u003cbr\u003eFor EC2 and other servers running Amazon Linux, follow the \u003ci\u003eCIS Benchmark for Amazon Linux\u003c/i\u003e and switch to IMDSv2. \u003cbr\u003eFor S3 buckets follow the \u003ci\u003eSecurity Best Practices for Amazon S3\u003c/i\u003e at \u003ca href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\"\u003ehttps://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\u003c/a\u003e to avoid accidental leakage. \u003cbr\u003eAlso take a look at some of these tools: \u003ca href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\"\u003ehttps://github.com/toniblyx/my-arsenal-of-aws-security-tools\u003c/a\u003e \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eMicrosoft Azure\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Microsoft Azure\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e).\u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eGoogle Cloud Platform\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Google Cloud Computing Platform\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eOracle Cloud Platform\u003c/b\u003e: Follow the hardening best practices (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\"\u003c/i\u003e).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
   },
   {
     "category": "missing-cloud-hardening",
@@ -320,7 +618,15 @@
       "erp-system",
       "contract-file-server",
       "sql-database"
-    ]
+    ],
+    "plain_title": "Missing Cloud Hardening risk at ERP DMZ",
+    "category_title": "Missing Cloud Hardening",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 1008,
+    "action": "Cloud Hardening",
+    "mitigation": "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Amazon Web Services\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", or \"Prowler AWS CIS Benchmark Tool\"\u003c/i\u003e). \u003cbr\u003eFor EC2 and other servers running Amazon Linux, follow the \u003ci\u003eCIS Benchmark for Amazon Linux\u003c/i\u003e and switch to IMDSv2. \u003cbr\u003eFor S3 buckets follow the \u003ci\u003eSecurity Best Practices for Amazon S3\u003c/i\u003e at \u003ca href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\"\u003ehttps://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\u003c/a\u003e to avoid accidental leakage. \u003cbr\u003eAlso take a look at some of these tools: \u003ca href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\"\u003ehttps://github.com/toniblyx/my-arsenal-of-aws-security-tools\u003c/a\u003e \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eMicrosoft Azure\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Microsoft Azure\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e).\u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eGoogle Cloud Platform\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Google Cloud Computing Platform\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eOracle Cloud Platform\u003c/b\u003e: Follow the hardening best practices (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\"\u003c/i\u003e).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
   },
   {
     "category": "missing-cloud-hardening",
@@ -332,7 +638,15 @@
     "data_breach_technical_assets": [
       "apache-webserver",
       "marketing-cms"
-    ]
+    ],
+    "plain_title": "Missing Cloud Hardening risk at Web DMZ",
+    "category_title": "Missing Cloud Hardening",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 1008,
+    "action": "Cloud Hardening",
+    "mitigation": "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Amazon Web Services\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", or \"Prowler AWS CIS Benchmark Tool\"\u003c/i\u003e). \u003cbr\u003eFor EC2 and other servers running Amazon Linux, follow the \u003ci\u003eCIS Benchmark for Amazon Linux\u003c/i\u003e and switch to IMDSv2. \u003cbr\u003eFor S3 buckets follow the \u003ci\u003eSecurity Best Practices for Amazon S3\u003c/i\u003e at \u003ca href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\"\u003ehttps://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\u003c/a\u003e to avoid accidental leakage. \u003cbr\u003eAlso take a look at some of these tools: \u003ca href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\"\u003ehttps://github.com/toniblyx/my-arsenal-of-aws-security-tools\u003c/a\u003e \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eMicrosoft Azure\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Microsoft Azure\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e).\u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eGoogle Cloud Platform\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Google Cloud Computing Platform\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eOracle Cloud Platform\u003c/b\u003e: Follow the hardening best practices (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\"\u003c/i\u003e).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
   },
   {
     "category": "missing-cloud-hardening",
@@ -347,7 +661,15 @@
       "erp-system",
       "contract-file-server",
       "sql-database"
-    ]
+    ],
+    "plain_title": "Missing Cloud Hardening risk at WebApp and Backoffice Virtualization",
+    "category_title": "Missing Cloud Hardening",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 1008,
+    "action": "Cloud Hardening",
+    "mitigation": "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Amazon Web Services\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", or \"Prowler AWS CIS Benchmark Tool\"\u003c/i\u003e). \u003cbr\u003eFor EC2 and other servers running Amazon Linux, follow the \u003ci\u003eCIS Benchmark for Amazon Linux\u003c/i\u003e and switch to IMDSv2. \u003cbr\u003eFor S3 buckets follow the \u003ci\u003eSecurity Best Practices for Amazon S3\u003c/i\u003e at \u003ca href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\"\u003ehttps://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\u003c/a\u003e to avoid accidental leakage. \u003cbr\u003eAlso take a look at some of these tools: \u003ca href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\"\u003ehttps://github.com/toniblyx/my-arsenal-of-aws-security-tools\u003c/a\u003e \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eMicrosoft Azure\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Microsoft Azure\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e).\u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eGoogle Cloud Platform\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Google Cloud Computing Platform\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eOracle Cloud Platform\u003c/b\u003e: Follow the hardening best practices (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\"\u003c/i\u003e).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
   },
   {
     "category": "missing-cloud-hardening",
@@ -358,7 +680,15 @@
     "data_breach_probability": "probable",
     "data_breach_technical_assets": [
       "contract-file-server"
-    ]
+    ],
+    "plain_title": "Missing Cloud Hardening (S3) risk at Contract File Server: Security Best Practices for AWS S3",
+    "category_title": "Missing Cloud Hardening",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 1008,
+    "action": "Cloud Hardening",
+    "mitigation": "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Amazon Web Services\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", or \"Prowler AWS CIS Benchmark Tool\"\u003c/i\u003e). \u003cbr\u003eFor EC2 and other servers running Amazon Linux, follow the \u003ci\u003eCIS Benchmark for Amazon Linux\u003c/i\u003e and switch to IMDSv2. \u003cbr\u003eFor S3 buckets follow the \u003ci\u003eSecurity Best Practices for Amazon S3\u003c/i\u003e at \u003ca href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\"\u003ehttps://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\u003c/a\u003e to avoid accidental leakage. \u003cbr\u003eAlso take a look at some of these tools: \u003ca href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\"\u003ehttps://github.com/toniblyx/my-arsenal-of-aws-security-tools\u003c/a\u003e \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eMicrosoft Azure\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Microsoft Azure\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e).\u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eGoogle Cloud Platform\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Google Cloud Computing Platform\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eOracle Cloud Platform\u003c/b\u003e: Follow the hardening best practices (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\"\u003c/i\u003e).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
   },
   {
     "category": "missing-file-validation",
@@ -371,7 +701,17 @@
     "data_breach_probability": "probable",
     "data_breach_technical_assets": [
       "apache-webserver"
-    ]
+    ],
+    "plain_title": "Missing File Validation risk at Apache Webserver",
+    "category_title": "Missing File Validation",
+    "stride": "spoofing",
+    "function": "development",
+    "cwe": 434,
+    "action": "File Validation",
+    "mitigation": "Filter by file extension and discard (if feasible) the name provided. Whitelist the accepted file types and determine the mime-type on the server-side (for example via \"Apache Tika\" or similar checks). If the file is retrievable by end users and/or backoffice employees, consider performing scans for popular malware (if the files can be retrieved much later than they were uploaded, also apply a fresh malware scan during retrieval to scan with newer signatures of popular malware). Also enforce limits on maximum file size to avoid denial-of-service like scenarios.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Apache Webserver",
+    "most_relevant_technical_asset_raa": 60.6120919375654
   },
   {
     "category": "missing-hardening",
@@ -384,7 +724,21 @@
     "most_relevant_technical_asset": "apache-webserver",
     "data_breach_technical_assets": [
       "apache-webserver"
-    ]
+    ],
+    "plain_title": "Missing Hardening risk at Apache Webserver",
+    "category_title": "Missing Hardening",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 16,
+    "action": "System Hardening",
+    "mitigation": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Apache Webserver",
+    "most_relevant_technical_asset_raa": 60.6120919375654,
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-hardening",
@@ -397,7 +751,21 @@
     "most_relevant_technical_asset": "erp-system",
     "data_breach_technical_assets": [
       "erp-system"
-    ]
+    ],
+    "plain_title": "Missing Hardening risk at Backoffice ERP System",
+    "category_title": "Missing Hardening",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 16,
+    "action": "System Hardening",
+    "mitigation": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-hardening",
@@ -410,7 +778,21 @@
     "most_relevant_technical_asset": "sql-database",
     "data_breach_technical_assets": [
       "sql-database"
-    ]
+    ],
+    "plain_title": "Missing Hardening risk at Customer Contract Database",
+    "category_title": "Missing Hardening",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 16,
+    "action": "System Hardening",
+    "mitigation": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Customer Contract Database",
+    "most_relevant_technical_asset_raa": 100,
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-hardening",
@@ -423,7 +805,21 @@
     "most_relevant_technical_asset": "identity-provider",
     "data_breach_technical_assets": [
       "identity-provider"
-    ]
+    ],
+    "plain_title": "Missing Hardening risk at Identity Provider",
+    "category_title": "Missing Hardening",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 16,
+    "action": "System Hardening",
+    "mitigation": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Identity Provider",
+    "most_relevant_technical_asset_raa": 40.999362954246536,
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-hardening",
@@ -436,7 +832,21 @@
     "most_relevant_technical_asset": "jenkins-build-server",
     "data_breach_technical_assets": [
       "jenkins-build-server"
-    ]
+    ],
+    "plain_title": "Missing Hardening risk at Jenkins Build Server",
+    "category_title": "Missing Hardening",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 16,
+    "action": "System Hardening",
+    "mitigation": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Jenkins Build Server",
+    "most_relevant_technical_asset_raa": 60.099849550227866,
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-hardening",
@@ -449,7 +859,21 @@
     "most_relevant_technical_asset": "ldap-auth-server",
     "data_breach_technical_assets": [
       "ldap-auth-server"
-    ]
+    ],
+    "plain_title": "Missing Hardening risk at LDAP Auth Server",
+    "category_title": "Missing Hardening",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 16,
+    "action": "System Hardening",
+    "mitigation": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "LDAP Auth Server",
+    "most_relevant_technical_asset_raa": 51.34381338742393,
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "missing-identity-propagation",
@@ -461,7 +885,18 @@
     "most_relevant_communication_link": "apache-webserver\u003eerp-system-traffic",
     "data_breach_technical_assets": [
       "erp-system"
-    ]
+    ],
+    "plain_title": "Missing End User Identity Propagation over communication link ERP System Traffic from Apache Webserver to Backoffice ERP System",
+    "category_title": "Missing Identity Propagation",
+    "stride": "elevation-of-privilege",
+    "function": "architecture",
+    "cwe": 284,
+    "action": "Identity Propagation and Resource-based Authorization",
+    "mitigation": "When processing requests for end users if possible authorize in the backend against the propagated identity of the end user. This can be achieved in passing JWTs or similar tokens and checking them in the backend services. For DevOps usages apply at least a technical-user authorization.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "most_relevant_communication_link_title": "ERP System Traffic"
   },
   {
     "category": "missing-vault",
@@ -469,7 +904,17 @@
     "exploitation_impact": "medium",
     "title": "\u003cb\u003eMissing Vault (Secret Storage)\u003c/b\u003e in the threat model (referencing asset \u003cb\u003eBackoffice ERP System\u003c/b\u003e as an example)",
     "synthetic_id": "missing-vault@erp-system",
-    "most_relevant_technical_asset": "erp-system"
+    "most_relevant_technical_asset": "erp-system",
+    "plain_title": "Missing Vault (Secret Storage) in the threat model (referencing asset Backoffice ERP System as an example)",
+    "category_title": "Missing Vault (Secret Storage)",
+    "stride": "information-disclosure",
+    "function": "architecture",
+    "cwe": 522,
+    "action": "Vault (Secret Storage)",
+    "mitigation": "Consider using a Vault (Secret Storage) to securely store and access config secrets (like credentials, private keys, client certificates, etc.).",
+    "check": "GetAttribute a Vault (Secret Storage) in place?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216
   },
   {
     "category": "mixed-targets-on-shared-runtime",
@@ -484,7 +929,15 @@
       "erp-system",
       "contract-file-server",
       "sql-database"
-    ]
+    ],
+    "plain_title": "Mixed Targets on Shared Runtime named WebApp and Backoffice Virtualization might enable attackers moving from one less valuable target to a more valuable one",
+    "category_title": "Mixed Targets on Shared Runtime",
+    "stride": "elevation-of-privilege",
+    "function": "operations",
+    "cwe": 1008,
+    "action": "Runtime Separation",
+    "mitigation": "Use separate runtime environments for running different target components or apply similar separation styles to prevent load- or breach-related problems originating from one more attacker-facing asset impacts also the other more critical rated backend/datastore assets.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
   },
   {
     "category": "path-traversal",
@@ -498,7 +951,18 @@
     "data_breach_probability": "probable",
     "data_breach_technical_assets": [
       "contract-file-server"
-    ]
+    ],
+    "plain_title": "Path-Traversal risk at Backoffice ERP System against filesystem Contract File Server via NFS Filesystem Access",
+    "category_title": "Path-Traversal",
+    "stride": "information-disclosure",
+    "function": "development",
+    "cwe": 22,
+    "action": "Path-Traversal Prevention",
+    "mitigation": "Before accessing the file cross-check that it resides in the expected folder and is of the expected type and filename/suffix. Try to use a mapping if possible instead of directly accessing by a filename which is (partly or fully) provided by the caller. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "most_relevant_communication_link_title": "NFS Filesystem Access"
   },
   {
     "category": "push-instead-of-pull-deployment",
@@ -510,7 +974,18 @@
     "most_relevant_communication_link": "jenkins-build-server\u003eapplication-deployment",
     "data_breach_technical_assets": [
       "apache-webserver"
-    ]
+    ],
+    "plain_title": "Push instead of Pull Deployment at Apache Webserver via build pipeline asset Jenkins Build Server",
+    "category_title": "Push instead of Pull Deployment",
+    "stride": "tampering",
+    "function": "architecture",
+    "cwe": 1127,
+    "action": "Build Pipeline Hardening",
+    "mitigation": "Try to prefer pull-based deployments (like GitOps scenarios offer) over push-based deployments to reduce the attack surface of the production system.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Apache Webserver",
+    "most_relevant_technical_asset_raa": 60.6120919375654,
+    "most_relevant_communication_link_title": "Application Deployment"
   },
   {
     "category": "push-instead-of-pull-deployment",
@@ -522,7 +997,18 @@
     "most_relevant_communication_link": "jenkins-build-server\u003ecms-updates",
     "data_breach_technical_assets": [
       "marketing-cms"
-    ]
+    ],
+    "plain_title": "Push instead of Pull Deployment at Marketing CMS via build pipeline asset Jenkins Build Server",
+    "category_title": "Push instead of Pull Deployment",
+    "stride": "tampering",
+    "function": "architecture",
+    "cwe": 1127,
+    "action": "Build Pipeline Hardening",
+    "mitigation": "Try to prefer pull-based deployments (like GitOps scenarios offer) over push-based deployments to reduce the attack surface of the production system.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Marketing CMS",
+    "most_relevant_technical_asset_raa": 22.55383688062901,
+    "most_relevant_communication_link_title": "CMS Updates"
   },
   {
     "category": "server-side-request-forgery",
@@ -537,7 +1023,18 @@
     "data_breach_technical_assets": [
       "apache-webserver",
       "marketing-cms"
-    ]
+    ],
+    "plain_title": "Server-Side Request Forgery (SSRF) risk at Apache Webserver server-side web-requesting the target Backoffice ERP System via ERP System Traffic",
+    "category_title": "Server-Side Request Forgery (SSRF)",
+    "stride": "information-disclosure",
+    "function": "development",
+    "cwe": 918,
+    "action": "SSRF Prevention",
+    "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Apache Webserver",
+    "most_relevant_technical_asset_raa": 60.6120919375654,
+    "most_relevant_communication_link_title": "ERP System Traffic"
   },
   {
     "category": "server-side-request-forgery",
@@ -552,7 +1049,18 @@
     "data_breach_technical_assets": [
       "apache-webserver",
       "marketing-cms"
-    ]
+    ],
+    "plain_title": "Server-Side Request Forgery (SSRF) risk at Apache Webserver server-side web-requesting the target Identity Provider via Auth Credential Check Traffic",
+    "category_title": "Server-Side Request Forgery (SSRF)",
+    "stride": "information-disclosure",
+    "function": "development",
+    "cwe": 918,
+    "action": "SSRF Prevention",
+    "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Apache Webserver",
+    "most_relevant_technical_asset_raa": 60.6120919375654,
+    "most_relevant_communication_link_title": "Auth Credential Check Traffic"
   },
   {
     "category": "something-strange",
@@ -565,7 +1073,17 @@
     "data_breach_probability": "probable",
     "data_breach_technical_assets": [
       "sql-database"
-    ]
+    ],
+    "plain_title": "Example Individual Risk at Database",
+    "category_title": "Some Individual Risk Example",
+    "stride": "repudiation",
+    "function": "business-side",
+    "cwe": 693,
+    "action": "Some text describing the action...",
+    "mitigation": "Some text describing the mitigation...",
+    "check": "Check if XYZ...",
+    "most_relevant_technical_asset_title": "Customer Contract Database",
+    "most_relevant_technical_asset_raa": 100
   },
   {
     "category": "something-strange",
@@ -574,7 +1092,17 @@
     "exploitation_impact": "very-high",
     "title": "\u003cb\u003eExample Individual Risk\u003c/b\u003e at \u003cb\u003eContract Filesystem\u003c/b\u003e",
     "synthetic_id": "something-strange@contract-file-server",
-    "most_relevant_technical_asset": "contract-file-server"
+    "most_relevant_technical_asset": "contract-file-server",
+    "plain_title": "Example Individual Risk at Contract Filesystem",
+    "category_title": "Some Individual Risk Example",
+    "stride": "repudiation",
+    "function": "business-side",
+    "cwe": 693,
+    "action": "Some text describing the action...",
+    "mitigation": "Some text describing the mitigation...",
+    "check": "Check if XYZ...",
+    "most_relevant_technical_asset_title": "Contract File Server",
+    "most_relevant_technical_asset_raa": 33.2657200811359
   },
   {
     "category": "sql-nosql-injection",
@@ -588,7 +1116,18 @@
     "data_breach_probability": "probable",
     "data_breach_technical_assets": [
       "sql-database"
-    ]
+    ],
+    "plain_title": "SQL/NoSQL-Injection risk at Backoffice ERP System against database Customer Contract Database via Database Traffic",
+    "category_title": "SQL/NoSQL-Injection",
+    "stride": "tampering",
+    "function": "development",
+    "cwe": 89,
+    "action": "SQL/NoSQL-Injection Prevention",
+    "mitigation": "Try to use parameter binding to be safe from injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "most_relevant_communication_link_title": "Database Traffic"
   },
   {
     "category": "unchecked-deployment",
@@ -602,7 +1141,17 @@
       "external-dev-client",
       "git-repo",
       "jenkins-build-server"
-    ]
+    ],
+    "plain_title": "Unchecked Deployment risk at External Development Client",
+    "category_title": "Unchecked Deployment",
+    "stride": "tampering",
+    "function": "architecture",
+    "cwe": 1127,
+    "action": "Build Pipeline Hardening",
+    "mitigation": "Apply DevSecOps best-practices and use scanning tools to identify vulnerabilities in source- or byte-code,dependencies, container layers, and optionally also via dynamic scans against running test systems.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "External Development Client",
+    "most_relevant_technical_asset_raa": 1
   },
   {
     "category": "unchecked-deployment",
@@ -616,7 +1165,17 @@
       "apache-webserver",
       "jenkins-build-server",
       "marketing-cms"
-    ]
+    ],
+    "plain_title": "Unchecked Deployment risk at Jenkins Build Server",
+    "category_title": "Unchecked Deployment",
+    "stride": "tampering",
+    "function": "architecture",
+    "cwe": 1127,
+    "action": "Build Pipeline Hardening",
+    "mitigation": "Apply DevSecOps best-practices and use scanning tools to identify vulnerabilities in source- or byte-code,dependencies, container layers, and optionally also via dynamic scans against running test systems.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Jenkins Build Server",
+    "most_relevant_technical_asset_raa": 60.099849550227866
   },
   {
     "category": "unchecked-deployment",
@@ -626,7 +1185,17 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "git-repo"
-    ]
+    ],
+    "plain_title": "Unchecked Deployment risk at Git Repository",
+    "category_title": "Unchecked Deployment",
+    "stride": "tampering",
+    "function": "architecture",
+    "cwe": 1127,
+    "action": "Build Pipeline Hardening",
+    "mitigation": "Apply DevSecOps best-practices and use scanning tools to identify vulnerabilities in source- or byte-code,dependencies, container layers, and optionally also via dynamic scans against running test systems.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Git Repository",
+    "most_relevant_technical_asset_raa": 31.49087221095335
   },
   {
     "category": "unencrypted-asset",
@@ -638,7 +1207,21 @@
     "most_relevant_technical_asset": "apache-webserver",
     "data_breach_technical_assets": [
       "apache-webserver"
-    ]
+    ],
+    "plain_title": "Unencrypted Technical Asset named Apache Webserver",
+    "category_title": "Unencrypted Technical Assets",
+    "stride": "information-disclosure",
+    "function": "operations",
+    "cwe": 311,
+    "action": "Encryption of Technical Asset",
+    "mitigation": "Apply encryption to the technical asset.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Apache Webserver",
+    "most_relevant_technical_asset_raa": 60.6120919375654,
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "unencrypted-asset",
@@ -650,7 +1233,21 @@
     "most_relevant_technical_asset": "erp-system",
     "data_breach_technical_assets": [
       "erp-system"
-    ]
+    ],
+    "plain_title": "Unencrypted Technical Asset named Backoffice ERP System missing end user individual encryption with data-with-end-user-individual-key",
+    "category_title": "Unencrypted Technical Assets",
+    "stride": "information-disclosure",
+    "function": "operations",
+    "cwe": 311,
+    "action": "Encryption of Technical Asset",
+    "mitigation": "Apply encryption to the technical asset.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "unencrypted-asset",
@@ -662,7 +1259,21 @@
     "most_relevant_technical_asset": "git-repo",
     "data_breach_technical_assets": [
       "git-repo"
-    ]
+    ],
+    "plain_title": "Unencrypted Technical Asset named Git Repository",
+    "category_title": "Unencrypted Technical Assets",
+    "stride": "information-disclosure",
+    "function": "operations",
+    "cwe": 311,
+    "action": "Encryption of Technical Asset",
+    "mitigation": "Apply encryption to the technical asset.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Git Repository",
+    "most_relevant_technical_asset_raa": 31.49087221095335,
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "unencrypted-asset",
@@ -674,7 +1285,21 @@
     "most_relevant_technical_asset": "jenkins-build-server",
     "data_breach_technical_assets": [
       "jenkins-build-server"
-    ]
+    ],
+    "plain_title": "Unencrypted Technical Asset named Jenkins Build Server",
+    "category_title": "Unencrypted Technical Assets",
+    "stride": "information-disclosure",
+    "function": "operations",
+    "cwe": 311,
+    "action": "Encryption of Technical Asset",
+    "mitigation": "Apply encryption to the technical asset.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Jenkins Build Server",
+    "most_relevant_technical_asset_raa": 60.099849550227866,
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "unencrypted-asset",
@@ -686,7 +1311,21 @@
     "most_relevant_technical_asset": "marketing-cms",
     "data_breach_technical_assets": [
       "marketing-cms"
-    ]
+    ],
+    "plain_title": "Unencrypted Technical Asset named Marketing CMS",
+    "category_title": "Unencrypted Technical Assets",
+    "stride": "information-disclosure",
+    "function": "operations",
+    "cwe": 311,
+    "action": "Encryption of Technical Asset",
+    "mitigation": "Apply encryption to the technical asset.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Marketing CMS",
+    "most_relevant_technical_asset_raa": 22.55383688062901,
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "unencrypted-asset",
@@ -698,7 +1337,21 @@
     "most_relevant_technical_asset": "contract-file-server",
     "data_breach_technical_assets": [
       "contract-file-server"
-    ]
+    ],
+    "plain_title": "Unencrypted Technical Asset named Contract File Server",
+    "category_title": "Unencrypted Technical Assets",
+    "stride": "information-disclosure",
+    "function": "operations",
+    "cwe": 311,
+    "action": "Encryption of Technical Asset",
+    "mitigation": "Apply encryption to the technical asset.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Contract File Server",
+    "most_relevant_technical_asset_raa": 33.2657200811359,
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "unencrypted-asset",
@@ -710,7 +1363,21 @@
     "most_relevant_technical_asset": "sql-database",
     "data_breach_technical_assets": [
       "sql-database"
-    ]
+    ],
+    "plain_title": "Unencrypted Technical Asset named Customer Contract Database missing end user individual encryption with data-with-end-user-individual-key",
+    "category_title": "Unencrypted Technical Assets",
+    "stride": "information-disclosure",
+    "function": "operations",
+    "cwe": 311,
+    "action": "Encryption of Technical Asset",
+    "mitigation": "Apply encryption to the technical asset.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Customer Contract Database",
+    "most_relevant_technical_asset_raa": 100,
+    "tracking_justification": "The hardening measures were implemented and checked",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "unencrypted-communication",
@@ -724,7 +1391,18 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "apache-webserver"
-    ]
+    ],
+    "plain_title": "Unencrypted Communication named Web Application Traffic between Load Balancer and Apache Webserver transferring authentication data (like credentials, token, session-id, etc.)",
+    "category_title": "Unencrypted Communication",
+    "stride": "information-disclosure",
+    "function": "operations",
+    "cwe": 319,
+    "action": "Encryption of Communication Links",
+    "mitigation": "Apply transport layer encryption to the communication link.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Load Balancer",
+    "most_relevant_technical_asset_raa": 9.952491809545325,
+    "most_relevant_communication_link_title": "Web Application Traffic"
   },
   {
     "category": "unencrypted-communication",
@@ -737,7 +1415,18 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "ldap-auth-server"
-    ]
+    ],
+    "plain_title": "Unencrypted Communication named Auth Traffic between Marketing CMS and LDAP Auth Server transferring authentication data (like credentials, token, session-id, etc.)",
+    "category_title": "Unencrypted Communication",
+    "stride": "information-disclosure",
+    "function": "operations",
+    "cwe": 319,
+    "action": "Encryption of Communication Links",
+    "mitigation": "Apply transport layer encryption to the communication link.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Marketing CMS",
+    "most_relevant_technical_asset_raa": 22.55383688062901,
+    "most_relevant_communication_link_title": "Auth Traffic"
   },
   {
     "category": "unencrypted-communication",
@@ -750,7 +1439,18 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "sql-database"
-    ]
+    ],
+    "plain_title": "Unencrypted Communication named Database Traffic between Backoffice ERP System and Customer Contract Database transferring authentication data (like credentials, token, session-id, etc.)",
+    "category_title": "Unencrypted Communication",
+    "stride": "information-disclosure",
+    "function": "operations",
+    "cwe": 319,
+    "action": "Encryption of Communication Links",
+    "mitigation": "Apply transport layer encryption to the communication link.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "most_relevant_communication_link_title": "Database Traffic"
   },
   {
     "category": "unencrypted-communication",
@@ -763,7 +1463,18 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "contract-file-server"
-    ]
+    ],
+    "plain_title": "Unencrypted Communication named NFS Filesystem Access between Backoffice ERP System and Contract File Server",
+    "category_title": "Unencrypted Communication",
+    "stride": "information-disclosure",
+    "function": "operations",
+    "cwe": 319,
+    "action": "Encryption of Communication Links",
+    "mitigation": "Apply transport layer encryption to the communication link.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "most_relevant_communication_link_title": "NFS Filesystem Access"
   },
   {
     "category": "unguarded-access-from-internet",
@@ -777,7 +1488,18 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "git-repo"
-    ]
+    ],
+    "plain_title": "Unguarded Access from Internet of Git Repository by External Development Client via Git-Repo Code Write Access",
+    "category_title": "Unguarded Access From Internet",
+    "stride": "elevation-of-privilege",
+    "function": "architecture",
+    "cwe": 501,
+    "action": "Encapsulation of Technical Asset",
+    "mitigation": "Encapsulate the asset behind a guarding service, application, or reverse-proxy. For admin maintenance a bastion-host should be used as a jump-server. For file transfer a store-and-forward-host should be used as an indirect file exchange platform.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Git Repository",
+    "most_relevant_technical_asset_raa": 31.49087221095335,
+    "most_relevant_communication_link_title": "Git-Repo Code Write Access"
   },
   {
     "category": "unguarded-access-from-internet",
@@ -791,7 +1513,18 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "git-repo"
-    ]
+    ],
+    "plain_title": "Unguarded Access from Internet of Git Repository by External Development Client via Git-Repo Web-UI Access",
+    "category_title": "Unguarded Access From Internet",
+    "stride": "elevation-of-privilege",
+    "function": "architecture",
+    "cwe": 501,
+    "action": "Encapsulation of Technical Asset",
+    "mitigation": "Encapsulate the asset behind a guarding service, application, or reverse-proxy. For admin maintenance a bastion-host should be used as a jump-server. For file transfer a store-and-forward-host should be used as an indirect file exchange platform.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Git Repository",
+    "most_relevant_technical_asset_raa": 31.49087221095335,
+    "most_relevant_communication_link_title": "Git-Repo Web-UI Access"
   },
   {
     "category": "unguarded-access-from-internet",
@@ -805,7 +1538,18 @@
     "data_breach_probability": "possible",
     "data_breach_technical_assets": [
       "jenkins-build-server"
-    ]
+    ],
+    "plain_title": "Unguarded Access from Internet of Jenkins Build Server by External Development Client via Jenkins Web-UI Access",
+    "category_title": "Unguarded Access From Internet",
+    "stride": "elevation-of-privilege",
+    "function": "architecture",
+    "cwe": 501,
+    "action": "Encapsulation of Technical Asset",
+    "mitigation": "Encapsulate the asset behind a guarding service, application, or reverse-proxy. For admin maintenance a bastion-host should be used as a jump-server. For file transfer a store-and-forward-host should be used as an indirect file exchange platform.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Jenkins Build Server",
+    "most_relevant_technical_asset_raa": 60.099849550227866,
+    "most_relevant_communication_link_title": "Jenkins Web-UI Access"
   },
   {
     "category": "untrusted-deserialization",
@@ -818,7 +1562,17 @@
     "data_breach_probability": "probable",
     "data_breach_technical_assets": [
       "jenkins-build-server"
-    ]
+    ],
+    "plain_title": "Untrusted Deserialization risk at Jenkins Build Server",
+    "category_title": "Untrusted Deserialization",
+    "stride": "tampering",
+    "function": "architecture",
+    "cwe": 502,
+    "action": "Prevention of Deserialization of Untrusted Data",
+    "mitigation": "Try to avoid the deserialization of untrusted data (even of data within the same trust-boundary as long as it is sent across a remote connection) in order to stay safe from Untrusted Deserialization vulnerabilities. Alternatively a strict whitelisting approach of the classes/types/values to deserialize might help as well. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Jenkins Build Server",
+    "most_relevant_technical_asset_raa": 60.099849550227866
   },
   {
     "category": "untrusted-deserialization",
@@ -832,7 +1586,21 @@
     "data_breach_probability": "probable",
     "data_breach_technical_assets": [
       "erp-system"
-    ]
+    ],
+    "plain_title": "Untrusted Deserialization risk at Backoffice ERP System",
+    "category_title": "Untrusted Deserialization",
+    "stride": "tampering",
+    "function": "architecture",
+    "cwe": 502,
+    "action": "Prevention of Deserialization of Untrusted Data",
+    "mitigation": "Try to avoid the deserialization of untrusted data (even of data within the same trust-boundary as long as it is sent across a remote connection) in order to stay safe from Untrusted Deserialization vulnerabilities. Alternatively a strict whitelisting approach of the classes/types/values to deserialize might help as well. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216,
+    "tracking_justification": "Risk accepted as tolerable",
+    "tracking_ticket": "XYZ-1234",
+    "tracking_date": "2020-01-04",
+    "tracking_checked_by": "John Doe"
   },
   {
     "category": "xml-external-entity",
@@ -845,6 +1613,16 @@
     "data_breach_probability": "probable",
     "data_breach_technical_assets": [
       "erp-system"
-    ]
+    ],
+    "plain_title": "XML External Entity (XXE) risk at Backoffice ERP System",
+    "category_title": "XML External Entity (XXE)",
+    "stride": "information-disclosure",
+    "function": "development",
+    "cwe": 611,
+    "action": "XML Parser Hardening",
+    "mitigation": "Apply hardening of all XML parser instances in order to stay safe from XML External Entity (XXE) vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Backoffice ERP System",
+    "most_relevant_technical_asset_raa": 62.062039616154216
   }
 ]

@@ -8,8 +8,63 @@ import (
 	"github.com/Pinguladora/threagile/pkg/types"
 )
 
+// riskJSON is a risk as risks.json writes it: the risk's own fields, followed by the details that
+// the risks.xlsx columns show as well. The details only ever get added to, never renamed or
+// removed, so that existing consumers of the file keep working.
+type riskJSON struct {
+	*types.Risk
+
+	PlainTitle                         string             `json:"plain_title"`
+	CategoryTitle                      string             `json:"category_title"`
+	STRIDE                             types.STRIDE       `json:"stride"`
+	Function                           types.RiskFunction `json:"function"`
+	CWE                                int                `json:"cwe"`
+	Action                             string             `json:"action"`
+	Mitigation                         string             `json:"mitigation"`
+	Check                              string             `json:"check"`
+	MostRelevantTechnicalAssetTitle    string             `json:"most_relevant_technical_asset_title,omitempty"`
+	MostRelevantTechnicalAssetRAA      *float64           `json:"most_relevant_technical_asset_raa,omitempty"`
+	MostRelevantCommunicationLinkTitle string             `json:"most_relevant_communication_link_title,omitempty"`
+	TrackingJustification              string             `json:"tracking_justification,omitempty"`
+	TrackingTicket                     string             `json:"tracking_ticket,omitempty"`
+	TrackingDate                       string             `json:"tracking_date,omitempty"`
+	TrackingCheckedBy                  string             `json:"tracking_checked_by,omitempty"`
+}
+
+func newRiskJSON(parsedModel *types.Model, risk *types.Risk) riskJSON {
+	details := newRiskDetails(parsedModel, parsedModel.GetRiskCategory(risk.CategoryId), risk)
+	result := riskJSON{
+		Risk:                               risk,
+		PlainTitle:                         removeFormattingTags(risk.Title),
+		CategoryTitle:                      details.category.Title,
+		STRIDE:                             details.category.STRIDE,
+		Function:                           details.category.Function,
+		CWE:                                details.category.CWE,
+		Action:                             details.category.Action,
+		Mitigation:                         details.category.Mitigation,
+		Check:                              details.category.Check,
+		MostRelevantTechnicalAssetTitle:    details.technicalAssetTitle(),
+		MostRelevantCommunicationLinkTitle: details.communicationLinkTitle(),
+		TrackingJustification:              details.tracking.Justification,
+		TrackingTicket:                     details.tracking.Ticket,
+		TrackingDate:                       details.trackingDate(),
+		TrackingCheckedBy:                  details.tracking.CheckedBy,
+	}
+	if details.technicalAsset != nil {
+		raa := details.technicalAssetRAA()
+		result.MostRelevantTechnicalAssetRAA = &raa
+	}
+	return result
+}
+
+// WriteRisksJSON writes all risks of the model, in category id order, as a JSON array.
 func WriteRisksJSON(parsedModel *types.Model, filename string) error {
-	jsonBytes, err := json.Marshal(parsedModel.AllRisks())
+	allRisks := parsedModel.AllRisks()
+	risks := make([]riskJSON, 0, len(allRisks))
+	for _, risk := range allRisks {
+		risks = append(risks, newRiskJSON(parsedModel, risk))
+	}
+	jsonBytes, err := json.Marshal(risks)
 	if err != nil {
 		return fmt.Errorf("failed to marshal risks to JSON: %w", err)
 	}
