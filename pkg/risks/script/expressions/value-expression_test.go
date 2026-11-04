@@ -231,9 +231,23 @@ func TestValueExpression_EvalAny_VariableNotFound_ReturnsNil(t *testing.T) {
 
 	result, _, err := expr.EvalAny(scope)
 	assert.NoError(t, err)
-	// When the variable is not found, scope.Get returns (nil, false),
-	// so evalStringReference returns a nil Value interface.
 	assert.Nil(t, result)
+}
+
+func TestValueExpression_Eval_VariableNotFound_DoesNotPanic(t *testing.T) {
+	scope := new(common.Scope)
+	_ = scope.Init(nil, nil)
+
+	for _, name := range []string{"{nonexistent}", "{nonexistent.field}", "{.field}"} {
+		expr := new(ValueExpression)
+		_, _, parseErr := expr.ParseAny(name)
+		require.NoError(t, parseErr)
+
+		assert.NotPanics(t, func() { _, _, _ = expr.EvalString(scope) }, name)
+		assert.NotPanics(t, func() { _, _, _ = expr.EvalDecimal(scope) }, name)
+		assert.NotPanics(t, func() { _, _, _ = expr.EvalArray(scope) }, name)
+		assert.NotPanics(t, func() { _, _, _ = expr.EvalBool(scope) }, name)
+	}
 }
 
 func TestValueExpression_EvalAny_MethodCall(t *testing.T) {

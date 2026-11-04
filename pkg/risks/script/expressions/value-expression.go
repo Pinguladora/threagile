@@ -231,6 +231,10 @@ func (what *ValueExpression) stringToDecimal(
 		return common.EmptyDecimalValue(), errorLiteral, evalError
 	}
 
+	if value == nil { // an unknown variable
+		return common.SomeDecimalValue(decimal.Zero, nil), "", nil
+	}
+
 	switch castValue := value.Value().(type) {
 	case decimal.Decimal:
 		return common.SomeDecimalValue(castValue, value.Event()), "", nil
@@ -260,6 +264,10 @@ func (what *ValueExpression) stringToString(
 		return common.EmptyStringValue(), errorLiteral, evalError
 	}
 
+	if value == nil { // an unknown variable
+		return common.EmptyStringValue(), "", nil
+	}
+
 	switch castValue := value.Value().(type) {
 	case string:
 		return common.SomeStringValue(castValue, value.Event()), "", nil
@@ -282,13 +290,9 @@ func (what *ValueExpression) evalStringReference(
 	varRe := `\{[^{}]+}`
 	value := what.resolveStringValues(scope, varRe, ref)
 	if regexp.MustCompile(`^` + varRe + `$`).MatchString(value.StringValue()) {
-		returnValue, ok := scope.Get(value.StringValue()[1 : len(value.StringValue())-1])
-		if ok {
-			return returnValue, "", nil
-		}
-
+		// an unknown variable is nil, which the evaluators of the expressions must take
+		returnValue, _ := scope.Get(value.StringValue()[1 : len(value.StringValue())-1])
 		return returnValue, "", nil
-		//		return common.SomeStringValue(value.StringValue()[1:len(value.StringValue())-1], nil), "", nil
 	}
 
 	funcRe := `(\w+)\(([^()]+)\)`

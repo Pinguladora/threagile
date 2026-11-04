@@ -73,6 +73,10 @@ func SomeArrayValue(value []Value, event *Event) *ArrayValue {
 }
 
 func ToArrayValue(value Value) (*ArrayValue, error) {
+	if value == nil { // an unknown variable
+		return EmptyArrayValue(), nil
+	}
+
 	var arrayValue []Value
 	switch castValue := value.Value().(type) {
 	case []Value:
