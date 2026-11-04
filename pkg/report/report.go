@@ -2561,47 +2561,8 @@ func (r *pdfReporter) createTagListing(parsedModel *types.Model) {
 	sorted := parsedModel.TagsAvailable
 	sort.Strings(sorted)
 	for _, tag := range sorted {
-		description := "" // could hold a separation text to distinguish technical assets, data assets etc.
-		for _, techAsset := range sortedTechnicalAssetsByTitle(parsedModel) {
-			if contains(techAsset.Tags, tag) {
-				if len(description) > 0 {
-					description += ", "
-				}
-				description += techAsset.Title
-			}
-			for _, commLink := range techAsset.CommunicationLinksSorted() {
-				if contains(commLink.Tags, tag) {
-					if len(description) > 0 {
-						description += ", "
-					}
-					description += commLink.Title
-				}
-			}
-		}
-		for _, dataAsset := range sortedDataAssetsByTitle(parsedModel) {
-			if contains(dataAsset.Tags, tag) {
-				if len(description) > 0 {
-					description += ", "
-				}
-				description += dataAsset.Title
-			}
-		}
-		for _, trustBoundary := range sortedTrustBoundariesByTitle(parsedModel) {
-			if contains(trustBoundary.Tags, tag) {
-				if len(description) > 0 {
-					description += ", "
-				}
-				description += trustBoundary.Title
-			}
-		}
-		for _, sharedRuntime := range sortedSharedRuntimesByTitle(parsedModel) {
-			if contains(sharedRuntime.Tags, tag) {
-				if len(description) > 0 {
-					description += ", "
-				}
-				description += sharedRuntime.Title
-			}
-		}
+		// could hold a separation text to distinguish technical assets, data assets etc.
+		description := taggedTitles(parsedModel, tag)
 		if len(description) > 0 {
 			if r.pdf.GetY() > 250 {
 				r.pageBreak()

@@ -483,3 +483,45 @@ func sortedValues[V any](values map[string]V) []V {
 	}
 	return result
 }
+
+// tagRow is the title and the tags of a model element in the tags sheet.
+type tagRow struct {
+	title string
+	tags  []string
+}
+
+// tagRows returns the rows of the tags sheet in the order they are written.
+func tagRows(parsedModel *types.Model) []tagRow {
+	rows := make([]tagRow, 0)
+	for _, techAsset := range sortedTechnicalAssetsByTitle(parsedModel) {
+		rows = append(rows, tagRow{techAsset.Title, techAsset.Tags})
+		for _, commLink := range techAsset.CommunicationLinksSorted() {
+			rows = append(rows, tagRow{commLink.Title, commLink.Tags})
+		}
+	}
+	for _, dataAsset := range sortedDataAssetsByTitle(parsedModel) {
+		rows = append(rows, tagRow{dataAsset.Title, dataAsset.Tags})
+	}
+	for _, trustBoundary := range sortedTrustBoundariesByTitle(parsedModel) {
+		rows = append(rows, tagRow{trustBoundary.Title, trustBoundary.Tags})
+	}
+	for _, sharedRuntime := range sortedSharedRuntimesByTitle(parsedModel) {
+		rows = append(rows, tagRow{sharedRuntime.Title, sharedRuntime.Tags})
+	}
+	return rows
+}
+
+// taggedTitles returns the titles of the model elements with the tag, comma separated, in the
+// order of the tag rows.
+func taggedTitles(parsedModel *types.Model, tag string) string {
+	description := ""
+	for _, row := range tagRows(parsedModel) {
+		if contains(row.tags, tag) {
+			if len(description) > 0 {
+				description += ", "
+			}
+			description += row.title
+		}
+	}
+	return description
+}
