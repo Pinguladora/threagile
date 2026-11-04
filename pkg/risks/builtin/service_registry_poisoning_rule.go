@@ -30,7 +30,7 @@ func (*ServiceRegistryPoisoningRule) Category() *types.RiskCategory {
 		FalsePositives: "Service registries not used for service discovery " +
 			"can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: false,
-		CWE:                        693,
+		CWE:                        cweProtectionMechanismFailure,
 	}
 }
 

@@ -32,7 +32,7 @@ func (*UnnecessaryDataAssetRule) Category() *types.RiskCategory {
 		RiskAssessment:             types.LowSeverity.String(),
 		FalsePositives:             falsePositivesIncompleteModel,
 		ModelFailurePossibleReason: true,
-		CWE:                        1008,
+		CWE:                        cweArchitecturalConcepts,
 	}
 }
 

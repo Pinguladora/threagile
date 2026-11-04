@@ -32,7 +32,7 @@ func (*XmlExternalEntityRule) Category() *types.RiskCategory {
 		FalsePositives: "Fully trusted (i.e. cryptographically signed or similar) XML data can be considered " +
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,
-		CWE:                        611,
+		CWE:                        cweXMLExternalEntity,
 	}
 }
 

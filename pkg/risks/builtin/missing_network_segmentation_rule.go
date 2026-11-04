@@ -6,12 +6,16 @@ import (
 	"github.com/Pinguladora/threagile/pkg/types"
 )
 
+// networkSegmentationRAALimit is the RAA value (in %) from which technical assets should be segmented from less
+// protected ones.
+const networkSegmentationRAALimit = 50
+
 type MissingNetworkSegmentationRule struct {
 	raaLimit int
 }
 
 func NewMissingNetworkSegmentationRule() *MissingNetworkSegmentationRule {
-	return &MissingNetworkSegmentationRule{raaLimit: 50}
+	return &MissingNetworkSegmentationRule{raaLimit: networkSegmentationRAALimit}
 }
 
 func (*MissingNetworkSegmentationRule) Category() *types.RiskCategory {
@@ -40,7 +44,7 @@ func (*MissingNetworkSegmentationRule) Category() *types.RiskCategory {
 		FalsePositives: "When all assets within the network segmentation trust-boundary are hardened and protected to the same extend as if all were " +
 			"containing/processing highly sensitive data.",
 		ModelFailurePossibleReason: false,
-		CWE:                        1008,
+		CWE:                        cweArchitecturalConcepts,
 	}
 }
 

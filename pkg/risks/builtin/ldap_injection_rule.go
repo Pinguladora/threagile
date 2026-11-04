@@ -31,7 +31,7 @@ func (*LdapInjectionRule) Category() *types.RiskCategory {
 		FalsePositives: "LDAP server queries by search values not consisting of parts controllable by the caller can be considered " +
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,
-		CWE:                        90,
+		CWE:                        cweLDAPInjection,
 	}
 }
 

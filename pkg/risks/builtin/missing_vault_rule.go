@@ -32,7 +32,7 @@ func (*MissingVaultRule) Category() *types.RiskCategory {
 		FalsePositives: "Models where no technical assets have any kind of sensitive config data to protect " +
 			"can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: true,
-		CWE:                        522,
+		CWE:                        cweInsufficientlyProtectedCredentials,
 	}
 }
 

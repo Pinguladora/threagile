@@ -31,7 +31,7 @@ func (*MissingIdentityStoreRule) Category() *types.RiskCategory {
 		FalsePositives: "Models only offering data/services without any real authentication need " +
 			"can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: true,
-		CWE:                        287,
+		CWE:                        cweImproperAuthentication,
 	}
 }
 

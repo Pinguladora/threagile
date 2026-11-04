@@ -36,7 +36,7 @@ func (*UncheckedDeploymentRule) Category() *types.RiskCategory {
 		FalsePositives: "When the build-pipeline does not build any software components it can be considered a false positive " +
 			"after individual review.",
 		ModelFailurePossibleReason: false,
-		CWE:                        1127,
+		CWE:                        cweInsufficientCompilationWarnings,
 	}
 }
 

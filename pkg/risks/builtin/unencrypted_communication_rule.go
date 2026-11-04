@@ -34,7 +34,7 @@ func (*UnencryptedCommunicationRule) Category() *types.RiskCategory {
 		FalsePositives: "When all sensitive data sent over the communication link is already fully encrypted on document or data level. " +
 			"Also intra-container/pod communication can be considered false positive when container orchestration platform handles encryption.",
 		ModelFailurePossibleReason: false,
-		CWE:                        319,
+		CWE:                        cweCleartextTransmission,
 	}
 }
 

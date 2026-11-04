@@ -41,7 +41,7 @@ func (*MissingCloudHardeningRule) Category() *types.RiskCategory {
 		FalsePositives: "Cloud components not running parts of the target architecture can be considered " +
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,
-		CWE:                        1008,
+		CWE:                        cweArchitecturalConcepts,
 	}
 }
 

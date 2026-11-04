@@ -36,7 +36,7 @@ func (*MixedTargetsOnSharedRuntimeRule) Category() *types.RiskCategory {
 		FalsePositives: "When all assets running on the shared runtime are hardened and protected to the same extend as if all were " +
 			"containing/processing highly sensitive data.",
 		ModelFailurePossibleReason: false,
-		CWE:                        1008,
+		CWE:                        cweArchitecturalConcepts,
 	}
 }
 

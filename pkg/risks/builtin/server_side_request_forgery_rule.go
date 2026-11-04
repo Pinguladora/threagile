@@ -36,7 +36,7 @@ func (*ServerSideRequestForgeryRule) Category() *types.RiskCategory {
 		FalsePositives: "Servers not sending outgoing web requests can be considered " +
 			"as false positives after review.",
 		ModelFailurePossibleReason: false,
-		CWE:                        918,
+		CWE:                        cweServerSideRequestForgery,
 	}
 }
 

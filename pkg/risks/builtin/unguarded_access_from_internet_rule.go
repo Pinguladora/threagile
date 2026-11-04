@@ -42,7 +42,7 @@ func (*UnguardedAccessFromInternetRule) Category() *types.RiskCategory {
 			"For assets with RAA values higher than 40 % the risk-rating increases.",
 		FalsePositives:             "When other means of filtering client requests are applied equivalent of " + types.ReverseProxy + ", " + types.WAF + ", or " + types.Gateway + " components.",
 		ModelFailurePossibleReason: false,
-		CWE:                        501,
+		CWE:                        cweTrustBoundaryViolation,
 	}
 }
 

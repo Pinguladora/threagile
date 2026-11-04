@@ -33,7 +33,7 @@ func (*MissingBuildInfrastructureRule) Category() *types.RiskCategory {
 		FalsePositives: "Models not having any custom-developed parts " +
 			"can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: true,
-		CWE:                        1127,
+		CWE:                        cweInsufficientCompilationWarnings,
 	}
 }
 

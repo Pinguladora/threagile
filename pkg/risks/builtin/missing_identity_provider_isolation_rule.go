@@ -33,7 +33,7 @@ func (*MissingIdentityProviderIsolationRule) Category() *types.RiskCategory {
 		FalsePositives: "When all assets within the network segmentation trust-boundary are hardened and protected to the same extend as if all were " +
 			"identity providers with data of highest sensitivity.",
 		ModelFailurePossibleReason: false,
-		CWE:                        1008,
+		CWE:                        cweArchitecturalConcepts,
 	}
 }
 

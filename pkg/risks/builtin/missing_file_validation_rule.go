@@ -32,7 +32,7 @@ func (*MissingFileValidationRule) Category() *types.RiskCategory {
 		FalsePositives: "Fully trusted (i.e. cryptographically signed or similar) files can be considered " +
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,
-		CWE:                        434,
+		CWE:                        cweUnrestrictedFileUpload,
 	}
 }
 
