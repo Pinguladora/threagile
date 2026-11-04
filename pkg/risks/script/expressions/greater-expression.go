@@ -16,44 +16,8 @@ type GreaterExpression struct {
 func (what *GreaterExpression) ParseBool(script any) (common.BoolExpression, any, error) {
 	what.literal = common.ToLiteral(script)
 
-	switch castScript := script.(type) {
-	case map[string]any:
-		for key, value := range castScript {
-			switch key {
-			case common.First:
-				item, errorScript, itemError := new(ValueExpression).ParseValue(value)
-				if itemError != nil {
-					return nil, errorScript, fmt.Errorf("failed to parse %q of equal-expression: %w", key, itemError)
-				}
-
-				what.first = item
-
-			case common.Second:
-				item, errorScript, itemError := new(ValueExpression).ParseValue(value)
-				if itemError != nil {
-					return nil, errorScript, fmt.Errorf("failed to parse %q of equal-expression: %w", key, itemError)
-				}
-
-				what.second = item
-
-			case common.As:
-				item, errorScript, itemError := new(ValueExpression).ParseValue(value)
-				if itemError != nil {
-					return nil, errorScript, fmt.Errorf("failed to parse %q of equal-expression: %w", key, itemError)
-				}
-
-				what.as = item
-
-			default:
-				return nil, script, fmt.Errorf("failed to parse equal-expression: unexpected keyword %q", key)
-			}
-		}
-
-	default:
-		return nil, script, fmt.Errorf("failed to parse equal-expression: expected map[string]any, got %T", script)
-	}
-
-	return what, nil, nil
+	return parseComparison[common.BoolExpression](what, "equal-expression", script, common.First, &what.first,
+		common.Second, &what.second, parseAsExpression("equal-expression", &what.as))
 }
 
 func (what *GreaterExpression) ParseAny(script any) (common.Expression, any, error) {

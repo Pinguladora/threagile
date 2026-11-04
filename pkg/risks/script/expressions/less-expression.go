@@ -1,8 +1,6 @@
 package expressions
 
 import (
-	"fmt"
-
 	"github.com/Pinguladora/threagile/pkg/risks/script/common"
 )
 
@@ -16,44 +14,8 @@ type LessExpression struct {
 func (what *LessExpression) ParseBool(script any) (common.BoolExpression, any, error) {
 	what.literal = common.ToLiteral(script)
 
-	switch script.(type) {
-	case map[string]any:
-		for key, value := range script.(map[string]any) {
-			switch key {
-			case common.First:
-				item, errorScript, itemError := new(ValueExpression).ParseValue(value)
-				if itemError != nil {
-					return nil, errorScript, fmt.Errorf("failed to parse %q of equal-expression: %w", key, itemError)
-				}
-
-				what.first = item
-
-			case common.Second:
-				item, errorScript, itemError := new(ValueExpression).ParseValue(value)
-				if itemError != nil {
-					return nil, errorScript, fmt.Errorf("failed to parse %q of equal-expression: %w", key, itemError)
-				}
-
-				what.second = item
-
-			case common.As:
-				item, ok := value.(string)
-				if !ok {
-					return nil, script, fmt.Errorf("failed to parse equal-expression: %q is not a string but %T", key, value)
-				}
-
-				what.as = item
-
-			default:
-				return nil, script, fmt.Errorf("failed to parse equal-expression: unexpected keyword %q", key)
-			}
-		}
-
-	default:
-		return nil, script, fmt.Errorf("failed to parse equal-expression: expected map[string]any, got %T", script)
-	}
-
-	return what, nil, nil
+	return parseComparison[common.BoolExpression](what, "equal-expression", script, common.First, &what.first,
+		common.Second, &what.second, parseAsString("equal-expression", script, &what.as))
 }
 
 func (what *LessExpression) ParseAny(script any) (common.Expression, any, error) {
@@ -61,19 +23,10 @@ func (what *LessExpression) ParseAny(script any) (common.Expression, any, error)
 }
 
 func (what *LessExpression) EvalBool(scope *common.Scope) (*common.BoolValue, string, error) {
-	first, errorItemLiteral, itemError := what.first.EvalAny(scope)
-	if itemError != nil {
-		return common.EmptyBoolValue(), errorItemLiteral, itemError
-	}
-
-	second, errorInLiteral, evalError := what.second.EvalAny(scope)
-	if evalError != nil {
-		return common.EmptyBoolValue(), errorInLiteral, evalError
-	}
-
-	compareValue, compareError := common.Compare(first, second, what.as)
+	compareValue, errorLiteral, compareError := evalComparison(scope, what.first, what.second, what.as, what.Literal(),
+		"equal-expression")
 	if compareError != nil {
-		return common.EmptyBoolValue(), what.Literal(), fmt.Errorf("failed to compare equal-expression: %w", compareError)
+		return common.EmptyBoolValue(), errorLiteral, compareError
 	}
 
 	if common.IsLess(compareValue.Property) {
