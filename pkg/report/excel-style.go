@@ -140,7 +140,7 @@ func (what *ExcelStyles) initRiskStyles(newStyle func(horizontal string, color s
 	what.severityLowBold = newStyle(excelAlignCenter, colorLowRisk, 12, true)
 	what.severityLowCenter = newStyle(excelAlignCenter, colorLowRisk, 12, false)
 
-	what.redCenter = newStyle(excelAlignCenter, colorLowRisk, 12, false)
+	what.redCenter = newStyle(excelAlignCenter, textColor(RgbHexColorRiskStatusUnchecked), 12, false)
 
 	colorRiskStatusMitigated := textColor(rgbHexColorRiskStatusMitigated)
 	what.greenCenter = newStyle(excelAlignCenter, colorRiskStatusMitigated, 12, false)
