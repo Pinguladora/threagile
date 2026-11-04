@@ -581,3 +581,28 @@ func TestUnencryptedCommunicationRuleGenerateRisks(t *testing.T) {
 		})
 	}
 }
+
+func TestUnencryptedCommunicationRuleKeepsTheModelsDataAssetOrder(t *testing.T) {
+	sent := make([]string, 2, 4) // spare capacity, so an append would share the array
+	sent[0], sent[1] = "zeta", "alpha"
+	link := &types.CommunicationLink{
+		Id: "client>link", SourceId: "client", TargetId: "server", Protocol: types.HTTP,
+		DataAssetsSent: sent, DataAssetsReceived: []string{"beta"},
+	}
+	model := &types.Model{
+		TechnicalAssets: map[string]*types.TechnicalAsset{
+			"client": {Id: "client", Title: "Client", CommunicationLinks: []*types.CommunicationLink{link}},
+			"server": {Id: "server", Title: "Server"},
+		},
+		DataAssets: map[string]*types.DataAsset{
+			"zeta":  {Id: "zeta", Title: "Zeta", Confidentiality: types.StrictlyConfidential},
+			"alpha": {Id: "alpha", Title: "Alpha", Confidentiality: types.StrictlyConfidential},
+			"beta":  {Id: "beta", Title: "Beta", Confidentiality: types.StrictlyConfidential},
+		},
+	}
+
+	_, err := NewUnencryptedCommunicationRule().GenerateRisks(model)
+
+	assert.NoError(t, err)
+	assert.Equal(t, []string{"zeta", "alpha"}, link.DataAssetsSent, "the rule must not reorder the model")
+}
