@@ -143,6 +143,10 @@ Industrial control protocols cannot carry the authentication that the
 these rules skip links over the insecure ones and leave them to
 `insecure-control-protocol`. The `unencrypted-communication` rule still reports them.
 
+[`demo/ot-plant/threagile.yaml`](../demo/ot-plant/threagile.yaml) models a water
+treatment plant with an industrial DMZ, a remote pump station and a chlorine safety
+system; analyze it to see the OT rules at work.
+
 ## Risk ids of Push instead of Pull Deployment
 
 Push instead of Pull Deployment creates one risk per deployment target, with the id

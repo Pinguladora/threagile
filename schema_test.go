@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"maps"
 	"os"
+	"path/filepath"
 	"slices"
 	"strings"
 	"testing"
@@ -155,21 +156,25 @@ func TestBundledModelsMatchSchema(t *testing.T) {
 	}
 }
 
-// aiAgentModel is the demo model of an AI system, which is not bundled into the binary.
-const aiAgentModel = "demo/ai-agent/threagile.yaml"
+// unbundledDemoModels are the demo models of an AI system and of an OT plant, which are not bundled into the
+// binary.
+var unbundledDemoModels = []string{"demo/ai-agent/threagile.yaml", "demo/ot-plant/threagile.yaml"}
 
-// demoModels returns the content of the demo models by name: the bundled ones and the AI agent demo.
+// demoModels returns the content of the demo models by name: the bundled ones and the unbundled ones.
 func demoModels(t *testing.T) map[string][]byte {
 	t.Helper()
-	aiAgent, err := os.ReadFile(aiAgentModel)
-	if err != nil {
-		t.Fatal(err)
-	}
-	return map[string][]byte{
+	models := map[string][]byte{
 		string(ExampleModel): ExampleModel.Bytes(),
 		string(StubModel):    StubModel.Bytes(),
-		aiAgentModel:         aiAgent,
 	}
+	for _, file := range unbundledDemoModels {
+		content, err := os.ReadFile(filepath.Clean(file))
+		if err != nil {
+			t.Fatal(err)
+		}
+		models[file] = content
+	}
+	return models
 }
 
 func TestSchemaValidatorFindsProblems(t *testing.T) {
