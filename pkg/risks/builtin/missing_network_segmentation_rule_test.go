@@ -30,7 +30,7 @@ func TestMissingNetworkSegmentationRuleGenerateRisksOutOfScopeNoRisksCreated(t *
 					{
 						Name: "service-registry",
 						Attributes: map[string]bool{
-							types.IsNoNetworkSegmentationRequired: true,
+							types.IsNoNetworkSegmentationRequired: false,
 						},
 					},
 				},
@@ -44,21 +44,44 @@ func TestMissingNetworkSegmentationRuleGenerateRisksOutOfScopeNoRisksCreated(t *
 
 func TestMissingNetworkSegmentationRuleGenerateRisksNoNetworkSegmentationRequiredNoRisksCreated(t *testing.T) {
 	rule := NewMissingNetworkSegmentationRule()
+	tb1 := &types.TrustBoundary{
+		Id:                    "tb1",
+		TechnicalAssetsInside: []string{"ta1", "ta2"},
+		Type:                  types.NetworkCloudProvider,
+	}
 	risks, err := rule.GenerateRisks(&types.Model{
 		TechnicalAssets: map[string]*types.TechnicalAsset{
 			"ta1": {
-				Title:      "Test Technical Asset",
-				OutOfScope: false,
-				RAA:        55,
+				Id: "ta1",
 				Technologies: types.TechnologyList{
 					{
-						Name: "service-registry",
+						Name: "reverse-proxy",
 						Attributes: map[string]bool{
-							types.IsNoNetworkSegmentationRequired: false,
+							types.IsNoNetworkSegmentationRequired: true,
+						},
+					},
+				},
+				Confidentiality: types.StrictlyConfidential,
+				Integrity:       types.MissionCritical,
+				Availability:    types.MissionCritical,
+				RAA:             55,
+			},
+			"ta2": {
+				Id: "ta2",
+				Technologies: types.TechnologyList{
+					{
+						Name: "artifact-registry",
+						Attributes: map[string]bool{
+							types.IsLessProtectedType: true,
 						},
 					},
 				},
 			},
+		},
+		TrustBoundaries: map[string]*types.TrustBoundary{"tb1": tb1},
+		DirectContainingTrustBoundaryMappedByTechnicalAssetId: map[string]*types.TrustBoundary{
+			"ta1": tb1,
+			"ta2": tb1,
 		},
 	})
 
@@ -76,7 +99,7 @@ func TestMissingNetworkSegmentationRuleGenerateRisksLowRAANoNetworkSegmentationR
 					{
 						Name: "service-registry",
 						Attributes: map[string]bool{
-							types.IsNoNetworkSegmentationRequired: true,
+							types.IsNoNetworkSegmentationRequired: false,
 						},
 					},
 				},
@@ -100,7 +123,7 @@ func TestMissingNetworkSegmentationRuleGenerateRisksNotDataStoreAndLowCIABNoRisk
 					{
 						Name: "service-registry",
 						Attributes: map[string]bool{
-							types.IsNoNetworkSegmentationRequired: true,
+							types.IsNoNetworkSegmentationRequired: false,
 						},
 					},
 				},
@@ -171,7 +194,7 @@ func TestMissingNetworkSegmentationRuleGenerateRisksRiskCreated(t *testing.T) {
 							{
 								Name: "service-registry",
 								Attributes: map[string]bool{
-									types.IsNoNetworkSegmentationRequired: true,
+									types.IsNoNetworkSegmentationRequired: false,
 								},
 							},
 						},
@@ -232,7 +255,7 @@ func TestMissingNetworkSegmentationRuleGenerateRisksSparringAssetIsNotLessProtec
 					{
 						Name: "service-registry",
 						Attributes: map[string]bool{
-							types.IsNoNetworkSegmentationRequired: true,
+							types.IsNoNetworkSegmentationRequired: false,
 						},
 					},
 				},
@@ -284,7 +307,7 @@ func TestMissingNetworkSegmentationRuleGenerateRisksSparringAssetCloseToHighValu
 					{
 						Name: "service-registry",
 						Attributes: map[string]bool{
-							types.IsNoNetworkSegmentationRequired: true,
+							types.IsNoNetworkSegmentationRequired: false,
 						},
 					},
 				},
@@ -342,7 +365,7 @@ func TestMissingNetworkSegmentationRuleGenerateRisksNotSameTrustBoundaryNoRisksC
 					{
 						Name: "service-registry",
 						Attributes: map[string]bool{
-							types.IsNoNetworkSegmentationRequired: true,
+							types.IsNoNetworkSegmentationRequired: false,
 						},
 					},
 				},
@@ -395,7 +418,7 @@ func TestMissingNetworkSegmentationHasDirectConnectionNoRisksCreated(t *testing.
 					{
 						Name: "service-registry",
 						Attributes: map[string]bool{
-							types.IsNoNetworkSegmentationRequired: true,
+							types.IsNoNetworkSegmentationRequired: false,
 						},
 					},
 				},

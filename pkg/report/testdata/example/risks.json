@@ -954,6 +954,54 @@
     "most_relevant_communication_link_title": "ERP System Traffic"
   },
   {
+    "category": "missing-network-segmentation",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMissing Network Segmentation\u003c/b\u003e to further encapsulate and protect \u003cb\u003eApache Webserver\u003c/b\u003e against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers",
+    "synthetic_id": "missing-network-segmentation@apache-webserver",
+    "most_relevant_technical_asset": "apache-webserver",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "apache-webserver"
+    ],
+    "plain_title": "Missing Network Segmentation to further encapsulate and protect Apache Webserver against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers",
+    "category_title": "Missing Network Segmentation",
+    "stride": "elevation-of-privilege",
+    "function": "operations",
+    "cwe": 1008,
+    "action": "Network Segmentation",
+    "mitigation": "Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Apache Webserver",
+    "most_relevant_technical_asset_raa": 60.6120919375654
+  },
+  {
+    "category": "missing-network-segmentation",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMissing Network Segmentation\u003c/b\u003e to further encapsulate and protect \u003cb\u003eJenkins Build Server\u003c/b\u003e against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers",
+    "synthetic_id": "missing-network-segmentation@jenkins-build-server",
+    "most_relevant_technical_asset": "jenkins-build-server",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "jenkins-build-server"
+    ],
+    "plain_title": "Missing Network Segmentation to further encapsulate and protect Jenkins Build Server against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers",
+    "category_title": "Missing Network Segmentation",
+    "stride": "elevation-of-privilege",
+    "function": "operations",
+    "cwe": 1008,
+    "action": "Network Segmentation",
+    "mitigation": "Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Jenkins Build Server",
+    "most_relevant_technical_asset_raa": 60.099849550227866
+  },
+  {
     "category": "missing-vault",
     "risk_status": "unchecked",
     "severity": "medium",

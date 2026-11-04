@@ -86,7 +86,7 @@ func (r *MissingNetworkSegmentationRule) skipAsset(technicalAsset *types.Technic
 		return true
 	}
 
-	if !technicalAsset.Technologies.GetAttribute(types.IsNoNetworkSegmentationRequired) {
+	if technicalAsset.Technologies.GetAttribute(types.IsNoNetworkSegmentationRequired) {
 		return true
 	}
 
