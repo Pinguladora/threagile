@@ -75,7 +75,8 @@ technical_assets:
         description: Browsing the shop and placing orders
         protocol: https
         authentication: session-id
-        authorization: end-user-identity-propagation
+        identity: end-user
+        authorization: unknown
         usage: business
         vpn: false
         ip_filtered: false
@@ -89,7 +90,8 @@ technical_assets:
         description: Checks whether the shop is up
         protocol: https
         authentication: none
-        authorization: none
+        identity: none
+        authorization: unknown
         usage: business
         vpn: false
         ip_filtered: false

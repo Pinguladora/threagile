@@ -46,8 +46,9 @@ technical_assets:
         target: erp-system
         description: Link to the ERP system
         protocol: https # values: see help
-        authentication: token # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -68,8 +69,9 @@ technical_assets:
         target: identity-provider
         description: Link to the identity provider server
         protocol: https # values: see help
-        authentication: credentials # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -116,8 +118,9 @@ technical_assets:
         target: ldap-auth-server
         description: Link to the LDAP server
         protocol: ldaps # values: see help
-        authentication: credentials # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -164,8 +167,9 @@ technical_assets:
         target: ldap-auth-server
         description: Link to the LDAP auth server
         protocol: ldap # values: see help
-        authentication: credentials # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -222,8 +226,9 @@ technical_assets:
         target: sql-database
         description: Link to the DB system
         protocol: jdbc # values: see help
-        authentication: credentials # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -243,8 +248,9 @@ technical_assets:
         target: contract-file-server
         description: Link to the file system
         protocol: nfs # values: see help
-        authentication: none # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: none # values: none, technical-user, end-user-identity-propagation
+        authentication: none # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: none # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false

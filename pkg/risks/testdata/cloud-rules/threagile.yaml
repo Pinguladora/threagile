@@ -76,7 +76,8 @@ technical_assets:
         description: Loads the product images
         protocol: https
         authentication: none
-        authorization: none
+        identity: none
+        authorization: unknown
         usage: business
         readonly: true
         data_assets_received:
@@ -141,7 +142,8 @@ technical_assets:
         description: Writes new orders
         protocol: jdbc-encrypted
         authentication: credentials
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         usage: business
         data_assets_sent:
           - customer-records
@@ -180,7 +182,8 @@ technical_assets:
         description: Decrypts the data key of the database
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         usage: business
 
   Key Management:
@@ -236,7 +239,8 @@ technical_assets:
         description: Reads the customer records through a cross-account role
         protocol: jdbc-encrypted
         authentication: credentials
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         usage: business
         readonly: true
         data_assets_received:
