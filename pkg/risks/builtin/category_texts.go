@@ -9,12 +9,14 @@ const (
 	asvsAccessControl      = "V4 - Access Control Verification Requirements"
 	asvsValidation         = "V5 - Validation, Sanitization and Encoding Verification Requirements"
 	asvsStoredCryptography = "V6 - Stored Cryptography Verification Requirements"
+	asvsDataProtection     = "V8 - Data Protection Verification Requirements"
 	asvsMaliciousCode      = "V10 - Malicious Code Verification Requirements"
 	asvsFilesAndResources  = "V12 - File and Resources Verification Requirements"
 	asvsConfiguration      = "V14 - Configuration Verification Requirements"
 
 	cheatSheetAttackSurfaceAnalysis = "https://cheatsheetseries.owasp.org/cheatsheets/" +
 		"Attack_Surface_Analysis_Cheat_Sheet.html"
+	cheatSheetAuthentication = "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html"
 	cheatSheetThreatModeling = "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html"
 
 	actionAttackSurfaceReduction = "Attack Surface Reduction"
