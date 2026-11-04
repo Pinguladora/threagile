@@ -45,8 +45,9 @@
         "title": "Assistant Request",
         "description": "Forwards the messages of a customer to the assistant",
         "protocol": "https",
-        "authentication": "token",
+        "authentication": "short-lived-token",
         "identity": "end-user",
+        "authorization": "function-level",
         "data_assets_sent": [
           "chat-transcripts"
         ],
@@ -109,6 +110,7 @@
         "protocol": "https",
         "authentication": "session-id",
         "identity": "end-user",
+        "authorization": "object-level",
         "data_assets_sent": [
           "chat-transcripts"
         ],
@@ -169,8 +171,9 @@
         "description": "Loads the current model version at start",
         "protocol": "https",
         "readonly": true,
-        "authentication": "token",
-        "identity": "service-account",
+        "authentication": "short-lived-token",
+        "identity": "workload",
+        "authorization": "function-level",
         "data_assets_received": [
           "model-weights"
         ],
@@ -263,8 +266,9 @@
         "description": "Reads the published articles",
         "protocol": "https",
         "readonly": true,
-        "authentication": "token",
-        "identity": "service-account",
+        "authentication": "short-lived-token",
+        "identity": "workload",
+        "authorization": "function-level",
         "data_assets_received": [
           "knowledge-articles"
         ],
@@ -278,8 +282,9 @@
         "title": "Embedding Upsert",
         "description": "Writes the embeddings of the articles",
         "protocol": "https",
-        "authentication": "token",
-        "identity": "service-account",
+        "authentication": "short-lived-token",
+        "identity": "workload",
+        "authorization": "function-level",
         "data_assets_sent": [
           "knowledge-articles"
         ],
@@ -462,6 +467,7 @@
         "protocol": "jdbc-encrypted",
         "authentication": "credentials",
         "identity": "service-account",
+        "authorization": "function-level",
         "data_assets_sent": [
           "order-data"
         ],
@@ -610,8 +616,9 @@
         "title": "Completion",
         "description": "Plans the next step and writes the answers",
         "protocol": "https",
-        "authentication": "credentials",
+        "authentication": "long-lived-token",
         "identity": "service-account",
+        "authorization": "function-level",
         "data_assets_sent": [
           "chat-transcripts",
           "customer-data"
@@ -629,8 +636,9 @@
         "title": "Memory Write",
         "description": "Stores summaries of resolved conversations as memory",
         "protocol": "https",
-        "authentication": "token",
-        "identity": "service-account",
+        "authentication": "short-lived-token",
+        "identity": "workload",
+        "authorization": "function-level",
         "data_assets_sent": [
           "chat-transcripts"
         ],
@@ -644,8 +652,9 @@
         "title": "Moderation",
         "description": "Checks requests and answers for harmful content",
         "protocol": "https",
-        "authentication": "token",
-        "identity": "service-account",
+        "authentication": "short-lived-token",
+        "identity": "workload",
+        "authorization": "function-level",
         "data_assets_sent": [
           "chat-transcripts"
         ],
@@ -663,8 +672,9 @@
         "description": "Retrieves the articles matching a question",
         "protocol": "https",
         "readonly": true,
-        "authentication": "token",
-        "identity": "service-account",
+        "authentication": "short-lived-token",
+        "identity": "workload",
+        "authorization": "function-level",
         "data_assets_received": [
           "knowledge-articles"
         ],
@@ -678,6 +688,7 @@
         "title": "Tool Calls",
         "description": "Calls the order, refund and web search tools",
         "protocol": "https",
+        "authorization": "none",
         "data_assets_sent": [
           "order-data"
         ],
@@ -737,8 +748,9 @@
         "title": "Order API",
         "description": "Looks up orders and issues refunds",
         "protocol": "https",
-        "authentication": "token",
-        "identity": "service-account",
+        "authentication": "short-lived-token",
+        "identity": "end-user",
+        "authorization": "function-level",
         "data_assets_sent": [
           "order-data"
         ],
@@ -757,8 +769,9 @@
         "description": "Searches the web for product information",
         "protocol": "https",
         "readonly": true,
-        "authentication": "credentials",
+        "authentication": "long-lived-token",
         "identity": "service-account",
+        "authorization": "function-level",
         "data_assets_received": [
           "web-content"
         ],

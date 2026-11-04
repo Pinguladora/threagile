@@ -50,6 +50,37 @@ In JetBrains IDEs, add the URL under *Settings > Languages & Frameworks > Schema
 Mappings*. To work offline, `threagile create-editing-support --output .` writes the schema of the binary, and
 live templates for the model, into the current folder.
 
+## Authentication, identity and authorization of links
+
+Three fields of a communication link describe how its target controls access:
+
+```yaml
+communication_links:
+  Order API:
+    target: order-service
+    authentication: short-lived-token  # how the caller proves who it is
+    identity: end-user                 # whose identity reaches the target
+    authorization: object-level        # how finely the target checks what the caller may do
+```
+
+- `authentication` is the mechanism, including how long its secret stays valid: `short-lived-token` for
+  tokens that expire within hours (OAuth 2.0 access tokens, OpenID Connect ID tokens) and `long-lived-token` for
+  bearer secrets that do not (API keys, personal access tokens). `token` leaves the lifetime open, and the rules
+  assume nothing about it. `multi-factor` covers any number of factors.
+- `identity` is whose permissions the target checks: `none` for anonymous calls, `service-account` for the
+  caller's own account with static credentials, `workload` for its identity issued by the platform (cloud IAM
+  roles, Kubernetes service account tokens, SPIFFE), and `end-user` when the identity of the user is passed on.
+  A personal access token is `long-lived-token` with `end-user`, an API key `long-lived-token` with
+  `service-account`.
+- `authorization` is the granularity of the check: `none`, `authenticated-only` (anyone authenticated may do
+  everything), `function-level` (per operation, for example by role) or `object-level` (also per object, like
+  the order or the account the request names). It is `unknown` when left out, and the rules then assume nothing.
+
+The policy model behind the check, like RBAC, ABAC or ReBAC, changes no risk, so it has no field; add it as a tag
+of the link when it helps the readers. Authorization that a separate service decides, for example through the
+[AuthZEN](https://openid.net/wg/authzen/) Authorization API, is modelled as a `policy-decision-point` technical
+asset with a link from each service that asks it, so that the rules see the decision point and the links to it.
+
 ## Migrating models of earlier versions
 
 Earlier versions of the model put the identity that a communication link carries into its `authorization`

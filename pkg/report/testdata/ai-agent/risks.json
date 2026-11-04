@@ -736,6 +736,66 @@
     "most_relevant_technical_asset_raa": 87.3574144486692
   },
   {
+    "category": "missing-object-level-authorization",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMissing Object-Level Authorization\u003c/b\u003e risk at \u003cb\u003eOrder Service\u003c/b\u003e for \u003cb\u003eSupport Tools\u003c/b\u003e (function-level)",
+    "synthetic_id": "missing-object-level-authorization@order-service@support-tools\u003eorder-api",
+    "most_relevant_technical_asset": "order-service",
+    "most_relevant_communication_link": "support-tools\u003eorder-api",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "order-service"
+    ],
+    "plain_title": "Missing Object-Level Authorization risk at Order Service for Support Tools (function-level)",
+    "category_title": "Missing Object-Level Authorization",
+    "stride": "elevation-of-privilege",
+    "function": "development",
+    "cwe": 639,
+    "references": [
+      "OWASP API1:2023 Broken Object Level Authorization",
+      "OWASP API5:2023 Broken Function Level Authorization"
+    ],
+    "action": "Object-Level Authorization",
+    "mitigation": "Check in every operation that the user of the request may access each object it names, by the identity of the user rather than an id the request carries, and deny by default, for example by asking a policy decision point with the user, the action and the object. Set the authorization of the link to \u003ci\u003eobject-level\u003c/i\u003e once this is in place.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Order Service",
+    "most_relevant_technical_asset_raa": 46.06157864553967,
+    "most_relevant_communication_link_title": "Order API"
+  },
+  {
+    "category": "missing-object-level-authorization",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMissing Object-Level Authorization\u003c/b\u003e risk at \u003cb\u003eSupport Agent\u003c/b\u003e for \u003cb\u003eChat Frontend\u003c/b\u003e (function-level)",
+    "synthetic_id": "missing-object-level-authorization@support-agent@chat-frontend\u003eassistant-request",
+    "most_relevant_technical_asset": "support-agent",
+    "most_relevant_communication_link": "chat-frontend\u003eassistant-request",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "support-agent"
+    ],
+    "plain_title": "Missing Object-Level Authorization risk at Support Agent for Chat Frontend (function-level)",
+    "category_title": "Missing Object-Level Authorization",
+    "stride": "elevation-of-privilege",
+    "function": "development",
+    "cwe": 639,
+    "references": [
+      "OWASP API1:2023 Broken Object Level Authorization",
+      "OWASP API5:2023 Broken Function Level Authorization"
+    ],
+    "action": "Object-Level Authorization",
+    "mitigation": "Check in every operation that the user of the request may access each object it names, by the identity of the user rather than an id the request carries, and deny by default, for example by asking a policy decision point with the user, the action and the object. Set the authorization of the link to \u003ci\u003eobject-level\u003c/i\u003e once this is in place.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Support Agent",
+    "most_relevant_technical_asset_raa": 87.3574144486692,
+    "most_relevant_communication_link_title": "Assistant Request"
+  },
+  {
     "category": "missing-vault",
     "risk_status": "unchecked",
     "severity": "medium",

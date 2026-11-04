@@ -147,6 +147,23 @@ these rules skip links over the insecure ones and leave them to
 treatment plant with an industrial DMZ, a remote pump station and a chlorine safety
 system; analyze it to see the OT rules at work.
 
+## Access rules
+
+These rules judge the [authentication, identity and authorization](./model.md#authentication-identity-and-authorization-of-links)
+of communication links, and the policy decision points that services externalize their authorization to. Links
+whose authorization is `unknown`, or whose authentication is `token` with an open lifetime, are skipped, so models
+that do not set these fields get no findings from them.
+
+| Rule (id) | Fires on | Rated by | References |
+|-----------|----------|----------|------------|
+| Long-Lived Credentials (`long-lived-credentials`) | links into assets with confidential or critical data authenticated with `long-lived-token`, or with `credentials` by a caller no human uses, unless the identity is `workload` | the data of the target; likely from the internet, from clients of humans or across a network trust boundary | OWASP NHI7 and NHI2 |
+| Missing Object-Level Authorization (`missing-object-level-authorization`) | links into non-datastore assets with confidential or critical data that act for users (identity `end-user` or a client of humans) with authorization `none`, `authenticated-only` or `function-level` | the data of the target, one step higher without function-level authorization; very likely from the internet | OWASP API1 and API5 |
+| Missing Policy Decision Point Redundancy (`missing-policy-decision-point-redundancy`) | policy decision points that are not redundant and that other assets ask over the network | the availability of the services that ask it | AuthZEN Authorization API, NIST SP 800-162 |
+| Unprotected Authorization Decisions (`unprotected-authorization-decisions`) | links to a policy decision point that are unauthenticated or unencrypted | the data of the service that asks; likely across a network trust boundary | AuthZEN Authorization API, NIST SP 800-162 |
+
+[`demo/ai-agent/threagile.yaml`](../demo/ai-agent/threagile.yaml) sets these fields on all its links; its order
+service and agent check access per function only, which the object-level rule reports.
+
 ## Risk ids of Push instead of Pull Deployment
 
 Push instead of Pull Deployment creates one risk per deployment target, with the id

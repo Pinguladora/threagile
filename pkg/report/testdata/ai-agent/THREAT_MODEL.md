@@ -41,13 +41,13 @@ Threagile toolkit was used to model the architecture of "AI Support Assistant" a
 
 Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.
 
-In total **60 initial risks** in **26 categories** have been identified during the threat modeling process:
+In total **62 initial risks** in **27 categories** have been identified during the threat modeling process:
 
 | Severity | Risks | Status | Risks |
 | --- | ---: | --- | ---: |
-| Critical | 0 | Unchecked | 59 |
+| Critical | 0 | Unchecked | 61 |
 | High | 0 | In Discussion | 0 |
-| Elevated | 24 | Accepted | 0 |
+| Elevated | 26 | Accepted | 0 |
 | Medium | 29 | In Progress | 1 |
 | Low | 7 | Mitigated | 0 |
 |  |  | False Positive | 0 |
@@ -56,7 +56,7 @@ The assistant acts for the customers: besides answering, it changes orders and i
 
 ## Impact Analysis of the Initial Risks
 
-The most prevalent impacts of the **60 initial risks** (distributed over **26 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **62 initial risks** (distributed over **27 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Cross-Site Scripting (XSS)](#cross-site-scripting-xss): 1 Initial Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -69,6 +69,10 @@ The most prevalent impacts of the **60 initial risks** (distributed over **26 ri
 - **Elevated**: [Missing Authentication](#missing-authentication): 1 Initial Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to access or modify sensitive data in an unauthenticated way.
+
+- **Elevated**: [Missing Object-Level Authorization](#missing-object-level-authorization): 2 Initial Risks, exploitation likelihood is _Likely_ with _Medium_ impact
+
+    If this risk is unmitigated, attackers with any account might read or change the data of all other users.
 
 - **Elevated**: [Prompt Injection](#prompt-injection): 2 Initial Risks, exploitation likelihood is _Likely_ with _High_ impact
 
@@ -170,23 +174,23 @@ The following table gives a high-level overview of the risk tracking status (inc
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Critical | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | High | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Elevated | 24 | 24 | 0 | 0 | 0 | 0 | 0 |
+| Elevated | 26 | 26 | 0 | 0 | 0 | 0 | 0 |
 | Medium | 29 | 28 | 0 | 0 | 1 | 0 | 0 |
 | Low | 7 | 7 | 0 | 0 | 0 | 0 | 0 |
 
-After removal of risks with status _mitigated_ and _false positive_ the following **60 remain unmitigated**:
+After removal of risks with status _mitigated_ and _false positive_ the following **62 remain unmitigated**:
 
 | Severity | Unmitigated risks | To be checked by | Unmitigated risks |
 | --- | ---: | --- | ---: |
 | Critical | 0 | Business Side | 1 |
 | High | 0 | Architecture | 11 |
-| Elevated | 24 | Development | 19 |
+| Elevated | 26 | Development | 21 |
 | Medium | 29 | Operations | 29 |
 | Low | 7 |  |  |
 
 ## Impact Analysis of the Remaining Risks
 
-The most prevalent impacts of the **60 remaining risks** (distributed over **26 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **62 remaining risks** (distributed over **27 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Cross-Site Scripting (XSS)](#cross-site-scripting-xss): 1 Remaining Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -199,6 +203,10 @@ The most prevalent impacts of the **60 remaining risks** (distributed over **26 
 - **Elevated**: [Missing Authentication](#missing-authentication): 1 Remaining Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to access or modify sensitive data in an unauthenticated way.
+
+- **Elevated**: [Missing Object-Level Authorization](#missing-object-level-authorization): 2 Remaining Risks, exploitation likelihood is _Likely_ with _Medium_ impact
+
+    If this risk is unmitigated, attackers with any account might read or change the data of all other users.
 
 - **Elevated**: [Prompt Injection](#prompt-injection): 2 Remaining Risks, exploitation likelihood is _Likely_ with _High_ impact
 
@@ -294,7 +302,7 @@ The most prevalent impacts of the **60 remaining risks** (distributed over **26 
 
 ## Risks by Severity
 
-All **60 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
+All **62 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
 
 ### Critical
 
@@ -310,13 +318,15 @@ _No risks._
 
 ### Elevated
 
-**24 risks**
+**26 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
 | Elevated | [**Cross-Site Scripting (XSS)** risk at **Chat Frontend**](#cross-site-scripting-xss) | [Cross-Site Scripting (XSS)](#cross-site-scripting-xss) | [Chat Frontend](#chat-frontend) | Unchecked |
 | Elevated | [**Excessive Agency** risk at **Support Agent** changing **Order Service**](#excessive-agency) | [Excessive Agency](#excessive-agency) | [Support Agent](#support-agent), [Tool Calls](#tool-calls) | Unchecked |
 | Elevated | [**Missing Authentication** covering communication link **Tool Calls** from **Support Agent** to **Support Tools**](#missing-authentication) | [Missing Authentication](#missing-authentication) | [Support Tools](#support-tools), [Tool Calls](#tool-calls) | Unchecked |
+| Elevated | [**Missing Object-Level Authorization** risk at **Order Service** for **Support Tools** (function-level)](#missing-object-level-authorization) | [Missing Object-Level Authorization](#missing-object-level-authorization) | [Order Service](#order-service), [Order API](#order-api) | Unchecked |
+| Elevated | [**Missing Object-Level Authorization** risk at **Support Agent** for **Chat Frontend** (function-level)](#missing-object-level-authorization) | [Missing Object-Level Authorization](#missing-object-level-authorization) | [Support Agent](#support-agent), [Assistant Request](#assistant-request) | Unchecked |
 | Elevated | [**Sensitive Data Disclosure through Model Output** risk at **Guardrail Model**](#sensitive-data-disclosure-through-model-output) | [Sensitive Data Disclosure through Model Output](#sensitive-data-disclosure-through-model-output) | [Guardrail Model](#guardrail-model) | Unchecked |
 | Elevated | [**Sensitive Data Disclosure through Model Output** risk at **Support Agent**](#sensitive-data-disclosure-through-model-output) | [Sensitive Data Disclosure through Model Output](#sensitive-data-disclosure-through-model-output) | [Support Agent](#support-agent) | Unchecked |
 | Elevated | [**Prompt Injection** risk at **Support Agent**](#prompt-injection) | [Prompt Injection](#prompt-injection) | [Support Agent](#support-agent), [Assistant Request](#assistant-request) | Unchecked |
@@ -571,7 +581,7 @@ _This list is not complete and regulatory or law relevant abuse cases have to be
 
 ## STRIDE Classification of Identified Risks
 
-This chapter clusters and classifies the risks by STRIDE categories: in total **60 potential risks** have been identified during the threat modeling process.
+This chapter clusters and classifies the risks by STRIDE categories: in total **62 potential risks** have been identified during the threat modeling process.
 
 ### Spoofing
 
@@ -687,7 +697,7 @@ Denial of service - Availability
 
 ### Elevation of Privilege
 
-**9 risks**
+**11 risks**
 
 Elevation of privilege - Authorization
 
@@ -698,6 +708,10 @@ Elevation of privilege - Authorization
 - **Elevated**: [Missing Authentication](#missing-authentication): 1/1 unmitigated Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
     Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes sensitive data.
+
+- **Elevated**: [Missing Object-Level Authorization](#missing-object-level-authorization): 2/2 unmitigated Risks, exploitation likelihood is _Likely_ with _Medium_ impact
+
+    A service that acts for its users must check in each request that the user may access the object at hand, like the order or the account the request names. Checking only that the caller is logged in, or that its role may call the operation, lets any user read or change the objects of others by changing an id in the request (BOLA, also known as IDOR).
 
 - **Elevated**: [Prompt Injection](#prompt-injection): 2/2 unmitigated Risks, exploitation likelihood is _Likely_ with _High_ impact
 
@@ -717,7 +731,7 @@ Elevation of privilege - Authorization
 
 ## Assignment by Function
 
-This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **60 potential risks** have been identified during the threat modeling process.
+This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **62 potential risks** have been identified during the threat modeling process.
 
 ### Business Side
 
@@ -777,13 +791,17 @@ Architecture
 
 ### Development
 
-**19 risks**
+**21 risks**
 
 Development
 
 - **Elevated**: [Cross-Site Scripting (XSS)](#cross-site-scripting-xss): 1/1 unmitigated Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
     Try to encode all values sent back to the browser and also handle DOM-manipulations in a safe way to avoid DOM-based XSS. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
+
+- **Elevated**: [Missing Object-Level Authorization](#missing-object-level-authorization): 2/2 unmitigated Risks, exploitation likelihood is _Likely_ with _Medium_ impact
+
+    Check in every operation that the user of the request may access each object it names, by the identity of the user rather than an id the request carries, and deny by default, for example by asking a policy decision point with the user, the action and the object. Set the authorization of the link to _object-level_ once this is in place.
 
 - **Elevated**: [Prompt Injection](#prompt-injection): 2/2 unmitigated Risks, exploitation likelihood is _Likely_ with _High_ impact
 
@@ -979,7 +997,7 @@ This chapter lists custom questions that arose during the threat modeling proces
 
 ## Identified Risks by Vulnerability Category
 
-In total **60 potential risks** have been identified during the threat modeling process, distributed across **26 vulnerability categories**. The following sections describe each identified risk category and its risks.
+In total **62 potential risks** have been identified during the threat modeling process, distributed across **27 vulnerability categories**. The following sections describe each identified risk category and its risks.
 
 ### Cross-Site Scripting (XSS)
 
@@ -1128,6 +1146,57 @@ The risk **Missing Authentication** was found **1 time** in the analyzed archite
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Elevated | **Missing Authentication** covering communication link **Tool Calls** from **Support Agent** to **Support Tools** | `missing-authentication@support-agent>tool-calls@support-agent@support-tools` | Likely | Medium | [Support Tools](#support-tools), [Tool Calls](#tool-calls) | Unchecked | _not tracked_ |
+
+### Missing Object-Level Authorization
+
+**Elevated** · 2/2 unmitigated Risks · `missing-object-level-authorization`
+
+| Property | Value |
+| --- | --- |
+| STRIDE | Elevation of Privilege |
+| CWE | [CWE 639](https://cwe.mitre.org/data/definitions/639.html) |
+| Function | Development |
+| Action | Object-Level Authorization |
+| ASVS chapter | V4 - Access Control Verification Requirements |
+| Cheat sheet | [Authorization_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) |
+| References | OWASP API1:2023 Broken Object Level Authorization; OWASP API5:2023 Broken Function Level Authorization |
+
+**Description**
+
+A service that acts for its users must check in each request that the user may access the object at hand, like the order or the account the request names. Checking only that the caller is logged in, or that its role may call the operation, lets any user read or change the objects of others by changing an id in the request (BOLA, also known as IDOR).
+
+**Impact**
+
+If this risk is unmitigated, attackers with any account might read or change the data of all other users.
+
+**Detection Logic**
+
+In-scope technical assets other than datastores, processing or storing data rated at least as confidential or critical, with an incoming communication link whose authorization is _none_, _authenticated-only_ or _function-level_, and whose identity is _end-user_ or whose caller is used by humans. Links whose authorization is _unknown_ are skipped.
+
+**Risk Rating**
+
+The risk rating depends on the sensitivity of the data processed or stored by the target, one step higher when the link has no function-level authorization either. The attack is very likely when the caller is on the internet, and likely otherwise.
+
+**False Positives**
+
+Services whose objects belong to all users alike, like a product catalog, can be considered as false positives after individual review.
+
+**Mitigation**
+
+Check in every operation that the user of the request may access each object it names, by the identity of the user rather than an id the request carries, and deny by default, for example by asking a policy decision point with the user, the action and the object. Set the authorization of the link to _object-level_ once this is in place.
+
+**Check**
+
+Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
+
+**Risk Findings**
+
+The risk **Missing Object-Level Authorization** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+
+| Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Elevated | **Missing Object-Level Authorization** risk at **Order Service** for **Support Tools** (function-level) | `missing-object-level-authorization@order-service@support-tools>order-api` | Likely | Medium | [Order Service](#order-service), [Order API](#order-api) | Unchecked | _not tracked_ |
+| Elevated | **Missing Object-Level Authorization** risk at **Support Agent** for **Chat Frontend** (function-level) | `missing-object-level-authorization@support-agent@chat-frontend>assistant-request` | Likely | Medium | [Support Agent](#support-agent), [Assistant Request](#assistant-request) | Unchecked | _not tracked_ |
 
 ### Prompt Injection
 
@@ -2316,7 +2385,7 @@ The risk **Unchecked Deployment** was found **1 time** in the analyzed architect
 
 ## Identified Risks by Technical Asset
 
-In total **60 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
+In total **62 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
 
 ### Chat Frontend
 
@@ -2512,13 +2581,14 @@ Embeddings of the support articles and the memory of the agent
 
 ### Order Service
 
-**Elevated** · 6/6 unmitigated Risks · `order-service`
+**Elevated** · 7/7 unmitigated Risks · `order-service`
 
 Manages orders and refunds
 
 **Identified Risks of the Asset**
 
 - **Elevated**: [**SQL/NoSQL-Injection** risk at **Order Service** against database **Orders Database** via **Order Storage**](#sqlnosql-injection) (Unchecked)
+- **Elevated**: [**Missing Object-Level Authorization** risk at **Order Service** for **Support Tools** (function-level)](#missing-object-level-authorization) (Unchecked)
 - **Medium**: [**Container Base Image Backdooring** risk at **Order Service**](#container-base-image-backdooring) (Unchecked)
 - **Medium**: [**Missing Build Infrastructure** in the threat model (referencing asset **Order Service** as an example)](#missing-build-infrastructure) (Unchecked)
 - **Medium**: [**Missing Vault (Secret Storage)** in the threat model (referencing asset **Order Service** as an example)](#missing-vault-secret-storage) (Unchecked)
@@ -2561,7 +2631,7 @@ Manages orders and refunds
 
 ### Support Agent
 
-**Elevated** · 15/15 unmitigated Risks · `support-agent`
+**Elevated** · 16/16 unmitigated Risks · `support-agent`
 
 Answers support questions, looks up orders and issues refunds through its tools
 
@@ -2571,6 +2641,7 @@ Answers support questions, looks up orders and issues refunds through its tools
 - **Elevated**: [**SQL/NoSQL-Injection** risk at **Support Agent** against database **Knowledge Index** via **Memory Write**](#sqlnosql-injection) (Unchecked)
 - **Elevated**: [**SQL/NoSQL-Injection** risk at **Support Agent** against database **Knowledge Index** via **Retrieval**](#sqlnosql-injection) (Unchecked)
 - **Elevated**: [**Excessive Agency** risk at **Support Agent** changing **Order Service**](#excessive-agency) (Unchecked)
+- **Elevated**: [**Missing Object-Level Authorization** risk at **Support Agent** for **Chat Frontend** (function-level)](#missing-object-level-authorization) (Unchecked)
 - **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Support Agent**](#sensitive-data-disclosure-through-model-output) (Unchecked)
 - **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Guardrail Model** via **Moderation**](#server-side-request-forgery-ssrf) (Unchecked)
 - **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Hosted LLM** via **Completion**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -2941,11 +3012,11 @@ _The asset was defined as out-of-scope._
 
 ## Identified Data Breach Probabilities by Data Asset
 
-In total **60 potential risks** have been identified during the threat modeling process, distributed across **6 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
+In total **62 potential risks** have been identified during the threat modeling process, distributed across **6 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
 
 ### Chat Transcripts
 
-**Probable** · 36/36 unmitigated Risks · `chat-transcripts`
+**Probable** · 37/37 unmitigated Risks · `chat-transcripts`
 
 The conversations of the customers with the assistant
 
@@ -2968,7 +3039,7 @@ The conversations of the customers with the assistant
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 36 remaining risks:
+This data asset has data breach potential because of 37 remaining risks:
 
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Chat Frontend**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Guardrail Model**](#container-base-image-backdooring) (Unchecked)
@@ -2977,6 +3048,7 @@ This data asset has data breach potential because of 36 remaining risks:
 - Probable, **Medium**: [**Missing Cloud Hardening** risk at **Agent Subnet**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Medium**: [**Missing Cloud Hardening** risk at **Cloud Account**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Medium**: [**Missing Cloud Hardening** risk at **Frontend Subnet**](#missing-cloud-hardening) (Unchecked)
+- Probable, **Elevated**: [**Missing Object-Level Authorization** risk at **Support Agent** for **Chat Frontend** (function-level)](#missing-object-level-authorization) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Ingestion Pipeline** against database **Knowledge Index** via **Embedding Upsert**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Support Agent** against database **Knowledge Index** via **Memory Write**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Support Agent** against database **Knowledge Index** via **Retrieval**](#sqlnosql-injection) (Unchecked)
@@ -3009,7 +3081,7 @@ This data asset has data breach potential because of 36 remaining risks:
 
 ### Customer Data
 
-**Probable** · 30/30 unmitigated Risks · `customer-data`
+**Probable** · 32/32 unmitigated Risks · `customer-data`
 
 Names, addresses and contact details of the customers
 
@@ -3032,7 +3104,7 @@ Names, addresses and contact details of the customers
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 30 remaining risks:
+This data asset has data breach potential because of 32 remaining risks:
 
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Order Service**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Orders Database**](#container-base-image-backdooring) (Unchecked)
@@ -3041,6 +3113,8 @@ This data asset has data breach potential because of 30 remaining risks:
 - Probable, **Medium**: [**Missing Cloud Hardening** risk at **Agent Subnet**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Medium**: [**Missing Cloud Hardening** risk at **Backend Subnet**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Medium**: [**Missing Cloud Hardening** risk at **Cloud Account**](#missing-cloud-hardening) (Unchecked)
+- Probable, **Elevated**: [**Missing Object-Level Authorization** risk at **Order Service** for **Support Tools** (function-level)](#missing-object-level-authorization) (Unchecked)
+- Probable, **Elevated**: [**Missing Object-Level Authorization** risk at **Support Agent** for **Chat Frontend** (function-level)](#missing-object-level-authorization) (Unchecked)
 - Probable, **Medium**: [**Publicly Shared Cloud Snapshot** risk at **Orders Database**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Order Service** against database **Orders Database** via **Order Storage**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Support Agent**](#sensitive-data-disclosure-through-model-output) (Unchecked)
@@ -3067,7 +3141,7 @@ This data asset has data breach potential because of 30 remaining risks:
 
 ### Knowledge Articles
 
-**Probable** · 28/28 unmitigated Risks · `knowledge-articles`
+**Probable** · 29/29 unmitigated Risks · `knowledge-articles`
 
 The support articles the assistant answers from
 
@@ -3090,7 +3164,7 @@ The support articles the assistant answers from
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 28 remaining risks:
+This data asset has data breach potential because of 29 remaining risks:
 
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Ingestion Pipeline**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Knowledge CMS**](#container-base-image-backdooring) (Unchecked)
@@ -3099,6 +3173,7 @@ This data asset has data breach potential because of 28 remaining risks:
 - Probable, **Medium**: [**Missing Cloud Hardening** risk at **Agent Subnet**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Medium**: [**Missing Cloud Hardening** risk at **Backend Subnet**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Medium**: [**Missing Cloud Hardening** risk at **Cloud Account**](#missing-cloud-hardening) (Unchecked)
+- Probable, **Elevated**: [**Missing Object-Level Authorization** risk at **Support Agent** for **Chat Frontend** (function-level)](#missing-object-level-authorization) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Ingestion Pipeline** against database **Knowledge Index** via **Embedding Upsert**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Support Agent** against database **Knowledge Index** via **Memory Write**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Support Agent** against database **Knowledge Index** via **Retrieval**](#sqlnosql-injection) (Unchecked)
@@ -3171,7 +3246,7 @@ This data asset has data breach potential because of 20 remaining risks:
 
 ### Order Data
 
-**Probable** · 30/30 unmitigated Risks · `order-data`
+**Probable** · 32/32 unmitigated Risks · `order-data`
 
 Orders, payments and refunds
 
@@ -3194,7 +3269,7 @@ Orders, payments and refunds
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 30 remaining risks:
+This data asset has data breach potential because of 32 remaining risks:
 
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Order Service**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Orders Database**](#container-base-image-backdooring) (Unchecked)
@@ -3203,6 +3278,8 @@ This data asset has data breach potential because of 30 remaining risks:
 - Probable, **Medium**: [**Missing Cloud Hardening** risk at **Agent Subnet**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Medium**: [**Missing Cloud Hardening** risk at **Backend Subnet**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Medium**: [**Missing Cloud Hardening** risk at **Cloud Account**](#missing-cloud-hardening) (Unchecked)
+- Probable, **Elevated**: [**Missing Object-Level Authorization** risk at **Order Service** for **Support Tools** (function-level)](#missing-object-level-authorization) (Unchecked)
+- Probable, **Elevated**: [**Missing Object-Level Authorization** risk at **Support Agent** for **Chat Frontend** (function-level)](#missing-object-level-authorization) (Unchecked)
 - Probable, **Medium**: [**Publicly Shared Cloud Snapshot** risk at **Orders Database**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Order Service** against database **Orders Database** via **Order Storage**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Support Agent**](#sensitive-data-disclosure-through-model-output) (Unchecked)
@@ -3350,9 +3427,9 @@ Forwards the messages of a customer to the assistant
 | Target | [Support Agent](#support-agent) |
 | Protocol | https |
 | Encrypted | yes |
-| Authentication | token |
+| Authentication | short-lived-token |
 | Identity | end-user |
-| Authorization | unknown |
+| Authorization | function-level |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3375,7 +3452,7 @@ The customers chat with the assistant
 | Encrypted | yes |
 | Authentication | session-id |
 | Identity | end-user |
-| Authorization | unknown |
+| Authorization | object-level |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3396,9 +3473,9 @@ Loads the current model version at start
 | Target | [Model Registry](#model-registry) |
 | Protocol | https |
 | Encrypted | yes |
-| Authentication | token |
-| Identity | service-account |
-| Authorization | unknown |
+| Authentication | short-lived-token |
+| Identity | workload |
+| Authorization | function-level |
 | Read-only | yes |
 | Usage | business |
 | Tags | none |
@@ -3419,9 +3496,9 @@ Writes the embeddings of the articles
 | Target | [Knowledge Index](#knowledge-index) |
 | Protocol | https |
 | Encrypted | yes |
-| Authentication | token |
-| Identity | service-account |
-| Authorization | unknown |
+| Authentication | short-lived-token |
+| Identity | workload |
+| Authorization | function-level |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3442,9 +3519,9 @@ Reads the published articles
 | Target | [Knowledge CMS](#knowledge-cms) |
 | Protocol | https |
 | Encrypted | yes |
-| Authentication | token |
-| Identity | service-account |
-| Authorization | unknown |
+| Authentication | short-lived-token |
+| Identity | workload |
+| Authorization | function-level |
 | Read-only | yes |
 | Usage | business |
 | Tags | none |
@@ -3467,7 +3544,7 @@ Reads and writes the orders
 | Encrypted | yes |
 | Authentication | credentials |
 | Identity | service-account |
-| Authorization | unknown |
+| Authorization | function-level |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3490,7 +3567,7 @@ Calls the order, refund and web search tools
 | Encrypted | yes |
 | Authentication | none |
 | Identity | none |
-| Authorization | unknown |
+| Authorization | none |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3511,9 +3588,9 @@ Retrieves the articles matching a question
 | Target | [Knowledge Index](#knowledge-index) |
 | Protocol | https |
 | Encrypted | yes |
-| Authentication | token |
-| Identity | service-account |
-| Authorization | unknown |
+| Authentication | short-lived-token |
+| Identity | workload |
+| Authorization | function-level |
 | Read-only | yes |
 | Usage | business |
 | Tags | none |
@@ -3534,9 +3611,9 @@ Checks requests and answers for harmful content
 | Target | [Guardrail Model](#guardrail-model) |
 | Protocol | https |
 | Encrypted | yes |
-| Authentication | token |
-| Identity | service-account |
-| Authorization | unknown |
+| Authentication | short-lived-token |
+| Identity | workload |
+| Authorization | function-level |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3557,9 +3634,9 @@ Stores summaries of resolved conversations as memory
 | Target | [Knowledge Index](#knowledge-index) |
 | Protocol | https |
 | Encrypted | yes |
-| Authentication | token |
-| Identity | service-account |
-| Authorization | unknown |
+| Authentication | short-lived-token |
+| Identity | workload |
+| Authorization | function-level |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3580,9 +3657,9 @@ Plans the next step and writes the answers
 | Target | [Hosted LLM](#hosted-llm) |
 | Protocol | https |
 | Encrypted | yes |
-| Authentication | credentials |
+| Authentication | long-lived-token |
 | Identity | service-account |
-| Authorization | unknown |
+| Authorization | function-level |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3603,9 +3680,9 @@ Searches the web for product information
 | Target | [Search API](#search-api) |
 | Protocol | https |
 | Encrypted | yes |
-| Authentication | credentials |
+| Authentication | long-lived-token |
 | Identity | service-account |
-| Authorization | unknown |
+| Authorization | function-level |
 | Read-only | yes |
 | Usage | business |
 | Tags | none |
@@ -3626,9 +3703,9 @@ Looks up orders and issues refunds
 | Target | [Order Service](#order-service) |
 | Protocol | https |
 | Encrypted | yes |
-| Authentication | token |
-| Identity | service-account |
-| Authorization | unknown |
+| Authentication | short-lived-token |
+| Identity | end-user |
+| Authorization | function-level |
 | Read-only | no |
 | Usage | business |
 | Tags | none |
@@ -3639,7 +3716,7 @@ Looks up orders and issues refunds
 
 ## Risk Tracking
 
-**1 of 60 risks** are tracked in the model; the others are unchecked.
+**1 of 62 risks** are tracked in the model; the others are unchecked.
 
 | Risk | ID | Severity | Status | Date | Checked by | Ticket | Justification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
