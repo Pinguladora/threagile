@@ -34,10 +34,9 @@ Common tasks (`mise tasks` lists them all):
 | `mise run analyze [model.yaml]` | Analyse a model (default: the bundled example) into `out/` |
 | `mise run serve` | Run the REST server and model editor on :8080 |
 | `mise run snapshot` | Local GoReleaser build of every release archive into `dist/` |
-| `mise run debt` | Full lint report, including the findings inherited from upstream |
 
-Lint only fails on findings introduced since `main`; the code inherited from
-upstream still carries findings that are being burned down separately.
+golangci-lint runs the strict linter set in `.golangci.yaml` over the whole code base,
+and every exception there says why it is made.
 
 Main program is [threagile](./cmd/threagile/main.go).
 

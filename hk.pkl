@@ -31,10 +31,9 @@ local pre_commit = new Mapping<String, Step> {
 // Slower checks, run before push.
 local pre_push = new Mapping<String, Step> {
     ["golangci-lint-config-verify"] { check = "golangci-lint config verify" }
-    // Only findings new since main fail, the same baseline as `mise run lint:go`.
     ["golangci-lint"] {
         glob = new Listing<String> { "**/*.go"; ".golangci.yaml" }
-        check = "golangci-lint run --new-from-merge-base=main ./..."
+        check = "golangci-lint run ./..."
     }
     // GitHub Actions hardening: pin actions to a SHA, lint the workflows, and run
     // zizmor's security static analysis. zizmor is pinned to offline mode here
