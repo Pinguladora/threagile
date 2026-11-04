@@ -41,7 +41,7 @@ func (what AnyValue) PlainValue() any {
 func (what AnyValue) Text() []string {
 	switch castValue := what.value.(type) {
 	case []any:
-		text := make([]string, 0)
+		text := make([]string, 0, len(castValue))
 		for _, item := range castValue {
 			text = append(text, fmt.Sprintf("  - %v", item))
 		}
@@ -49,7 +49,7 @@ func (what AnyValue) Text() []string {
 		return text
 
 	case map[string]any:
-		text := make([]string, 0)
+		text := make([]string, 0, len(castValue))
 		for _, name := range slices.Sorted(maps.Keys(castValue)) {
 			item := castValue[name]
 			text = append(text, fmt.Sprintf("  %v: %v", name, item))
