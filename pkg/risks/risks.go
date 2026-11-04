@@ -21,6 +21,7 @@ func GetBuiltInRiskRules() types.RiskRules {
 		builtin.NewCrossSiteRequestForgeryRule(),
 		builtin.NewCrossSiteScriptingRule(),
 		builtin.NewDosRiskyAccessAcrossTrustBoundaryRule(),
+		builtin.NewEncryptionKeyDeletionRule(),
 		builtin.NewIncompleteModelRule(),
 		builtin.NewLdapInjectionRule(),
 		builtin.NewMissingAuthenticationRule(),
