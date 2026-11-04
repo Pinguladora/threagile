@@ -31,7 +31,7 @@ func (what ArrayValue) ArrayValue() []Value {
 }
 
 func (what ArrayValue) PlainValue() any {
-	values := make([]any, 0)
+	values := make([]any, 0, len(what.value))
 	for _, value := range what.value {
 		values = append(values, value.PlainValue())
 	}
@@ -79,7 +79,7 @@ func ToArrayValue(value Value) (*ArrayValue, error) {
 		arrayValue = castValue
 
 	case []any:
-		arrayValue = make([]Value, 0)
+		arrayValue = make([]Value, 0, len(castValue))
 		for _, item := range castValue {
 			arrayValue = append(arrayValue, SomeValue(item, nil))
 		}

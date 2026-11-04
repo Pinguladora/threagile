@@ -23,7 +23,7 @@ func (what History) String() string {
 }
 
 func (what History) Indented(level int) []string {
-	lines := make([]string, 0)
+	lines := make([]string, 0, len(what))
 	for _, item := range what {
 		lines = append(lines, item.Indented(level)...)
 	}
