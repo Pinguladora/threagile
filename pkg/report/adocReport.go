@@ -508,37 +508,6 @@ func colorPrefixByDataBreachProbability(probability types.DataBreachProbability,
 	}
 }
 
-func titleOfSeverity(severity types.RiskSeverity) string {
-	switch severity {
-	case types.CriticalSeverity:
-		return "Critical Risk Severity"
-	case types.HighSeverity:
-		return "High Risk Severity"
-	case types.ElevatedSeverity:
-		return "Elevated Risk Severity"
-	case types.MediumSeverity:
-		return "Medium Risk Severity"
-	case types.LowSeverity:
-		return "Low Risk Severity"
-	default:
-		return ""
-	}
-}
-
-func riskSuffix(remainingRisks int, totalRisks int) string {
-	suffix := ""
-	if remainingRisks > 0 {
-		suffix = strconv.Itoa(remainingRisks) + "/" + strconv.Itoa(totalRisks) + " unmitigated Risk"
-	} else {
-		suffix = strconv.Itoa(totalRisks) + " mitigated Risk"
-	}
-	if totalRisks != 1 {
-		suffix += "s"
-	}
-
-	return suffix
-}
-
 func (adoc adocReport) addCategories(f *os.File, risksByCategory map[string][]*types.Risk, initialRisks bool, severity types.RiskSeverity, bothInitialAndRemainingRisks bool, describeDescription bool) {
 	describeImpact := true
 	riskCategories := getRiskCategories(adoc.model, reduceToSeverityRisk(risksByCategory, initialRisks, severity))
@@ -1960,7 +1929,7 @@ func (adoc adocReport) dataAssets(f *os.File) {
 		sentViaText := communicationLinkTitleOrNone(adoc.model.SentViaCommLinksSorted(dataAsset), "")
 		receivedViaText := communicationLinkTitleOrNone(adoc.model.ReceivedViaCommLinksSorted(dataAsset), "")
 		dataBreachRisksStillAtRisk := identifiedDataBreachProbabilityRisksStillAtRisk(adoc.model, dataAsset)
-		sortByDataBreachProbability(dataBreachRisksStillAtRisk, adoc.model)
+		sortByDataBreachProbability(dataBreachRisksStillAtRisk)
 		dataBreachText := "This data asset has no data breach potential."
 		if len(dataBreachRisksStillAtRisk) > 0 {
 			riskRemainingStr := "risk"
