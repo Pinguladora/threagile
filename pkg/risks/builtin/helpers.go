@@ -57,6 +57,73 @@ func containsCaseInsensitiveAny(as []string, bs ...string) bool {
 	return false
 }
 
+// newCallerAttackRisk creates the risk of the caller of an incoming flow attacking the technical asset, rated by the
+// sensitivity of the data the asset processes.
+func newCallerAttackRisk(
+	input *types.Model, categoryId string, title string, technicalAsset *types.TechnicalAsset,
+	incomingFlow *types.CommunicationLink, likelihood types.RiskExploitationLikelihood,
+) *types.Risk {
+	caller := input.TechnicalAssets[incomingFlow.SourceId]
+	impact := types.MediumImpact
+	if input.HighestProcessedConfidentiality(technicalAsset) == types.StrictlyConfidential ||
+		input.HighestProcessedIntegrity(technicalAsset) == types.MissionCritical {
+		impact = types.HighImpact
+	}
+	risk := &types.Risk{
+		CategoryId:                      categoryId,
+		Severity:                        types.CalculateSeverity(likelihood, impact),
+		ExploitationLikelihood:          likelihood,
+		ExploitationImpact:              impact,
+		Title:                           title,
+		MostRelevantTechnicalAssetId:    caller.Id,
+		MostRelevantCommunicationLinkId: incomingFlow.Id,
+		DataBreachProbability:           types.Probable,
+		DataBreachTechnicalAssetIDs:     []string{technicalAsset.Id},
+	}
+	risk.SyntheticId = risk.CategoryId + "@" + caller.Id + "@" + technicalAsset.Id + "@" + incomingFlow.Id
+	return risk
+}
+
+// processesHighestRatedData tells whether the technical asset processes strictly confidential or mission-critical
+// data.
+func processesHighestRatedData(parsedModel *types.Model, ta *types.TechnicalAsset) bool {
+	return parsedModel.HighestProcessedConfidentiality(ta) == types.StrictlyConfidential ||
+		parsedModel.HighestProcessedIntegrity(ta) == types.MissionCritical ||
+		parsedModel.HighestProcessedAvailability(ta) == types.MissionCritical
+}
+
+// transfersHighestRatedData tells whether the communication link transfers strictly confidential or mission-critical
+// data.
+func transfersHighestRatedData(parsedModel *types.Model, link *types.CommunicationLink) bool {
+	return parsedModel.HighestCommunicationLinkConfidentiality(link) == types.StrictlyConfidential ||
+		parsedModel.HighestCommunicationLinkIntegrity(link) == types.MissionCritical ||
+		parsedModel.HighestCommunicationLinkAvailability(link) == types.MissionCritical
+}
+
+// findUnrelatedNeighbours checks all other technical assets that are not related to the given one, as decided by
+// isRelated: whether any of them is in the same network segment or execution environment as the given one, and
+// whether any of them is even in the same execution environment.
+func findUnrelatedNeighbours(
+	parsedModel *types.Model, ta *types.TechnicalAsset, isRelated func(*types.TechnicalAsset) bool,
+) (found bool, sameExecutionEnv bool) {
+	for sparringAssetCandidateId := range parsedModel.TechnicalAssets { // so inner loop again over all assets
+		if ta.Id == sparringAssetCandidateId {
+			continue
+		}
+		if isRelated(parsedModel.TechnicalAssets[sparringAssetCandidateId]) {
+			continue
+		}
+
+		if isSameExecutionEnvironment(parsedModel, ta, sparringAssetCandidateId) {
+			found = true
+			sameExecutionEnv = true
+		} else if isSameTrustBoundaryNetworkOnly(parsedModel, ta, sparringAssetCandidateId) {
+			found = true
+		}
+	}
+	return found, sameExecutionEnv
+}
+
 func isSameExecutionEnvironment(parsedModel *types.Model, ta *types.TechnicalAsset, otherAssetId string) bool {
 	trustBoundaryOfMyAsset, trustBoundaryOfMyAssetOk := parsedModel.DirectContainingTrustBoundaryMappedByTechnicalAssetId[ta.Id]
 	trustBoundaryOfOtherAsset, trustBoundaryOfOtherAssetOk := parsedModel.DirectContainingTrustBoundaryMappedByTechnicalAssetId[otherAssetId]

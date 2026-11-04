@@ -42,38 +42,57 @@ func (r *WrongCommunicationLinkContentRule) GenerateRisks(input *types.Model) ([
 	for _, techAsset := range input.TechnicalAssets {
 		for _, commLink := range techAsset.CommunicationLinks {
 			// check readonly consistency
-			if commLink.Readonly {
-				if len(commLink.DataAssetsReceived) == 0 && len(commLink.DataAssetsSent) > 0 {
-					risks = append(risks, r.createRisk(techAsset, commLink,
-						"(data assets sent/received not matching the communication link's readonly flag)"))
-				}
-			} else {
-				if len(commLink.DataAssetsSent) == 0 && len(commLink.DataAssetsReceived) > 0 {
-					risks = append(risks, r.createRisk(techAsset, commLink,
-						"(data assets sent/received not matching the communication link's readonly flag)"))
-				}
+			if hasReadonlyMismatch(commLink) {
+				risks = append(risks, r.createRisk(techAsset, commLink,
+					"(data assets sent/received not matching the communication link's readonly flag)"))
 			}
 			// check for protocol inconsistencies
 			targetAsset := input.TechnicalAssets[commLink.TargetId]
-			if commLink.Protocol == types.InterProcessCommunication && targetAsset.Type != types.Process {
-				risks = append(risks, r.createRisk(techAsset, commLink,
-					"(protocol type \""+types.InterProcessCommunication.String()+"\" does not match target technology type \""+targetAsset.Technologies.String()+"\": expected \""+types.Process.String()+"\")"))
-			}
-			if commLink.Protocol == types.InProcessLibraryCall && !targetAsset.Technologies.GetAttribute(types.Library) {
-				risks = append(risks, r.createRisk(techAsset, commLink,
-					"(protocol type \""+types.InProcessLibraryCall.String()+"\" does not match target technology type \""+targetAsset.Technologies.String()+"\": expected \""+types.Library+"\")"))
-			}
-			if commLink.Protocol == types.LocalFileAccess && !targetAsset.Technologies.GetAttribute(types.LocalFileSystem) {
-				risks = append(risks, r.createRisk(techAsset, commLink,
-					"(protocol type \""+types.LocalFileAccess.String()+"\" does not match target technology type \""+targetAsset.Technologies.String()+"\": expected \""+types.LocalFileSystem+"\")"))
-			}
-			if commLink.Protocol == types.ContainerSpawning && targetAsset.Machine != types.Container {
-				risks = append(risks, r.createRisk(techAsset, commLink,
-					"(protocol type \""+types.ContainerSpawning.String()+"\" does not match target machine type \""+targetAsset.Machine.String()+"\": expected \""+types.Container.String()+"\")"))
+			if reason := protocolMismatch(commLink, targetAsset); reason != "" {
+				risks = append(risks, r.createRisk(techAsset, commLink, reason))
 			}
 		}
 	}
 	return risks, nil
+}
+
+func hasReadonlyMismatch(commLink *types.CommunicationLink) bool {
+	if commLink.Readonly {
+		return len(commLink.DataAssetsReceived) == 0 && len(commLink.DataAssetsSent) > 0
+	}
+	return len(commLink.DataAssetsSent) == 0 && len(commLink.DataAssetsReceived) > 0
+}
+
+// protocolMismatch returns why the protocol of the communication link does not match its target, or "" when it
+// matches.
+func protocolMismatch(commLink *types.CommunicationLink, targetAsset *types.TechnicalAsset) string {
+	switch commLink.Protocol {
+	case types.InterProcessCommunication:
+		if targetAsset.Type != types.Process {
+			return "(protocol type \"" + types.InterProcessCommunication.String() +
+				"\" does not match target technology type \"" + targetAsset.Technologies.String() +
+				"\": expected \"" + types.Process.String() + "\")"
+		}
+	case types.InProcessLibraryCall:
+		if !targetAsset.Technologies.GetAttribute(types.Library) {
+			return "(protocol type \"" + types.InProcessLibraryCall.String() +
+				"\" does not match target technology type \"" + targetAsset.Technologies.String() +
+				"\": expected \"" + types.Library + "\")"
+		}
+	case types.LocalFileAccess:
+		if !targetAsset.Technologies.GetAttribute(types.LocalFileSystem) {
+			return "(protocol type \"" + types.LocalFileAccess.String() +
+				"\" does not match target technology type \"" + targetAsset.Technologies.String() +
+				"\": expected \"" + types.LocalFileSystem + "\")"
+		}
+	case types.ContainerSpawning:
+		if targetAsset.Machine != types.Container {
+			return "(protocol type \"" + types.ContainerSpawning.String() +
+				"\" does not match target machine type \"" + targetAsset.Machine.String() +
+				"\": expected \"" + types.Container.String() + "\")"
+		}
+	}
+	return ""
 }
 
 func (r *WrongCommunicationLinkContentRule) createRisk(technicalAsset *types.TechnicalAsset, commLink *types.CommunicationLink, reason string) *types.Risk {

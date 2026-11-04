@@ -72,19 +72,8 @@ func (r *ServerSideRequestForgeryRule) createRisk(input *types.Model, technicalA
 	// check all potential attack targets within the same trust boundary (accessible via web protocols)
 	uniqueDataBreachTechnicalAssetIDs := make(map[string]any)
 	uniqueDataBreachTechnicalAssetIDs[technicalAsset.Id] = true
-	for _, potentialTargetAsset := range input.TechnicalAssets {
-		if !isSameTrustBoundaryNetworkOnly(input, technicalAsset, potentialTargetAsset.Id) {
-			continue
-		}
-		for _, commLinkIncoming := range input.IncomingTechnicalCommunicationLinksMappedByTargetId[potentialTargetAsset.Id] {
-			if !commLinkIncoming.Protocol.IsPotentialWebAccessProtocol() {
-				continue
-			}
-			uniqueDataBreachTechnicalAssetIDs[potentialTargetAsset.Id] = true
-			if input.HighestProcessedConfidentiality(potentialTargetAsset) == types.StrictlyConfidential {
-				impact = types.MediumImpact
-			}
-		}
+	if collectWebAccessedNeighbours(input, technicalAsset, uniqueDataBreachTechnicalAssetIDs) {
+		impact = types.MediumImpact
 	}
 	// adjust for cloud-based special risks
 	trustBoundaryId := input.GetTechnicalAssetTrustBoundaryId(technicalAsset)
@@ -109,4 +98,26 @@ func (r *ServerSideRequestForgeryRule) createRisk(input *types.Model, technicalA
 	}
 	risk.SyntheticId = risk.CategoryId + "@" + technicalAsset.Id + "@" + target.Id + "@" + outgoingFlow.Id
 	return risk
+}
+
+// collectWebAccessedNeighbours adds the technical assets in the same trust boundary as the given one that are accessed
+// via web protocols to the ids, and tells whether any of them processes strictly confidential data.
+func collectWebAccessedNeighbours(
+	input *types.Model, technicalAsset *types.TechnicalAsset, ids map[string]any,
+) (processesStrictlyConfidentialData bool) {
+	for _, potentialTargetAsset := range input.TechnicalAssets {
+		if !isSameTrustBoundaryNetworkOnly(input, technicalAsset, potentialTargetAsset.Id) {
+			continue
+		}
+		for _, commLinkIncoming := range input.IncomingTechnicalCommunicationLinksMappedByTargetId[potentialTargetAsset.Id] {
+			if !commLinkIncoming.Protocol.IsPotentialWebAccessProtocol() {
+				continue
+			}
+			ids[potentialTargetAsset.Id] = true
+			if input.HighestProcessedConfidentiality(potentialTargetAsset) == types.StrictlyConfidential {
+				processesStrictlyConfidentialData = true
+			}
+		}
+	}
+	return processesStrictlyConfidentialData
 }

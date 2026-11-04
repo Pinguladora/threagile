@@ -61,22 +61,7 @@ func (r *UnguardedAccessFromInternetRule) GenerateRisks(input *types.Model) ([]*
 		commLinks := input.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id]
 		sort.Sort(types.ByTechnicalCommunicationLinkIdSort(commLinks))
 		for _, incomingAccess := range commLinks {
-			if technicalAsset.Technologies.GetAttribute(types.LoadBalancer) {
-				continue
-			}
-			if !technicalAsset.CustomDevelopedParts &&
-				((technicalAsset.Technologies.GetAttribute(types.IsHTTPInternetAccessOK) && (incomingAccess.Protocol == types.HTTP || incomingAccess.Protocol == types.HTTPS)) ||
-					(technicalAsset.Technologies.GetAttribute(types.IsFTPInternetAccessOK) && (incomingAccess.Protocol == types.FTP || incomingAccess.Protocol == types.FTPS || incomingAccess.Protocol == types.SFTP))) {
-				continue
-			}
-			if input.TechnicalAssets[incomingAccess.SourceId].Technologies.GetAttribute(types.Monitoring) ||
-				incomingAccess.VPN {
-				continue
-			}
-			if technicalAsset.Confidentiality < types.Confidential && technicalAsset.Integrity < types.Critical {
-				continue
-			}
-			if !input.TechnicalAssets[incomingAccess.SourceId].Internet {
+			if skipIncomingAccessFromInternet(input, technicalAsset, incomingAccess) {
 				continue
 			}
 
@@ -85,6 +70,38 @@ func (r *UnguardedAccessFromInternetRule) GenerateRisks(input *types.Model) ([]*
 		}
 	}
 	return risks, nil
+}
+
+func skipIncomingAccessFromInternet(
+	input *types.Model, technicalAsset *types.TechnicalAsset, incomingAccess *types.CommunicationLink,
+) bool {
+	if technicalAsset.Technologies.GetAttribute(types.LoadBalancer) {
+		return true
+	}
+	if !technicalAsset.CustomDevelopedParts && isInternetAccessOK(technicalAsset, incomingAccess) {
+		return true
+	}
+	if input.TechnicalAssets[incomingAccess.SourceId].Technologies.GetAttribute(types.Monitoring) ||
+		incomingAccess.VPN {
+		return true
+	}
+	if technicalAsset.Confidentiality < types.Confidential && technicalAsset.Integrity < types.Critical {
+		return true
+	}
+	return !input.TechnicalAssets[incomingAccess.SourceId].Internet
+}
+
+// isInternetAccessOK tells whether the technical asset may be accessed from the internet via the protocol of the
+// incoming access.
+func isInternetAccessOK(technicalAsset *types.TechnicalAsset, incomingAccess *types.CommunicationLink) bool {
+	switch incomingAccess.Protocol {
+	case types.HTTP, types.HTTPS:
+		return technicalAsset.Technologies.GetAttribute(types.IsHTTPInternetAccessOK)
+	case types.FTP, types.FTPS, types.SFTP:
+		return technicalAsset.Technologies.GetAttribute(types.IsFTPInternetAccessOK)
+	default:
+		return false
+	}
 }
 
 func (r *UnguardedAccessFromInternetRule) createRisk(dataStore *types.TechnicalAsset, dataFlow *types.CommunicationLink,

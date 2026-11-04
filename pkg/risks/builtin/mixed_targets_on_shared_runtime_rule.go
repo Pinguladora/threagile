@@ -54,29 +54,33 @@ func (r *MixedTargetsOnSharedRuntimeRule) GenerateRisks(input *types.Model) ([]*
 	sort.Strings(keys)
 	for _, key := range keys {
 		sharedRuntime := input.SharedRuntimes[key]
-		currentTrustBoundaryId := ""
-		hasFrontend, hasBackend := false, false
-		riskAdded := false
-		for _, technicalAssetId := range sharedRuntime.TechnicalAssetsRunning {
-			technicalAsset := input.TechnicalAssets[technicalAssetId]
-			if len(currentTrustBoundaryId) > 0 && currentTrustBoundaryId != input.GetTechnicalAssetTrustBoundaryId(technicalAsset) {
-				risks = append(risks, r.createRisk(input, sharedRuntime))
-				riskAdded = true
-				break
-			}
-			currentTrustBoundaryId = input.GetTechnicalAssetTrustBoundaryId(technicalAsset)
-			if technicalAsset.Technologies.GetAttribute(types.IsExclusivelyFrontendRelated) {
-				hasFrontend = true
-			}
-			if technicalAsset.Technologies.GetAttribute(types.IsExclusivelyBackendRelated) {
-				hasBackend = true
-			}
-		}
-		if !riskAdded && hasFrontend && hasBackend {
+		if hasMixedTargets(input, sharedRuntime) {
 			risks = append(risks, r.createRisk(input, sharedRuntime))
 		}
 	}
 	return risks, nil
+}
+
+// hasMixedTargets tells whether the technical assets running on the shared runtime are in different trust
+// boundaries or are both exclusively frontend and exclusively backend related.
+func hasMixedTargets(input *types.Model, sharedRuntime *types.SharedRuntime) bool {
+	currentTrustBoundaryId := ""
+	hasFrontend, hasBackend := false, false
+	for _, technicalAssetId := range sharedRuntime.TechnicalAssetsRunning {
+		technicalAsset := input.TechnicalAssets[technicalAssetId]
+		if len(currentTrustBoundaryId) > 0 &&
+			currentTrustBoundaryId != input.GetTechnicalAssetTrustBoundaryId(technicalAsset) {
+			return true
+		}
+		currentTrustBoundaryId = input.GetTechnicalAssetTrustBoundaryId(technicalAsset)
+		if technicalAsset.Technologies.GetAttribute(types.IsExclusivelyFrontendRelated) {
+			hasFrontend = true
+		}
+		if technicalAsset.Technologies.GetAttribute(types.IsExclusivelyBackendRelated) {
+			hasBackend = true
+		}
+	}
+	return hasFrontend && hasBackend
 }
 
 func (r *MixedTargetsOnSharedRuntimeRule) createRisk(input *types.Model, sharedRuntime *types.SharedRuntime) *types.Risk {

@@ -74,40 +74,40 @@ func (r *UnnecessaryDataTransferRule) GenerateRisks(input *types.Model) ([]*type
 	return risks, nil
 }
 
-func (r *UnnecessaryDataTransferRule) checkRisksAgainstTechnicalAsset(input *types.Model, risks []*types.Risk, technicalAsset *types.TechnicalAsset, dataFlow *types.CommunicationLink, inverseDirection bool) []*types.Risk {
+func (r *UnnecessaryDataTransferRule) checkRisksAgainstTechnicalAsset(
+	input *types.Model, risks []*types.Risk, technicalAsset *types.TechnicalAsset, dataFlow *types.CommunicationLink,
+	inverseDirection bool,
+) []*types.Risk {
 	for _, transferredDataAssetId := range dataFlow.DataAssetsSent {
-		if !processesOrStoresDataAsset(technicalAsset, transferredDataAssetId) {
-			transferredDataAsset := input.DataAssets[transferredDataAssetId]
-			// fmt.Print("--->>> Checking "+technicalAsset.ID+": "+transferredDataAsset.ID+" sent via "+dataFlow.ID+"\n")
-			if transferredDataAsset.Confidentiality >= types.Confidential || transferredDataAsset.Integrity >= types.Critical {
-				commPartnerId := dataFlow.TargetId
-				if inverseDirection {
-					commPartnerId = dataFlow.SourceId
-				}
-				commPartnerAsset := input.TechnicalAssets[commPartnerId]
-				risk := r.createRisk(technicalAsset, transferredDataAsset, commPartnerAsset)
-				if isNewRisk(risks, risk) {
-					risks = append(risks, risk)
-				}
-			}
-		}
+		risks = r.checkTransferredDataAsset(input, risks, technicalAsset, dataFlow, inverseDirection, transferredDataAssetId)
 	}
 	for _, transferredDataAssetId := range dataFlow.DataAssetsReceived {
-		if !processesOrStoresDataAsset(technicalAsset, transferredDataAssetId) {
-			transferredDataAsset := input.DataAssets[transferredDataAssetId]
-			// fmt.Print("--->>> Checking "+technicalAsset.ID+": "+transferredDataAsset.ID+" received via "+dataFlow.ID+"\n")
-			if transferredDataAsset.Confidentiality >= types.Confidential || transferredDataAsset.Integrity >= types.Critical {
-				commPartnerId := dataFlow.TargetId
-				if inverseDirection {
-					commPartnerId = dataFlow.SourceId
-				}
-				commPartnerAsset := input.TechnicalAssets[commPartnerId]
-				risk := r.createRisk(technicalAsset, transferredDataAsset, commPartnerAsset)
-				if isNewRisk(risks, risk) {
-					risks = append(risks, risk)
-				}
-			}
-		}
+		risks = r.checkTransferredDataAsset(input, risks, technicalAsset, dataFlow, inverseDirection, transferredDataAssetId)
+	}
+	return risks
+}
+
+// checkTransferredDataAsset adds a risk for a sensitive data asset sent or received via the data flow that the
+// technical asset neither processes nor stores.
+func (r *UnnecessaryDataTransferRule) checkTransferredDataAsset(
+	input *types.Model, risks []*types.Risk, technicalAsset *types.TechnicalAsset, dataFlow *types.CommunicationLink,
+	inverseDirection bool, transferredDataAssetId string,
+) []*types.Risk {
+	if processesOrStoresDataAsset(technicalAsset, transferredDataAssetId) {
+		return risks
+	}
+	transferredDataAsset := input.DataAssets[transferredDataAssetId]
+	if transferredDataAsset.Confidentiality < types.Confidential && transferredDataAsset.Integrity < types.Critical {
+		return risks
+	}
+	commPartnerId := dataFlow.TargetId
+	if inverseDirection {
+		commPartnerId = dataFlow.SourceId
+	}
+	commPartnerAsset := input.TechnicalAssets[commPartnerId]
+	risk := r.createRisk(technicalAsset, transferredDataAsset, commPartnerAsset)
+	if isNewRisk(risks, risk) {
+		risks = append(risks, risk)
 	}
 	return risks
 }

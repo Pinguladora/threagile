@@ -56,9 +56,8 @@ func (r *ServiceRegistryPoisoningRule) createRisk(input *types.Model, technicalA
 
 	for _, incomingFlow := range incomingFlows {
 		caller := input.TechnicalAssets[incomingFlow.SourceId]
-		if input.HighestProcessedConfidentiality(technicalAsset) == types.StrictlyConfidential || input.HighestProcessedIntegrity(technicalAsset) == types.MissionCritical || input.HighestProcessedAvailability(technicalAsset) == types.MissionCritical ||
-			input.HighestProcessedConfidentiality(caller) == types.StrictlyConfidential || input.HighestProcessedIntegrity(caller) == types.MissionCritical || input.HighestProcessedAvailability(caller) == types.MissionCritical ||
-			input.HighestCommunicationLinkConfidentiality(incomingFlow) == types.StrictlyConfidential || input.HighestCommunicationLinkIntegrity(incomingFlow) == types.MissionCritical || input.HighestCommunicationLinkAvailability(incomingFlow) == types.MissionCritical {
+		if processesHighestRatedData(input, technicalAsset) || processesHighestRatedData(input, caller) ||
+			transfersHighestRatedData(input, incomingFlow) {
 			impact = types.MediumImpact
 			break
 		}
