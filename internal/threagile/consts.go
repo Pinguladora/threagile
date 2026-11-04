@@ -46,6 +46,7 @@ const (
 	CreateEditingSupportCommand = "create-editing-support"
 	ImportModelCommand          = "import-model"
 	ImportOTMCommand            = "import-otm"
+	MigrateModelCommand         = "migrate-model"
 	ListTypesCommand            = "list-types"
 	ListRiskRulesCommand        = "list-risk-rules"
 	ListModelMacrosCommand      = "list-model-macros"
