@@ -150,6 +150,25 @@ func riskIdExpression(pattern string) *regexp.Regexp {
 	return regexp.MustCompile("^" + strings.ReplaceAll(regexp.QuoteMeta(pattern), `\*`, `[^@]+`) + "$")
 }
 
+// RisksMatching returns, sorted by synthetic id, the risk with the given synthetic id, or the risks that the id
+// matches when it holds the wildcards of risk tracking.
+func (model *Model) RisksMatching(pattern string) []*Risk {
+	if risk, ok := model.GeneratedRisksBySyntheticId[pattern]; ok {
+		return []*Risk{risk}
+	}
+	risks := make([]*Risk, 0)
+	if !strings.Contains(pattern, "*") {
+		return risks
+	}
+	expression := riskIdExpression(pattern)
+	for _, syntheticRiskId := range slices.Sorted(maps.Keys(model.GeneratedRisksBySyntheticId)) {
+		if expression.MatchString(syntheticRiskId) {
+			risks = append(risks, model.GeneratedRisksBySyntheticId[syntheticRiskId])
+		}
+	}
+	return risks
+}
+
 func (model *Model) CheckRiskTracking(ignoreOrphanedRiskTracking bool, progressReporter ProgressReporter) error {
 	progressReporter.Info("Checking risk tracking")
 	for _, syntheticRiskId := range slices.Sorted(maps.Keys(model.RiskTracking)) {

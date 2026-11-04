@@ -1,7 +1,6 @@
 package model
 
 import (
-	"errors"
 	"fmt"
 	"maps"
 	"os"
@@ -20,14 +19,6 @@ type ReadResult struct {
 	IntroTextRAA     string
 	BuiltinRiskRules types.RiskRules
 	CustomRiskRules  types.RiskRules
-}
-
-type explainRiskConfig any
-
-type explainRiskReporter any
-
-func (what ReadResult) ExplainRisk(cfg explainRiskConfig, risk string, reporter explainRiskReporter) error {
-	return errors.New("not implemented")
 }
 
 type configReader interface {

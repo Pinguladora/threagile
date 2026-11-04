@@ -23,7 +23,8 @@ Some of identified risks are real risks, some of it is accepted risk therefore n
 `risk_tracking` is keyed by the synthetic id of a risk, like `unencrypted-asset@orders-db`. A `*` stands for any
 one part of the id between the `@` characters, and a key covers the whole id: `unencrypted-asset@*` tracks the
 `unencrypted-asset` risk of every asset, `dos-risky-access-across-trust-boundary@*@*@*` the four-part ids of
-that rule, and `*@orders-db` the risks of `orders-db` but not those of `orders-db-replica`.
+that rule, and `*@orders-db` the risks of `orders-db` but not those of `orders-db-replica`. To see which risks a
+key tracks, run `threagile explain risk '<key>'`.
 
 ## Connections through proxies (`via`)
 
