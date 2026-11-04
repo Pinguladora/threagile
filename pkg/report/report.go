@@ -2035,7 +2035,7 @@ func (r *pdfReporter) createAssignmentByFunction(parsedModel *types.Model) {
 	html.Write(5, "Risk finding paragraphs are clickable and link to the corresponding chapter.")
 	r.pdf.SetFont("Helvetica", "", fontSizeBody)
 
-	oldLeft, _, _, _ := r.pdf.GetMargins()
+	oldLeft := r.leftMargin()
 
 	if r.pdf.GetY() > 250 {
 		r.pageBreak()
@@ -2186,7 +2186,7 @@ func (r *pdfReporter) createSTRIDE(parsedModel *types.Model) {
 	html.Write(5, "Risk finding paragraphs are clickable and link to the corresponding chapter.")
 	r.pdf.SetFont("Helvetica", "", fontSizeBody)
 
-	oldLeft, _, _, _ := r.pdf.GetMargins()
+	oldLeft := r.leftMargin()
 
 	if r.pdf.GetY() > 250 {
 		r.pageBreak()
@@ -2661,7 +2661,7 @@ func (r *pdfReporter) createRiskCategories(parsedModel *types.Model) {
 		r.pdfColorGray()
 		html.Write(5, "Risk finding paragraphs are clickable and link to the corresponding chapter.<br>")
 		r.pdf.SetFont("Helvetica", "", fontSizeBody)
-		oldLeft, _, _, _ := r.pdf.GetMargins()
+		oldLeft := r.leftMargin()
 		headlineCriticalWritten, headlineHighWritten, headlineElevatedWritten, headlineMediumWritten, headlineLowWritten := false, false, false, false, false
 		for _, risk := range risksStr {
 			text.WriteString("<br>")
@@ -2885,7 +2885,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 		r.pdfColorBlack()
 		r.pdf.CellFormat(190, 6, "Identified Risks of Asset", "0", 0, "", false, 0, "")
 		r.pdfColorGray()
-		oldLeft, _, _, _ := r.pdf.GetMargins()
+		oldLeft := r.leftMargin()
 		if len(risksStr) > 0 {
 			r.pdf.SetFont("Helvetica", "", fontSizeSmall)
 			html.Write(5, "Risk finding paragraphs are clickable and link to the corresponding chapter.")
@@ -4632,6 +4632,12 @@ func (r *pdfReporter) pdfColorDisclaimer() {
 
 func (r *pdfReporter) pdfColorOutOfScope() {
 	r.pdf.SetTextColor(127, 127, 127)
+}
+
+// leftMargin returns the current left margin of the PDF.
+func (r *pdfReporter) leftMargin() float64 {
+	left, _, _, _ := r.pdf.GetMargins() //nolint:dogsled // gofpdf has no getter for the left margin alone
+	return left
 }
 
 func (r *pdfReporter) pdfColorGray() {
