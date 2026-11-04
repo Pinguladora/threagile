@@ -446,7 +446,7 @@ technical_assets:
         description: Link to the ERP system (Web)
         protocol: https # values: see help
         authentication: short-lived-token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
-        identity: service-account # values: none, service-account, workload, end-user
+        identity: end-user # values: none, service-account, workload, end-user
         authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
@@ -465,6 +465,7 @@ technical_assets:
         protocol: ssh # values: see help
         authentication: client-certificate # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: service-account # values: none, service-account, workload, end-user
+        account: erp-db-owner # the database account, when several callers might share one
         authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
@@ -485,7 +486,7 @@ technical_assets:
         description: Link to the LDAP auth server for managing users
         protocol: ldaps # values: see help
         authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
-        identity: service-account # values: none, service-account, workload, end-user
+        identity: end-user # values: none, service-account, workload, end-user
         authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
@@ -836,6 +837,7 @@ technical_assets:
         protocol: jdbc # values: see help
         authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
         identity: service-account # values: none, service-account, workload, end-user
+        account: erp-db-owner # the database account, when several callers might share one
         authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
@@ -985,7 +987,7 @@ technical_assets:
         description: Link to the Git repo
         protocol: ssh # values: see help
         authentication: client-certificate # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
-        identity: service-account # values: none, service-account, workload, end-user
+        identity: end-user # values: none, service-account, workload, end-user
         authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
@@ -1005,7 +1007,7 @@ technical_assets:
         description: Link to the Git repo
         protocol: https # values: see help
         authentication: long-lived-token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
-        identity: service-account # values: none, service-account, workload, end-user
+        identity: end-user # values: none, service-account, workload, end-user
         authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
@@ -1025,7 +1027,7 @@ technical_assets:
         description: Link to the Jenkins build server
         protocol: https # values: see help
         authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
-        identity: service-account # values: none, service-account, workload, end-user
+        identity: end-user # values: none, service-account, workload, end-user
         authorization: function-level # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false

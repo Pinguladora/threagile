@@ -104,6 +104,7 @@ through other assets: content passes on along the communication links.
 | Unverified Model Supply Chain (`model-supply-chain`) | model registries, and language models that are custom-developed or communicate with a model registry | none | the data the models process | LLM03, LLM04, ASI04, MAESTRO layer 1 |
 | Sensitive Data Disclosure through Model Output (`model-output-disclosure`) | language models and agents that untrusted content reaches and that process, or read from a vector database, confidential data | none | the confidentiality of what the model can read | LLM02, MAESTRO layer 1 |
 | Unauthenticated MCP Server (`unauthenticated-mcp-server`) | links without authentication into an MCP server whose tools reach confidential or critical assets | none | what the tools reach; very likely for internet callers, likely for callers taking untrusted content | ASI02, ASI03, LLM06, MAESTRO layers 4 and 7 |
+| Confused Deputy Agent (`confused-deputy-agent`) | agents that act for users (an incoming link with identity `end-user`, or from a client of humans) and reach assets with confidential or critical data with identity `service-account` or `workload`, directly or through the tools of an MCP server | none | the most sensitive asset reached; likely when the agent takes untrusted content | ASI03, LLM06, NHI9, MAESTRO layer 3 |
 
 Model a hosted model you call as a service (like a commercial LLM API) as an
 out-of-scope `llm` asset, so that the rules judge your use of it rather than the
@@ -151,8 +152,8 @@ system; analyze it to see the OT rules at work.
 
 These rules judge the [authentication, identity and authorization](./model.md#authentication-identity-and-authorization-of-links)
 of communication links, and the policy decision points that services externalize their authorization to. Links
-whose authorization is `unknown`, or whose authentication is `token` with an open lifetime, are skipped, so models
-that do not set these fields get no findings from them.
+whose authorization is `unknown`, or whose authentication is `token` with an open lifetime, are skipped by the rules
+that depend on them, so models that do not set these fields get no findings from them.
 
 | Rule (id) | Fires on | Rated by | References |
 |-----------|----------|----------|------------|
@@ -160,9 +161,16 @@ that do not set these fields get no findings from them.
 | Missing Object-Level Authorization (`missing-object-level-authorization`) | links into non-datastore assets with confidential or critical data that act for users (identity `end-user` or a client of humans) with authorization `none`, `authenticated-only` or `function-level` | the data of the target, one step higher without function-level authorization; very likely from the internet | OWASP API1 and API5 |
 | Missing Policy Decision Point Redundancy (`missing-policy-decision-point-redundancy`) | policy decision points that are not redundant and that other assets ask over the network | the availability of the services that ask it | AuthZEN Authorization API, NIST SP 800-162 |
 | Unprotected Authorization Decisions (`unprotected-authorization-decisions`) | links to a policy decision point that are unauthenticated or unencrypted | the data of the service that asks; likely across a network trust boundary | AuthZEN Authorization API, NIST SP 800-162 |
+| Human Use of Machine Identity (`human-use-of-machine-identity`) | links into assets with confidential or critical data from clients of humans with identity `service-account` or `workload` | the data of the target; likely | OWASP NHI10, ASI03 |
+| Shared Machine Account (`shared-machine-account`) | in-scope assets whose links name an `account` that links of other assets name too, with identity `service-account` or `workload` | the data of all targets of the account; likely when the callers are in different trust boundaries | OWASP NHI9, ASI03 |
+
+The shared account rule needs the optional `account` of a link, which names the account behind a machine identity;
+links without one are skipped.
 
 [`demo/ai-agent/threagile.yaml`](../demo/ai-agent/threagile.yaml) sets these fields on all its links; its order
-service and agent check access per function only, which the object-level rule reports.
+service and agent check access per function only, which the object-level rule reports. In
+[`demo/example/threagile.yaml`](../demo/example/threagile.yaml), an administrator shares the database account of
+the ERP system.
 
 ## Risk ids of Push instead of Pull Deployment
 

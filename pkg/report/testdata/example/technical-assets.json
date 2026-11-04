@@ -143,6 +143,7 @@
         "protocol": "ssh",
         "authentication": "client-certificate",
         "identity": "service-account",
+        "account": "erp-db-owner",
         "authorization": "function-level",
         "usage": "devops",
         "data_assets_sent": [
@@ -165,7 +166,7 @@
         "description": "Link to the ERP system (Web)",
         "protocol": "https",
         "authentication": "short-lived-token",
-        "identity": "service-account",
+        "identity": "end-user",
         "authorization": "function-level",
         "usage": "devops",
         "data_assets_sent": [
@@ -185,7 +186,7 @@
         "description": "Link to the LDAP auth server for managing users",
         "protocol": "ldaps",
         "authentication": "credentials",
-        "identity": "service-account",
+        "identity": "end-user",
         "authorization": "function-level",
         "usage": "devops",
         "data_assets_sent": [
@@ -464,6 +465,7 @@
         "protocol": "jdbc",
         "authentication": "credentials",
         "identity": "service-account",
+        "account": "erp-db-owner",
         "authorization": "function-level",
         "data_assets_sent": [
           "customer-accounts",
@@ -555,7 +557,7 @@
         "description": "Link to the Git repo",
         "protocol": "ssh",
         "authentication": "client-certificate",
-        "identity": "service-account",
+        "identity": "end-user",
         "authorization": "function-level",
         "usage": "devops",
         "data_assets_sent": [
@@ -577,7 +579,7 @@
         "description": "Link to the Git repo",
         "protocol": "https",
         "authentication": "long-lived-token",
-        "identity": "service-account",
+        "identity": "end-user",
         "authorization": "function-level",
         "usage": "devops",
         "data_assets_sent": [
@@ -599,7 +601,7 @@
         "description": "Link to the Jenkins build server",
         "protocol": "https",
         "authentication": "credentials",
-        "identity": "service-account",
+        "identity": "end-user",
         "authorization": "function-level",
         "usage": "devops",
         "data_assets_sent": [
