@@ -446,6 +446,18 @@ func (adoc adocReport) writeManagementSummery() error {
 		"modeling process:")
 	writeLine(ms, "\n\n")
 
+	writeLine(ms, adoc.managementSummaryPieCharts())
+	// individual management summary comment
+	if len(adoc.model.ManagementSummaryComment) > 0 {
+		writeLine(ms, "\n\n\n"+fixBasicHtml(adoc.model.ManagementSummaryComment))
+	}
+
+	return nil
+}
+
+// managementSummaryPieCharts returns the pie charts of all risks by severity and by risk
+// tracking status.
+func (adoc adocReport) managementSummaryPieCharts() string {
 	countCritical := len(filteredBySeverity(adoc.model, types.CriticalSeverity))
 	countHigh := len(filteredBySeverity(adoc.model, types.HighSeverity))
 	countElevated := len(filteredBySeverity(adoc.model, types.ElevatedSeverity))
@@ -459,7 +471,7 @@ func (adoc adocReport) writeManagementSummery() error {
 	countStatusMitigated := len(filteredByRiskStatus(adoc.model, types.Mitigated))
 	countStatusFalsePositive := len(filteredByRiskStatus(adoc.model, types.FalsePositive))
 
-	pieCharts := `[cols="a,a",frame=none,grid=none]
+	return `[cols="a,a",frame=none,grid=none]
 |===
 |
 [mermaid]
@@ -492,13 +504,6 @@ pie showData
 ....
 |===
 `
-	writeLine(ms, pieCharts)
-	// individual management summary comment
-	if len(adoc.model.ManagementSummaryComment) > 0 {
-		writeLine(ms, "\n\n\n"+fixBasicHtml(adoc.model.ManagementSummaryComment))
-	}
-
-	return nil
 }
 
 func colorPrefixBySeverity(severity types.RiskSeverity, smallFont bool) (string, string) {
@@ -675,11 +680,23 @@ func (adoc adocReport) riskMitigationStatus(f *os.File) {
 	writeLine(f, "The following chart gives a high-level overview of the risk tracking status (including mitigated "+
 		"risks):")
 
-	risksCritical := filteredBySeverity(adoc.model, types.CriticalSeverity)
-	risksHigh := filteredBySeverity(adoc.model, types.HighSeverity)
-	risksElevated := filteredBySeverity(adoc.model, types.ElevatedSeverity)
-	risksMedium := filteredBySeverity(adoc.model, types.MediumSeverity)
-	risksLow := filteredBySeverity(adoc.model, types.LowSeverity)
+	writeLine(f, adoc.riskStatusChart())
+	writeLine(f, "")
+	stillAtRisk := filteredByStillAtRisk(adoc.model)
+	count := len(stillAtRisk)
+	if count == 0 {
+		writeLine(f, "After removal of risks with status _mitigated_ and _false positive_ "+
+			"*"+strconv.Itoa(count)+" remain unmitigated*.")
+	} else {
+		writeLine(f, "After removal of risks with status _mitigated_ and _false positive_ "+
+			"the following *"+strconv.Itoa(count)+" remain unmitigated*:")
+
+		writeLine(f, adoc.unmitigatedRisksPieCharts())
+	}
+}
+
+// riskStatusChart returns the bar chart of the risk tracking status of the risks by severity.
+func (adoc adocReport) riskStatusChart() string {
 	countStatusUnchecked := len(filteredByRiskStatus(adoc.model, types.Unchecked))
 	countStatusInDiscussion := len(filteredByRiskStatus(adoc.model, types.InDiscussion))
 	countStatusAccepted := len(filteredByRiskStatus(adoc.model, types.Accepted))
@@ -687,13 +704,7 @@ func (adoc adocReport) riskMitigationStatus(f *os.File) {
 	countStatusMitigated := len(filteredByRiskStatus(adoc.model, types.Mitigated))
 	countStatusFalsePositive := len(filteredByRiskStatus(adoc.model, types.FalsePositive))
 
-	lowTitle := types.LowSeverity.Title() + " (" + strconv.Itoa(len(risksLow)) + ")"
-	medTitle := types.MediumSeverity.Title() + " (" + strconv.Itoa(len(risksMedium)) + ")"
-	elevatedTitle := types.ElevatedSeverity.Title() + " (" + strconv.Itoa(len(risksElevated)) + ")"
-	highTitle := types.HighSeverity.Title() + " (" + strconv.Itoa(len(risksHigh)) + ")"
-	criticalTitle := types.CriticalSeverity.Title() + " (" + strconv.Itoa(len(risksCritical)) + ")"
-
-	diagram := `
+	return `
 [vegalite]
 ....
 {
@@ -701,83 +712,15 @@ func (adoc adocReport) riskMitigationStatus(f *os.File) {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
   "data": {
     "values": [
-      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.Unchecked))) +
-		`, "status": "Unchecked", "color": "` + RgbHexColorRiskStatusUnchecked() + `"},
-      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.InDiscussion))) +
-		`, "status": "InDiscussion", "color": "` + rgbHexColorRiskStatusInDiscussion() + `"},
-      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.Accepted))) +
-		`, "status": "Accepted", "color": "` + rgbHexColorRiskStatusAccepted() + `"},
-      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.InProgress))) +
-		`, "status": "InProgress", "color": "` + rgbHexColorRiskStatusInProgress() + `"},
-      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.Mitigated))) +
-		`, "status": "Mitigated", "color": "` + rgbHexColorRiskStatusMitigated() + `"},
-      {"risk": "` + lowTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksLow, types.FalsePositive))) +
-		`, "status": "FalsePositive", "color": "` + rgbHexColorRiskStatusFalsePositive() + `"},
+` + adoc.riskStatusChartValues(types.LowSeverity) + `,
 
-      {"risk": "` + medTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.Unchecked))) +
-		`, "status": "Unchecked", "color": "` + RgbHexColorRiskStatusUnchecked() + `"},
-      {"risk": "` + medTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.InDiscussion))) +
-		`, "status": "InDiscussion", "color": "` + rgbHexColorRiskStatusInDiscussion() + `"},
-      {"risk": "` + medTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.Accepted))) +
-		`, "status": "Accepted", "color": "` + rgbHexColorRiskStatusAccepted() + `"},
-      {"risk": "` + medTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.InProgress))) +
-		`, "status": "InProgress", "color": "` + rgbHexColorRiskStatusInProgress() + `"},
-      {"risk": "` + medTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.Mitigated))) +
-		`, "status": "Mitigated", "color": "` + rgbHexColorRiskStatusMitigated() + `"},
-      {"risk": "` + medTitle + `", "value": ` +
-		strconv.Itoa(len(reduceToRiskStatus(risksMedium, types.FalsePositive))) + `, "status": "FalsePositive", "color": "` +
-		rgbHexColorRiskStatusFalsePositive() + `"},
+` + adoc.riskStatusChartValues(types.MediumSeverity) + `,
 
-      {"risk": "` + elevatedTitle + `", "value": ` +
-		strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.Unchecked))) + `, "status": "Unchecked", "color": "` +
-		RgbHexColorRiskStatusUnchecked() + `"},
-      {"risk": "` + elevatedTitle + `", "value": ` +
-		strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.InDiscussion))) + `, "status": "InDiscussion", "color": "` +
-		rgbHexColorRiskStatusInDiscussion() + `"},
-      {"risk": "` + elevatedTitle + `", "value": ` +
-		strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.Accepted))) + `, "status": "Accepted", "color": "` +
-		rgbHexColorRiskStatusAccepted() + `"},
-      {"risk": "` + elevatedTitle + `", "value": ` +
-		strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.InProgress))) + `, "status": "InProgress", "color": "` +
-		rgbHexColorRiskStatusInProgress() + `"},
-      {"risk": "` + elevatedTitle + `", "value": ` +
-		strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.Mitigated))) + `, "status": "Mitigated", "color": "` +
-		rgbHexColorRiskStatusMitigated() + `"},
-      {"risk": "` + elevatedTitle + `", "value": ` +
-		strconv.Itoa(len(reduceToRiskStatus(risksElevated, types.FalsePositive))) +
-		`, "status": "FalsePositive", "color": "` + rgbHexColorRiskStatusFalsePositive() + `"},
+` + adoc.riskStatusChartValues(types.ElevatedSeverity) + `,
 
-      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.Unchecked))) +
-		`, "status": "Unchecked", "color": "` + RgbHexColorRiskStatusUnchecked() + `"},
-      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.InDiscussion))) +
-		`, "status": "InDiscussion", "color": "` + rgbHexColorRiskStatusInDiscussion() + `"},
-      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.Accepted))) +
-		`, "status": "Accepted", "color": "` + rgbHexColorRiskStatusAccepted() + `"},
-      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.InProgress))) +
-		`, "status": "InProgress", "color": "` + rgbHexColorRiskStatusInProgress() + `"},
-      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.Mitigated))) +
-		`, "status": "Mitigated", "color": "` + rgbHexColorRiskStatusMitigated() + `"},
-      {"risk": "` + highTitle + `", "value": ` + strconv.Itoa(len(reduceToRiskStatus(risksHigh, types.FalsePositive))) +
-		`, "status": "FalsePositive", "color": "` + rgbHexColorRiskStatusFalsePositive() + `"},
+` + adoc.riskStatusChartValues(types.HighSeverity) + `,
 
-      {"risk": "` + criticalTitle + `", "value": ` +
-		strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.Unchecked))) + `, "status": "Unchecked", "color": "` +
-		RgbHexColorRiskStatusUnchecked() + `"},
-      {"risk": "` + criticalTitle + `", "value": ` +
-		strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.InDiscussion))) + `, "status": "InDiscussion", "color": "` +
-		rgbHexColorRiskStatusInDiscussion() + `"},
-      {"risk": "` + criticalTitle + `", "value": ` +
-		strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.Accepted))) + `, "status": "Accepted", "color": "` +
-		rgbHexColorRiskStatusAccepted() + `"},
-      {"risk": "` + criticalTitle + `", "value": ` +
-		strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.InProgress))) + `, "status": "InProgress", "color": "` +
-		rgbHexColorRiskStatusInProgress() + `"},
-      {"risk": "` + criticalTitle + `", "value": ` +
-		strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.Mitigated))) + `, "status": "Mitigated", "color": "` +
-		rgbHexColorRiskStatusMitigated() + `"},
-      {"risk": "` + criticalTitle + `", "value": ` +
-		strconv.Itoa(len(reduceToRiskStatus(risksCritical, types.FalsePositive))) +
-		`, "status": "FalsePositive", "color": "` + rgbHexColorRiskStatusFalsePositive() + `"}
+` + adoc.riskStatusChartValues(types.CriticalSeverity) + `
     ]
   },
   "mark": {"type": "bar", "cornerRadiusTopLeft": 3, "cornerRadiusTopRight": 3},
@@ -811,36 +754,56 @@ func (adoc adocReport) riskMitigationStatus(f *os.File) {
 }
 ....
 `
-	writeLine(f, diagram)
-	writeLine(f, "")
-	stillAtRisk := filteredByStillAtRisk(adoc.model)
-	count := len(stillAtRisk)
-	if count == 0 {
-		writeLine(f, "After removal of risks with status _mitigated_ and _false positive_ "+
-			"*"+strconv.Itoa(count)+" remain unmitigated*.")
-	} else {
-		writeLine(f, "After removal of risks with status _mitigated_ and _false positive_ "+
-			"the following *"+strconv.Itoa(count)+" remain unmitigated*:")
+}
 
-		countCritical := len(types.ReduceToOnlyStillAtRisk(filteredBySeverity(adoc.model, types.CriticalSeverity)))
-		countHigh := len(types.ReduceToOnlyStillAtRisk(filteredBySeverity(adoc.model, types.HighSeverity)))
-		countElevated := len(types.ReduceToOnlyStillAtRisk(filteredBySeverity(adoc.model, types.ElevatedSeverity)))
-		countMedium := len(types.ReduceToOnlyStillAtRisk(filteredBySeverity(adoc.model, types.MediumSeverity)))
-		countLow := len(types.ReduceToOnlyStillAtRisk(filteredBySeverity(adoc.model, types.LowSeverity)))
+// riskStatusChartValues returns the data values of the risk tracking status chart for the risks
+// of one severity, one value per risk status.
+func (adoc adocReport) riskStatusChartValues(severity types.RiskSeverity) string {
+	risks := filteredBySeverity(adoc.model, severity)
+	title := severity.Title() + " (" + strconv.Itoa(len(risks)) + ")"
+	statuses := []struct {
+		status types.RiskStatus
+		name   string
+		color  string
+	}{
+		{types.Unchecked, "Unchecked", RgbHexColorRiskStatusUnchecked()},
+		{types.InDiscussion, "InDiscussion", rgbHexColorRiskStatusInDiscussion()},
+		{types.Accepted, "Accepted", rgbHexColorRiskStatusAccepted()},
+		{types.InProgress, "InProgress", rgbHexColorRiskStatusInProgress()},
+		{types.Mitigated, "Mitigated", rgbHexColorRiskStatusMitigated()},
+		{types.FalsePositive, "FalsePositive", rgbHexColorRiskStatusFalsePositive()},
+	}
+	values := make([]string, 0, len(statuses))
+	for _, status := range statuses {
+		values = append(values, `      {"risk": "`+title+`", "value": `+
+			strconv.Itoa(len(reduceToRiskStatus(risks, status.status)))+`, "status": "`+status.name+
+			`", "color": "`+status.color+`"}`)
+	}
+	return strings.Join(values, ",\n")
+}
 
-		countBusinessSide := len(types.ReduceToOnlyStillAtRisk(filteredByRiskFunction(adoc.model, types.BusinessSide)))
-		countArchitecture := len(types.ReduceToOnlyStillAtRisk(filteredByRiskFunction(adoc.model, types.Architecture)))
-		countDevelopment := len(types.ReduceToOnlyStillAtRisk(filteredByRiskFunction(adoc.model, types.Development)))
-		countOperation := len(types.ReduceToOnlyStillAtRisk(filteredByRiskFunction(adoc.model, types.Operations)))
+// unmitigatedRisksPieCharts returns the pie charts of the risks still at risk by severity and by
+// function.
+func (adoc adocReport) unmitigatedRisksPieCharts() string {
+	countCritical := len(types.ReduceToOnlyStillAtRisk(filteredBySeverity(adoc.model, types.CriticalSeverity)))
+	countHigh := len(types.ReduceToOnlyStillAtRisk(filteredBySeverity(adoc.model, types.HighSeverity)))
+	countElevated := len(types.ReduceToOnlyStillAtRisk(filteredBySeverity(adoc.model, types.ElevatedSeverity)))
+	countMedium := len(types.ReduceToOnlyStillAtRisk(filteredBySeverity(adoc.model, types.MediumSeverity)))
+	countLow := len(types.ReduceToOnlyStillAtRisk(filteredBySeverity(adoc.model, types.LowSeverity)))
 
-		pieCharts := `[cols="a,a",frame=none,grid=none]
+	countBusinessSide := len(types.ReduceToOnlyStillAtRisk(filteredByRiskFunction(adoc.model, types.BusinessSide)))
+	countArchitecture := len(types.ReduceToOnlyStillAtRisk(filteredByRiskFunction(adoc.model, types.Architecture)))
+	countDevelopment := len(types.ReduceToOnlyStillAtRisk(filteredByRiskFunction(adoc.model, types.Development)))
+	countOperation := len(types.ReduceToOnlyStillAtRisk(filteredByRiskFunction(adoc.model, types.Operations)))
+
+	return `[cols="a,a",frame=none,grid=none]
 |===
 |
 [mermaid]
 ....
 %%{init: {'pie' : {'textPosition' : 0.5}, 'theme': 'base', 'themeVariables': { 'pie1': '` + rgbHexColorCriticalRisk() +
-			`', 'pie2': '` + rgbHexColorHighRisk() + `', 'pie3': '` + rgbHexColorElevatedRisk() + `', 'pie4': '` +
-			rgbHexColorMediumRisk() + `', 'pie5': '` + rgbHexColorLowRisk() + `'}}}%%
+		`', 'pie2': '` + rgbHexColorHighRisk() + `', 'pie3': '` + rgbHexColorElevatedRisk() + `', 'pie4': '` +
+		rgbHexColorMediumRisk() + `', 'pie5': '` + rgbHexColorLowRisk() + `'}}}%%
 pie showData
   "unmitigated critical risk" : ` + strconv.Itoa(countCritical) + `
   "unmitigated high risk" : ` + strconv.Itoa(countHigh) + `
@@ -853,8 +816,8 @@ pie showData
 [mermaid]
 ....
 %%{init: {'pie' : {'textPosition' : 0.5}, 'theme': 'base', 'themeVariables': { 'pie1': '` + rgbHexColorBusiness() +
-			`', 'pie2': '` + rgbHexColorArchitecture() + `', 'pie3': '` + rgbHexColorDevelopment() + `', 'pie4': '` +
-			rgbHexColorOperation() + `'}}}%%
+		`', 'pie2': '` + rgbHexColorArchitecture() + `', 'pie3': '` + rgbHexColorDevelopment() + `', 'pie4': '` +
+		rgbHexColorOperation() + `'}}}%%
 pie showData
   "business side related" : ` + strconv.Itoa(countBusinessSide) + `
   "architecture related" : ` + strconv.Itoa(countArchitecture) + `
@@ -863,8 +826,6 @@ pie showData
 ....
 |===
 `
-		writeLine(f, pieCharts)
-	}
 }
 
 func (adoc adocReport) writeRiskMitigationStatus() error {
