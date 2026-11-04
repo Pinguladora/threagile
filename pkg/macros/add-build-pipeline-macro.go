@@ -59,7 +59,7 @@ func (m *AddBuildPipeline) GetNextQuestion(model *types.Model) (nextQuestion Mac
 		return MacroQuestion{
 			ID:              "source-repository",
 			Title:           "What product is used as the sourcecode repository?",
-			Description:     "This name affects the technical asset's title and ID plus also the tags used.",
+			Description:     productNameDescription,
 			PossibleAnswers: nil,
 			MultiSelect:     false,
 			DefaultAnswer:   "Git",
@@ -68,7 +68,7 @@ func (m *AddBuildPipeline) GetNextQuestion(model *types.Model) (nextQuestion Mac
 		return MacroQuestion{
 			ID:              "build-pipeline",
 			Title:           "What product is used as the build pipeline?",
-			Description:     "This name affects the technical asset's title and ID plus also the tags used.",
+			Description:     productNameDescription,
 			PossibleAnswers: nil,
 			MultiSelect:     false,
 			DefaultAnswer:   "Jenkins",
@@ -77,7 +77,7 @@ func (m *AddBuildPipeline) GetNextQuestion(model *types.Model) (nextQuestion Mac
 		return MacroQuestion{
 			ID:              "artifact-registry",
 			Title:           "What product is used as the artifact registry?",
-			Description:     "This name affects the technical asset's title and ID plus also the tags used.",
+			Description:     productNameDescription,
 			PossibleAnswers: nil,
 			MultiSelect:     false,
 			DefaultAnswer:   "Nexus",
@@ -87,15 +87,15 @@ func (m *AddBuildPipeline) GetNextQuestion(model *types.Model) (nextQuestion Mac
 			ID:              "code-inspection-used",
 			Title:           "Are code inspection platforms (like SonarQube) used?",
 			Description:     "This affects whether code inspection platform are added.",
-			PossibleAnswers: []string{"Yes", "No"},
+			PossibleAnswers: []string{answerYes, answerNo},
 			MultiSelect:     false,
-			DefaultAnswer:   "Yes",
+			DefaultAnswer:   answerYes,
 		}, nil
 	case 4:
 		return MacroQuestion{
 			ID:              types.CodeInspectionPlatform,
 			Title:           "What product is used as the code inspection platform?",
-			Description:     "This name affects the technical asset's title and ID plus also the tags used.",
+			Description:     productNameDescription,
 			PossibleAnswers: nil,
 			MultiSelect:     false,
 			DefaultAnswer:   "SonarQube",
@@ -105,15 +105,15 @@ func (m *AddBuildPipeline) GetNextQuestion(model *types.Model) (nextQuestion Mac
 			ID:              "container-technology-used",
 			Title:           "Is container technology (like Docker) used?",
 			Description:     "This affects whether container registries are added.",
-			PossibleAnswers: []string{"Yes", "No"},
+			PossibleAnswers: []string{answerYes, answerNo},
 			MultiSelect:     false,
-			DefaultAnswer:   "Yes",
+			DefaultAnswer:   answerYes,
 		}, nil
 	case 6:
 		return MacroQuestion{
 			ID:              "container-registry",
 			Title:           "What product is used as the container registry?",
-			Description:     "This name affects the technical asset's title and ID plus also the tags used.",
+			Description:     productNameDescription,
 			PossibleAnswers: nil,
 			MultiSelect:     false,
 			DefaultAnswer:   "Docker",
@@ -122,7 +122,7 @@ func (m *AddBuildPipeline) GetNextQuestion(model *types.Model) (nextQuestion Mac
 		return MacroQuestion{
 			ID:              "container-platform",
 			Title:           "What product is used as the container platform (for orchestration and runtime)?",
-			Description:     "This name affects the technical asset's title and ID plus also the tags used.",
+			Description:     productNameDescription,
 			PossibleAnswers: nil,
 			MultiSelect:     false,
 			DefaultAnswer:   "Kubernetes",
@@ -132,27 +132,27 @@ func (m *AddBuildPipeline) GetNextQuestion(model *types.Model) (nextQuestion Mac
 			ID:              "internet",
 			Title:           "Are build pipeline components exposed on the internet?",
 			Description:     "",
-			PossibleAnswers: []string{"Yes", "No"},
+			PossibleAnswers: []string{answerYes, answerNo},
 			MultiSelect:     false,
-			DefaultAnswer:   "No",
+			DefaultAnswer:   answerNo,
 		}, nil
 	case 9:
 		return MacroQuestion{
 			ID:              "multi-tenant",
 			Title:           "Are build pipeline components used by multiple tenants?",
 			Description:     "",
-			PossibleAnswers: []string{"Yes", "No"},
+			PossibleAnswers: []string{answerYes, answerNo},
 			MultiSelect:     false,
-			DefaultAnswer:   "No",
+			DefaultAnswer:   answerNo,
 		}, nil
 	case 10:
 		return MacroQuestion{
 			ID:              "encryption",
 			Title:           "Are build pipeline components encrypted?",
 			Description:     "",
-			PossibleAnswers: []string{"Yes", "No"},
+			PossibleAnswers: []string{answerYes, answerNo},
 			MultiSelect:     false,
-			DefaultAnswer:   "No",
+			DefaultAnswer:   answerNo,
 		}, nil
 	case 11:
 		possibleAnswers := make([]string, 0)
@@ -172,12 +172,12 @@ func (m *AddBuildPipeline) GetNextQuestion(model *types.Model) (nextQuestion Mac
 		}
 	case 12:
 		return MacroQuestion{
-			ID:              "within-trust-boundary",
+			ID:              withinTrustBoundaryQuestion,
 			Title:           "Are the server-side components of the build pipeline components within a network trust boundary?",
 			Description:     "",
-			PossibleAnswers: []string{"Yes", "No"},
+			PossibleAnswers: []string{answerYes, answerNo},
 			MultiSelect:     false,
-			DefaultAnswer:   "Yes",
+			DefaultAnswer:   answerYes,
 		}, nil
 	case 13:
 		possibleAnswers := []string{createNewTrustBoundaryLabel}
@@ -188,7 +188,7 @@ func (m *AddBuildPipeline) GetNextQuestion(model *types.Model) (nextQuestion Mac
 		}
 		sort.Strings(possibleAnswers)
 		return MacroQuestion{
-			ID:              "selected-trust-boundary",
+			ID:              selectedTrustBoundaryQuestion,
 			Title:           "Choose from the list of existing network trust boundaries or create a new one?",
 			Description:     "",
 			PossibleAnswers: possibleAnswers,
@@ -241,18 +241,19 @@ func (m *AddBuildPipeline) ApplyAnswer(questionID string, answer ...string) (mes
 		m.codeInspectionUsed = strings.EqualFold(m.macroState["code-inspection-used"][0], "yes")
 	case "container-technology-used":
 		m.containerTechUsed = strings.EqualFold(m.macroState["container-technology-used"][0], "yes")
-	case "within-trust-boundary":
-		m.withinTrustBoundary = strings.EqualFold(m.macroState["within-trust-boundary"][0], "yes")
-	case "selected-trust-boundary":
-		m.createNewTrustBoundary = strings.EqualFold(m.macroState["selected-trust-boundary"][0], createNewTrustBoundaryLabel)
+	case withinTrustBoundaryQuestion:
+		m.withinTrustBoundary = strings.EqualFold(m.macroState[withinTrustBoundaryQuestion][0], "yes")
+	case selectedTrustBoundaryQuestion:
+		m.createNewTrustBoundary = strings.EqualFold(m.macroState[selectedTrustBoundaryQuestion][0],
+			createNewTrustBoundaryLabel)
 	}
 
-	return "Answer processed", true, nil
+	return answerProcessed, true, nil
 }
 
 func (m *AddBuildPipeline) GoBack() (message string, validResult bool, err error) {
 	if len(m.questionsAnswered) == 0 {
-		return "Cannot go back further", false, nil
+		return cannotGoBackFurther, false, nil
 	}
 	lastQuestionID := m.questionsAnswered[len(m.questionsAnswered)-1]
 	m.questionsAnswered = m.questionsAnswered[:len(m.questionsAnswered)-1]
@@ -302,9 +303,9 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 	owner := m.macroState["owner"][0]
 
 	if _, exists := parsedModel.DataAssets["Sourcecode"]; !exists {
-		// fmt.Println("Adding data asset:", "sourcecode") // ################################################
+		// fmt.Println("Adding data asset:", sourcecodeDataAsset) // ################################################
 		dataAsset := input.DataAsset{
-			ID:              "sourcecode",
+			ID:              sourcecodeDataAsset,
 			Description:     "Sourcecode to build the application components from",
 			Usage:           types.DevOps.String(),
 			Tags:            []string{},
@@ -324,9 +325,9 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 	}
 
 	if _, exists := parsedModel.DataAssets["Deployment"]; !exists {
-		// fmt.Println("Adding data asset:", "deployment") // ################################################
+		// fmt.Println("Adding data asset:", deploymentDataAsset) // ################################################
 		dataAsset := input.DataAsset{
-			ID:              "deployment",
+			ID:              deploymentDataAsset,
 			Description:     "Deployment unit being installed/shipped",
 			Usage:           types.DevOps.String(),
 			Tags:            []string{},
@@ -365,8 +366,8 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 			IpFiltered:             false,
 			Readonly:               false,
 			Usage:                  types.DevOps.String(),
-			DataAssetsSent:         []string{"sourcecode"},
-			DataAssetsReceived:     []string{"sourcecode"},
+			DataAssetsSent:         []string{sourcecodeDataAsset},
+			DataAssetsReceived:     []string{sourcecodeDataAsset},
 			DiagramTweakWeight:     0,
 			DiagramTweakConstraint: false,
 		}
@@ -382,7 +383,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 			Readonly:               true,
 			Usage:                  types.DevOps.String(),
 			DataAssetsSent:         nil,
-			DataAssetsReceived:     []string{"deployment"},
+			DataAssetsReceived:     []string{deploymentDataAsset},
 			DiagramTweakWeight:     0,
 			DiagramTweakConstraint: false,
 		}
@@ -398,7 +399,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 			Readonly:               true,
 			Usage:                  types.DevOps.String(),
 			DataAssetsSent:         nil,
-			DataAssetsReceived:     []string{"deployment"},
+			DataAssetsReceived:     []string{deploymentDataAsset},
 			DiagramTweakWeight:     0,
 			DiagramTweakConstraint: false,
 		}
@@ -414,8 +415,8 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 				IpFiltered:             false,
 				Readonly:               false,
 				Usage:                  types.DevOps.String(),
-				DataAssetsSent:         []string{"deployment"},
-				DataAssetsReceived:     []string{"deployment"},
+				DataAssetsSent:         []string{deploymentDataAsset},
+				DataAssetsReceived:     []string{deploymentDataAsset},
 				DiagramTweakWeight:     0,
 				DiagramTweakConstraint: false,
 			}
@@ -430,8 +431,8 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 				IpFiltered:             false,
 				Readonly:               false,
 				Usage:                  types.DevOps.String(),
-				DataAssetsSent:         []string{"deployment"},
-				DataAssetsReceived:     []string{"deployment"},
+				DataAssetsSent:         []string{deploymentDataAsset},
+				DataAssetsReceived:     []string{deploymentDataAsset},
 				DiagramTweakWeight:     0,
 				DiagramTweakConstraint: false,
 			}
@@ -449,7 +450,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 				Readonly:               true,
 				Usage:                  types.DevOps.String(),
 				DataAssetsSent:         nil,
-				DataAssetsReceived:     []string{"sourcecode"},
+				DataAssetsReceived:     []string{sourcecodeDataAsset},
 				DiagramTweakWeight:     0,
 				DiagramTweakConstraint: false,
 			}
@@ -478,9 +479,9 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 			MultiTenant:          false,
 			Redundant:            false,
 			CustomDevelopedParts: false,
-			DataAssetsProcessed:  []string{"sourcecode", "deployment"},
-			DataAssetsStored:     []string{"sourcecode", "deployment"},
-			DataFormatsAccepted:  []string{"file"},
+			DataAssetsProcessed:  []string{sourcecodeDataAsset, deploymentDataAsset},
+			DataAssetsStored:     []string{sourcecodeDataAsset, deploymentDataAsset},
+			DataFormatsAccepted:  []string{types.File.String()},
 			CommunicationLinks:   commLinks,
 		}
 		*changeLogCollector = append(*changeLogCollector, "adding technical asset (including communication links): "+id)
@@ -520,9 +521,9 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 			MultiTenant:          strings.EqualFold(m.macroState["multi-tenant"][0], "yes"),
 			Redundant:            false,
 			CustomDevelopedParts: false,
-			DataAssetsProcessed:  []string{"sourcecode"},
-			DataAssetsStored:     []string{"sourcecode"},
-			DataFormatsAccepted:  []string{"file"},
+			DataAssetsProcessed:  []string{sourcecodeDataAsset},
+			DataAssetsStored:     []string{sourcecodeDataAsset},
+			DataFormatsAccepted:  []string{types.File.String()},
 			CommunicationLinks:   nil,
 		}
 		*changeLogCollector = append(*changeLogCollector, "adding technical asset (including communication links): "+id)
@@ -563,9 +564,9 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 				MultiTenant:          strings.EqualFold(m.macroState["multi-tenant"][0], "yes"),
 				Redundant:            false,
 				CustomDevelopedParts: false,
-				DataAssetsProcessed:  []string{"deployment"},
-				DataAssetsStored:     []string{"deployment"},
-				DataFormatsAccepted:  []string{"file"},
+				DataAssetsProcessed:  []string{deploymentDataAsset},
+				DataAssetsStored:     []string{deploymentDataAsset},
+				DataFormatsAccepted:  []string{types.File.String()},
 				CommunicationLinks:   nil,
 			}
 			*changeLogCollector = append(*changeLogCollector, "adding technical asset (including communication links): "+id)
@@ -605,9 +606,9 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 				MultiTenant:          strings.EqualFold(m.macroState["multi-tenant"][0], "yes"),
 				Redundant:            false,
 				CustomDevelopedParts: false,
-				DataAssetsProcessed:  []string{"deployment"},
-				DataAssetsStored:     []string{"deployment"},
-				DataFormatsAccepted:  []string{"file"},
+				DataAssetsProcessed:  []string{deploymentDataAsset},
+				DataAssetsStored:     []string{deploymentDataAsset},
+				DataFormatsAccepted:  []string{types.File.String()},
 				CommunicationLinks:   nil,
 			}
 			*changeLogCollector = append(*changeLogCollector, "adding technical asset (including communication links): "+id)
@@ -639,7 +640,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 			Readonly:               true,
 			Usage:                  types.DevOps.String(),
 			DataAssetsSent:         nil,
-			DataAssetsReceived:     []string{"sourcecode"},
+			DataAssetsReceived:     []string{sourcecodeDataAsset},
 			DiagramTweakWeight:     0,
 			DiagramTweakConstraint: false,
 		}
@@ -654,8 +655,8 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 			IpFiltered:             false,
 			Readonly:               false,
 			Usage:                  types.DevOps.String(),
-			DataAssetsSent:         []string{"deployment"},
-			DataAssetsReceived:     []string{"deployment"},
+			DataAssetsSent:         []string{deploymentDataAsset},
+			DataAssetsReceived:     []string{deploymentDataAsset},
 			DiagramTweakWeight:     0,
 			DiagramTweakConstraint: false,
 		}
@@ -671,8 +672,8 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 				IpFiltered:             false,
 				Readonly:               false,
 				Usage:                  types.DevOps.String(),
-				DataAssetsSent:         []string{"deployment"},
-				DataAssetsReceived:     []string{"deployment"},
+				DataAssetsSent:         []string{deploymentDataAsset},
+				DataAssetsReceived:     []string{deploymentDataAsset},
 				DiagramTweakWeight:     0,
 				DiagramTweakConstraint: false,
 			}
@@ -688,8 +689,8 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 					IpFiltered:             false,
 					Readonly:               false,
 					Usage:                  types.DevOps.String(),
-					DataAssetsSent:         []string{"deployment"},
-					DataAssetsReceived:     []string{"deployment"},
+					DataAssetsSent:         []string{deploymentDataAsset},
+					DataAssetsReceived:     []string{deploymentDataAsset},
 					DiagramTweakWeight:     0,
 					DiagramTweakConstraint: false,
 				}
@@ -706,7 +707,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 					Readonly:               true,
 					Usage:                  types.DevOps.String(),
 					DataAssetsSent:         nil,
-					DataAssetsReceived:     []string{"deployment"},
+					DataAssetsReceived:     []string{deploymentDataAsset},
 					DiagramTweakWeight:     0,
 					DiagramTweakConstraint: false,
 				}
@@ -733,7 +734,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 				IpFiltered:             false,
 				Readonly:               false,
 				Usage:                  types.DevOps.String(),
-				DataAssetsSent:         []string{"sourcecode"},
+				DataAssetsSent:         []string{sourcecodeDataAsset},
 				DataAssetsReceived:     []string{},
 				DiagramTweakWeight:     0,
 				DiagramTweakConstraint: false,
@@ -759,7 +760,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 						IpFiltered:             false,
 						Readonly:               false,
 						Usage:                  types.DevOps.String(),
-						DataAssetsSent:         []string{"deployment"},
+						DataAssetsSent:         []string{deploymentDataAsset},
 						DataAssetsReceived:     nil,
 						DiagramTweakWeight:     0,
 						DiagramTweakConstraint: false,
@@ -779,7 +780,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 						IpFiltered:             false,
 						Readonly:               false,
 						Usage:                  types.DevOps.String(),
-						DataAssetsSent:         []string{"deployment"},
+						DataAssetsSent:         []string{deploymentDataAsset},
 						DataAssetsReceived:     nil,
 						DiagramTweakWeight:     0,
 						DiagramTweakConstraint: false,
@@ -798,7 +799,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 						Readonly:               true,
 						Usage:                  types.DevOps.String(),
 						DataAssetsSent:         nil,
-						DataAssetsReceived:     []string{"deployment"},
+						DataAssetsReceived:     []string{deploymentDataAsset},
 						DiagramTweakWeight:     0,
 						DiagramTweakConstraint: false,
 					}
@@ -815,7 +816,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 				}
 			}
 
-			// don't forget to also add the "deployment" data asset as stored on the target
+			// don't forget to also add the deploymentDataAsset data asset as stored on the target
 			targetAssetTitle := parsedModel.TechnicalAssets[deployTargetID].Title
 			assetsStored := make([]string, 0)
 			if modelInput.TechnicalAssets[targetAssetTitle].DataAssetsStored != nil {
@@ -827,7 +828,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 			for _, val := range assetsStored {
 				mergedArrays = append(mergedArrays, val)
 			}
-			mergedArrays = append(mergedArrays, "deployment")
+			mergedArrays = append(mergedArrays, deploymentDataAsset)
 			if !dryRun {
 				x := modelInput.TechnicalAssets[targetAssetTitle]
 				x.DataAssetsStored = mergedArrays
@@ -858,9 +859,9 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 			MultiTenant:          strings.EqualFold(m.macroState["multi-tenant"][0], "yes"),
 			Redundant:            false,
 			CustomDevelopedParts: false,
-			DataAssetsProcessed:  []string{"sourcecode", "deployment"},
-			DataAssetsStored:     []string{"sourcecode", "deployment"},
-			DataFormatsAccepted:  []string{"file"},
+			DataAssetsProcessed:  []string{sourcecodeDataAsset, deploymentDataAsset},
+			DataAssetsStored:     []string{sourcecodeDataAsset, deploymentDataAsset},
+			DataFormatsAccepted:  []string{types.File.String()},
 			CommunicationLinks:   commLinks,
 		}
 		*changeLogCollector = append(*changeLogCollector, "adding technical asset (including communication links): "+id)
@@ -900,9 +901,9 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 			MultiTenant:          strings.EqualFold(m.macroState["multi-tenant"][0], "yes"),
 			Redundant:            false,
 			CustomDevelopedParts: false,
-			DataAssetsProcessed:  []string{"sourcecode", "deployment"},
-			DataAssetsStored:     []string{"sourcecode", "deployment"},
-			DataFormatsAccepted:  []string{"file"},
+			DataAssetsProcessed:  []string{sourcecodeDataAsset, deploymentDataAsset},
+			DataAssetsStored:     []string{sourcecodeDataAsset, deploymentDataAsset},
+			DataFormatsAccepted:  []string{types.File.String()},
 			CommunicationLinks:   nil,
 		}
 		*changeLogCollector = append(*changeLogCollector, "adding technical asset (including communication links): "+id)
@@ -943,9 +944,9 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 				MultiTenant:          strings.EqualFold(m.macroState["multi-tenant"][0], "yes"),
 				Redundant:            false,
 				CustomDevelopedParts: false,
-				DataAssetsProcessed:  []string{"sourcecode"},
-				DataAssetsStored:     []string{"sourcecode"},
-				DataFormatsAccepted:  []string{"file"},
+				DataAssetsProcessed:  []string{sourcecodeDataAsset},
+				DataAssetsStored:     []string{sourcecodeDataAsset},
+				DataFormatsAccepted:  []string{types.File.String()},
 				CommunicationLinks:   nil,
 			}
 			*changeLogCollector = append(*changeLogCollector, "adding technical asset (including communication links): "+id)
@@ -973,7 +974,7 @@ func (m *AddBuildPipeline) applyChange(modelInput *input.Model, parsedModel *typ
 				modelInput.TrustBoundaries[title] = trustBoundary
 			}
 		} else {
-			existingTrustBoundaryToAddTo := m.macroState["selected-trust-boundary"][0]
+			existingTrustBoundaryToAddTo := m.macroState[selectedTrustBoundaryQuestion][0]
 			// fmt.Println("Adding to existing trust boundary:", existingTrustBoundaryToAddTo)
 			title := parsedModel.TrustBoundaries[existingTrustBoundaryToAddTo].Title
 			assetsInside := make([]string, 0)

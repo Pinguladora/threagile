@@ -61,7 +61,7 @@ func (m *AddVaultMacro) GetNextQuestion(parsedModel *types.Model) (nextQuestion 
 		return MacroQuestion{
 			ID:              "vault-name",
 			Title:           "What product is used as the vault?",
-			Description:     "This name affects the technical asset's title and ID plus also the tags used.",
+			Description:     productNameDescription,
 			PossibleAnswers: nil,
 			MultiSelect:     false,
 			DefaultAnswer:   "",
@@ -89,9 +89,9 @@ func (m *AddVaultMacro) GetNextQuestion(parsedModel *types.Model) (nextQuestion 
 			ID:              "multi-tenant",
 			Title:           "Is the vault used by multiple tenants?",
 			Description:     "",
-			PossibleAnswers: []string{"Yes", "No"},
+			PossibleAnswers: []string{answerYes, answerNo},
 			MultiSelect:     false,
-			DefaultAnswer:   "No",
+			DefaultAnswer:   answerNo,
 		}, nil
 	case 4:
 		possibleAnswers := make([]string, 0)
@@ -111,12 +111,12 @@ func (m *AddVaultMacro) GetNextQuestion(parsedModel *types.Model) (nextQuestion 
 		}
 	case 5:
 		return MacroQuestion{
-			ID:              "within-trust-boundary",
+			ID:              withinTrustBoundaryQuestion,
 			Title:           "Is the vault placed within a network trust boundary?",
 			Description:     "",
-			PossibleAnswers: []string{"Yes", "No"},
+			PossibleAnswers: []string{answerYes, answerNo},
 			MultiSelect:     false,
-			DefaultAnswer:   "Yes",
+			DefaultAnswer:   answerYes,
 		}, nil
 	case 6:
 		possibleAnswers := []string{createNewTrustBoundaryLabel}
@@ -127,7 +127,7 @@ func (m *AddVaultMacro) GetNextQuestion(parsedModel *types.Model) (nextQuestion 
 		}
 		sort.Strings(possibleAnswers)
 		return MacroQuestion{
-			ID:              "selected-trust-boundary",
+			ID:              selectedTrustBoundaryQuestion,
 			Title:           "Choose from the list of existing network trust boundaries or create a new one?",
 			Description:     "",
 			PossibleAnswers: possibleAnswers,
@@ -158,19 +158,20 @@ func (m *AddVaultMacro) ApplyAnswer(questionID string, answer ...string) (messag
 	m.macroState[questionID] = answer
 	m.questionsAnswered = append(m.questionsAnswered, questionID)
 	switch questionID {
-	case "within-trust-boundary":
-		m.withinTrustBoundary = strings.EqualFold(m.macroState["within-trust-boundary"][0], "yes")
+	case withinTrustBoundaryQuestion:
+		m.withinTrustBoundary = strings.EqualFold(m.macroState[withinTrustBoundaryQuestion][0], "yes")
 
-	case "selected-trust-boundary":
-		m.createNewTrustBoundary = strings.EqualFold(m.macroState["selected-trust-boundary"][0], createNewTrustBoundaryLabel)
+	case selectedTrustBoundaryQuestion:
+		m.createNewTrustBoundary = strings.EqualFold(m.macroState[selectedTrustBoundaryQuestion][0],
+			createNewTrustBoundaryLabel)
 	}
 
-	return "Answer processed", true, nil
+	return answerProcessed, true, nil
 }
 
 func (m *AddVaultMacro) GoBack() (message string, validResult bool, err error) {
 	if len(m.questionsAnswered) == 0 {
-		return "Cannot go back further", false, nil
+		return cannotGoBackFurther, false, nil
 	}
 	lastQuestionID := m.questionsAnswered[len(m.questionsAnswered)-1]
 	m.questionsAnswered = m.questionsAnswered[:len(m.questionsAnswered)-1]
@@ -197,7 +198,7 @@ func (m *AddVaultMacro) applyChange(modelInput *input.Model, parsedModel *types.
 
 	if _, exists := parsedModel.DataAssets["Configuration Secrets"]; !exists {
 		dataAsset := input.DataAsset{
-			ID:                     "configuration-secrets",
+			ID:                     configurationSecretsDataAsset,
 			Description:            "Configuration secrets (like credentials, keys, certificates, etc.) secured and managed by a vault",
 			Usage:                  types.DevOps.String(),
 			Tags:                   []string{},
@@ -251,7 +252,7 @@ func (m *AddVaultMacro) applyChange(modelInput *input.Model, parsedModel *types.
 				Redundant:               false,
 				CustomDevelopedParts:    false,
 				DataAssetsProcessed:     nil,
-				DataAssetsStored:        []string{"configuration-secrets"},
+				DataAssetsStored:        []string{configurationSecretsDataAsset},
 				DataFormatsAccepted:     nil,
 				CommunicationLinks:      nil,
 			}
@@ -280,8 +281,8 @@ func (m *AddVaultMacro) applyChange(modelInput *input.Model, parsedModel *types.
 				IpFiltered:             false,
 				Readonly:               false,
 				Usage:                  types.DevOps.String(),
-				DataAssetsSent:         []string{"configuration-secrets"},
-				DataAssetsReceived:     []string{"configuration-secrets"},
+				DataAssetsSent:         []string{configurationSecretsDataAsset},
+				DataAssetsReceived:     []string{configurationSecretsDataAsset},
 				DiagramTweakWeight:     0,
 				DiagramTweakConstraint: false,
 			}
@@ -315,7 +316,7 @@ func (m *AddVaultMacro) applyChange(modelInput *input.Model, parsedModel *types.
 				Readonly:               true,
 				Usage:                  types.DevOps.String(),
 				DataAssetsSent:         nil,
-				DataAssetsReceived:     []string{"configuration-secrets"},
+				DataAssetsReceived:     []string{configurationSecretsDataAsset},
 				DiagramTweakWeight:     0,
 				DiagramTweakConstraint: false,
 			}
@@ -325,7 +326,7 @@ func (m *AddVaultMacro) applyChange(modelInput *input.Model, parsedModel *types.
 				client.CommunicationLinks["Vault Access ("+clientID+")"] = clientAccessCommLink
 				modelInput.TechnicalAssets[clientAssetTitle] = client
 			}
-			// don't forget to also add the "configuration-secrets" data asset as processed on the client
+			// don't forget to also add the configurationSecretsDataAsset data asset as processed on the client
 			assetsProcessed := make([]string, 0)
 			if modelInput.TechnicalAssets[clientAssetTitle].DataAssetsProcessed != nil {
 				for _, val := range modelInput.TechnicalAssets[clientAssetTitle].DataAssetsProcessed {
@@ -336,7 +337,7 @@ func (m *AddVaultMacro) applyChange(modelInput *input.Model, parsedModel *types.
 			for _, val := range assetsProcessed {
 				mergedArrays = append(mergedArrays, val)
 			}
-			mergedArrays = append(mergedArrays, "configuration-secrets")
+			mergedArrays = append(mergedArrays, configurationSecretsDataAsset)
 			if !dryRun {
 				x := modelInput.TechnicalAssets[clientAssetTitle]
 				x.DataAssetsProcessed = mergedArrays
@@ -366,13 +367,13 @@ func (m *AddVaultMacro) applyChange(modelInput *input.Model, parsedModel *types.
 			MultiTenant:             strings.EqualFold(m.macroState["multi-tenant"][0], "yes"),
 			Redundant:               false,
 			CustomDevelopedParts:    false,
-			DataAssetsProcessed:     []string{"configuration-secrets"},
+			DataAssetsProcessed:     []string{configurationSecretsDataAsset},
 			DataAssetsStored:        nil,
 			DataFormatsAccepted:     nil,
 			CommunicationLinks:      commLinks,
 		}
 		if inMemoryUsed {
-			techAsset.DataAssetsStored = []string{"configuration-secrets"}
+			techAsset.DataAssetsStored = []string{configurationSecretsDataAsset}
 		}
 		*changeLogCollector = append(*changeLogCollector, "adding technical asset (including communication links): "+vaultID)
 		if !dryRun {
@@ -417,7 +418,7 @@ func (m *AddVaultMacro) applyChange(modelInput *input.Model, parsedModel *types.
 				modelInput.TrustBoundaries[title] = trustBoundary
 			}
 		} else { // adding to existing trust boundary
-			existingTrustBoundaryToAddTo := m.macroState["selected-trust-boundary"][0]
+			existingTrustBoundaryToAddTo := m.macroState[selectedTrustBoundaryQuestion][0]
 			title := parsedModel.TrustBoundaries[existingTrustBoundaryToAddTo].Title
 
 			if filesystemUsed { // ---------------------- nest as execution-environment trust boundary ----------------------

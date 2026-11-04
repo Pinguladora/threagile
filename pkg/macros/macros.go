@@ -322,6 +322,34 @@ const NoMoreQuestionsID = ""
 // changesetValid is the message macros report when their final change set is valid.
 const changesetValid = "Changeset valid"
 
+// The messages of the macros for answers and for going back.
+const (
+	answerProcessed     = "Answer processed"
+	cannotGoBackFurther = "Cannot go back further"
+)
+
+// The answers of the yes-or-no questions of the macros.
+const (
+	answerYes = "Yes"
+	answerNo  = "No"
+)
+
+// The IDs of the questions about trust boundaries that the macros ask.
+const (
+	withinTrustBoundaryQuestion   = "within-trust-boundary"
+	selectedTrustBoundaryQuestion = "selected-trust-boundary"
+)
+
+// productNameDescription describes the questions for the product a technical asset is.
+const productNameDescription = "This name affects the technical asset's title and ID plus also the tags used."
+
+// The IDs of the data assets that the macros add.
+const (
+	sourcecodeDataAsset           = "sourcecode"
+	deploymentDataAsset           = "deployment"
+	configurationSecretsDataAsset = "configuration-secrets"
+)
+
 func NoMoreQuestions() MacroQuestion {
 	return MacroQuestion{
 		ID:              NoMoreQuestionsID,

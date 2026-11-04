@@ -24,11 +24,11 @@ func (*PrettyPrintMacro) GetNextQuestion(_ *types.Model) (nextQuestion MacroQues
 }
 
 func (*PrettyPrintMacro) ApplyAnswer(_ string, _ ...string) (message string, validResult bool, err error) {
-	return "Answer processed", true, nil
+	return answerProcessed, true, nil
 }
 
 func (*PrettyPrintMacro) GoBack() (message string, validResult bool, err error) {
-	return "Cannot go back further", false, nil
+	return cannotGoBackFurther, false, nil
 }
 
 func (*PrettyPrintMacro) GetFinalChangeImpact(_ *input.Model, _ *types.Model) (changes []string, message string, validResult bool, err error) {
