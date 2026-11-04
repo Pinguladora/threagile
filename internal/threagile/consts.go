@@ -24,6 +24,7 @@ const (
 	JsonStatsFilename           = "stats.json"
 	JsonOTMFilename             = "otm.json"
 	ReportHTMLFilename          = "report.html"
+	ReportMarkdownFilename      = "THREAT_MODEL.md"
 	TemplateFilename            = report.DefaultTemplateFilename
 	ReportLogoImagePath         = report.DefaultReportLogoImagePath
 	DataFlowDiagramFilenameDOT  = "data-flow-diagram.gv"

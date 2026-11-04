@@ -26,6 +26,7 @@ type GenerateCommands struct {
 	ReportPDF           bool
 	ReportADOC          bool
 	ReportHTML          bool
+	ReportMarkdown      bool
 }
 
 func (c *GenerateCommands) Defaults() *GenerateCommands {
@@ -41,6 +42,7 @@ func (c *GenerateCommands) Defaults() *GenerateCommands {
 		ReportPDF:           true,
 		ReportADOC:          true,
 		ReportHTML:          true,
+		ReportMarkdown:      true,
 	}
 	return c
 }
@@ -67,6 +69,7 @@ type reportConfigReader interface {
 	GetJsonStatsFilename() string
 	GetJsonOTMFilename() string
 	GetReportHTMLFilename() string
+	GetReportMarkdownFilename() string
 	GetTemplateFilename() string
 	GetReportLogoImagePath() string
 
@@ -266,7 +269,7 @@ func writeExcelOutputs(config reportConfigReader, readResult *model.ReadResult, 
 	return nil
 }
 
-// writeReports writes the PDF, AsciiDoc and HTML reports that are asked for.
+// writeReports writes the PDF, AsciiDoc, HTML and Markdown reports that are asked for.
 func writeReports(config reportConfigReader, readResult *model.ReadResult, commands *GenerateCommands,
 	riskRules types.RiskRules, diagramDPI int, progressReporter progressReporter,
 ) error {
@@ -287,6 +290,14 @@ func writeReports(config reportConfigReader, readResult *model.ReadResult, comma
 	if commands.ReportHTML {
 		progressReporter.Info("Writing report html")
 		err := writeReportHTML(config, readResult, riskRules, diagramDPI, progressReporter)
+		if err != nil {
+			return err
+		}
+	}
+
+	if commands.ReportMarkdown {
+		progressReporter.Info("Writing report markdown")
+		err := writeReportMarkdown(config, readResult, riskRules)
 		if err != nil {
 			return err
 		}
@@ -402,6 +413,17 @@ func reportOptions(config reportConfigReader, readResult *model.ReadResult, risk
 		HideChapters:      config.GetReportConfigurationHideChapters(),
 		HideEmptyChapters: config.GetHideEmptyChapters(),
 	}
+}
+
+// writeReportMarkdown writes the Markdown report, whose diagrams are Mermaid code drawn from the model.
+func writeReportMarkdown(config reportConfigReader, readResult *model.ReadResult, riskRules types.RiskRules) error {
+	modelHash, err := hashFile(config.GetInputFile())
+	if err != nil {
+		return err
+	}
+	return WriteReportMarkdown(readResult.ParsedModel,
+		filepath.Join(config.GetOutputFolder(), config.GetReportMarkdownFilename()),
+		reportOptions(config, readResult, riskRules, modelHash))
 }
 
 // diagramDOT writes the DOT source of a diagram into a temporary file and returns it.

@@ -141,7 +141,7 @@ func generateOutputs(t *testing.T) map[string][]byte {
 			DataFlowDiagramDOT:  readFile(t, filepath.Join(outputDir, config.GetDataFlowDiagramFilenameDOT())),
 			DataAssetDiagramDOT: readFile(t, filepath.Join(outputDir, config.GetDataAssetDiagramFilenameDOT())),
 		}, reporter))
-	require.NoError(t, report.WriteReportMarkdown(parsedModel, filepath.Join(outputDir, "THREAT_MODEL.md"), options))
+	require.NoError(t, report.WriteReportMarkdown(parsedModel, filepath.Join(outputDir, config.GetReportMarkdownFilename()), options))
 	require.NoError(t, report.WriteRisksExcelToFile(parsedModel, filepath.Join(outputDir, config.GetExcelRisksFilename()), config))
 	require.NoError(t, report.WriteTagsExcelToFile(parsedModel, filepath.Join(outputDir, config.GetExcelTagsFilename()), config))
 

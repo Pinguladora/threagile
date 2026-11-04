@@ -229,6 +229,7 @@ func (s *server) resultFiles(tmpOutputDir string) []string {
 		filepath.Join(tmpOutputDir, s.config.GetDataAssetDiagramFilenamePNG()),
 		filepath.Join(tmpOutputDir, s.config.GetReportFilename()),
 		filepath.Join(tmpOutputDir, s.config.GetReportHTMLFilename()),
+		filepath.Join(tmpOutputDir, s.config.GetReportMarkdownFilename()),
 		filepath.Join(tmpOutputDir, s.config.GetExcelRisksFilename()),
 		filepath.Join(tmpOutputDir, s.config.GetExcelTagsFilename()),
 		filepath.Join(tmpOutputDir, s.config.GetJsonRisksFilename()),
