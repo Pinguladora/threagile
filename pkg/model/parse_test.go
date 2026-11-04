@@ -12,6 +12,7 @@ import (
 	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestDefaultInputNotFail(t *testing.T) {
@@ -226,4 +227,144 @@ func TestCommunicationLinksOrderedByTitle(t *testing.T) {
 		incoming = append(incoming, link.Title)
 	}
 	assert.Equal(t, sorted, incoming)
+}
+
+// viaModel has a client whose link to a web server passes through a load balancer and a WAF
+// (threagile#15); the load balancer also has a link of its own titled like the one of the client.
+func viaModel(via ...string) *input.Model {
+	asset := func(id string) input.TechnicalAsset {
+		asset := createTechnicalAsset(types.Internal, types.Operational, types.Operational)
+		asset.ID = id
+		return asset
+	}
+	client := asset("client")
+	client.CommunicationLinks = map[string]input.CommunicationLink{
+		"Customer Traffic": {
+			Target:                 "web-server",
+			Via:                    via,
+			Description:            "Customer requests",
+			Protocol:               "https",
+			Authentication:         "token",
+			Authorization:          "end-user-identity-propagation",
+			Usage:                  "business",
+			Tags:                   []string{"edge"},
+			VPN:                    true,
+			IpFiltered:             true,
+			Readonly:               true,
+			DataAssetsSent:         []string{"orders"},
+			DataAssetsReceived:     []string{"pages"},
+			DiagramTweakWeight:     3,
+			DiagramTweakConstraint: true,
+		},
+	}
+	loadBalancer := asset("load-balancer")
+	loadBalancer.CommunicationLinks = map[string]input.CommunicationLink{
+		"Customer Traffic": {
+			Target:         "web-server",
+			Protocol:       "http",
+			Authentication: "none",
+			Authorization:  "none",
+			Usage:          "devops",
+		},
+	}
+	outOfScopeProxy := asset("cdn")
+	outOfScopeProxy.OutOfScope = true
+
+	data := func(id string) input.DataAsset {
+		asset := createDataAsset(types.Internal, types.Operational, types.Operational)
+		asset.ID = id
+		return asset
+	}
+	model := createInputModel(
+		map[string]input.TechnicalAsset{
+			"Client":        client,
+			"Load Balancer": loadBalancer,
+			"WAF":           asset("waf"),
+			"Web Server":    asset("web-server"),
+			"CDN":           outOfScopeProxy,
+		},
+		map[string]input.DataAsset{"Orders": data("orders"), "Pages": data("pages")},
+	)
+	model.TagsAvailable = []string{"edge"}
+	return model
+}
+
+func TestViaExpandsLinkIntoHops(t *testing.T) {
+	parsedModel, err := ParseModel(&mockConfig{}, viaModel("load-balancer", "waf"), make(types.RiskRules), make(types.RiskRules))
+	require.NoError(t, err)
+
+	assert.NotContains(t, parsedModel.CommunicationLinks, "client>customer-traffic")
+	type hop struct{ id, title, source, target string }
+	expected := []hop{
+		{"client>customer-traffic>load-balancer", "Customer Traffic (hop 1 of 3)", "client", "load-balancer"},
+		{"client>customer-traffic>waf", "Customer Traffic (hop 2 of 3)", "load-balancer", "waf"},
+		{"client>customer-traffic>web-server", "Customer Traffic (hop 3 of 3)", "waf", "web-server"},
+	}
+	for _, want := range expected {
+		link := parsedModel.CommunicationLinks[want.id]
+		require.NotNil(t, link, want.id)
+		assert.Equal(t, want, hop{link.Id, link.Title, link.SourceId, link.TargetId})
+
+		// the source owns the hop, and the target sees it coming in
+		assert.Contains(t, parsedModel.TechnicalAssets[want.source].CommunicationLinks, link)
+		assert.Contains(t, parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[want.target], link)
+		assert.Subset(t, parsedModel.TechnicalAssets[want.source].DataAssetsProcessed, []string{"orders", "pages"})
+		assert.Subset(t, parsedModel.TechnicalAssets[want.target].DataAssetsProcessed, []string{"orders", "pages"})
+
+		assert.Equal(t, "Customer requests", link.Description)
+		assert.Equal(t, types.HTTPS, link.Protocol)
+		assert.Equal(t, types.Token, link.Authentication)
+		assert.Equal(t, types.EndUserIdentityPropagation, link.Authorization)
+		assert.Equal(t, types.Business, link.Usage)
+		assert.Equal(t, []string{"edge"}, link.Tags)
+		assert.True(t, link.VPN)
+		assert.True(t, link.IpFiltered)
+		assert.True(t, link.Readonly)
+		assert.Equal(t, []string{"orders"}, link.DataAssetsSent)
+		assert.Equal(t, []string{"pages"}, link.DataAssetsReceived)
+		assert.Equal(t, 3, link.DiagramTweakWeight)
+		assert.False(t, link.DiagramTweakConstraint)
+	}
+	assert.Len(t, parsedModel.TechnicalAssets["client"].CommunicationLinks, 1)
+	assert.Len(t, parsedModel.TechnicalAssets["waf"].CommunicationLinks, 1)
+
+	// the modelled link of the load balancer keeps its id, and its links stay ordered by title
+	loadBalancerLinks := parsedModel.TechnicalAssets["load-balancer"].CommunicationLinks
+	titles := make([]string, 0, len(loadBalancerLinks))
+	for _, link := range loadBalancerLinks {
+		titles = append(titles, link.Title)
+	}
+	assert.Equal(t, []string{"Customer Traffic", "Customer Traffic (hop 2 of 3)"}, titles)
+	assert.Equal(t, types.HTTP, parsedModel.CommunicationLinks["load-balancer>customer-traffic"].Protocol)
+
+	// the hops do not share their lists
+	parsedModel.CommunicationLinks["client>customer-traffic>waf"].Tags[0] = "changed"
+	assert.Equal(t, []string{"edge"}, parsedModel.CommunicationLinks["client>customer-traffic>web-server"].Tags)
+}
+
+func TestViaAllowsOutOfScopeProxy(t *testing.T) {
+	parsedModel, err := ParseModel(&mockConfig{}, viaModel("cdn"), make(types.RiskRules), make(types.RiskRules))
+	require.NoError(t, err)
+
+	assert.Equal(t, "cdn", parsedModel.CommunicationLinks["client>customer-traffic>web-server"].SourceId)
+	assert.Equal(t, "cdn", parsedModel.CommunicationLinks["client>customer-traffic>cdn"].TargetId)
+}
+
+func TestViaRejectsInvalidProxies(t *testing.T) {
+	tests := map[string]struct {
+		via   []string
+		error string
+	}{
+		"unknown asset": {[]string{"load-balancer", "proxy"}, `missing technical asset "proxy" in 'via'`},
+		"source":        {[]string{"client"}, `lists its source "client"`},
+		"target":        {[]string{"waf", "web-server"}, `lists its target "web-server"`},
+		"repeated":      {[]string{"waf", "load-balancer", "waf"}, `lists "waf" more than once`},
+	}
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			_, err := ParseModel(&mockConfig{}, viaModel(test.via...), make(types.RiskRules), make(types.RiskRules))
+			require.ErrorContains(t, err, test.error)
+			assert.ErrorContains(t, err, `communication link "Customer Traffic" of technical asset "Client"`)
+		})
+	}
 }

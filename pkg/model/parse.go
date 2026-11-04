@@ -1,6 +1,7 @@
 package model
 
 import (
+	"cmp"
 	"errors"
 	"fmt"
 	"maps"
@@ -136,6 +137,14 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 
 	// Technical Assets ===============================================================================
 	parsedModel.TechnicalAssets = make(map[string]*types.TechnicalAsset)
+	// the via lists of communication links refer to technical assets that may be parsed later
+	technicalAssetIds := make(map[string]bool, len(modelInput.TechnicalAssets))
+	for _, asset := range modelInput.TechnicalAssets {
+		technicalAssetIds[asset.ID] = true
+	}
+	// hops of communication links through proxies, which the proxies own once they are parsed
+	proxyHops := make([]*types.CommunicationLink, 0)
+	hopOwners := make(map[string]bool)
 	for _, title := range slices.Sorted(maps.Keys(modelInput.TechnicalAssets)) {
 		asset := modelInput.TechnicalAssets[title]
 		id := asset.ID
@@ -326,12 +335,18 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 					DiagramTweakWeight:     weight,
 					DiagramTweakConstraint: !commLink.DiagramTweakConstraint,
 				}
+				if len(commLink.Via) > 0 {
+					where := fmt.Sprintf("communication link %q of technical asset %q", commLinkTitle, title)
+					hops, err := expandVia(link, commLink.Via, technicalAssetIds, where)
+					if err != nil {
+						return nil, err
+					}
+					link = hops[0]
+					proxyHops = append(proxyHops, hops[1:]...)
+					hopOwners[id] = true
+				}
 				communicationLinks = append(communicationLinks, link)
-				// track all comm links
-				parsedModel.CommunicationLinks[link.Id] = link
-				// keep track of map of *all* comm links mapped by target-id (to be able to look up "who is calling me" kind of things)
-				parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[link.TargetId] = append(
-					parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[link.TargetId], link)
+				addCommunicationLink(&parsedModel, link)
 			}
 		}
 
@@ -375,6 +390,26 @@ func ParseModel(config technologyMapConfigReader, modelInput *input.Model, built
 			CommunicationLinks:      communicationLinks,
 			DiagramTweakOrder:       asset.DiagramTweakOrder,
 		}
+	}
+
+	// The hops after the first one belong to the proxies, as if they were modelled as their links
+	for _, hop := range proxyHops {
+		proxy := parsedModel.TechnicalAssets[hop.SourceId]
+		proxy.CommunicationLinks = append(proxy.CommunicationLinks, hop)
+		for _, dataAsset := range slices.Concat(hop.DataAssetsSent, hop.DataAssetsReceived) {
+			if !contains(proxy.DataAssetsProcessed, dataAsset) {
+				proxy.DataAssetsProcessed = append(proxy.DataAssetsProcessed, dataAsset)
+			}
+		}
+		addCommunicationLink(&parsedModel, hop)
+		hopOwners[proxy.Id] = true
+	}
+	// keep the links of the assets with hops ordered by title, like those of every other asset
+	byTitle := func(a, b *types.CommunicationLink) int {
+		return cmp.Or(strings.Compare(a.Title, b.Title), strings.Compare(a.Id, b.Id))
+	}
+	for ownerId := range hopOwners {
+		slices.SortStableFunc(parsedModel.TechnicalAssets[ownerId].CommunicationLinks, byTitle)
 	}
 
 	// If CIA is lower than that of its data assets, it is implicitly set to the highest CIA value of its data assets
@@ -779,6 +814,53 @@ func createDataFlowId(sourceAssetId, title string) (string, error) {
 		return "", err
 	}
 	return sourceAssetId + ">" + strings.Trim(reg.ReplaceAllString(strings.ToLower(title), "-"), "- "), nil
+}
+
+// addCommunicationLink tracks a link of a technical asset in the indexes of all links.
+func addCommunicationLink(parsedModel *types.Model, link *types.CommunicationLink) {
+	// track all comm links
+	parsedModel.CommunicationLinks[link.Id] = link
+	// keep track of map of *all* comm links mapped by target-id (to be able to look up "who is calling me" kind of things)
+	parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[link.TargetId] = append(
+		parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[link.TargetId], link)
+}
+
+// expandVia splits a communication link through proxies, the technical assets its via lists in order,
+// into one link per hop: from the source of the link to the first proxy, from there to the next one,
+// and from the last proxy to the target of the link. Every hop copies the attributes of the link.
+// The id of a hop is the id of the link followed by ">" and the id of the target of the hop, so it
+// cannot clash with the id of a modelled link, which has a single ">". Its title is the title of the
+// link followed by "(hop 2 of 3)".
+func expandVia(
+	link *types.CommunicationLink, via []string, technicalAssetIds map[string]bool, where string,
+) ([]*types.CommunicationLink, error) {
+	for i, proxyId := range via {
+		switch {
+		case !technicalAssetIds[proxyId]:
+			return nil, fmt.Errorf("missing technical asset %q in 'via' of %s", proxyId, where)
+		case proxyId == link.SourceId:
+			return nil, fmt.Errorf("'via' of %s lists its source %q", where, proxyId)
+		case proxyId == link.TargetId:
+			return nil, fmt.Errorf("'via' of %s lists its target %q", where, proxyId)
+		case slices.Contains(via[:i], proxyId):
+			return nil, fmt.Errorf("'via' of %s lists %q more than once", where, proxyId)
+		}
+	}
+
+	stops := slices.Concat([]string{link.SourceId}, via, []string{link.TargetId})
+	hops := make([]*types.CommunicationLink, 0, len(stops)-1)
+	for i := 1; i < len(stops); i++ {
+		hop := *link
+		hop.Id = link.Id + ">" + stops[i]
+		hop.SourceId = stops[i-1]
+		hop.TargetId = stops[i]
+		hop.Title = fmt.Sprintf("%s (hop %d of %d)", link.Title, i, len(stops)-1)
+		hop.Tags = slices.Clone(link.Tags)
+		hop.DataAssetsSent = slices.Clone(link.DataAssetsSent)
+		hop.DataAssetsReceived = slices.Clone(link.DataAssetsReceived)
+		hops = append(hops, &hop)
+	}
+	return hops, nil
 }
 
 func createSyntheticId(categoryId string,
