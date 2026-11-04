@@ -74,7 +74,12 @@ const (
 
 const (
 	ThreagileVersion = "1.0.0" // Also update into example and stub model files and openapi.yaml
-	Logo             = "  _____ _                          _ _      \n |_   _| |__  _ __ ___  __ _  __ _(_) | ___ \n   | | | '_ \\| '__/ _ \\/ _` |/ _` | | |/ _ \\\n   | | | | | | | |  __/ (_| | (_| | | |  __/\n   |_| |_| |_|_|  \\___|\\__,_|\\__, |_|_|\\___|\n                             |___/        " +
+	Logo             = "  _____ _                          _ _      \n" +
+		" |_   _| |__  _ __ ___  __ _  __ _(_) | ___ \n" +
+		"   | | | '_ \\| '__/ _ \\/ _` |/ _` | | |/ _ \\\n" +
+		"   | | | | | | | |  __/ (_| | (_| | | |  __/\n" +
+		"   |_| |_| |_|_|  \\___|\\__,_|\\__, |_|_|\\___|\n" +
+		"                             |___/        " +
 		"\nThreagile - Agile Threat Modeling"
 	VersionText = "Documentation: https://threagile.io\n" +
 		"Container image: " + containerImage + "\n" +
@@ -100,9 +105,11 @@ const (
 		containerUser + " -p 8080:8080 -v \"$(pwd)/server-data\":/data " + containerImage + " server --server-port 8080\n\n" +
 		"If you want to find out about the different enum values usable in the model yaml file: \n" +
 		" docker run --rm -it " + containerImage + " " + ListTypesCommand + "\n\n" +
-		"If you want to use some nice editing help (syntax validation, autocompletion, and live templates) in your favourite IDE: \n" +
+		"If you want to use some nice editing help (syntax validation, autocompletion, and live templates) in your " +
+		"favourite IDE: \n" +
 		containerRun + CreateEditingSupportCommand + " --output .\n\n" +
-		"If you want to list all available model macros (which are macros capable of reading a model yaml file, asking you questions in a wizard-style and then update the model yaml file accordingly): \n" +
+		"If you want to list all available model macros (which are macros capable of reading a model yaml file, " +
+		"asking you questions in a wizard-style and then update the model yaml file accordingly): \n" +
 		" docker run --rm -it " + containerImage + " " + ListModelMacrosCommand + "\n\n" +
 		"If you want to execute a certain model macro on the model yaml file (here the macro add-build-pipeline): \n" +
 		containerRun + "--model threagile.yaml --output . execute-model-macro add-build-pipeline"
