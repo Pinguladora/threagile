@@ -41,8 +41,8 @@ digraph generatedModel { concentrate=true
   752644550 [ shape="box" style="filled" fillcolor="#FF8E00"
 				label=<<b>Knowledge Index</b>> penwidth="3.0" color="#FF8E00" ];
 				
-  1305071387 [ shape="box" style="filled" fillcolor="#C87832"
-				label=<<b>Knowledge CMS</b>> penwidth="3.0" color="#C87832" ];
+  1305071387 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Knowledge CMS</b>> penwidth="3.0" color="#FF8E00" ];
 				
   1505061542 [ shape="box" style="filled" fillcolor="#FF8E00"
 				label=<<b>Ingestion Pipeline</b>> penwidth="3.0" color="#FF8E00" ];

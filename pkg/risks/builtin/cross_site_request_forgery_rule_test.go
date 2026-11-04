@@ -41,7 +41,7 @@ func TestCrossSiteRequestForgeryRuleGenerateRisksTechAssetNotWebApplicationNotRi
 					{
 						Name: "tool",
 						Attributes: map[string]bool{
-							types.WebApplication: false,
+							types.IsWebApplication: false,
 						},
 					},
 				},
@@ -63,7 +63,7 @@ func TestCrossSiteRequestForgeryRuleGenerateRisksTechAssetWebApplicationWithoutI
 					{
 						Name: "web-app",
 						Attributes: map[string]bool{
-							types.WebApplication: true,
+							types.IsWebApplication: true,
 						},
 					},
 				},
@@ -86,7 +86,7 @@ func TestCrossSiteRequestForgeryRuleGenerateRisksTechAssetWebApplicationIncoming
 					{
 						Name: "web-app",
 						Attributes: map[string]bool{
-							types.WebApplication: true,
+							types.IsWebApplication: true,
 						},
 					},
 				},
@@ -126,7 +126,7 @@ func TestCrossSiteRequestForgeryRuleGenerateRisksTechAssetWebApplicationIncoming
 					{
 						Name: "web-app",
 						Attributes: map[string]bool{
-							types.WebApplication: true,
+							types.IsWebApplication: true,
 						},
 					},
 				},
@@ -171,7 +171,7 @@ func TestCrossSiteRequestForgeryRuleGenerateRisksTechAssetWebApplicationIncoming
 					{
 						Name: "web-app",
 						Attributes: map[string]bool{
-							types.WebApplication: true,
+							types.IsWebApplication: true,
 						},
 					},
 				},
@@ -217,7 +217,7 @@ func TestCrossSiteRequestForgeryRuleGenerateRisksTechAssetWebApplicationIncoming
 					{
 						Name: "web-app",
 						Attributes: map[string]bool{
-							types.WebApplication: true,
+							types.IsWebApplication: true,
 						},
 					},
 				},

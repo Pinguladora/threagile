@@ -49,7 +49,7 @@ func (r *MissingWafRule) GenerateRisks(input *types.Model) ([]*types.Risk, error
 		if technicalAsset.OutOfScope {
 			continue
 		}
-		if !technicalAsset.Technologies.GetAttribute(types.WebApplication) &&
+		if !technicalAsset.Technologies.GetAttribute(types.IsWebApplication) &&
 			!technicalAsset.Technologies.GetAttribute(types.IsWebService) {
 			continue
 		}

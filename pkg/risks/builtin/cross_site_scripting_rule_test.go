@@ -41,7 +41,7 @@ func TestCrossSiteScriptingRuleGenerateRisksTechAssetNotWebApplicationNotRisksCr
 					{
 						Name: "tool",
 						Attributes: map[string]bool{
-							types.WebApplication: false,
+							types.IsWebApplication: false,
 						},
 					},
 				},
@@ -65,7 +65,7 @@ func TestCrossSiteScriptingRuleGenerateRisksTechAssetWebApplicationRisksCreated(
 					{
 						Name: "web-app",
 						Attributes: map[string]bool{
-							types.WebApplication: true,
+							types.IsWebApplication: true,
 						},
 					},
 				},
@@ -91,7 +91,7 @@ func TestCrossSiteScriptingRuleGenerateRisksTechAssetProcessStrictlyConfidential
 					{
 						Name: "web-app",
 						Attributes: map[string]bool{
-							types.WebApplication: true,
+							types.IsWebApplication: true,
 						},
 					},
 				},
@@ -123,7 +123,7 @@ func TestCrossSiteScriptingRuleGenerateRisksTechAssetProcessMissionCriticalInteg
 					{
 						Name: "web-app",
 						Attributes: map[string]bool{
-							types.WebApplication: true,
+							types.IsWebApplication: true,
 						},
 					},
 				},
@@ -155,7 +155,7 @@ func TestCrossSiteScriptingRuleGenerateRisksTechAssetNoDataProcessedMediumImpact
 					{
 						Name: "web-app",
 						Attributes: map[string]bool{
-							types.WebApplication: true,
+							types.IsWebApplication: true,
 						},
 					},
 				},
@@ -182,7 +182,7 @@ func TestCrossSiteScriptingRuleGenerateRisksMultipleWebApplicationsEachGenerates
 					{
 						Name: "web-app",
 						Attributes: map[string]bool{
-							types.WebApplication: true,
+							types.IsWebApplication: true,
 						},
 					},
 				},
@@ -194,7 +194,7 @@ func TestCrossSiteScriptingRuleGenerateRisksMultipleWebApplicationsEachGenerates
 					{
 						Name: "web-app",
 						Attributes: map[string]bool{
-							types.WebApplication: true,
+							types.IsWebApplication: true,
 						},
 					},
 				},
@@ -221,7 +221,7 @@ func TestCrossSiteScriptingRuleGenerateRisksTechAssetProcessBothConfidentialAndS
 					{
 						Name: "web-app",
 						Attributes: map[string]bool{
-							types.WebApplication: true,
+							types.IsWebApplication: true,
 						},
 					},
 				},

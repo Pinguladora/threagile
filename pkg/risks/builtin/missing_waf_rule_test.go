@@ -27,7 +27,7 @@ func TestMissingWafRuleGenerateRisksOutOfScopeNoRisksCreated(t *testing.T) {
 					{
 						Name: "not-web-application",
 						Attributes: map[string]bool{
-							types.WebApplication: true,
+							types.IsWebApplication: true,
 						},
 					},
 				},
@@ -50,8 +50,8 @@ func TestMissingWafRuleGenerateRisksNotWebApplicationOrServiceNoRisksCreated(t *
 					{
 						Name: "not-web-application",
 						Attributes: map[string]bool{
-							types.WebApplication: false,
-							types.IsWebService:   false,
+							types.IsWebApplication: false,
+							types.IsWebService:     false,
 						},
 					},
 				},
@@ -80,7 +80,7 @@ func TestMissingWafRuleGenerateRisksNotAccrossBoundaryNetworkNoRisksCreated(t *t
 					{
 						Name: "web-application",
 						Attributes: map[string]bool{
-							types.WebApplication: true,
+							types.IsWebApplication: true,
 						},
 					},
 				},
@@ -143,7 +143,7 @@ func TestMissingWafRuleGenerateRisksWebApplicationFirewallCallNoRisksCreated(t *
 					{
 						Name: "web-application",
 						Attributes: map[string]bool{
-							types.WebApplication: true,
+							types.IsWebApplication: true,
 						},
 					},
 				},
@@ -207,7 +207,7 @@ func TestMissingWafRuleGenerateRisksNotWebAccessProtocolNoRisksCreated(t *testin
 					{
 						Name: "web-application",
 						Attributes: map[string]bool{
-							types.WebApplication: true,
+							types.IsWebApplication: true,
 						},
 					},
 				},
@@ -308,7 +308,7 @@ func TestMissingWafSegmentationRuleGenerateRisksRiskCreated(t *testing.T) {
 							{
 								Name: "web-application",
 								Attributes: map[string]bool{
-									types.WebApplication: true,
+									types.IsWebApplication: true,
 								},
 							},
 						},

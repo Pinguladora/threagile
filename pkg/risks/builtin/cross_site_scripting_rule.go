@@ -58,7 +58,7 @@ func (r *CrossSiteScriptingRule) GenerateRisks(input *types.Model) ([]*types.Ris
 func (asl *CrossSiteScriptingRule) skipAsset(technicalAsset *types.TechnicalAsset) bool {
 	// Only web applications are checked so far, though mobile clients or rich-clients are affected as well as long
 	// as they use web-views.
-	return technicalAsset.OutOfScope || !technicalAsset.Technologies.GetAttribute(types.WebApplication)
+	return technicalAsset.OutOfScope || !technicalAsset.Technologies.GetAttribute(types.IsWebApplication)
 }
 
 func (r *CrossSiteScriptingRule) createRisk(

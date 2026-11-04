@@ -340,6 +340,16 @@
           ]
         },
         {
+          "threat": "cross-site-scripting",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "cross-site-scripting-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "missing-cloud-hardening",
           "state": "exposed",
           "mitigations": [
@@ -375,6 +385,16 @@
           "mitigations": [
             {
               "mitigation": "missing-network-segmentation-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-waf",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-waf-mitigation",
               "state": "recommended"
             }
           ]
@@ -640,6 +660,16 @@
       },
       "threats": [
         {
+          "threat": "cross-site-scripting",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "cross-site-scripting-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "missing-cloud-hardening",
           "state": "exposed",
           "mitigations": [
@@ -665,6 +695,16 @@
           "mitigations": [
             {
               "mitigation": "missing-vault-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-waf",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-waf-mitigation",
               "state": "recommended"
             }
           ]
@@ -874,6 +914,16 @@
         ]
       },
       "threats": [
+        {
+          "threat": "cross-site-scripting",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "cross-site-scripting-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
         {
           "threat": "missing-cloud-hardening",
           "state": "exposed",
@@ -1142,11 +1192,31 @@
           ]
         },
         {
+          "threat": "cross-site-scripting",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "cross-site-scripting-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "missing-cloud-hardening",
           "state": "exposed",
           "mitigations": [
             {
               "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-waf",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-waf-mitigation",
               "state": "recommended"
             }
           ]
@@ -1303,6 +1373,16 @@
       ],
       "threats": [
         {
+          "threat": "cross-site-request-forgery",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "cross-site-request-forgery-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "long-lived-credentials",
           "state": "exposed",
           "mitigations": [
@@ -1346,6 +1426,16 @@
         "internal-business-data"
       ],
       "threats": [
+        {
+          "threat": "cross-site-request-forgery",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "cross-site-request-forgery-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
         {
           "threat": "dos-risky-access-across-trust-boundary",
           "state": "exposed",
@@ -1456,6 +1546,16 @@
       ],
       "threats": [
         {
+          "threat": "cross-site-request-forgery",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "cross-site-request-forgery-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "missing-authentication-second-factor",
           "state": "mitigated",
           "mitigations": [
@@ -1521,6 +1621,16 @@
       ],
       "threats": [
         {
+          "threat": "cross-site-request-forgery",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "cross-site-request-forgery-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "dos-risky-access-across-trust-boundary",
           "state": "exposed",
           "mitigations": [
@@ -1566,6 +1676,16 @@
         "marketing-material"
       ],
       "threats": [
+        {
+          "threat": "cross-site-request-forgery",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "cross-site-request-forgery-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
         {
           "threat": "dos-risky-access-across-trust-boundary",
           "state": "exposed",
@@ -2009,6 +2129,16 @@
       ],
       "threats": [
         {
+          "threat": "cross-site-request-forgery",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "cross-site-request-forgery-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
           "threat": "missing-authentication",
           "state": "exposed",
           "mitigations": [
@@ -2053,6 +2183,16 @@
         "customer-operational-data"
       ],
       "threats": [
+        {
+          "threat": "cross-site-request-forgery",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "cross-site-request-forgery-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
         {
           "threat": "missing-authentication-second-factor",
           "state": "mitigated",
@@ -2203,6 +2343,50 @@
         "threagile:asvs": "V10 - Malicious Code Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html",
         "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "cross-site-request-forgery",
+      "name": "Cross-Site Request Forgery (CSRF)",
+      "description": "When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.",
+      "categories": [
+        "Spoofing",
+        "OWASP A01:2025 Broken Access Control"
+      ],
+      "cwes": [
+        "CWE-352"
+      ],
+      "risk": {
+        "likelihood": 75,
+        "impact": 25,
+        "impactComment": "If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site."
+      },
+      "attributes": {
+        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+        "threagile:function": "development"
+      }
+    },
+    {
+      "id": "cross-site-scripting",
+      "name": "Cross-Site Scripting (XSS)",
+      "description": "For each web application Cross-Site Scripting (XSS) risks might arise. In terms of the overall risk level take other applications running on the same domain into account as well.",
+      "categories": [
+        "Tampering",
+        "OWASP A05:2025 Injection"
+      ],
+      "cwes": [
+        "CWE-79"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 75,
+        "impactComment": "If this risk remains unmitigated, attackers might be able to access individual victim sessions and steal or modify user data."
+      },
+      "attributes": {
+        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
+        "threagile:function": "development"
       }
     },
     {
@@ -2500,6 +2684,27 @@
         "threagile:asvs": "V6 - Stored Cryptography Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
         "threagile:function": "architecture"
+      }
+    },
+    {
+      "id": "missing-waf",
+      "name": "Missing Web Application Firewall (WAF)",
+      "description": "To have a first line of filtering defense, security architectures with web-services or web-applications should include a WAF in front of them. Even though a WAF is not a replacement for security (all components must be secure even without a WAF) it adds another layer of defense to the overall system by delaying some attacks and having easier attack alerting through it.",
+      "categories": [
+        "Tampering"
+      ],
+      "cwes": [
+        "CWE-1008"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might be able to apply standard attack pattern tests at great speed without any filtering."
+      },
+      "attributes": {
+        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Virtual_Patching_Cheat_Sheet.html",
+        "threagile:function": "operations"
       }
     },
     {
@@ -2866,6 +3071,24 @@
       }
     },
     {
+      "id": "cross-site-request-forgery-mitigation",
+      "name": "CSRF Prevention",
+      "description": "Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "cross-site-scripting-mitigation",
+      "name": "XSS Prevention",
+      "description": "Try to encode all values sent back to the browser and also handle DOM-manipulations in a safe way to avoid DOM-based XSS. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
       "id": "dos-risky-access-across-trust-boundary-mitigation",
       "name": "Anti-DoS Measures",
       "description": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
@@ -2980,6 +3203,15 @@
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "GetAttribute a Vault (Secret Storage) in place?"
+      }
+    },
+    {
+      "id": "missing-waf-mitigation",
+      "name": "Web Application Firewall (WAF)",
+      "description": "Consider placing a Web Application Firewall (WAF) in front of the web-services and/or web-applications. For cloud environments many cloud providers offer pre-configured WAFs. Even reverse proxies can be enhances by a WAF component via ModSecurity plugins.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "GetAttribute a Web Application Firewall (WAF) in place?"
       }
     },
     {

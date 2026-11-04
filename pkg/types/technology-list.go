@@ -6,6 +6,7 @@ const (
 	MayContainSecrets                                 = "may_contain_secrets" // #nosec G101 // a tag, not a secret
 	NoAuthenticationRequired                          = "no_authentication_required"
 	IsHighValueTarget                                 = "high_value_target"
+	IsWebApplication                                  = "web_application"
 	IsWebService                                      = "web_service"
 	IsIdentityStore                                   = "identity_store"
 	IsNoNetworkSegmentationRequired                   = "no_network_segmentation_required"

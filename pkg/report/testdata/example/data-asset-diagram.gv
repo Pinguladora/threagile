@@ -35,8 +35,8 @@ digraph generatedModel { concentrate=true
   3672894744 [ shape="box" style="filled" fillcolor="#FF8E00"
 				label=<<b>Jenkins Build Server</b>> penwidth="3.0" color="#FF8E00" ];
 				
-  513618175 [ shape="box" style="filled" fillcolor="#C87832"
-				label=<<b>Identity Provider</b>> penwidth="3.0" color="#C87832" ];
+  513618175 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Identity Provider</b>> penwidth="3.0" color="#FF8E00" ];
 				
   3786194998 [ shape="box" style="filled" fillcolor="#FF8E00"
 				label=<<b>Git Repository</b>> penwidth="3.0" color="#FF8E00" ];
