@@ -16,12 +16,12 @@ func (*MissingAuthenticationRule) Category() *types.RiskCategory {
 		Title:       "Missing Authentication",
 		Description: "Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes sensitive data. ",
 		Impact:      "If this risk is unmitigated, attackers might be able to access or modify sensitive data in an unauthenticated way.",
-		ASVS:        "V2 - Authentication Verification Requirements",
+		ASVS:        asvsAuthentication,
 		CheatSheet:  "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
 		Action:      "Authentication of Incoming Requests",
 		Mitigation: "Apply an authentication method to the technical asset. To protect highly sensitive data consider " +
 			"the use of two-factor authentication for human users.",
-		Check:    "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:    checkCheatSheetAndASVS,
 		Function: types.Architecture,
 		STRIDE:   types.ElevationOfPrivilege,
 		DetectionLogic: "In-scope technical assets (except " + types.LoadBalancer + ", " + types.ReverseProxy + ", " + types.ServiceRegistry + ", " + types.WAF + ", " + types.IDS + ", and " + types.IPS + " and in-process calls) should authenticate incoming requests when the asset processes " +

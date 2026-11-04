@@ -6,14 +6,8 @@ import (
 	"github.com/Pinguladora/threagile/pkg/types"
 )
 
-// Category texts the cloud risk rules share, also with other rules.
+// Category texts the cloud risk rules share.
 const (
-	checkCheatSheetAndASVS = "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
-
-	asvsAccessControl      = "V4 - Access Control Verification Requirements"
-	asvsStoredCryptography = "V6 - Stored Cryptography Verification Requirements"
-	asvsConfiguration      = "V14 - Configuration Verification Requirements"
-
 	cheatSheetSecureCloudArchitecture = "https://cheatsheetseries.owasp.org/cheatsheets/" +
 		"Secure_Cloud_Architecture_Cheat_Sheet.html"
 

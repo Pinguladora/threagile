@@ -17,12 +17,12 @@ func (*SqlNoSqlInjectionRule) Category() *types.RiskCategory {
 		Description: "When a database is accessed via database access protocols SQL/NoSQL-Injection risks might arise. " +
 			"The risk rating depends on the sensitivity technical asset itself and of the data assets processed.",
 		Impact:     "If this risk is unmitigated, attackers might be able to modify SQL/NoSQL queries to steal and modify data and eventually further escalate towards a deeper system penetration via code executions.",
-		ASVS:       "V5 - Validation, Sanitization and Encoding Verification Requirements",
+		ASVS:       asvsValidation,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
 		Action:     "SQL/NoSQL-Injection Prevention",
 		Mitigation: "Try to use parameter binding to be safe from injection vulnerabilities. " +
 			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:          checkCheatSheetAndASVS,
 		Function:       types.Development,
 		STRIDE:         types.Tampering,
 		DetectionLogic: "Database accessed via typical database access protocols by in-scope clients.",

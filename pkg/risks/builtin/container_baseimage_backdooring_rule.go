@@ -18,7 +18,7 @@ func (*ContainerBaseImageBackdooringRule) Category() *types.RiskCategory {
 			"base images and other layers used contain vulnerable components or backdoors." +
 			"<br><br>See for example: <a href=\"https://techcrunch.com/2018/06/15/tainted-crypto-mining-containers-pulled-from-docker-hub/\">https://techcrunch.com/2018/06/15/tainted-crypto-mining-containers-pulled-from-docker-hub/</a>",
 		Impact:     "If this risk is unmitigated, attackers might be able to deeply persist in the target system by executing code in deployed containers.",
-		ASVS:       "V10 - Malicious Code Verification Requirements",
+		ASVS:       asvsMaliciousCode,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html",
 		Action:     "Container Infrastructure Hardening",
 		Mitigation: "Apply hardening of all container infrastructures (see for example the <i>CIS-Benchmarks for Docker and Kubernetes</i> and the <i>Docker Bench for Security</i>). " +

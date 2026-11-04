@@ -21,18 +21,18 @@ func (*AccidentalSecretLeakRule) Category() *types.RiskCategory {
 			"checked-in or packaged-in passwords, API tokens, certificates, crypto keys, etc.",
 		Impact: "If this risk is unmitigated, attackers which have access to affected sourcecode repositories or artifact registries might " +
 			"find secrets accidentally checked-in.",
-		ASVS:       "V14 - Configuration Verification Requirements",
-		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
-		Action:     "Build Pipeline Hardening",
+		ASVS:       asvsConfiguration,
+		CheatSheet: cheatSheetAttackSurfaceAnalysis,
+		Action:     actionBuildPipelineHardening,
 		Mitigation: "Establish measures preventing accidental check-in or package-in of secrets into sourcecode repositories " +
 			"and artifact registries. This starts by using good .gitignore and .dockerignore files, but does not stop there. " +
 			"See for example tools like <i>\"git-secrets\" or \"Talisman\"</i> to have check-in preventive measures for secrets. " +
 			"Consider also to regularly scan your repositories for secrets accidentally checked-in using scanning tools like <i>\"gitleaks\" or \"gitrob\"</i>.",
-		Check:                      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:                      checkCheatSheetAndASVS,
 		Function:                   types.Operations,
 		STRIDE:                     types.InformationDisclosure,
 		DetectionLogic:             "In-scope sourcecode repositories and artifact registries.",
-		RiskAssessment:             "The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.",
+		RiskAssessment:             ratingByAssetAndProcessedDataSensitivity,
 		FalsePositives:             "Usually no false positives.",
 		ModelFailurePossibleReason: false,
 		CWE:                        200,

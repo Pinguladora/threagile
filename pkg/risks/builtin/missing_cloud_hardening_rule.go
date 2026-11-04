@@ -21,8 +21,8 @@ func (*MissingCloudHardeningRule) Category() *types.RiskCategory {
 		Description: "Cloud components should be hardened according to the cloud vendor best practices. This affects their " +
 			"configuration, auditing, and further areas.",
 		Impact:     "If this risk is unmitigated, attackers might access cloud components in an unintended way.",
-		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
-		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+		ASVS:       asvsArchitecture,
+		CheatSheet: cheatSheetAttackSurfaceAnalysis,
 		Action:     "Cloud Hardening",
 		Mitigation: "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which " +
 			"depend on the cloud provider tags in the model). " +
@@ -33,11 +33,11 @@ func (*MissingCloudHardeningRule) Category() *types.RiskCategory {
 			"<br><br>For <b>Microsoft Azure</b>: Follow the <i>CIS Benchmark for Microsoft Azure</i> (see also the automated checks of cloud audit tools like <i>\"CloudSploit\" or \"ScoutSuite\"</i>)." +
 			"<br><br>For <b>Google Cloud Platform</b>: Follow the <i>CIS Benchmark for Google Cloud Computing Platform</i> (see also the automated checks of cloud audit tools like <i>\"CloudSploit\" or \"ScoutSuite\"</i>). " +
 			"<br><br>For <b>Oracle Cloud Platform</b>: Follow the hardening best practices (see also the automated checks of cloud audit tools like <i>\"CloudSploit\"</i>).",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:          checkCheatSheetAndASVS,
 		Function:       types.Operations,
 		STRIDE:         types.Tampering,
 		DetectionLogic: "In-scope cloud components (either residing in cloud trust boundaries or more specifically tagged with cloud provider types).",
-		RiskAssessment: "The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.",
+		RiskAssessment: ratingByAssetAndProcessedDataSensitivity,
 		FalsePositives: "Cloud components not running parts of the target architecture can be considered " +
 			"as false positives after individual review.",
 		ModelFailurePossibleReason: false,

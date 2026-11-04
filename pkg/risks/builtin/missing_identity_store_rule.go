@@ -18,11 +18,11 @@ func (*MissingIdentityStoreRule) Category() *types.RiskCategory {
 			"critical assets (and thus not seeing their risks).",
 		Impact: "If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model in the identity provider/store " +
 			"that is currently missing in the model.",
-		ASVS:           "V2 - Authentication Verification Requirements",
+		ASVS:           asvsAuthentication,
 		CheatSheet:     "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
 		Action:         "Identity Store",
 		Mitigation:     "Include an identity store in the model if the application has a login.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:          checkCheatSheetAndASVS,
 		Function:       types.Architecture,
 		STRIDE:         types.Spoofing,
 		DetectionLogic: "Models with authenticated data-flows authorized via end user identity missing an in-scope identity store.",

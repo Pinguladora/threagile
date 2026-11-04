@@ -18,14 +18,14 @@ func (*PathTraversalRule) Category() *types.RiskCategory {
 			"The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.",
 		Impact: "If this risk is unmitigated, attackers might be able to read sensitive files (configuration data, key/credential files, deployment files, " +
 			"business data files, etc.) from the filesystem of affected components.",
-		ASVS:       "V12 - File and Resources Verification Requirements",
+		ASVS:       asvsFilesAndResources,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
 		Action:     "Path-Traversal Prevention",
 		Mitigation: "Before accessing the file cross-check that it resides in the expected folder and is of the expected " +
 			"type and filename/suffix. Try to use a mapping if possible instead of directly accessing by a filename which is " +
 			"(partly or fully) provided by the caller. " +
 			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:          checkCheatSheetAndASVS,
 		Function:       types.Development,
 		STRIDE:         types.InformationDisclosure,
 		DetectionLogic: "Filesystems accessed by in-scope callers.",

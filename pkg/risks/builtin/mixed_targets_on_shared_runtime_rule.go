@@ -20,13 +20,13 @@ func (*MixedTargetsOnSharedRuntimeRule) Category() *types.RiskCategory {
 			"shared (underlying) runtime.",
 		Impact: "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards " +
 			"more valuable targets, as they are running on the same shared runtime.",
-		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
-		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+		ASVS:       asvsArchitecture,
+		CheatSheet: cheatSheetAttackSurfaceAnalysis,
 		Action:     "Runtime Separation",
 		Mitigation: "Use separate runtime environments for running different target components or apply similar separation styles to " +
 			"prevent load- or breach-related problems originating from one more attacker-facing asset impacts also the " +
 			"other more critical rated backend/datastore assets.",
-		Check:    "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:    checkCheatSheetAndASVS,
 		Function: types.Operations,
 		STRIDE:   types.ElevationOfPrivilege,
 		DetectionLogic: "Shared runtime running technical assets of different trust-boundaries is at risk. " +

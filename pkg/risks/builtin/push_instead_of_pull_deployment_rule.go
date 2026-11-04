@@ -20,11 +20,11 @@ func (*PushInsteadPullDeploymentRule) Category() *types.RiskCategory {
 			"interfaces.",
 		Impact: "If this risk is unmitigated, attackers might have more potential target vectors for attacks, as the overall attack surface is " +
 			"unnecessarily increased.",
-		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
-		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
-		Action:     "Build Pipeline Hardening",
+		ASVS:       asvsArchitecture,
+		CheatSheet: cheatSheetAttackSurfaceAnalysis,
+		Action:     actionBuildPipelineHardening,
 		Mitigation: "Try to prefer pull-based deployments (like GitOps scenarios offer) over push-based deployments to reduce the attack surface of the production system.",
-		Check:      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:      checkCheatSheetAndASVS,
 		Function:   types.Architecture,
 		STRIDE:     types.Tampering,
 		DetectionLogic: "Models with build pipeline components accessing in-scope targets of deployment (in a non-readonly way) which " +

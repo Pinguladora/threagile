@@ -18,12 +18,12 @@ func (*XmlExternalEntityRule) Category() *types.RiskCategory {
 		Impact: "If this risk is unmitigated, attackers might be able to read sensitive files (configuration data, key/credential files, deployment files, " +
 			"business data files, etc.) form the filesystem of affected components and/or access sensitive services or files " +
 			"of other components.",
-		ASVS:       "V14 - Configuration Verification Requirements",
+		ASVS:       asvsConfiguration,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html",
 		Action:     "XML Parser Hardening",
 		Mitigation: "Apply hardening of all XML parser instances in order to stay safe from XML External Entity (XXE) vulnerabilities. " +
 			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:          checkCheatSheetAndASVS,
 		Function:       types.Development,
 		STRIDE:         types.InformationDisclosure,
 		DetectionLogic: "In-scope technical assets accepting XML data formats.",

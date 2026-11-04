@@ -23,12 +23,12 @@ func (*UncheckedDeploymentRule) Category() *types.RiskCategory {
 			"There are several open-source and commercial tools existing in the categories DAST, SAST, and IAST.",
 		Impact: "If this risk remains unmitigated, vulnerabilities in custom-developed software or their dependencies " +
 			"might not be identified during continuous deployment cycles.",
-		ASVS:       "V14 - Configuration Verification Requirements",
+		ASVS:       asvsConfiguration,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html",
-		Action:     "Build Pipeline Hardening",
+		Action:     actionBuildPipelineHardening,
 		Mitigation: "Apply DevSecOps best-practices and use scanning tools to identify vulnerabilities in source- or byte-code," +
 			"dependencies, container layers, and optionally also via dynamic scans against running test systems.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:          checkCheatSheetAndASVS,
 		Function:       types.Architecture,
 		STRIDE:         types.Tampering,
 		DetectionLogic: "All development-relevant technical assets.",

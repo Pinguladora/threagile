@@ -21,7 +21,7 @@ func (*UnencryptedAssetRule) Category() *types.RiskCategory {
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
 		Action:     "Encryption of Technical Asset",
 		Mitigation: "Apply encryption to the technical asset.",
-		Check:      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:      checkCheatSheetAndASVS,
 		Function:   types.Operations,
 		STRIDE:     types.InformationDisclosure,
 		DetectionLogic: "In-scope unencrypted technical assets (excluding " + types.ReverseProxy +

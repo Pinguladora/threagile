@@ -17,13 +17,13 @@ func (*CrossSiteScriptingRule) Category() *types.RiskCategory {
 		Description: "For each web application Cross-Site Scripting (XSS) risks might arise. In terms " +
 			"of the overall risk level take other applications running on the same domain into account as well.",
 		Impact:     "If this risk remains unmitigated, attackers might be able to access individual victim sessions and steal or modify user data.",
-		ASVS:       "V5 - Validation, Sanitization and Encoding Verification Requirements",
+		ASVS:       asvsValidation,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
 		Action:     "XSS Prevention",
 		Mitigation: "Try to encode all values sent back to the browser and also handle DOM-manipulations in a safe way " +
 			"to avoid DOM-based XSS. " +
 			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:          checkCheatSheetAndASVS,
 		Function:       types.Development,
 		STRIDE:         types.Tampering,
 		DetectionLogic: "In-scope web applications.",

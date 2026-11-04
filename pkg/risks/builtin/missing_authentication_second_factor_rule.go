@@ -19,12 +19,12 @@ func (*MissingAuthenticationSecondFactorRule) Category() *types.RiskCategory {
 		Description: "Technical assets (especially multi-tenant systems) should authenticate incoming requests with " +
 			"two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.",
 		Impact:     "If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication.",
-		ASVS:       "V2 - Authentication Verification Requirements",
+		ASVS:       asvsAuthentication,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html",
 		Action:     "Authentication with Second Factor (2FA)",
 		Mitigation: "Apply an authentication method to the technical asset protecting highly sensitive data via " +
 			"two-factor authentication for human users.",
-		Check:    "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:    checkCheatSheetAndASVS,
 		Function: types.BusinessSide,
 		STRIDE:   types.ElevationOfPrivilege,
 		DetectionLogic: "In-scope technical assets (except " + types.LoadBalancer + ", " + types.ReverseProxy + ", " + types.WAF + ", " + types.IDS + ", and " + types.IPS + ") should authenticate incoming requests via two-factor authentication (2FA) " +

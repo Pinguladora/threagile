@@ -20,13 +20,13 @@ func (*UnguardedAccessFromInternetRule) Category() *types.RiskCategory {
 			"or reverse-proxy.",
 		Impact: "If this risk is unmitigated, attackers might be able to directly attack sensitive systems without any hardening components in-between " +
 			"due to them being directly exposed on the internet.",
-		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
-		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+		ASVS:       asvsArchitecture,
+		CheatSheet: cheatSheetAttackSurfaceAnalysis,
 		Action:     "Encapsulation of Technical Asset",
 		Mitigation: "Encapsulate the asset behind a guarding service, application, or reverse-proxy. " +
 			"For admin maintenance a bastion-host should be used as a jump-server. " +
 			"For file transfer a store-and-forward-host should be used as an indirect file exchange platform.",
-		Check:    "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:    checkCheatSheetAndASVS,
 		Function: types.Architecture,
 		STRIDE:   types.ElevationOfPrivilege,
 		DetectionLogic: "In-scope technical assets (excluding " + types.LoadBalancer + ") with confidentiality rating " +

@@ -24,7 +24,7 @@ func (*UnencryptedCommunicationRule) Category() *types.RiskCategory {
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html",
 		Action:     "Encryption of Communication Links",
 		Mitigation: "Apply transport layer encryption to the communication link.",
-		Check:      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:      checkCheatSheetAndASVS,
 		Function:   types.Operations,
 		STRIDE:     types.InformationDisclosure,
 		DetectionLogic: "Unencrypted technical communication links of in-scope technical assets (excluding " + types.Monitoring + " traffic as well as " + types.LocalFileAccess.String() + ", " + types.InProcessLibraryCall.String() + " and " + types.InterProcessCommunication.String() + ") " +

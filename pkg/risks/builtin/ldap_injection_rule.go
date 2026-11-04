@@ -17,13 +17,13 @@ func (*LdapInjectionRule) Category() *types.RiskCategory {
 		Description: "When an LDAP server is accessed LDAP-Injection risks might arise. " +
 			"The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed.",
 		Impact:     "If this risk remains unmitigated, attackers might be able to modify LDAP queries and access more data from the LDAP server than allowed.",
-		ASVS:       "V5 - Validation, Sanitization and Encoding Verification Requirements",
+		ASVS:       asvsValidation,
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html",
 		Action:     "LDAP-Injection Prevention",
 		Mitigation: "Try to use libraries that properly encode LDAP meta characters in searches and queries to access " +
 			"the LDAP server in order to stay safe from LDAP-Injection vulnerabilities. " +
 			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:          checkCheatSheetAndASVS,
 		Function:       types.Development,
 		STRIDE:         types.Tampering,
 		DetectionLogic: "In-scope clients accessing LDAP servers via typical LDAP access protocols.",
