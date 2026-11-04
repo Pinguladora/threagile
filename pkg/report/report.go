@@ -2511,10 +2511,7 @@ func (r *pdfReporter) createRiskCategories(parsedModel *types.Model) {
 			text.WriteString("<br>")
 			html.Write(5, text.String())
 			text.Reset()
-			if r.pdf.GetY() > 250 {
-				r.pageBreak()
-				r.pdf.SetY(36)
-			}
+			r.pageBreakBelow(250)
 			switch risk.Severity {
 			case types.CriticalSeverity:
 				colorCriticalRisk(r.pdf)
@@ -2846,33 +2843,12 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 		r.pdf.Ln(-1)
 		r.pdf.Ln(-1)
 		r.pdf.SetFont("Helvetica", "", fontSizeBody)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "ID:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, technicalAsset.Id, "0", "0", false)
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Type:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, technicalAsset.Type.String(), "0", "0", false)
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Usage:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, technicalAsset.Usage.String(), "0", "0", false)
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.attributeRow("ID:", technicalAsset.Id)
+		r.pageBreakBelow(270)
+		r.attributeRow("Type:", technicalAsset.Type.String())
+		r.pageBreakBelow(270)
+		r.attributeRow("Usage:", technicalAsset.Usage.String())
+		r.pageBreakBelow(270)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "RAA:", "0", 0, "", false, 0, "")
@@ -2884,28 +2860,11 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 		}
 		r.pdf.MultiCell(145, 6, textRAA, "0", "0", false)
 		r.pdfColorBlack()
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Size:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, technicalAsset.Size.String(), "0", "0", false)
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Technology:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, technicalAsset.Technologies.String(), "0", "0", false)
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(270)
+		r.attributeRow("Size:", technicalAsset.Size.String())
+		r.pageBreakBelow(270)
+		r.attributeRow("Technology:", technicalAsset.Technologies.String())
+		r.pageBreakBelow(270)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Tags:", "0", 0, "", false, 0, "")
@@ -2924,69 +2883,20 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 			tagsUsedText = textNone
 		}
 		r.pdf.MultiCell(145, 6, uni(tagsUsedText), "0", "0", false)
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Internet:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, strconv.FormatBool(technicalAsset.Internet), "0", "0", false)
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Machine:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, technicalAsset.Machine.String(), "0", "0", false)
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Encryption:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, technicalAsset.Encryption.String(), "0", "0", false)
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Multi-Tenant:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, strconv.FormatBool(technicalAsset.MultiTenant), "0", "0", false)
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Redundant:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, strconv.FormatBool(technicalAsset.Redundant), "0", "0", false)
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Custom-Developed:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, strconv.FormatBool(technicalAsset.CustomDevelopedParts), "0", "0", false)
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Client by Human:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, strconv.FormatBool(technicalAsset.UsedAsClientByHuman), "0", "0", false)
+		r.pageBreakBelow(270)
+		r.attributeRow("Internet:", strconv.FormatBool(technicalAsset.Internet))
+		r.pageBreakBelow(270)
+		r.attributeRow("Machine:", technicalAsset.Machine.String())
+		r.pageBreakBelow(270)
+		r.attributeRow("Encryption:", technicalAsset.Encryption.String())
+		r.pageBreakBelow(270)
+		r.attributeRow("Multi-Tenant:", strconv.FormatBool(technicalAsset.MultiTenant))
+		r.pageBreakBelow(270)
+		r.attributeRow("Redundant:", strconv.FormatBool(technicalAsset.Redundant))
+		r.pageBreakBelow(270)
+		r.attributeRow("Custom-Developed:", strconv.FormatBool(technicalAsset.CustomDevelopedParts))
+		r.pageBreakBelow(270)
+		r.attributeRow("Client by Human:", strconv.FormatBool(technicalAsset.UsedAsClientByHuman))
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Data Processed:", "0", 0, "", false, 0, "")
@@ -3050,15 +2960,8 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 		r.pdf.Ln(-1)
 		r.pdf.Ln(-1)
 		r.pdf.SetFont("Helvetica", "", fontSizeBody)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Owner:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, uni(technicalAsset.Owner), "0", "0", false)
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.attributeRow("Owner:", uni(technicalAsset.Owner))
+		r.pageBreakBelow(270)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Confidentiality:", "0", 0, "", false, 0, "")
@@ -3068,10 +2971,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 		r.pdf.CellFormat(115, 6, technicalAsset.Confidentiality.RatingStringInScale(), "0", 0, "", false, 0, "")
 		r.pdfColorBlack()
 		r.pdf.Ln(-1)
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(270)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Integrity:", "0", 0, "", false, 0, "")
@@ -3081,10 +2981,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 		r.pdf.CellFormat(115, 6, technicalAsset.Integrity.RatingStringInScale(), "0", 0, "", false, 0, "")
 		r.pdfColorBlack()
 		r.pdf.Ln(-1)
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(270)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Availability:", "0", 0, "", false, 0, "")
@@ -3094,23 +2991,13 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 		r.pdf.CellFormat(115, 6, technicalAsset.Availability.RatingStringInScale(), "0", 0, "", false, 0, "")
 		r.pdfColorBlack()
 		r.pdf.Ln(-1)
-		if r.pdf.GetY() > 270 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "CIA-Justification:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, uni(technicalAsset.JustificationCiaRating), "0", "0", false)
+		r.pageBreakBelow(270)
+		r.attributeRow("CIA-Justification:", uni(technicalAsset.JustificationCiaRating))
 
 		if technicalAsset.OutOfScope {
 			r.pdf.Ln(-1)
 			r.pdf.Ln(4)
-			if r.pdf.GetY() > 270 {
-				r.pageBreak()
-				r.pdf.SetY(36)
-			}
+			r.pageBreakBelow(270)
 			r.pdfColorBlack()
 			r.pdf.SetFont("Helvetica", "B", fontSizeBody)
 			r.pdf.CellFormat(190, 6, "Asset Out-of-Scope Justification", "0", 0, "", false, 0, "")
@@ -3140,10 +3027,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 			r.pdf.Ln(-1)
 			r.pdf.SetFont("Helvetica", "", fontSizeBody)
 			for _, outgoingCommLink := range technicalAsset.CommunicationLinksSorted() {
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorBlack()
 				r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(185, 6, uni(outgoingCommLink.Title)+" (outgoing)", "0", 0, "", false, 0, "")
@@ -3151,10 +3035,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 				r.pdfColorGray()
 				r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.MultiCell(185, 6, uni(outgoingCommLink.Description), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdf.Ln(-1)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
@@ -3162,64 +3043,43 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 				r.pdfColorBlack()
 				r.pdf.MultiCell(125, 6, uni(parsedModel.TechnicalAssets[outgoingCommLink.TargetId].Title), "0", "0", false)
 				r.pdf.Link(60, r.pdf.GetY()-5, 70, 5, r.tocLinkIdByAssetId[outgoingCommLink.TargetId])
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "Protocol:", "0", 0, "", false, 0, "")
 				r.pdfColorBlack()
 				r.pdf.MultiCell(140, 6, outgoingCommLink.Protocol.String(), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "Encrypted:", "0", 0, "", false, 0, "")
 				r.pdfColorBlack()
 				r.pdf.MultiCell(140, 6, strconv.FormatBool(outgoingCommLink.Protocol.IsEncrypted()), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "Authentication:", "0", 0, "", false, 0, "")
 				r.pdfColorBlack()
 				r.pdf.MultiCell(140, 6, outgoingCommLink.Authentication.String(), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "Authorization:", "0", 0, "", false, 0, "")
 				r.pdfColorBlack()
 				r.pdf.MultiCell(140, 6, outgoingCommLink.Authorization.String(), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "Read-Only:", "0", 0, "", false, 0, "")
 				r.pdfColorBlack()
 				r.pdf.MultiCell(140, 6, strconv.FormatBool(outgoingCommLink.Readonly), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "Usage:", "0", 0, "", false, 0, "")
 				r.pdfColorBlack()
 				r.pdf.MultiCell(140, 6, outgoingCommLink.Usage.String(), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "Tags:", "0", 0, "", false, 0, "")
@@ -3238,19 +3098,13 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 					tagsUsedText = textNone
 				}
 				r.pdf.MultiCell(140, 6, uni(tagsUsedText), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "VPN:", "0", 0, "", false, 0, "")
 				r.pdfColorBlack()
 				r.pdf.MultiCell(140, 6, strconv.FormatBool(outgoingCommLink.VPN), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "IP-Filtered:", "0", 0, "", false, 0, "")
@@ -3311,10 +3165,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 			r.pdf.Ln(-1)
 			r.pdf.SetFont("Helvetica", "", fontSizeBody)
 			for _, incomingCommLink := range incomingCommLinks {
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorBlack()
 				r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(185, 6, uni(incomingCommLink.Title)+" (incoming)", "0", 0, "", false, 0, "")
@@ -3322,10 +3173,7 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 				r.pdfColorGray()
 				r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.MultiCell(185, 6, uni(incomingCommLink.Description), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdf.Ln(-1)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
@@ -3333,64 +3181,43 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 				r.pdfColorBlack()
 				r.pdf.MultiCell(140, 6, uni(parsedModel.TechnicalAssets[incomingCommLink.SourceId].Title), "0", "0", false)
 				r.pdf.Link(60, r.pdf.GetY()-5, 70, 5, r.tocLinkIdByAssetId[incomingCommLink.SourceId])
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "Protocol:", "0", 0, "", false, 0, "")
 				r.pdfColorBlack()
 				r.pdf.MultiCell(140, 6, incomingCommLink.Protocol.String(), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "Encrypted:", "0", 0, "", false, 0, "")
 				r.pdfColorBlack()
 				r.pdf.MultiCell(140, 6, strconv.FormatBool(incomingCommLink.Protocol.IsEncrypted()), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "Authentication:", "0", 0, "", false, 0, "")
 				r.pdfColorBlack()
 				r.pdf.MultiCell(140, 6, incomingCommLink.Authentication.String(), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "Authorization:", "0", 0, "", false, 0, "")
 				r.pdfColorBlack()
 				r.pdf.MultiCell(140, 6, incomingCommLink.Authorization.String(), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "Read-Only:", "0", 0, "", false, 0, "")
 				r.pdfColorBlack()
 				r.pdf.MultiCell(140, 6, strconv.FormatBool(incomingCommLink.Readonly), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "Usage:", "0", 0, "", false, 0, "")
 				r.pdfColorBlack()
 				r.pdf.MultiCell(140, 6, incomingCommLink.Usage.String(), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "Tags:", "0", 0, "", false, 0, "")
@@ -3409,19 +3236,13 @@ func (r *pdfReporter) createTechnicalAssets(parsedModel *types.Model) {
 					tagsUsedText = textNone
 				}
 				r.pdf.MultiCell(140, 6, uni(tagsUsedText), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "VPN:", "0", 0, "", false, 0, "")
 				r.pdfColorBlack()
 				r.pdf.MultiCell(140, 6, strconv.FormatBool(incomingCommLink.VPN), "0", "0", false)
-				if r.pdf.GetY() > 270 {
-					r.pageBreak()
-					r.pdf.SetY(36)
-				}
+				r.pageBreakBelow(270)
 				r.pdfColorGray()
 				r.pdf.CellFormat(15, 6, "", "0", 0, "", false, 0, "")
 				r.pdf.CellFormat(35, 6, "IP-Filtered:", "0", 0, "", false, 0, "")
@@ -3525,33 +3346,12 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 		html.Write(5, "<br><br>")
 
 		r.pdf.SetFont("Helvetica", "", fontSizeBody)
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "ID:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, dataAsset.Id, "0", "0", false)
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Usage:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, dataAsset.Usage.String(), "0", "0", false)
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Quantity:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, dataAsset.Quantity.String(), "0", "0", false)
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.attributeRow("ID:", dataAsset.Id)
+		r.pageBreakBelow(265)
+		r.attributeRow("Usage:", dataAsset.Usage.String())
+		r.pageBreakBelow(265)
+		r.attributeRow("Quantity:", dataAsset.Quantity.String())
+		r.pageBreakBelow(265)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Tags:", "0", 0, "", false, 0, "")
@@ -3570,28 +3370,11 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 			tagsUsedText = textNone
 		}
 		r.pdf.MultiCell(145, 6, uni(tagsUsedText), "0", "0", false)
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Origin:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, uni(dataAsset.Origin), "0", "0", false)
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "Owner:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, uni(dataAsset.Owner), "0", "0", false)
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(265)
+		r.attributeRow("Origin:", uni(dataAsset.Origin))
+		r.pageBreakBelow(265)
+		r.attributeRow("Owner:", uni(dataAsset.Owner))
+		r.pageBreakBelow(265)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Confidentiality:", "0", 0, "", false, 0, "")
@@ -3601,10 +3384,7 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 		r.pdf.CellFormat(115, 6, dataAsset.Confidentiality.RatingStringInScale(), "0", 0, "", false, 0, "")
 		r.pdfColorBlack()
 		r.pdf.Ln(-1)
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(265)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Integrity:", "0", 0, "", false, 0, "")
@@ -3614,10 +3394,7 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 		r.pdf.CellFormat(115, 6, dataAsset.Integrity.RatingStringInScale(), "0", 0, "", false, 0, "")
 		r.pdfColorBlack()
 		r.pdf.Ln(-1)
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(265)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Availability:", "0", 0, "", false, 0, "")
@@ -3627,20 +3404,10 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 		r.pdf.CellFormat(115, 6, dataAsset.Availability.RatingStringInScale(), "0", 0, "", false, 0, "")
 		r.pdfColorBlack()
 		r.pdf.Ln(-1)
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "CIA-Justification:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, uni(dataAsset.JustificationCiaRating), "0", "0", false)
+		r.pageBreakBelow(265)
+		r.attributeRow("CIA-Justification:", uni(dataAsset.JustificationCiaRating))
 
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(265)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Processed by:", "0", 0, "", false, 0, "")
@@ -3658,10 +3425,7 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 		}
 		r.pdf.MultiCell(145, 6, uni(processedByText), "0", "0", false)
 
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(265)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Stored by:", "0", 0, "", false, 0, "")
@@ -3679,10 +3443,7 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 		}
 		r.pdf.MultiCell(145, 6, uni(storedByText), "0", "0", false)
 
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(265)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Sent via:", "0", 0, "", false, 0, "")
@@ -3700,10 +3461,7 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 		}
 		r.pdf.MultiCell(145, 6, uni(sentViaText), "0", "0", false)
 
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(265)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Received via:", "0", 0, "", false, 0, "")
@@ -3744,18 +3502,12 @@ func (r *pdfReporter) createDataAssets(parsedModel *types.Model) {
 		}
 		r.pdf.MultiCell(145, 6, riskText, "0", "0", false)
 		r.pdf.SetFont("Helvetica", "", fontSizeBody)
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(265)
 
 		// how can is this data asset be indirectly lost (i.e. why)
 		dataBreachRisksStillAtRisk := identifiedDataBreachProbabilityRisksStillAtRisk(parsedModel, dataAsset)
 		sortByDataBreachProbability(dataBreachRisksStillAtRisk)
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(265)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Data Breach Risks:", "0", 0, "", false, 0, "")
@@ -3833,16 +3585,9 @@ func (r *pdfReporter) createTrustBoundaries(parsedModel *types.Model) {
 
 		r.pdf.SetFont("Helvetica", "", fontSizeBody)
 
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "ID:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, trustBoundary.Id, "0", "0", false)
+		r.attributeRow("ID:", trustBoundary.Id)
 
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(265)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Type:", "0", 0, "", false, 0, "")
@@ -3853,10 +3598,7 @@ func (r *pdfReporter) createTrustBoundaries(parsedModel *types.Model) {
 		r.pdf.MultiCell(145, 6, trustBoundary.Type.String(), "0", "0", false)
 		r.pdfColorBlack()
 
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(265)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Tags:", "0", 0, "", false, 0, "")
@@ -3876,10 +3618,7 @@ func (r *pdfReporter) createTrustBoundaries(parsedModel *types.Model) {
 		}
 		r.pdf.MultiCell(145, 6, uni(tagsUsedText), "0", "0", false)
 
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(265)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Assets inside:", "0", 0, "", false, 0, "")
@@ -3898,10 +3637,7 @@ func (r *pdfReporter) createTrustBoundaries(parsedModel *types.Model) {
 		}
 		r.pdf.MultiCell(145, 6, uni(assetsInsideText), "0", "0", false)
 
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(265)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Boundaries nested:", "0", 0, "", false, 0, "")
@@ -3950,16 +3686,9 @@ func (r *pdfReporter) createSharedRuntimes(parsedModel *types.Model) {
 
 		r.pdf.SetFont("Helvetica", "", fontSizeBody)
 
-		r.pdfColorGray()
-		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
-		r.pdf.CellFormat(40, 6, "ID:", "0", 0, "", false, 0, "")
-		r.pdfColorBlack()
-		r.pdf.MultiCell(145, 6, sharedRuntime.Id, "0", "0", false)
+		r.attributeRow("ID:", sharedRuntime.Id)
 
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(265)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Tags:", "0", 0, "", false, 0, "")
@@ -3979,10 +3708,7 @@ func (r *pdfReporter) createSharedRuntimes(parsedModel *types.Model) {
 		}
 		r.pdf.MultiCell(145, 6, uni(tagsUsedText), "0", "0", false)
 
-		if r.pdf.GetY() > 265 {
-			r.pageBreak()
-			r.pdf.SetY(36)
-		}
+		r.pageBreakBelow(265)
 		r.pdfColorGray()
 		r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		r.pdf.CellFormat(40, 6, "Assets running:", "0", 0, "", false, 0, "")
@@ -4474,6 +4200,24 @@ func (r *pdfReporter) pageBreak() {
 	gofpdi.UseImportedTemplate(r.pdf, r.contentTemplateId, 0, 0, 0, 300)
 	r.pdf.SetX(17)
 	r.pdf.SetY(20)
+}
+
+// pageBreakBelow starts a new page, with the cursor at the top of the content, when the cursor
+// is below y.
+func (r *pdfReporter) pageBreakBelow(y float64) {
+	if r.pdf.GetY() > y {
+		r.pageBreak()
+		r.pdf.SetY(36)
+	}
+}
+
+// attributeRow writes an attribute of a model element: its label in gray and its value in black.
+func (r *pdfReporter) attributeRow(label string, value string) {
+	r.pdfColorGray()
+	r.pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
+	r.pdf.CellFormat(40, 6, label, "0", 0, "", false, 0, "")
+	r.pdfColorBlack()
+	r.pdf.MultiCell(145, 6, value, "0", "0", false)
 }
 
 func (r *pdfReporter) pageBreakInLists() {
