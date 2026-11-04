@@ -1184,7 +1184,8 @@
                 "rtu",
                 "safety-controller",
                 "scada-server",
-                "policy-decision-point"
+                "policy-decision-point",
+                "ai-guardrail"
               ],
               "type": "string"
             },
@@ -1267,7 +1268,8 @@
               "rtu",
               "safety-controller",
               "scada-server",
-              "policy-decision-point"
+              "policy-decision-point",
+              "ai-guardrail"
             ],
             "type": "string"
           },

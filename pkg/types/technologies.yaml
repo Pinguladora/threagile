@@ -23,6 +23,23 @@ ai-agent:
     backend_related: true
     processing_end_user_requests: true
     propagate_identity_to_outgoing_targets: true
+ai-guardrail:
+  aliases:
+    - guardrail
+    - llm-guardrail
+    - ai-firewall
+    - llm-firewall
+    - prompt-guard
+    - llama-guard
+    - nemo-guardrails
+    - guardrails-ai
+    - bedrock-guardrails
+    - azure-content-safety
+  description: A guardrail that screens the input and output of language models and AI agents for prompt injection, jailbreaks and data that must not pass, as a service in their path or as a library inside them
+  attributes:
+    ai-guardrail: true
+    ai: true
+    security_control_related: true
 application-server:
   aliases:
     - app-server
