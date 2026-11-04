@@ -107,7 +107,8 @@ technical_assets:
         description: Chat
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: false
         usage: business
         data_assets_sent: [chat-messages]
@@ -141,7 +142,8 @@ technical_assets:
         description: Assistant Request
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: false
         usage: business
         data_assets_sent: [chat-messages]
@@ -175,7 +177,8 @@ technical_assets:
         description: Completion
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: false
         usage: business
         data_assets_sent: [chat-messages, customer-records]
@@ -185,7 +188,8 @@ technical_assets:
         description: Retrieval
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: true
         usage: business
         data_assets_received: [kb-articles]
@@ -194,7 +198,8 @@ technical_assets:
         description: Memory Write
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: false
         usage: business
         data_assets_sent: [chat-messages]
@@ -203,7 +208,8 @@ technical_assets:
         description: Tool Calls
         protocol: https
         authentication: none
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: false
         usage: business
         data_assets_sent: [orders]
@@ -213,7 +219,8 @@ technical_assets:
         description: Hosted Completion
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: false
         usage: business
         data_assets_sent: [chat-messages]
@@ -247,7 +254,8 @@ technical_assets:
         description: Model Pull
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: true
         usage: business
         data_assets_received: [model-weights]
@@ -326,7 +334,8 @@ technical_assets:
         description: Embedding Upsert
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: false
         usage: business
         data_assets_sent: [kb-articles]
@@ -335,7 +344,8 @@ technical_assets:
         description: Policy Upsert
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: false
         usage: business
         data_assets_sent: [kb-articles]
@@ -391,7 +401,8 @@ technical_assets:
         description: Order Update
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: false
         usage: business
         data_assets_sent: [orders]
@@ -401,7 +412,8 @@ technical_assets:
         description: Web Fetch
         protocol: https
         authentication: none
-        authorization: none
+        identity: none
+        authorization: unknown
         readonly: true
         usage: business
 
@@ -481,7 +493,8 @@ technical_assets:
         description: Draft Change
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: false
         usage: business
         data_assets_sent: [orders]
@@ -514,7 +527,8 @@ technical_assets:
         description: Order Fix
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: false
         usage: business
         data_assets_sent: [orders]
@@ -523,7 +537,8 @@ technical_assets:
         description: Policy Lookup
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: true
         usage: business
         data_assets_received: [kb-articles]
@@ -532,7 +547,8 @@ technical_assets:
         description: Reviewed Fix
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: false
         usage: business
         tags: [human-in-the-loop]
@@ -542,7 +558,8 @@ technical_assets:
         description: Status Tools
         protocol: https
         authentication: none
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: false
         usage: business
 
@@ -574,7 +591,8 @@ technical_assets:
         description: Status Read
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         readonly: true
         usage: business
 

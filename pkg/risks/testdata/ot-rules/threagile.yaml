@@ -70,7 +70,8 @@ technical_assets:
         description: Vendor Write
         protocol: modbus
         authentication: none
-        authorization: none
+        identity: none
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -109,7 +110,8 @@ technical_assets:
         description: Report
         protocol: https
         authentication: credentials
-        authorization: none
+        identity: none
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -122,7 +124,8 @@ technical_assets:
         description: Jump
         protocol: ssh
         authentication: credentials
-        authorization: none
+        identity: none
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -161,7 +164,8 @@ technical_assets:
         description: Remote Desktop
         protocol: binary-encrypted
         authentication: credentials
-        authorization: none
+        identity: none
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -226,7 +230,8 @@ technical_assets:
         description: Secure Write
         protocol: opc-ua-encrypted
         authentication: credentials
-        authorization: none
+        identity: none
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -239,7 +244,8 @@ technical_assets:
         description: Write B
         protocol: ethernet-ip
         authentication: none
-        authorization: none
+        identity: none
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -252,7 +258,8 @@ technical_assets:
         description: Poll B
         protocol: modbus
         authentication: none
-        authorization: none
+        identity: none
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -265,7 +272,8 @@ technical_assets:
         description: Archive
         protocol: https
         authentication: credentials
-        authorization: none
+        identity: none
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -304,7 +312,8 @@ technical_assets:
         description: Safety Status
         protocol: modbus
         authentication: none
-        authorization: none
+        identity: none
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -343,7 +352,8 @@ technical_assets:
         description: Program A
         protocol: s7comm
         authentication: none
-        authorization: none
+        identity: none
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -356,7 +366,8 @@ technical_assets:
         description: Program SIS
         protocol: s7comm
         authentication: none
-        authorization: none
+        identity: none
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -395,7 +406,8 @@ technical_assets:
         description: Program SIS Dedicated
         protocol: s7comm
         authentication: none
-        authorization: none
+        identity: none
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -408,7 +420,8 @@ technical_assets:
         description: Read A
         protocol: s7comm
         authentication: none
-        authorization: none
+        identity: none
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -447,7 +460,8 @@ technical_assets:
         description: Actuate
         protocol: profinet
         authentication: none
-        authorization: none
+        identity: none
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false

@@ -41,8 +41,9 @@ technical_assets:
         target: git-repo
         description: Link to the Git repo
         protocol: ssh # values: see help
-        authentication: client-certificate # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: client-certificate # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -60,8 +61,9 @@ technical_assets:
         target: git-repo
         description: Link to the Git repo
         protocol: https # values: see help
-        authentication: token # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -79,8 +81,9 @@ technical_assets:
         target: jenkins-build-server
         description: Link to the Jenkins build server
         protocol: https # values: see help
-        authentication: credentials # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -178,8 +181,9 @@ technical_assets:
         target: git-repo
         description: Link to the Git repository server
         protocol: ssh # values: see help
-        authentication: client-certificate # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: client-certificate # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -195,8 +199,9 @@ technical_assets:
         target: apache-webserver
         description: Link to the Apache webserver
         protocol: ssh # values: see help
-        authentication: client-certificate # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: client-certificate # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -210,8 +215,9 @@ technical_assets:
         target: marketing-cms
         description: Link to the CMS
         protocol: ssh # values: see help
-        authentication: client-certificate # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: client-certificate # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false

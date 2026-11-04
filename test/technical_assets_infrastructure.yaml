@@ -40,8 +40,9 @@ technical_assets:
         target: apache-webserver
         description: Link to the web server
         protocol: http # values: see help
-        authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: end-user-identity-propagation # values: none, technical-user, end-user-identity-propagation
+        authentication: session-id # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: end-user # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -61,8 +62,9 @@ technical_assets:
         target: marketing-cms
         description: Link to the CMS server
         protocol: http # values: see help
-        authentication: none # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: none # values: none, technical-user, end-user-identity-propagation
+        authentication: none # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: none # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false

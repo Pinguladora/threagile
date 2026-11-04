@@ -320,8 +320,9 @@ technical_assets:
         target: load-balancer
         description: Link to the load balancer
         protocol: https # values: see help
-        authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: end-user-identity-propagation # values: none, technical-user, end-user-identity-propagation
+        authentication: session-id # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: end-user # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -375,8 +376,9 @@ technical_assets:
         target: erp-system
         description: Link to the ERP system
         protocol: https # values: see help
-        authentication: token # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: end-user-identity-propagation # values: none, technical-user, end-user-identity-propagation
+        authentication: token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: end-user # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
           - some-erp
         vpn: true
@@ -394,8 +396,9 @@ technical_assets:
         target: marketing-cms
         description: Link to the CMS for editing content
         protocol: https # values: see help
-        authentication: token # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: end-user-identity-propagation # values: none, technical-user, end-user-identity-propagation
+        authentication: token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: end-user # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: true
         ip_filtered: false
@@ -442,8 +445,9 @@ technical_assets:
         target: erp-system
         description: Link to the ERP system (Web)
         protocol: https # values: see help
-        authentication: token # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -459,8 +463,9 @@ technical_assets:
         target: sql-database
         description: Link to the database (JDBC tunneled via SSH)
         protocol: ssh # values: see help
-        authentication: client-certificate # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: client-certificate # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -479,8 +484,9 @@ technical_assets:
         target: ldap-auth-server
         description: Link to the LDAP auth server for managing users
         protocol: ldaps # values: see help
-        authentication: credentials # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -533,8 +539,9 @@ technical_assets:
         target: apache-webserver
         description: Link to the web server
         protocol: http # values: see help
-        authentication: session-id # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: end-user-identity-propagation # values: none, technical-user, end-user-identity-propagation
+        authentication: session-id # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: end-user # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -554,8 +561,9 @@ technical_assets:
         target: marketing-cms
         description: Link to the CMS server
         protocol: http # values: see help
-        authentication: none # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: none # values: none, technical-user, end-user-identity-propagation
+        authentication: none # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: none # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -613,8 +621,9 @@ technical_assets:
         target: erp-system
         description: Link to the ERP system
         protocol: https # values: see help
-        authentication: token # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -635,8 +644,9 @@ technical_assets:
         target: identity-provider
         description: Link to the identity provider server
         protocol: https # values: see help
-        authentication: credentials # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -683,8 +693,9 @@ technical_assets:
         target: ldap-auth-server
         description: Link to the LDAP server
         protocol: ldaps # values: see help
-        authentication: credentials # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -764,8 +775,9 @@ technical_assets:
         target: ldap-auth-server
         description: Link to the LDAP auth server
         protocol: ldap # values: see help
-        authentication: credentials # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -822,8 +834,9 @@ technical_assets:
         target: sql-database
         description: Link to the DB system
         protocol: jdbc # values: see help
-        authentication: credentials # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -843,8 +856,9 @@ technical_assets:
         target: contract-file-server
         description: Link to the file system
         protocol: nfs # values: see help
-        authentication: none # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: none # values: none, technical-user, end-user-identity-propagation
+        authentication: none # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: none # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -970,8 +984,9 @@ technical_assets:
         target: git-repo
         description: Link to the Git repo
         protocol: ssh # values: see help
-        authentication: client-certificate # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: client-certificate # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -989,8 +1004,9 @@ technical_assets:
         target: git-repo
         description: Link to the Git repo
         protocol: https # values: see help
-        authentication: token # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: token # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -1008,8 +1024,9 @@ technical_assets:
         target: jenkins-build-server
         description: Link to the Jenkins build server
         protocol: https # values: see help
-        authentication: credentials # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: credentials # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -1107,8 +1124,9 @@ technical_assets:
         target: git-repo
         description: Link to the Git repository server
         protocol: ssh # values: see help
-        authentication: client-certificate # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: client-certificate # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -1124,8 +1142,9 @@ technical_assets:
         target: apache-webserver
         description: Link to the Apache webserver
         protocol: ssh # values: see help
-        authentication: client-certificate # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: client-certificate # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
@@ -1139,8 +1158,9 @@ technical_assets:
         target: marketing-cms
         description: Link to the CMS
         protocol: ssh # values: see help
-        authentication: client-certificate # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: technical-user # values: none, technical-user, end-user-identity-propagation
+        authentication: client-certificate # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: service-account # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false

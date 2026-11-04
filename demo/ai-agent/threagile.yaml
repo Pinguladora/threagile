@@ -161,7 +161,8 @@ technical_assets:
         description: The customers chat with the assistant
         protocol: https
         authentication: session-id
-        authorization: end-user-identity-propagation
+        identity: end-user
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -200,7 +201,8 @@ technical_assets:
         description: Forwards the messages of a customer to the assistant
         protocol: https
         authentication: token
-        authorization: end-user-identity-propagation
+        identity: end-user
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -239,7 +241,8 @@ technical_assets:
         description: Plans the next step and writes the answers
         protocol: https
         authentication: credentials
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -252,7 +255,8 @@ technical_assets:
         description: Checks requests and answers for harmful content
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -265,7 +269,8 @@ technical_assets:
         description: Retrieves the articles matching a question
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -278,7 +283,8 @@ technical_assets:
         description: Stores summaries of resolved conversations as memory
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -291,7 +297,8 @@ technical_assets:
         description: Calls the order, refund and web search tools
         protocol: https
         authentication: none
-        authorization: none
+        identity: none
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -357,7 +364,8 @@ technical_assets:
         description: Loads the current model version at start
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -448,7 +456,8 @@ technical_assets:
         description: Reads the published articles
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -461,7 +470,8 @@ technical_assets:
         description: Writes the embeddings of the articles
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -526,7 +536,8 @@ technical_assets:
         description: Looks up orders and issues refunds
         protocol: https
         authentication: token
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -539,7 +550,8 @@ technical_assets:
         description: Searches the web for product information
         protocol: https
         authentication: credentials
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false
@@ -605,7 +617,8 @@ technical_assets:
         description: Reads and writes the orders
         protocol: jdbc-encrypted
         authentication: credentials
-        authorization: technical-user
+        identity: service-account
+        authorization: unknown
         tags: []
         vpn: false
         ip_filtered: false

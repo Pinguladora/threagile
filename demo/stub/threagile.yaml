@@ -128,8 +128,9 @@ technical_assets:
         target: some-other-component
         description: Some Description
         protocol: https # values: see help
-        authentication: none # values: none, credentials, session-id, token, client-certificate, two-factor
-        authorization: none # values: none, technical-user, end-user-identity-propagation
+        authentication: none # values: none, credentials, session-id, token, short-lived-token, long-lived-token, client-certificate, multi-factor, externalized
+        identity: none # values: none, service-account, workload, end-user
+        authorization: unknown # values: unknown, none, authenticated-only, function-level, object-level
         tags:
         vpn: false
         ip_filtered: false
