@@ -51,6 +51,7 @@ func aiRiskRules() []types.RiskRule {
 		builtin.NewModelSupplyChainRule(),
 		builtin.NewPromptInjectionRule(),
 		builtin.NewUnauthenticatedMCPServerRule(),
+		builtin.NewUnsandboxedCodeExecutionRule(),
 		builtin.NewVectorStorePoisoningRule(),
 	}
 }

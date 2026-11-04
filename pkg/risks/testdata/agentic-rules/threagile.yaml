@@ -173,6 +173,20 @@ technical_assets:
         usage: business
         data_assets_sent: [tasks]
         data_assets_received: [tasks]
+      Trusted Run:
+        target: trusted-interpreter
+        description: Trusted Run
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
 
   Web App:
     id: web-app
@@ -587,6 +601,422 @@ technical_assets:
     data_formats_accepted: [json]
     communication_links: {}
 
+  Chat Browser:
+    id: chat-browser
+    description: Chat Browser
+    type: external-entity
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: true
+    justification_out_of_scope: External
+    size: service
+    technologies: [browser]
+    tags: []
+    internet: true
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Coding Chat:
+        target: coding-agent
+        description: Coding Chat
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
+      Notebook Chat:
+        target: notebook-agent
+        description: Notebook Chat
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
+
+  Coding Agent:
+    id: coding-agent
+    description: Coding Agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Sandboxed Run:
+        target: sandbox
+        description: Sandboxed Run
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Linked Run:
+        target: linked-interpreter
+        description: Linked Run
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
+      Egress Run:
+        target: egress-interpreter
+        description: Egress Run
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Runtime Run:
+        target: runtime-interpreter
+        description: Runtime Run
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
+
+  Sandbox:
+    id: sandbox
+    description: Sandbox
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [code-interpreter]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Linked Interpreter:
+    id: linked-interpreter
+    description: Linked Interpreter
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [code-interpreter]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Interpreter Order Read:
+        target: orders-db
+        description: Interpreter Order Read
+        protocol: jdbc-encrypted
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Egress Interpreter:
+    id: egress-interpreter
+    description: Egress Interpreter
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [code-interpreter]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Package Download:
+        target: public-web
+        description: Package Download
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [tasks]
+        data_assets_received: [tasks]
+
+  Public Web:
+    id: public-web
+    description: Public Web
+    type: external-entity
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: true
+    justification_out_of_scope: External
+    size: service
+    technologies: [web-server]
+    tags: []
+    internet: true
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Runtime Interpreter:
+    id: runtime-interpreter
+    description: Runtime Interpreter
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [code-interpreter]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Notebook Agent:
+    id: notebook-agent
+    description: Notebook Agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent, code-interpreter]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Notebook Order Change:
+        target: orders-db
+        description: Notebook Order Change
+        protocol: jdbc-encrypted
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Offline Agent:
+    id: offline-agent
+    description: Offline Agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent, code-interpreter]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Offline Order Change:
+        target: orders-db
+        description: Offline Order Change
+        protocol: jdbc-encrypted
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Trusted Interpreter:
+    id: trusted-interpreter
+    description: Trusted Interpreter
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [code-interpreter]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [tasks]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Trusted Order Read:
+        target: orders-db
+        description: Trusted Order Read
+        protocol: jdbc-encrypted
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
 trust_boundaries:
 
   Agent Network:
@@ -594,7 +1024,7 @@ trust_boundaries:
     description: The orchestrating agent
     type: network-cloud-security-group
     tags: []
-    technical_assets_inside: [orchestrator, worker-b, worker-c, worker-d, worker-e, worker-f, worker-g, order-tools, web-app, task-board]
+    technical_assets_inside: [orchestrator, worker-b, worker-c, worker-d, worker-e, worker-f, worker-g, order-tools, web-app, task-board, coding-agent, sandbox, linked-interpreter, egress-interpreter, runtime-interpreter, notebook-agent, offline-agent, trusted-interpreter]
     trust_boundaries_nested: []
 
   Worker Network:
@@ -605,4 +1035,10 @@ trust_boundaries:
     technical_assets_inside: [worker-a, orders-db]
     trust_boundaries_nested: []
 
-shared_runtimes: {}
+shared_runtimes:
+
+  Data Host:
+    id: data-host
+    description: The host of the orders database
+    tags: []
+    technical_assets_running: [orders-db, runtime-interpreter]
