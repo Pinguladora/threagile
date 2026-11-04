@@ -55,6 +55,33 @@ func TestFromInterchangeAddsTheOutsideZoneWhenNeeded(t *testing.T) {
 	assert.Len(t, document.TrustZones, 1, "no outside zone without components outside")
 }
 
+func TestOutsideZoneDoesNotClashWithATrustBoundary(t *testing.T) {
+	model := &interchange.Model{
+		Zones: []interchange.Zone{{ID: otm.OutsideZoneID, Type: "network-on-prem"}},
+		Components: []interchange.Component{
+			{ID: "inside", ParentID: otm.OutsideZoneID},
+			{ID: "outside"},
+		},
+	}
+
+	document := otm.FromInterchange(model)
+	ids := make([]string, 0, len(document.TrustZones))
+	for _, zone := range document.TrustZones {
+		ids = append(ids, zone.ID)
+	}
+	assert.Equal(t, []string{otm.OutsideZoneID, otm.OutsideZoneID + "-2"}, ids, "the added zone takes a free id")
+	assert.Equal(t, otm.OutsideZoneID+"-2", document.Components[1].Parent.TrustZone)
+
+	back := otm.ToInterchange(document)
+	require.Len(t, back.Zones, 1, "only the added zone is dropped again")
+	assert.Equal(t, otm.OutsideZoneID, back.Zones[0].ID)
+	parents := map[string]string{}
+	for _, component := range back.Components {
+		parents[component.ID] = component.ParentID
+	}
+	assert.Equal(t, map[string]string{"inside": otm.OutsideZoneID, "outside": ""}, parents)
+}
+
 func TestFromInterchangeMapsThreats(t *testing.T) {
 	document := otm.FromInterchange(&interchange.Model{
 		Components: []interchange.Component{{ID: "c", Threats: []interchange.ThreatInstance{

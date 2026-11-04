@@ -287,6 +287,9 @@
       "description": "The technical assets that are in no trust boundary of the threagile model.",
       "risk": {
         "trustRating": 0
+      },
+      "attributes": {
+        "threagile:outside-trust-boundaries": "true"
       }
     },
     {

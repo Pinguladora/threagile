@@ -35,7 +35,7 @@ its `.license` file.
 | `author.name`, `author.contact` | `project.owner`, `project.ownerContact` |  |
 | `tags_available` | `project.tags` |  |
 | trust boundary | `trustZones` | `type` is the threagile type, `parent` the boundary it is nested in, `trustRating` see below |
-| (assets in no trust boundary) | trust zone `outside-trust-boundaries` | OTM requires each component to have a parent; this zone, rated 0, is only added when needed |
+| (assets in no trust boundary) | trust zone `outside-trust-boundaries` | OTM requires each component to have a parent; this zone, rated 0, is only added when needed, takes a `-2`, `-3`, … suffix if a trust boundary already has that id, and is marked with the attribute `threagile:outside-trust-boundaries` |
 | technical asset | `components` | `type` is the first technology, `parent` the trust boundary, `assets` the data assets processed and stored |
 | communication link | `dataflows` | id `<source>><link>`, `assets` all data assets sent or received; `bidirectional` when the link sends data and receives some back, which the data-flow diagram draws with a double hollow tail |
 | data asset | `assets` | `risk` holds the CIA rating as a score (see below), `risk.comment` its justification |
@@ -108,7 +108,7 @@ and `implemented` for mitigations.
 | `project.description` | `application_description` |  |
 | `project.owner`, `project.ownerContact` | `author.name`, `author.contact` |  |
 | `project.tags` | `tags_available` | with every tag the elements use, as threagile requires |
-| `trustZones` | `trust_boundaries` | `type` when it is a threagile type; a parent zone lists it in `trust_boundaries_nested`; `outside-trust-boundaries` is left out |
+| `trustZones` | `trust_boundaries` | `type` when it is a threagile type; a parent zone lists it in `trust_boundaries_nested`; the zone marked `threagile:outside-trust-boundaries` is left out |
 | `components` | `technical_assets` | `type` is the technology when threagile knows it; `parent` puts it in that trust boundary; `assets` become the data assets processed and stored |
 | `dataflows` | `communication_links` of the source asset | `destination` is the target; `assets` are sent, and received too when the flow is `bidirectional`, unless `threagile:` attributes say which are sent and received |
 | `assets` | `data_assets` | the CIA scores become the nearest levels, `risk.comment` the justification |

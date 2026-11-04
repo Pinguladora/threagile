@@ -1,6 +1,7 @@
 package otm
 
 import (
+	"fmt"
 	"slices"
 	"strconv"
 	"strings"
@@ -11,12 +12,16 @@ import (
 
 // OutsideZoneID is the id of the trust zone that holds the components outside of all trust
 // boundaries, as OTM requires every component to have a parent. FromInterchange adds it only when
-// there are such components, and ToInterchange leaves it out again.
+// there are such components (with a numeric suffix if a trust boundary already has this id) and
+// marks it with the outsideZoneAttribute, by which ToInterchange recognises and leaves it out.
 const OutsideZoneID = "outside-trust-boundaries"
 
 const (
 	outsideZoneName = "Outside of all trust boundaries"
 	outsideZoneType = "untrusted"
+	// outsideZoneAttribute marks the trust zone FromInterchange adds for the components outside of
+	// all trust boundaries.
+	outsideZoneAttribute = attributePrefix + OutsideZoneID
 	// attributePrefix namespaces the threagile properties among the attributes of an element.
 	attributePrefix = "threagile:"
 	// mitigationSuffix makes the id of the mitigation of a threat from the id of the threat.
@@ -92,6 +97,7 @@ var states = map[types.RiskStatus]state{
 
 // FromInterchange turns elements into an OTM document, with every list sorted by id.
 func FromInterchange(model *interchange.Model) *Document {
+	outside := outsideZoneID(model.Zones)
 	document := &Document{
 		OTMVersion: Version,
 		Project: Project{
@@ -103,8 +109,8 @@ func FromInterchange(model *interchange.Model) *Document {
 			Tags:         model.Project.Tags,
 			Attributes:   attributes(model.Project.Properties),
 		},
-		TrustZones: trustZones(model),
-		Components: components(model.Components),
+		TrustZones: trustZones(model, outside),
+		Components: components(model.Components, outside),
 		Dataflows:  dataflows(model.Flows),
 		Assets:     assets(model.DataAssets),
 	}
@@ -119,12 +125,12 @@ func FromInterchange(model *interchange.Model) *Document {
 	return document
 }
 
-func components(elements []interchange.Component) []Component {
+func components(elements []interchange.Component, outside string) []Component {
 	result := make([]Component, 0, len(elements))
 	for _, component := range elements {
 		parent := component.ParentID
 		if parent == "" {
-			parent = OutsideZoneID
+			parent = outside
 		}
 
 		otmComponent := Component{
@@ -186,7 +192,22 @@ func assets(elements []interchange.DataAsset) []Asset {
 	return result
 }
 
-func trustZones(model *interchange.Model) []TrustZone {
+// outsideZoneID is OutsideZoneID, or the first OutsideZoneID-<n> that no trust boundary uses.
+func outsideZoneID(zones []interchange.Zone) string {
+	taken := make(map[string]bool, len(zones))
+	for _, zone := range zones {
+		taken[zone.ID] = true
+	}
+
+	id := OutsideZoneID
+	for n := 2; taken[id]; n++ {
+		id = fmt.Sprintf("%s-%d", OutsideZoneID, n)
+	}
+
+	return id
+}
+
+func trustZones(model *interchange.Model, outside string) []TrustZone {
 	zones := make(map[string]interchange.Zone, len(model.Zones))
 	for _, zone := range model.Zones {
 		zones[zone.ID] = zone
@@ -208,14 +229,15 @@ func trustZones(model *interchange.Model) []TrustZone {
 		trustZones = append(trustZones, trustZone)
 	}
 
-	outside := func(component interchange.Component) bool { return component.ParentID == "" }
-	if slices.ContainsFunc(model.Components, outside) {
+	isOutside := func(component interchange.Component) bool { return component.ParentID == "" }
+	if slices.ContainsFunc(model.Components, isOutside) {
 		trustZones = append(trustZones, TrustZone{
-			ID:          OutsideZoneID,
+			ID:          outside,
 			Name:        outsideZoneName,
 			Type:        outsideZoneType,
 			Description: "The technical assets that are in no trust boundary of the threagile model.",
 			Risk:        TrustZoneRisk{TrustRating: outsideTrustRating},
+			Attributes:  Attributes{outsideZoneAttribute: "true"},
 		})
 	}
 
