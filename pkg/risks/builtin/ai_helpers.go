@@ -21,10 +21,13 @@ const (
 	owaspAgenticPrivilegeAbuse        = "OWASP ASI03:2026 Identity and Privilege Abuse"
 	owaspAgenticSupplyChain           = "OWASP ASI04:2026 Agentic Supply Chain Vulnerabilities"
 	owaspAgenticMemoryPoisoning       = "OWASP ASI06:2026 Memory and Context Poisoning"
+	owaspAgenticRogueAgents           = "OWASP ASI10:2026 Rogue Agents"
 	maestroFoundationModels           = "MAESTRO Layer 1: Foundation Models"
 	maestroDataOperations             = "MAESTRO Layer 2: Data Operations"
 	maestroAgentFrameworks            = "MAESTRO Layer 3: Agent Frameworks"
 	maestroDeploymentAndInfrastucture = "MAESTRO Layer 4: Deployment and Infrastructure"
+	maestroEvaluationAndObservability = "MAESTRO Layer 5: Evaluation and Observability"
+	maestroSecurityAndCompliance      = "MAESTRO Layer 6: Security and Compliance"
 	maestroAgentEcosystem             = "MAESTRO Layer 7: Agent Ecosystem"
 
 	cheatSheetLLMPromptInjection = "https://cheatsheetseries.owasp.org/cheatsheets/" +
@@ -37,6 +40,7 @@ const (
 	cweUnnecessaryPrivileges       = 250  // CWE-250: Execution with Unnecessary Privileges
 	cweInsufficientAuthenticity    = 345  // CWE-345: Insufficient Verification of Data Authenticity
 	cweDownloadWithoutIntegrity    = 494  // CWE-494: Download of Code Without Integrity Check
+	cweInsufficientLogging         = 778  // CWE-778: Insufficient Logging
 	cweImproperLLMPromptNeutralize = 1427 // CWE-1427: Improper Neutralization of Input Used for LLM Prompting
 )
 
@@ -51,6 +55,11 @@ func isLanguageModel(technicalAsset *types.TechnicalAsset) bool {
 // isAIAgent reports whether the technical asset is an AI agent.
 func isAIAgent(technicalAsset *types.TechnicalAsset) bool {
 	return technicalAsset.Technologies.GetAttribute(types.AIAgent)
+}
+
+// isAIGuardrail reports whether the technical asset screens the input and output of language models and agents.
+func isAIGuardrail(technicalAsset *types.TechnicalAsset) bool {
+	return technicalAsset.Technologies.GetAttribute(types.AIGuardrail)
 }
 
 // isPromptedAsset reports whether the technical asset takes prompts: a language model or an AI agent.

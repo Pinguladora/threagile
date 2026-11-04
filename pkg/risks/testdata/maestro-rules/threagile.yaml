@@ -1,0 +1,637 @@
+threagile_version: 1.0.0
+
+# Exercises the rules on AI guardrails and AI monitoring: what they find and what they skip.
+
+title: MAESTRO Rules
+
+date: 2026-11-04
+
+author:
+  name: John Doe
+
+business_criticality: critical
+
+business_overview:
+  description: MAESTRO rules test
+  images: []
+
+technical_overview:
+  description: MAESTRO rules test
+  images: []
+
+data_assets:
+
+  Chats:
+    id: chats
+    description: Chats
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Chats of the customers
+
+technical_assets:
+
+
+  Chat Browser:
+    id: chat-browser
+    description: Chat Browser
+    type: external-entity
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: true
+    justification_out_of_scope: External
+    size: service
+    technologies: [browser]
+    tags: []
+    internet: true
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chats]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Guarded Chat:
+        target: gateway-guardrail
+        description: Guarded Chat
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chats]
+        data_assets_received: [chats]
+      Plain Chat:
+        target: plain-agent
+        description: Plain Chat
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chats]
+        data_assets_received: [chats]
+      Library Chat:
+        target: library-agent
+        description: Library Chat
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chats]
+        data_assets_received: [chats]
+      Checked Chat:
+        target: checking-agent
+        description: Checked Chat
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chats]
+        data_assets_received: [chats]
+      Web Chat:
+        target: web-app
+        description: Web Chat
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chats]
+        data_assets_received: [chats]
+
+  Gateway Guardrail:
+    id: gateway-guardrail
+    description: Gateway Guardrail
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-guardrail]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chats]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Screened Chat:
+        target: guarded-agent
+        description: Screened Chat
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chats]
+        data_assets_received: [chats]
+
+  Guarded Agent:
+    id: guarded-agent
+    description: Guarded Agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chats]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Planning:
+        target: planner
+        description: Planning
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chats]
+        data_assets_received: [chats]
+      Agent Traces:
+        target: siem
+        description: Agent Traces
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chats]
+        data_assets_received: [chats]
+
+  Planner:
+    id: planner
+    description: Planner
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [llm]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chats]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Plain Agent:
+    id: plain-agent
+    description: Plain Agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chats]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Metrics Scraper:
+    id: metrics-scraper
+    description: Metrics Scraper
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [monitoring]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chats]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Scrape:
+        target: plain-agent
+        description: Scrape
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chats]
+        data_assets_received: [chats]
+
+  Library Agent:
+    id: library-agent
+    description: Library Agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent, ai-guardrail]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chats]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Library Traces:
+        target: siem
+        description: Library Traces
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chats]
+        data_assets_received: [chats]
+
+  Checking Agent:
+    id: checking-agent
+    description: Checking Agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chats]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Moderation:
+        target: moderation-service
+        description: Moderation
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chats]
+        data_assets_received: [chats]
+      Checking Traces:
+        target: siem
+        description: Checking Traces
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chats]
+        data_assets_received: [chats]
+
+  Moderation Service:
+    id: moderation-service
+    description: Moderation Service
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-guardrail]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chats]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Web App:
+    id: web-app
+    description: Web App
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [web-application]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chats]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Summary:
+        target: summarizer
+        description: Summary
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chats]
+        data_assets_received: [chats]
+
+  Summarizer:
+    id: summarizer
+    description: Summarizer
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [llm]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chats]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Scheduler:
+    id: scheduler
+    description: Scheduler
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [scheduler]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chats]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Nightly Run:
+        target: batch-agent
+        description: Nightly Run
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [chats]
+        data_assets_received: [chats]
+
+  Batch Agent:
+    id: batch-agent
+    description: Batch Agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chats]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Hosted Model:
+    id: hosted-model
+    description: Hosted Model
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [llm]
+    tags: []
+    internet: true
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chats]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  SIEM:
+    id: siem
+    description: SIEM
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [monitoring]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [chats]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+trust_boundaries:
+
+  App Network:
+    id: app-network
+    description: The application
+    type: network-cloud-security-group
+    tags: []
+    technical_assets_inside: [gateway-guardrail, guarded-agent, planner, plain-agent, metrics-scraper, library-agent, checking-agent, moderation-service, web-app, summarizer, scheduler, batch-agent, siem]
+    trust_boundaries_nested: []
+
+shared_runtimes: {}

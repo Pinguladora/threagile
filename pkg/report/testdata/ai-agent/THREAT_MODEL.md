@@ -41,14 +41,14 @@ Threagile toolkit was used to model the architecture of "AI Support Assistant" a
 
 Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.
 
-In total **63 initial risks** in **28 categories** have been identified during the threat modeling process:
+In total **66 initial risks** in **30 categories** have been identified during the threat modeling process:
 
 | Severity | Risks | Status | Risks |
 | --- | ---: | --- | ---: |
-| Critical | 0 | Unchecked | 62 |
+| Critical | 0 | Unchecked | 65 |
 | High | 0 | In Discussion | 0 |
-| Elevated | 27 | Accepted | 0 |
-| Medium | 29 | In Progress | 1 |
+| Elevated | 29 | Accepted | 0 |
+| Medium | 30 | In Progress | 1 |
 | Low | 7 | Mitigated | 0 |
 |  |  | False Positive | 0 |
 
@@ -56,7 +56,7 @@ The assistant acts for the customers: besides answering, it changes orders and i
 
 ## Impact Analysis of the Initial Risks
 
-The most prevalent impacts of the **63 initial risks** (distributed over **28 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **66 initial risks** (distributed over **30 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Confused Deputy Agent](#confused-deputy-agent): 1 Initial Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -69,6 +69,10 @@ The most prevalent impacts of the **63 initial risks** (distributed over **28 ri
 - **Elevated**: [Excessive Agency](#excessive-agency): 1 Initial Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers who steer the agent, or the agent's own mistakes, might change or delete critical data and trigger actions with real-world effects.
+
+- **Elevated**: [Missing AI Monitoring](#missing-ai-monitoring): 2 Initial Risks, exploitation likelihood is _Likely_ with _Medium_ impact
+
+    If this risk is unmitigated, attacks through the model or the agent, and its own mistakes, might go on unnoticed, and their effects could not be traced.
 
 - **Elevated**: [Missing Authentication](#missing-authentication): 1 Initial Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -113,6 +117,10 @@ The most prevalent impacts of the **63 initial risks** (distributed over **28 ri
 - **Medium**: [Long-Lived Credentials](#long-lived-credentials): 1 Initial Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.
+
+- **Medium**: [Missing AI Guardrail](#missing-ai-guardrail): 1 Initial Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    If this risk is unmitigated, prompt injections and jailbreaks reach the model or the agent unchecked, and harmful or confidential output leaves it unchecked.
 
 - **Medium**: [Missing Build Infrastructure](#missing-build-infrastructure): 1 Initial Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -178,23 +186,23 @@ The following table gives a high-level overview of the risk tracking status (inc
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Critical | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | High | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Elevated | 27 | 27 | 0 | 0 | 0 | 0 | 0 |
-| Medium | 29 | 28 | 0 | 0 | 1 | 0 | 0 |
+| Elevated | 29 | 29 | 0 | 0 | 0 | 0 | 0 |
+| Medium | 30 | 29 | 0 | 0 | 1 | 0 | 0 |
 | Low | 7 | 7 | 0 | 0 | 0 | 0 | 0 |
 
-After removal of risks with status _mitigated_ and _false positive_ the following **63 remain unmitigated**:
+After removal of risks with status _mitigated_ and _false positive_ the following **66 remain unmitigated**:
 
 | Severity | Unmitigated risks | To be checked by | Unmitigated risks |
 | --- | ---: | --- | ---: |
 | Critical | 0 | Business Side | 1 |
-| High | 0 | Architecture | 12 |
-| Elevated | 27 | Development | 21 |
-| Medium | 29 | Operations | 29 |
+| High | 0 | Architecture | 13 |
+| Elevated | 29 | Development | 21 |
+| Medium | 30 | Operations | 31 |
 | Low | 7 |  |  |
 
 ## Impact Analysis of the Remaining Risks
 
-The most prevalent impacts of the **63 remaining risks** (distributed over **28 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **66 remaining risks** (distributed over **30 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Confused Deputy Agent](#confused-deputy-agent): 1 Remaining Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -207,6 +215,10 @@ The most prevalent impacts of the **63 remaining risks** (distributed over **28 
 - **Elevated**: [Excessive Agency](#excessive-agency): 1 Remaining Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers who steer the agent, or the agent's own mistakes, might change or delete critical data and trigger actions with real-world effects.
+
+- **Elevated**: [Missing AI Monitoring](#missing-ai-monitoring): 2 Remaining Risks, exploitation likelihood is _Likely_ with _Medium_ impact
+
+    If this risk is unmitigated, attacks through the model or the agent, and its own mistakes, might go on unnoticed, and their effects could not be traced.
 
 - **Elevated**: [Missing Authentication](#missing-authentication): 1 Remaining Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -251,6 +263,10 @@ The most prevalent impacts of the **63 remaining risks** (distributed over **28 
 - **Medium**: [Long-Lived Credentials](#long-lived-credentials): 1 Remaining Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.
+
+- **Medium**: [Missing AI Guardrail](#missing-ai-guardrail): 1 Remaining Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    If this risk is unmitigated, prompt injections and jailbreaks reach the model or the agent unchecked, and harmful or confidential output leaves it unchecked.
 
 - **Medium**: [Missing Build Infrastructure](#missing-build-infrastructure): 1 Remaining Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -310,7 +326,7 @@ The most prevalent impacts of the **63 remaining risks** (distributed over **28 
 
 ## Risks by Severity
 
-All **63 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
+All **66 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
 
 ### Critical
 
@@ -326,13 +342,15 @@ _No risks._
 
 ### Elevated
 
-**27 risks**
+**29 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
 | Elevated | [**Confused Deputy Agent** risk at **Support Agent** reaching **Knowledge Index** with its own identity](#confused-deputy-agent) | [Confused Deputy Agent](#confused-deputy-agent) | [Support Agent](#support-agent), [Retrieval](#retrieval) | Unchecked |
 | Elevated | [**Cross-Site Scripting (XSS)** risk at **Chat Frontend**](#cross-site-scripting-xss) | [Cross-Site Scripting (XSS)](#cross-site-scripting-xss) | [Chat Frontend](#chat-frontend) | Unchecked |
 | Elevated | [**Excessive Agency** risk at **Support Agent** changing **Order Service**](#excessive-agency) | [Excessive Agency](#excessive-agency) | [Support Agent](#support-agent), [Tool Calls](#tool-calls) | Unchecked |
+| Elevated | [**Missing AI Monitoring** risk at **Guardrail Model**](#missing-ai-monitoring) | [Missing AI Monitoring](#missing-ai-monitoring) | [Guardrail Model](#guardrail-model) | Unchecked |
+| Elevated | [**Missing AI Monitoring** risk at **Support Agent**](#missing-ai-monitoring) | [Missing AI Monitoring](#missing-ai-monitoring) | [Support Agent](#support-agent) | Unchecked |
 | Elevated | [**Missing Authentication** covering communication link **Tool Calls** from **Support Agent** to **Support Tools**](#missing-authentication) | [Missing Authentication](#missing-authentication) | [Support Tools](#support-tools), [Tool Calls](#tool-calls) | Unchecked |
 | Elevated | [**Missing Object-Level Authorization** risk at **Order Service** for **Support Tools** (function-level)](#missing-object-level-authorization) | [Missing Object-Level Authorization](#missing-object-level-authorization) | [Order Service](#order-service), [Order API](#order-api) | Unchecked |
 | Elevated | [**Missing Object-Level Authorization** risk at **Support Agent** for **Chat Frontend** (function-level)](#missing-object-level-authorization) | [Missing Object-Level Authorization](#missing-object-level-authorization) | [Support Agent](#support-agent), [Assistant Request](#assistant-request) | Unchecked |
@@ -360,7 +378,7 @@ _No risks._
 
 ### Medium
 
-**29 risks**
+**30 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
@@ -376,6 +394,7 @@ _No risks._
 | Medium | [**Container Base Image Backdooring** risk at **Support Tools**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Support Tools](#support-tools) | Unchecked |
 | Medium | [**Cross-Site Request Forgery (CSRF)** risk at **Chat Frontend** via **Support Chat** from **Customer Browser**](#cross-site-request-forgery-csrf) | [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf) | [Chat Frontend](#chat-frontend), [Support Chat](#support-chat) | Unchecked |
 | Medium | [**Long-Lived Credentials** risk at **Orders Database** used by **Order Service** (credentials)](#long-lived-credentials) | [Long-Lived Credentials](#long-lived-credentials) | [Orders Database](#orders-database), [Order Storage](#order-storage) | Unchecked |
+| Medium | [**Missing AI Guardrail** risk at **Support Agent**](#missing-ai-guardrail) | [Missing AI Guardrail](#missing-ai-guardrail) | [Support Agent](#support-agent), [Assistant Request](#assistant-request) | Unchecked |
 | Medium | [**Missing Multi-Factor Authentication** covering communication link **Support Chat** from **Customer Browser** to **Chat Frontend**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [Chat Frontend](#chat-frontend), [Support Chat](#support-chat) | Unchecked |
 | Medium | [**Missing Build Infrastructure** in the threat model (referencing asset **Order Service** as an example)](#missing-build-infrastructure) | [Missing Build Infrastructure](#missing-build-infrastructure) | [Order Service](#order-service) | Unchecked |
 | Medium | [**Missing Cloud Hardening** risk at **Agent Subnet**](#missing-cloud-hardening) | [Missing Cloud Hardening](#missing-cloud-hardening) | none | Unchecked |
@@ -590,7 +609,7 @@ _This list is not complete and regulatory or law relevant abuse cases have to be
 
 ## STRIDE Classification of Identified Risks
 
-This chapter clusters and classifies the risks by STRIDE categories: in total **63 potential risks** have been identified during the threat modeling process.
+This chapter clusters and classifies the risks by STRIDE categories: in total **66 potential risks** have been identified during the threat modeling process.
 
 ### Spoofing
 
@@ -662,11 +681,13 @@ Tampering - Integrity
 
 ### Repudiation
 
-**0 risks**
+**2 risks**
 
 Repudiation - Non-repudiability
 
-_No risks were identified._
+- **Elevated**: [Missing AI Monitoring](#missing-ai-monitoring): 2/2 unmitigated Risks, exploitation likelihood is _Likely_ with _Medium_ impact
+
+    What an AI agent or a language model does depends on what it reads, so it cannot be tested in full before it runs. Without a record of its prompts, its tool calls and its answers in a monitoring system, nobody sees a prompt injection, an agent going astray or a model that drifts, nor can tell afterwards what it did.
 
 ### Information Disclosure
 
@@ -706,7 +727,7 @@ Denial of service - Availability
 
 ### Elevation of Privilege
 
-**12 risks**
+**13 risks**
 
 Elevation of privilege - Authorization
 
@@ -730,6 +751,10 @@ Elevation of privilege - Authorization
 
     A language model cannot tell the instructions of its prompt apart from the data in it. Content that reaches a model or an agent from users, the internet or another trust zone can carry instructions of its own, either directly in a request or indirectly in a document, a web page or a tool response the model reads, and so take over what the model does.
 
+- **Medium**: [Missing AI Guardrail](#missing-ai-guardrail): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    A guardrail screens what reaches a language model or an agent, and what comes back from it, for prompt injection, jailbreaks and data that must not pass, independently of the model. Without one, the instructions of the system prompt are the only defense, and a model follows whatever content convinces it.
+
 - **Medium**: [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
@@ -744,7 +769,7 @@ Elevation of privilege - Authorization
 
 ## Assignment by Function
 
-This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **63 potential risks** have been identified during the threat modeling process.
+This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **66 potential risks** have been identified during the threat modeling process.
 
 ### Business Side
 
@@ -758,7 +783,7 @@ Business
 
 ### Architecture
 
-**12 risks**
+**13 risks**
 
 Architecture
 
@@ -785,6 +810,10 @@ Architecture
 - **Elevated**: [Vector Store Poisoning](#vector-store-poisoning): 1/1 unmitigated Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
     Ingest only content from vetted sources, record where each entry came from and validate it before it is embedded. Keep the entries of different users and tenants apart with access controls at retrieval time, limit what agents may write into their memory, and review and expire stored entries regularly.
+
+- **Medium**: [Missing AI Guardrail](#missing-ai-guardrail): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    Screen the untrusted input of the model or agent, and its output, with a guardrail like a prompt injection classifier, a content safety service or a policy framework for agents, and block or flag what it finds. Model a guardrail service as an ai-guardrail technical asset in the path of the untrusted content, or one the agent asks, and a guardrail library inside the agent by adding ai-guardrail to the technologies of the agent. A guardrail lowers the risk of prompt injection, but does not remove it.
 
 - **Medium**: [Missing Build Infrastructure](#missing-build-infrastructure): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -838,9 +867,13 @@ Development
 
 ### Operations
 
-**29 risks**
+**31 risks**
 
 Operations
+
+- **Elevated**: [Missing AI Monitoring](#missing-ai-monitoring): 2/2 unmitigated Risks, exploitation likelihood is _Likely_ with _Medium_ impact
+
+    Send the prompts, tool calls, answers and decisions of the agent or model, with the user they were for, to a monitoring system, for example as OpenTelemetry traces, and alert on anomalies like injection attempts, unusual tool use and spikes in cost. Evaluate the quality and the safety of the answers continuously, and model the monitoring system as a monitoring technical asset with a link to or from the agent or model.
 
 - **Medium**: [Container Base Image Backdooring](#container-base-image-backdooring): 10/10 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -982,9 +1015,17 @@ This chapter lists all technical assets that have been defined as out-of-scope. 
 
 ## Potential Model Failures
 
-**3 of 3 unmitigated**
+**6 of 6 unmitigated**
 
 This chapter lists potential model failures where not all relevant assets have been modeled or the model might itself contain inconsistencies. Each potential model failure should be checked in the model against the architecture design:
+
+- **Elevated**: [Missing AI Monitoring](#missing-ai-monitoring): 2/2 unmitigated Risks, exploitation likelihood is _Likely_ with _Medium_ impact
+
+    What an AI agent or a language model does depends on what it reads, so it cannot be tested in full before it runs. Without a record of its prompts, its tool calls and its answers in a monitoring system, nobody sees a prompt injection, an agent going astray or a model that drifts, nor can tell afterwards what it did.
+
+- **Medium**: [Missing AI Guardrail](#missing-ai-guardrail): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    A guardrail screens what reaches a language model or an agent, and what comes back from it, for prompt injection, jailbreaks and data that must not pass, independently of the model. Without one, the instructions of the system prompt are the only defense, and a model follows whatever content convinces it.
 
 - **Medium**: [Missing Build Infrastructure](#missing-build-infrastructure): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -1014,7 +1055,7 @@ This chapter lists custom questions that arose during the threat modeling proces
 
 ## Identified Risks by Vulnerability Category
 
-In total **63 potential risks** have been identified during the threat modeling process, distributed across **28 vulnerability categories**. The following sections describe each identified risk category and its risks.
+In total **66 potential risks** have been identified during the threat modeling process, distributed across **30 vulnerability categories**. The following sections describe each identified risk category and its risks.
 
 ### Confused Deputy Agent
 
@@ -1164,6 +1205,57 @@ The risk **Excessive Agency** was found **1 time** in the analyzed architecture 
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Elevated | **Excessive Agency** risk at **Support Agent** changing **Order Service** | `excessive-agency@support-agent@support-agent>tool-calls` | Likely | Medium | [Support Agent](#support-agent), [Tool Calls](#tool-calls) | Unchecked | _not tracked_ |
+
+### Missing AI Monitoring
+
+**Elevated** · 2/2 unmitigated Risks · `missing-ai-monitoring`
+
+| Property | Value |
+| --- | --- |
+| STRIDE | Repudiation |
+| CWE | [CWE 778](https://cwe.mitre.org/data/definitions/778.html) |
+| Function | Operations |
+| Action | AI Observability |
+| ASVS chapter | V7 - Error Handling and Logging Verification Requirements |
+| Cheat sheet | [Logging_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html) |
+| References | MAESTRO Layer 5: Evaluation and Observability; OWASP ASI10:2026 Rogue Agents |
+
+**Description**
+
+What an AI agent or a language model does depends on what it reads, so it cannot be tested in full before it runs. Without a record of its prompts, its tool calls and its answers in a monitoring system, nobody sees a prompt injection, an agent going astray or a model that drifts, nor can tell afterwards what it did.
+
+**Impact**
+
+If this risk is unmitigated, attacks through the model or the agent, and its own mistakes, might go on unnoticed, and their effects could not be traced.
+
+**Detection Logic**
+
+In-scope ai-agent technical assets, and in-scope llm technical assets not on the internet (self-hosted models), with no communication link to or from a monitoring technical asset.
+
+**Risk Rating**
+
+The risk rating depends on the sensitivity of the data processed by the agent or model. The attack is likely when the agent or model takes untrusted content, and unlikely otherwise.
+
+**False Positives**
+
+Agents and models whose platform records their prompts, tool calls and answers without a modelled link, like a managed agent service with built-in tracing, can be considered as false positives after individual review.
+
+**Mitigation**
+
+Send the prompts, tool calls, answers and decisions of the agent or model, with the user they were for, to a monitoring system, for example as OpenTelemetry traces, and alert on anomalies like injection attempts, unusual tool use and spikes in cost. Evaluate the quality and the safety of the answers continuously, and model the monitoring system as a monitoring technical asset with a link to or from the agent or model.
+
+**Check**
+
+Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
+
+**Risk Findings**
+
+The risk **Missing AI Monitoring** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+
+| Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Elevated | **Missing AI Monitoring** risk at **Guardrail Model** | `missing-ai-monitoring@guardrail-model` | Likely | Medium | [Guardrail Model](#guardrail-model) | Unchecked | _not tracked_ |
+| Elevated | **Missing AI Monitoring** risk at **Support Agent** | `missing-ai-monitoring@support-agent` | Likely | Medium | [Support Agent](#support-agent) | Unchecked | _not tracked_ |
 
 ### Missing Authentication
 
@@ -1736,6 +1828,56 @@ The risk **Long-Lived Credentials** was found **1 time** in the analyzed archite
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Medium | **Long-Lived Credentials** risk at **Orders Database** used by **Order Service** (credentials) | `long-lived-credentials@orders-db@order-service>order-storage` | Unlikely | Medium | [Orders Database](#orders-database), [Order Storage](#order-storage) | Unchecked | _not tracked_ |
+
+### Missing AI Guardrail
+
+**Medium** · 1/1 unmitigated Risk · `missing-ai-guardrail`
+
+| Property | Value |
+| --- | --- |
+| STRIDE | Elevation of Privilege |
+| CWE | [CWE 1427](https://cwe.mitre.org/data/definitions/1427.html) |
+| Function | Architecture |
+| Action | AI Guardrails |
+| ASVS chapter | V5 - Validation, Sanitization and Encoding Verification Requirements |
+| Cheat sheet | [LLM_Prompt_Injection_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html) |
+| References | MAESTRO Layer 6: Security and Compliance; OWASP LLM01:2025 Prompt Injection; OWASP ASI01:2026 Agent Goal Hijack |
+
+**Description**
+
+A guardrail screens what reaches a language model or an agent, and what comes back from it, for prompt injection, jailbreaks and data that must not pass, independently of the model. Without one, the instructions of the system prompt are the only defense, and a model follows whatever content convinces it.
+
+**Impact**
+
+If this risk is unmitigated, prompt injections and jailbreaks reach the model or the agent unchecked, and harmful or confidential output leaves it unchecked.
+
+**Detection Logic**
+
+In-scope llm and ai-agent technical assets that untrusted content reaches (as for prompt injection) through a communication link that no guardrail screens. A link is screened when it comes from an ai-guardrail technical asset, or when the model or agent is one itself or has a link to one. Links from other language models and agents are skipped, as the rule reports a missing guardrail where the content first reaches a model.
+
+**Risk Rating**
+
+The risk rating depends on the sensitivity of the data processed by the model or agent. The attack is likely when the model or agent talks to the internet directly, and unlikely otherwise.
+
+**False Positives**
+
+Models and agents whose platform screens their input and output without a modelled guardrail, like a managed model service with content filtering turned on, can be considered as false positives after individual review.
+
+**Mitigation**
+
+Screen the untrusted input of the model or agent, and its output, with a guardrail like a prompt injection classifier, a content safety service or a policy framework for agents, and block or flag what it finds. Model a guardrail service as an ai-guardrail technical asset in the path of the untrusted content, or one the agent asks, and a guardrail library inside the agent by adding ai-guardrail to the technologies of the agent. A guardrail lowers the risk of prompt injection, but does not remove it.
+
+**Check**
+
+Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
+
+**Risk Findings**
+
+The risk **Missing AI Guardrail** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+
+| Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Medium | **Missing AI Guardrail** risk at **Support Agent** | `missing-ai-guardrail@support-agent` | Unlikely | Medium | [Support Agent](#support-agent), [Assistant Request](#assistant-request) | Unchecked | _not tracked_ |
 
 ### Missing Build Infrastructure
 
@@ -2452,7 +2594,7 @@ The risk **Unchecked Deployment** was found **1 time** in the analyzed architect
 
 ## Identified Risks by Technical Asset
 
-In total **63 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
+In total **66 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
 
 ### Chat Frontend
 
@@ -2505,12 +2647,13 @@ The support chat page and its backend for frontend
 
 ### Guardrail Model
 
-**Elevated** · 5/5 unmitigated Risks · `guardrail-model`
+**Elevated** · 6/6 unmitigated Risks · `guardrail-model`
 
 A small self-hosted model fine-tuned to classify harmful content
 
 **Identified Risks of the Asset**
 
+- **Elevated**: [**Missing AI Monitoring** risk at **Guardrail Model**](#missing-ai-monitoring) (Unchecked)
 - **Elevated**: [**Prompt Injection** risk at **Guardrail Model**](#prompt-injection) (Unchecked)
 - **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Guardrail Model**](#sensitive-data-disclosure-through-model-output) (Unchecked)
 - **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Guardrail Model** server-side web-requesting the target **Model Registry** via **Model Pull**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -2698,7 +2841,7 @@ Manages orders and refunds
 
 ### Support Agent
 
-**Elevated** · 17/17 unmitigated Risks · `support-agent`
+**Elevated** · 19/19 unmitigated Risks · `support-agent`
 
 Answers support questions, looks up orders and issues refunds through its tools
 
@@ -2709,6 +2852,7 @@ Answers support questions, looks up orders and issues refunds through its tools
 - **Elevated**: [**SQL/NoSQL-Injection** risk at **Support Agent** against database **Knowledge Index** via **Retrieval**](#sqlnosql-injection) (Unchecked)
 - **Elevated**: [**Confused Deputy Agent** risk at **Support Agent** reaching **Knowledge Index** with its own identity](#confused-deputy-agent) (Unchecked)
 - **Elevated**: [**Excessive Agency** risk at **Support Agent** changing **Order Service**](#excessive-agency) (Unchecked)
+- **Elevated**: [**Missing AI Monitoring** risk at **Support Agent**](#missing-ai-monitoring) (Unchecked)
 - **Elevated**: [**Missing Object-Level Authorization** risk at **Support Agent** for **Chat Frontend** (function-level)](#missing-object-level-authorization) (Unchecked)
 - **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Support Agent**](#sensitive-data-disclosure-through-model-output) (Unchecked)
 - **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Guardrail Model** via **Moderation**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -2717,6 +2861,7 @@ Answers support questions, looks up orders and issues refunds through its tools
 - **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Knowledge Index** via **Retrieval**](#server-side-request-forgery-ssrf) (Unchecked)
 - **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Support Tools** via **Tool Calls**](#server-side-request-forgery-ssrf) (Unchecked)
 - **Medium**: [**Container Base Image Backdooring** risk at **Support Agent**](#container-base-image-backdooring) (Unchecked)
+- **Medium**: [**Missing AI Guardrail** risk at **Support Agent**](#missing-ai-guardrail) (Unchecked)
 - **Medium**: [**Missing Identity Store** in the threat model (referencing asset **Support Agent** as an example)](#missing-identity-store) (Unchecked)
 - **Medium**: [**Missing Hardening** risk at **Support Agent**](#missing-hardening) (Unchecked)
 - **Low**: [**Denial-of-Service** risky access of **Support Agent** by **Chat Frontend** via **Assistant Request**](#dos-risky-access-across-trust-boundary) (Unchecked)
@@ -3080,11 +3225,11 @@ _The asset was defined as out-of-scope._
 
 ## Identified Data Breach Probabilities by Data Asset
 
-In total **63 potential risks** have been identified during the threat modeling process, distributed across **6 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
+In total **66 potential risks** have been identified during the threat modeling process, distributed across **6 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
 
 ### Chat Transcripts
 
-**Probable** · 38/38 unmitigated Risks · `chat-transcripts`
+**Probable** · 41/41 unmitigated Risks · `chat-transcripts`
 
 The conversations of the customers with the assistant
 
@@ -3107,7 +3252,7 @@ The conversations of the customers with the assistant
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 38 remaining risks:
+This data asset has data breach potential because of 41 remaining risks:
 
 - Probable, **Elevated**: [**Confused Deputy Agent** risk at **Support Agent** reaching **Knowledge Index** with its own identity](#confused-deputy-agent) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Chat Frontend**](#container-base-image-backdooring) (Unchecked)
@@ -3124,6 +3269,7 @@ This data asset has data breach potential because of 38 remaining risks:
 - Probable, **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Guardrail Model**](#sensitive-data-disclosure-through-model-output) (Unchecked)
 - Probable, **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Support Agent**](#sensitive-data-disclosure-through-model-output) (Unchecked)
 - Possible, **Elevated**: [**Cross-Site Scripting (XSS)** risk at **Chat Frontend**](#cross-site-scripting-xss) (Unchecked)
+- Possible, **Medium**: [**Missing AI Guardrail** risk at **Support Agent**](#missing-ai-guardrail) (Unchecked)
 - Possible, **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Support Chat** from **Customer Browser** to **Chat Frontend**](#missing-multi-factor-authentication-mfa) (Unchecked)
 - Possible, **Elevated**: [**Prompt Injection** risk at **Guardrail Model**](#prompt-injection) (Unchecked)
 - Possible, **Elevated**: [**Prompt Injection** risk at **Support Agent**](#prompt-injection) (Unchecked)
@@ -3140,6 +3286,8 @@ This data asset has data breach potential because of 38 remaining risks:
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Tools** server-side web-requesting the target **Search API** via **Web Search**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Medium**: [**Unguarded Access from Internet** of **Chat Frontend** by **Customer Browser** via **Support Chat**](#unguarded-access-from-internet) (Unchecked)
 - Improbable, **Medium**: [**Cross-Site Request Forgery (CSRF)** risk at **Chat Frontend** via **Support Chat** from **Customer Browser**](#cross-site-request-forgery-csrf) (Unchecked)
+- Improbable, **Elevated**: [**Missing AI Monitoring** risk at **Guardrail Model**](#missing-ai-monitoring) (Unchecked)
+- Improbable, **Elevated**: [**Missing AI Monitoring** risk at **Support Agent**](#missing-ai-monitoring) (Unchecked)
 - Improbable, **Medium**: [**Missing Hardening** risk at **Knowledge Index**](#missing-hardening) (Unchecked)
 - Improbable, **Medium**: [**Missing Hardening** risk at **Support Agent**](#missing-hardening) (Unchecked)
 - Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Knowledge Index** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
@@ -3150,7 +3298,7 @@ This data asset has data breach potential because of 38 remaining risks:
 
 ### Customer Data
 
-**Probable** · 32/32 unmitigated Risks · `customer-data`
+**Probable** · 34/34 unmitigated Risks · `customer-data`
 
 Names, addresses and contact details of the customers
 
@@ -3173,7 +3321,7 @@ Names, addresses and contact details of the customers
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 32 remaining risks:
+This data asset has data breach potential because of 34 remaining risks:
 
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Order Service**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Orders Database**](#container-base-image-backdooring) (Unchecked)
@@ -3188,6 +3336,7 @@ This data asset has data breach potential because of 32 remaining risks:
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Order Service** against database **Orders Database** via **Order Storage**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Support Agent**](#sensitive-data-disclosure-through-model-output) (Unchecked)
 - Possible, **Medium**: [**Long-Lived Credentials** risk at **Orders Database** used by **Order Service** (credentials)](#long-lived-credentials) (Unchecked)
+- Possible, **Medium**: [**Missing AI Guardrail** risk at **Support Agent**](#missing-ai-guardrail) (Unchecked)
 - Possible, **Elevated**: [**Missing Authentication** covering communication link **Tool Calls** from **Support Agent** to **Support Tools**](#missing-authentication) (Unchecked)
 - Possible, **Elevated**: [**Prompt Injection** risk at **Support Agent**](#prompt-injection) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Guardrail Model** server-side web-requesting the target **Model Registry** via **Model Pull**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -3202,6 +3351,7 @@ This data asset has data breach potential because of 32 remaining risks:
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Tools** server-side web-requesting the target **Search API** via **Web Search**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Unauthenticated MCP Server** risk at **Support Tools** called by **Support Agent**](#unauthenticated-mcp-server) (Unchecked)
 - Improbable, **Elevated**: [**Excessive Agency** risk at **Support Agent** changing **Order Service**](#excessive-agency) (Unchecked)
+- Improbable, **Elevated**: [**Missing AI Monitoring** risk at **Support Agent**](#missing-ai-monitoring) (Unchecked)
 - Improbable, **Medium**: [**Missing Hardening** risk at **Orders Database**](#missing-hardening) (Unchecked)
 - Improbable, **Medium**: [**Missing Hardening** risk at **Support Agent**](#missing-hardening) (Unchecked)
 - Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Orders Database** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
@@ -3210,7 +3360,7 @@ This data asset has data breach potential because of 32 remaining risks:
 
 ### Knowledge Articles
 
-**Probable** · 30/30 unmitigated Risks · `knowledge-articles`
+**Probable** · 32/32 unmitigated Risks · `knowledge-articles`
 
 The support articles the assistant answers from
 
@@ -3233,7 +3383,7 @@ The support articles the assistant answers from
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 30 remaining risks:
+This data asset has data breach potential because of 32 remaining risks:
 
 - Probable, **Elevated**: [**Confused Deputy Agent** risk at **Support Agent** reaching **Knowledge Index** with its own identity](#confused-deputy-agent) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Ingestion Pipeline**](#container-base-image-backdooring) (Unchecked)
@@ -3248,6 +3398,7 @@ This data asset has data breach potential because of 30 remaining risks:
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Support Agent** against database **Knowledge Index** via **Memory Write**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Support Agent** against database **Knowledge Index** via **Retrieval**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Support Agent**](#sensitive-data-disclosure-through-model-output) (Unchecked)
+- Possible, **Medium**: [**Missing AI Guardrail** risk at **Support Agent**](#missing-ai-guardrail) (Unchecked)
 - Possible, **Elevated**: [**Prompt Injection** risk at **Support Agent**](#prompt-injection) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Guardrail Model** server-side web-requesting the target **Model Registry** via **Model Pull**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Ingestion Pipeline** server-side web-requesting the target **Knowledge CMS** via **Article Export**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -3259,6 +3410,7 @@ This data asset has data breach potential because of 30 remaining risks:
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Support Tools** via **Tool Calls**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Tools** server-side web-requesting the target **Order Service** via **Order API**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Tools** server-side web-requesting the target **Search API** via **Web Search**](#server-side-request-forgery-ssrf) (Unchecked)
+- Improbable, **Elevated**: [**Missing AI Monitoring** risk at **Support Agent**](#missing-ai-monitoring) (Unchecked)
 - Improbable, **Medium**: [**Missing Hardening** risk at **Knowledge Index**](#missing-hardening) (Unchecked)
 - Improbable, **Medium**: [**Missing Hardening** risk at **Support Agent**](#missing-hardening) (Unchecked)
 - Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Knowledge Index** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
@@ -3268,7 +3420,7 @@ This data asset has data breach potential because of 30 remaining risks:
 
 ### Model Weights
 
-**Probable** · 20/20 unmitigated Risks · `model-weights`
+**Probable** · 21/21 unmitigated Risks · `model-weights`
 
 The weights of the self-hosted guardrail model
 
@@ -3291,7 +3443,7 @@ The weights of the self-hosted guardrail model
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 20 remaining risks:
+This data asset has data breach potential because of 21 remaining risks:
 
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Guardrail Model**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Model Registry**](#container-base-image-backdooring) (Unchecked)
@@ -3310,13 +3462,14 @@ This data asset has data breach potential because of 20 remaining risks:
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Tools** server-side web-requesting the target **Order Service** via **Order API**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Tools** server-side web-requesting the target **Search API** via **Web Search**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Low**: [**Unchecked Deployment** risk at **Model Registry**](#unchecked-deployment) (Unchecked)
+- Improbable, **Elevated**: [**Missing AI Monitoring** risk at **Guardrail Model**](#missing-ai-monitoring) (Unchecked)
 - Improbable, **Medium**: [**Unencrypted Technical Asset** named **Model Registry**](#unencrypted-technical-assets) (Unchecked)
 - Improbable, **Medium**: [**Unverified Model Supply Chain** risk at **Model Registry**](#unverified-model-supply-chain) (Unchecked)
 - Improbable, **Medium**: [**Unverified Model Supply Chain** risk at **Guardrail Model**](#unverified-model-supply-chain) (In Progress)
 
 ### Order Data
 
-**Probable** · 32/32 unmitigated Risks · `order-data`
+**Probable** · 34/34 unmitigated Risks · `order-data`
 
 Orders, payments and refunds
 
@@ -3339,7 +3492,7 @@ Orders, payments and refunds
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 32 remaining risks:
+This data asset has data breach potential because of 34 remaining risks:
 
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Order Service**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Orders Database**](#container-base-image-backdooring) (Unchecked)
@@ -3354,6 +3507,7 @@ This data asset has data breach potential because of 32 remaining risks:
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Order Service** against database **Orders Database** via **Order Storage**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Support Agent**](#sensitive-data-disclosure-through-model-output) (Unchecked)
 - Possible, **Medium**: [**Long-Lived Credentials** risk at **Orders Database** used by **Order Service** (credentials)](#long-lived-credentials) (Unchecked)
+- Possible, **Medium**: [**Missing AI Guardrail** risk at **Support Agent**](#missing-ai-guardrail) (Unchecked)
 - Possible, **Elevated**: [**Missing Authentication** covering communication link **Tool Calls** from **Support Agent** to **Support Tools**](#missing-authentication) (Unchecked)
 - Possible, **Elevated**: [**Prompt Injection** risk at **Support Agent**](#prompt-injection) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Guardrail Model** server-side web-requesting the target **Model Registry** via **Model Pull**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -3368,6 +3522,7 @@ This data asset has data breach potential because of 32 remaining risks:
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Tools** server-side web-requesting the target **Search API** via **Web Search**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Unauthenticated MCP Server** risk at **Support Tools** called by **Support Agent**](#unauthenticated-mcp-server) (Unchecked)
 - Improbable, **Elevated**: [**Excessive Agency** risk at **Support Agent** changing **Order Service**](#excessive-agency) (Unchecked)
+- Improbable, **Elevated**: [**Missing AI Monitoring** risk at **Support Agent**](#missing-ai-monitoring) (Unchecked)
 - Improbable, **Medium**: [**Missing Hardening** risk at **Orders Database**](#missing-hardening) (Unchecked)
 - Improbable, **Medium**: [**Missing Hardening** risk at **Support Agent**](#missing-hardening) (Unchecked)
 - Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Orders Database** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
@@ -3786,7 +3941,7 @@ Looks up orders and issues refunds
 
 ## Risk Tracking
 
-**1 of 63 risks** are tracked in the model; the others are unchecked.
+**1 of 66 risks** are tracked in the model; the others are unchecked.
 
 | Risk | ID | Severity | Status | Date | Checked by | Ticket | Justification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -3823,6 +3978,8 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Insecure Control Protocol | `insecure-control-protocol` | Tampering | Most industrial control protocols, like Modbus, DNP3, S7comm, EtherNet/IP or PROFINET, were designed for closed networks: a controller or field device executes every command it receives, without checking who sent it or whether it was changed on the way. Anyone who can send packets to it can write setpoints and outputs, stop it or download a new program. | In-scope controllers (plc, rtu, safety-controller) and field-device technical assets with an incoming non-readonly communication link over an industrial control protocol without a secure variant in use (all of them except modbus-security, dnp3-encrypted and opc-ua-encrypted). | The risk rating depends on the integrity and availability of the controlled process, and is the highest for safety controllers. The attack is very likely when the sender is on the internet, likely when it is an IT asset, reaches IT or calls across a network trust boundary, and unlikely otherwise. |
 | LDAP-Injection | `ldap-injection` | Tampering | When an LDAP server is accessed LDAP-Injection risks might arise. The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed. | In-scope clients accessing LDAP servers via typical LDAP access protocols. | The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed. |
 | Long-Lived Credentials | `long-lived-credentials` | Spoofing | Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it. | In-scope technical assets processing or storing data rated at least as confidential or critical with an incoming communication link that is not process-local and is authenticated with _long-lived-token_, or with _credentials_ by a caller not used by humans, unless the identity of the link is _workload_. Links authenticated with _token_ are skipped, as the lifetime of the token is not modelled. | The risk rating depends on the sensitivity of the data processed or stored by the target. The attack is likely when the caller is on the internet, is used by humans or calls across a network trust boundary, where secrets leak more easily, and unlikely otherwise. |
+| Missing AI Guardrail | `missing-ai-guardrail` | Elevation of Privilege | A guardrail screens what reaches a language model or an agent, and what comes back from it, for prompt injection, jailbreaks and data that must not pass, independently of the model. Without one, the instructions of the system prompt are the only defense, and a model follows whatever content convinces it. | In-scope llm and ai-agent technical assets that untrusted content reaches (as for prompt injection) through a communication link that no guardrail screens. A link is screened when it comes from an ai-guardrail technical asset, or when the model or agent is one itself or has a link to one. Links from other language models and agents are skipped, as the rule reports a missing guardrail where the content first reaches a model. | The risk rating depends on the sensitivity of the data processed by the model or agent. The attack is likely when the model or agent talks to the internet directly, and unlikely otherwise. |
+| Missing AI Monitoring | `missing-ai-monitoring` | Repudiation | What an AI agent or a language model does depends on what it reads, so it cannot be tested in full before it runs. Without a record of its prompts, its tool calls and its answers in a monitoring system, nobody sees a prompt injection, an agent going astray or a model that drifts, nor can tell afterwards what it did. | In-scope ai-agent technical assets, and in-scope llm technical assets not on the internet (self-hosted models), with no communication link to or from a monitoring technical asset. | The risk rating depends on the sensitivity of the data processed by the agent or model. The attack is likely when the agent or model takes untrusted content, and unlikely otherwise. |
 | Missing Authentication | `missing-authentication` | Elevation of Privilege | Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes sensitive data. | In-scope technical assets (except load-balancer, reverse-proxy, service-registry, waf, ids, and ips and in-process calls) should authenticate incoming requests when the asset processes sensitive data. This is especially the case for all multi-tenant assets (there even non-sensitive ones). Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. | The risk rating (medium or high) depends on the sensitivity of the data sent across the communication link. Monitoring callers are exempted from this risk. |
 | Missing Multi-Factor Authentication (MFA) | `missing-authentication-second-factor` | Elevation of Privilege | Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans. | In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via multi-factor authentication (MFA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. | medium |
 | Missing Build Infrastructure | `missing-build-infrastructure` | Tampering | The modeled architecture does not contain a build infrastructure (devops-client, sourcecode-repo, build-pipeline, etc.), which might be the risk of a model missing critical assets (and thus not seeing their risks). If the architecture contains custom-developed parts, the pipeline where code gets developed and built needs to be part of the model. | Models with in-scope custom-developed parts missing in-scope development (code creation) and build infrastructure components (devops-client, sourcecode-repo, build-pipeline, etc.). | The risk rating depends on the highest sensitivity of the in-scope assets running custom-developed parts. |
