@@ -494,7 +494,7 @@ pie showData
 %%{init: {'pie' : {'textPosition' : 0.5}, 'theme': 'base', 'themeVariables': { 'pie1': '` +
 		RgbHexColorRiskStatusUnchecked() + `', 'pie2': '` + rgbHexColorRiskStatusInDiscussion() + `', 'pie3': '` +
 		rgbHexColorRiskStatusAccepted() + `', 'pie4': '` + rgbHexColorRiskStatusInProgress() + `', 'pie5': '` +
-		rgbHexColorRiskStatusMitigated() + `', 'pie5': '` + rgbHexColorRiskStatusFalsePositive() + `'}}}%%
+		rgbHexColorRiskStatusMitigated() + `', 'pie6': '` + rgbHexColorRiskStatusFalsePositive() + `'}}}%%
 pie showData
   "unchecked" : ` + strconv.Itoa(countStatusUnchecked) + `
   "in discussion" : ` + strconv.Itoa(countStatusInDiscussion) + `
