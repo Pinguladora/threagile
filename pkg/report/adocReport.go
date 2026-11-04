@@ -641,7 +641,7 @@ func (adoc AdocReport) impactAnalysis(f *os.File, initialRisks bool) int {
 		initialStr = "remaining"
 	}
 
-	riskText := "risks"
+	riskText := textRisksLower
 	if count == 1 {
 		riskText = textRiskLower
 	}
@@ -1874,7 +1874,7 @@ func (adoc AdocReport) writeTechnicalAssetRisks(f *os.File, technicalAsset *type
 			adoc.riskTrackingStatus(f, risk)
 		}
 	} else {
-		text := "No risksStr were identified."
+		text := "No risks were identified."
 		if technicalAsset.OutOfScope {
 			text = "Asset was defined as out-of-scope."
 		}
