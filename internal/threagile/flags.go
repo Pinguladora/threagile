@@ -36,6 +36,7 @@ const (
 	statsJsonFileFlagName           = "stats-json"
 	otmJsonFileFlagName             = "otm-json"
 	reportHTMLFileFlagName          = "report-html"
+	reportMarkdownFileFlagName      = "report-md"
 	templateFileNameFlagName        = "background"
 	reportLogoImagePathFlagName     = "reportLogoImagePath"
 	technologyFileFlagName          = "technology"
@@ -66,6 +67,7 @@ const (
 	skipReportPDFFlagName           = "skip-report-pdf"
 	skipReportADOCFlagName          = "skip-report-adoc"
 	skipReportHTMLFlagName          = "skip-report-html"
+	skipReportMarkdownFlagName      = "skip-report-md"
 
 	generateDataFlowDiagramFlagName     = "generate-data-flow-diagram"
 	generateDataAssetDiagramFlagName    = "generate-data-asset-diagram"

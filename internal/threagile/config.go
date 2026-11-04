@@ -48,6 +48,7 @@ type Config struct {
 	JsonStatsFilenameValue           string `json:"JsonStatsFilename,omitempty"           yaml:"JsonStatsFilename"`
 	JsonOTMFilenameValue             string `json:"JsonOTMFilename,omitempty"             yaml:"JsonOTMFilename"`
 	ReportHTMLFilenameValue          string `json:"ReportHTMLFilename,omitempty"          yaml:"ReportHTMLFilename"`
+	ReportMarkdownFilenameValue      string `json:"ReportMarkdownFilename,omitempty"      yaml:"ReportMarkdownFilename"`
 	TemplateFilenameValue            string `json:"TemplateFilename,omitempty"            yaml:"TemplateFilename"`
 	ReportLogoImagePathValue         string `json:"ReportLogoImagePath,omitempty"         yaml:"ReportLogoImagePath"`
 	TechnologyFilenameValue          string `json:"TechnologyFilename,omitempty"          yaml:"TechnologyFilename"`
@@ -82,6 +83,7 @@ type Config struct {
 	SkipReportPDFValue           bool `json:"SkipReportPDF,omitempty"           yaml:"SkipReportPDF"`
 	SkipReportADOCValue          bool `json:"SkipReportADOC,omitempty"          yaml:"SkipReportADOC"`
 	SkipReportHTMLValue          bool `json:"SkipReportHTML,omitempty"          yaml:"SkipReportHTML"`
+	SkipReportMarkdownValue      bool `json:"SkipReportMarkdown,omitempty"      yaml:"SkipReportMarkdown"`
 
 	AttractivenessValue Attractiveness `json:"Attractiveness" yaml:"Attractiveness"`
 
@@ -114,6 +116,7 @@ type ConfigGetter interface {
 	GetJsonStatsFilename() string
 	GetJsonOTMFilename() string
 	GetReportHTMLFilename() string
+	GetReportMarkdownFilename() string
 	GetReportLogoImagePath() string
 	GetTemplateFilename() string
 	GetRiskRulePlugins() []string
@@ -148,6 +151,7 @@ type ConfigGetter interface {
 	GetSkipReportPDF() bool
 	GetSkipReportADOC() bool
 	GetSkipReportHTML() bool
+	GetSkipReportMarkdown() bool
 	GetAttractiveness() Attractiveness
 	GetReportConfiguration() report.ReportConfiguation
 	GetThreagileVersion() string
@@ -200,6 +204,7 @@ func (c *Config) Defaults(buildTimestamp string) *Config {
 		JsonStatsFilenameValue:           JsonStatsFilename,
 		JsonOTMFilenameValue:             JsonOTMFilename,
 		ReportHTMLFilenameValue:          ReportHTMLFilename,
+		ReportMarkdownFilenameValue:      ReportMarkdownFilename,
 		TemplateFilenameValue:            TemplateFilename,
 		ReportLogoImagePathValue:         ReportLogoImagePath,
 		TechnologyFilenameValue:          "",
@@ -505,6 +510,12 @@ var configMergers = lowerCaseKeys(map[string]func(c *Config, config *Config, val
 	"SkipReportHTML": func(c *Config, config *Config, _ any) {
 		c.SkipReportHTMLValue = config.SkipReportHTMLValue
 	},
+	"ReportMarkdownFilename": func(c *Config, config *Config, _ any) {
+		c.ReportMarkdownFilenameValue = config.ReportMarkdownFilenameValue
+	},
+	"SkipReportMarkdown": func(c *Config, config *Config, _ any) {
+		c.SkipReportMarkdownValue = config.SkipReportMarkdownValue
+	},
 	"TemplateFilename": func(c *Config, config *Config, _ any) {
 		c.TemplateFilenameValue = config.TemplateFilenameValue
 	},
@@ -809,6 +820,10 @@ func (c *Config) GetReportHTMLFilename() string {
 	return c.ReportHTMLFilenameValue
 }
 
+func (c *Config) GetReportMarkdownFilename() string {
+	return c.ReportMarkdownFilenameValue
+}
+
 func (c *Config) GetExcelRisksFilename() string {
 	return c.ExcelRisksFilenameValue
 }
@@ -999,6 +1014,10 @@ func (c *Config) GetSkipReportADOC() bool {
 
 func (c *Config) GetSkipReportHTML() bool {
 	return c.SkipReportHTMLValue
+}
+
+func (c *Config) GetSkipReportMarkdown() bool {
+	return c.SkipReportMarkdownValue
 }
 
 func (c *Config) GetAttractiveness() Attractiveness {

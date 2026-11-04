@@ -115,6 +115,8 @@ func (what *Threagile) initFileFlags() {
 		"Open Threat Model (OTM) JSON file")
 	flags.StringVar(&what.flags.ReportHTMLFilenameValue, reportHTMLFileFlagName, what.config.GetReportHTMLFilename(),
 		"HTML report file")
+	flags.StringVar(&what.flags.ReportMarkdownFilenameValue, reportMarkdownFileFlagName,
+		what.config.GetReportMarkdownFilename(), "Markdown report file")
 	flags.StringVar(&what.flags.TemplateFilenameValue, templateFileNameFlagName, what.config.GetTemplateFilename(),
 		"template pdf file")
 	flags.StringVar(&what.flags.ReportLogoImagePathValue, reportLogoImagePathFlagName,
@@ -180,6 +182,8 @@ func (what *Threagile) initSkipFlags() {
 		"skip generating report adoc, including diagrams")
 	flags.BoolVar(&what.flags.SkipReportHTMLValue, skipReportHTMLFlagName, what.config.GetSkipReportHTML(),
 		"skip generating report html")
+	flags.BoolVar(&what.flags.SkipReportMarkdownValue, skipReportMarkdownFlagName, what.config.GetSkipReportMarkdown(),
+		"skip generating report markdown")
 
 	flags.BoolVar(&what.flags.generateDataFlowDiagramFlag, generateDataFlowDiagramFlagName,
 		!what.config.GetSkipDataFlowDiagram(), "(deprecated) generate generating data flow diagram")
@@ -362,6 +366,7 @@ func (what *Threagile) readCommands() *report.GenerateCommands {
 	commands.ReportPDF = !what.flags.SkipReportPDFValue
 	commands.ReportADOC = !what.flags.SkipReportADOCValue
 	commands.ReportHTML = !what.flags.SkipReportHTMLValue
+	commands.ReportMarkdown = !what.flags.SkipReportMarkdownValue
 	return commands
 }
 
@@ -433,6 +438,8 @@ func (what *Threagile) overrideFileArgs(cmd *cobra.Command) {
 	what.overridePath(cmd, otmJsonFileFlagName, &what.config.JsonOTMFilenameValue, what.flags.JsonOTMFilenameValue)
 	what.overridePath(cmd, reportHTMLFileFlagName, &what.config.ReportHTMLFilenameValue,
 		what.flags.ReportHTMLFilenameValue)
+	what.overridePath(cmd, reportMarkdownFileFlagName, &what.config.ReportMarkdownFilenameValue,
+		what.flags.ReportMarkdownFilenameValue)
 	override(what, cmd, templateFileNameFlagName, &what.config.TemplateFilenameValue, what.flags.TemplateFilenameValue)
 	override(what, cmd, reportLogoImagePathFlagName, &what.config.ReportLogoImagePathValue,
 		what.flags.ReportLogoImagePathValue)
@@ -480,6 +487,8 @@ func (what *Threagile) overrideSkipArgs(cmd *cobra.Command) {
 	override(what, cmd, skipReportPDFFlagName, &what.config.SkipReportPDFValue, what.flags.SkipReportPDFValue)
 	override(what, cmd, skipReportADOCFlagName, &what.config.SkipReportADOCValue, what.flags.SkipReportADOCValue)
 	override(what, cmd, skipReportHTMLFlagName, &what.config.SkipReportHTMLValue, what.flags.SkipReportHTMLValue)
+	override(what, cmd, skipReportMarkdownFlagName, &what.config.SkipReportMarkdownValue,
+		what.flags.SkipReportMarkdownValue)
 
 	override(what, cmd, generateDataFlowDiagramFlagName, &what.config.SkipDataFlowDiagramValue,
 		!what.flags.generateDataFlowDiagramFlag)
