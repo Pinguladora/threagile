@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -436,25 +437,21 @@ func (s *server) deleteDataAsset(ginContext *gin.Context) {
 // communication links and the individual risks; it reports whether there were any.
 func removeDataAssetReferences(modelInput *input.Model, dataAssetID string) bool {
 	referencesDeleted := false
-	for _, techAsset := range modelInput.TechnicalAssets {
-		var removed bool
-		// as before, the shortened lists stay in this copy of the asset
-		techAsset.DataAssetsProcessed, removed = removeDataAssetID(techAsset.DataAssetsProcessed, dataAssetID)
-		referencesDeleted = referencesDeleted || removed
-		techAsset.DataAssetsStored, removed = removeDataAssetID(techAsset.DataAssetsStored, dataAssetID)
-		referencesDeleted = referencesDeleted || removed
-		for title, commLink := range techAsset.CommunicationLinks {
-			x := techAsset.CommunicationLinks[title]
-			x.DataAssetsSent, removed = removeDataAssetID(commLink.DataAssetsSent, dataAssetID)
-			if removed {
+	for title, techAsset := range modelInput.TechnicalAssets {
+		var processed, stored bool
+		techAsset.DataAssetsProcessed, processed = removeDataAssetID(techAsset.DataAssetsProcessed, dataAssetID)
+		techAsset.DataAssetsStored, stored = removeDataAssetID(techAsset.DataAssetsStored, dataAssetID)
+		if processed || stored {
+			referencesDeleted = true
+			modelInput.TechnicalAssets[title] = techAsset
+		}
+		for linkTitle, commLink := range techAsset.CommunicationLinks {
+			var sent, received bool
+			commLink.DataAssetsSent, sent = removeDataAssetID(commLink.DataAssetsSent, dataAssetID)
+			commLink.DataAssetsReceived, received = removeDataAssetID(commLink.DataAssetsReceived, dataAssetID)
+			if sent || received {
 				referencesDeleted = true
-				techAsset.CommunicationLinks[title] = x
-			}
-			x = techAsset.CommunicationLinks[title]
-			x.DataAssetsReceived, removed = removeDataAssetID(commLink.DataAssetsReceived, dataAssetID)
-			if removed {
-				referencesDeleted = true
-				techAsset.CommunicationLinks[title] = x
+				techAsset.CommunicationLinks[linkTitle] = commLink
 			}
 		}
 	}
@@ -463,7 +460,7 @@ func removeDataAssetReferences(modelInput *input.Model, dataAssetID string) bool
 			if individualRiskInstance.MostRelevantDataAsset == dataAssetID { // apply the removal
 				referencesDeleted = true
 				x := individualRiskCat.RisksIdentified[individualRiskInstanceTitle]
-				x.MostRelevantDataAsset = "" // not well tested
+				x.MostRelevantDataAsset = ""
 				individualRiskCat.RisksIdentified[individualRiskInstanceTitle] = x
 			}
 		}
@@ -471,21 +468,13 @@ func removeDataAssetReferences(modelInput *input.Model, dataAssetID string) bool
 	return referencesDeleted
 }
 
-// removeDataAssetID removes a data asset from a list in place and returns the shortened list; it reports
-// whether the list had the data asset.
+// removeDataAssetID returns the list without the data asset, and whether the list had it. The list itself is left
+// as it is: it may be shared with the model the caller read it from.
 func removeDataAssetID(list []string, dataAssetID string) ([]string, bool) {
-	removed := false
-	for i, referencedAsset := range list {
-		if referencedAsset == dataAssetID { // apply the removal
-			removed = true
-			// Remove the element at index i
-			// this removal is not well tested
-			copy(list[i:], list[i+1:]) // Shift a[i+1:] left one index.
-			list[len(list)-1] = ""     // Erase last element (write zero value).
-			list = list[:len(list)-1]  // Truncate slice.
-		}
+	if !slices.Contains(list, dataAssetID) {
+		return list, false
 	}
-	return list, removed
+	return slices.DeleteFunc(slices.Clone(list), func(id string) bool { return id == dataAssetID }), true
 }
 
 func (s *server) setDataAsset(ginContext *gin.Context) {
