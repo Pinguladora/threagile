@@ -120,7 +120,7 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 	}
 	modelTitle := ""
 	if addModelTitle {
-		modelTitle = `label="` + parsedModel.Title + `"`
+		modelTitle = `label="` + quote(parsedModel.Title) + `"`
 	}
 	dotContent.WriteString(`	graph [ ` + modelTitle + `
 		labelloc=t
@@ -188,7 +188,8 @@ func WriteDataFlowDiagramGraphvizDOT(parsedModel *types.Model,
 			}
 			snippet.WriteString(`	graph [
       dpi=` + strconv.Itoa(dpi) + `
-      label=<<table border="0" cellborder="0" cellpadding="0"><tr><td><b>` + trustBoundary.Title + `</b> (` + trustBoundary.Type.String() + `)</td></tr></table>>
+      label=<<table border="0" cellborder="0" cellpadding="0"><tr><td><b>` +
+				encode(trustBoundary.Title) + `</b> (` + trustBoundary.Type.String() + `)</td></tr></table>>
       fontsize="21"
       style="` + style + `"
       color="` + color + `"
@@ -358,7 +359,7 @@ func makeLegendArrow(id, title string, dataFlow *types.CommunicationLink) string
 	dir, arrowHead, arrowTail := dataFlowArrows(dataFlow)
 	node := ` shape=box style="solid,filled" fillcolor="` + VeryLightGray + `" color="` + Black + `"];` + "\n"
 	return "  " + id + `_initiator [label="Initiator"` + node +
-		"  " + id + `_target [label="` + encode(title) + `"` + node +
+		"  " + id + `_target [label="` + quote(title) + `"` + node +
 		"  " + id + "_initiator -> " + id + `_target [color="` + Black + `" style="solid" penwidth="1.5"` +
 		` arrowtail="` + arrowTail + `" arrowhead="` + arrowHead + `" dir="` + dir + `" arrowsize="2.0"];` + "\n"
 }
@@ -697,7 +698,12 @@ func makeTechAssetNode(parsedModel *types.Model, technicalAsset *types.Technical
 	}
 
 	return "  " + hash(technicalAsset.Id) + ` [
-label=<<table border="0" cellborder="` + compartmentBorder + `" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="` + DarkBlue + `">` + lineBreak + technicalAsset.Technologies.String() + `</font><br/><font point-size="15" color="` + LightGray + `">` + technicalAsset.Size.String() + `</font></td></tr><tr><td><b><font color="` + determineTechnicalAssetLabelColor(technicalAsset, parsedModel) + `">` + encode(title) + `</font></b><br/></td></tr><tr><td>` + attackerAttractivenessLabel + `</td></tr></table>>
+label=<<table border="0" cellborder="` + compartmentBorder +
+		`" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="` + DarkBlue + `">` +
+		lineBreak + encode(technicalAsset.Technologies.String()) +
+		`</font><br/><font point-size="15" color="` + LightGray + `">` + technicalAsset.Size.String() +
+		`</font></td></tr><tr><td><b><font color="` + determineTechnicalAssetLabelColor(technicalAsset, parsedModel) + `">` +
+		encode(title) + `</font></b><br/></td></tr><tr><td>` + attackerAttractivenessLabel + `</td></tr></table>>
 shape=` + shape + ` style="` + determineShapeBorderLineStyle(technicalAsset) + `,` + determineShapeStyle(technicalAsset) + `" penwidth="` + determineShapeBorderPenWidth(technicalAsset, parsedModel) + `" fillcolor="` + determineShapeFillColor(technicalAsset, parsedModel) + `"
 peripheries=` + strconv.Itoa(determineShapePeripheries(technicalAsset)) + `
 color="` + determineShapeBorderColor(technicalAsset, parsedModel) + "\"\n  ]; "
@@ -844,6 +850,19 @@ func hash(s string) string {
 	return strconv.FormatUint(uint64(h.Sum32()), 10)
 }
 
+// htmlLabelEscaper escapes text for Graphviz HTML-like labels (label=<...>).
+var htmlLabelEscaper = strings.NewReplacer("&", "&amp;", "<", "&lt;", ">", "&gt;", `"`, "&quot;")
+
+// encode escapes model text for an HTML-like label, so that titles with <, > or quotes neither
+// break the DOT source nor inject markup into the label.
 func encode(value string) string {
-	return strings.ReplaceAll(value, "&", "&amp;")
+	return htmlLabelEscaper.Replace(value)
+}
+
+// quotedLabelEscaper escapes text for Graphviz double-quoted strings (label="...").
+var quotedLabelEscaper = strings.NewReplacer(`\`, `\\`, `"`, `\"`, "\n", `\n`, "\r", "")
+
+// quote escapes model text for a double-quoted DOT string.
+func quote(value string) string {
+	return quotedLabelEscaper.Replace(value)
 }
