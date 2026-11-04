@@ -11,7 +11,7 @@ import (
 )
 
 func MakeID(val string) string {
-	reg, _ := regexp.Compile("[^A-Za-z0-9]+")
+	reg := regexp.MustCompile("[^A-Za-z0-9]+")
 	return strings.Trim(reg.ReplaceAllString(strings.ToLower(val), "-"), "- ")
 }
 

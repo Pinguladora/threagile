@@ -235,18 +235,26 @@ func (model *Model) CheckNestedTrustBoundariesExisting() error {
 	return nil
 }
 
+// The highest products of likelihood and impact weight that rate as each severity below critical.
+const (
+	maxLowSeverityWeight      = 1
+	maxMediumSeverityWeight   = 3
+	maxElevatedSeverityWeight = 8
+	maxHighSeverityWeight     = 12
+)
+
 func CalculateSeverity(likelihood RiskExploitationLikelihood, impact RiskExploitationImpact) RiskSeverity {
 	result := likelihood.Weight() * impact.Weight()
-	if result <= 1 {
+	if result <= maxLowSeverityWeight {
 		return LowSeverity
 	}
-	if result <= 3 {
+	if result <= maxMediumSeverityWeight {
 		return MediumSeverity
 	}
-	if result <= 8 {
+	if result <= maxElevatedSeverityWeight {
 		return ElevatedSeverity
 	}
-	if result <= 12 {
+	if result <= maxHighSeverityWeight {
 		return HighSeverity
 	}
 	return CriticalSeverity
@@ -691,10 +699,8 @@ func (model *Model) DataAssetsReceivedSorted(what *CommunicationLink) []*DataAss
 
 func (model *Model) GetTechnicalAssetTrustBoundaryId(ta *TechnicalAsset) string {
 	for _, trustBoundary := range model.TrustBoundaries {
-		for _, techAssetInside := range trustBoundary.TechnicalAssetsInside {
-			if techAssetInside == ta.Id {
-				return trustBoundary.Id
-			}
+		if slices.Contains(trustBoundary.TechnicalAssetsInside, ta.Id) {
+			return trustBoundary.Id
 		}
 	}
 	return ""
