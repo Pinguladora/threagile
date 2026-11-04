@@ -134,8 +134,9 @@ func RunServer(config serverConfigReader, builtinRiskRules types.RiskRules) {
 		})
 	})
 
-	// TODO router.GET("/meta/risk-rules", listRiskRules)
-	// TODO router.GET("/meta/model-macros", listModelMacros)
+	// not served yet:
+	// router.GET("/meta/risk-rules", listRiskRules)
+	// router.GET("/meta/model-macros", listModelMacros)
 
 	router.GET("/meta/stats", s.stats)
 
@@ -279,7 +280,8 @@ func (s *server) stubFile(ginContext *gin.Context) {
 		handleErrorInServiceCall(err, ginContext)
 		return
 	}
-	ginContext.Data(http.StatusOK, gin.MIMEYAML, s.addSupportedTags(stub)) // TODO use also the MIMEYAML way of serving YAML in model export?
+	// the model export serves its YAML as a file attachment instead of this way
+	ginContext.Data(http.StatusOK, gin.MIMEYAML, s.addSupportedTags(stub))
 }
 
 func (s *server) addSupportedTags(input []byte) []byte {
@@ -372,7 +374,7 @@ func (s *server) stats(ginContext *gin.Context) {
 			}
 		}
 	}
-	// TODO collect and deliver more stats (old model count?) and health info
+	// the stats could also count old models and tell about the health of the server
 	ginContext.JSON(http.StatusOK, gin.H{
 		"key_count":     keyCount,
 		"model_count":   modelCount,

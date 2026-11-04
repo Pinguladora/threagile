@@ -206,7 +206,8 @@ func (s *server) doItViaRuntimeCall(modelFile string, outputDir string,
 	if s.config.GetVerbose() {
 		args = append(args, "--verbose")
 	}
-	if s.config.GetIgnoreOrphanedRiskTracking() { // TODO why add all them as arguments, when they are also variables on outer level?
+	// the outer level has these options as variables too, yet they go to the analysis as arguments
+	if s.config.GetIgnoreOrphanedRiskTracking() {
 		args = append(args, "--ignore-orphaned-risk-tracking")
 	}
 	if generateDataFlowDiagram {
