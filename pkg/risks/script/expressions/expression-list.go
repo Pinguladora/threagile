@@ -11,54 +11,32 @@ type ExpressionList struct {
 	expressions []common.Expression
 }
 
+// newExpressions create the expressions by their keywords; ParseAny parses their scripts.
+var newExpressions = map[string]func() common.Expression{
+	common.All:            func() common.Expression { return new(AllExpression) },
+	common.Any:            func() common.Expression { return new(AnyExpression) },
+	common.And:            func() common.Expression { return new(AndExpression) },
+	common.Contains:       func() common.Expression { return new(ContainsExpression) },
+	common.Count:          func() common.Expression { return new(CountExpression) },
+	common.Equal:          func() common.Expression { return new(EqualExpression) },
+	common.EqualOrGreater: func() common.Expression { return new(EqualOrGreaterExpression) },
+	common.EqualOrLess:    func() common.Expression { return new(EqualOrLessExpression) },
+	common.False:          func() common.Expression { return new(FalseExpression) },
+	common.Greater:        func() common.Expression { return new(GreaterExpression) },
+	common.Less:           func() common.Expression { return new(LessExpression) },
+	common.NotEqual:       func() common.Expression { return new(NotEqualExpression) },
+	common.Or:             func() common.Expression { return new(OrExpression) },
+	common.True:           func() common.Expression { return new(TrueExpression) },
+}
+
 func (what *ExpressionList) ParseExpression(script map[string]any) (common.Expression, any, error) {
 	for key, value := range script {
-		switch key {
-		case common.All:
-			return new(AllExpression).ParseBool(value)
-
-		case common.Any:
-			return new(AnyExpression).ParseBool(value)
-
-		case common.And:
-			return new(AndExpression).ParseBool(value)
-
-		case common.Contains:
-			return new(ContainsExpression).ParseBool(value)
-
-		case common.Count:
-			return new(CountExpression).ParseDecimal(value)
-
-		case common.Equal:
-			return new(EqualExpression).ParseBool(value)
-
-		case common.EqualOrGreater:
-			return new(EqualOrGreaterExpression).ParseBool(value)
-
-		case common.EqualOrLess:
-			return new(EqualOrLessExpression).ParseBool(value)
-
-		case common.False:
-			return new(FalseExpression).ParseBool(value)
-
-		case common.Greater:
-			return new(GreaterExpression).ParseBool(value)
-
-		case common.Less:
-			return new(LessExpression).ParseBool(value)
-
-		case common.NotEqual:
-			return new(NotEqualExpression).ParseBool(value)
-
-		case common.Or:
-			return new(OrExpression).ParseBool(value)
-
-		case common.True:
-			return new(TrueExpression).ParseBool(value)
-
-		default:
+		newExpression, ok := newExpressions[key]
+		if !ok {
 			return nil, script, fmt.Errorf("failed to parse expression: unexpected keyword %q", key)
 		}
+
+		return newExpression().ParseAny(value) //nolint:wrapcheck // only dispatches to the expression of the keyword
 	}
 
 	return what, nil, nil
