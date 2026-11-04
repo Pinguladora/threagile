@@ -205,7 +205,7 @@ func TestHTMLReportOfAHostileModelIsInert(t *testing.T) {
 	document, err := html.Parse(bytes.NewReader(page))
 	require.NoError(t, err)
 	ids, links, styles, texts := make(map[string]bool), make([]string, 0), make([]string, 0), new(strings.Builder)
-	policy := ""
+	policy, diagrams := "", 0
 	for node := range document.Descendants() {
 		switch node.Type {
 		case html.TextNode:
@@ -223,12 +223,18 @@ func TestHTMLReportOfAHostileModelIsInert(t *testing.T) {
 			if node.Data == "style" {
 				styles = append(styles, node.FirstChild.Data)
 			}
+			if node.Data == "svg" && attributeOf(node, "role") == "img" {
+				diagrams++
+			}
 			if node.Data == "meta" && attributeOf(node, "http-equiv") == "Content-Security-Policy" {
 				policy = attributeOf(node, "content")
 			}
 		default:
 		}
 	}
+
+	// hostile titles are escaped in the DOT source, so both diagrams render rather than being left out
+	assert.Equal(t, 2, diagrams, "the data-flow and data-asset diagrams")
 
 	// the only style sheet is the report's own, which the content security policy allows by its hash
 	require.Len(t, styles, 1)
