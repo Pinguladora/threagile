@@ -126,6 +126,18 @@ cms:
     less_protected_type: true
     propagate_identity_to_outgoing_targets: true
     web_application: true
+code-interpreter:
+  aliases:
+    - code-execution
+    - code-runner
+    - code-execution-tool
+    - python-repl
+    - notebook-kernel
+    - jupyter-kernel
+  description: Runs code that a language model or an AI agent writes, as a service or inside the agent
+  attributes:
+    code-interpreter: true
+    backend_related: true
 code-inspection-platform:
   aliases:
     - code-inspection
