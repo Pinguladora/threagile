@@ -410,81 +410,11 @@ func (s *server) deleteDataAsset(ginContext *gin.Context) {
 	defer s.unlockFolder(folderNameOfKey)
 	modelInput, _, ok := s.readModel(ginContext, ginContext.Param("model-id"), key, folderNameOfKey)
 	if ok {
-		referencesDeleted := false
 		// yes, here keyed by title in YAML for better readability in the YAML file itself
 		for title, dataAsset := range modelInput.DataAssets {
 			if dataAsset.ID == ginContext.Param("data-asset-id") {
 				// also remove all usages of this data asset !!
-				for _, techAsset := range modelInput.TechnicalAssets {
-					if techAsset.DataAssetsProcessed != nil {
-						for i, parsedChangeCandidateAsset := range techAsset.DataAssetsProcessed {
-							referencedAsset := parsedChangeCandidateAsset
-							if referencedAsset == dataAsset.ID { // apply the removal
-								referencesDeleted = true
-								// Remove the element at index i
-								// this removal is not well tested
-								copy(techAsset.DataAssetsProcessed[i:], techAsset.DataAssetsProcessed[i+1:])                         // Shift a[i+1:] left one index.
-								techAsset.DataAssetsProcessed[len(techAsset.DataAssetsProcessed)-1] = ""                             // Erase last element (write zero value).
-								techAsset.DataAssetsProcessed = techAsset.DataAssetsProcessed[:len(techAsset.DataAssetsProcessed)-1] // Truncate slice.
-							}
-						}
-					}
-					if techAsset.DataAssetsStored != nil {
-						for i, parsedChangeCandidateAsset := range techAsset.DataAssetsStored {
-							referencedAsset := parsedChangeCandidateAsset
-							if referencedAsset == dataAsset.ID { // apply the removal
-								referencesDeleted = true
-								// Remove the element at index i
-								// this removal is not well tested
-								copy(techAsset.DataAssetsStored[i:], techAsset.DataAssetsStored[i+1:])                      // Shift a[i+1:] left one index.
-								techAsset.DataAssetsStored[len(techAsset.DataAssetsStored)-1] = ""                          // Erase last element (write zero value).
-								techAsset.DataAssetsStored = techAsset.DataAssetsStored[:len(techAsset.DataAssetsStored)-1] // Truncate slice.
-							}
-						}
-					}
-					if techAsset.CommunicationLinks != nil {
-						for title, commLink := range techAsset.CommunicationLinks {
-							for i, dataAssetSent := range commLink.DataAssetsSent {
-								referencedAsset := dataAssetSent
-								if referencedAsset == dataAsset.ID { // apply the removal
-									referencesDeleted = true
-									// Remove the element at index i
-									// this removal is not well tested
-									copy(techAsset.CommunicationLinks[title].DataAssetsSent[i:], techAsset.CommunicationLinks[title].DataAssetsSent[i+1:]) // Shift a[i+1:] left one index.
-									techAsset.CommunicationLinks[title].DataAssetsSent[len(techAsset.CommunicationLinks[title].DataAssetsSent)-1] = ""     // Erase last element (write zero value).
-									x := techAsset.CommunicationLinks[title]
-									x.DataAssetsSent = techAsset.CommunicationLinks[title].DataAssetsSent[:len(techAsset.CommunicationLinks[title].DataAssetsSent)-1] // Truncate slice.
-									techAsset.CommunicationLinks[title] = x
-								}
-							}
-							for i, dataAssetReceived := range commLink.DataAssetsReceived {
-								referencedAsset := dataAssetReceived
-								if referencedAsset == dataAsset.ID { // apply the removal
-									referencesDeleted = true
-									// Remove the element at index i
-									// this removal is not well tested
-									copy(techAsset.CommunicationLinks[title].DataAssetsReceived[i:], techAsset.CommunicationLinks[title].DataAssetsReceived[i+1:]) // Shift a[i+1:] left one index.
-									techAsset.CommunicationLinks[title].DataAssetsReceived[len(techAsset.CommunicationLinks[title].DataAssetsReceived)-1] = ""     // Erase last element (write zero value).
-									x := techAsset.CommunicationLinks[title]
-									x.DataAssetsReceived = techAsset.CommunicationLinks[title].DataAssetsReceived[:len(techAsset.CommunicationLinks[title].DataAssetsReceived)-1] // Truncate slice.
-									techAsset.CommunicationLinks[title] = x
-								}
-							}
-						}
-					}
-				}
-				for _, individualRiskCat := range modelInput.CustomRiskCategories {
-					if individualRiskCat.RisksIdentified != nil {
-						for individualRiskInstanceTitle, individualRiskInstance := range individualRiskCat.RisksIdentified {
-							if individualRiskInstance.MostRelevantDataAsset == dataAsset.ID { // apply the removal
-								referencesDeleted = true
-								x := individualRiskCat.RisksIdentified[individualRiskInstanceTitle]
-								x.MostRelevantDataAsset = "" // not well tested
-								individualRiskCat.RisksIdentified[individualRiskInstanceTitle] = x
-							}
-						}
-					}
-				}
+				referencesDeleted := removeDataAssetReferences(&modelInput, dataAsset.ID)
 				// remove it itself
 				delete(modelInput.DataAssets, title)
 				ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Data Asset Deletion")
@@ -499,6 +429,62 @@ func (s *server) deleteDataAsset(ginContext *gin.Context) {
 		}
 		respondError(ginContext, http.StatusNotFound, "data asset not found")
 	}
+}
+
+// removeDataAssetReferences removes the references to a data asset from the technical assets, their
+// communication links and the individual risks; it reports whether there were any.
+func removeDataAssetReferences(modelInput *input.Model, dataAssetID string) bool {
+	referencesDeleted := false
+	for _, techAsset := range modelInput.TechnicalAssets {
+		var removed bool
+		// as before, the shortened lists stay in this copy of the asset
+		techAsset.DataAssetsProcessed, removed = removeDataAssetID(techAsset.DataAssetsProcessed, dataAssetID)
+		referencesDeleted = referencesDeleted || removed
+		techAsset.DataAssetsStored, removed = removeDataAssetID(techAsset.DataAssetsStored, dataAssetID)
+		referencesDeleted = referencesDeleted || removed
+		for title, commLink := range techAsset.CommunicationLinks {
+			x := techAsset.CommunicationLinks[title]
+			x.DataAssetsSent, removed = removeDataAssetID(commLink.DataAssetsSent, dataAssetID)
+			if removed {
+				referencesDeleted = true
+				techAsset.CommunicationLinks[title] = x
+			}
+			x = techAsset.CommunicationLinks[title]
+			x.DataAssetsReceived, removed = removeDataAssetID(commLink.DataAssetsReceived, dataAssetID)
+			if removed {
+				referencesDeleted = true
+				techAsset.CommunicationLinks[title] = x
+			}
+		}
+	}
+	for _, individualRiskCat := range modelInput.CustomRiskCategories {
+		for individualRiskInstanceTitle, individualRiskInstance := range individualRiskCat.RisksIdentified {
+			if individualRiskInstance.MostRelevantDataAsset == dataAssetID { // apply the removal
+				referencesDeleted = true
+				x := individualRiskCat.RisksIdentified[individualRiskInstanceTitle]
+				x.MostRelevantDataAsset = "" // not well tested
+				individualRiskCat.RisksIdentified[individualRiskInstanceTitle] = x
+			}
+		}
+	}
+	return referencesDeleted
+}
+
+// removeDataAssetID removes a data asset from a list in place and returns the shortened list; it reports
+// whether the list had the data asset.
+func removeDataAssetID(list []string, dataAssetID string) ([]string, bool) {
+	removed := false
+	for i, referencedAsset := range list {
+		if referencedAsset == dataAssetID { // apply the removal
+			removed = true
+			// Remove the element at index i
+			// this removal is not well tested
+			copy(list[i:], list[i+1:]) // Shift a[i+1:] left one index.
+			list[len(list)-1] = ""     // Erase last element (write zero value).
+			list = list[:len(list)-1]  // Truncate slice.
+		}
+	}
+	return list, removed
 }
 
 func (s *server) setDataAsset(ginContext *gin.Context) {
@@ -530,51 +516,7 @@ func (s *server) setDataAsset(ginContext *gin.Context) {
 				idChanged := dataAssetInput.ID != dataAsset.ID
 				if idChanged { // ID-CHANGE-PROPAGATION
 					// also update all usages to point to the new (changed) ID !!
-					for techAssetTitle, techAsset := range modelInput.TechnicalAssets {
-						if techAsset.DataAssetsProcessed != nil {
-							for i, parsedChangeCandidateAsset := range techAsset.DataAssetsProcessed {
-								referencedAsset := parsedChangeCandidateAsset
-								if referencedAsset == dataAsset.ID { // apply the ID change
-									modelInput.TechnicalAssets[techAssetTitle].DataAssetsProcessed[i] = dataAssetInput.ID
-								}
-							}
-						}
-						if techAsset.DataAssetsStored != nil {
-							for i, parsedChangeCandidateAsset := range techAsset.DataAssetsStored {
-								referencedAsset := parsedChangeCandidateAsset
-								if referencedAsset == dataAsset.ID { // apply the ID change
-									modelInput.TechnicalAssets[techAssetTitle].DataAssetsStored[i] = dataAssetInput.ID
-								}
-							}
-						}
-						if techAsset.CommunicationLinks != nil {
-							for title, commLink := range techAsset.CommunicationLinks {
-								for i, dataAssetSent := range commLink.DataAssetsSent {
-									referencedAsset := dataAssetSent
-									if referencedAsset == dataAsset.ID { // apply the ID change
-										modelInput.TechnicalAssets[techAssetTitle].CommunicationLinks[title].DataAssetsSent[i] = dataAssetInput.ID
-									}
-								}
-								for i, dataAssetReceived := range commLink.DataAssetsReceived {
-									referencedAsset := dataAssetReceived
-									if referencedAsset == dataAsset.ID { // apply the ID change
-										modelInput.TechnicalAssets[techAssetTitle].CommunicationLinks[title].DataAssetsReceived[i] = dataAssetInput.ID
-									}
-								}
-							}
-						}
-					}
-					for _, individualRiskCat := range modelInput.CustomRiskCategories {
-						if individualRiskCat.RisksIdentified != nil {
-							for individualRiskInstanceTitle, individualRiskInstance := range individualRiskCat.RisksIdentified {
-								if individualRiskInstance.MostRelevantDataAsset == dataAsset.ID { // apply the ID change
-									x := individualRiskCat.RisksIdentified[individualRiskInstanceTitle]
-									x.MostRelevantDataAsset = dataAssetInput.ID // not well tested
-									individualRiskCat.RisksIdentified[individualRiskInstanceTitle] = x
-								}
-							}
-						}
-					}
+					renameDataAssetReferences(&modelInput, dataAsset.ID, dataAssetInput.ID)
 				}
 				ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Data Asset Update")
 				if ok {
@@ -587,6 +529,52 @@ func (s *server) setDataAsset(ginContext *gin.Context) {
 			}
 		}
 		respondError(ginContext, http.StatusNotFound, "data asset not found")
+	}
+}
+
+// renameDataAssetReferences points the references to a data asset in the technical assets, their
+// communication links and the individual risks to its new ID.
+func renameDataAssetReferences(modelInput *input.Model, oldID string, newID string) {
+	for techAssetTitle, techAsset := range modelInput.TechnicalAssets {
+		renameDataAssetInTechnicalAsset(modelInput, techAssetTitle, techAsset, oldID, newID)
+	}
+	for _, individualRiskCat := range modelInput.CustomRiskCategories {
+		for individualRiskInstanceTitle, individualRiskInstance := range individualRiskCat.RisksIdentified {
+			if individualRiskInstance.MostRelevantDataAsset == oldID { // apply the ID change
+				x := individualRiskCat.RisksIdentified[individualRiskInstanceTitle]
+				x.MostRelevantDataAsset = newID // not well tested
+				individualRiskCat.RisksIdentified[individualRiskInstanceTitle] = x
+			}
+		}
+	}
+}
+
+// renameDataAssetInTechnicalAsset points the references of a technical asset and its communication links to
+// a data asset to its new ID.
+func renameDataAssetInTechnicalAsset(
+	modelInput *input.Model, techAssetTitle string, techAsset input.TechnicalAsset, oldID string, newID string,
+) {
+	for i, referencedAsset := range techAsset.DataAssetsProcessed {
+		if referencedAsset == oldID { // apply the ID change
+			modelInput.TechnicalAssets[techAssetTitle].DataAssetsProcessed[i] = newID
+		}
+	}
+	for i, referencedAsset := range techAsset.DataAssetsStored {
+		if referencedAsset == oldID { // apply the ID change
+			modelInput.TechnicalAssets[techAssetTitle].DataAssetsStored[i] = newID
+		}
+	}
+	for title, commLink := range techAsset.CommunicationLinks {
+		for i, referencedAsset := range commLink.DataAssetsSent {
+			if referencedAsset == oldID { // apply the ID change
+				modelInput.TechnicalAssets[techAssetTitle].CommunicationLinks[title].DataAssetsSent[i] = newID
+			}
+		}
+		for i, referencedAsset := range commLink.DataAssetsReceived {
+			if referencedAsset == oldID { // apply the ID change
+				modelInput.TechnicalAssets[techAssetTitle].CommunicationLinks[title].DataAssetsReceived[i] = newID
+			}
+		}
 	}
 }
 
@@ -726,17 +714,7 @@ func (s *server) setSharedRuntime(ginContext *gin.Context) {
 				modelInput.SharedRuntimes[payload.Title] = sharedRuntimeInput
 				idChanged := sharedRuntimeInput.ID != sharedRuntime.ID
 				if idChanged { // ID-CHANGE-PROPAGATION
-					for _, individualRiskCat := range modelInput.CustomRiskCategories {
-						if individualRiskCat.RisksIdentified != nil {
-							for individualRiskInstanceTitle, individualRiskInstance := range individualRiskCat.RisksIdentified {
-								if individualRiskInstance.MostRelevantSharedRuntime == sharedRuntime.ID { // apply the ID change
-									x := individualRiskCat.RisksIdentified[individualRiskInstanceTitle]
-									x.MostRelevantSharedRuntime = sharedRuntimeInput.ID // not well tested
-									individualRiskCat.RisksIdentified[individualRiskInstanceTitle] = x
-								}
-							}
-						}
-					}
+					renameSharedRuntimeReferences(&modelInput, sharedRuntime.ID, sharedRuntimeInput.ID)
 				}
 				ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Shared Runtime Update")
 				if ok {
@@ -790,17 +768,9 @@ func (s *server) createNewSharedRuntime(ginContext *gin.Context) {
 			respondError(ginContext, http.StatusBadRequest, "unable to parse request payload")
 			return
 		}
-		// yes, here keyed by title in YAML for better readability in the YAML file itself
-		if _, exists := modelInput.SharedRuntimes[payload.Title]; exists {
-			respondError(ginContext, http.StatusConflict, "shared runtime with this title already exists")
+		if conflict := sharedRuntimeConflict(modelInput, payload); conflict != "" {
+			respondError(ginContext, http.StatusConflict, conflict)
 			return
-		}
-		// but later it will in memory keyed by its "id", so do this uniqueness check also
-		for _, sharedRuntime := range modelInput.SharedRuntimes {
-			if sharedRuntime.ID == payload.Id {
-				respondError(ginContext, http.StatusConflict, "shared runtime with this id already exists")
-				return
-			}
 		}
 		if !checkTechnicalAssetsExisting(modelInput, payload.TechnicalAssetsRunning) {
 			respondError(ginContext, http.StatusBadRequest, "referenced technical asset does not exist")
@@ -821,6 +791,38 @@ func (s *server) createNewSharedRuntime(ginContext *gin.Context) {
 			})
 		}
 	}
+}
+
+// sharedRuntimeConflict tells why a new shared runtime would clash with one of the model, if it would.
+func sharedRuntimeConflict(modelInput input.Model, payload payloadSharedRuntime) string {
+	// yes, here keyed by title in YAML for better readability in the YAML file itself
+	if _, exists := modelInput.SharedRuntimes[payload.Title]; exists {
+		return "shared runtime with this title already exists"
+	}
+	// but later it will in memory keyed by its "id", so do this uniqueness check also
+	for _, sharedRuntime := range modelInput.SharedRuntimes {
+		if sharedRuntime.ID == payload.Id {
+			return "shared runtime with this id already exists"
+		}
+	}
+	return ""
+}
+
+// renameSharedRuntimeReferences points the references of the individual risks to a shared runtime to its
+// new ID, or removes them for an empty one; it reports whether there were any.
+func renameSharedRuntimeReferences(modelInput *input.Model, oldID string, newID string) bool {
+	referencesChanged := false
+	for _, individualRiskCat := range modelInput.CustomRiskCategories {
+		for individualRiskInstanceTitle, individualRiskInstance := range individualRiskCat.RisksIdentified {
+			if individualRiskInstance.MostRelevantSharedRuntime == oldID { // apply the change
+				referencesChanged = true
+				x := individualRiskCat.RisksIdentified[individualRiskInstanceTitle]
+				x.MostRelevantSharedRuntime = newID // not well tested
+				individualRiskCat.RisksIdentified[individualRiskInstanceTitle] = x
+			}
+		}
+	}
+	return referencesChanged
 }
 
 func checkTechnicalAssetsExisting(modelInput input.Model, techAssetIDs []string) (ok bool) {
@@ -858,23 +860,11 @@ func (s *server) deleteSharedRuntime(ginContext *gin.Context) {
 	defer s.unlockFolder(folderNameOfKey)
 	modelInput, _, ok := s.readModel(ginContext, ginContext.Param("model-id"), key, folderNameOfKey)
 	if ok {
-		referencesDeleted := false
 		// yes, here keyed by title in YAML for better readability in the YAML file itself
 		for title, sharedRuntime := range modelInput.SharedRuntimes {
 			if sharedRuntime.ID == ginContext.Param("shared-runtime-id") {
 				// also remove all usages of this shared runtime !!
-				for _, individualRiskCat := range modelInput.CustomRiskCategories {
-					if individualRiskCat.RisksIdentified != nil {
-						for individualRiskInstanceTitle, individualRiskInstance := range individualRiskCat.RisksIdentified {
-							if individualRiskInstance.MostRelevantSharedRuntime == sharedRuntime.ID { // apply the removal
-								referencesDeleted = true
-								x := individualRiskCat.RisksIdentified[individualRiskInstanceTitle]
-								x.MostRelevantSharedRuntime = "" // not well tested
-								individualRiskCat.RisksIdentified[individualRiskInstanceTitle] = x
-							}
-						}
-					}
-				}
+				referencesDeleted := renameSharedRuntimeReferences(&modelInput, sharedRuntime.ID, "")
 				// remove it itself
 				delete(modelInput.SharedRuntimes, title)
 				ok = s.writeModel(ginContext, key, folderNameOfKey, &modelInput, "Shared Runtime Deletion")
@@ -909,14 +899,7 @@ func (s *server) readModel(ginContext *gin.Context, modelUUID string, key []byte
 	if !ok {
 		return modelInputResult, yamlText, false
 	}
-	cryptoKey := generateKeyFromAlreadyStrongRandomInput(key)
-	block, err := aes.NewCipher(cryptoKey)
-	if err != nil {
-		log.Println(err)
-		respondError(ginContext, http.StatusInternalServerError, "unable to open model")
-		return modelInputResult, yamlText, false
-	}
-	aesGcm, err := cipher.NewGCM(block)
+	aesGcm, err := newModelCipher(key)
 	if err != nil {
 		log.Println(err)
 		respondError(ginContext, http.StatusInternalServerError, "unable to open model")
@@ -956,6 +939,20 @@ func (s *server) readModel(ginContext *gin.Context, modelUUID string, key []byte
 		return modelInputResult, yamlText, false
 	}
 	return *modelInput, string(yamlBytes), true
+}
+
+// newModelCipher creates the cipher of the model files of a key.
+func newModelCipher(key []byte) (cipher.AEAD, error) {
+	cryptoKey := generateKeyFromAlreadyStrongRandomInput(key)
+	block, err := aes.NewCipher(cryptoKey)
+	if err != nil {
+		return nil, fmt.Errorf("unable to create the model cipher: %w", err)
+	}
+	aesGcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return nil, fmt.Errorf("unable to create the model cipher: %w", err)
+	}
+	return aesGcm, nil
 }
 
 func (s *server) writeModel(ginContext *gin.Context, key []byte, folderNameOfKey string, modelInput *input.Model, changeReasonForHistory string) (ok bool) {
@@ -1045,19 +1042,7 @@ func (s *server) analyzeModelOnServerDirectly(ginContext *gin.Context) {
 		return
 	}
 	s.lockFolder(folderNameOfKey)
-	defer func() {
-		s.unlockFolder(folderNameOfKey)
-		var err error
-		if r := recover(); r != nil {
-			err = panicError(r)
-			if s.config.GetVerbose() {
-				log.Println(err)
-			}
-			log.Println(err)
-			respondError(ginContext, http.StatusBadRequest, strings.TrimSpace(err.Error()))
-			ok = false
-		}
-	}()
+	defer func() { s.unlockFolderAndAnswerPanic(ginContext, folderNameOfKey, recover()) }()
 
 	dpi, err := strconv.Atoi(ginContext.DefaultQuery("dpi", strconv.Itoa(s.config.GetGraphvizDPI())))
 	if err != nil {
@@ -1069,28 +1054,18 @@ func (s *server) analyzeModelOnServerDirectly(ginContext *gin.Context) {
 	if !ok {
 		return
 	}
-	tmpModelFile, err := os.CreateTemp(s.config.GetTempFolder(), "threagile-direct-analyze-*")
-	if err != nil {
-		handleErrorInServiceCall(err, ginContext)
-		return
-	}
-	defer func() { _ = os.Remove(tmpModelFile.Name()) }() // #nosec G703
-	tmpOutputDir, err := os.MkdirTemp(s.config.GetTempFolder(), "threagile-direct-analyze-")
-	if err != nil {
-		handleErrorInServiceCall(err, ginContext)
-		return
-	}
-	defer func() { _ = os.RemoveAll(tmpOutputDir) }()
-	tmpResultFile, err := os.CreateTemp(s.config.GetTempFolder(), "threagile-result-*.zip")
-	if err != nil {
-		handleErrorInServiceCall(err, ginContext)
-		return
-	}
-	defer func() { _ = os.Remove(tmpResultFile.Name()) }() // #nosec G703
 
-	err = os.WriteFile(tmpModelFile.Name(), []byte(yamlText), 0o400) // #nosec G703
+	files := new(temporaryFiles)
+	defer files.remove()
 
-	s.doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, true, true, true, true, true, true, true, true, dpi)
+	tmpModelFile, tmpOutputDir, tmpResultFile, ok := s.createDirectAnalysisFiles(ginContext, files)
+	if !ok {
+		return
+	}
+
+	err = os.WriteFile(tmpModelFile, []byte(yamlText), 0o400) // #nosec G703
+
+	s.doItViaRuntimeCall(tmpModelFile, tmpOutputDir, allAnalysisOutputs, dpi)
 	if err != nil {
 		handleErrorInServiceCall(err, ginContext)
 		return
@@ -1101,31 +1076,64 @@ func (s *server) analyzeModelOnServerDirectly(ginContext *gin.Context) {
 		return
 	}
 
-	files := []string{
-		filepath.Join(tmpOutputDir, s.config.GetInputFile()),
-		filepath.Join(tmpOutputDir, s.config.GetDataFlowDiagramFilenamePNG()),
-		filepath.Join(tmpOutputDir, s.config.GetDataAssetDiagramFilenamePNG()),
-		filepath.Join(tmpOutputDir, s.config.GetReportFilename()),
-		filepath.Join(tmpOutputDir, s.config.GetReportHTMLFilename()),
-		filepath.Join(tmpOutputDir, s.config.GetExcelRisksFilename()),
-		filepath.Join(tmpOutputDir, s.config.GetExcelTagsFilename()),
-		filepath.Join(tmpOutputDir, s.config.GetJsonRisksFilename()),
-		filepath.Join(tmpOutputDir, s.config.GetJsonTechnicalAssetsFilename()),
-		filepath.Join(tmpOutputDir, s.config.GetJsonStatsFilename()),
-	}
+	s.streamDirectAnalysisResult(ginContext, tmpOutputDir, tmpResultFile)
+}
+
+// streamDirectAnalysisResult packs the result files of analyzing a model on the server and streams them back.
+func (s *server) streamDirectAnalysisResult(ginContext *gin.Context, tmpOutputDir string, tmpResultFile string) {
+	resultFiles := s.resultFiles(tmpOutputDir)
 	if s.config.GetKeepDiagramSourceFiles() {
-		files = append(files, filepath.Join(tmpOutputDir, s.config.GetDataFlowDiagramFilenameDOT()))
-		files = append(files, filepath.Join(tmpOutputDir, s.config.GetDataAssetDiagramFilenameDOT()))
+		resultFiles = append(resultFiles, filepath.Join(tmpOutputDir, s.config.GetDataFlowDiagramFilenameDOT()))
+		resultFiles = append(resultFiles, filepath.Join(tmpOutputDir, s.config.GetDataAssetDiagramFilenameDOT()))
 	}
-	err = zipFiles(tmpResultFile.Name(), files)
-	if err != nil {
-		handleErrorInServiceCall(err, ginContext)
+	if !zipResult(ginContext, tmpResultFile, resultFiles) {
 		return
 	}
 	if s.config.GetVerbose() {
-		fmt.Println("Streaming back result file: " + tmpResultFile.Name())
+		fmt.Println("Streaming back result file: " + tmpResultFile)
 	}
-	ginContext.FileAttachment(tmpResultFile.Name(), "threagile-result.zip")
+	ginContext.FileAttachment(tmpResultFile, "threagile-result.zip")
+}
+
+// createDirectAnalysisFiles creates the temporary model file, output folder and result archive of analyzing a
+// model on the server.
+func (s *server) createDirectAnalysisFiles(
+	ginContext *gin.Context, files *temporaryFiles,
+) (tmpModelFile string, tmpOutputDir string, tmpResultFile string, ok bool) {
+	modelFile, err := os.CreateTemp(s.config.GetTempFolder(), "threagile-direct-analyze-*")
+	if err != nil {
+		handleErrorInServiceCall(err, ginContext)
+		return "", "", "", false
+	}
+	files.add(func() { _ = os.Remove(modelFile.Name()) }) // #nosec G703
+	tmpOutputDir, err = os.MkdirTemp(s.config.GetTempFolder(), "threagile-direct-analyze-")
+	if err != nil {
+		handleErrorInServiceCall(err, ginContext)
+		return "", "", "", false
+	}
+	files.add(func() { _ = os.RemoveAll(tmpOutputDir) })
+	resultFile, err := os.CreateTemp(s.config.GetTempFolder(), "threagile-result-*.zip")
+	if err != nil {
+		handleErrorInServiceCall(err, ginContext)
+		return "", "", "", false
+	}
+	files.add(func() { _ = os.Remove(resultFile.Name()) }) // #nosec G703
+	return modelFile.Name(), tmpOutputDir, resultFile.Name(), true
+}
+
+// unlockFolderAndAnswerPanic unlocks the folder of a key and answers the panic of a request, if any, with its
+// error.
+func (s *server) unlockFolderAndAnswerPanic(ginContext *gin.Context, folderNameOfKey string, r any) {
+	s.unlockFolder(folderNameOfKey)
+	var err error
+	if r != nil {
+		err = panicError(r)
+		if s.config.GetVerbose() {
+			log.Println(err)
+		}
+		log.Println(err)
+		respondError(ginContext, http.StatusBadRequest, strings.TrimSpace(err.Error()))
+	}
 }
 
 func (s *server) writeModelYAML(ginContext *gin.Context, yaml string, key []byte, modelFolder string, changeReasonForHistory string, skipBackup bool) (ok bool) {
@@ -1232,25 +1240,30 @@ func (s *server) backupModelToHistory(modelFolder string, changeReasonForHistory
 		return fmt.Errorf("failed to list model backups: %w", err)
 	}
 	if len(files) > s.config.GetBackupHistoryFilesToKeep() {
-		requiredToDelete := len(files) - s.config.GetBackupHistoryFilesToKeep()
-		sort.Slice(files, func(i, j int) bool {
-			return files[i].Name() < files[j].Name()
-		})
-		for _, file := range files {
-			requiredToDelete--
-			if file.Name() != filepath.Clean(file.Name()) {
-				return fmt.Errorf("weird file name %v", file.Name())
-			}
-			err = os.Remove(filepath.Clean(filepath.Join(historyFolder, file.Name())))
-			if err != nil {
-				return fmt.Errorf("failed to remove old model backup: %w", err)
-			}
-			if requiredToDelete <= 0 {
-				break
-			}
-		}
+		return removeOldestBackups(historyFolder, files, len(files)-s.config.GetBackupHistoryFilesToKeep())
 	}
 	return
+}
+
+// removeOldestBackups removes the given number of the oldest backups from the history folder.
+func removeOldestBackups(historyFolder string, files []os.DirEntry, requiredToDelete int) error {
+	sort.Slice(files, func(i, j int) bool {
+		return files[i].Name() < files[j].Name()
+	})
+	for _, file := range files {
+		requiredToDelete--
+		if file.Name() != filepath.Clean(file.Name()) {
+			return fmt.Errorf("weird file name %v", file.Name())
+		}
+		err := os.Remove(filepath.Clean(filepath.Join(historyFolder, file.Name())))
+		if err != nil {
+			return fmt.Errorf("failed to remove old model backup: %w", err)
+		}
+		if requiredToDelete <= 0 {
+			break
+		}
+	}
+	return nil
 }
 
 func folderNameForModel(folderNameOfKey string, uuid string) string {

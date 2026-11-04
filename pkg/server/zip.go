@@ -48,10 +48,9 @@ func unzip(src string, dest string) ([]string, error) {
 
 	for _, f := range r.File {
 		// Store filename/path for returning and using later on
-		path := filepath.Clean(filepath.Join(dest, filepath.Clean(f.Name)))
-		// Check for ZipSlip. More Info: http://bit.ly/2MsjAWE
-		if !strings.HasPrefix(path, filepath.Clean(dest)+string(os.PathSeparator)) {
-			return filenames, fmt.Errorf("%s: illegal file path", path)
+		path, pathError := zipEntryPath(dest, f.Name)
+		if pathError != nil {
+			return filenames, pathError
 		}
 		filenames = append(filenames, path)
 		if f.FileInfo().IsDir() {
@@ -63,10 +62,7 @@ func unzip(src string, dest string) ([]string, error) {
 		if err = os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
 			return filenames, err
 		}
-		if path != filepath.Clean(path) {
-			return filenames, fmt.Errorf("weird file path %v", path)
-		}
-		outFile, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
+		outFile, err := os.OpenFile(filepath.Clean(path), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
 		if err != nil {
 			return filenames, err
 		}
@@ -89,6 +85,21 @@ func unzip(src string, dest string) ([]string, error) {
 		}
 	}
 	return filenames, nil
+}
+
+// zipEntryPath is the path in the destination folder of a file in an archive; it rejects files that would end
+// up outside the folder.
+func zipEntryPath(dest string, name string) (string, error) {
+	path := filepath.Clean(filepath.Join(dest, filepath.Clean(name)))
+	// Check for ZipSlip. More Info: http://bit.ly/2MsjAWE
+	if !strings.HasPrefix(path, filepath.Clean(dest)+string(os.PathSeparator)) {
+		return path, fmt.Errorf("%s: illegal file path", path)
+	}
+	// path is clean already, so this check never fails
+	if path != filepath.Clean(path) {
+		return path, fmt.Errorf("weird file path %v", path)
+	}
+	return path, nil
 }
 
 func addFileToZip(zipWriter *zip.Writer, filename string) error {
