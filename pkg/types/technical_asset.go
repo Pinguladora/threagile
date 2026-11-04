@@ -50,14 +50,14 @@ func (what TechnicalAsset) HighestSensitivityScore() float64 {
 }
 
 func (what TechnicalAsset) DataFormatsAcceptedSorted() []DataFormat {
-	result := make([]DataFormat, 0)
+	result := make([]DataFormat, 0, len(what.DataFormatsAccepted))
 	result = append(result, what.DataFormatsAccepted...)
 	sort.Sort(ByDataFormatAcceptedSort(result))
 	return result
 }
 
 func (what TechnicalAsset) CommunicationLinksSorted() []*CommunicationLink {
-	result := make([]*CommunicationLink, 0)
+	result := make([]*CommunicationLink, 0, len(what.CommunicationLinks))
 	result = append(result, what.CommunicationLinks...)
 	sort.Sort(ByTechnicalCommunicationLinkTitleSort(result))
 	return result

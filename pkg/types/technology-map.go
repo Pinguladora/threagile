@@ -130,7 +130,7 @@ func (what TechnologyMap) GetAll(names ...string) ([]*Technology, error) {
 }
 
 func (what TechnologyMap) PropagateAttributes() {
-	technologyList := make([]Technology, 0)
+	technologyList := make([]Technology, 0, len(what))
 	for name, value := range what {
 		technology := new(Technology)
 		*technology = value

@@ -264,7 +264,7 @@ func (model *Model) InScopeTechnicalAssets() []*TechnicalAsset {
 }
 
 func (model *Model) SortedTechnicalAssetIDs() []string {
-	res := make([]string, 0)
+	res := make([]string, 0, len(model.TechnicalAssets))
 	for id := range model.TechnicalAssets {
 		res = append(res, id)
 	}
@@ -470,7 +470,7 @@ func (model *Model) SortedRiskCategories() []*RiskCategory {
 		}
 	}
 
-	categories := make([]*RiskCategory, 0)
+	categories := make([]*RiskCategory, 0, len(categoryMap))
 	for categoryId := range categoryMap {
 		categories = append(categories, categoryMap[categoryId])
 	}
@@ -672,7 +672,7 @@ func (model *Model) HighestCommunicationLinkAvailability(what *CommunicationLink
 }
 
 func (model *Model) DataAssetsSentSorted(what *CommunicationLink) []*DataAsset {
-	result := make([]*DataAsset, 0)
+	result := make([]*DataAsset, 0, len(what.DataAssetsSent))
 	for _, assetID := range what.DataAssetsSent {
 		result = append(result, model.DataAssets[assetID])
 	}
@@ -681,7 +681,7 @@ func (model *Model) DataAssetsSentSorted(what *CommunicationLink) []*DataAsset {
 }
 
 func (model *Model) DataAssetsReceivedSorted(what *CommunicationLink) []*DataAsset {
-	result := make([]*DataAsset, 0)
+	result := make([]*DataAsset, 0, len(what.DataAssetsReceived))
 	for _, assetID := range what.DataAssetsReceived {
 		result = append(result, model.DataAssets[assetID])
 	}
@@ -738,7 +738,7 @@ func (model *Model) HighestStoredConfidentiality(what *TechnicalAsset) Confident
 }
 
 func (model *Model) DataAssetsProcessedSorted(what *TechnicalAsset) []*DataAsset {
-	result := make([]*DataAsset, 0)
+	result := make([]*DataAsset, 0, len(what.DataAssetsProcessed))
 	for _, assetID := range what.DataAssetsProcessed {
 		result = append(result, model.DataAssets[assetID])
 	}
@@ -747,7 +747,7 @@ func (model *Model) DataAssetsProcessedSorted(what *TechnicalAsset) []*DataAsset
 }
 
 func (model *Model) DataAssetsStoredSorted(what *TechnicalAsset) []*DataAsset {
-	result := make([]*DataAsset, 0)
+	result := make([]*DataAsset, 0, len(what.DataAssetsStored))
 	for _, assetID := range what.DataAssetsStored {
 		result = append(result, model.DataAssets[assetID])
 	}
