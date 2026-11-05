@@ -1,6 +1,8 @@
 package builtin
 
 import (
+	"slices"
+
 	"github.com/Pinguladora/threagile/pkg/types"
 )
 
@@ -50,10 +52,8 @@ func (r *MissingFileValidationRule) GenerateRisks(input *types.Model) ([]*types.
 		if r.skipAsset(technicalAsset) {
 			continue
 		}
-		for _, format := range technicalAsset.DataFormatsAccepted {
-			if format == types.File {
-				risks = append(risks, r.createRisk(input, technicalAsset))
-			}
+		if slices.Contains(technicalAsset.DataFormatsAccepted, types.File) {
+			risks = append(risks, r.createRisk(input, technicalAsset))
 		}
 	}
 	return risks, nil
