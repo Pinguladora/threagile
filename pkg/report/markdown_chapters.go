@@ -12,6 +12,7 @@ var markdownChapters = map[string]func(*markdownWriter, *reportView){
 	"risk-mitigation":           (*markdownWriter).riskMitigation,
 	chapterRemainingRisks:       (*markdownWriter).remainingRisks,
 	"risks-by-severity":         (*markdownWriter).risksBySeverity,
+	chapterBaseline:             (*markdownWriter).baseline,
 	"application-overview":      (*markdownWriter).applicationOverview,
 	"data-flow-diagram":         (*markdownWriter).dataFlowDiagram,
 	chapterAssetRegister:        (*markdownWriter).assetRegister,
@@ -444,4 +445,56 @@ func (what *markdownWriter) catalogCoverage(view *reportView) {
 		}
 		what.table([]markdownColumn{{"Entry", false}, {"Risk rules", false}, {"Risks", false}}, rows...)
 	}
+}
+
+func (what *markdownWriter) baseline(view *reportView) {
+	changes := view.Baseline
+	what.paragraph("Compared with the risks of the baseline " + markdownCode(changes.Filename) + ": " +
+		strong(strconv.Itoa(len(changes.New))+" new") + ", " + strconv.Itoa(len(changes.Resolved)) + " resolved, " +
+		strconv.Itoa(len(changes.Escalated)) + " escalated, " + strconv.Itoa(len(changes.Deescalated)) +
+		" de-escalated and " + plural(changes.Unchanged, "unchanged risk", "unchanged risks") + ".")
+	if len(changes.New) > 0 {
+		what.heading(3, "", "New Risks")
+		rows := make([][]string, 0, len(changes.New))
+		for _, risk := range changes.New {
+			rows = append(rows, []string{
+				what.riskLink(risk), markdownCode(risk.SyntheticID), risk.Severity.Title, risk.Status.Title,
+			})
+		}
+		what.table([]markdownColumn{{textRisk, false}, {"ID", false}, {columnSeverity, false}, {columnStatus, false}},
+			rows...)
+	}
+	what.riskChanges("Escalated Risks", changes.Escalated)
+	what.riskChanges("De-escalated Risks", changes.Deescalated)
+	if len(changes.Resolved) > 0 {
+		what.heading(3, "", "Resolved Risks")
+		what.paragraph("The baseline had these risks, which the model no longer has.")
+		rows := make([][]string, 0, len(changes.Resolved))
+		for _, risk := range changes.Resolved {
+			rows = append(rows, []string{markdownText(risk.Title), markdownCode(risk.SyntheticID), risk.Severity.Title})
+		}
+		what.table([]markdownColumn{{textRisk, false}, {"ID", false}, {"Severity in the baseline", false}}, rows...)
+	}
+}
+
+// riskChanges writes the risks whose severity changed since the baseline, under the title, if there are any.
+func (what *markdownWriter) riskChanges(title string, changes []viewRiskChange) {
+	if len(changes) == 0 {
+		return
+	}
+	what.heading(3, "", title)
+	rows := make([][]string, 0, len(changes))
+	for _, change := range changes {
+		rows = append(rows, []string{
+			what.riskLink(change.Risk), markdownCode(change.Risk.SyntheticID), change.Previous.Title,
+			change.Risk.Severity.Title, change.Risk.Status.Title,
+		})
+	}
+	what.table([]markdownColumn{
+		{textRisk, false},
+		{"ID", false},
+		{"Severity in the baseline", false},
+		{columnSeverity, false},
+		{columnStatus, false},
+	}, rows...)
 }

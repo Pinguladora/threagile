@@ -17,6 +17,18 @@ that may carry threagile's basic markup go through markup, which keeps only that
 <p class="muted">No risks were identified.</p>
 {{- end}}
 {{- end -}}
+{{- define "risk-changes"}}
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Risk</th><th scope="col">Severity in the baseline</th><th scope="col">Severity</th><th scope="col">Status</th></tr></thead>
+<tbody>
+{{- range .}}
+<tr><td><a href="#{{.Risk.Anchor}}">{{markup .Risk.Title}}</a><br><span class="id">{{.Risk.SyntheticID}}</span></td><td>{{template "level" .Previous}}</td><td>{{template "level" .Risk.Severity}}</td><td>{{template "level" .Risk.Status}}</td></tr>
+{{- end}}
+</tbody>
+</table>
+</div>
+{{- end -}}
 {{- define "risk-groups"}}
 {{- range .}}
 <h3>{{.Title}} <span class="summary">{{.Count}} {{if eq .Count 1}}risk{{else}}risks{{end}}</span></h3>
@@ -163,6 +175,39 @@ that may carry threagile's basic markup go through markup, which keeps only that
 {{- template "risk-list" .Risks}}
 {{- end}}
 </section>
+{{- with .Baseline}}
+
+<section class="chapter" id="baseline">
+<h2>Changes Since the Baseline</h2>
+<p>Compared with the risks of the baseline <span class="id">{{.Filename}}</span>: <strong>{{len .New}} new</strong>, {{len .Resolved}} resolved, {{len .Escalated}} escalated, {{len .Deescalated}} de-escalated and {{.Unchanged}} unchanged {{if eq .Unchanged 1}}risk{{else}}risks{{end}}.</p>
+{{- if .New}}
+<h3>New Risks</h3>
+{{- template "risk-list" .New}}
+{{- end}}
+{{- if .Escalated}}
+<h3>Escalated Risks</h3>
+{{- template "risk-changes" .Escalated}}
+{{- end}}
+{{- if .Deescalated}}
+<h3>De-escalated Risks</h3>
+{{- template "risk-changes" .Deescalated}}
+{{- end}}
+{{- if .Resolved}}
+<h3>Resolved Risks</h3>
+<p>The baseline had these risks, which the model no longer has.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Risk</th><th scope="col">Severity in the baseline</th></tr></thead>
+<tbody>
+{{- range .Resolved}}
+<tr><td>{{.Title}}<br><span class="id">{{.SyntheticID}}</span></td><td>{{template "level" .Severity}}</td></tr>
+{{- end}}
+</tbody>
+</table>
+</div>
+{{- end}}
+</section>
+{{- end}}
 
 <section class="chapter" id="application-overview">
 <h2>Application Overview</h2>

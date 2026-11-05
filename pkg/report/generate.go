@@ -412,6 +412,7 @@ func reportOptions(config reportConfigReader, readResult *model.ReadResult, risk
 		CustomRiskRules:   readResult.CustomRiskRules,
 		HideChapters:      config.GetReportConfigurationHideChapters(),
 		HideEmptyChapters: config.GetHideEmptyChapters(),
+		Baseline:          readResult.Baseline,
 	}
 }
 

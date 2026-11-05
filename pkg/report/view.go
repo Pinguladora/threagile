@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Pinguladora/threagile/pkg/baseline"
 	"github.com/Pinguladora/threagile/pkg/types"
 )
 
@@ -23,6 +24,8 @@ type ReportOptions struct {
 	// HideEmptyChapters leaves out the chapter of the remaining risks when there are none, as
 	// the AsciiDoc report does; the optional chapters of the model are left out when empty anyway.
 	HideEmptyChapters bool
+	// Baseline compares the risks with those of an earlier analysis; nil when there is none to compare with.
+	Baseline *baseline.Comparison
 }
 
 // markupText is text that may carry threagile's basic markup (see basicMarkup). The view keeps
@@ -54,6 +57,7 @@ type reportView struct {
 	RemainingImpact     viewImpact
 	Mitigation          []viewMitigationRow
 	RisksBySeverity     []viewSeverityRisks
+	Baseline            *viewBaseline // nil when the risks are not compared with a baseline
 	TrackedRisks        []*viewRisk
 
 	SecurityRequirements []viewTitledText
@@ -166,6 +170,7 @@ func newReportView(parsedModel *types.Model, options ReportOptions) *reportView 
 	report.addSummary(parsedModel, risks)
 	report.addModelChapters(parsedModel)
 	report.addRiskChapters(parsedModel, risks)
+	report.Baseline = newViewBaseline(options.Baseline, risks)
 	report.addAssetChapters(parsedModel, risks)
 	report.RiskRules = viewRiskRules(parsedModel, options)
 	report.Catalogs = viewCatalogs(report.RiskRules, report.Categories)
@@ -186,6 +191,7 @@ func (what *reportView) Shows(id string) bool {
 func (what *reportView) sections(options ReportOptions) []viewSection {
 	optional := map[string]bool{
 		chapterRemainingRisks:       len(what.RemainingImpact.Entries) > 0 || !options.HideEmptyChapters,
+		chapterBaseline:             what.Baseline != nil,
 		chapterAssetRegister:        !options.HideChapters[AssetRegister],
 		chapterSecurityRequirements: len(what.SecurityRequirements) > 0,
 		chapterAbuseCases:           len(what.AbuseCases) > 0,
@@ -206,6 +212,7 @@ func (what *reportView) sections(options ReportOptions) []viewSection {
 // The ids of the chapters that a report leaves out when they would be empty or are hidden.
 const (
 	chapterRemainingRisks       = "remaining-risks"
+	chapterBaseline             = "baseline"
 	chapterAssetRegister        = "asset-register"
 	chapterSecurityRequirements = "security-requirements"
 	chapterAbuseCases           = "abuse-cases"
@@ -225,6 +232,7 @@ var viewChapters = []viewSection{
 	{"risk-mitigation", "Risk Mitigation"},
 	{chapterRemainingRisks, "Impact Analysis of the Remaining Risks"},
 	{"risks-by-severity", "Risks by Severity"},
+	{chapterBaseline, textChangesSinceBaseline},
 	{"application-overview", "Application Overview"},
 	{"data-flow-diagram", "Data-Flow Diagram"},
 	{chapterAssetRegister, "Asset Register"},
