@@ -715,3 +715,45 @@ func TestMissingAuthenticationSecondFactorRuleCallersCallerProcessConfidentialDa
 	assert.Len(t, risks, 1)
 	assert.Equal(t, "<b>Missing Multi-Factor Authentication</b> covering communication link <b>Access confidential data with client certificate from load balancer</b> from <b>Browser</b> forwarded via <b>Load Balancer</b> to <b>Test Technical Asset</b>", risks[0].Title)
 }
+
+func TestMissingAuthenticationSecondFactorRuleForwardedRisksOfEachHumanCallerHaveTheirOwnIds(t *testing.T) {
+	rule := NewMissingAuthenticationSecondFactorRule(NewMissingAuthenticationRule())
+	human := func(id string) *types.TechnicalAsset {
+		return &types.TechnicalAsset{Id: id, Title: id, UsedAsClientByHuman: true}
+	}
+
+	risks, err := rule.GenerateRisks(&types.Model{
+		TechnicalAssets: map[string]*types.TechnicalAsset{
+			"app": {Id: "app", Title: "App", MultiTenant: true},
+			"proxy": {
+				Id:    "proxy",
+				Title: "Proxy",
+				Technologies: types.TechnologyList{
+					{Name: "reverse-proxy", Attributes: map[string]bool{types.IsTrafficForwarding: true}},
+				},
+			},
+			"browser":    human("browser"),
+			"mobile-app": human("mobile-app"),
+		},
+		IncomingTechnicalCommunicationLinksMappedByTargetId: map[string][]*types.CommunicationLink{
+			"app": {{Id: "proxy>app", SourceId: "proxy", TargetId: "app", DataAssetsSent: []string{"da1"}}},
+			"proxy": {
+				{Id: "browser>proxy", SourceId: "browser", TargetId: "proxy", DataAssetsSent: []string{"da1"}},
+				{Id: "mobile-app>proxy", SourceId: "mobile-app", TargetId: "proxy", DataAssetsSent: []string{"da1"}},
+			},
+		},
+		DataAssets: map[string]*types.DataAsset{
+			"da1": {Id: "da1", Confidentiality: types.Confidential},
+		},
+	})
+
+	assert.Nil(t, err)
+	ids := make([]string, 0, len(risks))
+	for _, risk := range risks {
+		ids = append(ids, risk.SyntheticId)
+	}
+	assert.ElementsMatch(t, []string{
+		"missing-authentication-second-factor@proxy>app@browser@app",
+		"missing-authentication-second-factor@proxy>app@mobile-app@app",
+	}, ids)
+}
