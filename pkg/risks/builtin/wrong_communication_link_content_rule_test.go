@@ -254,3 +254,23 @@ func TestWrongCommunicationLinkContentRuleSendDataAssetRisksCreated(t *testing.T
 		})
 	}
 }
+
+func TestWrongCommunicationLinkContentRuleGenerateRisksBothMismatchesOneRisk(t *testing.T) {
+	rule := NewWrongCommunicationLinkContentRule()
+	link := &types.CommunicationLink{
+		Id: "a>b", SourceId: "a", TargetId: "b", Protocol: types.LocalFileAccess, Readonly: true,
+		DataAssetsSent: []string{"da1"},
+	}
+
+	risks, err := rule.GenerateRisks(&types.Model{
+		TechnicalAssets: map[string]*types.TechnicalAsset{
+			"a": {Id: "a", Title: "A", CommunicationLinks: []*types.CommunicationLink{link}},
+			"b": {Id: "b", Title: "B", Type: types.Process},
+		},
+	})
+
+	assert.Nil(t, err)
+	assert.Len(t, risks, 1, "the risk is identified by the link")
+	assert.Contains(t, risks[0].Title, "readonly flag)")
+	assert.Contains(t, risks[0].Title, `expected "local-file-system")`)
+}
