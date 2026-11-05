@@ -261,3 +261,20 @@ func TestMissingFileValidationRuleGenerateRisksOnlyMissionCriticalAvailabilityMe
 	assert.Equal(t, types.MediumImpact, risks[0].ExploitationImpact)
 	assert.Equal(t, "<b>Missing File Validation</b> risk at <b>Test Technical Asset</b>", risks[0].Title)
 }
+
+func TestMissingFileValidationRuleGenerateRisksFileListedTwiceOneRiskCreated(t *testing.T) {
+	rule := NewMissingFileValidationRule()
+
+	risks, err := rule.GenerateRisks(&types.Model{
+		TechnicalAssets: map[string]*types.TechnicalAsset{
+			"ta1": {
+				Id:                   "ta1",
+				CustomDevelopedParts: true,
+				DataFormatsAccepted:  []types.DataFormat{types.File, types.File},
+			},
+		},
+	})
+
+	assert.Nil(t, err)
+	assert.Len(t, risks, 1)
+}
