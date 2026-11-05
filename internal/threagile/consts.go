@@ -120,7 +120,6 @@ const (
 		" - graphviz (EPL License): https://graphviz.org/license/\n" +
 		" - go-graphviz (MIT License): https://github.com/goccy/go-graphviz/blob/master/LICENSE\n" +
 		" - wazero (Apache License): https://github.com/tetratelabs/wazero/blob/main/LICENSE\n" +
-		" - gg (MIT License): https://github.com/fogleman/gg/blob/master/LICENSE.md\n" +
 		" - DejaVu fonts (Bitstream Vera License): https://dejavu-fonts.github.io/License.html\n" +
 		" - gofpdf (MIT License): https://github.com/jung-kurt/gofpdf/blob/master/LICENSE\n" +
 		" - go-chart (MIT License): https://github.com/wcharczuk/go-chart/blob/master/LICENSE\n" +
