@@ -7,6 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"gopkg.in/yaml.v3"
 )
 
 const legacyModel = `title: Legacy # a model of an earlier version
@@ -124,4 +125,82 @@ technical_assets:
 	again, err := MigrateModelFile(modelFile)
 	require.NoError(t, err)
 	assert.Empty(t, again.Changes, "a migrated model needs no more changes")
+}
+
+func TestMigrateModelFileTurnsIndividualRiskCategoriesIntoCustomRiskCategories(t *testing.T) {
+	modelFile := filepath.Join(t.TempDir(), "threagile.yaml")
+	require.NoError(t, os.WriteFile(modelFile, []byte(`title: Legacy
+
+individual_risk_categories: # manually identified risks
+  Some Individual Risk: # the title
+    id: something-strange
+    description: Some text
+    risks_identified:
+      Something Strange at Shop:
+        severity: critical
+  Other Risk:
+    id: other
+    title: Other Risk Titled Again`), 0o600))
+
+	migration, err := MigrateModelFile(modelFile)
+	require.NoError(t, err)
+
+	migrated, err := os.ReadFile(filepath.Clean(modelFile))
+	require.NoError(t, err)
+	assert.Equal(t, `title: Legacy
+
+custom_risk_categories: # manually identified risks
+  - title: Some Individual Risk # the title
+    id: something-strange
+    description: Some text
+    risks_identified:
+      Something Strange at Shop:
+        severity: critical
+  -
+    id: other
+    title: Other Risk Titled Again`, string(migrated), "a category that names its title keeps it")
+	assert.Equal(t, []string{modelFile + ": individual_risk_categories: now custom_risk_categories, 2 categories"},
+		migration.Changes)
+
+	var model struct {
+		Custom []struct {
+			ID    string `yaml:"id"`
+			Title string `yaml:"title"`
+		} `yaml:"custom_risk_categories"`
+	}
+	require.NoError(t, yaml.Unmarshal(migrated, &model))
+	assert.Equal(t, "Some Individual Risk", model.Custom[0].Title)
+	assert.Equal(t, "Other Risk Titled Again", model.Custom[1].Title)
+
+	again, err := MigrateModelFile(modelFile)
+	require.NoError(t, err)
+	assert.Empty(t, again.Changes, "a migrated model needs no more changes")
+}
+
+func TestMigrateModelFileLeavesIndividualRiskCategoriesItCannotRewrite(t *testing.T) {
+	for name, content := range map[string]string{
+		"a quoted title": `individual_risk_categories:
+  "Quoted: Risk":
+    id: quoted
+`,
+		"both keys": `individual_risk_categories:
+  Some Risk:
+    id: some
+custom_risk_categories:
+  - id: other
+    title: Other
+`,
+	} {
+		modelFile := filepath.Join(t.TempDir(), "threagile.yaml")
+		require.NoError(t, os.WriteFile(modelFile, []byte(content), 0o600))
+
+		migration, err := MigrateModelFile(modelFile)
+		require.NoError(t, err)
+
+		migrated, err := os.ReadFile(filepath.Clean(modelFile))
+		require.NoError(t, err)
+		assert.Equal(t, content, string(migrated), name)
+		assert.Empty(t, migration.Changes, name)
+		assert.Len(t, migration.Notes, 1, name)
+	}
 }
