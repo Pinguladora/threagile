@@ -43,13 +43,13 @@ Threagile toolkit was used to model the architecture of "Some Example Applicatio
 
 Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.
 
-In total **94 initial risks** in **34 categories** have been identified during the threat modeling process:
+In total **93 initial risks** in **34 categories** have been identified during the threat modeling process:
 
 | Severity | Risks | Status | Risks |
 | --- | ---: | --- | ---: |
-| Critical | 1 | Unchecked | 63 |
+| Critical | 1 | Unchecked | 62 |
 | High | 2 | In Discussion | 0 |
-| Elevated | 39 | Accepted | 1 |
+| Elevated | 38 | Accepted | 1 |
 | Medium | 43 | In Progress | 5 |
 | Low | 9 | Mitigated | 24 |
 |  |  | False Positive | 1 |
@@ -58,7 +58,7 @@ Just some **more** custom summary possible here...
 
 ## Impact Analysis of the Initial Risks
 
-The most prevalent impacts of the **94 initial risks** (distributed over **34 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **93 initial risks** (distributed over **34 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Critical**: [Some Individual Risk Example](#some-individual-risk-example): 2 Initial Risks, exploitation likelihood is _Frequent_ with _Very High_ impact
 
@@ -92,7 +92,7 @@ The most prevalent impacts of the **94 initial risks** (distributed over **34 ri
 
     If this risk is unmitigated, attackers might be able to access or modify sensitive data in an unauthenticated way.
 
-- **Elevated**: [Missing Cloud Hardening](#missing-cloud-hardening): 6 Initial Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
+- **Elevated**: [Missing Cloud Hardening](#missing-cloud-hardening): 5 Initial Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
 
     If this risk is unmitigated, attackers might access cloud components in an unintended way.
 
@@ -156,7 +156,7 @@ The most prevalent impacts of the **94 initial risks** (distributed over **34 ri
 
     If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.
 
-- **Medium**: [Missing Cloud Hardening](#missing-cloud-hardening): 6 Initial Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
+- **Medium**: [Missing Cloud Hardening](#missing-cloud-hardening): 5 Initial Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
 
     If this risk is unmitigated, attackers might access cloud components in an unintended way.
 
@@ -228,23 +228,23 @@ The following table gives a high-level overview of the risk tracking status (inc
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Critical | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
 | High | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
-| Elevated | 39 | 29 | 0 | 1 | 0 | 8 | 1 |
+| Elevated | 38 | 28 | 0 | 1 | 0 | 8 | 1 |
 | Medium | 43 | 27 | 0 | 0 | 0 | 16 | 0 |
 | Low | 9 | 4 | 0 | 0 | 5 | 0 | 0 |
 
-After removal of risks with status _mitigated_ and _false positive_ the following **69 remain unmitigated**:
+After removal of risks with status _mitigated_ and _false positive_ the following **68 remain unmitigated**:
 
 | Severity | Unmitigated risks | To be checked by | Unmitigated risks |
 | --- | ---: | --- | ---: |
 | Critical | 1 | Business Side | 2 |
 | High | 2 | Architecture | 14 |
-| Elevated | 30 | Development | 15 |
-| Medium | 27 | Operations | 38 |
+| Elevated | 29 | Development | 15 |
+| Medium | 27 | Operations | 37 |
 | Low | 9 |  |  |
 
 ## Impact Analysis of the Remaining Risks
 
-The most prevalent impacts of the **69 remaining risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **68 remaining risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Critical**: [Some Individual Risk Example](#some-individual-risk-example): 2 Remaining Risks, exploitation likelihood is _Frequent_ with _Very High_ impact
 
@@ -274,7 +274,7 @@ The most prevalent impacts of the **69 remaining risks** (distributed over **29 
 
     If this risk is unmitigated, attackers might be able to access or modify sensitive data in an unauthenticated way.
 
-- **Elevated**: [Missing Cloud Hardening](#missing-cloud-hardening): 6 Remaining Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
+- **Elevated**: [Missing Cloud Hardening](#missing-cloud-hardening): 5 Remaining Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
 
     If this risk is unmitigated, attackers might access cloud components in an unintended way.
 
@@ -330,7 +330,7 @@ The most prevalent impacts of the **69 remaining risks** (distributed over **29 
 
     If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.
 
-- **Medium**: [Missing Cloud Hardening](#missing-cloud-hardening): 6 Remaining Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
+- **Medium**: [Missing Cloud Hardening](#missing-cloud-hardening): 5 Remaining Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
 
     If this risk is unmitigated, attackers might access cloud components in an unintended way.
 
@@ -388,7 +388,7 @@ The most prevalent impacts of the **69 remaining risks** (distributed over **29 
 
 ## Risks by Severity
 
-All **94 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
+All **93 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
 
 ### Critical
 
@@ -409,7 +409,7 @@ All **94 risks** by severity, with their tracking status. Each risk links to its
 
 ### Elevated
 
-**39 risks**
+**38 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
@@ -430,7 +430,6 @@ All **94 risks** by severity, with their tracking status. Each risk links to its
 | Elevated | [**Missing Cloud Hardening (EC2)** risk at **Apache Webserver**: _CIS Benchmark for Amazon Linux_](#missing-cloud-hardening) | [Missing Cloud Hardening](#missing-cloud-hardening) | none | Unchecked |
 | Elevated | [**Missing Cloud Hardening** risk at **ERP DMZ**](#missing-cloud-hardening) | [Missing Cloud Hardening](#missing-cloud-hardening) | none | Unchecked |
 | Elevated | [**Missing Cloud Hardening** risk at **Web DMZ**](#missing-cloud-hardening) | [Missing Cloud Hardening](#missing-cloud-hardening) | none | Unchecked |
-| Elevated | [**Missing Cloud Hardening** risk at **WebApp and Backoffice Virtualization**](#missing-cloud-hardening) | [Missing Cloud Hardening](#missing-cloud-hardening) | none | Unchecked |
 | Elevated | [**Missing File Validation** risk at **Apache Webserver**](#missing-file-validation) | [Missing File Validation](#missing-file-validation) | [Apache Webserver](#apache-webserver) | Unchecked |
 | Elevated | [**Missing Hardening** risk at **Apache Webserver**](#missing-hardening) | [Missing Hardening](#missing-hardening) | [Apache Webserver](#apache-webserver) | Mitigated |
 | Elevated | [**Missing Hardening** risk at **Backoffice ERP System**](#missing-hardening) | [Missing Hardening](#missing-hardening) | [Backoffice ERP System](#backoffice-erp-system) | Mitigated |
@@ -793,7 +792,7 @@ This chapter lists what tags are used by which elements.
 
 ## STRIDE Classification of Identified Risks
 
-This chapter clusters and classifies the risks by STRIDE categories: in total **94 potential risks** have been identified during the threat modeling process.
+This chapter clusters and classifies the risks by STRIDE categories: in total **93 potential risks** have been identified during the threat modeling process.
 
 ### Spoofing
 
@@ -823,7 +822,7 @@ Spoofing - Authenticity
 
 ### Tampering
 
-**34 risks**
+**33 risks**
 
 Tampering - Integrity
 
@@ -839,7 +838,7 @@ Tampering - Integrity
 
     When an LDAP server is accessed LDAP-Injection risks might arise. The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed.
 
-- **Elevated**: [Missing Cloud Hardening](#missing-cloud-hardening): 6/6 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
+- **Elevated**: [Missing Cloud Hardening](#missing-cloud-hardening): 5/5 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
 
     Cloud components should be hardened according to the cloud vendor best practices. This affects their configuration, auditing, and further areas.
 
@@ -859,7 +858,7 @@ Tampering - Integrity
 
     When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors.
 
-- **Medium**: [Missing Cloud Hardening](#missing-cloud-hardening): 6/6 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
+- **Medium**: [Missing Cloud Hardening](#missing-cloud-hardening): 5/5 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
 
     Cloud components should be hardened according to the cloud vendor best practices. This affects their configuration, auditing, and further areas.
 
@@ -993,7 +992,7 @@ Elevation of privilege - Authorization
 
 ## Assignment by Function
 
-This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **94 potential risks** have been identified during the threat modeling process.
+This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **93 potential risks** have been identified during the threat modeling process.
 
 ### Business Side
 
@@ -1099,7 +1098,7 @@ Development
 
 ### Operations
 
-**51 risks**
+**50 risks**
 
 Operations
 
@@ -1111,7 +1110,7 @@ Operations
 
     Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity _workload_ or the authentication _short-lived-token_. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.
 
-- **Elevated**: [Missing Cloud Hardening](#missing-cloud-hardening): 6/6 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
+- **Elevated**: [Missing Cloud Hardening](#missing-cloud-hardening): 5/5 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
 
     Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model).
 
@@ -1147,7 +1146,7 @@ Operations
 
     Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity _workload_ or the authentication _short-lived-token_. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.
 
-- **Medium**: [Missing Cloud Hardening](#missing-cloud-hardening): 6/6 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
+- **Medium**: [Missing Cloud Hardening](#missing-cloud-hardening): 5/5 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Very High_ impact
 
     Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model).
 
@@ -1345,7 +1344,7 @@ This chapter lists custom questions that arose during the threat modeling proces
 
 ## Identified Risks by Vulnerability Category
 
-In total **94 potential risks** have been identified during the threat modeling process, distributed across **34 vulnerability categories**. The following sections describe each identified risk category and its risks.
+In total **93 potential risks** have been identified during the threat modeling process, distributed across **34 vulnerability categories**. The following sections describe each identified risk category and its risks.
 
 ### Some Individual Risk Example
 
@@ -1708,7 +1707,7 @@ The risk **Missing Authentication** was found **2 times** in the analyzed archit
 
 ### Missing Cloud Hardening
 
-**Elevated** · 6/6 unmitigated Risks · `missing-cloud-hardening`
+**Elevated** · 5/5 unmitigated Risks · `missing-cloud-hardening`
 
 | Property | Value |
 | --- | --- |
@@ -1764,7 +1763,7 @@ Are recommendations from the linked cheat sheet and referenced ASVS chapter appl
 
 **Risk Findings**
 
-The risk **Missing Cloud Hardening** was found **6 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+The risk **Missing Cloud Hardening** was found **5 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -1772,7 +1771,6 @@ The risk **Missing Cloud Hardening** was found **6 times** in the analyzed archi
 | Elevated | **Missing Cloud Hardening (EC2)** risk at **Apache Webserver**: _CIS Benchmark for Amazon Linux_ | `missing-cloud-hardening@apache-webserver@ec2` | Unlikely | Very High | none | Unchecked | _not tracked_ |
 | Elevated | **Missing Cloud Hardening** risk at **ERP DMZ** | `missing-cloud-hardening@erp-dmz` | Unlikely | Very High | none | Unchecked | _not tracked_ |
 | Elevated | **Missing Cloud Hardening** risk at **Web DMZ** | `missing-cloud-hardening@web-dmz` | Unlikely | Very High | none | Unchecked | _not tracked_ |
-| Elevated | **Missing Cloud Hardening** risk at **WebApp and Backoffice Virtualization** | `missing-cloud-hardening@webapp-virtualization` | Unlikely | Very High | none | Unchecked | _not tracked_ |
 | Medium | **Missing Cloud Hardening (S3)** risk at **Contract File Server**: _Security Best Practices for AWS S3_ | `missing-cloud-hardening@contract-file-server@s3` | Unlikely | High | none | Unchecked | _not tracked_ |
 
 ### Missing File Validation
@@ -3129,7 +3127,7 @@ The risk **Unencrypted Technical Assets** was found **7 times** in the analyzed 
 
 ## Identified Risks by Technical Asset
 
-In total **94 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
+In total **93 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
 
 ### Customer Contract Database
 
@@ -3829,7 +3827,7 @@ External developer client
 
 ## Identified Data Breach Probabilities by Data Asset
 
-In total **94 potential risks** have been identified during the threat modeling process, distributed across **12 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
+In total **93 potential risks** have been identified during the threat modeling process, distributed across **12 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
 
 ### Build Job Config
 
@@ -3867,7 +3865,7 @@ This data asset has data breach potential because of 6 remaining risks:
 
 ### Client Application Code
 
-**Probable** · 28/37 unmitigated Risks · `client-application-code`
+**Probable** · 27/36 unmitigated Risks · `client-application-code`
 
 Angular and other client-side code delivered by the application.
 
@@ -3890,7 +3888,7 @@ Angular and other client-side code delivered by the application.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 28 remaining risks:
+This data asset has data breach potential because of 27 remaining risks:
 
 - Probable, **Medium**: [**Accidental Secret Leak (Git)** risk at **Git Repository**: _Git Leak Prevention_](#accidental-secret-leak) (Unchecked)
 - Probable, **Medium**: [**Code Backdooring** risk at **Git Repository**](#code-backdooring) (Unchecked)
@@ -3899,7 +3897,6 @@ This data asset has data breach potential because of 28 remaining risks:
 - Probable, **Elevated**: [**Missing Cloud Hardening (AWS)** risk at **Application Network**: _CIS Benchmark for AWS_](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening (EC2)** risk at **Apache Webserver**: _CIS Benchmark for Amazon Linux_](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **Web DMZ**](#missing-cloud-hardening) (Unchecked)
-- Probable, **Elevated**: [**Missing Cloud Hardening** risk at **WebApp and Backoffice Virtualization**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing File Validation** risk at **Apache Webserver**](#missing-file-validation) (Unchecked)
 - Probable, **Elevated**: [**Publicly Shared Cloud Snapshot (AMI)** risk at **Apache Webserver**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **Elevated**: [**Untrusted Deserialization** risk at **Jenkins Build Server**](#untrusted-deserialization) (Unchecked)
@@ -3923,7 +3920,7 @@ This data asset has data breach potential because of 28 remaining risks:
 
 ### Customer Accounts
 
-**Probable** · 47/65 unmitigated Risks · `customer-accounts`
+**Probable** · 46/64 unmitigated Risks · `customer-accounts`
 
 Customer Accounts (including transient credentials when entered for checking them)
 
@@ -3946,7 +3943,7 @@ Customer Accounts (including transient credentials when entered for checking the
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 47 remaining risks:
+This data asset has data breach potential because of 46 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -3956,7 +3953,6 @@ This data asset has data breach potential because of 47 remaining risks:
 - Probable, **Elevated**: [**Missing Cloud Hardening (EC2)** risk at **Apache Webserver**: _CIS Benchmark for Amazon Linux_](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **ERP DMZ**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **Web DMZ**](#missing-cloud-hardening) (Unchecked)
-- Probable, **Elevated**: [**Missing Cloud Hardening** risk at **WebApp and Backoffice Virtualization**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing File Validation** risk at **Apache Webserver**](#missing-file-validation) (Unchecked)
 - Probable, **Elevated**: [**Publicly Shared Cloud Snapshot (AMI)** risk at **Apache Webserver**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **Elevated**: [**Publicly Shared Cloud Snapshot** risk at **Customer Contract Database**](#publicly-shared-cloud-snapshot) (Unchecked)
@@ -3998,7 +3994,7 @@ This data asset has data breach potential because of 47 remaining risks:
 
 ### Customer Contract Summaries
 
-**Probable** · 9/10 unmitigated Risks · `contract-summaries`
+**Probable** · 8/9 unmitigated Risks · `contract-summaries`
 
 Customer Contract Summaries
 
@@ -4021,12 +4017,11 @@ Customer Contract Summaries
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 9 remaining risks:
+This data asset has data breach potential because of 8 remaining risks:
 
 - Probable, **Elevated**: [**Missing Cloud Hardening (AWS)** risk at **Application Network**: _CIS Benchmark for AWS_](#missing-cloud-hardening) (Unchecked)
 - Probable, **Medium**: [**Missing Cloud Hardening (S3)** risk at **Contract File Server**: _Security Best Practices for AWS S3_](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **ERP DMZ**](#missing-cloud-hardening) (Unchecked)
-- Probable, **Elevated**: [**Missing Cloud Hardening** risk at **WebApp and Backoffice Virtualization**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Path-Traversal** risk at **Backoffice ERP System** against filesystem **Contract File Server** via **NFS Filesystem Access**](#path-traversal) (Unchecked)
 - Probable, **Medium**: [**Public Cloud Asset Access (S3)** risk at **Contract File Server**](#public-cloud-asset-access) (Unchecked)
 - Possible, **Elevated**: [**Missing Authentication** covering communication link **NFS Filesystem Access** from **Backoffice ERP System** to **Contract File Server**](#missing-authentication) (Unchecked)
@@ -4035,7 +4030,7 @@ This data asset has data breach potential because of 9 remaining risks:
 
 ### Customer Contracts
 
-**Probable** · 32/40 unmitigated Risks · `customer-contracts`
+**Probable** · 31/39 unmitigated Risks · `customer-contracts`
 
 Customer Contracts (PDF)
 
@@ -4058,7 +4053,7 @@ Customer Contracts (PDF)
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 32 remaining risks:
+This data asset has data breach potential because of 31 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -4067,7 +4062,6 @@ This data asset has data breach potential because of 32 remaining risks:
 - Probable, **Medium**: [**Missing Cloud Hardening (S3)** risk at **Contract File Server**: _Security Best Practices for AWS S3_](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **ERP DMZ**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **Web DMZ**](#missing-cloud-hardening) (Unchecked)
-- Probable, **Elevated**: [**Missing Cloud Hardening** risk at **WebApp and Backoffice Virtualization**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing File Validation** risk at **Apache Webserver**](#missing-file-validation) (Unchecked)
 - Probable, **Elevated**: [**Path-Traversal** risk at **Backoffice ERP System** against filesystem **Contract File Server** via **NFS Filesystem Access**](#path-traversal) (Unchecked)
 - Probable, **Medium**: [**Public Cloud Asset Access (S3)** risk at **Contract File Server**](#public-cloud-asset-access) (Unchecked)
@@ -4095,7 +4089,7 @@ This data asset has data breach potential because of 32 remaining risks:
 
 ### Customer Operational Data
 
-**Probable** · 34/44 unmitigated Risks · `customer-operational-data`
+**Probable** · 33/43 unmitigated Risks · `customer-operational-data`
 
 Customer Operational Data
 
@@ -4118,7 +4112,7 @@ Customer Operational Data
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 34 remaining risks:
+This data asset has data breach potential because of 33 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -4127,7 +4121,6 @@ This data asset has data breach potential because of 34 remaining risks:
 - Probable, **Elevated**: [**Missing Cloud Hardening (EC2)** risk at **Apache Webserver**: _CIS Benchmark for Amazon Linux_](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **ERP DMZ**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **Web DMZ**](#missing-cloud-hardening) (Unchecked)
-- Probable, **Elevated**: [**Missing Cloud Hardening** risk at **WebApp and Backoffice Virtualization**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing File Validation** risk at **Apache Webserver**](#missing-file-validation) (Unchecked)
 - Probable, **Elevated**: [**Publicly Shared Cloud Snapshot (AMI)** risk at **Apache Webserver**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **Elevated**: [**Publicly Shared Cloud Snapshot** risk at **Customer Contract Database**](#publicly-shared-cloud-snapshot) (Unchecked)
@@ -4157,7 +4150,7 @@ This data asset has data breach potential because of 34 remaining risks:
 
 ### Database Customizing and Dumps
 
-**Probable** · 11/14 unmitigated Risks · `db-dumps`
+**Probable** · 10/13 unmitigated Risks · `db-dumps`
 
 Data for customizing of the DB system, which might include full database dumps.
 
@@ -4180,12 +4173,11 @@ Data for customizing of the DB system, which might include full database dumps.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 11 remaining risks:
+This data asset has data breach potential because of 10 remaining risks:
 
 - Probable, **Critical**: [**Example Individual Risk** at **Database**](#some-individual-risk-example) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening (AWS)** risk at **Application Network**: _CIS Benchmark for AWS_](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **ERP DMZ**](#missing-cloud-hardening) (Unchecked)
-- Probable, **Elevated**: [**Missing Cloud Hardening** risk at **WebApp and Backoffice Virtualization**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Publicly Shared Cloud Snapshot** risk at **Customer Contract Database**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **High**: [**SQL/NoSQL-Injection** risk at **Backoffice ERP System** against database **Customer Contract Database** via **Database Traffic**](#sqlnosql-injection) (Unchecked)
 - Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Customer Contract Database** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
@@ -4196,7 +4188,7 @@ This data asset has data breach potential because of 11 remaining risks:
 
 ### ERP Customizing Data
 
-**Probable** · 12/16 unmitigated Risks · `erp-customizing`
+**Probable** · 11/15 unmitigated Risks · `erp-customizing`
 
 Data for customizing of the ERP system.
 
@@ -4219,11 +4211,10 @@ Data for customizing of the ERP system.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 12 remaining risks:
+This data asset has data breach potential because of 11 remaining risks:
 
 - Probable, **Elevated**: [**Missing Cloud Hardening (AWS)** risk at **Application Network**: _CIS Benchmark for AWS_](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **ERP DMZ**](#missing-cloud-hardening) (Unchecked)
-- Probable, **Elevated**: [**Missing Cloud Hardening** risk at **WebApp and Backoffice Virtualization**](#missing-cloud-hardening) (Unchecked)
 - Probable, **High**: [**XML External Entity (XXE)** risk at **Backoffice ERP System**](#xml-external-entity-xxe) (Unchecked)
 - Probable, **Elevated**: [**Untrusted Deserialization** risk at **Backoffice ERP System**](#untrusted-deserialization) (Accepted)
 - Possible, **Elevated**: [**Cross-Site Scripting (XSS)** risk at **Backoffice ERP System**](#cross-site-scripting-xss) (Unchecked)
@@ -4236,7 +4227,7 @@ This data asset has data breach potential because of 12 remaining risks:
 
 ### ERP Logs
 
-**Probable** · 19/26 unmitigated Risks · `erp-logs`
+**Probable** · 18/25 unmitigated Risks · `erp-logs`
 
 Logs generated by the ERP system.
 
@@ -4259,12 +4250,11 @@ Logs generated by the ERP system.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 19 remaining risks:
+This data asset has data breach potential because of 18 remaining risks:
 
 - Probable, **Critical**: [**Example Individual Risk** at **Database**](#some-individual-risk-example) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening (AWS)** risk at **Application Network**: _CIS Benchmark for AWS_](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **ERP DMZ**](#missing-cloud-hardening) (Unchecked)
-- Probable, **Elevated**: [**Missing Cloud Hardening** risk at **WebApp and Backoffice Virtualization**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Publicly Shared Cloud Snapshot** risk at **Customer Contract Database**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **High**: [**SQL/NoSQL-Injection** risk at **Backoffice ERP System** against database **Customer Contract Database** via **Database Traffic**](#sqlnosql-injection) (Unchecked)
 - Probable, **High**: [**XML External Entity (XXE)** risk at **Backoffice ERP System**](#xml-external-entity-xxe) (Unchecked)
@@ -4283,7 +4273,7 @@ This data asset has data breach potential because of 19 remaining risks:
 
 ### Marketing Material
 
-**Probable** · 19/25 unmitigated Risks · `marketing-material`
+**Probable** · 18/24 unmitigated Risks · `marketing-material`
 
 Website and marketing data to inform potential customers and generate new leads.
 
@@ -4306,13 +4296,12 @@ Website and marketing data to inform potential customers and generate new leads.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 19 remaining risks:
+This data asset has data breach potential because of 18 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Marketing CMS**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening (AWS)** risk at **Application Network**: _CIS Benchmark for AWS_](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **Web DMZ**](#missing-cloud-hardening) (Unchecked)
-- Probable, **Elevated**: [**Missing Cloud Hardening** risk at **WebApp and Backoffice Virtualization**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Untrusted Deserialization** risk at **Jenkins Build Server**](#untrusted-deserialization) (Unchecked)
 - Possible, **Elevated**: [**Cross-Site Scripting (XSS)** risk at **Marketing CMS**](#cross-site-scripting-xss) (Unchecked)
 - Possible, **Elevated**: [**Missing Authentication** covering communication link **CMS Content Traffic** from **Load Balancer** to **Marketing CMS**](#missing-authentication) (Unchecked)
@@ -4330,7 +4319,7 @@ This data asset has data breach potential because of 19 remaining risks:
 
 ### Server Application Code
 
-**Probable** · 28/37 unmitigated Risks · `server-application-code`
+**Probable** · 27/36 unmitigated Risks · `server-application-code`
 
 API and other server-side code of the application.
 
@@ -4353,7 +4342,7 @@ API and other server-side code of the application.
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 28 remaining risks:
+This data asset has data breach potential because of 27 remaining risks:
 
 - Probable, **Medium**: [**Accidental Secret Leak (Git)** risk at **Git Repository**: _Git Leak Prevention_](#accidental-secret-leak) (Unchecked)
 - Probable, **Medium**: [**Code Backdooring** risk at **Git Repository**](#code-backdooring) (Unchecked)
@@ -4362,7 +4351,6 @@ This data asset has data breach potential because of 28 remaining risks:
 - Probable, **Elevated**: [**Missing Cloud Hardening (AWS)** risk at **Application Network**: _CIS Benchmark for AWS_](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening (EC2)** risk at **Apache Webserver**: _CIS Benchmark for Amazon Linux_](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **Web DMZ**](#missing-cloud-hardening) (Unchecked)
-- Probable, **Elevated**: [**Missing Cloud Hardening** risk at **WebApp and Backoffice Virtualization**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing File Validation** risk at **Apache Webserver**](#missing-file-validation) (Unchecked)
 - Probable, **Elevated**: [**Publicly Shared Cloud Snapshot (AMI)** risk at **Apache Webserver**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **Elevated**: [**Untrusted Deserialization** risk at **Jenkins Build Server**](#untrusted-deserialization) (Unchecked)
@@ -4386,7 +4374,7 @@ This data asset has data breach potential because of 28 remaining risks:
 
 ### Some Internal Business Data
 
-**Probable** · 34/44 unmitigated Risks · `internal-business-data`
+**Probable** · 33/43 unmitigated Risks · `internal-business-data`
 
 Internal business data of the ERP system used unrelated to the customer-facing processes.
 
@@ -4409,7 +4397,7 @@ Internal business data of the ERP system used unrelated to the customer-facing p
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 34 remaining risks:
+This data asset has data breach potential because of 33 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -4418,7 +4406,6 @@ This data asset has data breach potential because of 34 remaining risks:
 - Probable, **Elevated**: [**Missing Cloud Hardening (EC2)** risk at **Apache Webserver**: _CIS Benchmark for Amazon Linux_](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **ERP DMZ**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Cloud Hardening** risk at **Web DMZ**](#missing-cloud-hardening) (Unchecked)
-- Probable, **Elevated**: [**Missing Cloud Hardening** risk at **WebApp and Backoffice Virtualization**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing File Validation** risk at **Apache Webserver**](#missing-file-validation) (Unchecked)
 - Probable, **Elevated**: [**Publicly Shared Cloud Snapshot (AMI)** risk at **Apache Webserver**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **Elevated**: [**Publicly Shared Cloud Snapshot** risk at **Customer Contract Database**](#publicly-shared-cloud-snapshot) (Unchecked)
@@ -5001,7 +4988,7 @@ Link to the LDAP auth server
 
 ## Risk Tracking
 
-**31 of 94 risks** are tracked in the model; the others are unchecked.
+**31 of 93 risks** are tracked in the model; the others are unchecked.
 
 | Risk | ID | Severity | Status | Date | Checked by | Ticket | Justification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -5048,7 +5035,7 @@ The risk rules checked **10 of 10** entries of the [OWASP Top 10:2025](https://t
 | Entry | Risk rules | Risks |
 | --- | --- | --- |
 | `A01` Broken Access Control | Confused Deputy Agent, Cross-Account Takeover, [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf), [Missing Identity Propagation](#missing-identity-propagation), [Missing Object-Level Authorization](#missing-object-level-authorization), Overprivileged Machine Identity, [Path-Traversal](#path-traversal), [Public Cloud Asset Access](#public-cloud-asset-access), [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 10/11 unmitigated Risks |
-| `A02` Security Misconfiguration | Container Platform Escape, [Missing Cloud Hardening](#missing-cloud-hardening), [Missing Hardening](#missing-hardening), [Public Cloud Asset Access](#public-cloud-asset-access), [Publicly Shared Cloud Snapshot](#publicly-shared-cloud-snapshot), [XML External Entity (XXE)](#xml-external-entity-xxe) | 10/16 unmitigated Risks |
+| `A02` Security Misconfiguration | Container Platform Escape, [Missing Cloud Hardening](#missing-cloud-hardening), [Missing Hardening](#missing-hardening), [Public Cloud Asset Access](#public-cloud-asset-access), [Publicly Shared Cloud Snapshot](#publicly-shared-cloud-snapshot), [XML External Entity (XXE)](#xml-external-entity-xxe) | 9/15 unmitigated Risks |
 | `A03` Software Supply Chain Failures | [Code Backdooring](#code-backdooring), [Container Base Image Backdooring](#container-base-image-backdooring), [Unchecked Deployment](#unchecked-deployment) | 7/7 unmitigated Risks |
 | `A04` Cryptographic Failures | [Unencrypted Communication](#unencrypted-communication), [Unencrypted Technical Assets](#unencrypted-technical-assets) | 4/11 unmitigated Risks |
 | `A05` Injection | [Cross-Site Scripting (XSS)](#cross-site-scripting-xss), [LDAP-Injection](#ldap-injection), [SQL/NoSQL-Injection](#sqlnosql-injection), Search-Query Injection | 5/7 unmitigated Risks |
@@ -5071,7 +5058,7 @@ The risk rules checked **6 of 10** entries of the [OWASP API Security Top 10 202
 | `API5` Broken Function Level Authorization | [Missing Object-Level Authorization](#missing-object-level-authorization) | 1 mitigated Risk |
 | `API6` Unrestricted Access to Sensitive Business Flows | none | _not checked by any risk rule_ |
 | `API7` Server Side Request Forgery | [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 2/2 unmitigated Risks |
-| `API8` Security Misconfiguration | [Missing Cloud Hardening](#missing-cloud-hardening), [Missing Hardening](#missing-hardening), [Unencrypted Communication](#unencrypted-communication) | 10/16 unmitigated Risks |
+| `API8` Security Misconfiguration | [Missing Cloud Hardening](#missing-cloud-hardening), [Missing Hardening](#missing-hardening), [Unencrypted Communication](#unencrypted-communication) | 9/15 unmitigated Risks |
 | `API9` Improper Inventory Management | none | _not checked by any risk rule_ |
 | `API10` Unsafe Consumption of APIs | none | _not checked by any risk rule_ |
 

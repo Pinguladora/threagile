@@ -1303,35 +1303,6 @@
   {
     "category": "missing-cloud-hardening",
     "risk_status": "unchecked",
-    "severity": "elevated",
-    "exploitation_likelihood": "unlikely",
-    "exploitation_impact": "very-high",
-    "title": "\u003cb\u003eMissing Cloud Hardening\u003c/b\u003e risk at \u003cb\u003eWebApp and Backoffice Virtualization\u003c/b\u003e",
-    "synthetic_id": "missing-cloud-hardening@webapp-virtualization",
-    "data_breach_probability": "probable",
-    "data_breach_technical_assets": [
-      "apache-webserver",
-      "marketing-cms",
-      "erp-system",
-      "contract-file-server",
-      "sql-database"
-    ],
-    "plain_title": "Missing Cloud Hardening risk at WebApp and Backoffice Virtualization",
-    "category_title": "Missing Cloud Hardening",
-    "stride": "tampering",
-    "function": "operations",
-    "cwe": 1008,
-    "references": [
-      "OWASP A02:2025 Security Misconfiguration",
-      "OWASP API8:2023 Security Misconfiguration"
-    ],
-    "action": "Cloud Hardening",
-    "mitigation": "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Amazon Web Services\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", or \"Prowler AWS CIS Benchmark Tool\"\u003c/i\u003e). \u003cbr\u003eFor EC2 and other servers running Amazon Linux, follow the \u003ci\u003eCIS Benchmark for Amazon Linux\u003c/i\u003e and switch to IMDSv2. \u003cbr\u003eFor S3 buckets follow the \u003ci\u003eSecurity Best Practices for Amazon S3\u003c/i\u003e at \u003ca href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\"\u003ehttps://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\u003c/a\u003e to avoid accidental leakage. \u003cbr\u003eAlso take a look at some of these tools: \u003ca href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\"\u003ehttps://github.com/toniblyx/my-arsenal-of-aws-security-tools\u003c/a\u003e \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eMicrosoft Azure\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Microsoft Azure\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e).\u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eGoogle Cloud Platform\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Google Cloud Computing Platform\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eOracle Cloud Platform\u003c/b\u003e: Follow the hardening best practices (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\"\u003c/i\u003e).",
-    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
-  },
-  {
-    "category": "missing-cloud-hardening",
-    "risk_status": "unchecked",
     "severity": "medium",
     "exploitation_likelihood": "unlikely",
     "exploitation_impact": "high",
