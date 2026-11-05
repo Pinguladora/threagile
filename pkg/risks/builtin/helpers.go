@@ -139,32 +139,11 @@ func isSameExecutionEnvironment(parsedModel *types.Model, ta *types.TechnicalAss
 }
 
 func isSameTrustBoundaryNetworkOnly(parsedModel *types.Model, ta *types.TechnicalAsset, otherAssetId string) bool {
-	useParentBoundary := func(
-		trustBoundaryOfAsset **types.TrustBoundary, parsedModel *types.Model, trustBoundaryOfAssetOk *bool,
-	) {
-		if trustBoundaryOfAsset == nil {
-			return
-		}
-		tb := *trustBoundaryOfAsset
-		if tb != nil && !tb.Type.IsNetworkBoundary() {
-			*trustBoundaryOfAsset = parsedModel.FindParentTrustBoundary(tb)
-			*trustBoundaryOfAssetOk = *trustBoundaryOfAsset != nil
-		}
-	}
-
 	boundaryOf := parsedModel.DirectContainingTrustBoundaryMappedByTechnicalAssetId
-
-	trustBoundaryOfMyAsset, trustBoundaryOfMyAssetOk := boundaryOf[ta.Id]
-	useParentBoundary(&trustBoundaryOfMyAsset, parsedModel, &trustBoundaryOfMyAssetOk)
-
-	trustBoundaryOfOtherAsset, trustBoundaryOfOtherAssetOk := boundaryOf[otherAssetId]
-	useParentBoundary(&trustBoundaryOfOtherAsset, parsedModel, &trustBoundaryOfOtherAssetOk)
-
-	if trustBoundaryOfMyAssetOk != trustBoundaryOfOtherAssetOk {
-		return false
+	networkOfMyAsset := networkBoundary(parsedModel, boundaryOf[ta.Id])
+	networkOfOtherAsset := networkBoundary(parsedModel, boundaryOf[otherAssetId])
+	if networkOfMyAsset == nil || networkOfOtherAsset == nil { // assets in no network share the same one
+		return networkOfMyAsset == networkOfOtherAsset
 	}
-	if !trustBoundaryOfMyAssetOk {
-		return true
-	}
-	return trustBoundaryOfMyAsset.Id == trustBoundaryOfOtherAsset.Id
+	return networkOfMyAsset.Id == networkOfOtherAsset.Id
 }

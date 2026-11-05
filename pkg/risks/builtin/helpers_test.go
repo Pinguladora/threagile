@@ -532,3 +532,23 @@ func Test_containsCaseInsensitiveAny(t *testing.T) {
 		})
 	}
 }
+
+func Test_isSameTrustBoundaryNetworkOnly_UsesTheNetworkAroundNestedExecutionEnvironments(t *testing.T) {
+	network := &types.TrustBoundary{Id: "network", Type: types.NetworkOnPrem, TrustBoundariesNested: []string{"outer"}}
+	outer := &types.TrustBoundary{Id: "outer", Type: types.ExecutionEnvironment, TrustBoundariesNested: []string{"inner"}}
+	inner := &types.TrustBoundary{Id: "inner", Type: types.ExecutionEnvironment}
+	otherNetwork := &types.TrustBoundary{Id: "other-network", Type: types.NetworkOnPrem}
+	parsedModel := &types.Model{
+		TrustBoundaries: map[string]*types.TrustBoundary{
+			network.Id: network, outer.Id: outer, inner.Id: inner, otherNetwork.Id: otherNetwork,
+		},
+		DirectContainingTrustBoundaryMappedByTechnicalAssetId: map[string]*types.TrustBoundary{
+			"in-inner": inner, "in-network": network, "in-other-network": otherNetwork,
+		},
+	}
+	ta := &types.TechnicalAsset{Id: "in-inner"}
+
+	assert.True(t, isSameTrustBoundaryNetworkOnly(parsedModel, ta, "in-network"), "two execution environments deep")
+	assert.False(t, isSameTrustBoundaryNetworkOnly(parsedModel, ta, "in-other-network"))
+	assert.False(t, isSameTrustBoundaryNetworkOnly(parsedModel, ta, "in-no-boundary"))
+}
