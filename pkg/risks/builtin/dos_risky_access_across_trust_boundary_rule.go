@@ -73,7 +73,7 @@ func (r *DosRiskyAccessAcrossTrustBoundaryRule) GenerateRisks(input *types.Model
 }
 
 func (asl *DosRiskyAccessAcrossTrustBoundaryRule) skipAsset(techAsset *types.TechnicalAsset) bool {
-	return techAsset.OutOfScope || !techAsset.Technologies.GetAttribute(types.LoadBalancer) &&
+	return techAsset.OutOfScope || techAsset.Technologies.GetAttribute(types.LoadBalancer) ||
 		techAsset.Availability < types.Critical
 }
 
