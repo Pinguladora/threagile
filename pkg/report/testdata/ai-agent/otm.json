@@ -689,6 +689,85 @@
       }
     },
     {
+      "id": "order-policy",
+      "name": "Order Policy",
+      "type": "policy-decision-point",
+      "description": "Decides which orders a customer may see and refund, as an OpenFGA relationship graph",
+      "parent": {
+        "trustZone": "backend-subnet"
+      },
+      "assets": {
+        "processed": [
+          "order-data"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "container-baseimage-backdooring",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "container-baseimage-backdooring-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-identity-provider-isolation",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-identity-provider-isolation-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-policy-decision-point-redundancy",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-policy-decision-point-redundancy-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-vault",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-vault-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:availability": "critical",
+        "threagile:confidentiality": "confidential",
+        "threagile:data_formats_accepted": "json",
+        "threagile:encryption": "none",
+        "threagile:integrity": "critical",
+        "threagile:justification_cia_rating": "Wrong decisions leak orders or refund money",
+        "threagile:machine": "container",
+        "threagile:owner": "Some Company",
+        "threagile:size": "service",
+        "threagile:type": "process",
+        "threagile:usage": "business"
+      }
+    },
+    {
       "id": "order-service",
       "name": "Order Service",
       "type": "web-service-rest",
@@ -734,11 +813,11 @@
           ]
         },
         {
-          "threat": "missing-vault",
+          "threat": "missing-network-segmentation",
           "state": "exposed",
           "mitigations": [
             {
-              "mitigation": "missing-vault-mitigation",
+              "mitigation": "missing-network-segmentation-mitigation",
               "state": "recommended"
             }
           ]
@@ -1296,6 +1375,36 @@
         "threagile:data_assets_sent": "order-data",
         "threagile:identity": "service-account",
         "threagile:protocol": "jdbc-encrypted",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "order-service\u003erefund-authorization",
+      "name": "Refund Authorization",
+      "description": "Asks whether the customer may get a refund of the order",
+      "source": "order-service",
+      "destination": "order-policy",
+      "assets": [
+        "order-data"
+      ],
+      "threats": [
+        {
+          "threat": "server-side-request-forgery",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "server-side-request-forgery-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "client-certificate",
+        "threagile:authorization": "function-level",
+        "threagile:data_assets_sent": "order-data",
+        "threagile:identity": "workload",
+        "threagile:protocol": "https",
         "threagile:usage": "business"
       }
     },
@@ -1915,6 +2024,28 @@
       }
     },
     {
+      "id": "missing-identity-provider-isolation",
+      "name": "Missing Identity Provider Isolation",
+      "description": "Highly sensitive identity provider assets and their identity data stores should be isolated from other assets by their own network segmentation trust-boundary (execution-environment boundaries do not count as network isolation).",
+      "categories": [
+        "Elevation of Privilege",
+        "OWASP A06:2025 Insecure Design"
+      ],
+      "cwes": [
+        "CWE-1008"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 75,
+        "impactComment": "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards highly sensitive identity provider assets and their identity data stores, as they are not separated by network segmentation."
+      },
+      "attributes": {
+        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
       "id": "missing-identity-store",
       "name": "Missing Identity Store",
       "description": "The modeled architecture does not contain an identity store, which might be the risk of a model missing critical assets (and thus not seeing their risks).",
@@ -1979,6 +2110,30 @@
         "threagile:asvs": "V4 - Access Control Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
         "threagile:function": "development"
+      }
+    },
+    {
+      "id": "missing-policy-decision-point-redundancy",
+      "name": "Missing Policy Decision Point Redundancy",
+      "description": "Services that externalize their authorization to a policy decision point, for example through the AuthZEN Authorization API, cannot decide a request without it. When it fails, they either deny every request and stop working, or, when they fail open, allow every request.",
+      "categories": [
+        "Denial of Service",
+        "OWASP A10:2025 Mishandling of Exceptional Conditions",
+        "OpenID AuthZEN Authorization API 1.0",
+        "NIST SP 800-162 Guide to Attribute Based Access Control"
+      ],
+      "cwes": [
+        "CWE-636"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, an outage of the policy decision point might stop every service that asks it, or let any request through services that fail open."
+      },
+      "attributes": {
+        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+        "threagile:function": "architecture"
       }
     },
     {
@@ -2403,6 +2558,15 @@
       }
     },
     {
+      "id": "missing-identity-provider-isolation-mitigation",
+      "name": "Network Segmentation",
+      "description": "Apply a network segmentation trust-boundary around the highly sensitive identity provider assets and their identity data stores.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
       "id": "missing-identity-store-mitigation",
       "name": "Identity Store",
       "description": "Include an identity store in the model if the application has a login.",
@@ -2424,6 +2588,15 @@
       "id": "missing-object-level-authorization-mitigation",
       "name": "Object-Level Authorization",
       "description": "Check in every operation that the user of the request may access each object it names, by the identity of the user rather than an id the request carries, and deny by default, for example by asking a policy decision point with the user, the action and the object. Set the authorization of the link to \u003ci\u003eobject-level\u003c/i\u003e once this is in place.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-policy-decision-point-redundancy-mitigation",
+      "name": "Policy Decision Point Redundancy",
+      "description": "Run the policy decision point redundantly, or as a local instance next to each service that asks it, with the policies distributed to each instance. Let the services deny requests they cannot get a decision for, and cache decisions only briefly.",
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"

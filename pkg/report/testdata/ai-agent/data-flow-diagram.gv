@@ -116,6 +116,7 @@ digraph generatedModel { concentrate=false
 	  margin="50.0"
     ];
 1305071387;
+1077714544;
 1556212517;
 1312838741;
  }
@@ -186,8 +187,14 @@ peripheries=1
 color="#AF780E"
   ]; 
   1556212517 [
-label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">web-service-rest</font><br/><font point-size="15" color="#666666">service</font></td></tr><tr><td><b><font color="#AF780E">Order Service</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 46 %</font></td></tr></table>>
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">web-service-rest</font><br/><font point-size="15" color="#666666">service</font></td></tr><tr><td><b><font color="#AF780E">Order Service</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 51 %</font></td></tr></table>>
 shape=ellipse style="solid,filled" penwidth="3.000000" fillcolor="#ffffb7"
+peripheries=1
+color="#AF780E"
+  ]; 
+  1077714544 [
+label=<<table border="0" cellborder="0" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="#000060">policy-decision-point</font><br/><font point-size="15" color="#666666">service</font></td></tr><tr><td><b><font color="#AF780E">Order Policy</font></b><br/></td></tr><tr><td><font point-size="15" color="#603112">RAA: 18 %</font></td></tr></table>>
+shape=ellipse style="solid,filled" penwidth="3.000000" fillcolor="#ffffff"
 peripheries=1
 color="#AF780E"
   ]; 
@@ -255,6 +262,8 @@ color="#AF780E"
   1299996772 -> 351167582 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
 
   1556212517 -> 1312838741 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="onormalonormal" arrowhead="normal" dir="both" arrowsize="2.0"  weight="1"  constraint=true  xlabel="jdbc-encrypted" fontcolor="#AF780E"  ];
+
+  1556212517 -> 1077714544 [ color="#AF780E"  style="solid" penwidth="2.500000" arrowtail="none" arrowhead="normal" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#AF780E"  ];
 
   1505061542 -> 1305071387 [ color="#000000"  style="solid" penwidth="1.500000" arrowtail="none" arrowhead="empty" dir="forward" arrowsize="2.0"  weight="1"  constraint=true  xlabel="https" fontcolor="#444444"  ];
 

@@ -626,6 +626,46 @@ technical_assets:
         usage: business
         data_assets_sent: [order-data]
         data_assets_received: [order-data, customer-data]
+      Refund Authorization:
+        target: order-policy
+        description: Asks whether the customer may get a refund of the order
+        protocol: https
+        authentication: client-certificate
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [order-data]
+        data_assets_received: []
+
+  Order Policy:
+    id: order-policy
+    description: Decides which orders a customer may see and refund, as an OpenFGA relationship graph
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technology: policy-decision-point
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Wrong decisions leak orders or refund money
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: false
+    data_assets_processed: [order-data]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
 
   Orders Database:
     id: orders-db
@@ -696,6 +736,7 @@ trust_boundaries:
     tags: []
     technical_assets_inside:
       - order-service
+      - order-policy
       - orders-db
       - knowledge-cms
     trust_boundaries_nested: []

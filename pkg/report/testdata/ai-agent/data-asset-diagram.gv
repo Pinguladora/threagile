@@ -35,6 +35,9 @@ digraph generatedModel { concentrate=true
   1556212517 [ shape="box" style="filled" fillcolor="#FF8E00"
 				label=<<b>Order Service</b>> penwidth="3.0" color="#FF8E00" ];
 				
+  1077714544 [ shape="box" style="filled" fillcolor="#C87832"
+				label=<<b>Order Policy</b>> penwidth="3.0" color="#C87832" ];
+				
   1251095166 [ shape="box" style="filled" fillcolor="#C87832"
 				label=<<b>Model Registry</b>> penwidth="3.0" color="#C87832" ];
 				
@@ -95,6 +98,8 @@ digraph generatedModel { concentrate=true
 2917860942 -> 1556212517 [ color="#666666" style="dashed" ];
 
 3261121732 -> 1556212517 [ color="#666666" style="dashed" ];
+
+2917860942 -> 1077714544 [ color="#666666" style="dashed" ];
 
 1321031310 -> 1251095166 [ color="blue" style="solid" ];
 
