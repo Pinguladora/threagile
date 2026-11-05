@@ -817,16 +817,6 @@
               "state": "recommended"
             }
           ]
-        },
-        {
-          "threat": "public-cloud-snapshot",
-          "state": "exposed",
-          "mitigations": [
-            {
-              "mitigation": "public-cloud-snapshot-mitigation",
-              "state": "recommended"
-            }
-          ]
         }
       ],
       "attributes": {
@@ -2088,28 +2078,6 @@
       }
     },
     {
-      "id": "public-cloud-snapshot",
-      "name": "Publicly Shared Cloud Snapshot",
-      "description": "Snapshots and images of cloud disks, databases and virtual machines (like EBS or RDS snapshots and EC2 AMIs) can be shared with all accounts of the cloud provider. A snapshot shared publicly by mistake hands everything stored on the asset to anyone.",
-      "categories": [
-        "Information Disclosure",
-        "OWASP A02:2025 Security Misconfiguration"
-      ],
-      "cwes": [
-        "CWE-668"
-      ],
-      "risk": {
-        "likelihood": 25,
-        "impact": 75,
-        "impactComment": "If this risk is unmitigated, attackers might restore a publicly shared snapshot or image and read the data stored on it, including credentials baked into an image."
-      },
-      "attributes": {
-        "threagile:asvs": "V14 - Configuration Verification Requirements",
-        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Secure_Cloud_Architecture_Cheat_Sheet.html",
-        "threagile:function": "operations"
-      }
-    },
-    {
       "id": "server-side-request-forgery",
       "name": "Server-Side Request Forgery (SSRF)",
       "description": "When a server system (i.e. not a client) is accessing other server systems via typical web protocols Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might arise. ",
@@ -2457,15 +2425,6 @@
       "id": "prompt-injection-mitigation",
       "name": "Prompt Injection Defenses",
       "description": "Treat everything a model reads as untrusted, including retrieved documents and tool responses: keep instructions apart from data (for example with clearly delimited and labelled content), filter input and output, and give the model and its tools only the permissions the task needs. Require a human approval for actions with side effects, and monitor for injection attempts. See the OWASP GenAI Security Project at \u003ca href=\"https://genai.owasp.org/\"\u003ehttps://genai.owasp.org/\u003c/a\u003e.",
-      "riskReduction": 100,
-      "attributes": {
-        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
-      }
-    },
-    {
-      "id": "public-cloud-snapshot-mitigation",
-      "name": "Snapshot Sharing Restrictions",
-      "description": "Prevent the public sharing of snapshots and images with a cloud configuration rule that revokes it, and audit the sharing settings regularly. Do not bake credentials into images; see the secrets management cheat sheet at \u003ca href=\"https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html\"\u003ehttps://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html\u003c/a\u003e. \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Turn on \u003ci\u003eblock public access\u003c/i\u003e for EBS snapshots (\u003ca href=\"https://docs.aws.amazon.com/ebs/latest/userguide/block-public-access-snapshots.html\"\u003ehttps://docs.aws.amazon.com/ebs/latest/userguide/block-public-access-snapshots.html\u003c/a\u003e) and for AMIs (\u003ca href=\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-to-amis.html\"\u003ehttps://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-to-amis.html\u003c/a\u003e) in every region, use the AWS Config managed rules \u003ci\u003eebs-snapshot-public-restorable-check\u003c/i\u003e (\u003ca href=\"https://docs.aws.amazon.com/config/latest/developerguide/ebs-snapshot-public-restorable-check.html\"\u003ehttps://docs.aws.amazon.com/config/latest/developerguide/ebs-snapshot-public-restorable-check.html\u003c/a\u003e) and \u003ci\u003erds-snapshots-public-prohibited\u003c/i\u003e (\u003ca href=\"https://docs.aws.amazon.com/config/latest/developerguide/rds-snapshots-public-prohibited.html\"\u003ehttps://docs.aws.amazon.com/config/latest/developerguide/rds-snapshots-public-prohibited.html\u003c/a\u003e) with an automatic remediation, and review the snapshot findings of \u003ci\u003eIAM Access Analyzer\u003c/i\u003e (\u003ca href=\"https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html\"\u003ehttps://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html\u003c/a\u003e).",
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"

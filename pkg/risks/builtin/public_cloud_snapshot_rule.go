@@ -51,7 +51,8 @@ func (*PublicCloudSnapshotRule) Category() *types.RiskCategory {
 		STRIDE:   types.InformationDisclosure,
 		DetectionLogic: "In-scope cloud technical assets (residing in cloud trust boundaries or tagged with cloud " +
 			"provider tags) storing data assets, that are either tagged as snapshot-capable services (aws:ebs, " +
-			"aws:rds, aws:ec2 for AMIs) or are " + types.Database + " or " + types.BlockStorage + " assets.",
+			"aws:rds, aws:ec2 for AMIs) or are " + types.Database + " or " + types.BlockStorage + " assets not running " +
+			"as containers.",
 		RiskAssessment: "The risk rating depends on the confidentiality of the technical asset itself and of the " +
 			"data assets stored, as a snapshot discloses the stored data but does not alter it.",
 		FalsePositives: "Cloud assets whose snapshots and images are not shared at all, or are shared only with " +
@@ -88,8 +89,11 @@ func (r *PublicCloudSnapshotRule) GenerateRisks(input *types.Model) ([]*types.Ri
 			continue
 		}
 
+		// a database running in a container keeps its data on a volume, which the block storage behind it
+		// models: the cloud does not snapshot the container itself
 		kind, tagged := snapshotKind(input, technicalAsset)
-		if !tagged && !technicalAsset.Technologies.GetAttribute(types.Database, types.BlockStorage) {
+		if !tagged && (technicalAsset.Machine == types.Container ||
+			!technicalAsset.Technologies.GetAttribute(types.Database, types.BlockStorage)) {
 			continue
 		}
 		risks = append(risks, r.createRisk(input, technicalAsset, kind))

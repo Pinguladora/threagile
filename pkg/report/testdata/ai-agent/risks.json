@@ -1261,33 +1261,6 @@
     "most_relevant_communication_link_title": "Moderation"
   },
   {
-    "category": "public-cloud-snapshot",
-    "risk_status": "unchecked",
-    "severity": "medium",
-    "exploitation_likelihood": "unlikely",
-    "exploitation_impact": "high",
-    "title": "\u003cb\u003ePublicly Shared Cloud Snapshot\u003c/b\u003e risk at \u003cb\u003eOrders Database\u003c/b\u003e",
-    "synthetic_id": "public-cloud-snapshot@orders-db",
-    "most_relevant_technical_asset": "orders-db",
-    "data_breach_probability": "probable",
-    "data_breach_technical_assets": [
-      "orders-db"
-    ],
-    "plain_title": "Publicly Shared Cloud Snapshot risk at Orders Database",
-    "category_title": "Publicly Shared Cloud Snapshot",
-    "stride": "information-disclosure",
-    "function": "operations",
-    "cwe": 668,
-    "references": [
-      "OWASP A02:2025 Security Misconfiguration"
-    ],
-    "action": "Snapshot Sharing Restrictions",
-    "mitigation": "Prevent the public sharing of snapshots and images with a cloud configuration rule that revokes it, and audit the sharing settings regularly. Do not bake credentials into images; see the secrets management cheat sheet at \u003ca href=\"https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html\"\u003ehttps://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html\u003c/a\u003e. \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Turn on \u003ci\u003eblock public access\u003c/i\u003e for EBS snapshots (\u003ca href=\"https://docs.aws.amazon.com/ebs/latest/userguide/block-public-access-snapshots.html\"\u003ehttps://docs.aws.amazon.com/ebs/latest/userguide/block-public-access-snapshots.html\u003c/a\u003e) and for AMIs (\u003ca href=\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-to-amis.html\"\u003ehttps://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-to-amis.html\u003c/a\u003e) in every region, use the AWS Config managed rules \u003ci\u003eebs-snapshot-public-restorable-check\u003c/i\u003e (\u003ca href=\"https://docs.aws.amazon.com/config/latest/developerguide/ebs-snapshot-public-restorable-check.html\"\u003ehttps://docs.aws.amazon.com/config/latest/developerguide/ebs-snapshot-public-restorable-check.html\u003c/a\u003e) and \u003ci\u003erds-snapshots-public-prohibited\u003c/i\u003e (\u003ca href=\"https://docs.aws.amazon.com/config/latest/developerguide/rds-snapshots-public-prohibited.html\"\u003ehttps://docs.aws.amazon.com/config/latest/developerguide/rds-snapshots-public-prohibited.html\u003c/a\u003e) with an automatic remediation, and review the snapshot findings of \u003ci\u003eIAM Access Analyzer\u003c/i\u003e (\u003ca href=\"https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html\"\u003ehttps://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html\u003c/a\u003e).",
-    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
-    "most_relevant_technical_asset_title": "Orders Database",
-    "most_relevant_technical_asset_raa": 100
-  },
-  {
     "category": "server-side-request-forgery",
     "risk_status": "unchecked",
     "severity": "elevated",
