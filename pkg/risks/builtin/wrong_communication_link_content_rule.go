@@ -1,6 +1,8 @@
 package builtin
 
 import (
+	"strings"
+
 	"github.com/Pinguladora/threagile/pkg/types"
 )
 
@@ -42,15 +44,16 @@ func (r *WrongCommunicationLinkContentRule) GenerateRisks(input *types.Model) ([
 	risks := make([]*types.Risk, 0)
 	for _, techAsset := range input.TechnicalAssets {
 		for _, commLink := range techAsset.CommunicationLinks {
-			// check readonly consistency
+			// a link with both inconsistencies gets one risk naming both, as the risk is identified by the link
+			reasons := make([]string, 0)
 			if hasReadonlyMismatch(commLink) {
-				risks = append(risks, r.createRisk(techAsset, commLink,
-					"(data assets sent/received not matching the communication link's readonly flag)"))
+				reasons = append(reasons, "(data assets sent/received not matching the communication link's readonly flag)")
 			}
-			// check for protocol inconsistencies
-			targetAsset := input.TechnicalAssets[commLink.TargetId]
-			if reason := protocolMismatch(commLink, targetAsset); reason != "" {
-				risks = append(risks, r.createRisk(techAsset, commLink, reason))
+			if reason := protocolMismatch(commLink, input.TechnicalAssets[commLink.TargetId]); reason != "" {
+				reasons = append(reasons, reason)
+			}
+			if len(reasons) > 0 {
+				risks = append(risks, r.createRisk(techAsset, commLink, strings.Join(reasons, " and ")))
 			}
 		}
 	}
