@@ -13,7 +13,8 @@
 //   - colours keep their alpha, so transparent pens draw nothing;
 //   - text uses the embedded DejaVu Sans font (regular weight only) and is centred
 //     in the box Graphviz reserved for it, shrunk where it would not fit;
-//   - images, bold, italic and output to a file name are not supported.
+//   - images, bold, italic and output to a file name are not supported;
+//   - it draws with golang.org/x/image (see pngCanvas) instead of fogleman/gg and golang/freetype.
 
 package report
 
@@ -26,11 +27,11 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/fogleman/gg"
 	"github.com/goccy/go-graphviz"
 	"github.com/goccy/go-graphviz/gvc"
-	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/font"
+	"golang.org/x/image/font/basicfont"
+	"golang.org/x/image/font/opentype"
 )
 
 // DejaVu Sans 2.37, see fonts/DejaVuSans-LICENSE. Its widths are close to the
@@ -48,7 +49,7 @@ func renderDiagramPNG(dot []byte) ([]byte, error) {
 	defer diagramRenderMutex.Unlock()
 
 	ctx := context.Background()
-	diagramFont, err := truetype.Parse(diagramFontTTF)
+	diagramFont, err := opentype.Parse(diagramFontTTF)
 	if err != nil {
 		return nil, fmt.Errorf("error parsing the diagram font: %w", err)
 	}
@@ -85,8 +86,8 @@ func renderDiagramPNG(dot []byte) ([]byte, error) {
 
 type pngRenderer struct {
 	*gvc.DefaultRenderEngine
-	dc    *gg.Context
-	font  *truetype.Font
+	dc    *pngCanvas
+	font  *opentype.Font
 	faces map[float64]font.Face
 	// nodeFilled is set once the current node's shape has been filled.
 	nodeFilled bool
@@ -96,7 +97,7 @@ type pngRenderer struct {
 }
 
 func (r *pngRenderer) BeginPage(_ context.Context, job *gvc.Job) error {
-	r.dc = gg.NewContext(int(job.Width()), int(job.Height())) // #nosec G115 -- page size in pixels
+	r.dc = newPNGCanvas(int(job.Width()), int(job.Height())) // #nosec G115 -- page size in pixels
 	x, y := r.point(job, job.Translation().X(), job.Translation().Y())
 	r.dc.Translate(x, y)
 	return nil
@@ -129,12 +130,12 @@ func (r *pngRenderer) TextSpan(_ context.Context, job *gvc.Job, p *gvc.PointFloa
 	scale := job.Scale().X()
 	size := span.Font().Size() * scale
 	r.dc.SetFontFace(r.face(size))
-	width, _ := r.dc.MeasureString(span.Text())
+	width := r.dc.MeasureString(span.Text())
 	reserved := span.Size().X() * scale
 	if width > reserved && width > 0 {
 		// Text sized for a narrower font (the default Times of the legend) shrinks to fit.
 		r.dc.SetFontFace(r.face(size * reserved / width))
-		width, _ = r.dc.MeasureString(span.Text())
+		width = r.dc.MeasureString(span.Text())
 	}
 	x, y := r.point(job, p.X(), p.Y()+span.YOffsetCenterLine())
 	switch span.Just() {
@@ -224,7 +225,6 @@ func (r *pngRenderer) draw(job *gvc.Job, fill bool) {
 	}
 	scale := job.Scale().X()
 	r.dc.SetLineWidth(obj.PenWidth() * scale)
-	r.dc.SetLineCapButt()
 	switch obj.Pen() { // the dash patterns of the Graphviz cairo renderer
 	case gvc.PenDashed:
 		r.dc.SetDash(6*scale, 6*scale)
@@ -273,7 +273,10 @@ func (r *pngRenderer) face(size float64) font.Face {
 	if face, ok := r.faces[size]; ok {
 		return face
 	}
-	face := truetype.NewFace(r.font, &truetype.Options{Size: size})
+	face, err := opentype.NewFace(r.font, &opentype.FaceOptions{Size: size, DPI: 72, Hinting: font.HintingNone})
+	if err != nil {
+		face = basicfont.Face7x13 // the embedded font is known good, so this cannot happen
+	}
 	r.faces[size] = face
 	return face
 }
