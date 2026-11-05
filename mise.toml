@@ -64,14 +64,31 @@ description = "Run all Go tests"
 alias = "t"
 
 [tasks.snapshot]
-run = "goreleaser release --snapshot --clean --skip=sign,sbom,ko"
-description = "Local snapshot build with GoReleaser (skips signing, SBOM, and ko images)"
+run = "goreleaser release --snapshot --clean --skip=sign,sbom,docker"
+description = "Local snapshot build with GoReleaser (skips signing, SBOM, and the container image)"
 alias = "snap"
 
 [tasks."snapshot:container"]
 run = "goreleaser release --snapshot --clean --skip=sign,sbom"
-description = "Local snapshot build including the ko container image (skips signing, SBOM)"
+description = "Local snapshot build including the container image (needs docker buildx; skips signing, SBOM)"
 alias = "snapc"
+
+[tasks."image:check"]
+description = "Render the PDF report of the example with the container image of snapshot:container"
+# The snapshot builds one image per platform, tagged with the platform; this runs the amd64 one.
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+engine="${CONTAINER_ENGINE:-docker}"
+out="$(mktemp -d)"
+trap 'rm -rf "${out}"' EXIT
+chmod 777 "${out}" # the image runs as an unprivileged user
+cp demo/example/threagile.yaml "${out}/"
+"${engine}" run --rm -v "${out}:/work:Z" ghcr.io/pinguladora/threagile:latest-amd64 \
+  analyze-model --model /work/threagile.yaml --output /work --skip-report-adoc
+test -s "${out}/report.pdf"
+echo "the image renders the PDF report"
+'''
 
 [tasks."lint:go"]
 run = "golangci-lint run ./... --fix"

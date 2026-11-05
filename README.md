@@ -37,7 +37,8 @@ it, threagile writes every other output and warns:
 go install github.com/Pinguladora/threagile/cmd/threagile@latest
 ```
 
-Or run the container image `ghcr.io/pinguladora/threagile`, which holds only the binary. The image is
+Or run the container image `ghcr.io/pinguladora/threagile`, which holds only the binary and typst, for the
+PDF report, on the minimal Red Hat `hi/static` base. The image is
 published with the releases; until then, build it locally with `mise run snapshot:container`.
 
 ## Usage

@@ -89,3 +89,34 @@ jobs:
             go-${{ runner.os }}-
       - name: Check the PDF reports with veraPDF
         run: mise run pdf:validate
+
+  image:
+    name: Container image
+    # Builds the container image of a release as a snapshot (nothing is pushed) and renders the PDF report of the
+    # example with it, so that a broken image shows before a release.
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read # checkout
+    env:
+      MISE_ENV: ci
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: block
+          disable-telemetry: "true"
+          disable-sudo: "true"
+          allowed-endpoints: >
+            github.com:443 api.github.com:443 codeload.github.com:443 objects.githubusercontent.com:443 release-assets.githubusercontent.com:443 raw.githubusercontent.com:443 mise.jdx.dev:443 proxy.golang.org:443 sum.golang.org:443 storage.googleapis.com:443 dl.google.com:443 go.dev:443 *.actions.githubusercontent.com:443 *.blob.core.windows.net:443 ghcr.io:443 pkg-containers.githubusercontent.com:443 registry.access.redhat.com:443 *.quay.io:443
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0 # goreleaser versions the snapshot from the tags
+      - name: Set up mise
+        uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
+      - name: Build the snapshot image
+        run: mise run snapshot:container
+      - name: Render the example's PDF report with the image
+        run: mise run image:check
