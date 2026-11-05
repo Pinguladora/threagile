@@ -137,6 +137,8 @@ func (what *Threagile) initOptionFlags() {
 		"macro to execute")
 	flags.StringVar(&what.flags.FailOnValue, failOnFlagName, what.config.GetFailOn(),
 		"exit with status 2 when unchecked risks of this severity or higher remain (low, medium, elevated, high, critical)")
+	flags.StringVar(&what.flags.BaselineValue, baselineFlagName, what.config.GetBaseline(),
+		"risks json of an earlier analysis to compare with; --fail-on then only fails on new or escalated risks")
 
 	// RiskExcelValue not available as flags
 
@@ -453,6 +455,7 @@ func (what *Threagile) overrideOptionArgs(cmd *cobra.Command) {
 	override(what, cmd, skipRiskRulesFlagName, &what.config.SkipRiskRulesValue,
 		strings.Split(what.flags.skipRiskRulesValue, ","))
 	override(what, cmd, failOnFlagName, &what.config.FailOnValue, what.flags.FailOnValue)
+	what.overridePath(cmd, baselineFlagName, &what.config.BaselineValue, what.flags.BaselineValue)
 	override(what, cmd, executeModelMacroFlagName, &what.config.ExecuteModelMacroValue, what.flags.ExecuteModelMacroValue)
 
 	// RiskExcelValue not available as flags

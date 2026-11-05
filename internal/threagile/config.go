@@ -58,6 +58,7 @@ type Config struct {
 	SkipRiskRulesValue     []string        `json:"SkipRiskRules,omitempty"     yaml:"SkipRiskRules"`
 	ExecuteModelMacroValue string          `json:"ExecuteModelMacro,omitempty" yaml:"ExecuteModelMacro"`
 	FailOnValue            string          `json:"FailOn,omitempty"            yaml:"FailOn"`
+	BaselineValue          string          `json:"Baseline,omitempty"          yaml:"Baseline"`
 	RiskExcelValue         RiskExcelConfig `json:"RiskExcel"                   yaml:"RiskExcel"`
 
 	ServerModeValue               bool `json:"ServerMode,omitempty"               yaml:"ServerMode"`
@@ -123,6 +124,7 @@ type ConfigGetter interface {
 	GetSkipRiskRules() []string
 	GetExecuteModelMacro() string
 	GetFailOn() string
+	GetBaseline() string
 	GetRiskExcelConfigHideColumns() []string
 	GetRiskExcelConfigSortByColumns() []string
 	GetRiskExcelConfigWidthOfColumns() map[string]float64
@@ -171,6 +173,7 @@ type ConfigSetter interface {
 	SetRiskRulePlugins(riskRulePlugins []string)
 	SetSkipRiskRules(skipRiskRules []string)
 	SetFailOn(failOn string)
+	SetBaseline(baseline string)
 	SetServerMode(serverMode bool)
 	SetServerPort(serverPort int)
 	SetDiagramDPI(diagramDPI int)
@@ -214,6 +217,7 @@ func (c *Config) Defaults(buildTimestamp string) *Config {
 		SkipRiskRulesValue:     make([]string, 0),
 		ExecuteModelMacroValue: "",
 		FailOnValue:            "",
+		BaselineValue:          "",
 		RiskExcelValue:         defaultRiskExcelConfig(),
 
 		ServerModeValue:               false,
@@ -539,6 +543,9 @@ var configMergers = lowerCaseKeys(map[string]func(c *Config, config *Config, val
 	},
 	"FailOn": func(c *Config, config *Config, _ any) {
 		c.FailOnValue = config.FailOnValue
+	},
+	"Baseline": func(c *Config, config *Config, _ any) {
+		c.BaselineValue = config.BaselineValue
 	},
 	"RiskExcel": func(c *Config, config *Config, value any) {
 		c.mergeRiskExcel(config, value)
@@ -882,6 +889,14 @@ func (c *Config) GetFailOn() string {
 
 func (c *Config) SetFailOn(failOn string) {
 	c.FailOnValue = failOn
+}
+
+func (c *Config) GetBaseline() string {
+	return c.BaselineValue
+}
+
+func (c *Config) SetBaseline(baseline string) {
+	c.BaselineValue = baseline
 }
 
 func (c *Config) GetExecuteModelMacro() string {
