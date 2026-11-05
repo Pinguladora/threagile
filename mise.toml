@@ -138,6 +138,34 @@ go run ./cmd/threagile analyze-model \
 '''
 alias = "a"
 
+[tasks."pdf:validate"]
+description = "Render the PDF reports of the demos and check them with veraPDF as PDF/A-3a and PDF/UA-1"
+# veraPDF runs from its container image (amd64 only): conda-forge has no arm64 build either, and mise cannot lock a
+# tool for some platforms only. CONTAINER_ENGINE picks docker (the default) or podman.
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+engine="${CONTAINER_ENGINE:-docker}"
+image="docker.io/verapdf/cli:v1.30.3@sha256:d74b7026c18a0f171e73c153b617fe6520e1511feb24ca98a348b2bb897669fb"
+out="$(mktemp -d)"
+trap 'rm -rf "${out}"' EXIT
+for demo in example ai-agent; do
+  mkdir -p "${out}/${demo}"
+  go run ./cmd/threagile analyze-model --model "demo/${demo}/threagile.yaml" --output "${out}/${demo}" \
+    --temp-dir "${out}" --skip-report-adoc --skip-risks-excel --skip-tags-excel
+  for flavour in ua1 3a; do
+    "${engine}" run --rm -v "${out}/${demo}:/data:Z" "${image}" --flavour "${flavour}" /data/report.pdf \
+      > "${out}/${demo}/verapdf-${flavour}.xml" || true
+    if ! grep -q 'isCompliant="true"' "${out}/${demo}/verapdf-${flavour}.xml"; then
+      echo "${demo}: report.pdf is not compliant with ${flavour}:" >&2
+      grep -o 'clause="[^"]*" testNumber="[0-9]*" status="failed"[^>]*' "${out}/${demo}/verapdf-${flavour}.xml" >&2 || true
+      exit 1
+    fi
+    echo "${demo}: report.pdf is compliant with ${flavour}"
+  done
+done
+'''
+
 [tasks.serve]
 # --server-dir is where the static UI lives (server/static); the server also
 # writes its API keys under server/keys, which is gitignored.
