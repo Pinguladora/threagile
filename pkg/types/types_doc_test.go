@@ -89,6 +89,7 @@ func typesDoc(t *testing.T, types map[string][]TypeEnum) string {
 // writeTechnologyTable renders the technologies with their aliases, which models may use instead of the names.
 func writeTechnologyTable(t *testing.T, doc *strings.Builder, technologies []TypeEnum) {
 	t.Helper()
+	doc.WriteString("A model may name a technology by one of its aliases; threagile reads it as the value.\n\n")
 	doc.WriteString("| Value | Aliases | Description |\n|-------|---------|-------------|\n")
 	for _, value := range technologies {
 		technology, ok := value.(Technology)

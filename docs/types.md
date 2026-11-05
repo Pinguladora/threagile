@@ -276,6 +276,8 @@ Used by `size` of technical assets.
 
 Used by `technologies` of technical assets.
 
+A model may name a technology by one of its aliases; threagile reads it as the value.
+
 | Value | Aliases | Description |
 |-------|---------|-------------|
 | `ai` | `artificial-intelligence`, `machine-learning`, `deep-learning`, `neural-network`, `ml`, `dl` | An Artificial Intelligence service |
