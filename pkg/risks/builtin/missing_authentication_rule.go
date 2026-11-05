@@ -128,7 +128,8 @@ func (r *MissingAuthenticationRule) createRisk(
 		DataBreachProbability:           types.Possible,
 		DataBreachTechnicalAssetIDs:     []string{technicalAsset.Id},
 	}
+	// a forwarded access names the caller of the forwarding asset, so each caller has its own risk
 	risk.SyntheticId = risk.CategoryId + "@" + incomingAccess.Id + "@" +
-		input.TechnicalAssets[incomingAccess.SourceId].Id + "@" + technicalAsset.Id
+		input.TechnicalAssets[incomingAccessOrigin.SourceId].Id + "@" + technicalAsset.Id
 	return risk
 }
