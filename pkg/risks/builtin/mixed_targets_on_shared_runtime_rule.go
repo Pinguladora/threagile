@@ -65,15 +65,14 @@ func (r *MixedTargetsOnSharedRuntimeRule) GenerateRisks(input *types.Model) ([]*
 // hasMixedTargets tells whether the technical assets running on the shared runtime are in different trust
 // boundaries or are both exclusively frontend and exclusively backend related.
 func hasMixedTargets(input *types.Model, sharedRuntime *types.SharedRuntime) bool {
-	currentTrustBoundaryId := ""
 	hasFrontend, hasBackend := false, false
-	for _, technicalAssetId := range sharedRuntime.TechnicalAssetsRunning {
+	for i, technicalAssetId := range sharedRuntime.TechnicalAssetsRunning {
 		technicalAsset := input.TechnicalAssets[technicalAssetId]
-		if len(currentTrustBoundaryId) > 0 &&
-			currentTrustBoundaryId != input.GetTechnicalAssetTrustBoundaryId(technicalAsset) {
+		// being in no trust boundary differs from being in one
+		if i > 0 && input.GetTechnicalAssetTrustBoundaryId(technicalAsset) !=
+			input.GetTechnicalAssetTrustBoundaryId(input.TechnicalAssets[sharedRuntime.TechnicalAssetsRunning[0]]) {
 			return true
 		}
-		currentTrustBoundaryId = input.GetTechnicalAssetTrustBoundaryId(technicalAsset)
 		if technicalAsset.Technologies.GetAttribute(types.IsExclusivelyFrontendRelated) {
 			hasFrontend = true
 		}

@@ -279,3 +279,28 @@ func TestMixedTargetsOnSharedRuntimeRuleGenerateRisksMixedTrustBoundaryRiskCreat
 		})
 	}
 }
+
+func TestMixedTargetsOnSharedRuntimeRuleGenerateRisksAssetInNoTrustBoundaryWhateverTheOrder(t *testing.T) {
+	rule := NewMixedTargetsOnSharedRuntimeRule()
+	model := func(running ...string) *types.Model {
+		return &types.Model{
+			TechnicalAssets: map[string]*types.TechnicalAsset{
+				"inside": {Id: "inside"},
+				"none":   {Id: "none"},
+			},
+			TrustBoundaries: map[string]*types.TrustBoundary{
+				"tb": {Id: "tb", TechnicalAssetsInside: []string{"inside"}},
+			},
+			SharedRuntimes: map[string]*types.SharedRuntime{
+				"runtime": {Id: "runtime", TechnicalAssetsRunning: running},
+			},
+		}
+	}
+
+	for _, running := range [][]string{{"inside", "none"}, {"none", "inside"}} {
+		risks, err := rule.GenerateRisks(model(running...))
+
+		assert.Nil(t, err)
+		assert.Len(t, risks, 1, running)
+	}
+}
