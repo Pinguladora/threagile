@@ -254,7 +254,11 @@ function:
     function: true
     propagate_identity_to_outgoing_targets: true
 gateway:
-  description: A gateway connecting two systems or trust boundaries
+  aliases:
+    - api-gateway
+    - ai-gateway
+    - llm-gateway
+  description: A gateway connecting two systems or trust boundaries, like an API gateway or an AI gateway enforcing rate limits and token budgets
   attributes:
     gateway: true
     frontend_related: true

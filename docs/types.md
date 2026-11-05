@@ -305,7 +305,7 @@ Used by `technologies` of technical assets.
 | `field-device` | `sensor`, `actuator`, `industrial-sensor`, `industrial-actuator`, `ied`, `intelligent-electronic-device`, `drive` | A sensor, actuator or other field device of an industrial control system |
 | `file-server` | `file-storage` | A file server |
 | `function` |  | A specific function (maybe RPC ?) |
-| `gateway` |  | A gateway connecting two systems or trust boundaries |
+| `gateway` | `api-gateway`, `ai-gateway`, `llm-gateway` | A gateway connecting two systems or trust boundaries, like an API gateway or an AI gateway enforcing rate limits and token budgets |
 | `historian` | `process-historian`, `data-historian` | A historian storing the process data of an industrial control system |
 | `hmi` | `human-machine-interface`, `operator-panel`, `operator-station` | A human-machine interface that operators monitor and control an industrial process with |
 | `hsm` | `hardware-security-module` | Hardware Security Module |

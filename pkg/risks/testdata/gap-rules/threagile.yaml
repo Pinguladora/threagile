@@ -1,0 +1,836 @@
+threagile_version: 1.0.0
+
+# Exercises the rules on overprivileged machine identities and unbounded model consumption: what they find and what
+# they skip.
+
+title: Gap Rules
+
+date: 2026-11-05
+
+author:
+  name: John Doe
+
+business_criticality: critical
+
+business_overview:
+  description: Gap rules test
+  images: []
+
+technical_overview:
+  description: Gap rules test
+  images: []
+
+data_assets:
+
+  Orders:
+    id: orders
+    description: Orders
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Orders of the customers
+
+  Catalog:
+    id: catalog
+    description: Catalog
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Public product catalog
+
+technical_assets:
+
+
+  Deployer:
+    id: deployer
+    description: Deployer
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [build-pipeline]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Schema Admin:
+        target: orders-db
+        description: Schema Admin
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: authenticated-only
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Schema Read:
+        target: orders-db
+        description: Schema Read
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: authenticated-only
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Scoped Deploy:
+        target: orders-db
+        description: Scoped Deploy
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Unknown Deploy:
+        target: orders-db
+        description: Unknown Deploy
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: unknown
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      User Deploy:
+        target: orders-db
+        description: User Deploy
+        protocol: https
+        authentication: short-lived-token
+        identity: end-user
+        authorization: authenticated-only
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Catalog Admin:
+        target: catalog-store
+        description: Catalog Admin
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+
+  Order Service:
+    id: order-service
+    description: Order Service
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [web-service-rest]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Order Storage:
+        target: orders-db
+        description: Order Storage
+        protocol: jdbc-encrypted
+        authentication: short-lived-token
+        identity: workload
+        authorization: none
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Orders DB:
+    id: orders-db
+    description: Orders DB
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [database]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: [orders]
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Catalog Store:
+    id: catalog-store
+    description: Catalog Store
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [database]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: [catalog]
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Chat Browser:
+    id: chat-browser
+    description: Chat Browser
+    type: external-entity
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: true
+    justification_out_of_scope: External
+    size: service
+    technologies: [browser]
+    tags: []
+    internet: true
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Open Chat:
+        target: open-agent
+        description: Open Chat
+        protocol: https
+        authentication: short-lived-token
+        identity: end-user
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+      Gated Chat:
+        target: api-gateway
+        description: Gated Chat
+        protocol: https
+        authentication: short-lived-token
+        identity: end-user
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+      Budget Chat:
+        target: budget-agent
+        description: Budget Chat
+        protocol: https
+        authentication: short-lived-token
+        identity: end-user
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+      Mixed Chat:
+        target: mixed-agent
+        description: Mixed Chat
+        protocol: https
+        authentication: short-lived-token
+        identity: end-user
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+
+  Staff Laptop:
+    id: staff-laptop
+    description: Staff Laptop
+    type: external-entity
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: true
+    justification_out_of_scope: External
+    size: service
+    technologies: [desktop]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Staff Chat:
+        target: staff-app
+        description: Staff Chat
+        protocol: https
+        authentication: short-lived-token
+        identity: end-user
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+
+  Open Agent:
+    id: open-agent
+    description: Open Agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Open Completion:
+        target: shared-model
+        description: Open Completion
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+
+  API Gateway:
+    id: api-gateway
+    description: API Gateway
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [gateway]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Gated Request:
+        target: gated-agent
+        description: Gated Request
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+
+  Gated Agent:
+    id: gated-agent
+    description: Gated Agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Gated Completion:
+        target: shared-model
+        description: Gated Completion
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+
+  Budget Agent:
+    id: budget-agent
+    description: Budget Agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Budget Completion:
+        target: llm-gateway
+        description: Budget Completion
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+
+  Mixed Agent:
+    id: mixed-agent
+    description: Mixed Agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [ai-agent]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Mixed Budget Completion:
+        target: llm-gateway
+        description: Mixed Budget Completion
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+      Mixed Direct Completion:
+        target: shared-model
+        description: Mixed Direct Completion
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+
+  LLM Gateway:
+    id: llm-gateway
+    description: LLM Gateway
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [gateway]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Metered Completion:
+        target: metered-model
+        description: Metered Completion
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+
+  Metered Model:
+    id: metered-model
+    description: Metered Model
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [llm]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Staff App:
+    id: staff-app
+    description: Staff App
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [web-application]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Staff Summary:
+        target: staff-model
+        description: Staff Summary
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+
+  Staff Model:
+    id: staff-model
+    description: Staff Model
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [llm]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: mission-critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Shared Model:
+    id: shared-model
+    description: Shared Model
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [llm]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Batch Job:
+    id: batch-job
+    description: Batch Job
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [batch-processing]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Batch Completion:
+        target: batch-model
+        description: Batch Completion
+        protocol: https
+        authentication: short-lived-token
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [catalog]
+        data_assets_received: [catalog]
+
+  Batch Model:
+    id: batch-model
+    description: Batch Model
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [llm]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+trust_boundaries:
+
+  Build Network:
+    id: build-network
+    description: The build system
+    type: network-cloud-security-group
+    tags: []
+    technical_assets_inside: [deployer]
+    trust_boundaries_nested: []
+
+  App Network:
+    id: app-network
+    description: The applications
+    type: network-cloud-security-group
+    tags: []
+    technical_assets_inside: [order-service, orders-db, catalog-store, open-agent, api-gateway, gated-agent, budget-agent, mixed-agent, llm-gateway, metered-model, staff-app, staff-model, shared-model, batch-job, batch-model]
+    trust_boundaries_nested: []
+
+shared_runtimes: {}

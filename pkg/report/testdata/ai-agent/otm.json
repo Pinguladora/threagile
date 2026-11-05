@@ -331,6 +331,16 @@
               "state": "required"
             }
           ]
+        },
+        {
+          "threat": "unbounded-model-consumption",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "unbounded-model-consumption-mitigation",
+              "state": "recommended"
+            }
+          ]
         }
       ],
       "attributes": {
@@ -946,6 +956,16 @@
           "mitigations": [
             {
               "mitigation": "model-output-disclosure-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "unbounded-model-consumption",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "unbounded-model-consumption-mitigation",
               "state": "recommended"
             }
           ]
@@ -2149,6 +2169,30 @@
       }
     },
     {
+      "id": "unbounded-model-consumption",
+      "name": "Unbounded Model Consumption",
+      "description": "Every request to a language model or an agent costs compute and tokens, and an agent can turn one request into many model calls. Users who reach a model or an agent without a gateway that limits their requests and tokens can exhaust its capacity, or the budget of a model paid for by use.",
+      "categories": [
+        "Denial of Service",
+        "OWASP LLM10:2025 Unbounded Consumption",
+        "OWASP API4:2023 Unrestricted Resource Consumption",
+        "MAESTRO Layer 4: Deployment and Infrastructure"
+      ],
+      "cwes": [
+        "CWE-770"
+      ],
+      "risk": {
+        "likelihood": 75,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers, or a runaway agent, might make the model or the agent unavailable for others, or run up its costs (denial of wallet)."
+      },
+      "attributes": {
+        "threagile:asvs": "V11 - Business Logic Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html",
+        "threagile:function": "architecture"
+      }
+    },
+    {
       "id": "unchecked-deployment",
       "name": "Unchecked Deployment",
       "description": "For each build-pipeline component Unchecked Deployment risks might arise when the build-pipeline does not include established DevSecOps best-practices. DevSecOps best-practices scan as part of CI/CD pipelines for vulnerabilities in source- or byte-code, dependencies, container layers, and dynamically against running test systems. There are several open-source and commercial tools existing in the categories DAST, SAST, and IAST.",
@@ -2452,6 +2496,15 @@
       "id": "unauthenticated-mcp-server-mitigation",
       "name": "Tool Server Authentication",
       "description": "Authenticate every caller of the server, for example with OAuth 2.1 as the MCP specification describes for HTTP transports, and pass on the identity of the user an agent acts for, so that each tool call is authorized for that user. Expose the server only to the agents that need it.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "unbounded-model-consumption-mitigation",
+      "name": "Rate Limits and Token Budgets",
+      "description": "Put a gateway between the users and the model or agent, like an API gateway or an AI gateway, that limits the requests and the tokens per user and per period, caps the length of inputs and outputs, and alerts on spending, and limit the number of model calls and tool calls per task in the agent. Model the gateway as a gateway technical asset in the path from the users, or between the agent and its language models.",
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"

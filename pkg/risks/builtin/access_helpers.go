@@ -13,6 +13,7 @@ const (
 	owaspAPIServerSideRequestForgery         = "OWASP API7:2023 Server Side Request Forgery"
 	owaspAPISecurityMisconfiguration         = "OWASP API8:2023 Security Misconfiguration"
 	owaspNHISecretLeakage                    = "OWASP NHI2:2025 Secret Leakage" // #nosec G101 // a catalog entry
+	owaspNHIOverprivileged                   = "OWASP NHI5:2025 Overprivileged NHI"
 	owaspNHIInsecureCloudDeployment          = "OWASP NHI6:2025 Insecure Cloud Deployment Configurations"
 	owaspNHILongLivedSecrets                 = "OWASP NHI7:2025 Long-Lived Secrets" // #nosec G101 // a catalog entry
 	owaspNHIReuse                            = "OWASP NHI9:2025 NHI Reuse"

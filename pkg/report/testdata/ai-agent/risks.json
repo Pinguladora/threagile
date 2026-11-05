@@ -1782,6 +1782,64 @@
     "most_relevant_communication_link_title": "Tool Calls"
   },
   {
+    "category": "unbounded-model-consumption",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "very-likely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eUnbounded Model Consumption\u003c/b\u003e risk at \u003cb\u003eGuardrail Model\u003c/b\u003e",
+    "synthetic_id": "unbounded-model-consumption@guardrail-model",
+    "most_relevant_technical_asset": "guardrail-model",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "guardrail-model"
+    ],
+    "plain_title": "Unbounded Model Consumption risk at Guardrail Model",
+    "category_title": "Unbounded Model Consumption",
+    "stride": "denial-of-service",
+    "function": "architecture",
+    "cwe": 770,
+    "references": [
+      "OWASP LLM10:2025 Unbounded Consumption",
+      "OWASP API4:2023 Unrestricted Resource Consumption",
+      "MAESTRO Layer 4: Deployment and Infrastructure"
+    ],
+    "action": "Rate Limits and Token Budgets",
+    "mitigation": "Put a gateway between the users and the model or agent, like an API gateway or an AI gateway, that limits the requests and the tokens per user and per period, caps the length of inputs and outputs, and alerts on spending, and limit the number of model calls and tool calls per task in the agent. Model the gateway as a gateway technical asset in the path from the users, or between the agent and its language models.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Guardrail Model",
+    "most_relevant_technical_asset_raa": 26.23574144486692
+  },
+  {
+    "category": "unbounded-model-consumption",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "very-likely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eUnbounded Model Consumption\u003c/b\u003e risk at \u003cb\u003eSupport Agent\u003c/b\u003e",
+    "synthetic_id": "unbounded-model-consumption@support-agent",
+    "most_relevant_technical_asset": "support-agent",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "support-agent"
+    ],
+    "plain_title": "Unbounded Model Consumption risk at Support Agent",
+    "category_title": "Unbounded Model Consumption",
+    "stride": "denial-of-service",
+    "function": "architecture",
+    "cwe": 770,
+    "references": [
+      "OWASP LLM10:2025 Unbounded Consumption",
+      "OWASP API4:2023 Unrestricted Resource Consumption",
+      "MAESTRO Layer 4: Deployment and Infrastructure"
+    ],
+    "action": "Rate Limits and Token Budgets",
+    "mitigation": "Put a gateway between the users and the model or agent, like an API gateway or an AI gateway, that limits the requests and the tokens per user and per period, caps the length of inputs and outputs, and alerts on spending, and limit the number of model calls and tool calls per task in the agent. Model the gateway as a gateway technical asset in the path from the users, or between the agent and its language models.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Support Agent",
+    "most_relevant_technical_asset_raa": 87.3574144486692
+  },
+  {
     "category": "unchecked-deployment",
     "risk_status": "unchecked",
     "severity": "low",

@@ -11,6 +11,7 @@ const (
 	asvsStoredCryptography = "V6 - Stored Cryptography Verification Requirements"
 	asvsDataProtection     = "V8 - Data Protection Verification Requirements"
 	asvsMaliciousCode      = "V10 - Malicious Code Verification Requirements"
+	asvsBusinessLogic      = "V11 - Business Logic Verification Requirements"
 	asvsFilesAndResources  = "V12 - File and Resources Verification Requirements"
 	asvsConfiguration      = "V14 - Configuration Verification Requirements"
 

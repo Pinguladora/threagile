@@ -17,6 +17,7 @@ const (
 	owaspLLMDataAndModelPoisoning     = "OWASP LLM04:2025 Data and Model Poisoning"
 	owaspLLMExcessiveAgency           = "OWASP LLM06:2025 Excessive Agency"
 	owaspLLMVectorAndEmbedding        = "OWASP LLM08:2025 Vector and Embedding Weaknesses"
+	owaspLLMUnboundedConsumption      = "OWASP LLM10:2025 Unbounded Consumption"
 	owaspAgenticGoalHijack            = "OWASP ASI01:2026 Agent Goal Hijack"
 	owaspAgenticToolMisuse            = "OWASP ASI02:2026 Tool Misuse and Exploitation"
 	owaspAgenticPrivilegeAbuse        = "OWASP ASI03:2026 Identity and Privilege Abuse"
@@ -45,6 +46,7 @@ const (
 	cweInsufficientAuthenticity    = 345  // CWE-345: Insufficient Verification of Data Authenticity
 	cweDownloadWithoutIntegrity    = 494  // CWE-494: Download of Code Without Integrity Check
 	cweInsufficientLogging         = 778  // CWE-778: Insufficient Logging
+	cweUnlimitedAllocation         = 770  // CWE-770: Allocation of Resources Without Limits or Throttling
 	cweImproperLLMPromptNeutralize = 1427 // CWE-1427: Improper Neutralization of Input Used for LLM Prompting
 )
 
