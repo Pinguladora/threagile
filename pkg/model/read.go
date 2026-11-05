@@ -116,12 +116,8 @@ func AnalyzeModel(
 	introTextRAA := applyRAA(parsedModel, progressReporter)
 
 	applyRiskGeneration(parsedModel, builtinRiskRules.Merge(customRiskRules), config.GetSkipRiskRules(), progressReporter)
-	err := parsedModel.ApplyWildcardRiskTrackingEvaluation(config.GetIgnoreOrphanedRiskTracking(), progressReporter)
-	if err != nil {
-		return nil, fmt.Errorf("unable to apply wildcard risk tracking evaluation: %w", err)
-	}
-
-	err = parsedModel.CheckRiskTracking(config.GetIgnoreOrphanedRiskTracking(), progressReporter)
+	parsedModel.ApplyWildcardRiskTrackingEvaluation(progressReporter)
+	err := parsedModel.CheckRiskTracking(config.GetIgnoreOrphanedRiskTracking(), progressReporter)
 	if err != nil {
 		return nil, fmt.Errorf("unable to check risk tracking: %w", err)
 	}

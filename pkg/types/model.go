@@ -104,9 +104,9 @@ func (model *Model) CheckTags(tags []string, where string) ([]string, error) {
 	return tagsUsed, nil
 }
 
-func (model *Model) ApplyWildcardRiskTrackingEvaluation(
-	ignoreOrphanedRiskTracking bool, progressReporter ProgressReporter,
-) error {
+// ApplyWildcardRiskTrackingEvaluation copies the tracking of each wildcard pattern to the risks it matches that
+// have no tracking of their own. Patterns matching no risk are left to CheckRiskTracking.
+func (model *Model) ApplyWildcardRiskTrackingEvaluation(progressReporter ProgressReporter) {
 	progressReporter.Info("Executing risk tracking evaluation")
 	// several patterns can match the same risk and the first one wins, so apply them in a fixed order
 	deferredRiskTracking := model.GetDeferredRiskTrackingDueToWildcardMatching()
@@ -114,12 +114,10 @@ func (model *Model) ApplyWildcardRiskTrackingEvaluation(
 		riskTracking := deferredRiskTracking[syntheticRiskIdPattern]
 		progressReporter.Infof("Applying wildcard risk tracking for risk id: %v", syntheticRiskIdPattern)
 
-		foundSome := false
 		matchingRiskIdExpression := riskIdExpression(syntheticRiskIdPattern)
 		for _, syntheticRiskId := range slices.Sorted(maps.Keys(model.GeneratedRisksBySyntheticId)) {
 			if matchingRiskIdExpression.Match([]byte(syntheticRiskId)) &&
 				model.HasNotYetAnyDirectNonWildcardRiskTracking(syntheticRiskId) {
-				foundSome = true
 				model.RiskTracking[syntheticRiskId] = &RiskTracking{
 					SyntheticRiskId: strings.TrimSpace(syntheticRiskId),
 					Justification:   riskTracking.Justification,
@@ -132,16 +130,7 @@ func (model *Model) ApplyWildcardRiskTrackingEvaluation(
 				progressReporter.Infof("  => %v", syntheticRiskId)
 			}
 		}
-
-		if !foundSome {
-			if ignoreOrphanedRiskTracking {
-				progressReporter.Warnf("Wildcard risk tracking does not match any risk id: %v", syntheticRiskIdPattern)
-			} else {
-				return fmt.Errorf("wildcard risk tracking does not match any risk id: %v", syntheticRiskIdPattern)
-			}
-		}
 	}
-	return nil
 }
 
 // riskIdExpression matches the synthetic ids of the risks that a risk id pattern names, as risk tracking does:
@@ -169,41 +158,33 @@ func (model *Model) RisksMatching(pattern string) []*Risk {
 	return risks
 }
 
+// CheckRiskTracking reports the risk tracking entries, plain ids or wildcard patterns, that match none of the
+// generated risks. They are typically left behind when the model or a rule changes. The error names all of them,
+// so that they can be fixed in one go; with ignoreOrphanedRiskTracking they are only logged.
 func (model *Model) CheckRiskTracking(ignoreOrphanedRiskTracking bool, progressReporter ProgressReporter) error {
 	progressReporter.Info("Checking risk tracking")
+	orphaned := make([]string, 0)
 	for _, syntheticRiskId := range slices.Sorted(maps.Keys(model.RiskTracking)) {
-		tracking := model.RiskTracking[syntheticRiskId]
-		foundSome := false
-		matchingRiskIdExpression := regexp.MustCompile(
-			strings.ReplaceAll(regexp.QuoteMeta(tracking.SyntheticRiskId), `\*`, `[^@]+`))
-		for syntheticRiskId := range model.GeneratedRisksBySyntheticId {
-			if matchingRiskIdExpression.Match([]byte(syntheticRiskId)) {
-				foundSome = true
-			}
-		}
-
-		if !foundSome {
-			if ignoreOrphanedRiskTracking {
-				progressReporter.Infof("Risk tracking references unknown risk (risk id not found): %v",
-					tracking.SyntheticRiskId)
-			} else {
-				return fmt.Errorf("Risk tracking references unknown risk (risk id not found) - "+
-					"you might want to use the option -ignore-orphaned-risk-tracking: %v"+
-					"\n\nNOTE: For risk tracking each risk-id needs to be defined (the string with the @ sign in it). "+
-					"These unique risk IDs are visible in the PDF report (the small grey string under each risk), "+
-					"the Excel (column \"ID\"), as well as the JSON responses. Some risk IDs have only one @ sign in them, "+
-					"while others multiple. The idea is to allow for unique but still speaking IDs. Therefore each risk instance "+
-					"creates its individual ID by taking all affected elements causing the risk to be within an @-delimited part. "+
-					"Using wildcards (the * sign) for parts delimited by @ signs allows to handle groups of certain risks at once. "+
-					"Best is to lookup the IDs to use in the created Excel file. Alternatively a model macro \"seed-risk-tracking\" "+
-					"is available that helps in initially seeding the risk tracking part here "+
-					"based on already identified and not yet handled risks",
-					tracking.SyntheticRiskId)
-			}
+		if len(model.RisksMatching(model.RiskTracking[syntheticRiskId].SyntheticRiskId)) == 0 {
+			orphaned = append(orphaned, model.RiskTracking[syntheticRiskId].SyntheticRiskId)
 		}
 	}
+	if len(orphaned) == 0 {
+		return nil
+	}
 
-	return nil
+	if ignoreOrphanedRiskTracking {
+		for _, syntheticRiskId := range orphaned {
+			progressReporter.Warnf("Risk tracking matches no risk: %v", syntheticRiskId)
+		}
+		return nil
+	}
+	return fmt.Errorf("risk tracking matches no risk for %d id(s): %v\n\n"+
+		"Each risk tracking id must name a risk that the model produces, where a \"*\" stands for one part "+
+		"of the id between the @ signs. Entries are left behind when the model or a rule changes. "+
+		"Look up the current ids with \"threagile explain risk <id or pattern>\" or in the reports, then update "+
+		"or remove the entries, or pass --ignore-orphaned-risk-tracking to only log them",
+		len(orphaned), strings.Join(orphaned, ", "))
 }
 
 func (model *Model) CheckTagExists(referencedTag, where string) error {

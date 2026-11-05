@@ -43,11 +43,46 @@ func TestWildcardRiskTrackingMatchesWholeIds(t *testing.T) {
 		},
 	}
 
-	assert.NoError(t, model.ApplyWildcardRiskTrackingEvaluation(false, silentReporter{}))
+	model.ApplyWildcardRiskTrackingEvaluation(silentReporter{})
 
 	assert.Contains(t, model.RiskTracking, "some-rule@db")
 	assert.NotContains(t, model.RiskTracking, "some-rule@db-replica", "another asset whose id starts the same")
 	assert.NotContains(t, model.RiskTracking, "some-rule@db@link", "an id with more parts")
+}
+
+func TestCheckRiskTrackingNamesEveryOrphanedEntry(t *testing.T) {
+	model := &Model{
+		GeneratedRisksBySyntheticId: map[string]*Risk{
+			"some-rule@db-replica": {SyntheticId: "some-rule@db-replica"},
+			"other-rule@db":        {SyntheticId: "other-rule@db"},
+		},
+		RiskTracking: map[string]*RiskTracking{
+			"some-rule@db":         {SyntheticRiskId: "some-rule@db", Status: Accepted},
+			"some-rule@db-replica": {SyntheticRiskId: "some-rule@db-replica", Status: Accepted},
+			"other-rule@*":         {SyntheticRiskId: "other-rule@*", Status: Mitigated},
+			"gone-rule@*":          {SyntheticRiskId: "gone-rule@*", Status: Mitigated},
+		},
+	}
+	model.ApplyWildcardRiskTrackingEvaluation(silentReporter{})
+
+	err := model.CheckRiskTracking(false, silentReporter{})
+
+	assert.ErrorContains(t, err, "for 2 id(s): gone-rule@*, some-rule@db\n",
+		"an id is not a prefix of other ids, and all orphans are named at once")
+	assert.NoError(t, model.CheckRiskTracking(true, silentReporter{}), "only logged when ignored")
+}
+
+func TestCheckRiskTrackingAcceptsAPatternWhoseRisksAreTrackedDirectly(t *testing.T) {
+	model := &Model{
+		GeneratedRisksBySyntheticId: map[string]*Risk{"some-rule@db": {SyntheticId: "some-rule@db"}},
+		RiskTracking: map[string]*RiskTracking{
+			"some-rule@db": {SyntheticRiskId: "some-rule@db", Status: Accepted},
+			"some-rule@*":  {SyntheticRiskId: "some-rule@*", Status: Mitigated},
+		},
+	}
+	model.ApplyWildcardRiskTrackingEvaluation(silentReporter{})
+
+	assert.NoError(t, model.CheckRiskTracking(false, silentReporter{}))
 }
 
 // silentReporter drops all progress.
