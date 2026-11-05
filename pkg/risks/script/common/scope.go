@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/Pinguladora/threagile/pkg/types"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 )
 
 type Scope struct {

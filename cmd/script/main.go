@@ -9,7 +9,7 @@ import (
 
 	"github.com/Pinguladora/threagile/pkg/risks/script"
 	"github.com/Pinguladora/threagile/pkg/types"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 )
 
 func main() {

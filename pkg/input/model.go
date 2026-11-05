@@ -10,11 +10,9 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
-	"sort"
 	"strings"
 
-	"github.com/mpvl/unique"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 )
 
 // === Model Type Stuff ======================================
@@ -258,17 +256,16 @@ var modelSectionMergers = map[string]func(model *Model, included *Model) error{
 		return nil
 	},
 	"diagram_tweak_invisible_connections_between_assets": func(model *Model, included *Model) error {
-		model.DiagramTweakInvisibleConnectionsBetweenAssets = append(model.DiagramTweakInvisibleConnectionsBetweenAssets,
-			included.DiagramTweakInvisibleConnectionsBetweenAssets...)
-		sort.Strings(model.DiagramTweakInvisibleConnectionsBetweenAssets)
-		unique.Strings(&model.DiagramTweakInvisibleConnectionsBetweenAssets)
+		merged := slices.Concat(model.DiagramTweakInvisibleConnectionsBetweenAssets,
+			included.DiagramTweakInvisibleConnectionsBetweenAssets)
+		slices.Sort(merged)
+		model.DiagramTweakInvisibleConnectionsBetweenAssets = slices.Compact(merged)
 		return nil
 	},
 	"diagram_tweak_same_rank_assets": func(model *Model, included *Model) error {
-		model.DiagramTweakSameRankAssets = append(model.DiagramTweakSameRankAssets,
-			included.DiagramTweakSameRankAssets...)
-		sort.Strings(model.DiagramTweakSameRankAssets)
-		unique.Strings(&model.DiagramTweakSameRankAssets)
+		merged := slices.Concat(model.DiagramTweakSameRankAssets, included.DiagramTweakSameRankAssets)
+		slices.Sort(merged)
+		model.DiagramTweakSameRankAssets = slices.Compact(merged)
 		return nil
 	},
 }

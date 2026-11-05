@@ -2,9 +2,9 @@ package report
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 
-	"github.com/mpvl/unique"
 	"github.com/xuri/excelize/v2"
 )
 
@@ -29,7 +29,8 @@ func (what *RiskGroup) SortedGroups() []string {
 	}
 
 	sort.Strings(groups)
-	unique.Strings(&groups)
+	slices.Sort(groups)
+	groups = slices.Compact(groups)
 
 	return groups
 }
@@ -126,7 +127,8 @@ func (what *RiskGroup) uniqueValues(column int) []string {
 	}
 
 	sort.Strings(values)
-	unique.Strings(&values)
+	slices.Sort(values)
+	values = slices.Compact(values)
 
 	return values
 }

@@ -10,15 +10,14 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/jung-kurt/gofpdf v1.16.2
 	github.com/mattn/go-shellwords v1.0.12
-	github.com/mpvl/unique v0.0.0-20150818121801-cbe035fff7de
 	github.com/shopspring/decimal v1.4.0
 	github.com/spf13/pflag v1.0.6
 	github.com/wcharczuk/go-chart v2.0.1+incompatible
 	github.com/xuri/excelize/v2 v2.9.0
 	github.com/yuin/goldmark v1.8.5
+	go.yaml.in/yaml/v3 v3.0.6
 	golang.org/x/crypto v0.48.0
 	golang.org/x/text v0.34.0
-	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -45,6 +44,7 @@ require (
 	github.com/tetratelabs/wazero v1.10.1 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	golang.org/x/sys v0.41.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 require (

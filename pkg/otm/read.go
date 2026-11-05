@@ -10,7 +10,7 @@ import (
 
 	"github.com/Pinguladora/threagile/pkg/interchange"
 	"github.com/Pinguladora/threagile/pkg/types"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 )
 
 // UnmarshalJSON reads attributes, turning values that are not strings into their JSON text. OTM
