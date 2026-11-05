@@ -414,3 +414,37 @@ func TestDosRiskyAccessAcrossTrustBoundaryRuleGenerateRisksWithLoadBalancerMulti
 	assert.Equal(t, "<b>Denial-of-Service</b> risky access of <b>Second Web Application</b> by <b>First Web Application</b> via <b>Call to load balancer</b> forwarded via <b>Load balancer</b>", risks[1].Title)
 	assert.Equal(t, types.LowImpact, risks[1].ExploitationImpact)
 }
+
+func TestDosRiskyAccessAcrossTrustBoundaryRuleGenerateRisksLoadBalancerNotRisksCreated(t *testing.T) {
+	rule := NewDosRiskyAccessAcrossTrustBoundaryRule()
+	internet := &types.TrustBoundary{Id: "internet", Type: types.NetworkDedicatedHoster}
+	edge := &types.TrustBoundary{Id: "edge", Type: types.NetworkOnPrem}
+	model := func(availability types.Criticality) *types.Model {
+		return &types.Model{
+			TechnicalAssets: map[string]*types.TechnicalAsset{
+				"browser": {Id: "browser"},
+				"lb": {
+					Id:           "lb",
+					Availability: availability,
+					Technologies: types.TechnologyList{
+						{Name: "load-balancer", Attributes: map[string]bool{types.LoadBalancer: true}},
+					},
+				},
+			},
+			IncomingTechnicalCommunicationLinksMappedByTargetId: map[string][]*types.CommunicationLink{
+				"lb": {{Id: "browser>lb", SourceId: "browser", TargetId: "lb", Protocol: types.HTTPS}},
+			},
+			DirectContainingTrustBoundaryMappedByTechnicalAssetId: map[string]*types.TrustBoundary{
+				"browser": internet,
+				"lb":      edge,
+			},
+		}
+	}
+
+	for _, availability := range []types.Criticality{types.Archive, types.MissionCritical} {
+		risks, err := rule.GenerateRisks(model(availability))
+
+		assert.Nil(t, err)
+		assert.Empty(t, risks, "load balancers are excluded, whatever their availability")
+	}
+}

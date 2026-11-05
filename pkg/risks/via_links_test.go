@@ -37,10 +37,6 @@ func TestViaLinksEndToEnd(t *testing.T) {
 		"missing-waf": {"missing-waf@status-page"},
 		// the hop that leaves the WAF is a link of the WAF
 		"server-side-request-forgery": {"server-side-request-forgery@waf@shop-server@customer-browser>shop-traffic>shop-server"},
-		// the customers reach the load balancer across a network trust boundary
-		"dos-risky-access-across-trust-boundary": {
-			"dos-risky-access-across-trust-boundary@load-balancer@customer-browser@customer-browser>shop-traffic>load-balancer->",
-		},
 	}
 	for category, expectedIds := range expected {
 		t.Run(category, func(t *testing.T) {
