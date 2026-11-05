@@ -75,7 +75,7 @@ description = "Build, sign, and publish a release with GoReleaser"
 description = "Extract a container image reference from the goreleaser artifacts"
 run = '''
 jq -r '
-  [.[] | select(.type=="Docker Manifest") | select(.extra.ID=="{{arg(i=0, name="ko_id")}}")]
+  [.[] | select(.type=="Docker Image") | select(.extra.ID=="{{arg(i=0, name="image_id")}}")]
   | first | .name | split("@") | first | split(":") | first
 ' dist/artifacts.json
 '''
@@ -84,7 +84,7 @@ jq -r '
 description = "Extract a container image digest from the goreleaser artifacts"
 run = '''
 jq -r '
-  [.[] | select(.type=="Docker Manifest") | select(.extra.ID=="{{arg(i=0, name="ko_id")}}")]
+  [.[] | select(.type=="Docker Image") | select(.extra.ID=="{{arg(i=0, name="image_id")}}")]
   | first | .extra.Digest
 ' dist/artifacts.json
 '''

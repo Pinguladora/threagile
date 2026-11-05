@@ -31,7 +31,8 @@ All outputs are then byte-identical between runs, `report.pdf` included.
 `report.pdf` has the chapters of the HTML and Markdown reports, with the diagrams as
 vector graphics on landscape pages. [Typst](https://typst.app) renders it, so it is
 only written when the `typst` command is on the `PATH`; without it, threagile warns
-and writes the other outputs.
+and writes the other outputs. The container image `ghcr.io/pinguladora/threagile` includes
+typst.
 
 The PDF conforms to PDF/A-3a, for archiving, and to PDF/UA-1, for accessibility: it
 is tagged, its images have alternative texts and it embeds its fonts. `mise run

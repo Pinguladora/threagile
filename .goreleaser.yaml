@@ -37,6 +37,26 @@ builds:
     # only runs on actual tags/releases
     skip: "{{ .IsSnapshot }}"
 
+  # The binaries of the container image, for the baseline variants that dockers_v2 takes for linux/amd64 and
+  # linux/arm64 (v1 and v8.0), so that the image runs on any CPU of its architecture.
+  - id: image
+    main: ./cmd/threagile
+    binary: threagile
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+      - -buildvcs=false
+    ldflags:
+      - -s -w
+      - -buildid=
+      - -X main.buildTimestamp={{.CommitDate}}
+      - -extldflags="-static"
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    targets:
+      - linux_amd64_v1
+      - linux_arm64_v8.0
+
   - id: dev
     main: ./cmd/threagile
     binary: threagile
@@ -67,25 +87,29 @@ gomod:
   proxy: true # Verifiable builds: fetch modules from the proxy
   mod: readonly # Prevent accidental go.mod/go.sum changes during build
 
-kos:
-  # The binary is static (CGO off, diagrams rendered in-process) and embeds its
-  # assets, so it runs on the minimal hi/static base with nothing else installed.
+dockers_v2:
+  # The binary of the image build and typst, which renders the PDF report, on the minimal hi/static base; see the
+  # Containerfile. Both are static, so nothing else is installed.
   - id: threagile-image
-    build: production
-    base_image: registry.access.redhat.com/hi/static:latest@sha256:f4d5109b57cf7eab0a7adc566f2d78f80fa0c5ec9ccab698c9fb8eb448db6071
-    bare: true
-    repositories:
+    ids: [image]
+    dockerfile: Containerfile
+    images:
       - ghcr.io/pinguladora/threagile
-    user: "65532:65532"
     tags:
       - latest
       - "{{.Tag}}"
     platforms:
       - linux/amd64
       - linux/arm64
-    sbom: spdx
-    creation_time: "{{.CommitTimestamp}}"
-    ko_data_creation_time: "{{.CommitTimestamp}}"
+    sbom: true
+    labels:
+      org.opencontainers.image.source: "{{.GitURL}}"
+      org.opencontainers.image.revision: "{{.FullCommit}}"
+      org.opencontainers.image.version: "{{.Version}}"
+      org.opencontainers.image.licenses: MIT
+    # the image records the commit time, not the build time
+    build_args:
+      SOURCE_DATE_EPOCH: "{{.CommitTimestamp}}"
 
 archives:
   - id: standard
