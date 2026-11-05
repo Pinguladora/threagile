@@ -440,6 +440,51 @@
     ],
     "raa": 20.912547528517113
   },
+  "order-policy": {
+    "id": "order-policy",
+    "title": "Order Policy",
+    "description": "Decides which orders a customer may see and refund, as an OpenFGA relationship graph",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "policy-decision-point",
+        "description": "A policy decision point that decides the authorization of other services, like an AuthZEN PDP, Open Policy Agent, Cedar, OpenFGA or SpiceDB",
+        "aliases": [
+          "pdp",
+          "authzen",
+          "authzen-pdp",
+          "authorization-service",
+          "opa",
+          "open-policy-agent",
+          "cedar",
+          "openfga",
+          "spicedb"
+        ],
+        "attributes": {
+          "backend_related": true,
+          "high_value_target": true,
+          "identity_related": true,
+          "policy-decision-point": true
+        }
+      }
+    ],
+    "machine": "container",
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "critical",
+    "availability": "critical",
+    "justification_cia_rating": "Wrong decisions leak orders or refund money",
+    "data_assets_processed": [
+      "order-data"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 18.155893536121674
+  },
   "order-service": {
     "id": "order-service",
     "title": "Order Service",
@@ -499,9 +544,25 @@
         ],
         "diagram_tweak_weight": 1,
         "diagram_tweak_constraint": true
+      },
+      {
+        "id": "order-service\u003erefund-authorization",
+        "source_id": "order-service",
+        "target_id": "order-policy",
+        "title": "Refund Authorization",
+        "description": "Asks whether the customer may get a refund of the order",
+        "protocol": "https",
+        "authentication": "client-certificate",
+        "identity": "workload",
+        "authorization": "function-level",
+        "data_assets_sent": [
+          "order-data"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
       }
     ],
-    "raa": 46.06157864553967
+    "raa": 51.21610355313315
   },
   "orders-db": {
     "id": "orders-db",
@@ -801,6 +862,6 @@
         "diagram_tweak_constraint": true
       }
     ],
-    "raa": 49.334600760456276
+    "raa": 49.34363660021108
   }
 }

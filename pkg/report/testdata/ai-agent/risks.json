@@ -200,6 +200,33 @@
     "severity": "medium",
     "exploitation_likelihood": "unlikely",
     "exploitation_impact": "medium",
+    "title": "\u003cb\u003eContainer Base Image Backdooring\u003c/b\u003e risk at \u003cb\u003eOrder Policy\u003c/b\u003e",
+    "synthetic_id": "container-baseimage-backdooring@order-policy",
+    "most_relevant_technical_asset": "order-policy",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "order-policy"
+    ],
+    "plain_title": "Container Base Image Backdooring risk at Order Policy",
+    "category_title": "Container Base Image Backdooring",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
+    "action": "Container Infrastructure Hardening",
+    "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
+    "most_relevant_technical_asset_title": "Order Policy",
+    "most_relevant_technical_asset_raa": 18.155893536121674
+  },
+  {
+    "category": "container-baseimage-backdooring",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
     "title": "\u003cb\u003eContainer Base Image Backdooring\u003c/b\u003e risk at \u003cb\u003eOrder Service\u003c/b\u003e",
     "synthetic_id": "container-baseimage-backdooring@order-service",
     "most_relevant_technical_asset": "order-service",
@@ -219,7 +246,7 @@
     "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
     "most_relevant_technical_asset_title": "Order Service",
-    "most_relevant_technical_asset_raa": 46.06157864553967
+    "most_relevant_technical_asset_raa": 51.21610355313315
   },
   {
     "category": "container-baseimage-backdooring",
@@ -300,7 +327,7 @@
     "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
     "most_relevant_technical_asset_title": "Support Tools",
-    "most_relevant_technical_asset_raa": 49.334600760456276
+    "most_relevant_technical_asset_raa": 49.34363660021108
   },
   {
     "category": "cross-site-request-forgery",
@@ -408,7 +435,7 @@
     "mitigation": "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
     "most_relevant_technical_asset_title": "Order Service",
-    "most_relevant_technical_asset_raa": 46.06157864553967,
+    "most_relevant_technical_asset_raa": 51.21610355313315,
     "most_relevant_communication_link_title": "Order API"
   },
   {
@@ -585,7 +612,7 @@
     "mitigation": "Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of multi-factor authentication for human users.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
     "most_relevant_technical_asset_title": "Support Tools",
-    "most_relevant_technical_asset_raa": 49.334600760456276,
+    "most_relevant_technical_asset_raa": 49.34363660021108,
     "most_relevant_communication_link_title": "Tool Calls"
   },
   {
@@ -637,7 +664,7 @@
     "mitigation": "Include the build infrastructure in the model.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
     "most_relevant_technical_asset_title": "Order Service",
-    "most_relevant_technical_asset_raa": 46.06157864553967
+    "most_relevant_technical_asset_raa": 51.21610355313315
   },
   {
     "category": "missing-cloud-hardening",
@@ -680,6 +707,7 @@
     "data_breach_probability": "probable",
     "data_breach_technical_assets": [
       "order-service",
+      "order-policy",
       "orders-db",
       "knowledge-cms"
     ],
@@ -714,6 +742,7 @@
       "ingestion-pipeline",
       "support-tools",
       "order-service",
+      "order-policy",
       "orders-db",
       "knowledge-cms"
     ],
@@ -840,6 +869,33 @@
     "most_relevant_technical_asset_raa": 87.3574144486692
   },
   {
+    "category": "missing-identity-provider-isolation",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eMissing Identity Provider Isolation\u003c/b\u003e to further encapsulate and protect identity-related asset \u003cb\u003eOrder Policy\u003c/b\u003e against unrelated lower protected assets \u003cb\u003ein the same network segment\u003c/b\u003e, which might be easier to compromise by attackers",
+    "synthetic_id": "missing-identity-provider-isolation@order-policy",
+    "most_relevant_technical_asset": "order-policy",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "order-policy"
+    ],
+    "plain_title": "Missing Identity Provider Isolation to further encapsulate and protect identity-related asset Order Policy against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers",
+    "category_title": "Missing Identity Provider Isolation",
+    "stride": "elevation-of-privilege",
+    "function": "operations",
+    "cwe": 1008,
+    "references": [
+      "OWASP A06:2025 Insecure Design"
+    ],
+    "action": "Network Segmentation",
+    "mitigation": "Apply a network segmentation trust-boundary around the highly sensitive identity provider assets and their identity data stores.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Order Policy",
+    "most_relevant_technical_asset_raa": 18.155893536121674
+  },
+  {
     "category": "missing-identity-store",
     "risk_status": "unchecked",
     "severity": "medium",
@@ -886,6 +942,33 @@
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
     "most_relevant_technical_asset_title": "Knowledge Index",
     "most_relevant_technical_asset_raa": 68.8212927756654
+  },
+  {
+    "category": "missing-network-segmentation",
+    "risk_status": "unchecked",
+    "severity": "low",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "low",
+    "title": "\u003cb\u003eMissing Network Segmentation\u003c/b\u003e to further encapsulate and protect \u003cb\u003eOrder Service\u003c/b\u003e against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers",
+    "synthetic_id": "missing-network-segmentation@order-service",
+    "most_relevant_technical_asset": "order-service",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "order-service"
+    ],
+    "plain_title": "Missing Network Segmentation to further encapsulate and protect Order Service against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers",
+    "category_title": "Missing Network Segmentation",
+    "stride": "elevation-of-privilege",
+    "function": "operations",
+    "cwe": 1008,
+    "references": [
+      "OWASP A06:2025 Insecure Design"
+    ],
+    "action": "Network Segmentation",
+    "mitigation": "Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Order Service",
+    "most_relevant_technical_asset_raa": 51.21610355313315
   },
   {
     "category": "missing-network-segmentation",
@@ -969,7 +1052,7 @@
     "mitigation": "Check in every operation that the user of the request may access each object it names, by the identity of the user rather than an id the request carries, and deny by default, for example by asking a policy decision point with the user, the action and the object. Set the authorization of the link to \u003ci\u003eobject-level\u003c/i\u003e once this is in place.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
     "most_relevant_technical_asset_title": "Order Service",
-    "most_relevant_technical_asset_raa": 46.06157864553967,
+    "most_relevant_technical_asset_raa": 51.21610355313315,
     "most_relevant_communication_link_title": "Order API"
   },
   {
@@ -1004,16 +1087,45 @@
     "most_relevant_communication_link_title": "Assistant Request"
   },
   {
+    "category": "missing-policy-decision-point-redundancy",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMissing Policy Decision Point Redundancy\u003c/b\u003e risk at \u003cb\u003eOrder Policy\u003c/b\u003e",
+    "synthetic_id": "missing-policy-decision-point-redundancy@order-policy",
+    "most_relevant_technical_asset": "order-policy",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "order-policy"
+    ],
+    "plain_title": "Missing Policy Decision Point Redundancy risk at Order Policy",
+    "category_title": "Missing Policy Decision Point Redundancy",
+    "stride": "denial-of-service",
+    "function": "architecture",
+    "cwe": 636,
+    "references": [
+      "OWASP A10:2025 Mishandling of Exceptional Conditions",
+      "OpenID AuthZEN Authorization API 1.0",
+      "NIST SP 800-162 Guide to Attribute Based Access Control"
+    ],
+    "action": "Policy Decision Point Redundancy",
+    "mitigation": "Run the policy decision point redundantly, or as a local instance next to each service that asks it, with the policies distributed to each instance. Let the services deny requests they cannot get a decision for, and cache decisions only briefly.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Order Policy",
+    "most_relevant_technical_asset_raa": 18.155893536121674
+  },
+  {
     "category": "missing-vault",
     "risk_status": "unchecked",
     "severity": "medium",
     "exploitation_likelihood": "unlikely",
     "exploitation_impact": "medium",
-    "title": "\u003cb\u003eMissing Vault (Secret Storage)\u003c/b\u003e in the threat model (referencing asset \u003cb\u003eOrder Service\u003c/b\u003e as an example)",
-    "synthetic_id": "missing-vault@order-service",
-    "most_relevant_technical_asset": "order-service",
+    "title": "\u003cb\u003eMissing Vault (Secret Storage)\u003c/b\u003e in the threat model (referencing asset \u003cb\u003eOrder Policy\u003c/b\u003e as an example)",
+    "synthetic_id": "missing-vault@order-policy",
+    "most_relevant_technical_asset": "order-policy",
     "data_breach_probability": "improbable",
-    "plain_title": "Missing Vault (Secret Storage) in the threat model (referencing asset Order Service as an example)",
+    "plain_title": "Missing Vault (Secret Storage) in the threat model (referencing asset Order Policy as an example)",
     "category_title": "Missing Vault (Secret Storage)",
     "stride": "information-disclosure",
     "function": "architecture",
@@ -1024,8 +1136,8 @@
     "action": "Vault (Secret Storage)",
     "mitigation": "Consider using a Vault (Secret Storage) to securely store and access config secrets (like credentials, private keys, client certificates, etc.).",
     "check": "GetAttribute a Vault (Secret Storage) in place?",
-    "most_relevant_technical_asset_title": "Order Service",
-    "most_relevant_technical_asset_raa": 46.06157864553967
+    "most_relevant_technical_asset_title": "Order Policy",
+    "most_relevant_technical_asset_raa": 18.155893536121674
   },
   {
     "category": "missing-waf",
@@ -1073,7 +1185,7 @@
     "mitigation": "Consider placing a Web Application Firewall (WAF) in front of the web-services and/or web-applications. For cloud environments many cloud providers offer pre-configured WAFs. Even reverse proxies can be enhances by a WAF component via ModSecurity plugins.",
     "check": "GetAttribute a Web Application Firewall (WAF) in place?",
     "most_relevant_technical_asset_title": "Order Service",
-    "most_relevant_technical_asset_raa": 46.06157864553967
+    "most_relevant_technical_asset_raa": 51.21610355313315
   },
   {
     "category": "model-output-disclosure",
@@ -1400,6 +1512,38 @@
     "severity": "elevated",
     "exploitation_likelihood": "likely",
     "exploitation_impact": "medium",
+    "title": "\u003cb\u003eServer-Side Request Forgery (SSRF)\u003c/b\u003e risk at \u003cb\u003eOrder Service\u003c/b\u003e server-side web-requesting the target \u003cb\u003eOrder Policy\u003c/b\u003e via \u003cb\u003eRefund Authorization\u003c/b\u003e",
+    "synthetic_id": "server-side-request-forgery@order-service@order-policy@order-service\u003erefund-authorization",
+    "most_relevant_technical_asset": "order-service",
+    "most_relevant_communication_link": "order-service\u003erefund-authorization",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "knowledge-cms",
+      "order-policy",
+      "order-service"
+    ],
+    "plain_title": "Server-Side Request Forgery (SSRF) risk at Order Service server-side web-requesting the target Order Policy via Refund Authorization",
+    "category_title": "Server-Side Request Forgery (SSRF)",
+    "stride": "information-disclosure",
+    "function": "development",
+    "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
+    "action": "SSRF Prevention",
+    "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Order Service",
+    "most_relevant_technical_asset_raa": 51.21610355313315,
+    "most_relevant_communication_link_title": "Refund Authorization"
+  },
+  {
+    "category": "server-side-request-forgery",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "medium",
     "title": "\u003cb\u003eServer-Side Request Forgery (SSRF)\u003c/b\u003e risk at \u003cb\u003eSupport Agent\u003c/b\u003e server-side web-requesting the target \u003cb\u003eGuardrail Model\u003c/b\u003e via \u003cb\u003eModeration\u003c/b\u003e",
     "synthetic_id": "server-side-request-forgery@support-agent@guardrail-model@support-agent\u003emoderation",
     "most_relevant_technical_asset": "support-agent",
@@ -1595,7 +1739,7 @@
     "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
     "most_relevant_technical_asset_title": "Support Tools",
-    "most_relevant_technical_asset_raa": 49.334600760456276,
+    "most_relevant_technical_asset_raa": 49.34363660021108,
     "most_relevant_communication_link_title": "Order API"
   },
   {
@@ -1629,7 +1773,7 @@
     "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
     "most_relevant_technical_asset_title": "Support Tools",
-    "most_relevant_technical_asset_raa": 49.334600760456276,
+    "most_relevant_technical_asset_raa": 49.34363660021108,
     "most_relevant_communication_link_title": "Web Search"
   },
   {
@@ -1687,7 +1831,7 @@
     "mitigation": "Try to use parameter binding to be safe from injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
     "most_relevant_technical_asset_title": "Order Service",
-    "most_relevant_technical_asset_raa": 46.06157864553967,
+    "most_relevant_technical_asset_raa": 51.21610355313315,
     "most_relevant_communication_link_title": "Order Storage"
   },
   {
@@ -1778,7 +1922,7 @@
     "mitigation": "Authenticate every caller of the server, for example with OAuth 2.1 as the MCP specification describes for HTTP transports, and pass on the identity of the user an agent acts for, so that each tool call is authorized for that user. Expose the server only to the agents that need it.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
     "most_relevant_technical_asset_title": "Support Tools",
-    "most_relevant_technical_asset_raa": 49.334600760456276,
+    "most_relevant_technical_asset_raa": 49.34363660021108,
     "most_relevant_communication_link_title": "Tool Calls"
   },
   {

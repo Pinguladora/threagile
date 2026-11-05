@@ -29,12 +29,13 @@
 20. [Identified Data Breach Probabilities by Data Asset](#identified-data-breach-probabilities-by-data-asset)
 21. [Trust Boundaries](#trust-boundaries)
 22. [Shared Runtimes](#shared-runtimes)
-23. [Communication Links](#communication-links)
-24. [Risk Tracking](#risk-tracking)
-25. [Threat Catalog Coverage](#threat-catalog-coverage)
-26. [Risk Rules Checked by Threagile](#risk-rules-checked-by-threagile)
-27. [Ratings](#ratings)
-28. [Disclaimer](#disclaimer)
+23. [Policy Decision Points](#policy-decision-points)
+24. [Communication Links](#communication-links)
+25. [Risk Tracking](#risk-tracking)
+26. [Threat Catalog Coverage](#threat-catalog-coverage)
+27. [Risk Rules Checked by Threagile](#risk-rules-checked-by-threagile)
+28. [Ratings](#ratings)
+29. [Disclaimer](#disclaimer)
 
 ## Management Summary
 
@@ -42,22 +43,22 @@ Threagile toolkit was used to model the architecture of "AI Support Assistant" a
 
 Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.
 
-In total **68 initial risks** in **29 categories** have been identified during the threat modeling process:
+In total **73 initial risks** in **31 categories** have been identified during the threat modeling process:
 
 | Severity | Risks | Status | Risks |
 | --- | ---: | --- | ---: |
-| Critical | 0 | Unchecked | 67 |
+| Critical | 0 | Unchecked | 72 |
 | High | 0 | In Discussion | 0 |
-| Elevated | 32 | Accepted | 0 |
-| Medium | 28 | In Progress | 1 |
-| Low | 8 | Mitigated | 0 |
+| Elevated | 33 | Accepted | 0 |
+| Medium | 31 | In Progress | 1 |
+| Low | 9 | Mitigated | 0 |
 |  |  | False Positive | 0 |
 
 The assistant acts for the customers: besides answering, it changes orders and issues refunds.
 
 ## Impact Analysis of the Initial Risks
 
-The most prevalent impacts of the **68 initial risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **73 initial risks** (distributed over **31 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Confused Deputy Agent](#confused-deputy-agent): 1 Initial Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -95,7 +96,7 @@ The most prevalent impacts of the **68 initial risks** (distributed over **29 ri
 
     If this risk is unmitigated, attackers might extract confidential data, other users' data or the system prompt through crafted questions.
 
-- **Elevated**: [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf): 11 Initial Risks, exploitation likelihood is _Likely_ with _Medium_ impact
+- **Elevated**: [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf): 12 Initial Risks, exploitation likelihood is _Likely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to access sensitive services or files of network-reachable components by modifying outgoing calls of affected components.
 
@@ -111,7 +112,7 @@ The most prevalent impacts of the **68 initial risks** (distributed over **29 ri
 
     If this risk is unmitigated, attackers might plant content that misleads the model, injects instructions into its prompts or makes it disclose data, persistently and for every user.
 
-- **Medium**: [Container Base Image Backdooring](#container-base-image-backdooring): 10 Initial Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Container Base Image Backdooring](#container-base-image-backdooring): 11 Initial Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to deeply persist in the target system by executing code in deployed containers.
 
@@ -135,6 +136,10 @@ The most prevalent impacts of the **68 initial risks** (distributed over **29 ri
 
     If this risk remains unmitigated, attackers might be able to easier attack high-value targets.
 
+- **Medium**: [Missing Identity Provider Isolation](#missing-identity-provider-isolation): 1 Initial Risk, exploitation likelihood is _Unlikely_ with _High_ impact
+
+    If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards highly sensitive identity provider assets and their identity data stores, as they are not separated by network segmentation.
+
 - **Medium**: [Missing Identity Store](#missing-identity-store): 1 Initial Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model in the identity provider/store that is currently missing in the model.
@@ -142,6 +147,10 @@ The most prevalent impacts of the **68 initial risks** (distributed over **29 ri
 - **Medium**: [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa): 1 Initial Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication.
+
+- **Medium**: [Missing Policy Decision Point Redundancy](#missing-policy-decision-point-redundancy): 1 Initial Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    If this risk is unmitigated, an outage of the policy decision point might stop every service that asks it, or let any request through services that fail open.
 
 - **Medium**: [Missing Vault (Secret Storage)](#missing-vault-secret-storage): 1 Initial Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -163,7 +172,7 @@ The most prevalent impacts of the **68 initial risks** (distributed over **29 ri
 
     If this risk remains unmitigated, attackers might be able to disturb the availability of important parts of the system.
 
-- **Low**: [Missing Network Segmentation](#missing-network-segmentation): 3 Initial Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
+- **Low**: [Missing Network Segmentation](#missing-network-segmentation): 4 Initial Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
 
     If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards more valuable targets, as they are not separated by network segmentation.
 
@@ -183,23 +192,23 @@ The following table gives a high-level overview of the risk tracking status (inc
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Critical | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | High | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Elevated | 32 | 32 | 0 | 0 | 0 | 0 | 0 |
-| Medium | 28 | 27 | 0 | 0 | 1 | 0 | 0 |
-| Low | 8 | 8 | 0 | 0 | 0 | 0 | 0 |
+| Elevated | 33 | 33 | 0 | 0 | 0 | 0 | 0 |
+| Medium | 31 | 30 | 0 | 0 | 1 | 0 | 0 |
+| Low | 9 | 9 | 0 | 0 | 0 | 0 | 0 |
 
-After removal of risks with status _mitigated_ and _false positive_ the following **68 remain unmitigated**:
+After removal of risks with status _mitigated_ and _false positive_ the following **73 remain unmitigated**:
 
 | Severity | Unmitigated risks | To be checked by | Unmitigated risks |
 | --- | ---: | --- | ---: |
 | Critical | 0 | Business Side | 1 |
-| High | 0 | Architecture | 14 |
-| Elevated | 32 | Development | 22 |
-| Medium | 28 | Operations | 31 |
-| Low | 8 |  |  |
+| High | 0 | Architecture | 15 |
+| Elevated | 33 | Development | 23 |
+| Medium | 31 | Operations | 34 |
+| Low | 9 |  |  |
 
 ## Impact Analysis of the Remaining Risks
 
-The most prevalent impacts of the **68 remaining risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **73 remaining risks** (distributed over **31 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Confused Deputy Agent](#confused-deputy-agent): 1 Remaining Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -237,7 +246,7 @@ The most prevalent impacts of the **68 remaining risks** (distributed over **29 
 
     If this risk is unmitigated, attackers might extract confidential data, other users' data or the system prompt through crafted questions.
 
-- **Elevated**: [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf): 11 Remaining Risks, exploitation likelihood is _Likely_ with _Medium_ impact
+- **Elevated**: [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf): 12 Remaining Risks, exploitation likelihood is _Likely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to access sensitive services or files of network-reachable components by modifying outgoing calls of affected components.
 
@@ -253,7 +262,7 @@ The most prevalent impacts of the **68 remaining risks** (distributed over **29 
 
     If this risk is unmitigated, attackers might plant content that misleads the model, injects instructions into its prompts or makes it disclose data, persistently and for every user.
 
-- **Medium**: [Container Base Image Backdooring](#container-base-image-backdooring): 10 Remaining Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Container Base Image Backdooring](#container-base-image-backdooring): 11 Remaining Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to deeply persist in the target system by executing code in deployed containers.
 
@@ -277,6 +286,10 @@ The most prevalent impacts of the **68 remaining risks** (distributed over **29 
 
     If this risk remains unmitigated, attackers might be able to easier attack high-value targets.
 
+- **Medium**: [Missing Identity Provider Isolation](#missing-identity-provider-isolation): 1 Remaining Risk, exploitation likelihood is _Unlikely_ with _High_ impact
+
+    If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards highly sensitive identity provider assets and their identity data stores, as they are not separated by network segmentation.
+
 - **Medium**: [Missing Identity Store](#missing-identity-store): 1 Remaining Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model in the identity provider/store that is currently missing in the model.
@@ -284,6 +297,10 @@ The most prevalent impacts of the **68 remaining risks** (distributed over **29 
 - **Medium**: [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa): 1 Remaining Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication.
+
+- **Medium**: [Missing Policy Decision Point Redundancy](#missing-policy-decision-point-redundancy): 1 Remaining Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    If this risk is unmitigated, an outage of the policy decision point might stop every service that asks it, or let any request through services that fail open.
 
 - **Medium**: [Missing Vault (Secret Storage)](#missing-vault-secret-storage): 1 Remaining Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -305,7 +322,7 @@ The most prevalent impacts of the **68 remaining risks** (distributed over **29 
 
     If this risk remains unmitigated, attackers might be able to disturb the availability of important parts of the system.
 
-- **Low**: [Missing Network Segmentation](#missing-network-segmentation): 3 Remaining Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
+- **Low**: [Missing Network Segmentation](#missing-network-segmentation): 4 Remaining Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
 
     If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards more valuable targets, as they are not separated by network segmentation.
 
@@ -319,7 +336,7 @@ The most prevalent impacts of the **68 remaining risks** (distributed over **29 
 
 ## Risks by Severity
 
-All **68 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
+All **73 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
 
 ### Critical
 
@@ -335,7 +352,7 @@ _No risks._
 
 ### Elevated
 
-**32 risks**
+**33 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
@@ -356,6 +373,7 @@ _No risks._
 | Elevated | [**Server-Side Request Forgery (SSRF)** risk at **Guardrail Model** server-side web-requesting the target **Model Registry** via **Model Pull**](#server-side-request-forgery-ssrf) | [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | [Guardrail Model](#guardrail-model), [Model Pull](#model-pull) | Unchecked |
 | Elevated | [**Server-Side Request Forgery (SSRF)** risk at **Ingestion Pipeline** server-side web-requesting the target **Knowledge CMS** via **Article Export**](#server-side-request-forgery-ssrf) | [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | [Ingestion Pipeline](#ingestion-pipeline), [Article Export](#article-export) | Unchecked |
 | Elevated | [**Server-Side Request Forgery (SSRF)** risk at **Ingestion Pipeline** server-side web-requesting the target **Knowledge Index** via **Embedding Upsert**](#server-side-request-forgery-ssrf) | [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | [Ingestion Pipeline](#ingestion-pipeline), [Embedding Upsert](#embedding-upsert) | Unchecked |
+| Elevated | [**Server-Side Request Forgery (SSRF)** risk at **Order Service** server-side web-requesting the target **Order Policy** via **Refund Authorization**](#server-side-request-forgery-ssrf) | [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | [Order Service](#order-service), [Refund Authorization](#refund-authorization) | Unchecked |
 | Elevated | [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Guardrail Model** via **Moderation**](#server-side-request-forgery-ssrf) | [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | [Support Agent](#support-agent), [Moderation](#moderation) | Unchecked |
 | Elevated | [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Hosted LLM** via **Completion**](#server-side-request-forgery-ssrf) | [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | [Support Agent](#support-agent), [Completion](#completion) | Unchecked |
 | Elevated | [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Knowledge Index** via **Memory Write**](#server-side-request-forgery-ssrf) | [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | [Support Agent](#support-agent), [Memory Write](#memory-write) | Unchecked |
@@ -374,7 +392,7 @@ _No risks._
 
 ### Medium
 
-**28 risks**
+**31 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
@@ -384,6 +402,7 @@ _No risks._
 | Medium | [**Container Base Image Backdooring** risk at **Knowledge CMS**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Knowledge CMS](#knowledge-cms) | Unchecked |
 | Medium | [**Container Base Image Backdooring** risk at **Knowledge Index**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Knowledge Index](#knowledge-index) | Unchecked |
 | Medium | [**Container Base Image Backdooring** risk at **Model Registry**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Model Registry](#model-registry) | Unchecked |
+| Medium | [**Container Base Image Backdooring** risk at **Order Policy**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Order Policy](#order-policy) | Unchecked |
 | Medium | [**Container Base Image Backdooring** risk at **Order Service**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Order Service](#order-service) | Unchecked |
 | Medium | [**Container Base Image Backdooring** risk at **Orders Database**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Orders Database](#orders-database) | Unchecked |
 | Medium | [**Container Base Image Backdooring** risk at **Support Agent**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Support Agent](#support-agent) | Unchecked |
@@ -399,8 +418,10 @@ _No risks._
 | Medium | [**Missing Hardening** risk at **Knowledge Index**](#missing-hardening) | [Missing Hardening](#missing-hardening) | [Knowledge Index](#knowledge-index) | Unchecked |
 | Medium | [**Missing Hardening** risk at **Orders Database**](#missing-hardening) | [Missing Hardening](#missing-hardening) | [Orders Database](#orders-database) | Unchecked |
 | Medium | [**Missing Hardening** risk at **Support Agent**](#missing-hardening) | [Missing Hardening](#missing-hardening) | [Support Agent](#support-agent) | Unchecked |
+| Medium | [**Missing Identity Provider Isolation** to further encapsulate and protect identity-related asset **Order Policy** against unrelated lower protected assets **in the same network segment**, which might be easier to compromise by attackers](#missing-identity-provider-isolation) | [Missing Identity Provider Isolation](#missing-identity-provider-isolation) | [Order Policy](#order-policy) | Unchecked |
 | Medium | [**Missing Identity Store** in the threat model (referencing asset **Support Agent** as an example)](#missing-identity-store) | [Missing Identity Store](#missing-identity-store) | [Support Agent](#support-agent) | Unchecked |
-| Medium | [**Missing Vault (Secret Storage)** in the threat model (referencing asset **Order Service** as an example)](#missing-vault-secret-storage) | [Missing Vault (Secret Storage)](#missing-vault-secret-storage) | [Order Service](#order-service) | Unchecked |
+| Medium | [**Missing Policy Decision Point Redundancy** risk at **Order Policy**](#missing-policy-decision-point-redundancy) | [Missing Policy Decision Point Redundancy](#missing-policy-decision-point-redundancy) | [Order Policy](#order-policy) | Unchecked |
+| Medium | [**Missing Vault (Secret Storage)** in the threat model (referencing asset **Order Policy** as an example)](#missing-vault-secret-storage) | [Missing Vault (Secret Storage)](#missing-vault-secret-storage) | [Order Policy](#order-policy) | Unchecked |
 | Medium | [**Unverified Model Supply Chain** risk at **Model Registry**](#unverified-model-supply-chain) | [Unverified Model Supply Chain](#unverified-model-supply-chain) | [Model Registry](#model-registry) | Unchecked |
 | Medium | [**Unverified Model Supply Chain** risk at **Guardrail Model**](#unverified-model-supply-chain) | [Unverified Model Supply Chain](#unverified-model-supply-chain) | [Guardrail Model](#guardrail-model) | In Progress |
 | Medium | [**Unencrypted Technical Asset** named **Knowledge Index**](#unencrypted-technical-assets) | [Unencrypted Technical Assets](#unencrypted-technical-assets) | [Knowledge Index](#knowledge-index) | Unchecked |
@@ -409,13 +430,14 @@ _No risks._
 
 ### Low
 
-**8 risks**
+**9 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
 | Low | [**Denial-of-Service** risky access of **Order Service** by **Support Tools** via **Order API**](#dos-risky-access-across-trust-boundary) | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | [Order Service](#order-service), [Order API](#order-api) | Unchecked |
 | Low | [**Denial-of-Service** risky access of **Support Agent** by **Chat Frontend** via **Assistant Request**](#dos-risky-access-across-trust-boundary) | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | [Support Agent](#support-agent), [Assistant Request](#assistant-request) | Unchecked |
 | Low | [**Missing Network Segmentation** to further encapsulate and protect **Knowledge Index** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) | [Missing Network Segmentation](#missing-network-segmentation) | [Knowledge Index](#knowledge-index) | Unchecked |
+| Low | [**Missing Network Segmentation** to further encapsulate and protect **Order Service** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) | [Missing Network Segmentation](#missing-network-segmentation) | [Order Service](#order-service) | Unchecked |
 | Low | [**Missing Network Segmentation** to further encapsulate and protect **Orders Database** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) | [Missing Network Segmentation](#missing-network-segmentation) | [Orders Database](#orders-database) | Unchecked |
 | Low | [**Missing Network Segmentation** to further encapsulate and protect **Support Agent** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) | [Missing Network Segmentation](#missing-network-segmentation) | [Support Agent](#support-agent) | Unchecked |
 | Low | [**Missing Web Application Firewall (WAF)** risk at **Knowledge CMS**](#missing-web-application-firewall-waf) | [Missing Web Application Firewall (WAF)](#missing-web-application-firewall-waf) | [Knowledge CMS](#knowledge-cms) | Unchecked |
@@ -459,6 +481,7 @@ flowchart TB
         end
         subgraph tb_3691562735 ["Backend Subnet (network-cloud-security-group)"]
             ta_1305071387(["Knowledge CMS"])
+            ta_1077714544(["Order Policy"])
             ta_1556212517(["Order Service"])
             ta_1312838741[("Orders Database")]
         end
@@ -474,6 +497,7 @@ flowchart TB
     ta_981300970 -->|"https"| ta_1251095166
     ta_1505061542 -->|"https"| ta_752644550
     ta_1505061542 -->|"https"| ta_1305071387
+    ta_1556212517 -->|"https"| ta_1077714544
     ta_1556212517 ==>|"jdbc-encrypted"| ta_1312838741
     ta_1299996772 ==>|"https"| ta_351167582
     ta_1299996772 -->|"https"| ta_752644550
@@ -527,6 +551,10 @@ Data-flow diagram of "AI Support Assistant". A box is an external entity, a stad
 - [Model Registry](#model-registry)
 
     Stores the versions of the guardrail model
+
+- [Order Policy](#order-policy)
+
+    Decides which orders a customer may see and refund, as an OpenFGA relationship graph
 
 - [Orders Database](#orders-database)
 
@@ -604,7 +632,7 @@ _This list is not complete and regulatory or law relevant abuse cases have to be
 
 ## STRIDE Classification of Identified Risks
 
-This chapter clusters and classifies the risks by STRIDE categories: in total **68 potential risks** have been identified during the threat modeling process.
+This chapter clusters and classifies the risks by STRIDE categories: in total **73 potential risks** have been identified during the threat modeling process.
 
 ### Spoofing
 
@@ -630,7 +658,7 @@ Spoofing - Authenticity
 
 ### Tampering
 
-**30 risks**
+**31 risks**
 
 Tampering - Integrity
 
@@ -646,7 +674,7 @@ Tampering - Integrity
 
     Language models and agents answer and act on what they retrieve from vector stores, for retrieval-augmented generation (RAG) or as the memory of an agent. Whoever can write into the store decides what the model believes: a poisoned document or memory entry carries false facts or hidden instructions into every answer that retrieves it, long after it was written.
 
-- **Medium**: [Container Base Image Backdooring](#container-base-image-backdooring): 10/10 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Container Base Image Backdooring](#container-base-image-backdooring): 11/11 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors.
 
@@ -686,7 +714,7 @@ Repudiation - Non-repudiability
 
 ### Information Disclosure
 
-**16 risks**
+**17 risks**
 
 Information disclosure - Confidentiality
 
@@ -694,7 +722,7 @@ Information disclosure - Confidentiality
 
     Whatever a language model or an agent can read, it can be talked into writing: data in its prompt, in its context window, in the documents it retrieves or in its training data. A model that has confidential data at hand and answers callers from the internet, from users or from another trust zone may hand that data to callers who are not allowed to see it.
 
-- **Elevated**: [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf): 11/11 unmitigated Risks, exploitation likelihood is _Likely_ with _Medium_ impact
+- **Elevated**: [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf): 12/12 unmitigated Risks, exploitation likelihood is _Likely_ with _Medium_ impact
 
     When a server system (i.e. not a client) is accessing other server systems via typical web protocols Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might arise.
 
@@ -708,7 +736,7 @@ Information disclosure - Confidentiality
 
 ### Denial of Service
 
-**4 risks**
+**5 risks**
 
 Denial of service - Availability
 
@@ -716,13 +744,17 @@ Denial of service - Availability
 
     Every request to a language model or an agent costs compute and tokens, and an agent can turn one request into many model calls. Users who reach a model or an agent without a gateway that limits their requests and tokens can exhaust its capacity, or the budget of a model paid for by use.
 
+- **Medium**: [Missing Policy Decision Point Redundancy](#missing-policy-decision-point-redundancy): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    Services that externalize their authorization to a policy decision point, for example through the AuthZEN Authorization API, cannot decide a request without it. When it fails, they either deny every request and stop working, or, when they fail open, allow every request.
+
 - **Low**: [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary): 2/2 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
 
     Assets accessed across trust boundaries with critical or mission-critical availability rating are more prone to Denial-of-Service (DoS) risks.
 
 ### Elevation of Privilege
 
-**12 risks**
+**14 risks**
 
 Elevation of privilege - Authorization
 
@@ -746,6 +778,10 @@ Elevation of privilege - Authorization
 
     A language model cannot tell the instructions of its prompt apart from the data in it. Content that reaches a model or an agent from users, the internet or another trust zone can carry instructions of its own, either directly in a request or indirectly in a document, a web page or a tool response the model reads, and so take over what the model does.
 
+- **Medium**: [Missing Identity Provider Isolation](#missing-identity-provider-isolation): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _High_ impact
+
+    Highly sensitive identity provider assets and their identity data stores should be isolated from other assets by their own network segmentation trust-boundary (execution-environment boundaries do not count as network isolation).
+
 - **Medium**: [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
@@ -754,13 +790,13 @@ Elevation of privilege - Authorization
 
     Internet-exposed assets must be guarded by a protecting service, application, or reverse-proxy.
 
-- **Low**: [Missing Network Segmentation](#missing-network-segmentation): 3/3 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
+- **Low**: [Missing Network Segmentation](#missing-network-segmentation): 4/4 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
 
     Highly sensitive assets and/or data stores residing in the same network segment than other lower sensitive assets (like webservers or content management systems etc.) should be better protected by a network segmentation trust-boundary.
 
 ## Assignment by Function
 
-This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **68 potential risks** have been identified during the threat modeling process.
+This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **73 potential risks** have been identified during the threat modeling process.
 
 ### Business Side
 
@@ -774,7 +810,7 @@ Business
 
 ### Architecture
 
-**14 risks**
+**15 risks**
 
 Architecture
 
@@ -814,6 +850,10 @@ Architecture
 
     Include an identity store in the model if the application has a login.
 
+- **Medium**: [Missing Policy Decision Point Redundancy](#missing-policy-decision-point-redundancy): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
+
+    Run the policy decision point redundantly, or as a local instance next to each service that asks it, with the policies distributed to each instance. Let the services deny requests they cannot get a decision for, and cache decisions only briefly.
+
 - **Medium**: [Missing Vault (Secret Storage)](#missing-vault-secret-storage): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     Consider using a Vault (Secret Storage) to securely store and access config secrets (like credentials, private keys, client certificates, etc.).
@@ -828,7 +868,7 @@ Architecture
 
 ### Development
 
-**22 risks**
+**23 risks**
 
 Development
 
@@ -848,7 +888,7 @@ Development
 
     Try to use parameter binding to be safe from injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
 
-- **Elevated**: [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf): 11/11 unmitigated Risks, exploitation likelihood is _Likely_ with _Medium_ impact
+- **Elevated**: [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf): 12/12 unmitigated Risks, exploitation likelihood is _Likely_ with _Medium_ impact
 
     Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
 
@@ -858,7 +898,7 @@ Development
 
 ### Operations
 
-**31 risks**
+**34 risks**
 
 Operations
 
@@ -866,7 +906,7 @@ Operations
 
     Send the prompts, tool calls, answers and decisions of the agent or model, with the user they were for, to a monitoring system, for example as OpenTelemetry traces, and alert on anomalies like injection attempts, unusual tool use and spikes in cost. Evaluate the quality and the safety of the answers continuously, and model the monitoring system as a monitoring technical asset with a link to or from the agent or model.
 
-- **Medium**: [Container Base Image Backdooring](#container-base-image-backdooring): 10/10 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Container Base Image Backdooring](#container-base-image-backdooring): 11/11 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     Apply hardening of all container infrastructures (see for example the _CIS-Benchmarks for Docker and Kubernetes_ and the _Docker Bench for Security_). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's _Distroless_ base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.
 
@@ -882,6 +922,10 @@ Operations
 
     Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).
 
+- **Medium**: [Missing Identity Provider Isolation](#missing-identity-provider-isolation): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _High_ impact
+
+    Apply a network segmentation trust-boundary around the highly sensitive identity provider assets and their identity data stores.
+
 - **Medium**: [Unencrypted Technical Assets](#unencrypted-technical-assets): 2/2 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     Apply encryption to the technical asset.
@@ -894,7 +938,7 @@ Operations
 
     Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.
 
-- **Low**: [Missing Network Segmentation](#missing-network-segmentation): 3/3 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
+- **Low**: [Missing Network Segmentation](#missing-network-segmentation): 4/4 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
 
     Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.
 
@@ -920,13 +964,13 @@ The following lists all technical assets sorted by their RAA value from highest 
 
     Embeddings of the support articles and the memory of the agent
 
+- [Order Service](#order-service): RAA 51 %, highest severity still at risk: **Elevated**
+
+    Manages orders and refunds
+
 - [Support Tools](#support-tools): RAA 49 %, highest severity still at risk: **Elevated**
 
     MCP server exposing the order, refund and web search tools to the agent
-
-- [Order Service](#order-service): RAA 46 %, highest severity still at risk: **Elevated**
-
-    Manages orders and refunds
 
 - [Guardrail Model](#guardrail-model): RAA 26 %, highest severity still at risk: **Elevated**
 
@@ -939,6 +983,10 @@ The following lists all technical assets sorted by their RAA value from highest 
 - [Model Registry](#model-registry): RAA 21 %, highest severity still at risk: **Medium**
 
     Stores the versions of the guardrail model
+
+- [Order Policy](#order-policy): RAA 18 %, highest severity still at risk: **Medium**
+
+    Decides which orders a customer may see and refund, as an OpenFGA relationship graph
 
 - [Ingestion Pipeline](#ingestion-pipeline): RAA 16 %, highest severity still at risk: **Elevated**
 
@@ -958,7 +1006,7 @@ The following table and diagram were generated by Threagile based on the model i
 | [Customer Data](#customer-data) | Probable | [Orders Database](#orders-database) | [Hosted LLM](#hosted-llm), [Order Service](#order-service), [Orders Database](#orders-database), [Support Agent](#support-agent), [Support Tools](#support-tools) |
 | [Knowledge Articles](#knowledge-articles) | Probable | [Knowledge CMS](#knowledge-cms), [Knowledge Index](#knowledge-index) | [Ingestion Pipeline](#ingestion-pipeline), [Knowledge CMS](#knowledge-cms), [Knowledge Index](#knowledge-index), [Support Agent](#support-agent) |
 | [Model Weights](#model-weights) | Probable | [Model Registry](#model-registry) | [Guardrail Model](#guardrail-model), [Model Registry](#model-registry) |
-| [Order Data](#order-data) | Probable | [Orders Database](#orders-database) | [Order Service](#order-service), [Orders Database](#orders-database), [Support Agent](#support-agent), [Support Tools](#support-tools) |
+| [Order Data](#order-data) | Probable | [Orders Database](#orders-database) | [Order Policy](#order-policy), [Order Service](#order-service), [Orders Database](#orders-database), [Support Agent](#support-agent), [Support Tools](#support-tools) |
 | [Web Content](#web-content) | Probable | none | [Search API](#search-api), [Support Tools](#support-tools) |
 
 The diagram shows where the data assets are stored: an arrow points from a data asset, a stadium, to each technical asset that stores it, a box; assets out of scope have a dashed border.
@@ -1042,7 +1090,7 @@ This chapter lists custom questions that arose during the threat modeling proces
 
 ## Identified Risks by Vulnerability Category
 
-In total **68 potential risks** have been identified during the threat modeling process, distributed across **29 vulnerability categories**. The following sections describe each identified risk category and its risks.
+In total **73 potential risks** have been identified during the threat modeling process, distributed across **31 vulnerability categories**. The following sections describe each identified risk category and its risks.
 
 ### Confused Deputy Agent
 
@@ -1504,7 +1552,7 @@ The risk **Sensitive Data Disclosure through Model Output** was found **2 times*
 
 ### Server-Side Request Forgery (SSRF)
 
-**Elevated** · 11/11 unmitigated Risks · `server-side-request-forgery`
+**Elevated** · 12/12 unmitigated Risks · `server-side-request-forgery`
 
 | Property | Value |
 | --- | --- |
@@ -1546,7 +1594,7 @@ Are recommendations from the linked cheat sheet and referenced ASVS chapter appl
 
 **Risk Findings**
 
-The risk **Server-Side Request Forgery (SSRF)** was found **11 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+The risk **Server-Side Request Forgery (SSRF)** was found **12 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -1554,6 +1602,7 @@ The risk **Server-Side Request Forgery (SSRF)** was found **11 times** in the an
 | Elevated | **Server-Side Request Forgery (SSRF)** risk at **Guardrail Model** server-side web-requesting the target **Model Registry** via **Model Pull** | `server-side-request-forgery@guardrail-model@model-registry@guardrail-model>model-pull` | Likely | Medium | [Guardrail Model](#guardrail-model), [Model Pull](#model-pull) | Unchecked | _not tracked_ |
 | Elevated | **Server-Side Request Forgery (SSRF)** risk at **Ingestion Pipeline** server-side web-requesting the target **Knowledge CMS** via **Article Export** | `server-side-request-forgery@ingestion-pipeline@knowledge-cms@ingestion-pipeline>article-export` | Likely | Medium | [Ingestion Pipeline](#ingestion-pipeline), [Article Export](#article-export) | Unchecked | _not tracked_ |
 | Elevated | **Server-Side Request Forgery (SSRF)** risk at **Ingestion Pipeline** server-side web-requesting the target **Knowledge Index** via **Embedding Upsert** | `server-side-request-forgery@ingestion-pipeline@knowledge-index@ingestion-pipeline>embedding-upsert` | Likely | Medium | [Ingestion Pipeline](#ingestion-pipeline), [Embedding Upsert](#embedding-upsert) | Unchecked | _not tracked_ |
+| Elevated | **Server-Side Request Forgery (SSRF)** risk at **Order Service** server-side web-requesting the target **Order Policy** via **Refund Authorization** | `server-side-request-forgery@order-service@order-policy@order-service>refund-authorization` | Likely | Medium | [Order Service](#order-service), [Refund Authorization](#refund-authorization) | Unchecked | _not tracked_ |
 | Elevated | **Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Guardrail Model** via **Moderation** | `server-side-request-forgery@support-agent@guardrail-model@support-agent>moderation` | Likely | Medium | [Support Agent](#support-agent), [Moderation](#moderation) | Unchecked | _not tracked_ |
 | Elevated | **Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Hosted LLM** via **Completion** | `server-side-request-forgery@support-agent@hosted-llm@support-agent>completion` | Likely | Medium | [Support Agent](#support-agent), [Completion](#completion) | Unchecked | _not tracked_ |
 | Elevated | **Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Knowledge Index** via **Memory Write** | `server-side-request-forgery@support-agent@knowledge-index@support-agent>memory-write` | Likely | Medium | [Support Agent](#support-agent), [Memory Write](#memory-write) | Unchecked | _not tracked_ |
@@ -1715,7 +1764,7 @@ The risk **Vector Store Poisoning** was found **1 time** in the analyzed archite
 
 ### Container Base Image Backdooring
 
-**Medium** · 10/10 unmitigated Risks · `container-baseimage-backdooring`
+**Medium** · 11/11 unmitigated Risks · `container-baseimage-backdooring`
 
 | Property | Value |
 | --- | --- |
@@ -1759,7 +1808,7 @@ Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied
 
 **Risk Findings**
 
-The risk **Container Base Image Backdooring** was found **10 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+The risk **Container Base Image Backdooring** was found **11 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -1769,6 +1818,7 @@ The risk **Container Base Image Backdooring** was found **10 times** in the anal
 | Medium | **Container Base Image Backdooring** risk at **Knowledge CMS** | `container-baseimage-backdooring@knowledge-cms` | Unlikely | Medium | [Knowledge CMS](#knowledge-cms) | Unchecked | _not tracked_ |
 | Medium | **Container Base Image Backdooring** risk at **Knowledge Index** | `container-baseimage-backdooring@knowledge-index` | Unlikely | Medium | [Knowledge Index](#knowledge-index) | Unchecked | _not tracked_ |
 | Medium | **Container Base Image Backdooring** risk at **Model Registry** | `container-baseimage-backdooring@model-registry` | Unlikely | Medium | [Model Registry](#model-registry) | Unchecked | _not tracked_ |
+| Medium | **Container Base Image Backdooring** risk at **Order Policy** | `container-baseimage-backdooring@order-policy` | Unlikely | Medium | [Order Policy](#order-policy) | Unchecked | _not tracked_ |
 | Medium | **Container Base Image Backdooring** risk at **Order Service** | `container-baseimage-backdooring@order-service` | Unlikely | Medium | [Order Service](#order-service) | Unchecked | _not tracked_ |
 | Medium | **Container Base Image Backdooring** risk at **Orders Database** | `container-baseimage-backdooring@orders-db` | Unlikely | Medium | [Orders Database](#orders-database) | Unchecked | _not tracked_ |
 | Medium | **Container Base Image Backdooring** risk at **Support Agent** | `container-baseimage-backdooring@support-agent` | Unlikely | Medium | [Support Agent](#support-agent) | Unchecked | _not tracked_ |
@@ -2042,6 +2092,56 @@ The risk **Missing Hardening** was found **3 times** in the analyzed architectur
 | Medium | **Missing Hardening** risk at **Orders Database** | `missing-hardening@orders-db` | Likely | Low | [Orders Database](#orders-database) | Unchecked | _not tracked_ |
 | Medium | **Missing Hardening** risk at **Support Agent** | `missing-hardening@support-agent` | Likely | Low | [Support Agent](#support-agent) | Unchecked | _not tracked_ |
 
+### Missing Identity Provider Isolation
+
+**Medium** · 1/1 unmitigated Risk · `missing-identity-provider-isolation`
+
+| Property | Value |
+| --- | --- |
+| STRIDE | Elevation of Privilege |
+| CWE | [CWE 1008](https://cwe.mitre.org/data/definitions/1008.html) |
+| Function | Operations |
+| Action | Network Segmentation |
+| ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
+| Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
+| References | OWASP A06:2025 Insecure Design |
+
+**Description**
+
+Highly sensitive identity provider assets and their identity data stores should be isolated from other assets by their own network segmentation trust-boundary (execution-environment boundaries do not count as network isolation).
+
+**Impact**
+
+If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards highly sensitive identity provider assets and their identity data stores, as they are not separated by network segmentation.
+
+**Detection Logic**
+
+In-scope identity provider assets and their identity data stores when surrounded by other (not identity-related) assets (without a network trust-boundary in-between). This risk is especially prevalent when other non-identity related assets are within the same execution environment (i.e. same database or same application server).
+
+**Risk Rating**
+
+Default is high impact. The impact is increased to very-high when the asset missing the trust-boundary protection is rated as strictly-confidential or mission-critical.
+
+**False Positives**
+
+When all assets within the network segmentation trust-boundary are hardened and protected to the same extend as if all were identity providers with data of highest sensitivity.
+
+**Mitigation**
+
+Apply a network segmentation trust-boundary around the highly sensitive identity provider assets and their identity data stores.
+
+**Check**
+
+Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
+
+**Risk Findings**
+
+The risk **Missing Identity Provider Isolation** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+
+| Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Medium | **Missing Identity Provider Isolation** to further encapsulate and protect identity-related asset **Order Policy** against unrelated lower protected assets **in the same network segment**, which might be easier to compromise by attackers | `missing-identity-provider-isolation@order-policy` | Unlikely | High | [Order Policy](#order-policy) | Unchecked | _not tracked_ |
+
 ### Missing Identity Store
 
 **Medium** · 1/1 unmitigated Risk · `missing-identity-store`
@@ -2141,6 +2241,56 @@ The risk **Missing Multi-Factor Authentication (MFA)** was found **1 time** in t
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Medium | **Missing Multi-Factor Authentication** covering communication link **Support Chat** from **Customer Browser** to **Chat Frontend** | `missing-authentication-second-factor@customer-browser>support-chat@customer-browser@chat-frontend` | Unlikely | Medium | [Chat Frontend](#chat-frontend), [Support Chat](#support-chat) | Unchecked | _not tracked_ |
 
+### Missing Policy Decision Point Redundancy
+
+**Medium** · 1/1 unmitigated Risk · `missing-policy-decision-point-redundancy`
+
+| Property | Value |
+| --- | --- |
+| STRIDE | Denial of Service |
+| CWE | [CWE 636](https://cwe.mitre.org/data/definitions/636.html) |
+| Function | Architecture |
+| Action | Policy Decision Point Redundancy |
+| ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
+| Cheat sheet | [Authorization_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) |
+| References | OWASP A10:2025 Mishandling of Exceptional Conditions; OpenID AuthZEN Authorization API 1.0; NIST SP 800-162 Guide to Attribute Based Access Control |
+
+**Description**
+
+Services that externalize their authorization to a policy decision point, for example through the AuthZEN Authorization API, cannot decide a request without it. When it fails, they either deny every request and stop working, or, when they fail open, allow every request.
+
+**Impact**
+
+If this risk is unmitigated, an outage of the policy decision point might stop every service that asks it, or let any request through services that fail open.
+
+**Detection Logic**
+
+In-scope policy-decision-point technical assets that are not redundant and that in-scope technical assets ask for decisions through communication links that are not process-local.
+
+**Risk Rating**
+
+The risk rating depends on the highest availability rating of the services that ask the policy decision point.
+
+**False Positives**
+
+Policy decision points whose callers keep working on cached policies of their own can be considered as false positives after individual review.
+
+**Mitigation**
+
+Run the policy decision point redundantly, or as a local instance next to each service that asks it, with the policies distributed to each instance. Let the services deny requests they cannot get a decision for, and cache decisions only briefly.
+
+**Check**
+
+Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
+
+**Risk Findings**
+
+The risk **Missing Policy Decision Point Redundancy** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+
+| Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Medium | **Missing Policy Decision Point Redundancy** risk at **Order Policy** | `missing-policy-decision-point-redundancy@order-policy` | Unlikely | Medium | [Order Policy](#order-policy) | Unchecked | _not tracked_ |
+
 ### Missing Vault (Secret Storage)
 
 **Medium** · 1/1 unmitigated Risk · `missing-vault`
@@ -2189,7 +2339,7 @@ The risk **Missing Vault (Secret Storage)** was found **1 time** in the analyzed
 
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Medium | **Missing Vault (Secret Storage)** in the threat model (referencing asset **Order Service** as an example) | `missing-vault@order-service` | Unlikely | Medium | [Order Service](#order-service) | Unchecked | _not tracked_ |
+| Medium | **Missing Vault (Secret Storage)** in the threat model (referencing asset **Order Policy** as an example) | `missing-vault@order-policy` | Unlikely | Medium | [Order Policy](#order-policy) | Unchecked | _not tracked_ |
 
 ### Unencrypted Technical Assets
 
@@ -2396,7 +2546,7 @@ The risk **DoS-risky Access Across Trust-Boundary** was found **2 times** in the
 
 ### Missing Network Segmentation
 
-**Low** · 3/3 unmitigated Risks · `missing-network-segmentation`
+**Low** · 4/4 unmitigated Risks · `missing-network-segmentation`
 
 | Property | Value |
 | --- | --- |
@@ -2438,11 +2588,12 @@ Are recommendations from the linked cheat sheet and referenced ASVS chapter appl
 
 **Risk Findings**
 
-The risk **Missing Network Segmentation** was found **3 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+The risk **Missing Network Segmentation** was found **4 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Low | **Missing Network Segmentation** to further encapsulate and protect **Knowledge Index** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers | `missing-network-segmentation@knowledge-index` | Unlikely | Low | [Knowledge Index](#knowledge-index) | Unchecked | _not tracked_ |
+| Low | **Missing Network Segmentation** to further encapsulate and protect **Order Service** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers | `missing-network-segmentation@order-service` | Unlikely | Low | [Order Service](#order-service) | Unchecked | _not tracked_ |
 | Low | **Missing Network Segmentation** to further encapsulate and protect **Orders Database** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers | `missing-network-segmentation@orders-db` | Unlikely | Low | [Orders Database](#orders-database) | Unchecked | _not tracked_ |
 | Low | **Missing Network Segmentation** to further encapsulate and protect **Support Agent** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers | `missing-network-segmentation@support-agent` | Unlikely | Low | [Support Agent](#support-agent) | Unchecked | _not tracked_ |
 
@@ -2548,7 +2699,7 @@ The risk **Unchecked Deployment** was found **1 time** in the analyzed architect
 
 ## Identified Risks by Technical Asset
 
-In total **68 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
+In total **73 potential risks** have been identified during the threat modeling process, distributed across **11 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
 
 ### Chat Frontend
 
@@ -2792,7 +2943,7 @@ Embeddings of the support articles and the memory of the agent
 
 ### Order Service
 
-**Elevated** · 7/7 unmitigated Risks · `order-service`
+**Elevated** · 8/8 unmitigated Risks · `order-service`
 
 Manages orders and refunds
 
@@ -2800,10 +2951,11 @@ Manages orders and refunds
 
 - **Elevated**: [**SQL/NoSQL-Injection** risk at **Order Service** against database **Orders Database** via **Order Storage**](#sqlnosql-injection) (Unchecked)
 - **Elevated**: [**Missing Object-Level Authorization** risk at **Order Service** for **Support Tools** (function-level)](#missing-object-level-authorization) (Unchecked)
+- **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Order Service** server-side web-requesting the target **Order Policy** via **Refund Authorization**](#server-side-request-forgery-ssrf) (Unchecked)
 - **Medium**: [**Container Base Image Backdooring** risk at **Order Service**](#container-base-image-backdooring) (Unchecked)
 - **Medium**: [**Missing Build Infrastructure** in the threat model (referencing asset **Order Service** as an example)](#missing-build-infrastructure) (Unchecked)
-- **Medium**: [**Missing Vault (Secret Storage)** in the threat model (referencing asset **Order Service** as an example)](#missing-vault-secret-storage) (Unchecked)
 - **Low**: [**Denial-of-Service** risky access of **Order Service** by **Support Tools** via **Order API**](#dos-risky-access-across-trust-boundary) (Unchecked)
+- **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Order Service** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - **Low**: [**Missing Web Application Firewall (WAF)** risk at **Order Service**](#missing-web-application-firewall-waf) (Unchecked)
 
 **Asset Information**
@@ -2812,7 +2964,7 @@ Manages orders and refunds
 | --- | --- |
 | Type | process |
 | Usage | business |
-| RAA | 46 % |
+| RAA | 51 % |
 | Size | service |
 | Technology | web-service-rest |
 | Tags | none |
@@ -2827,7 +2979,7 @@ Manages orders and refunds
 | Data formats accepted | JSON |
 | Data processed | [Customer Data](#customer-data), [Order Data](#order-data) |
 | Data stored | none |
-| Outgoing communication links | [Order Storage](#order-storage) |
+| Outgoing communication links | [Refund Authorization](#refund-authorization), [Order Storage](#order-storage) |
 | Incoming communication links | [Order API](#order-api) |
 
 **Asset Rating**
@@ -2996,6 +3148,53 @@ Stores the versions of the guardrail model
 | Integrity | critical |
 | Availability | important |
 | CIA justification | Holds the model weights |
+
+### Order Policy
+
+**Medium** · 4/4 unmitigated Risks · `order-policy`
+
+Decides which orders a customer may see and refund, as an OpenFGA relationship graph
+
+**Identified Risks of the Asset**
+
+- **Medium**: [**Missing Identity Provider Isolation** to further encapsulate and protect identity-related asset **Order Policy** against unrelated lower protected assets **in the same network segment**, which might be easier to compromise by attackers](#missing-identity-provider-isolation) (Unchecked)
+- **Medium**: [**Container Base Image Backdooring** risk at **Order Policy**](#container-base-image-backdooring) (Unchecked)
+- **Medium**: [**Missing Policy Decision Point Redundancy** risk at **Order Policy**](#missing-policy-decision-point-redundancy) (Unchecked)
+- **Medium**: [**Missing Vault (Secret Storage)** in the threat model (referencing asset **Order Policy** as an example)](#missing-vault-secret-storage) (Unchecked)
+
+**Asset Information**
+
+| Property | Value |
+| --- | --- |
+| Type | process |
+| Usage | business |
+| RAA | 18 % |
+| Size | service |
+| Technology | policy-decision-point |
+| Tags | none |
+| Trust boundary | [Backend Subnet](#backend-subnet) |
+| Internet | no |
+| Machine | container |
+| Encryption | none |
+| Multi-tenant | no |
+| Redundant | no |
+| Custom-developed | no |
+| Client used by a human | no |
+| Data formats accepted | JSON |
+| Data processed | [Order Data](#order-data) |
+| Data stored | none |
+| Outgoing communication links | none |
+| Incoming communication links | [Refund Authorization](#refund-authorization) |
+
+**Asset Rating**
+
+| Property | Value |
+| --- | --- |
+| Owner | Some Company |
+| Confidentiality | confidential |
+| Integrity | critical |
+| Availability | critical |
+| CIA justification | Wrong decisions leak orders or refund money |
 
 ### Orders Database
 
@@ -3181,7 +3380,7 @@ _The asset was defined as out-of-scope._
 
 ## Identified Data Breach Probabilities by Data Asset
 
-In total **68 potential risks** have been identified during the threat modeling process, distributed across **6 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
+In total **73 potential risks** have been identified during the threat modeling process, distributed across **6 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
 
 ### Chat Transcripts
 
@@ -3255,7 +3454,7 @@ This data asset has data breach potential because of 42 remaining risks:
 
 ### Customer Data
 
-**Probable** · 33/33 unmitigated Risks · `customer-data`
+**Probable** · 35/35 unmitigated Risks · `customer-data`
 
 Names, addresses and contact details of the customers
 
@@ -3278,7 +3477,7 @@ Names, addresses and contact details of the customers
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 33 remaining risks:
+This data asset has data breach potential because of 35 remaining risks:
 
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Order Service**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Orders Database**](#container-base-image-backdooring) (Unchecked)
@@ -3297,6 +3496,7 @@ This data asset has data breach potential because of 33 remaining risks:
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Guardrail Model** server-side web-requesting the target **Model Registry** via **Model Pull**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Ingestion Pipeline** server-side web-requesting the target **Knowledge CMS** via **Article Export**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Ingestion Pipeline** server-side web-requesting the target **Knowledge Index** via **Embedding Upsert**](#server-side-request-forgery-ssrf) (Unchecked)
+- Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Order Service** server-side web-requesting the target **Order Policy** via **Refund Authorization**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Guardrail Model** via **Moderation**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Hosted LLM** via **Completion**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Knowledge Index** via **Memory Write**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -3309,6 +3509,7 @@ This data asset has data breach potential because of 33 remaining risks:
 - Improbable, **Elevated**: [**Missing AI Monitoring** risk at **Support Agent**](#missing-ai-monitoring) (Unchecked)
 - Improbable, **Medium**: [**Missing Hardening** risk at **Orders Database**](#missing-hardening) (Unchecked)
 - Improbable, **Medium**: [**Missing Hardening** risk at **Support Agent**](#missing-hardening) (Unchecked)
+- Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Order Service** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Orders Database** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Support Agent** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Low**: [**Missing Web Application Firewall (WAF)** risk at **Order Service**](#missing-web-application-firewall-waf) (Unchecked)
@@ -3316,7 +3517,7 @@ This data asset has data breach potential because of 33 remaining risks:
 
 ### Knowledge Articles
 
-**Probable** · 34/34 unmitigated Risks · `knowledge-articles`
+**Probable** · 35/35 unmitigated Risks · `knowledge-articles`
 
 The support articles the assistant answers from
 
@@ -3339,7 +3540,7 @@ The support articles the assistant answers from
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 34 remaining risks:
+This data asset has data breach potential because of 35 remaining risks:
 
 - Probable, **Elevated**: [**Confused Deputy Agent** risk at **Support Agent** reaching **Knowledge Index** with its own identity](#confused-deputy-agent) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Ingestion Pipeline**](#container-base-image-backdooring) (Unchecked)
@@ -3359,6 +3560,7 @@ This data asset has data breach potential because of 34 remaining risks:
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Guardrail Model** server-side web-requesting the target **Model Registry** via **Model Pull**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Ingestion Pipeline** server-side web-requesting the target **Knowledge CMS** via **Article Export**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Ingestion Pipeline** server-side web-requesting the target **Knowledge Index** via **Embedding Upsert**](#server-side-request-forgery-ssrf) (Unchecked)
+- Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Order Service** server-side web-requesting the target **Order Policy** via **Refund Authorization**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Guardrail Model** via **Moderation**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Hosted LLM** via **Completion**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Knowledge Index** via **Memory Write**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -3428,7 +3630,7 @@ This data asset has data breach potential because of 22 remaining risks:
 
 ### Order Data
 
-**Probable** · 33/33 unmitigated Risks · `order-data`
+**Probable** · 38/38 unmitigated Risks · `order-data`
 
 Orders, payments and refunds
 
@@ -3443,16 +3645,17 @@ Orders, payments and refunds
 | Integrity | critical |
 | Availability | critical |
 | CIA justification | Refunds move money, so wrong order data costs the company directly |
-| Processed by | [Order Service](#order-service), [Orders Database](#orders-database), [Support Agent](#support-agent), [Support Tools](#support-tools) |
+| Processed by | [Order Policy](#order-policy), [Order Service](#order-service), [Orders Database](#orders-database), [Support Agent](#support-agent), [Support Tools](#support-tools) |
 | Stored by | [Orders Database](#orders-database) |
-| Sent via | [Tool Calls](#tool-calls), [Order Storage](#order-storage), [Order API](#order-api) |
+| Sent via | [Tool Calls](#tool-calls), [Refund Authorization](#refund-authorization), [Order Storage](#order-storage), [Order API](#order-api) |
 | Received via | [Tool Calls](#tool-calls), [Order Storage](#order-storage), [Order API](#order-api) |
 | Data breach | Probable |
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 33 remaining risks:
+This data asset has data breach potential because of 38 remaining risks:
 
+- Probable, **Medium**: [**Container Base Image Backdooring** risk at **Order Policy**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Order Service**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Orders Database**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Support Agent**](#container-base-image-backdooring) (Unchecked)
@@ -3470,6 +3673,7 @@ This data asset has data breach potential because of 33 remaining risks:
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Guardrail Model** server-side web-requesting the target **Model Registry** via **Model Pull**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Ingestion Pipeline** server-side web-requesting the target **Knowledge CMS** via **Article Export**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Ingestion Pipeline** server-side web-requesting the target **Knowledge Index** via **Embedding Upsert**](#server-side-request-forgery-ssrf) (Unchecked)
+- Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Order Service** server-side web-requesting the target **Order Policy** via **Refund Authorization**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Guardrail Model** via **Moderation**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Hosted LLM** via **Completion**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Agent** server-side web-requesting the target **Knowledge Index** via **Memory Write**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -3482,8 +3686,11 @@ This data asset has data breach potential because of 33 remaining risks:
 - Improbable, **Elevated**: [**Missing AI Monitoring** risk at **Support Agent**](#missing-ai-monitoring) (Unchecked)
 - Improbable, **Medium**: [**Missing Hardening** risk at **Orders Database**](#missing-hardening) (Unchecked)
 - Improbable, **Medium**: [**Missing Hardening** risk at **Support Agent**](#missing-hardening) (Unchecked)
+- Improbable, **Medium**: [**Missing Identity Provider Isolation** to further encapsulate and protect identity-related asset **Order Policy** against unrelated lower protected assets **in the same network segment**, which might be easier to compromise by attackers](#missing-identity-provider-isolation) (Unchecked)
+- Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Order Service** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Orders Database** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Support Agent** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
+- Improbable, **Medium**: [**Missing Policy Decision Point Redundancy** risk at **Order Policy**](#missing-policy-decision-point-redundancy) (Unchecked)
 - Improbable, **Low**: [**Missing Web Application Firewall (WAF)** risk at **Order Service**](#missing-web-application-firewall-waf) (Unchecked)
 - Improbable, **Elevated**: [**Unbounded Model Consumption** risk at **Support Agent**](#unbounded-model-consumption) (Unchecked)
 
@@ -3559,7 +3766,7 @@ The order system and the content management
 | Type | network-cloud-security-group |
 | Tags | none |
 | Nested in | [Cloud Account](#cloud-account) |
-| Assets inside | [Knowledge CMS](#knowledge-cms), [Order Service](#order-service), [Orders Database](#orders-database) |
+| Assets inside | [Knowledge CMS](#knowledge-cms), [Order Policy](#order-policy), [Order Service](#order-service), [Orders Database](#orders-database) |
 | Boundaries nested | none |
 
 ### Cloud Account
@@ -3594,9 +3801,21 @@ Reachable from the internet through the load balancer
 
 In total **0 shared runtimes have** been modeled during the threat modeling process.
 
+## Policy Decision Points
+
+Policy decision points decide the authorization of other services, their enforcement points, which ask them before granting a request. A decision point that is unavailable, tampered with or wrong affects every request that its enforcement points authorize.
+
+### Order Policy
+
+[Order Policy](#order-policy): not redundant, 4/4 unmitigated Risks.
+
+| Enforcement point | Asks via | Authentication | Requests it authorizes (authorization) |
+| --- | --- | --- | --- |
+| [Order Service](#order-service) | [Refund Authorization](#refund-authorization) | client-certificate | [Order API](#order-api) from [Support Tools](#support-tools) (function-level) |
+
 ## Communication Links
 
-In total **13 communication links have** been modeled, listed by their source asset.
+In total **14 communication links have** been modeled, listed by their source asset.
 
 ### Assistant Request
 
@@ -3712,6 +3931,29 @@ Reads the published articles
 | IP-filtered | no |
 | Data sent | none |
 | Data received | [Knowledge Articles](#knowledge-articles) |
+
+### Refund Authorization
+
+from [Order Service](#order-service) to [Order Policy](#order-policy) · `order-service>refund-authorization`
+
+Asks whether the customer may get a refund of the order
+
+| Property | Value |
+| --- | --- |
+| Source | [Order Service](#order-service) |
+| Target | [Order Policy](#order-policy) |
+| Protocol | https |
+| Encrypted | yes |
+| Authentication | client-certificate |
+| Identity | workload |
+| Authorization | function-level |
+| Read-only | no |
+| Usage | business |
+| Tags | none |
+| VPN | no |
+| IP-filtered | no |
+| Data sent | [Order Data](#order-data) |
+| Data received | none |
 
 ### Order Storage
 
@@ -3899,7 +4141,7 @@ Looks up orders and issues refunds
 
 ## Risk Tracking
 
-**1 of 68 risks** are tracked in the model; the others are unchecked.
+**1 of 73 risks** are tracked in the model; the others are unchecked.
 
 | Risk | ID | Severity | Status | Date | Checked by | Ticket | Justification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -3915,16 +4157,16 @@ The risk rules checked **10 of 10** entries of the [OWASP Top 10:2025](https://t
 
 | Entry | Risk rules | Risks |
 | --- | --- | --- |
-| `A01` Broken Access Control | [Confused Deputy Agent](#confused-deputy-agent), Cross-Account Takeover, [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf), Missing Identity Propagation, [Missing Object-Level Authorization](#missing-object-level-authorization), Overprivileged Machine Identity, Path-Traversal, Public Cloud Asset Access, [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 15/15 unmitigated Risks |
+| `A01` Broken Access Control | [Confused Deputy Agent](#confused-deputy-agent), Cross-Account Takeover, [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf), Missing Identity Propagation, [Missing Object-Level Authorization](#missing-object-level-authorization), Overprivileged Machine Identity, Path-Traversal, Public Cloud Asset Access, [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 16/16 unmitigated Risks |
 | `A02` Security Misconfiguration | Container Platform Escape, [Missing Cloud Hardening](#missing-cloud-hardening), [Missing Hardening](#missing-hardening), Public Cloud Asset Access, Publicly Shared Cloud Snapshot, XML External Entity (XXE) | 7/7 unmitigated Risks |
-| `A03` Software Supply Chain Failures | Code Backdooring, [Container Base Image Backdooring](#container-base-image-backdooring), [Unchecked Deployment](#unchecked-deployment) | 11/11 unmitigated Risks |
+| `A03` Software Supply Chain Failures | Code Backdooring, [Container Base Image Backdooring](#container-base-image-backdooring), [Unchecked Deployment](#unchecked-deployment) | 12/12 unmitigated Risks |
 | `A04` Cryptographic Failures | Unencrypted Communication, [Unencrypted Technical Assets](#unencrypted-technical-assets) | 2/2 unmitigated Risks |
 | `A05` Injection | [Cross-Site Scripting (XSS)](#cross-site-scripting-xss), LDAP-Injection, [SQL/NoSQL-Injection](#sqlnosql-injection), Search-Query Injection | 6/6 unmitigated Risks |
-| `A06` Insecure Design | Missing File Validation, Missing Identity Provider Isolation, [Missing Network Segmentation](#missing-network-segmentation), Missing Vault Isolation, Mixed Targets on Shared Runtime, [Unguarded Access From Internet](#unguarded-access-from-internet), Unguarded Direct Datastore Access | 4/4 unmitigated Risks |
+| `A06` Insecure Design | Missing File Validation, [Missing Identity Provider Isolation](#missing-identity-provider-isolation), [Missing Network Segmentation](#missing-network-segmentation), Missing Vault Isolation, Mixed Targets on Shared Runtime, [Unguarded Access From Internet](#unguarded-access-from-internet), Unguarded Direct Datastore Access | 6/6 unmitigated Risks |
 | `A07` Authentication Failures | Human Use of Machine Identity, [Long-Lived Credentials](#long-lived-credentials), [Missing Authentication](#missing-authentication), [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | 3/3 unmitigated Risks |
 | `A08` Software or Data Integrity Failures | Code Backdooring, Push instead of Pull Deployment, Service Registry Poisoning, Untrusted Deserialization | _no risks found_ |
 | `A09` Security Logging and Alerting Failures | [Missing AI Monitoring](#missing-ai-monitoring) | 2/2 unmitigated Risks |
-| `A10` Mishandling of Exceptional Conditions | Missing Policy Decision Point Redundancy | _no risks found_ |
+| `A10` Mishandling of Exceptional Conditions | [Missing Policy Decision Point Redundancy](#missing-policy-decision-point-redundancy) | 1/1 unmitigated Risk |
 
 ### OWASP API Security Top 10 2023
 
@@ -3938,7 +4180,7 @@ The risk rules checked **6 of 10** entries of the [OWASP API Security Top 10 202
 | `API4` Unrestricted Resource Consumption | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary), [Unbounded Model Consumption](#unbounded-model-consumption) | 4/4 unmitigated Risks |
 | `API5` Broken Function Level Authorization | [Missing Object-Level Authorization](#missing-object-level-authorization) | 2/2 unmitigated Risks |
 | `API6` Unrestricted Access to Sensitive Business Flows | none | _not checked by any risk rule_ |
-| `API7` Server Side Request Forgery | [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 11/11 unmitigated Risks |
+| `API7` Server Side Request Forgery | [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 12/12 unmitigated Risks |
 | `API8` Security Misconfiguration | [Missing Cloud Hardening](#missing-cloud-hardening), [Missing Hardening](#missing-hardening), Unencrypted Communication | 7/7 unmitigated Risks |
 | `API9` Improper Inventory Management | none | _not checked by any risk rule_ |
 | `API10` Unsafe Consumption of APIs | none | _not checked by any risk rule_ |
