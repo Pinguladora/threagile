@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-var allAssets = []Asset{License, ExampleModel, StubModel, Background, Logo, Schema, OpenAPI, LiveTemplates}
+var allAssets = []Asset{License, ExampleModel, StubModel, Logo, Schema, OpenAPI, LiveTemplates}
 
 func TestAssetBytesMatchRepositoryFiles(t *testing.T) {
 	for _, asset := range allAssets {

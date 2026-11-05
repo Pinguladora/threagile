@@ -8,7 +8,7 @@ Every flag can also be set in the [config file](./config.md). Every command take
 |------|------|---------|-------------|
 | `--add-model-title` | bool | `false` | add model title |
 | `--app-dir` | string | `/app` | optional folder with files that override the ones embedded in the binary |
-| `--background` | string | `background.pdf` | template pdf file |
+| `--background` | string | `background.pdf` | (deprecated, ignored: the PDF report, rendered by typst, has no background template) template pdf file |
 | `--backup-history-files-to-keep` | int | `50` | number of backup history files to keep |
 | `--baseline` | string |  | risks json of an earlier analysis to compare with; --fail-on then only fails on new or escalated risks |
 | `--config` | string |  | config file |

@@ -2,7 +2,7 @@
 
 The output of running tool may be in different formats:
 
-* `report.pdf` - most comprehensive report contained all information.
+* `report.pdf` - the same report as a PDF, see [the PDF report](#the-pdf-report) below.
 * `report.html` - the same report as a single, self-contained [HTML page](./html-report.md), to read in a browser or keep as a CI artifact.
 * `THREAT_MODEL.md` - the same report as a single [Markdown file](./markdown-report.md) with Mermaid diagrams, to keep in the repository or publish on a documentation site.
 * `risks.xlsx` and `risks.json` - list of identified risks in Excel and JSON formats.
@@ -24,9 +24,22 @@ to a Unix timestamp to fix it, for example to the time of the last commit:
 SOURCE_DATE_EPOCH=$(git log -1 --format=%ct) threagile analyze-model --model threagile.yaml --output out
 ```
 
-All outputs are then byte-identical between runs, except `report.pdf`: the PDF
-library numbers the objects of the imported background page in random order, so
-the PDF bytes differ while its content stays the same.
+All outputs are then byte-identical between runs, `report.pdf` included.
+
+## The PDF report
+
+`report.pdf` has the chapters of the HTML and Markdown reports, with the diagrams as
+vector graphics on landscape pages. [Typst](https://typst.app) renders it, so it is
+only written when the `typst` command is on the `PATH`; without it, threagile warns
+and writes the other outputs.
+
+The PDF conforms to PDF/A-3a, for archiving, and to PDF/UA-1, for accessibility: it
+is tagged, its images have alternative texts and it embeds its fonts. `mise run
+pdf:validate` renders the reports of the demos and checks both with
+[veraPDF](https://verapdf.org), as CI does.
+
+The `--background` template of earlier versions is no longer used; `--reportLogoImagePath`
+still sets the logo of the title page.
 
 ## Failing CI on unchecked risks
 

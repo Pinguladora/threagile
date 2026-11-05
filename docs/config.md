@@ -41,7 +41,7 @@ This config keys is used when application run in [analyze mode](./mode-analyze.m
 | `SkipReportHTML`              | bool                  | The same as `-skip-report-html` at [flags](./flags.md)             | false                   |
 | `ReportMarkdownFilename`      | string (path to file) | The same as `-report-md` at [flags](./flags.md)                    | THREAT_MODEL.md         |
 | `SkipReportMarkdown`          | bool                  | The same as `-skip-report-md` at [flags](./flags.md)               | false                   |
-| `TemplateFilename`            | string (path to file) | The same as `-background` at [flags](./flags.md)                   | see [flags](./flags.md) |
+| `TemplateFilename`            | string (path to file) | Deprecated and ignored: the PDF report has no background template  | see [flags](./flags.md) |
 | `ReportLogoImagePath`         | string (path to file) | The same as `-reportLogoImagePath` or `--v` at [flags](./flags.md) | see [flags](./flags.md) |
 | `KeepDiagramSourceFiles`      | bool                  | If true dot files will not be removed after png generated          | false                   |
 | `FailOn`                      | string (severity)     | The same as `-fail-on` at [flags](./flags.md)                      | ""                      |

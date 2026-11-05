@@ -118,7 +118,7 @@ func (what *Threagile) initFileFlags() {
 	flags.StringVar(&what.flags.ReportMarkdownFilenameValue, reportMarkdownFileFlagName,
 		what.config.GetReportMarkdownFilename(), "Markdown report file")
 	flags.StringVar(&what.flags.TemplateFilenameValue, templateFileNameFlagName, what.config.GetTemplateFilename(),
-		"template pdf file")
+		"(deprecated, ignored: the PDF report, rendered by typst, has no background template) template pdf file")
 	flags.StringVar(&what.flags.ReportLogoImagePathValue, reportLogoImagePathFlagName,
 		what.config.GetReportLogoImagePath(), "report logo image")
 	flags.StringVar(&what.flags.TechnologyFilenameValue, technologyFileFlagName, what.config.GetTechnologyFilename(),

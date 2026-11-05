@@ -1,5 +1,5 @@
 // Package threagile embeds the files threagile needs at run time (license,
-// example and stub models, editing support, report background and logo, and the
+// example and stub models, editing support, report logo, and the
 // server's web UI), so that a lone binary works without an --app-dir folder.
 //
 // The embedded copies are only defaults: callers look for a file on disk first
@@ -17,7 +17,7 @@ import (
 
 //go:embed LICENSE.txt
 //go:embed demo/example/threagile.yaml demo/stub/threagile.yaml
-//go:embed report/template/background.pdf report/threagile-logo.png
+//go:embed report/threagile-logo.png
 //go:embed support/schema.json support/openapi.yaml support/live-templates.txt
 //go:embed server/static
 var files embed.FS
@@ -31,7 +31,6 @@ const (
 	License       Asset = "LICENSE.txt"
 	ExampleModel  Asset = "demo/example/threagile.yaml"
 	StubModel     Asset = "demo/stub/threagile.yaml"
-	Background    Asset = "report/template/background.pdf"
 	Logo          Asset = "report/threagile-logo.png"
 	Schema        Asset = "support/schema.json"
 	OpenAPI       Asset = "support/openapi.yaml"

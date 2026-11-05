@@ -20,7 +20,7 @@ task.source_freshness_hash_contents = true
 # hooks) lives in mise.dev.toml and loads via .miserc's `dev` env, never in CI
 # (MISE_ENV=ci). A tool sits here when both local work and CI need it:
 # go/golangci-lint (Go work + CI), goreleaser/syft (local snapshot + release CI),
-# actionlint/zizmor (local hk hooks + the lint:gha CI job).
+# actionlint/zizmor (local hk hooks + the lint:gha CI job), typst (PDF report tests).
 cocogitto = "7.0.0"
 go = "1.27.1"
 # Built from source so it compiles against the pinned go. The prebuilt
@@ -32,6 +32,8 @@ goreleaser = "2.18.2"
 syft = "1.52.0"
 actionlint = "1.7.12"
 zizmor = "1.30.1"
+# Renders the PDF report at run time (the binary runs it when it is on the PATH); the tests and CI render with it.
+"aqua:typst/typst" = "0.15.1"
 
 [tasks."secret:scan"]
 run = "kingfisher scan . --no-validate --redact"
@@ -132,7 +134,6 @@ go run ./cmd/threagile analyze-model \
   --model "${MODEL}" \
   --output out \
   --app-dir . \
-  --background report/template/background.pdf \
   --ignore-orphaned-risk-tracking
 '''
 alias = "a"
