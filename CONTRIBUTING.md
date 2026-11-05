@@ -90,7 +90,6 @@ Where
 
 ```
 app/
-├─ [background.pdf](./report/template/background.pdf)
 ├─ [LICENSE.txt](./LICENSE.txt)
 ├─ [live-templates.txt](./support/live-templates.txt)
 ├─ [openapi.yaml](./support/openapi.yaml)

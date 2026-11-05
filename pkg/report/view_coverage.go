@@ -81,19 +81,6 @@ func modelCatalogs(parsedModel *types.Model, options ReportOptions) []viewCatalo
 	return viewCatalogs(viewRiskRules(parsedModel, options), categories)
 }
 
-// catalogEntryLine is an entry of the coverage as one line of text: the risk rules that checked it and what they
-// found.
-func catalogEntryLine(entry viewCatalogEntry) string {
-	rules := make([]string, 0, len(entry.Rules))
-	for _, rule := range entry.Rules {
-		rules = append(rules, rule.Title)
-	}
-	if len(rules) == 0 {
-		return entry.Summary
-	}
-	return strings.Join(rules, ", ") + ": " + entry.Summary
-}
-
 // newViewCatalogEntry is the coverage of the catalog entry by the risk rules that were not skipped and reference
 // it, each listed once, by title, and linked to its category when it found risks.
 func newViewCatalogEntry(

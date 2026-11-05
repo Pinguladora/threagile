@@ -121,8 +121,6 @@ const (
 		" - go-graphviz (MIT License): https://github.com/goccy/go-graphviz/blob/master/LICENSE\n" +
 		" - wazero (Apache License): https://github.com/tetratelabs/wazero/blob/main/LICENSE\n" +
 		" - DejaVu fonts (Bitstream Vera License): https://dejavu-fonts.github.io/License.html\n" +
-		" - gofpdf (MIT License): https://github.com/jung-kurt/gofpdf/blob/master/LICENSE\n" +
-		" - go-chart (MIT License): https://github.com/wcharczuk/go-chart/blob/master/LICENSE\n" +
 		" - excelize (BSD License): https://github.com/qax-os/excelize/blob/master/LICENSE\n" +
 		" - graphics-go (BSD License): https://github.com/BurntSushi/graphics-go/blob/master/LICENSE\n" +
 		" - google-uuid (BSD License): https://github.com/google/uuid/blob/master/LICENSE\n" +

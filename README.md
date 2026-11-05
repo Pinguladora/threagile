@@ -30,7 +30,8 @@ Efforts on UI are ongoing and there are few attempts to do it although that is f
 ## Installation
 
 Install the binary with Go (1.27 or newer); it is static and embeds everything it needs, including the
-diagram renderer, so nothing else has to be installed:
+diagram renderer. Only the PDF report needs another program, [typst](https://typst.app), on the `PATH`; without
+it, threagile writes every other output and warns:
 
 ```shell
 go install github.com/Pinguladora/threagile/cmd/threagile@latest
@@ -55,7 +56,7 @@ threagile analyze-model --model threagile.yaml --output out
 |------|------------|
 | `THREAT_MODEL.md` | the [report as Markdown](./docs/markdown-report.md), with Mermaid diagrams, to keep in the repository |
 | `report.html` | the report as a single self-contained HTML page |
-| `report.pdf`, `adocReport/` | the report as PDF and as AsciiDoc |
+| `report.pdf`, `adocReport/` | the report as PDF/A-3a and PDF/UA-1 (rendered by [typst](https://typst.app) when it is installed) and as AsciiDoc |
 | `data-flow-diagram.png`, `data-asset-diagram.png` | the diagrams; add `--keep-diagram-source-files` to also keep their Graphviz sources (`.gv`) |
 | `risks.json`, `technical-assets.json`, `stats.json` | the results for other tools |
 | `risks.xlsx`, `tags.xlsx` | the risks and the tags as spreadsheets |

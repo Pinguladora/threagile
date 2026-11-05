@@ -305,37 +305,60 @@ func writeReports(config reportConfigReader, readResult *model.ReadResult, comma
 	return nil
 }
 
-// writeReportPDF writes the PDF report.
+// writeReportPDF writes the PDF report, rendered by typst; without typst it only warns that it leaves the report out.
+// Like the HTML report, it renders the diagrams from DOT sources of its own.
 func writeReportPDF(config reportConfigReader, readResult *model.ReadResult, riskRules types.RiskRules,
 	progressReporter progressReporter,
 ) error {
+	// the diagrams are vector graphics in the PDF, drawn at 72 dpi, so that Graphviz does not scale them to a DPI
+	const diagramDPI = 72
 	modelHash, err := hashFile(config.GetInputFile())
 	if err != nil {
 		return err
 	}
-	// report PDF
 	progressReporter.Info("Writing report pdf")
+	if config.GetTemplateFilename() != DefaultTemplateFilename {
+		progressReporter.Warn("--background is ignored: the PDF report, rendered by typst, has no background template")
+	}
+	writeDataFlowDOT := func(filename string) (*os.File, error) {
+		return WriteDataFlowDiagramGraphvizDOT(readResult.ParsedModel, filename, diagramDPI,
+			config.GetAddModelTitle(), config.GetAddLegend(), progressReporter)
+	}
+	dataFlowDOT, err := diagramDOT(config.GetTempFolder(), config.GetDataFlowDiagramFilenameDOT(), writeDataFlowDOT)
+	if err != nil {
+		return fmt.Errorf("error while generating data flow diagram: %w", err)
+	}
+	writeDataAssetDOT := func(filename string) (*os.File, error) {
+		return WriteDataAssetDiagramGraphvizDOT(readResult.ParsedModel, filename, diagramDPI, progressReporter)
+	}
+	dataAssetDOT, err := diagramDOT(config.GetTempFolder(), config.GetDataAssetDiagramFilenameDOT(), writeDataAssetDOT)
+	if err != nil {
+		return fmt.Errorf("error while generating data asset diagram: %w", err)
+	}
 
-	templateFilename, err := backgroundTemplateFile(config.GetAppFolder(), config.GetTemplateFilename())
+	logo, err := reportLogo(config.GetReportLogoImagePath())
 	if err != nil {
 		return err
 	}
+	logoExtension := filepath.Ext(config.GetReportLogoImagePath())
+	if logoExtension == "" {
+		logoExtension = ".png"
+	}
 
-	pdfReporter := newPdfReporter(riskRules)
-	return pdfReporter.WriteReportPDF(filepath.Join(config.GetOutputFolder(), config.GetReportFilename()),
-		templateFilename,
-		filepath.Join(config.GetOutputFolder(), config.GetDataFlowDiagramFilenamePNG()),
-		filepath.Join(config.GetOutputFolder(), config.GetDataAssetDiagramFilenamePNG()),
-		config.GetInputFile(),
-		config.GetSkipRiskRules(),
-		config.GetBuildTimestamp(),
-		config.GetThreagileVersion(),
-		modelHash,
-		readResult.IntroTextRAA,
-		readResult.CustomRiskRules,
-		config.GetTempFolder(),
-		readResult.ParsedModel,
-		config.GetReportConfigurationHideChapters())
+	err = WriteReportPDF(readResult.ParsedModel, filepath.Join(config.GetOutputFolder(), config.GetReportFilename()),
+		PDFReportOptions{
+			ReportOptions:       reportOptions(config, readResult, riskRules, modelHash),
+			DataFlowDiagramDOT:  dataFlowDOT,
+			DataAssetDiagramDOT: dataAssetDOT,
+			Logo:                logo,
+			LogoExtension:       logoExtension,
+			TempFolder:          config.GetTempFolder(),
+		}, progressReporter)
+	if errors.Is(err, ErrTypstMissing) {
+		progressReporter.Warn(err.Error() + "; the PDF report is left out")
+		return nil
+	}
+	return err
 }
 
 // writeReportADOC writes the AsciiDoc report.

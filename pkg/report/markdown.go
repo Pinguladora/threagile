@@ -24,7 +24,11 @@ func WriteReportMarkdown(parsedModel *types.Model, filename string, options Repo
 // renderReportMarkdown renders the report twice: the first time to learn the anchors that the
 // headings get, which depend on all headings before them, and the second time with links to them.
 func renderReportMarkdown(parsedModel *types.Model, options ReportOptions) []byte {
-	view := newReportView(parsedModel, options)
+	return renderReportMarkdownView(newReportView(parsedModel, options))
+}
+
+// renderReportMarkdownView renders the report view as Markdown.
+func renderReportMarkdownView(view *reportView) []byte {
 	first := newMarkdownWriter(nil)
 	first.report(view)
 	second := newMarkdownWriter(first.headings)
