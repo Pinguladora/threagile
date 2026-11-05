@@ -31,6 +31,7 @@ var markdownChapters = map[string]func(*markdownWriter, *reportView){
 	"data-assets":               (*markdownWriter).dataAssets,
 	"trust-boundaries":          (*markdownWriter).trustBoundaries,
 	"shared-runtimes":           (*markdownWriter).sharedRuntimes,
+	chapterDecisionPoints:       (*markdownWriter).decisionPoints,
 	"communication-links":       (*markdownWriter).communicationLinks,
 	"risk-tracking":             (*markdownWriter).riskTracking,
 	chapterCatalogCoverage:      (*markdownWriter).catalogCoverage,
@@ -497,4 +498,50 @@ func (what *markdownWriter) riskChanges(title string, changes []viewRiskChange) 
 		{columnSeverity, false},
 		{columnStatus, false},
 	}, rows...)
+}
+
+func (what *markdownWriter) decisionPoints(view *reportView) {
+	what.paragraph(decisionPointsIntro)
+	for _, decisionPoint := range view.DecisionPoints {
+		what.heading(3, "", decisionPoint.Asset.Title)
+		what.paragraph(what.ref(decisionPoint.Asset) + ": " + decisionPointState(decisionPoint) + ", " +
+			markdownText(decisionPoint.Summary) + ".")
+		if len(decisionPoint.Enforcement) == 0 {
+			what.paragraph(muted("No technical asset asks it."))
+			continue
+		}
+		rows := make([][]string, 0, len(decisionPoint.Enforcement))
+		for _, enforcement := range decisionPoint.Enforcement {
+			requests := make([]string, 0, len(enforcement.Requests))
+			for _, request := range enforcement.Requests {
+				requests = append(requests, what.ref(request.Link)+" from "+what.ref(request.Source)+" ("+
+					markdownText(request.Authorization)+")")
+			}
+			if len(requests) == 0 {
+				requests = append(requests, viewNone)
+			}
+			rows = append(rows, []string{
+				what.ref(enforcement.Asset), what.ref(enforcement.Link), markdownText(enforcement.Authentication),
+				strings.Join(requests, ", "),
+			})
+		}
+		what.table([]markdownColumn{
+			{"Enforcement point", false},
+			{"Asks via", false},
+			{"Authentication", false},
+			{"Requests it authorizes (authorization)", false},
+		}, rows...)
+	}
+}
+
+// decisionPointState tells whether the decision point is in scope and redundant.
+func decisionPointState(decisionPoint viewDecisionPoint) string {
+	state := "not redundant"
+	if decisionPoint.Redundant {
+		state = "redundant"
+	}
+	if decisionPoint.OutOfScope {
+		state = viewOutOfScopeText + ", " + state
+	}
+	return state
 }

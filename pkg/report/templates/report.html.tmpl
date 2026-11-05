@@ -577,6 +577,31 @@ that may carry threagile's basic markup go through markup, which keeps only that
 </section>
 {{- end}}
 </section>
+{{- if .Shows "decision-points"}}
+
+<section class="chapter" id="decision-points">
+<h2>Policy Decision Points</h2>
+<p>{{decisionPointsIntro}}</p>
+{{- range .DecisionPoints}}
+<h3>{{.Asset.Title}}</h3>
+<p>{{template "ref" .Asset}}: {{if .OutOfScope}}out of scope, {{end}}{{if .Redundant}}redundant{{else}}not redundant{{end}}, {{.Summary}}.</p>
+{{- if .Enforcement}}
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Enforcement point</th><th scope="col">Asks via</th><th scope="col">Authentication</th><th scope="col">Requests it authorizes (authorization)</th></tr></thead>
+<tbody>
+{{- range .Enforcement}}
+<tr><th scope="row">{{template "ref" .Asset}}</th><td>{{template "ref" .Link}}</td><td>{{.Authentication}}</td><td>{{range $index, $request := .Requests}}{{if $index}}, {{end}}{{template "ref" $request.Link}} from {{template "ref" $request.Source}} ({{$request.Authorization}}){{else}}<span class="muted">none</span>{{end}}</td></tr>
+{{- end}}
+</tbody>
+</table>
+</div>
+{{- else}}
+<p class="muted">No technical asset asks it.</p>
+{{- end}}
+{{- end}}
+</section>
+{{- end}}
 
 <section class="chapter" id="communication-links">
 <h2>Communication Links</h2>

@@ -83,6 +83,8 @@ The policy model behind the check, like RBAC, ABAC or ReBAC, changes no risk, so
 of the link when it helps the readers. Authorization that a separate service decides, for example through the
 [AuthZEN](https://openid.net/wg/authzen/) Authorization API, is modelled as a `policy-decision-point` technical
 asset with a link from each service that asks it, so that the rules see the decision point and the links to it.
+The HTML and Markdown reports list each decision point in the chapter "Policy Decision Points", with the services
+that ask it and the requests that those services authorize.
 
 ## Migrating models of earlier versions
 
