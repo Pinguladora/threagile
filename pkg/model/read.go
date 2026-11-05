@@ -8,6 +8,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/Pinguladora/threagile/pkg/baseline"
 	"github.com/Pinguladora/threagile/pkg/input"
 	"github.com/Pinguladora/threagile/pkg/types"
 	"gopkg.in/yaml.v3"
@@ -19,6 +20,8 @@ type ReadResult struct {
 	IntroTextRAA     string
 	BuiltinRiskRules types.RiskRules
 	CustomRiskRules  types.RiskRules
+	// Baseline compares the risks with those of an earlier analysis; nil when there is none to compare with.
+	Baseline *baseline.Comparison
 }
 
 type configReader interface {

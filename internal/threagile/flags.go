@@ -45,6 +45,7 @@ const (
 	skipRiskRulesFlagName         = "skip-risk-rules"
 	executeModelMacroFlagName     = "execute-model-macro"
 	failOnFlagName                = "fail-on"
+	baselineFlagName              = "baseline"
 
 	serverModeFlagName               = "server-mode"
 	serverPortFlagName               = "server-port"

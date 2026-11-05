@@ -44,6 +44,8 @@ This config keys is used when application run in [analyze mode](./mode-analyze.m
 | `TemplateFilename`            | string (path to file) | The same as `-background` at [flags](./flags.md)                   | see [flags](./flags.md) |
 | `ReportLogoImagePath`         | string (path to file) | The same as `-reportLogoImagePath` or `--v` at [flags](./flags.md) | see [flags](./flags.md) |
 | `KeepDiagramSourceFiles`      | bool                  | If true dot files will not be removed after png generated          | false                   |
+| `FailOn`                      | string (severity)     | The same as `-fail-on` at [flags](./flags.md)                      | ""                      |
+| `Baseline`                    | string (path to file) | The same as `-baseline` at [flags](./flags.md)                     | ""                      |
 
 ### Diagrams config keys
 

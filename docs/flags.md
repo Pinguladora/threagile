@@ -10,6 +10,7 @@ Every flag can also be set in the [config file](./config.md). Every command take
 | `--app-dir` | string | `/app` | optional folder with files that override the ones embedded in the binary |
 | `--background` | string | `background.pdf` | template pdf file |
 | `--backup-history-files-to-keep` | int | `50` | number of backup history files to keep |
+| `--baseline` | string |  | risks json of an earlier analysis to compare with; --fail-on then only fails on new or escalated risks |
 | `--config` | string |  | config file |
 | `--custom-risk-rules-plugin` | string |  | comma-separated list of plugins file names with custom risk rules to load |
 | `--data-asset-diagram-dot` | string | `data-asset-diagram.gv` | data asset diagram DOT file |
