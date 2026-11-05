@@ -61,16 +61,24 @@ func TestSqlNoSqlInjectionRuleCreateRisks(t *testing.T) {
 			expectRiskCreated:            false,
 			isVulnerableToQueryInjection: true,
 		},
-		"not vulnerable to query injection not lax": {
+		"database protocol into a datastore of another technology": {
 			assetType:                    types.Datastore,
 			protocol:                     types.JdbcEncrypted,
-			expectRiskCreated:            false,
 			isVulnerableToQueryInjection: false,
+			expectRiskCreated:            true,
+			expectedLikelihood:           types.VeryLikely,
+			expectedImpact:               types.MediumImpact,
 		},
-		"lax database always vulnerable to query injection": {
+		"lax protocol into a datastore that is no database": {
+			assetType:                    types.Datastore,
+			protocol:                     types.HTTPS,
+			isVulnerableToQueryInjection: false,
+			expectRiskCreated:            false,
+		},
+		"lax protocol into a database": {
 			assetType:                    types.Datastore,
 			protocol:                     types.HTTP,
-			isVulnerableToQueryInjection: false,
+			isVulnerableToQueryInjection: true,
 			expectRiskCreated:            true,
 			expectedLikelihood:           types.VeryLikely,
 			expectedImpact:               types.MediumImpact,
@@ -303,18 +311,20 @@ func TestSqlNoSqlInjectionRuleGenerateRisksMultipleDatastoresEachWithRiskyFlowGe
 	assert.Len(t, risks, 2)
 }
 
-func TestSqlNoSqlInjectionRuleGenerateRisksLaxDatabaseProtocolNotVulnerableAttributeStillCreatesRisk(t *testing.T) {
+// TestSqlNoSqlInjectionRuleGenerateRisksLaxDatabaseProtocolIntoNoDatabaseNoRisk checks that a datastore that is no
+// database, like a vault, a container registry or object storage, gets no risk for being accessed over HTTPS.
+func TestSqlNoSqlInjectionRuleGenerateRisksLaxDatabaseProtocolIntoNoDatabaseNoRisk(t *testing.T) {
 	rule := NewSqlNoSqlInjectionRule()
 	risks, err := rule.GenerateRisks(&types.Model{
 		TechnicalAssets: map[string]*types.TechnicalAsset{
 			"ta1": {
 				Id:         "ta1",
-				Title:      "NoSQL Database",
+				Title:      "Key Vault",
 				OutOfScope: false,
 				Type:       types.Datastore,
 				Technologies: types.TechnologyList{
 					{
-						Name: "nosql-database",
+						Name: "vault",
 						Attributes: map[string]bool{
 							types.IsVulnerableToQueryInjection: false,
 						},
@@ -333,17 +343,14 @@ func TestSqlNoSqlInjectionRuleGenerateRisksLaxDatabaseProtocolNotVulnerableAttri
 					Title:    "REST Flow",
 					TargetId: "ta1",
 					SourceId: "ta2",
-					Protocol: types.HTTP,
+					Protocol: types.HTTPS,
 				},
 			},
 		},
 	})
 
 	assert.Nil(t, err)
-	assert.Len(t, risks, 1)
-	// Lax protocol always triggers regardless of IsVulnerableToQueryInjection attribute
-	assert.Equal(t, types.VeryLikely, risks[0].ExploitationLikelihood)
-	assert.Equal(t, types.MediumImpact, risks[0].ExploitationImpact)
+	assert.Empty(t, risks)
 }
 
 func TestSqlNoSqlInjectionRuleGenerateRisksNonDevOpsUsageVeryLikelyLikelihood(t *testing.T) {

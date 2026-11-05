@@ -269,6 +269,7 @@ historian:
   attributes:
     historian: true
     operational_technology: true
+    vulnerable_to_query_injection: true
 hmi:
   aliases:
     - human-machine-interface
@@ -618,6 +619,7 @@ vector-database:
   attributes:
     vector-database: true
     backend_related: true
+    vulnerable_to_query_injection: true
 waf:
   aliases:
     - web-application-firewall

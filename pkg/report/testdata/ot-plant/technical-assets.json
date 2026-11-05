@@ -379,7 +379,8 @@
         ],
         "attributes": {
           "historian": true,
-          "operational_technology": true
+          "operational_technology": true,
+          "vulnerable_to_query_injection": true
         }
       }
     ],
@@ -623,7 +624,8 @@
         ],
         "attributes": {
           "historian": true,
-          "operational_technology": true
+          "operational_technology": true,
+          "vulnerable_to_query_injection": true
         }
       }
     ],

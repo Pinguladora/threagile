@@ -24,10 +24,11 @@ func (*SqlNoSqlInjectionRule) Category() *types.RiskCategory {
 		Mitigation: "Try to use parameter binding to be safe from injection vulnerabilities. " +
 			"When a third-party product is used instead of custom developed software, check if the product applies the proper " +
 			"mitigation and ensure a reasonable patch-level.",
-		Check:          checkCheatSheetAndASVS,
-		Function:       types.Development,
-		STRIDE:         types.Tampering,
-		DetectionLogic: "Database accessed via typical database access protocols by in-scope clients.",
+		Check:    checkCheatSheetAndASVS,
+		Function: types.Development,
+		STRIDE:   types.Tampering,
+		DetectionLogic: "In-scope datastores accessed via typical database access protocols, and databases accessed " +
+			"via HTTP or binary protocols as well (like NoSQL databases with a REST interface).",
 		RiskAssessment: "The risk rating depends on the sensitivity of the data stored inside the database.",
 		FalsePositives: "Database accesses by queries not consisting of parts controllable by the caller can be considered " +
 			"as false positives after individual review.",
@@ -51,11 +52,13 @@ func (r *SqlNoSqlInjectionRule) GenerateRisks(input *types.Model) ([]*types.Risk
 
 		incomingFlows := input.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id]
 		for _, incomingFlow := range incomingFlows {
+			// a database protocol makes any datastore a database; HTTP and binary protocols only reach a
+			// database when the datastore is one, like a NoSQL database with a REST interface
 			potentialDatabaseAccessProtocol := incomingFlow.Protocol.IsPotentialDatabaseAccessProtocol()
 			isVulnerableToQueryInjection := technicalAsset.Technologies.GetAttribute(types.IsVulnerableToQueryInjection)
 			potentialLaxDatabaseAccessProtocol := incomingFlow.Protocol.IsPotentialLaxDatabaseAccessProtocol()
-			if potentialDatabaseAccessProtocol && isVulnerableToQueryInjection ||
-				potentialLaxDatabaseAccessProtocol {
+			if potentialDatabaseAccessProtocol ||
+				potentialLaxDatabaseAccessProtocol && isVulnerableToQueryInjection {
 				risks = append(risks, r.createRisk(input, technicalAsset, incomingFlow))
 			}
 		}
