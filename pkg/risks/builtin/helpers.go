@@ -17,30 +17,29 @@ func isAcrossTrustBoundaryNetworkOnly(parsedModel *types.Model, communicationLin
 
 	boundaryOf := parsedModel.DirectContainingTrustBoundaryMappedByTechnicalAssetId
 
-	trustBoundaryOfSourceAsset, trustBoundaryOfSourceAssetOk := boundaryOf[communicationLink.SourceId]
-	if !isNetworkOnly(parsedModel, trustBoundaryOfSourceAssetOk, trustBoundaryOfSourceAsset) {
+	trustBoundaryOfSourceAsset := networkBoundary(parsedModel, boundaryOf[communicationLink.SourceId])
+	if trustBoundaryOfSourceAsset == nil {
 		return false
 	}
 
-	trustBoundaryOfTargetAsset, trustBoundaryOfTargetAssetOk := boundaryOf[communicationLink.TargetId]
-	if !isNetworkOnly(parsedModel, trustBoundaryOfTargetAssetOk, trustBoundaryOfTargetAsset) {
+	trustBoundaryOfTargetAsset := networkBoundary(parsedModel, boundaryOf[communicationLink.TargetId])
+	if trustBoundaryOfTargetAsset == nil {
 		return false
 	}
 
 	return isAcrossNetworkTrustBoundary(trustBoundaryOfSourceAsset, trustBoundaryOfTargetAsset)
 }
 
-func isNetworkOnly(parsedModel *types.Model, trustBoundaryOk bool, trustBoundary *types.TrustBoundary) bool {
-	if !trustBoundaryOk {
-		return false
-	}
-	if !trustBoundary.Type.IsNetworkBoundary() { // find and use the parent boundary then
-		parentTrustBoundary := parsedModel.FindParentTrustBoundary(trustBoundary)
-		if parentTrustBoundary != nil {
-			return false
+// networkBoundary returns the trust boundary itself when it is a network boundary, else the closest network boundary
+// it is nested in, or nil when there is none. The walk is bounded, as nothing rules out boundaries nesting each other.
+func networkBoundary(parsedModel *types.Model, trustBoundary *types.TrustBoundary) *types.TrustBoundary {
+	for range len(parsedModel.TrustBoundaries) + 1 {
+		if trustBoundary == nil || trustBoundary.Type.IsNetworkBoundary() {
+			return trustBoundary
 		}
+		trustBoundary = parsedModel.FindParentTrustBoundary(trustBoundary)
 	}
-	return true
+	return nil
 }
 
 func contains(as []string, b string) bool {
@@ -129,11 +128,8 @@ func isSameExecutionEnvironment(parsedModel *types.Model, ta *types.TechnicalAss
 	boundaryOf := parsedModel.DirectContainingTrustBoundaryMappedByTechnicalAssetId
 	trustBoundaryOfMyAsset, trustBoundaryOfMyAssetOk := boundaryOf[ta.Id]
 	trustBoundaryOfOtherAsset, trustBoundaryOfOtherAssetOk := boundaryOf[otherAssetId]
-	if trustBoundaryOfMyAssetOk != trustBoundaryOfOtherAssetOk {
+	if !trustBoundaryOfMyAssetOk || !trustBoundaryOfOtherAssetOk { // assets in no boundary only share the network
 		return false
-	}
-	if !trustBoundaryOfMyAssetOk {
-		return true
 	}
 	if trustBoundaryOfMyAsset.Type == types.ExecutionEnvironment &&
 		trustBoundaryOfOtherAsset.Type == types.ExecutionEnvironment {

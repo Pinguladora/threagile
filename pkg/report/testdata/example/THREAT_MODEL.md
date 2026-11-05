@@ -43,22 +43,22 @@ Threagile toolkit was used to model the architecture of "Some Example Applicatio
 
 Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.
 
-In total **91 initial risks** in **34 categories** have been identified during the threat modeling process:
+In total **94 initial risks** in **34 categories** have been identified during the threat modeling process:
 
 | Severity | Risks | Status | Risks |
 | --- | ---: | --- | ---: |
-| Critical | 1 | Unchecked | 62 |
+| Critical | 1 | Unchecked | 63 |
 | High | 2 | In Discussion | 0 |
-| Elevated | 36 | Accepted | 1 |
-| Medium | 45 | In Progress | 3 |
-| Low | 7 | Mitigated | 24 |
+| Elevated | 39 | Accepted | 1 |
+| Medium | 43 | In Progress | 5 |
+| Low | 9 | Mitigated | 24 |
 |  |  | False Positive | 1 |
 
 Just some **more** custom summary possible here...
 
 ## Impact Analysis of the Initial Risks
 
-The most prevalent impacts of the **91 initial risks** (distributed over **34 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **94 initial risks** (distributed over **34 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Critical**: [Some Individual Risk Example](#some-individual-risk-example): 2 Initial Risks, exploitation likelihood is _Frequent_ with _Very High_ impact
 
@@ -176,7 +176,7 @@ The most prevalent impacts of the **91 initial risks** (distributed over **34 ri
 
     If this risk is unmitigated, attackers might be able to easier steal config secrets (like credentials, private keys, client certificates, etc.) once a vulnerability to access files is present and exploited.
 
-- **Medium**: [Missing Web Application Firewall (WAF)](#missing-web-application-firewall-waf): 3 Initial Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Missing Web Application Firewall (WAF)](#missing-web-application-firewall-waf): 4 Initial Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to apply standard attack pattern tests at great speed without any filtering.
 
@@ -212,7 +212,7 @@ The most prevalent impacts of the **91 initial risks** (distributed over **34 ri
 
     If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.
 
-- **Low**: [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary): 3 Initial Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
+- **Low**: [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary): 5 Initial Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
 
     If this risk remains unmitigated, attackers might be able to disturb the availability of important parts of the system.
 
@@ -228,23 +228,23 @@ The following table gives a high-level overview of the risk tracking status (inc
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Critical | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
 | High | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
-| Elevated | 36 | 26 | 0 | 1 | 0 | 8 | 1 |
-| Medium | 45 | 29 | 0 | 0 | 0 | 16 | 0 |
-| Low | 7 | 4 | 0 | 0 | 3 | 0 | 0 |
+| Elevated | 39 | 29 | 0 | 1 | 0 | 8 | 1 |
+| Medium | 43 | 27 | 0 | 0 | 0 | 16 | 0 |
+| Low | 9 | 4 | 0 | 0 | 5 | 0 | 0 |
 
-After removal of risks with status _mitigated_ and _false positive_ the following **66 remain unmitigated**:
+After removal of risks with status _mitigated_ and _false positive_ the following **69 remain unmitigated**:
 
 | Severity | Unmitigated risks | To be checked by | Unmitigated risks |
 | --- | ---: | --- | ---: |
 | Critical | 1 | Business Side | 2 |
 | High | 2 | Architecture | 14 |
-| Elevated | 27 | Development | 15 |
-| Medium | 29 | Operations | 35 |
-| Low | 7 |  |  |
+| Elevated | 30 | Development | 15 |
+| Medium | 27 | Operations | 38 |
+| Low | 9 |  |  |
 
 ## Impact Analysis of the Remaining Risks
 
-The most prevalent impacts of the **66 remaining risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **69 remaining risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Critical**: [Some Individual Risk Example](#some-individual-risk-example): 2 Remaining Risks, exploitation likelihood is _Frequent_ with _Very High_ impact
 
@@ -346,7 +346,7 @@ The most prevalent impacts of the **66 remaining risks** (distributed over **29 
 
     If this risk is unmitigated, attackers might be able to easier steal config secrets (like credentials, private keys, client certificates, etc.) once a vulnerability to access files is present and exploited.
 
-- **Medium**: [Missing Web Application Firewall (WAF)](#missing-web-application-firewall-waf): 3 Remaining Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Missing Web Application Firewall (WAF)](#missing-web-application-firewall-waf): 4 Remaining Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to apply standard attack pattern tests at great speed without any filtering.
 
@@ -378,7 +378,7 @@ The most prevalent impacts of the **66 remaining risks** (distributed over **29 
 
     If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.
 
-- **Low**: [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary): 3 Remaining Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
+- **Low**: [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary): 5 Remaining Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
 
     If this risk remains unmitigated, attackers might be able to disturb the availability of important parts of the system.
 
@@ -388,7 +388,7 @@ The most prevalent impacts of the **66 remaining risks** (distributed over **29 
 
 ## Risks by Severity
 
-All **91 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
+All **94 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
 
 ### Critical
 
@@ -409,7 +409,7 @@ All **91 risks** by severity, with their tracking status. Each risk links to its
 
 ### Elevated
 
-**36 risks**
+**39 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
@@ -422,6 +422,8 @@ All **91 risks** by severity, with their tracking status. Each risk links to its
 | Elevated | [**LDAP-Injection** risk at **Marketing CMS** against LDAP server **LDAP Auth Server** via **Auth Traffic**](#ldap-injection) | [LDAP-Injection](#ldap-injection) | [Marketing CMS](#marketing-cms), [Auth Traffic](#auth-traffic) | Mitigated |
 | Elevated | [**Long-Lived Credentials** risk at **Backoffice ERP System** used by **Apache Webserver** (long-lived-token)](#long-lived-credentials) | [Long-Lived Credentials](#long-lived-credentials) | [Backoffice ERP System](#backoffice-erp-system), [ERP System Traffic](#erp-system-traffic) | Unchecked |
 | Elevated | [**Long-Lived Credentials** risk at **Git Repository** used by **External Development Client** (long-lived-token)](#long-lived-credentials) | [Long-Lived Credentials](#long-lived-credentials) | [Git Repository](#git-repository), [Git-Repo Web-UI Access](#git-repo-web-ui-access) | Unchecked |
+| Elevated | [**Long-Lived Credentials** risk at **Identity Provider** used by **Apache Webserver** (credentials)](#long-lived-credentials) | [Long-Lived Credentials](#long-lived-credentials) | [Identity Provider](#identity-provider), [Auth Credential Check Traffic](#auth-credential-check-traffic) | Unchecked |
+| Elevated | [**Long-Lived Credentials** risk at **LDAP Auth Server** used by **Marketing CMS** (credentials)](#long-lived-credentials) | [Long-Lived Credentials](#long-lived-credentials) | [LDAP Auth Server](#ldap-auth-server), [Auth Traffic](#auth-traffic) | Unchecked |
 | Elevated | [**Missing Authentication** covering communication link **CMS Content Traffic** from **Load Balancer** to **Marketing CMS**](#missing-authentication) | [Missing Authentication](#missing-authentication) | [Marketing CMS](#marketing-cms), [CMS Content Traffic](#cms-content-traffic) | Unchecked |
 | Elevated | [**Missing Authentication** covering communication link **NFS Filesystem Access** from **Backoffice ERP System** to **Contract File Server**](#missing-authentication) | [Missing Authentication](#missing-authentication) | [Contract File Server](#contract-file-server), [NFS Filesystem Access](#nfs-filesystem-access) | Unchecked |
 | Elevated | [**Missing Cloud Hardening (AWS)** risk at **Application Network**: _CIS Benchmark for AWS_](#missing-cloud-hardening) | [Missing Cloud Hardening](#missing-cloud-hardening) | none | Unchecked |
@@ -443,6 +445,7 @@ All **91 risks** by severity, with their tracking status. Each risk links to its
 | Elevated | [**Server-Side Request Forgery (SSRF)** risk at **Apache Webserver** server-side web-requesting the target **Backoffice ERP System** via **ERP System Traffic**](#server-side-request-forgery-ssrf) | [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | [Apache Webserver](#apache-webserver), [ERP System Traffic](#erp-system-traffic) | Unchecked |
 | Elevated | [**Server-Side Request Forgery (SSRF)** risk at **Apache Webserver** server-side web-requesting the target **Identity Provider** via **Auth Credential Check Traffic**](#server-side-request-forgery-ssrf) | [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | [Apache Webserver](#apache-webserver), [Auth Credential Check Traffic](#auth-credential-check-traffic) | Unchecked |
 | Elevated | [**Shared Machine Account** risk at **Backoffice ERP System** sharing **erp-db-owner** with **Backend Admin Client**](#shared-machine-account) | [Shared Machine Account](#shared-machine-account) | [Backoffice ERP System](#backoffice-erp-system), [Database Traffic](#database-traffic) | Unchecked |
+| Elevated | [**Unencrypted Communication** named **Auth Traffic** between **Marketing CMS** and **LDAP Auth Server** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) | [Unencrypted Communication](#unencrypted-communication) | [Marketing CMS](#marketing-cms), [Auth Traffic](#auth-traffic) | Unchecked |
 | Elevated | [**Unencrypted Communication** named **Web Application Traffic** between **Load Balancer** and **Apache Webserver** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) | [Unencrypted Communication](#unencrypted-communication) | [Load Balancer](#load-balancer), [Web Application Traffic](#web-application-traffic) | Unchecked |
 | Elevated | [**Unguarded Access from Internet** of **Git Repository** by **External Development Client** via **Git-Repo Code Write Access**](#unguarded-access-from-internet) | [Unguarded Access From Internet](#unguarded-access-from-internet) | [Git Repository](#git-repository), [Git-Repo Code Write Access](#git-repo-code-write-access) | Unchecked |
 | Elevated | [**Unguarded Access from Internet** of **Git Repository** by **External Development Client** via **Git-Repo Web-UI Access**](#unguarded-access-from-internet) | [Unguarded Access From Internet](#unguarded-access-from-internet) | [Git Repository](#git-repository), [Git-Repo Web-UI Access](#git-repo-web-ui-access) | Unchecked |
@@ -452,7 +455,7 @@ All **91 risks** by severity, with their tracking status. Each risk links to its
 
 ### Medium
 
-**45 risks**
+**43 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
@@ -464,9 +467,7 @@ All **91 risks** by severity, with their tracking status. Each risk links to its
 | Medium | [**Cross-Site Request Forgery (CSRF)** risk at **Apache Webserver** via **Web Application Traffic** from **Load Balancer**](#cross-site-request-forgery-csrf) | [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf) | [Apache Webserver](#apache-webserver), [Web Application Traffic](#web-application-traffic) | Unchecked |
 | Medium | [**Cross-Site Request Forgery (CSRF)** risk at **Marketing CMS** via **CMS Content Traffic** from **Load Balancer**](#cross-site-request-forgery-csrf) | [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf) | [Marketing CMS](#marketing-cms), [CMS Content Traffic](#cms-content-traffic) | Unchecked |
 | Medium | [**Long-Lived Credentials** risk at **Customer Contract Database** used by **Backoffice ERP System** (credentials)](#long-lived-credentials) | [Long-Lived Credentials](#long-lived-credentials) | [Customer Contract Database](#customer-contract-database), [Database Traffic](#database-traffic) | Unchecked |
-| Medium | [**Long-Lived Credentials** risk at **Identity Provider** used by **Apache Webserver** (credentials)](#long-lived-credentials) | [Long-Lived Credentials](#long-lived-credentials) | [Identity Provider](#identity-provider), [Auth Credential Check Traffic](#auth-credential-check-traffic) | Unchecked |
 | Medium | [**Long-Lived Credentials** risk at **LDAP Auth Server** used by **Identity Provider** (credentials)](#long-lived-credentials) | [Long-Lived Credentials](#long-lived-credentials) | [LDAP Auth Server](#ldap-auth-server), [LDAP Credential Check Traffic](#ldap-credential-check-traffic) | Unchecked |
-| Medium | [**Long-Lived Credentials** risk at **LDAP Auth Server** used by **Marketing CMS** (credentials)](#long-lived-credentials) | [Long-Lived Credentials](#long-lived-credentials) | [LDAP Auth Server](#ldap-auth-server), [Auth Traffic](#auth-traffic) | Unchecked |
 | Medium | [**Missing Multi-Factor Authentication** covering communication link **CMS Content Traffic** from **Customer Web Client** forwarded via **Load Balancer** to **Marketing CMS**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [Marketing CMS](#marketing-cms), [CMS Content Traffic](#cms-content-traffic) | Mitigated |
 | Medium | [**Missing Multi-Factor Authentication** covering communication link **DB Update Access** from **Backend Admin Client** to **Customer Contract Database**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [Customer Contract Database](#customer-contract-database), [DB Update Access](#db-update-access) | Mitigated |
 | Medium | [**Missing Multi-Factor Authentication** covering communication link **ERP Internal Access** from **Backoffice Client** to **Backoffice ERP System**](#missing-multi-factor-authentication-mfa) | [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | [Backoffice ERP System](#backoffice-erp-system), [ERP Internal Access](#erp-internal-access) | Mitigated |
@@ -483,6 +484,7 @@ All **91 risks** by severity, with their tracking status. Each risk links to its
 | Medium | [**Missing Vault (Secret Storage)** in the threat model (referencing asset **Backoffice ERP System** as an example)](#missing-vault-secret-storage) | [Missing Vault (Secret Storage)](#missing-vault-secret-storage) | [Backoffice ERP System](#backoffice-erp-system) | Unchecked |
 | Medium | [**Missing Web Application Firewall (WAF)** risk at **Apache Webserver**](#missing-web-application-firewall-waf) | [Missing Web Application Firewall (WAF)](#missing-web-application-firewall-waf) | [Apache Webserver](#apache-webserver) | Unchecked |
 | Medium | [**Missing Web Application Firewall (WAF)** risk at **Backoffice ERP System**](#missing-web-application-firewall-waf) | [Missing Web Application Firewall (WAF)](#missing-web-application-firewall-waf) | [Backoffice ERP System](#backoffice-erp-system) | Unchecked |
+| Medium | [**Missing Web Application Firewall (WAF)** risk at **Identity Provider**](#missing-web-application-firewall-waf) | [Missing Web Application Firewall (WAF)](#missing-web-application-firewall-waf) | [Identity Provider](#identity-provider) | Unchecked |
 | Medium | [**Missing Web Application Firewall (WAF)** risk at **Marketing CMS**](#missing-web-application-firewall-waf) | [Missing Web Application Firewall (WAF)](#missing-web-application-firewall-waf) | [Marketing CMS](#marketing-cms) | Unchecked |
 | Medium | [**Mixed Targets on Shared Runtime** named **WebApp and Backoffice Virtualization** might enable attackers moving from one less valuable target to a more valuable one](#mixed-targets-on-shared-runtime) | [Mixed Targets on Shared Runtime](#mixed-targets-on-shared-runtime) | [WebApp and Backoffice Virtualization](#webapp-and-backoffice-virtualization) | Unchecked |
 | Medium | [**Public Cloud Asset Access (S3)** risk at **Contract File Server**](#public-cloud-asset-access) | [Public Cloud Asset Access](#public-cloud-asset-access) | [Contract File Server](#contract-file-server) | Unchecked |
@@ -498,13 +500,12 @@ All **91 risks** by severity, with their tracking status. Each risk links to its
 | Medium | [**Unencrypted Technical Asset** named **Marketing CMS**](#unencrypted-technical-assets) | [Unencrypted Technical Assets](#unencrypted-technical-assets) | [Marketing CMS](#marketing-cms) | Mitigated |
 | Medium | [**Unencrypted Technical Asset** named **Contract File Server**](#unencrypted-technical-assets) | [Unencrypted Technical Assets](#unencrypted-technical-assets) | [Contract File Server](#contract-file-server) | Mitigated |
 | Medium | [**Unencrypted Technical Asset** named **Customer Contract Database** missing end user individual encryption with data-with-end-user-individual-key](#unencrypted-technical-assets) | [Unencrypted Technical Assets](#unencrypted-technical-assets) | [Customer Contract Database](#customer-contract-database) | Mitigated |
-| Medium | [**Unencrypted Communication** named **Auth Traffic** between **Marketing CMS** and **LDAP Auth Server** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) | [Unencrypted Communication](#unencrypted-communication) | [Marketing CMS](#marketing-cms), [Auth Traffic](#auth-traffic) | Unchecked |
 | Medium | [**Unencrypted Communication** named **Database Traffic** between **Backoffice ERP System** and **Customer Contract Database** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) | [Unencrypted Communication](#unencrypted-communication) | [Backoffice ERP System](#backoffice-erp-system), [Database Traffic](#database-traffic) | Unchecked |
 | Medium | [**Unencrypted Communication** named **NFS Filesystem Access** between **Backoffice ERP System** and **Contract File Server**](#unencrypted-communication) | [Unencrypted Communication](#unencrypted-communication) | [Backoffice ERP System](#backoffice-erp-system), [NFS Filesystem Access](#nfs-filesystem-access) | Unchecked |
 
 ### Low
 
-**7 risks**
+**9 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
@@ -513,6 +514,8 @@ All **91 risks** by severity, with their tracking status. Each risk links to its
 | Low | [**Cross-Site Request Forgery (CSRF)** risk at **Marketing CMS** via **Marketing CMS Editing** from **Backoffice Client**](#cross-site-request-forgery-csrf) | [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf) | [Marketing CMS](#marketing-cms), [Marketing CMS Editing](#marketing-cms-editing) | Unchecked |
 | Low | [**Denial-of-Service** risky access of **Backoffice ERP System** by **Apache Webserver** via **ERP System Traffic**](#dos-risky-access-across-trust-boundary) | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | [Backoffice ERP System](#backoffice-erp-system), [ERP System Traffic](#erp-system-traffic) | In Progress |
 | Low | [**Denial-of-Service** risky access of **Backoffice ERP System** by **Backoffice Client** via **ERP Internal Access**](#dos-risky-access-across-trust-boundary) | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | [Backoffice ERP System](#backoffice-erp-system), [ERP Internal Access](#erp-internal-access) | In Progress |
+| Low | [**Denial-of-Service** risky access of **Identity Provider** by **Apache Webserver** via **Auth Credential Check Traffic**](#dos-risky-access-across-trust-boundary) | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | [Identity Provider](#identity-provider), [Auth Credential Check Traffic](#auth-credential-check-traffic) | In Progress |
+| Low | [**Denial-of-Service** risky access of **LDAP Auth Server** by **Marketing CMS** via **Auth Traffic**](#dos-risky-access-across-trust-boundary) | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | [LDAP Auth Server](#ldap-auth-server), [Auth Traffic](#auth-traffic) | In Progress |
 | Low | [**Denial-of-Service** risky access of **Marketing CMS** by **Backoffice Client** via **Marketing CMS Editing**](#dos-risky-access-across-trust-boundary) | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | [Marketing CMS](#marketing-cms), [Marketing CMS Editing](#marketing-cms-editing) | In Progress |
 | Low | [**Unchecked Deployment** risk at **Git Repository**](#unchecked-deployment) | [Unchecked Deployment](#unchecked-deployment) | [Git Repository](#git-repository) | Unchecked |
 
@@ -624,6 +627,10 @@ Data-flow diagram of "Some Example Application". A box is an external entity, a 
 
     Jenkins build-server
 
+- [LDAP Auth Server](#ldap-auth-server)
+
+    LDAP authentication server
+
 - [Load Balancer](#load-balancer)
 
     Load Balancer (HA-Proxy)
@@ -631,10 +638,6 @@ Data-flow diagram of "Some Example Application". A box is an external entity, a 
 - [Marketing CMS](#marketing-cms)
 
     CMS for the marketing content
-
-- [LDAP Auth Server](#ldap-auth-server)
-
-    LDAP authentication server
 
 - [Backend Admin Client](#backend-admin-client) (out of scope)
 
@@ -790,7 +793,7 @@ This chapter lists what tags are used by which elements.
 
 ## STRIDE Classification of Identified Risks
 
-This chapter clusters and classifies the risks by STRIDE categories: in total **91 potential risks** have been identified during the threat modeling process.
+This chapter clusters and classifies the risks by STRIDE categories: in total **94 potential risks** have been identified during the threat modeling process.
 
 ### Spoofing
 
@@ -820,7 +823,7 @@ Spoofing - Authenticity
 
 ### Tampering
 
-**33 risks**
+**34 risks**
 
 Tampering - Integrity
 
@@ -860,7 +863,7 @@ Tampering - Integrity
 
     Cloud components should be hardened according to the cloud vendor best practices. This affects their configuration, auditing, and further areas.
 
-- **Medium**: [Missing Web Application Firewall (WAF)](#missing-web-application-firewall-waf): 3/3 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Missing Web Application Firewall (WAF)](#missing-web-application-firewall-waf): 4/4 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     To have a first line of filtering defense, security architectures with web-services or web-applications should include a WAF in front of them. Even though a WAF is not a replacement for security (all components must be secure even without a WAF) it adds another layer of defense to the overall system by delaying some attacks and having easier attack alerting through it.
 
@@ -942,11 +945,11 @@ Information disclosure - Confidentiality
 
 ### Denial of Service
 
-**3 risks**
+**5 risks**
 
 Denial of service - Availability
 
-- **Low**: [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary): 3/3 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
+- **Low**: [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary): 5/5 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
 
     Assets accessed across trust boundaries with critical or mission-critical availability rating are more prone to Denial-of-Service (DoS) risks.
 
@@ -990,7 +993,7 @@ Elevation of privilege - Authorization
 
 ## Assignment by Function
 
-This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **91 potential risks** have been identified during the threat modeling process.
+This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **94 potential risks** have been identified during the threat modeling process.
 
 ### Business Side
 
@@ -1096,7 +1099,7 @@ Development
 
 ### Operations
 
-**48 risks**
+**51 risks**
 
 Operations
 
@@ -1152,7 +1155,7 @@ Operations
 
     Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.
 
-- **Medium**: [Missing Web Application Firewall (WAF)](#missing-web-application-firewall-waf): 3/3 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
+- **Medium**: [Missing Web Application Firewall (WAF)](#missing-web-application-firewall-waf): 4/4 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     Consider placing a Web Application Firewall (WAF) in front of the web-services and/or web-applications. For cloud environments many cloud providers offer pre-configured WAFs. Even reverse proxies can be enhances by a WAF component via ModSecurity plugins.
 
@@ -1172,7 +1175,7 @@ Operations
 
     Apply encryption to the technical asset.
 
-- **Low**: [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary): 3/3 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
+- **Low**: [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary): 5/5 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
 
     Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.
 
@@ -1198,7 +1201,7 @@ The following lists all technical assets sorted by their RAA value from highest 
 
     Jenkins build-server
 
-- [LDAP Auth Server](#ldap-auth-server): RAA 51 %, highest severity still at risk: **Medium**
+- [LDAP Auth Server](#ldap-auth-server): RAA 51 %, highest severity still at risk: **Elevated**
 
     LDAP authentication server
 
@@ -1342,7 +1345,7 @@ This chapter lists custom questions that arose during the threat modeling proces
 
 ## Identified Risks by Vulnerability Category
 
-In total **91 potential risks** have been identified during the threat modeling process, distributed across **34 vulnerability categories**. The following sections describe each identified risk category and its risks.
+In total **94 potential risks** have been identified during the threat modeling process, distributed across **34 vulnerability categories**. The following sections describe each identified risk category and its risks.
 
 ### Some Individual Risk Example
 
@@ -1647,10 +1650,10 @@ The risk **Long-Lived Credentials** was found **6 times** in the analyzed archit
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Elevated | **Long-Lived Credentials** risk at **Backoffice ERP System** used by **Apache Webserver** (long-lived-token) | `long-lived-credentials@erp-system@apache-webserver>erp-system-traffic` | Likely | High | [Backoffice ERP System](#backoffice-erp-system), [ERP System Traffic](#erp-system-traffic) | Unchecked | _not tracked_ |
 | Elevated | **Long-Lived Credentials** risk at **Git Repository** used by **External Development Client** (long-lived-token) | `long-lived-credentials@git-repo@external-dev-client>git-repo-web-ui-access` | Likely | High | [Git Repository](#git-repository), [Git-Repo Web-UI Access](#git-repo-web-ui-access) | Unchecked | _not tracked_ |
+| Elevated | **Long-Lived Credentials** risk at **Identity Provider** used by **Apache Webserver** (credentials) | `long-lived-credentials@identity-provider@apache-webserver>auth-credential-check-traffic` | Likely | High | [Identity Provider](#identity-provider), [Auth Credential Check Traffic](#auth-credential-check-traffic) | Unchecked | _not tracked_ |
+| Elevated | **Long-Lived Credentials** risk at **LDAP Auth Server** used by **Marketing CMS** (credentials) | `long-lived-credentials@ldap-auth-server@marketing-cms>auth-traffic` | Likely | High | [LDAP Auth Server](#ldap-auth-server), [Auth Traffic](#auth-traffic) | Unchecked | _not tracked_ |
 | Medium | **Long-Lived Credentials** risk at **Customer Contract Database** used by **Backoffice ERP System** (credentials) | `long-lived-credentials@sql-database@erp-system>database-traffic` | Unlikely | High | [Customer Contract Database](#customer-contract-database), [Database Traffic](#database-traffic) | Unchecked | _not tracked_ |
-| Medium | **Long-Lived Credentials** risk at **Identity Provider** used by **Apache Webserver** (credentials) | `long-lived-credentials@identity-provider@apache-webserver>auth-credential-check-traffic` | Unlikely | High | [Identity Provider](#identity-provider), [Auth Credential Check Traffic](#auth-credential-check-traffic) | Unchecked | _not tracked_ |
 | Medium | **Long-Lived Credentials** risk at **LDAP Auth Server** used by **Identity Provider** (credentials) | `long-lived-credentials@ldap-auth-server@identity-provider>ldap-credential-check-traffic` | Unlikely | High | [LDAP Auth Server](#ldap-auth-server), [LDAP Credential Check Traffic](#ldap-credential-check-traffic) | Unchecked | _not tracked_ |
-| Medium | **Long-Lived Credentials** risk at **LDAP Auth Server** used by **Marketing CMS** (credentials) | `long-lived-credentials@ldap-auth-server@marketing-cms>auth-traffic` | Unlikely | High | [LDAP Auth Server](#ldap-auth-server), [Auth Traffic](#auth-traffic) | Unchecked | _not tracked_ |
 
 ### Missing Authentication
 
@@ -2074,8 +2077,8 @@ The risk **Unencrypted Communication** was found **4 times** in the analyzed arc
 
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| Elevated | **Unencrypted Communication** named **Auth Traffic** between **Marketing CMS** and **LDAP Auth Server** transferring authentication data (like credentials, token, session-id, etc.) | `unencrypted-communication@marketing-cms>auth-traffic@marketing-cms@ldap-auth-server` | Likely | High | [Marketing CMS](#marketing-cms), [Auth Traffic](#auth-traffic) | Unchecked | _not tracked_ |
 | Elevated | **Unencrypted Communication** named **Web Application Traffic** between **Load Balancer** and **Apache Webserver** transferring authentication data (like credentials, token, session-id, etc.) | `unencrypted-communication@load-balancer>web-application-traffic@load-balancer@apache-webserver` | Likely | High | [Load Balancer](#load-balancer), [Web Application Traffic](#web-application-traffic) | Unchecked | _not tracked_ |
-| Medium | **Unencrypted Communication** named **Auth Traffic** between **Marketing CMS** and **LDAP Auth Server** transferring authentication data (like credentials, token, session-id, etc.) | `unencrypted-communication@marketing-cms>auth-traffic@marketing-cms@ldap-auth-server` | Unlikely | High | [Marketing CMS](#marketing-cms), [Auth Traffic](#auth-traffic) | Unchecked | _not tracked_ |
 | Medium | **Unencrypted Communication** named **Database Traffic** between **Backoffice ERP System** and **Customer Contract Database** transferring authentication data (like credentials, token, session-id, etc.) | `unencrypted-communication@erp-system>database-traffic@erp-system@sql-database` | Unlikely | High | [Backoffice ERP System](#backoffice-erp-system), [Database Traffic](#database-traffic) | Unchecked | _not tracked_ |
 | Medium | **Unencrypted Communication** named **NFS Filesystem Access** between **Backoffice ERP System** and **Contract File Server** | `unencrypted-communication@erp-system>nfs-filesystem-access@erp-system@contract-file-server` | Unlikely | Medium | [Backoffice ERP System](#backoffice-erp-system), [NFS Filesystem Access](#nfs-filesystem-access) | Unchecked | _not tracked_ |
 
@@ -2545,7 +2548,7 @@ The risk **Missing Vault (Secret Storage)** was found **1 time** in the analyzed
 
 ### Missing Web Application Firewall (WAF)
 
-**Medium** · 3/3 unmitigated Risks · `missing-waf`
+**Medium** · 4/4 unmitigated Risks · `missing-waf`
 
 | Property | Value |
 | --- | --- |
@@ -2586,12 +2589,13 @@ GetAttribute a Web Application Firewall (WAF) in place?
 
 **Risk Findings**
 
-The risk **Missing Web Application Firewall (WAF)** was found **3 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+The risk **Missing Web Application Firewall (WAF)** was found **4 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Medium | **Missing Web Application Firewall (WAF)** risk at **Apache Webserver** | `missing-waf@apache-webserver` | Unlikely | Medium | [Apache Webserver](#apache-webserver) | Unchecked | _not tracked_ |
 | Medium | **Missing Web Application Firewall (WAF)** risk at **Backoffice ERP System** | `missing-waf@erp-system` | Unlikely | Medium | [Backoffice ERP System](#backoffice-erp-system) | Unchecked | _not tracked_ |
+| Medium | **Missing Web Application Firewall (WAF)** risk at **Identity Provider** | `missing-waf@identity-provider` | Unlikely | Medium | [Identity Provider](#identity-provider) | Unchecked | _not tracked_ |
 | Medium | **Missing Web Application Firewall (WAF)** risk at **Marketing CMS** | `missing-waf@marketing-cms` | Unlikely | Medium | [Marketing CMS](#marketing-cms) | Unchecked | _not tracked_ |
 
 ### Mixed Targets on Shared Runtime
@@ -2801,7 +2805,7 @@ The risk **Unchecked Deployment** was found **3 times** in the analyzed architec
 
 ### DoS-risky Access Across Trust-Boundary
 
-**Low** · 3/3 unmitigated Risks · `dos-risky-access-across-trust-boundary`
+**Low** · 5/5 unmitigated Risks · `dos-risky-access-across-trust-boundary`
 
 | Property | Value |
 | --- | --- |
@@ -2843,12 +2847,14 @@ Are recommendations from the linked cheat sheet and referenced ASVS chapter appl
 
 **Risk Findings**
 
-The risk **DoS-risky Access Across Trust-Boundary** was found **3 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+The risk **DoS-risky Access Across Trust-Boundary** was found **5 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Low | **Denial-of-Service** risky access of **Backoffice ERP System** by **Apache Webserver** via **ERP System Traffic** | `dos-risky-access-across-trust-boundary@erp-system@apache-webserver@apache-webserver>erp-system-traffic->` | Unlikely | Low | [Backoffice ERP System](#backoffice-erp-system), [ERP System Traffic](#erp-system-traffic) | In Progress | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures are being implemented and checked |
 | Low | **Denial-of-Service** risky access of **Backoffice ERP System** by **Backoffice Client** via **ERP Internal Access** | `dos-risky-access-across-trust-boundary@erp-system@backoffice-client@backoffice-client>erp-internal-access->` | Unlikely | Low | [Backoffice ERP System](#backoffice-erp-system), [ERP Internal Access](#erp-internal-access) | In Progress | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures are being implemented and checked |
+| Low | **Denial-of-Service** risky access of **Identity Provider** by **Apache Webserver** via **Auth Credential Check Traffic** | `dos-risky-access-across-trust-boundary@identity-provider@apache-webserver@apache-webserver>auth-credential-check-traffic->` | Unlikely | Low | [Identity Provider](#identity-provider), [Auth Credential Check Traffic](#auth-credential-check-traffic) | In Progress | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures are being implemented and checked |
+| Low | **Denial-of-Service** risky access of **LDAP Auth Server** by **Marketing CMS** via **Auth Traffic** | `dos-risky-access-across-trust-boundary@ldap-auth-server@marketing-cms@marketing-cms>auth-traffic->` | Unlikely | Low | [LDAP Auth Server](#ldap-auth-server), [Auth Traffic](#auth-traffic) | In Progress | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures are being implemented and checked |
 | Low | **Denial-of-Service** risky access of **Marketing CMS** by **Backoffice Client** via **Marketing CMS Editing** | `dos-risky-access-across-trust-boundary@marketing-cms@backoffice-client@backoffice-client>marketing-cms-editing->` | Unlikely | Low | [Marketing CMS](#marketing-cms), [Marketing CMS Editing](#marketing-cms-editing) | In Progress | 2020-01-04; by John Doe; ticket XYZ-1234; The hardening measures are being implemented and checked |
 
 ### LDAP-Injection
@@ -3123,7 +3129,7 @@ The risk **Unencrypted Technical Assets** was found **7 times** in the analyzed 
 
 ## Identified Risks by Technical Asset
 
-In total **91 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
+In total **94 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
 
 ### Customer Contract Database
 
@@ -3395,16 +3401,18 @@ Git repository server
 
 ### Identity Provider
 
-**Elevated** · 2/4 unmitigated Risks · `identity-provider`
+**Elevated** · 4/6 unmitigated Risks · `identity-provider`
 
 Identity provider server
 
 **Identified Risks of the Asset**
 
 - **Elevated**: [**Cross-Site Scripting (XSS)** risk at **Identity Provider**](#cross-site-scripting-xss) (Unchecked)
+- **Elevated**: [**Long-Lived Credentials** risk at **Identity Provider** used by **Apache Webserver** (credentials)](#long-lived-credentials) (Unchecked)
 - **Elevated**: [**LDAP-Injection** risk at **Identity Provider** against LDAP server **LDAP Auth Server** via **LDAP Credential Check Traffic**](#ldap-injection) (Mitigated)
 - **Elevated**: [**Missing Hardening** risk at **Identity Provider**](#missing-hardening) (Mitigated)
-- **Medium**: [**Long-Lived Credentials** risk at **Identity Provider** used by **Apache Webserver** (credentials)](#long-lived-credentials) (Unchecked)
+- **Medium**: [**Missing Web Application Firewall (WAF)** risk at **Identity Provider**](#missing-web-application-firewall-waf) (Unchecked)
+- **Low**: [**Denial-of-Service** risky access of **Identity Provider** by **Apache Webserver** via **Auth Credential Check Traffic**](#dos-risky-access-across-trust-boundary) (In Progress)
 
 **Asset Information**
 
@@ -3491,6 +3499,54 @@ Jenkins build-server
 | Availability | important |
 | CIA justification | The build pipeline might contain sensitive configuration values like backend credentials, certificates etc. and is therefore rated as confidential. The integrity and availability is rated as critical and important due to the risk of reputation damage and application update unavailability when the build pipeline is compromised. |
 
+### LDAP Auth Server
+
+**Elevated** · 3/5 unmitigated Risks · `ldap-auth-server`
+
+LDAP authentication server
+
+**Identified Risks of the Asset**
+
+- **Elevated**: [**Long-Lived Credentials** risk at **LDAP Auth Server** used by **Marketing CMS** (credentials)](#long-lived-credentials) (Unchecked)
+- **Elevated**: [**Missing Hardening** risk at **LDAP Auth Server**](#missing-hardening) (Mitigated)
+- **Medium**: [**Long-Lived Credentials** risk at **LDAP Auth Server** used by **Identity Provider** (credentials)](#long-lived-credentials) (Unchecked)
+- **Medium**: [**Missing Multi-Factor Authentication** covering communication link **User Management Access** from **Backend Admin Client** to **LDAP Auth Server**](#missing-multi-factor-authentication-mfa) (Mitigated)
+- **Low**: [**Denial-of-Service** risky access of **LDAP Auth Server** by **Marketing CMS** via **Auth Traffic**](#dos-risky-access-across-trust-boundary) (In Progress)
+
+**Asset Information**
+
+| Property | Value |
+| --- | --- |
+| Type | datastore |
+| Usage | business |
+| RAA | 51 % |
+| Size | component |
+| Technology | identity-store-ldap |
+| Tags | linux |
+| Trust boundary | [Auth Handling Environment](#auth-handling-environment) |
+| Internet | no |
+| Machine | physical |
+| Encryption | transparent |
+| Multi-tenant | no |
+| Redundant | no |
+| Custom-developed | no |
+| Client used by a human | no |
+| Data formats accepted | none |
+| Data processed | [Customer Accounts](#customer-accounts) |
+| Data stored | [Customer Accounts](#customer-accounts) |
+| Outgoing communication links | none |
+| Incoming communication links | [Auth Traffic](#auth-traffic), [LDAP Credential Check Traffic](#ldap-credential-check-traffic), [User Management Access](#user-management-access) |
+
+**Asset Rating**
+
+| Property | Value |
+| --- | --- |
+| Owner | Company ABC |
+| Confidentiality | strictly-confidential |
+| Integrity | critical |
+| Availability | critical |
+| CIA justification | The auth data of the application |
+
 ### Load Balancer
 
 **Elevated** · 1/1 unmitigated Risk · `load-balancer`
@@ -3544,11 +3600,11 @@ CMS for the marketing content
 **Identified Risks of the Asset**
 
 - **Elevated**: [**Cross-Site Scripting (XSS)** risk at **Marketing CMS**](#cross-site-scripting-xss) (Unchecked)
+- **Elevated**: [**Unencrypted Communication** named **Auth Traffic** between **Marketing CMS** and **LDAP Auth Server** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - **Elevated**: [**Missing Authentication** covering communication link **CMS Content Traffic** from **Load Balancer** to **Marketing CMS**](#missing-authentication) (Unchecked)
 - **Elevated**: [**LDAP-Injection** risk at **Marketing CMS** against LDAP server **LDAP Auth Server** via **Auth Traffic**](#ldap-injection) (Mitigated)
 - **Elevated**: [**Missing Object-Level Authorization** risk at **Marketing CMS** for **Backoffice Client** (function-level)](#missing-object-level-authorization) (False Positive)
 - **Medium**: [**Container Base Image Backdooring** risk at **Marketing CMS**](#container-base-image-backdooring) (Unchecked)
-- **Medium**: [**Unencrypted Communication** named **Auth Traffic** between **Marketing CMS** and **LDAP Auth Server** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - **Medium**: [**Missing Web Application Firewall (WAF)** risk at **Marketing CMS**](#missing-web-application-firewall-waf) (Unchecked)
 - **Medium**: [**Push instead of Pull Deployment** at **Marketing CMS** via build pipeline asset **Jenkins Build Server**](#push-instead-of-pull-deployment) (Unchecked)
 - **Medium**: [**Cross-Site Request Forgery (CSRF)** risk at **Marketing CMS** via **CMS Content Traffic** from **Load Balancer**](#cross-site-request-forgery-csrf) (Unchecked)
@@ -3590,53 +3646,6 @@ CMS for the marketing content
 | Integrity | critical |
 | Availability | critical |
 | CIA justification | The correct configuration and reachability of the web server is mandatory for all customer usages of the portal. |
-
-### LDAP Auth Server
-
-**Medium** · 2/4 unmitigated Risks · `ldap-auth-server`
-
-LDAP authentication server
-
-**Identified Risks of the Asset**
-
-- **Elevated**: [**Missing Hardening** risk at **LDAP Auth Server**](#missing-hardening) (Mitigated)
-- **Medium**: [**Long-Lived Credentials** risk at **LDAP Auth Server** used by **Identity Provider** (credentials)](#long-lived-credentials) (Unchecked)
-- **Medium**: [**Long-Lived Credentials** risk at **LDAP Auth Server** used by **Marketing CMS** (credentials)](#long-lived-credentials) (Unchecked)
-- **Medium**: [**Missing Multi-Factor Authentication** covering communication link **User Management Access** from **Backend Admin Client** to **LDAP Auth Server**](#missing-multi-factor-authentication-mfa) (Mitigated)
-
-**Asset Information**
-
-| Property | Value |
-| --- | --- |
-| Type | datastore |
-| Usage | business |
-| RAA | 51 % |
-| Size | component |
-| Technology | identity-store-ldap |
-| Tags | linux |
-| Trust boundary | [Auth Handling Environment](#auth-handling-environment) |
-| Internet | no |
-| Machine | physical |
-| Encryption | transparent |
-| Multi-tenant | no |
-| Redundant | no |
-| Custom-developed | no |
-| Client used by a human | no |
-| Data formats accepted | none |
-| Data processed | [Customer Accounts](#customer-accounts) |
-| Data stored | [Customer Accounts](#customer-accounts) |
-| Outgoing communication links | none |
-| Incoming communication links | [Auth Traffic](#auth-traffic), [LDAP Credential Check Traffic](#ldap-credential-check-traffic), [User Management Access](#user-management-access) |
-
-**Asset Rating**
-
-| Property | Value |
-| --- | --- |
-| Owner | Company ABC |
-| Confidentiality | strictly-confidential |
-| Integrity | critical |
-| Availability | critical |
-| CIA justification | The auth data of the application |
 
 ### Backend Admin Client
 
@@ -3820,7 +3829,7 @@ External developer client
 
 ## Identified Data Breach Probabilities by Data Asset
 
-In total **91 potential risks** have been identified during the threat modeling process, distributed across **12 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
+In total **94 potential risks** have been identified during the threat modeling process, distributed across **12 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
 
 ### Build Job Config
 
@@ -3914,7 +3923,7 @@ This data asset has data breach potential because of 28 remaining risks:
 
 ### Customer Accounts
 
-**Probable** · 46/64 unmitigated Risks · `customer-accounts`
+**Probable** · 47/65 unmitigated Risks · `customer-accounts`
 
 Customer Accounts (including transient credentials when entered for checking them)
 
@@ -3937,7 +3946,7 @@ Customer Accounts (including transient credentials when entered for checking the
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 46 remaining risks:
+This data asset has data breach potential because of 47 remaining risks:
 
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -3961,15 +3970,15 @@ This data asset has data breach potential because of 46 remaining risks:
 - Possible, **Elevated**: [**Human Use of Machine Identity** risk at **Customer Contract Database** by users of **Backend Admin Client** (service-account)](#human-use-of-machine-identity) (Unchecked)
 - Possible, **Elevated**: [**Long-Lived Credentials** risk at **Backoffice ERP System** used by **Apache Webserver** (long-lived-token)](#long-lived-credentials) (Unchecked)
 - Possible, **Medium**: [**Long-Lived Credentials** risk at **Customer Contract Database** used by **Backoffice ERP System** (credentials)](#long-lived-credentials) (Unchecked)
-- Possible, **Medium**: [**Long-Lived Credentials** risk at **Identity Provider** used by **Apache Webserver** (credentials)](#long-lived-credentials) (Unchecked)
+- Possible, **Elevated**: [**Long-Lived Credentials** risk at **Identity Provider** used by **Apache Webserver** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Medium**: [**Long-Lived Credentials** risk at **LDAP Auth Server** used by **Identity Provider** (credentials)](#long-lived-credentials) (Unchecked)
-- Possible, **Medium**: [**Long-Lived Credentials** risk at **LDAP Auth Server** used by **Marketing CMS** (credentials)](#long-lived-credentials) (Unchecked)
+- Possible, **Elevated**: [**Long-Lived Credentials** risk at **LDAP Auth Server** used by **Marketing CMS** (credentials)](#long-lived-credentials) (Unchecked)
 - Possible, **Elevated**: [**Missing Authentication** covering communication link **CMS Content Traffic** from **Load Balancer** to **Marketing CMS**](#missing-authentication) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Apache Webserver** server-side web-requesting the target **Backoffice ERP System** via **ERP System Traffic**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Apache Webserver** server-side web-requesting the target **Identity Provider** via **Auth Credential Check Traffic**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Elevated**: [**Shared Machine Account** risk at **Backoffice ERP System** sharing **erp-db-owner** with **Backend Admin Client**](#shared-machine-account) (Unchecked)
 - Possible, **Medium**: [**Unchecked Deployment** risk at **Jenkins Build Server**](#unchecked-deployment) (Unchecked)
-- Possible, **Medium**: [**Unencrypted Communication** named **Auth Traffic** between **Marketing CMS** and **LDAP Auth Server** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
+- Possible, **Elevated**: [**Unencrypted Communication** named **Auth Traffic** between **Marketing CMS** and **LDAP Auth Server** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - Possible, **Medium**: [**Unencrypted Communication** named **Database Traffic** between **Backoffice ERP System** and **Customer Contract Database** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - Possible, **Elevated**: [**Unencrypted Communication** named **Web Application Traffic** between **Load Balancer** and **Apache Webserver** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - Improbable, **Medium**: [**Cross-Site Request Forgery (CSRF)** risk at **Apache Webserver** via **Web Application Traffic** from **Load Balancer**](#cross-site-request-forgery-csrf) (Unchecked)
@@ -3981,6 +3990,7 @@ This data asset has data breach potential because of 46 remaining risks:
 - Improbable, **Medium**: [**Missing Network Segmentation** to further encapsulate and protect **Apache Webserver** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Medium**: [**Missing Web Application Firewall (WAF)** risk at **Apache Webserver**](#missing-web-application-firewall-waf) (Unchecked)
 - Improbable, **Medium**: [**Missing Web Application Firewall (WAF)** risk at **Backoffice ERP System**](#missing-web-application-firewall-waf) (Unchecked)
+- Improbable, **Medium**: [**Missing Web Application Firewall (WAF)** risk at **Identity Provider**](#missing-web-application-firewall-waf) (Unchecked)
 - Improbable, **Medium**: [**Missing Web Application Firewall (WAF)** risk at **Marketing CMS**](#missing-web-application-firewall-waf) (Unchecked)
 - Improbable, **Medium**: [**Mixed Targets on Shared Runtime** named **WebApp and Backoffice Virtualization** might enable attackers moving from one less valuable target to a more valuable one](#mixed-targets-on-shared-runtime) (Unchecked)
 - Improbable, **Medium**: [**Push instead of Pull Deployment** at **Apache Webserver** via build pipeline asset **Jenkins Build Server**](#push-instead-of-pull-deployment) (Unchecked)
@@ -4991,7 +5001,7 @@ Link to the LDAP auth server
 
 ## Risk Tracking
 
-**29 of 91 risks** are tracked in the model; the others are unchecked.
+**31 of 94 risks** are tracked in the model; the others are unchecked.
 
 | Risk | ID | Severity | Status | Date | Checked by | Ticket | Justification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -5023,6 +5033,8 @@ Link to the LDAP auth server
 | [**Unencrypted Technical Asset** named **Customer Contract Database** missing end user individual encryption with data-with-end-user-individual-key](#unencrypted-technical-assets) | `unencrypted-asset@sql-database` | Medium | Mitigated | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures were implemented and checked |
 | [**Denial-of-Service** risky access of **Backoffice ERP System** by **Apache Webserver** via **ERP System Traffic**](#dos-risky-access-across-trust-boundary) | `dos-risky-access-across-trust-boundary@erp-system@apache-webserver@apache-webserver>erp-system-traffic->` | Low | In Progress | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures are being implemented and checked |
 | [**Denial-of-Service** risky access of **Backoffice ERP System** by **Backoffice Client** via **ERP Internal Access**](#dos-risky-access-across-trust-boundary) | `dos-risky-access-across-trust-boundary@erp-system@backoffice-client@backoffice-client>erp-internal-access->` | Low | In Progress | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures are being implemented and checked |
+| [**Denial-of-Service** risky access of **Identity Provider** by **Apache Webserver** via **Auth Credential Check Traffic**](#dos-risky-access-across-trust-boundary) | `dos-risky-access-across-trust-boundary@identity-provider@apache-webserver@apache-webserver>auth-credential-check-traffic->` | Low | In Progress | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures are being implemented and checked |
+| [**Denial-of-Service** risky access of **LDAP Auth Server** by **Marketing CMS** via **Auth Traffic**](#dos-risky-access-across-trust-boundary) | `dos-risky-access-across-trust-boundary@ldap-auth-server@marketing-cms@marketing-cms>auth-traffic->` | Low | In Progress | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures are being implemented and checked |
 | [**Denial-of-Service** risky access of **Marketing CMS** by **Backoffice Client** via **Marketing CMS Editing**](#dos-risky-access-across-trust-boundary) | `dos-risky-access-across-trust-boundary@marketing-cms@backoffice-client@backoffice-client>marketing-cms-editing->` | Low | In Progress | 2020-01-04 | John Doe | XYZ-1234 | The hardening measures are being implemented and checked |
 
 ## Threat Catalog Coverage
@@ -5055,7 +5067,7 @@ The risk rules checked **6 of 10** entries of the [OWASP API Security Top 10 202
 | `API1` Broken Object Level Authorization | [Missing Identity Propagation](#missing-identity-propagation), [Missing Object-Level Authorization](#missing-object-level-authorization) | 1/2 unmitigated Risks |
 | `API2` Broken Authentication | [Missing Authentication](#missing-authentication), [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | 2/11 unmitigated Risks |
 | `API3` Broken Object Property Level Authorization | none | _not checked by any risk rule_ |
-| `API4` Unrestricted Resource Consumption | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary), Unbounded Model Consumption | 3/3 unmitigated Risks |
+| `API4` Unrestricted Resource Consumption | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary), Unbounded Model Consumption | 5/5 unmitigated Risks |
 | `API5` Broken Function Level Authorization | [Missing Object-Level Authorization](#missing-object-level-authorization) | 1 mitigated Risk |
 | `API6` Unrestricted Access to Sensitive Business Flows | none | _not checked by any risk rule_ |
 | `API7` Server Side Request Forgery | [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 2/2 unmitigated Risks |
