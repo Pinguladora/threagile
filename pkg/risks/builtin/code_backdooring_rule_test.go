@@ -378,3 +378,34 @@ func TestCodeBackdoogingRuleGenerateRisksDevOpsImportantDataAssetNoAddingTargetR
 	sort.Strings(orderedDataBreachTechnicalAssetIDs)
 	assert.Equal(t, []string{"deployment-target", "git-lab-ci-cd"}, orderedDataBreachTechnicalAssetIDs)
 }
+
+func TestCodeBackdooringRuleGenerateRisksOutOfScopeDeveloperClientRisksCreated(t *testing.T) {
+	rule := NewCodeBackdooringRule()
+	model := func(callerTechnology types.TechnologyList) *types.Model {
+		return &types.Model{
+			TechnicalAssets: map[string]*types.TechnicalAsset{
+				"git-repo": {
+					Id:    "git-repo",
+					Title: "Git Repository",
+					Technologies: types.TechnologyList{
+						{Name: "sourcecode-repository", Attributes: map[string]bool{types.IsDevelopmentRelevant: true}},
+					},
+				},
+				"caller": {Id: "caller", OutOfScope: true, Technologies: callerTechnology},
+			},
+			IncomingTechnicalCommunicationLinksMappedByTargetId: map[string][]*types.CommunicationLink{
+				"git-repo": {{SourceId: "caller", TargetId: "git-repo", VPN: true}},
+			},
+		}
+	}
+
+	risks, err := rule.GenerateRisks(model(types.TechnologyList{
+		{Name: "devops-client", Attributes: map[string]bool{types.DevOpsClient: true}},
+	}))
+	assert.Nil(t, err)
+	assert.Len(t, risks, 1, "an unmanaged developer client, even over VPN")
+
+	risks, err = rule.GenerateRisks(model(types.TechnologyList{{Name: "web-server"}}))
+	assert.Nil(t, err)
+	assert.Empty(t, risks, "other out-of-scope callers")
+}
