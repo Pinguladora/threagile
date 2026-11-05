@@ -3917,7 +3917,7 @@ The risk rules checked **5 of 10** entries of the [OWASP Non-Human Identities To
 | Entry | Risk rules | Risks |
 | --- | --- | --- |
 | `NHI1` Improper Offboarding | none | _not checked by any risk rule_ |
-| `NHI2` Secret Leakage | [Long-Lived Credentials](#long-lived-credentials), [Missing Vault (Secret Storage)](#missing-vault-secret-storage) | 2/2 unmitigated Risks |
+| `NHI2` Secret Leakage | Accidental Secret Leak, [Long-Lived Credentials](#long-lived-credentials), [Missing Vault (Secret Storage)](#missing-vault-secret-storage) | 2/2 unmitigated Risks |
 | `NHI3` Vulnerable Third-Party NHI | none | _not checked by any risk rule_ |
 | `NHI4` Insecure Authentication | none | _not checked by any risk rule_ |
 | `NHI5` Overprivileged NHI | none | _not checked by any risk rule_ |

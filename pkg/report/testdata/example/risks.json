@@ -5,31 +5,23 @@
     "severity": "medium",
     "exploitation_likelihood": "unlikely",
     "exploitation_impact": "high",
-    "title": "\u003cb\u003eAccidental Secret Leak(Git)\u003c/b\u003e risk at \u003cb\u003eGit Repository\u003c/b\u003e: \u003cu\u003eGit Leak Prevention\u003c/u\u003e",
+    "title": "\u003cb\u003eAccidental Secret Leak (Git)\u003c/b\u003e risk at \u003cb\u003eGit Repository\u003c/b\u003e: \u003cu\u003eGit Leak Prevention\u003c/u\u003e",
     "synthetic_id": "accidental-secret-leak@git-repo",
     "most_relevant_technical_asset": "git-repo",
     "data_breach_probability": "probable",
     "data_breach_technical_assets": [
       "git-repo"
     ],
-    "risk_explanation": [
-      "Risk 'Accidental Secret Leak' has been flagged for technical asset 'git-repo' because",
-      "out_of_scope of technical asset 'git-repo' is \u003cnil\u003e, and",
-      "attributes.sourcecode-repository of technologies of technical asset 'git-repo' is true"
-    ],
-    "rating_explanation": [
-      "'Exploitation Likelihood' is 'unlikely'",
-      "'Exploitation Impact' is 'high'",
-      "'Data Breach Probability' is 'probable'",
-      "'Severity' is 'medium'"
-    ],
-    "plain_title": "Accidental Secret Leak(Git) risk at Git Repository: Git Leak Prevention",
+    "plain_title": "Accidental Secret Leak (Git) risk at Git Repository: Git Leak Prevention",
     "category_title": "Accidental Secret Leak",
     "stride": "information-disclosure",
     "function": "operations",
     "cwe": 200,
+    "references": [
+      "OWASP NHI2:2025 Secret Leakage"
+    ],
     "action": "Build Pipeline Hardening",
-    "mitigation": "Establish measures preventing accidental check-in or package-in of secrets into sourcecode repositories and artifact registries. This starts by using good .gitignore and .dockerignore files, but does not stop there. See for example tools like \u003ci\u003e\\\"git-secrets\\\"\u003c/i\u003e or \u003ci\u003e\\\"Talisman\\\"\u003c/i\u003e to have check-in preventive measures for secrets. Consider also to regularly scan your repositories for secrets accidentally checked-in using scanning tools like \u003ci\u003e\"gitleaks\"\u003c/i\u003e or \u003ci\u003e\"gitrob\"\u003c/i\u003e.",
+    "mitigation": "Establish measures preventing accidental check-in or package-in of secrets into sourcecode repositories and artifact registries. This starts by using good .gitignore and .dockerignore files, but does not stop there. See for example tools like \u003ci\u003e\"git-secrets\" or \"Talisman\"\u003c/i\u003e to have check-in preventive measures for secrets. Consider also to regularly scan your repositories for secrets accidentally checked-in using scanning tools like \u003ci\u003e\"gitleaks\" or \"gitrob\"\u003c/i\u003e.",
     "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
     "most_relevant_technical_asset_title": "Git Repository",
     "most_relevant_technical_asset_raa": 31.49087221095335

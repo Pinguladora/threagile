@@ -24,9 +24,10 @@ func GetBuiltInRiskRules() types.RiskRules {
 	}
 
 	for id, rule := range scriptRules {
-		builtinRule, ok := rules[id]
-		if ok && builtinRule != nil {
-			fmt.Printf("WARNING: script risk rule %q shadows built-in risk rule\n", id)
+		// the embedded scripts include ports of built-in rules that exercise the script engine: the built-in rule
+		// of an id is the one that runs, with its references and its explanations
+		if _, isBuiltIn := rules[id]; isBuiltIn {
+			continue
 		}
 
 		rules[id] = rule
