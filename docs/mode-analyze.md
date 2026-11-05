@@ -43,3 +43,25 @@ through, add a `risk_tracking` entry for it to the model.
 ```sh
 threagile analyze-model --model threagile.yaml --output out --fail-on high
 ```
+
+## Comparing with a baseline
+
+`--baseline <risks.json>` (or `"Baseline"` in the config file) compares the risks with
+those of an earlier analysis, read from its `risks.json`. Threagile prints how many risks
+are new, resolved, escalated (higher severity), de-escalated and unchanged, and lists the
+new and the escalated ones. The HTML and Markdown reports get a chapter "Changes Since the
+Baseline" after the risks by severity. Risks are matched by their synthetic id, the same id
+that `risk_tracking` uses.
+
+With a baseline, `--fail-on` only fails on unchecked risks that were not already at the
+threshold in the baseline: the new ones and those whose severity rose to it. The gate can
+then be turned on for a model that still has open risks, and fails when a change adds one.
+The baseline is read before the analysis writes its outputs, so it can be the `risks.json`
+in the output folder.
+
+```sh
+# on the main branch, keep the risks as the baseline
+threagile analyze-model --model threagile.yaml --output baseline
+# on a pull request, fail on new high or critical risks only
+threagile analyze-model --model threagile.yaml --output out --baseline baseline/risks.json --fail-on high
+```

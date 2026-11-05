@@ -12,6 +12,7 @@ import (
 	"testing"
 
 	"github.com/Pinguladora/threagile/internal/threagile"
+	"github.com/Pinguladora/threagile/pkg/baseline"
 	"github.com/Pinguladora/threagile/pkg/model"
 	"github.com/Pinguladora/threagile/pkg/report"
 	"github.com/Pinguladora/threagile/pkg/risks"
@@ -342,6 +343,10 @@ func analyzeHostileModel(t *testing.T) (*types.Model, report.ReportOptions) {
 		IntroTextRAA:     result.IntroTextRAA,
 		RiskRules:        risks.GetBuiltInRiskRules(),
 		CustomRiskRules:  result.CustomRiskRules,
+		// a baseline is another analysis' output: its resolved risks are shown as they are
+		Baseline: baseline.Compare("baseline "+hostile+".json", []baseline.Risk{
+			{SyntheticId: "gone@" + hostile, Title: "Gone " + hostile, Severity: types.HighSeverity},
+		}, parsedModel.AllRisks()),
 	}
 }
 

@@ -63,7 +63,9 @@ threagile analyze-model --model threagile.yaml --output out
 
 Each output can be skipped with its `--skip-...` flag, see `threagile analyze-model --help`. To fail a CI
 build on risks nobody has looked at yet, add `--fail-on high`: the analysis then exits with status 2 when
-unchecked risks of that severity or higher remain.
+unchecked risks of that severity or higher remain. With `--baseline <earlier risks.json>` the gate only fails
+on risks that are new or newly reached that severity, and the reports show what changed (see
+[analyze mode](./docs/mode-analyze.md#comparing-with-a-baseline)).
 
 Other commands:
 
