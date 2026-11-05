@@ -100,7 +100,6 @@ func TestRoundTrip(t *testing.T) {
 	assert.ElementsMatch(t, []string{
 		"something-strange@contract-file-server",
 		"something-strange@sql-database",
-		"missing-cloud-hardening@webapp-virtualization",
 		"mixed-targets-on-shared-runtime@webapp-virtualization",
 	}, lost)
 	assert.Len(t, imported.GeneratedRisksBySyntheticId, len(original.GeneratedRisksBySyntheticId)-len(lost),

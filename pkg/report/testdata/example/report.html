@@ -510,14 +510,14 @@ footer {
 <h2>Management Summary</h2>
 <p>Threagile toolkit was used to model the architecture of "Some Example Application" and derive risks by analyzing the components and data flows. The risks identified during this analysis are shown in the following chapters. Identified risks during threat modeling do not necessarily mean that the vulnerability associated with this risk actually exists: it is more to be seen as a list of potential risks and threats, which should be individually reviewed and reduced by removing false positives. For the remaining risks it should be checked in the design and implementation of "Some Example Application" whether the mitigation advices have been applied or not.</p>
 <p>Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.</p>
-<p>In total <strong>94 initial risks</strong> in <strong>34 categories</strong> have been identified during the threat modeling process:</p>
+<p>In total <strong>93 initial risks</strong> in <strong>34 categories</strong> have been identified during the threat modeling process:</p>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Severity</th><th scope="col" class="number">Risks</th><th scope="col">Status</th><th scope="col" class="number">Risks</th></tr></thead>
 <tbody>
-<tr><th scope="row"><span class="badge sev-critical">Critical</span></th><td class="number">1</td><th scope="row"><span class="badge status-unchecked">Unchecked</span></th><td class="number">63</td></tr>
+<tr><th scope="row"><span class="badge sev-critical">Critical</span></th><td class="number">1</td><th scope="row"><span class="badge status-unchecked">Unchecked</span></th><td class="number">62</td></tr>
 <tr><th scope="row"><span class="badge sev-high">High</span></th><td class="number">2</td><th scope="row"><span class="badge status-in-discussion">In Discussion</span></th><td class="number">0</td></tr>
-<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">39</td><th scope="row"><span class="badge status-accepted">Accepted</span></th><td class="number">1</td></tr>
+<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">38</td><th scope="row"><span class="badge status-accepted">Accepted</span></th><td class="number">1</td></tr>
 <tr><th scope="row"><span class="badge sev-medium">Medium</span></th><td class="number">43</td><th scope="row"><span class="badge status-in-progress">In Progress</span></th><td class="number">5</td></tr>
 <tr><th scope="row"><span class="badge sev-low">Low</span></th><td class="number">9</td><th scope="row"><span class="badge status-mitigated">Mitigated</span></th><td class="number">24</td></tr>
 <tr><td></td><td></td><th scope="row"><span class="badge status-false-positive">False Positive</span></th><td class="number">1</td></tr>
@@ -530,7 +530,7 @@ footer {
 
 <section class="chapter" id="initial-risks">
 <h2>Impact Analysis of the Initial Risks</h2>
-<p>The most prevalent impacts of the <strong>94 initial risks</strong> (distributed over <strong>34 risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
+<p>The most prevalent impacts of the <strong>93 initial risks</strong> (distributed over <strong>34 risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
 <dl class="entries">
 <dt><span class="badge sev-critical">Critical</span> <a href="#category-something-strange">Some Individual Risk Example</a>: <span class="summary">2 Initial Risks, exploitation likelihood is <em>Frequent</em> with <em>Very High</em> impact</span></dt>
 <dd>Some text describing the impact...</dd>
@@ -548,7 +548,7 @@ footer {
 <dd>If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-authentication">Missing Authentication</a>: <span class="summary">2 Initial Risks, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might be able to access or modify sensitive data in an unauthenticated way.</dd>
-<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">6 Initial Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
+<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">5 Initial Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might access cloud components in an unintended way.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-file-validation">Missing File Validation</a>: <span class="summary">1 Initial Risk, exploitation likelihood is <em>Very Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might be able to provide malicious files to the application.</dd>
@@ -580,7 +580,7 @@ footer {
 <dd>If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.</dd>
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-long-lived-credentials">Long-Lived Credentials</a>: <span class="summary">6 Initial Risks, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.</dd>
-<dt><span class="badge sev-medium">Medium</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">6 Initial Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
+<dt><span class="badge sev-medium">Medium</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">5 Initial Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might access cloud components in an unintended way.</dd>
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-missing-identity-propagation">Missing Identity Propagation</a>: <span class="summary">1 Initial Risk, exploitation likelihood is <em>Unlikely</em> with <em>Medium</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might be able to access or modify foreign data after a successful compromise of a component within the system due to missing resource-based authorization checks.</dd>
@@ -626,8 +626,8 @@ footer {
 <td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="2.33" height="10"></rect></svg></td></tr>
 <tr><th scope="row"><span class="badge sev-high">High</span></th><td class="number">2</td><td class="number">2</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td>
 <td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="4.65" height="10"></rect></svg></td></tr>
-<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">39</td><td class="number">29</td><td class="number">0</td><td class="number">1</td><td class="number">0</td><td class="number">8</td><td class="number">1</td>
-<td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="67.44" height="10"></rect><rect class="status-accepted" x="67.44" width="2.33" height="10"></rect><rect class="status-mitigated" x="69.77" width="18.60" height="10"></rect><rect class="status-false-positive" x="88.37" width="2.33" height="10"></rect></svg></td></tr>
+<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">38</td><td class="number">28</td><td class="number">0</td><td class="number">1</td><td class="number">0</td><td class="number">8</td><td class="number">1</td>
+<td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="65.12" height="10"></rect><rect class="status-accepted" x="65.12" width="2.33" height="10"></rect><rect class="status-mitigated" x="67.44" width="18.60" height="10"></rect><rect class="status-false-positive" x="86.05" width="2.33" height="10"></rect></svg></td></tr>
 <tr><th scope="row"><span class="badge sev-medium">Medium</span></th><td class="number">43</td><td class="number">27</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">16</td><td class="number">0</td>
 <td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="62.79" height="10"></rect><rect class="status-mitigated" x="62.79" width="37.21" height="10"></rect></svg></td></tr>
 <tr><th scope="row"><span class="badge sev-low">Low</span></th><td class="number">9</td><td class="number">4</td><td class="number">0</td><td class="number">0</td><td class="number">5</td><td class="number">0</td><td class="number">0</td>
@@ -635,15 +635,15 @@ footer {
 </tbody>
 </table>
 </div>
-<p>After removal of risks with status <em>mitigated</em> and <em>false positive</em> the following <strong>69 remain unmitigated</strong>:</p>
+<p>After removal of risks with status <em>mitigated</em> and <em>false positive</em> the following <strong>68 remain unmitigated</strong>:</p>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Severity</th><th scope="col" class="number">Unmitigated risks</th><th scope="col">To be checked by</th><th scope="col" class="number">Unmitigated risks</th></tr></thead>
 <tbody>
 <tr><th scope="row"><span class="badge sev-critical">Critical</span></th><td class="number">1</td><th scope="row">Business Side</th><td class="number">2</td></tr>
 <tr><th scope="row"><span class="badge sev-high">High</span></th><td class="number">2</td><th scope="row">Architecture</th><td class="number">14</td></tr>
-<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">30</td><th scope="row">Development</th><td class="number">15</td></tr>
-<tr><th scope="row"><span class="badge sev-medium">Medium</span></th><td class="number">27</td><th scope="row">Operations</th><td class="number">38</td></tr>
+<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">29</td><th scope="row">Development</th><td class="number">15</td></tr>
+<tr><th scope="row"><span class="badge sev-medium">Medium</span></th><td class="number">27</td><th scope="row">Operations</th><td class="number">37</td></tr>
 <tr><th scope="row"><span class="badge sev-low">Low</span></th><td class="number">9</td><td></td><td></td></tr>
 </tbody>
 </table>
@@ -652,7 +652,7 @@ footer {
 
 <section class="chapter" id="remaining-risks">
 <h2>Impact Analysis of the Remaining Risks</h2>
-<p>The most prevalent impacts of the <strong>69 remaining risks</strong> (distributed over <strong>29 risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
+<p>The most prevalent impacts of the <strong>68 remaining risks</strong> (distributed over <strong>29 risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
 <dl class="entries">
 <dt><span class="badge sev-critical">Critical</span> <a href="#category-something-strange">Some Individual Risk Example</a>: <span class="summary">2 Remaining Risks, exploitation likelihood is <em>Frequent</em> with <em>Very High</em> impact</span></dt>
 <dd>Some text describing the impact...</dd>
@@ -668,7 +668,7 @@ footer {
 <dd>If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-authentication">Missing Authentication</a>: <span class="summary">2 Remaining Risks, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might be able to access or modify sensitive data in an unauthenticated way.</dd>
-<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">6 Remaining Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
+<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">5 Remaining Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might access cloud components in an unintended way.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-file-validation">Missing File Validation</a>: <span class="summary">1 Remaining Risk, exploitation likelihood is <em>Very Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might be able to provide malicious files to the application.</dd>
@@ -696,7 +696,7 @@ footer {
 <dd>If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.</dd>
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-long-lived-credentials">Long-Lived Credentials</a>: <span class="summary">6 Remaining Risks, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.</dd>
-<dt><span class="badge sev-medium">Medium</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">6 Remaining Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
+<dt><span class="badge sev-medium">Medium</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">5 Remaining Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might access cloud components in an unintended way.</dd>
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-missing-identity-propagation">Missing Identity Propagation</a>: <span class="summary">1 Remaining Risk, exploitation likelihood is <em>Unlikely</em> with <em>Medium</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might be able to access or modify foreign data after a successful compromise of a component within the system due to missing resource-based authorization checks.</dd>
@@ -729,7 +729,7 @@ footer {
 
 <section class="chapter" id="risks-by-severity">
 <h2>Risks by Severity</h2>
-<p>All <strong>94 risks</strong> by severity, with their tracking status. Each risk links to its details in the chapter of its category.</p>
+<p>All <strong>93 risks</strong> by severity, with their tracking status. Each risk links to its details in the chapter of its category.</p>
 <h3>Critical <span class="summary">1 risk</span></h3>
 <div class="table-wrap">
 <table>
@@ -749,7 +749,7 @@ footer {
 </tbody>
 </table>
 </div>
-<h3>Elevated <span class="summary">39 risks</span></h3>
+<h3>Elevated <span class="summary">38 risks</span></h3>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Severity</th><th scope="col">Risk</th><th scope="col">Category</th><th scope="col">Most relevant</th><th scope="col">Status</th></tr></thead>
@@ -771,7 +771,6 @@ footer {
 <tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-missing-cloud-hardening_40apache-webserver_40ec2"><b>Missing Cloud Hardening (EC2)</b> risk at <b>Apache Webserver</b>: <u>CIS Benchmark for Amazon Linux</u></a></td><td><a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a></td><td><span class="muted">none</span></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
 <tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-missing-cloud-hardening_40erp-dmz"><b>Missing Cloud Hardening</b> risk at <b>ERP DMZ</b></a></td><td><a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a></td><td><span class="muted">none</span></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
 <tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-missing-cloud-hardening_40web-dmz"><b>Missing Cloud Hardening</b> risk at <b>Web DMZ</b></a></td><td><a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a></td><td><span class="muted">none</span></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
-<tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-missing-cloud-hardening_40webapp-virtualization"><b>Missing Cloud Hardening</b> risk at <b>WebApp and Backoffice Virtualization</b></a></td><td><a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a></td><td><span class="muted">none</span></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
 <tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-missing-file-validation_40apache-webserver"><b>Missing File Validation</b> risk at <b>Apache Webserver</b></a></td><td><a href="#category-missing-file-validation">Missing File Validation</a></td><td><a href="#asset-apache-webserver">Apache Webserver</a></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
 <tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-missing-hardening_40apache-webserver"><b>Missing Hardening</b> risk at <b>Apache Webserver</b></a></td><td><a href="#category-missing-hardening">Missing Hardening</a></td><td><a href="#asset-apache-webserver">Apache Webserver</a></td><td><span class="badge status-mitigated">Mitigated</span></td></tr>
 <tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-missing-hardening_40erp-system"><b>Missing Hardening</b> risk at <b>Backoffice ERP System</b></a></td><td><a href="#category-missing-hardening">Missing Hardening</a></td><td><a href="#asset-erp-system">Backoffice ERP System</a></td><td><span class="badge status-mitigated">Mitigated</span></td></tr>
@@ -1044,7 +1043,7 @@ footer {
 
 <section class="chapter" id="stride">
 <h2>STRIDE Classification of Identified Risks</h2>
-<p>This chapter clusters and classifies the risks by STRIDE categories: in total <strong>94 potential risks</strong> have been identified during the threat modeling process.</p>
+<p>This chapter clusters and classifies the risks by STRIDE categories: in total <strong>93 potential risks</strong> have been identified during the threat modeling process.</p>
 <h3>Spoofing <span class="summary">12 risks</span></h3>
 <p class="muted">Spoofing - Authenticity</p>
 <dl class="entries">
@@ -1059,7 +1058,7 @@ footer {
 <dt><span class="badge sev-low">Low</span> <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>: <span class="summary">5/5 unmitigated Risks, exploitation likelihood is <em>Very Likely</em> with <em>Low</em> impact</span></dt>
 <dd>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</dd>
 </dl>
-<h3>Tampering <span class="summary">34 risks</span></h3>
+<h3>Tampering <span class="summary">33 risks</span></h3>
 <p class="muted">Tampering - Integrity</p>
 <dl class="entries">
 <dt><span class="badge sev-high">High</span> <a href="#category-sql-nosql-injection">SQL/NoSQL-Injection</a>: <span class="summary">1/1 unmitigated Risk, exploitation likelihood is <em>Very Likely</em> with <em>High</em> impact</span></dt>
@@ -1068,7 +1067,7 @@ footer {
 <dd>For each web application Cross-Site Scripting (XSS) risks might arise. In terms of the overall risk level take other applications running on the same domain into account as well.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-ldap-injection">LDAP-Injection</a>: <span class="summary">2 mitigated Risks, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
 <dd>When an LDAP server is accessed LDAP-Injection risks might arise. The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed.</dd>
-<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">6/6 unmitigated Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
+<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">5/5 unmitigated Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
 <dd>Cloud components should be hardened according to the cloud vendor best practices. This affects their configuration, auditing, and further areas.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-hardening">Missing Hardening</a>: <span class="summary">6 mitigated Risks, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>Technical assets with a Relative Attacker Attractiveness (RAA) value of 55 % or higher should be explicitly hardened taking best practices and vendor hardening guides into account.</dd>
@@ -1078,7 +1077,7 @@ footer {
 <dd>For each build pipeline component Code Backdooring risks might arise where attackers compromise the build pipeline in order to let backdoored artifacts be shipped into production. Aside from direct code backdooring this includes backdooring of dependencies and even of more lower-level build infrastructure, like backdooring compilers (similar to what the XcodeGhost malware did) or dependencies.</dd>
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-container-baseimage-backdooring">Container Base Image Backdooring</a>: <span class="summary">2/2 unmitigated Risks, exploitation likelihood is <em>Unlikely</em> with <em>High</em> impact</span></dt>
 <dd>When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors.</dd>
-<dt><span class="badge sev-medium">Medium</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">6/6 unmitigated Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
+<dt><span class="badge sev-medium">Medium</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">5/5 unmitigated Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
 <dd>Cloud components should be hardened according to the cloud vendor best practices. This affects their configuration, auditing, and further areas.</dd>
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-missing-waf">Missing Web Application Firewall (WAF)</a>: <span class="summary">4/4 unmitigated Risks, exploitation likelihood is <em>Unlikely</em> with <em>Medium</em> impact</span></dt>
 <dd>To have a first line of filtering defense, security architectures with web-services or web-applications should include a WAF in front of them. Even though a WAF is not a replacement for security (all components must be secure even without a WAF) it adds another layer of defense to the overall system by delaying some attacks and having easier attack alerting through it.</dd>
@@ -1153,7 +1152,7 @@ footer {
 
 <section class="chapter" id="functions">
 <h2>Assignment by Function</h2>
-<p>This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total <strong>94 potential risks</strong> have been identified during the threat modeling process.</p>
+<p>This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total <strong>93 potential risks</strong> have been identified during the threat modeling process.</p>
 <h3>Business Side <span class="summary">11 risks</span></h3>
 <p class="muted">Business</p>
 <dl class="entries">
@@ -1208,14 +1207,14 @@ footer {
 <dt><span class="badge sev-low">Low</span> <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>: <span class="summary">5/5 unmitigated Risks, exploitation likelihood is <em>Very Likely</em> with <em>Low</em> impact</span></dt>
 <dd>Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.</dd>
 </dl>
-<h3>Operations <span class="summary">51 risks</span></h3>
+<h3>Operations <span class="summary">50 risks</span></h3>
 <p class="muted">Operations</p>
 <dl class="entries">
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-human-use-of-machine-identity">Human Use of Machine Identity</a>: <span class="summary">1/1 unmitigated Risk, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
 <dd>Let people sign in with their own identity, through single sign-on with multi-factor authentication, and pass it on to the target, modelling the link with the identity <i>end-user</i>. Where an administrator needs the permissions of a service, grant them for a limited time through a privileged access workflow that records who used them. Keep secrets of service accounts out of clients.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-long-lived-credentials">Long-Lived Credentials</a>: <span class="summary">6/6 unmitigated Risks, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
 <dd>Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity <i>workload</i> or the authentication <i>short-lived-token</i>. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.</dd>
-<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">6/6 unmitigated Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
+<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">5/5 unmitigated Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
 <dd>Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model). </dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-hardening">Missing Hardening</a>: <span class="summary">6 mitigated Risks, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).</dd>
@@ -1233,7 +1232,7 @@ footer {
 <dd>Apply hardening of all container infrastructures (see for example the <i>CIS-Benchmarks for Docker and Kubernetes</i> and the <i>Docker Bench for Security</i>). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google&#39;s <i>Distroless</i> base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.</dd>
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-long-lived-credentials">Long-Lived Credentials</a>: <span class="summary">6/6 unmitigated Risks, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
 <dd>Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity <i>workload</i> or the authentication <i>short-lived-token</i>. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.</dd>
-<dt><span class="badge sev-medium">Medium</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">6/6 unmitigated Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
+<dt><span class="badge sev-medium">Medium</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">5/5 unmitigated Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
 <dd>Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model). </dd>
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-missing-network-segmentation">Missing Network Segmentation</a>: <span class="summary">2/2 unmitigated Risks, exploitation likelihood is <em>Unlikely</em> with <em>Medium</em> impact</span></dt>
 <dd>Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.</dd>
@@ -1329,7 +1328,7 @@ footer {
 
 <section class="chapter" id="risk-categories">
 <h2>Identified Risks by Vulnerability Category</h2>
-<p>In total <strong>94 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>34 vulnerability categories</strong>. The following sections describe each identified risk category and its risks.</p>
+<p>In total <strong>93 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>34 vulnerability categories</strong>. The following sections describe each identified risk category and its risks.</p>
 <section class="item" id="category-something-strange">
 <h3>Some Individual Risk Example <span class="badge sev-critical">Critical</span> <span class="summary">2/2 unmitigated Risks</span></h3>
 <p class="id">something-strange</p>
@@ -1644,7 +1643,7 @@ footer {
 </div>
 </section>
 <section class="item" id="category-missing-cloud-hardening">
-<h3>Missing Cloud Hardening <span class="badge sev-elevated">Elevated</span> <span class="summary">6/6 unmitigated Risks</span></h3>
+<h3>Missing Cloud Hardening <span class="badge sev-elevated">Elevated</span> <span class="summary">5/5 unmitigated Risks</span></h3>
 <p class="id">missing-cloud-hardening</p>
 <div class="table-wrap">
 <table class="props">
@@ -1674,7 +1673,7 @@ footer {
 <h4>Check</h4>
 <div class="text">Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?</div>
 <h4>Risk Findings</h4>
-<p>The risk <strong>Missing Cloud Hardening</strong> was found <strong>6 times</strong> in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.</p>
+<p>The risk <strong>Missing Cloud Hardening</strong> was found <strong>5 times</strong> in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.</p>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Severity</th><th scope="col">Risk</th><th scope="col">Likelihood</th><th scope="col">Impact</th><th scope="col">Most relevant</th><th scope="col">Status</th><th scope="col">Tracking</th></tr></thead>
@@ -1686,8 +1685,6 @@ footer {
 <tr id="risk-missing-cloud-hardening_40erp-dmz"><td><span class="badge sev-elevated">Elevated</span></td><td><b>Missing Cloud Hardening</b> risk at <b>ERP DMZ</b><br><span class="id">missing-cloud-hardening@erp-dmz</span></td><td>Unlikely</td><td>Very High</td><td><span class="muted">none</span></td><td><span class="badge status-unchecked">Unchecked</span></td>
 <td><span class="muted">not tracked</span></td></tr>
 <tr id="risk-missing-cloud-hardening_40web-dmz"><td><span class="badge sev-elevated">Elevated</span></td><td><b>Missing Cloud Hardening</b> risk at <b>Web DMZ</b><br><span class="id">missing-cloud-hardening@web-dmz</span></td><td>Unlikely</td><td>Very High</td><td><span class="muted">none</span></td><td><span class="badge status-unchecked">Unchecked</span></td>
-<td><span class="muted">not tracked</span></td></tr>
-<tr id="risk-missing-cloud-hardening_40webapp-virtualization"><td><span class="badge sev-elevated">Elevated</span></td><td><b>Missing Cloud Hardening</b> risk at <b>WebApp and Backoffice Virtualization</b><br><span class="id">missing-cloud-hardening@webapp-virtualization</span></td><td>Unlikely</td><td>Very High</td><td><span class="muted">none</span></td><td><span class="badge status-unchecked">Unchecked</span></td>
 <td><span class="muted">not tracked</span></td></tr>
 <tr id="risk-missing-cloud-hardening_40contract-file-server_40s3"><td><span class="badge sev-medium">Medium</span></td><td><b>Missing Cloud Hardening (S3)</b> risk at <b>Contract File Server</b>: <u>Security Best Practices for AWS S3</u><br><span class="id">missing-cloud-hardening@contract-file-server@s3</span></td><td>Unlikely</td><td>High</td><td><span class="muted">none</span></td><td><span class="badge status-unchecked">Unchecked</span></td>
 <td><span class="muted">not tracked</span></td></tr>
@@ -2880,7 +2877,7 @@ footer {
 
 <section class="chapter" id="technical-assets">
 <h2>Identified Risks by Technical Asset</h2>
-<p>In total <strong>94 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>10 in-scope technical assets</strong>. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.</p>
+<p>In total <strong>93 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>10 in-scope technical assets</strong>. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.</p>
 <section class="item" id="asset-sql-database">
 <h3>Customer Contract Database <span class="badge sev-critical">Critical</span> <span class="summary">4/7 unmitigated Risks</span></h3>
 <p class="id">sql-database</p>
@@ -3631,7 +3628,7 @@ footer {
 
 <section class="chapter" id="data-assets">
 <h2>Identified Data Breach Probabilities by Data Asset</h2>
-<p>In total <strong>94 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>12 data assets</strong>. The following sections describe the derived data breach probabilities grouped by data asset.</p>
+<p>In total <strong>93 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>12 data assets</strong>. The following sections describe the derived data breach probabilities grouped by data asset.</p>
 <section class="item" id="data-asset-build-job-config">
 <h3>Build Job Config <span class="badge sev-high">Probable</span> <span class="summary">6/9 unmitigated Risks</span></h3>
 <p class="id">build-job-config</p>
@@ -3669,7 +3666,7 @@ footer {
 </ul>
 </section>
 <section class="item" id="data-asset-client-application-code">
-<h3>Client Application Code <span class="badge sev-high">Probable</span> <span class="summary">28/37 unmitigated Risks</span></h3>
+<h3>Client Application Code <span class="badge sev-high">Probable</span> <span class="summary">27/36 unmitigated Risks</span></h3>
 <p class="id">client-application-code</p>
 <div class="text">Angular and other client-side code delivered by the application.</div>
 <div class="table-wrap">
@@ -3694,7 +3691,7 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 28 remaining risks:</p>
+<p>This data asset has data breach potential because of 27 remaining risks:</p>
 <ul>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-accidental-secret-leak_40git-repo"><b>Accidental Secret Leak (Git)</b> risk at <b>Git Repository</b>: <u>Git Leak Prevention</u></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-code-backdooring_40git-repo"><b>Code Backdooring</b> risk at <b>Git Repository</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -3703,7 +3700,6 @@ footer {
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40application-network_40aws"><b>Missing Cloud Hardening (AWS)</b> risk at <b>Application Network</b>: <u>CIS Benchmark for AWS</u></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40apache-webserver_40ec2"><b>Missing Cloud Hardening (EC2)</b> risk at <b>Apache Webserver</b>: <u>CIS Benchmark for Amazon Linux</u></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40web-dmz"><b>Missing Cloud Hardening</b> risk at <b>Web DMZ</b></a> <span class="badge status-unchecked">Unchecked</span></li>
-<li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40webapp-virtualization"><b>Missing Cloud Hardening</b> risk at <b>WebApp and Backoffice Virtualization</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-file-validation_40apache-webserver"><b>Missing File Validation</b> risk at <b>Apache Webserver</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-public-cloud-snapshot_40apache-webserver"><b>Publicly Shared Cloud Snapshot (AMI)</b> risk at <b>Apache Webserver</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-untrusted-deserialization_40jenkins-build-server"><b>Untrusted Deserialization</b> risk at <b>Jenkins Build Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -3727,7 +3723,7 @@ footer {
 </ul>
 </section>
 <section class="item" id="data-asset-customer-accounts">
-<h3>Customer Accounts <span class="badge sev-high">Probable</span> <span class="summary">47/65 unmitigated Risks</span></h3>
+<h3>Customer Accounts <span class="badge sev-high">Probable</span> <span class="summary">46/64 unmitigated Risks</span></h3>
 <p class="id">customer-accounts</p>
 <div class="text">Customer Accounts (including transient credentials when entered for checking them)</div>
 <div class="table-wrap">
@@ -3752,7 +3748,7 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 47 remaining risks:</p>
+<p>This data asset has data breach potential because of 46 remaining risks:</p>
 <ul>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-code-backdooring_40jenkins-build-server"><b>Code Backdooring</b> risk at <b>Jenkins Build Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-container-baseimage-backdooring_40apache-webserver"><b>Container Base Image Backdooring</b> risk at <b>Apache Webserver</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -3762,7 +3758,6 @@ footer {
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40apache-webserver_40ec2"><b>Missing Cloud Hardening (EC2)</b> risk at <b>Apache Webserver</b>: <u>CIS Benchmark for Amazon Linux</u></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40erp-dmz"><b>Missing Cloud Hardening</b> risk at <b>ERP DMZ</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40web-dmz"><b>Missing Cloud Hardening</b> risk at <b>Web DMZ</b></a> <span class="badge status-unchecked">Unchecked</span></li>
-<li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40webapp-virtualization"><b>Missing Cloud Hardening</b> risk at <b>WebApp and Backoffice Virtualization</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-file-validation_40apache-webserver"><b>Missing File Validation</b> risk at <b>Apache Webserver</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-public-cloud-snapshot_40apache-webserver"><b>Publicly Shared Cloud Snapshot (AMI)</b> risk at <b>Apache Webserver</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-public-cloud-snapshot_40sql-database"><b>Publicly Shared Cloud Snapshot</b> risk at <b>Customer Contract Database</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -3804,7 +3799,7 @@ footer {
 </ul>
 </section>
 <section class="item" id="data-asset-contract-summaries">
-<h3>Customer Contract Summaries <span class="badge sev-high">Probable</span> <span class="summary">9/10 unmitigated Risks</span></h3>
+<h3>Customer Contract Summaries <span class="badge sev-high">Probable</span> <span class="summary">8/9 unmitigated Risks</span></h3>
 <p class="id">contract-summaries</p>
 <div class="text">Customer Contract Summaries</div>
 <div class="table-wrap">
@@ -3829,12 +3824,11 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 9 remaining risks:</p>
+<p>This data asset has data breach potential because of 8 remaining risks:</p>
 <ul>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40application-network_40aws"><b>Missing Cloud Hardening (AWS)</b> risk at <b>Application Network</b>: <u>CIS Benchmark for AWS</u></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-missing-cloud-hardening_40contract-file-server_40s3"><b>Missing Cloud Hardening (S3)</b> risk at <b>Contract File Server</b>: <u>Security Best Practices for AWS S3</u></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40erp-dmz"><b>Missing Cloud Hardening</b> risk at <b>ERP DMZ</b></a> <span class="badge status-unchecked">Unchecked</span></li>
-<li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40webapp-virtualization"><b>Missing Cloud Hardening</b> risk at <b>WebApp and Backoffice Virtualization</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-path-traversal_40erp-system_40contract-file-server_40erp-system_3enfs-filesystem-access"><b>Path-Traversal</b> risk at <b>Backoffice ERP System</b> against filesystem <b>Contract File Server</b> via <b>NFS Filesystem Access</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-public-cloud-asset-access_40contract-file-server"><b>Public Cloud Asset Access (S3)</b> risk at <b>Contract File Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-authentication_40erp-system_3enfs-filesystem-access_40erp-system_40contract-file-server"><b>Missing Authentication</b> covering communication link <b>NFS Filesystem Access</b> from <b>Backoffice ERP System</b> to <b>Contract File Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -3843,7 +3837,7 @@ footer {
 </ul>
 </section>
 <section class="item" id="data-asset-customer-contracts">
-<h3>Customer Contracts <span class="badge sev-high">Probable</span> <span class="summary">32/40 unmitigated Risks</span></h3>
+<h3>Customer Contracts <span class="badge sev-high">Probable</span> <span class="summary">31/39 unmitigated Risks</span></h3>
 <p class="id">customer-contracts</p>
 <div class="text">Customer Contracts (PDF)</div>
 <div class="table-wrap">
@@ -3868,7 +3862,7 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 32 remaining risks:</p>
+<p>This data asset has data breach potential because of 31 remaining risks:</p>
 <ul>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-code-backdooring_40jenkins-build-server"><b>Code Backdooring</b> risk at <b>Jenkins Build Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-container-baseimage-backdooring_40apache-webserver"><b>Container Base Image Backdooring</b> risk at <b>Apache Webserver</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -3877,7 +3871,6 @@ footer {
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-missing-cloud-hardening_40contract-file-server_40s3"><b>Missing Cloud Hardening (S3)</b> risk at <b>Contract File Server</b>: <u>Security Best Practices for AWS S3</u></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40erp-dmz"><b>Missing Cloud Hardening</b> risk at <b>ERP DMZ</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40web-dmz"><b>Missing Cloud Hardening</b> risk at <b>Web DMZ</b></a> <span class="badge status-unchecked">Unchecked</span></li>
-<li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40webapp-virtualization"><b>Missing Cloud Hardening</b> risk at <b>WebApp and Backoffice Virtualization</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-file-validation_40apache-webserver"><b>Missing File Validation</b> risk at <b>Apache Webserver</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-path-traversal_40erp-system_40contract-file-server_40erp-system_3enfs-filesystem-access"><b>Path-Traversal</b> risk at <b>Backoffice ERP System</b> against filesystem <b>Contract File Server</b> via <b>NFS Filesystem Access</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-public-cloud-asset-access_40contract-file-server"><b>Public Cloud Asset Access (S3)</b> risk at <b>Contract File Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -3905,7 +3898,7 @@ footer {
 </ul>
 </section>
 <section class="item" id="data-asset-customer-operational-data">
-<h3>Customer Operational Data <span class="badge sev-high">Probable</span> <span class="summary">34/44 unmitigated Risks</span></h3>
+<h3>Customer Operational Data <span class="badge sev-high">Probable</span> <span class="summary">33/43 unmitigated Risks</span></h3>
 <p class="id">customer-operational-data</p>
 <div class="text">Customer Operational Data</div>
 <div class="table-wrap">
@@ -3930,7 +3923,7 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 34 remaining risks:</p>
+<p>This data asset has data breach potential because of 33 remaining risks:</p>
 <ul>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-code-backdooring_40jenkins-build-server"><b>Code Backdooring</b> risk at <b>Jenkins Build Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-container-baseimage-backdooring_40apache-webserver"><b>Container Base Image Backdooring</b> risk at <b>Apache Webserver</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -3939,7 +3932,6 @@ footer {
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40apache-webserver_40ec2"><b>Missing Cloud Hardening (EC2)</b> risk at <b>Apache Webserver</b>: <u>CIS Benchmark for Amazon Linux</u></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40erp-dmz"><b>Missing Cloud Hardening</b> risk at <b>ERP DMZ</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40web-dmz"><b>Missing Cloud Hardening</b> risk at <b>Web DMZ</b></a> <span class="badge status-unchecked">Unchecked</span></li>
-<li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40webapp-virtualization"><b>Missing Cloud Hardening</b> risk at <b>WebApp and Backoffice Virtualization</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-file-validation_40apache-webserver"><b>Missing File Validation</b> risk at <b>Apache Webserver</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-public-cloud-snapshot_40apache-webserver"><b>Publicly Shared Cloud Snapshot (AMI)</b> risk at <b>Apache Webserver</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-public-cloud-snapshot_40sql-database"><b>Publicly Shared Cloud Snapshot</b> risk at <b>Customer Contract Database</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -3969,7 +3961,7 @@ footer {
 </ul>
 </section>
 <section class="item" id="data-asset-db-dumps">
-<h3>Database Customizing and Dumps <span class="badge sev-high">Probable</span> <span class="summary">11/14 unmitigated Risks</span></h3>
+<h3>Database Customizing and Dumps <span class="badge sev-high">Probable</span> <span class="summary">10/13 unmitigated Risks</span></h3>
 <p class="id">db-dumps</p>
 <div class="text">Data for customizing of the DB system, which might include full database dumps.</div>
 <div class="table-wrap">
@@ -3994,12 +3986,11 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 11 remaining risks:</p>
+<p>This data asset has data breach potential because of 10 remaining risks:</p>
 <ul>
 <li>Probable: <span class="badge sev-critical">Critical</span> <a href="#risk-something-strange_40sql-database"><b>Example Individual Risk</b> at <b>Database</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40application-network_40aws"><b>Missing Cloud Hardening (AWS)</b> risk at <b>Application Network</b>: <u>CIS Benchmark for AWS</u></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40erp-dmz"><b>Missing Cloud Hardening</b> risk at <b>ERP DMZ</b></a> <span class="badge status-unchecked">Unchecked</span></li>
-<li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40webapp-virtualization"><b>Missing Cloud Hardening</b> risk at <b>WebApp and Backoffice Virtualization</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-public-cloud-snapshot_40sql-database"><b>Publicly Shared Cloud Snapshot</b> risk at <b>Customer Contract Database</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-high">High</span> <a href="#risk-sql-nosql-injection_40erp-system_40sql-database_40erp-system_3edatabase-traffic"><b>SQL/NoSQL-Injection</b> risk at <b>Backoffice ERP System</b> against database <b>Customer Contract Database</b> via <b>Database Traffic</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-human-use-of-machine-identity_40sql-database_40backend-admin-client_3edb-update-access"><b>Human Use of Machine Identity</b> risk at <b>Customer Contract Database</b> by users of <b>Backend Admin Client</b> (service-account)</a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -4010,7 +4001,7 @@ footer {
 </ul>
 </section>
 <section class="item" id="data-asset-erp-customizing">
-<h3>ERP Customizing Data <span class="badge sev-high">Probable</span> <span class="summary">12/16 unmitigated Risks</span></h3>
+<h3>ERP Customizing Data <span class="badge sev-high">Probable</span> <span class="summary">11/15 unmitigated Risks</span></h3>
 <p class="id">erp-customizing</p>
 <div class="text">Data for customizing of the ERP system.</div>
 <div class="table-wrap">
@@ -4035,11 +4026,10 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 12 remaining risks:</p>
+<p>This data asset has data breach potential because of 11 remaining risks:</p>
 <ul>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40application-network_40aws"><b>Missing Cloud Hardening (AWS)</b> risk at <b>Application Network</b>: <u>CIS Benchmark for AWS</u></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40erp-dmz"><b>Missing Cloud Hardening</b> risk at <b>ERP DMZ</b></a> <span class="badge status-unchecked">Unchecked</span></li>
-<li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40webapp-virtualization"><b>Missing Cloud Hardening</b> risk at <b>WebApp and Backoffice Virtualization</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-high">High</span> <a href="#risk-xml-external-entity_40erp-system"><b>XML External Entity (XXE)</b> risk at <b>Backoffice ERP System</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-untrusted-deserialization_40erp-system"><b>Untrusted Deserialization</b> risk at <b>Backoffice ERP System</b></a> <span class="badge status-accepted">Accepted</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-cross-site-scripting_40erp-system"><b>Cross-Site Scripting (XSS)</b> risk at <b>Backoffice ERP System</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -4052,7 +4042,7 @@ footer {
 </ul>
 </section>
 <section class="item" id="data-asset-erp-logs">
-<h3>ERP Logs <span class="badge sev-high">Probable</span> <span class="summary">19/26 unmitigated Risks</span></h3>
+<h3>ERP Logs <span class="badge sev-high">Probable</span> <span class="summary">18/25 unmitigated Risks</span></h3>
 <p class="id">erp-logs</p>
 <div class="text">Logs generated by the ERP system.</div>
 <div class="table-wrap">
@@ -4077,12 +4067,11 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 19 remaining risks:</p>
+<p>This data asset has data breach potential because of 18 remaining risks:</p>
 <ul>
 <li>Probable: <span class="badge sev-critical">Critical</span> <a href="#risk-something-strange_40sql-database"><b>Example Individual Risk</b> at <b>Database</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40application-network_40aws"><b>Missing Cloud Hardening (AWS)</b> risk at <b>Application Network</b>: <u>CIS Benchmark for AWS</u></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40erp-dmz"><b>Missing Cloud Hardening</b> risk at <b>ERP DMZ</b></a> <span class="badge status-unchecked">Unchecked</span></li>
-<li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40webapp-virtualization"><b>Missing Cloud Hardening</b> risk at <b>WebApp and Backoffice Virtualization</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-public-cloud-snapshot_40sql-database"><b>Publicly Shared Cloud Snapshot</b> risk at <b>Customer Contract Database</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-high">High</span> <a href="#risk-sql-nosql-injection_40erp-system_40sql-database_40erp-system_3edatabase-traffic"><b>SQL/NoSQL-Injection</b> risk at <b>Backoffice ERP System</b> against database <b>Customer Contract Database</b> via <b>Database Traffic</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-high">High</span> <a href="#risk-xml-external-entity_40erp-system"><b>XML External Entity (XXE)</b> risk at <b>Backoffice ERP System</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -4101,7 +4090,7 @@ footer {
 </ul>
 </section>
 <section class="item" id="data-asset-marketing-material">
-<h3>Marketing Material <span class="badge sev-high">Probable</span> <span class="summary">19/25 unmitigated Risks</span></h3>
+<h3>Marketing Material <span class="badge sev-high">Probable</span> <span class="summary">18/24 unmitigated Risks</span></h3>
 <p class="id">marketing-material</p>
 <div class="text">Website and marketing data to inform potential customers and generate new leads.</div>
 <div class="table-wrap">
@@ -4126,13 +4115,12 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 19 remaining risks:</p>
+<p>This data asset has data breach potential because of 18 remaining risks:</p>
 <ul>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-code-backdooring_40jenkins-build-server"><b>Code Backdooring</b> risk at <b>Jenkins Build Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-container-baseimage-backdooring_40marketing-cms"><b>Container Base Image Backdooring</b> risk at <b>Marketing CMS</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40application-network_40aws"><b>Missing Cloud Hardening (AWS)</b> risk at <b>Application Network</b>: <u>CIS Benchmark for AWS</u></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40web-dmz"><b>Missing Cloud Hardening</b> risk at <b>Web DMZ</b></a> <span class="badge status-unchecked">Unchecked</span></li>
-<li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40webapp-virtualization"><b>Missing Cloud Hardening</b> risk at <b>WebApp and Backoffice Virtualization</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-untrusted-deserialization_40jenkins-build-server"><b>Untrusted Deserialization</b> risk at <b>Jenkins Build Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-cross-site-scripting_40marketing-cms"><b>Cross-Site Scripting (XSS)</b> risk at <b>Marketing CMS</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-authentication_40load-balancer_3ecms-content-traffic_40load-balancer_40marketing-cms"><b>Missing Authentication</b> covering communication link <b>CMS Content Traffic</b> from <b>Load Balancer</b> to <b>Marketing CMS</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -4150,7 +4138,7 @@ footer {
 </ul>
 </section>
 <section class="item" id="data-asset-server-application-code">
-<h3>Server Application Code <span class="badge sev-high">Probable</span> <span class="summary">28/37 unmitigated Risks</span></h3>
+<h3>Server Application Code <span class="badge sev-high">Probable</span> <span class="summary">27/36 unmitigated Risks</span></h3>
 <p class="id">server-application-code</p>
 <div class="text">API and other server-side code of the application.</div>
 <div class="table-wrap">
@@ -4175,7 +4163,7 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 28 remaining risks:</p>
+<p>This data asset has data breach potential because of 27 remaining risks:</p>
 <ul>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-accidental-secret-leak_40git-repo"><b>Accidental Secret Leak (Git)</b> risk at <b>Git Repository</b>: <u>Git Leak Prevention</u></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-code-backdooring_40git-repo"><b>Code Backdooring</b> risk at <b>Git Repository</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -4184,7 +4172,6 @@ footer {
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40application-network_40aws"><b>Missing Cloud Hardening (AWS)</b> risk at <b>Application Network</b>: <u>CIS Benchmark for AWS</u></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40apache-webserver_40ec2"><b>Missing Cloud Hardening (EC2)</b> risk at <b>Apache Webserver</b>: <u>CIS Benchmark for Amazon Linux</u></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40web-dmz"><b>Missing Cloud Hardening</b> risk at <b>Web DMZ</b></a> <span class="badge status-unchecked">Unchecked</span></li>
-<li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40webapp-virtualization"><b>Missing Cloud Hardening</b> risk at <b>WebApp and Backoffice Virtualization</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-file-validation_40apache-webserver"><b>Missing File Validation</b> risk at <b>Apache Webserver</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-public-cloud-snapshot_40apache-webserver"><b>Publicly Shared Cloud Snapshot (AMI)</b> risk at <b>Apache Webserver</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-untrusted-deserialization_40jenkins-build-server"><b>Untrusted Deserialization</b> risk at <b>Jenkins Build Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -4208,7 +4195,7 @@ footer {
 </ul>
 </section>
 <section class="item" id="data-asset-internal-business-data">
-<h3>Some Internal Business Data <span class="badge sev-high">Probable</span> <span class="summary">34/44 unmitigated Risks</span></h3>
+<h3>Some Internal Business Data <span class="badge sev-high">Probable</span> <span class="summary">33/43 unmitigated Risks</span></h3>
 <p class="id">internal-business-data</p>
 <div class="text">Internal business data of the ERP system used unrelated to the customer-facing processes.</div>
 <div class="table-wrap">
@@ -4233,7 +4220,7 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 34 remaining risks:</p>
+<p>This data asset has data breach potential because of 33 remaining risks:</p>
 <ul>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-code-backdooring_40jenkins-build-server"><b>Code Backdooring</b> risk at <b>Jenkins Build Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-container-baseimage-backdooring_40apache-webserver"><b>Container Base Image Backdooring</b> risk at <b>Apache Webserver</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -4242,7 +4229,6 @@ footer {
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40apache-webserver_40ec2"><b>Missing Cloud Hardening (EC2)</b> risk at <b>Apache Webserver</b>: <u>CIS Benchmark for Amazon Linux</u></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40erp-dmz"><b>Missing Cloud Hardening</b> risk at <b>ERP DMZ</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40web-dmz"><b>Missing Cloud Hardening</b> risk at <b>Web DMZ</b></a> <span class="badge status-unchecked">Unchecked</span></li>
-<li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40webapp-virtualization"><b>Missing Cloud Hardening</b> risk at <b>WebApp and Backoffice Virtualization</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-file-validation_40apache-webserver"><b>Missing File Validation</b> risk at <b>Apache Webserver</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-public-cloud-snapshot_40apache-webserver"><b>Publicly Shared Cloud Snapshot (AMI)</b> risk at <b>Apache Webserver</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-public-cloud-snapshot_40sql-database"><b>Publicly Shared Cloud Snapshot</b> risk at <b>Customer Contract Database</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -4883,7 +4869,7 @@ footer {
 
 <section class="chapter" id="risk-tracking">
 <h2>Risk Tracking</h2>
-<p><strong>31 of 94 risks</strong> are tracked in the model; the others are unchecked.</p>
+<p><strong>31 of 93 risks</strong> are tracked in the model; the others are unchecked.</p>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Risk</th><th scope="col">Severity</th><th scope="col">Status</th><th scope="col">Date</th><th scope="col">Checked by</th><th scope="col">Ticket</th><th scope="col">Justification</th></tr></thead>
@@ -4934,7 +4920,7 @@ footer {
 <thead><tr><th scope="col">Entry</th><th scope="col">Risk rules</th><th scope="col">Risks</th></tr></thead>
 <tbody>
 <tr><th scope="row"><span class="id">A01</span> Broken Access Control</th><td>Confused Deputy Agent, Cross-Account Takeover, <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>, <a href="#category-missing-identity-propagation">Missing Identity Propagation</a>, <a href="#category-missing-object-level-authorization">Missing Object-Level Authorization</a>, Overprivileged Machine Identity, <a href="#category-path-traversal">Path-Traversal</a>, <a href="#category-public-cloud-asset-access">Public Cloud Asset Access</a>, <a href="#category-server-side-request-forgery">Server-Side Request Forgery (SSRF)</a></td><td>10/11 unmitigated Risks</td></tr>
-<tr><th scope="row"><span class="id">A02</span> Security Misconfiguration</th><td>Container Platform Escape, <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>, <a href="#category-missing-hardening">Missing Hardening</a>, <a href="#category-public-cloud-asset-access">Public Cloud Asset Access</a>, <a href="#category-public-cloud-snapshot">Publicly Shared Cloud Snapshot</a>, <a href="#category-xml-external-entity">XML External Entity (XXE)</a></td><td>10/16 unmitigated Risks</td></tr>
+<tr><th scope="row"><span class="id">A02</span> Security Misconfiguration</th><td>Container Platform Escape, <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>, <a href="#category-missing-hardening">Missing Hardening</a>, <a href="#category-public-cloud-asset-access">Public Cloud Asset Access</a>, <a href="#category-public-cloud-snapshot">Publicly Shared Cloud Snapshot</a>, <a href="#category-xml-external-entity">XML External Entity (XXE)</a></td><td>9/15 unmitigated Risks</td></tr>
 <tr><th scope="row"><span class="id">A03</span> Software Supply Chain Failures</th><td><a href="#category-code-backdooring">Code Backdooring</a>, <a href="#category-container-baseimage-backdooring">Container Base Image Backdooring</a>, <a href="#category-unchecked-deployment">Unchecked Deployment</a></td><td>7/7 unmitigated Risks</td></tr>
 <tr><th scope="row"><span class="id">A04</span> Cryptographic Failures</th><td><a href="#category-unencrypted-communication">Unencrypted Communication</a>, <a href="#category-unencrypted-asset">Unencrypted Technical Assets</a></td><td>4/11 unmitigated Risks</td></tr>
 <tr><th scope="row"><span class="id">A05</span> Injection</th><td><a href="#category-cross-site-scripting">Cross-Site Scripting (XSS)</a>, <a href="#category-ldap-injection">LDAP-Injection</a>, <a href="#category-sql-nosql-injection">SQL/NoSQL-Injection</a>, Search-Query Injection</td><td>5/7 unmitigated Risks</td></tr>
@@ -4959,7 +4945,7 @@ footer {
 <tr><th scope="row"><span class="id">API5</span> Broken Function Level Authorization</th><td><a href="#category-missing-object-level-authorization">Missing Object-Level Authorization</a></td><td>1 mitigated Risk</td></tr>
 <tr><th scope="row"><span class="id">API6</span> Unrestricted Access to Sensitive Business Flows</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
 <tr><th scope="row"><span class="id">API7</span> Server Side Request Forgery</th><td><a href="#category-server-side-request-forgery">Server-Side Request Forgery (SSRF)</a></td><td>2/2 unmitigated Risks</td></tr>
-<tr><th scope="row"><span class="id">API8</span> Security Misconfiguration</th><td><a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>, <a href="#category-missing-hardening">Missing Hardening</a>, <a href="#category-unencrypted-communication">Unencrypted Communication</a></td><td>10/16 unmitigated Risks</td></tr>
+<tr><th scope="row"><span class="id">API8</span> Security Misconfiguration</th><td><a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>, <a href="#category-missing-hardening">Missing Hardening</a>, <a href="#category-unencrypted-communication">Unencrypted Communication</a></td><td>9/15 unmitigated Risks</td></tr>
 <tr><th scope="row"><span class="id">API9</span> Improper Inventory Management</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
 <tr><th scope="row"><span class="id">API10</span> Unsafe Consumption of APIs</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
 </tbody>

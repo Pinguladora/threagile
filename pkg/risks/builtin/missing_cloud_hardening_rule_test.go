@@ -289,9 +289,6 @@ func TestMissingCloudHardeningRuleGenerateRisksSharedRuntimeWithoutCloudHardenin
 			expectedTitleSuffix:   " (OCP)",
 			expectedMessageSuffix: ": <u>Vendor Best Practices for Oracle Cloud Platform</u>",
 		},
-		"unspecific-cloud": {
-			cloud: "unspecific-cloud",
-		},
 	}
 
 	for name, testCase := range testCases {
@@ -334,6 +331,30 @@ func TestMissingCloudHardeningRuleGenerateRisksSharedRuntimeWithoutCloudHardenin
 	}
 }
 
+func TestMissingCloudHardeningRuleGenerateRisksSharedRuntimeWithoutCloudTagNoRisksCreated(t *testing.T) {
+	rule := NewMissingCloudHardeningRule()
+
+	risks, err := rule.GenerateRisks(&types.Model{
+		TechnicalAssets: map[string]*types.TechnicalAsset{
+			"ta1": {
+				Id:    "ta1",
+				Title: "Technical Asset Inside Shared Runtime",
+			},
+		},
+		SharedRuntimes: map[string]*types.SharedRuntime{
+			"on-prem-cluster": {
+				Id:                     "on-prem-cluster",
+				Title:                  "On-Prem Cluster",
+				TechnicalAssetsRunning: []string{"ta1"},
+				Tags:                   []string{"vmware"},
+			},
+		},
+	})
+
+	assert.Nil(t, err)
+	assert.Empty(t, risks, "a shared runtime is not in a cloud unless tagged so")
+}
+
 func TestMissingCloudHardeningRuleGenerateRisksSharedRuntimeWithoutCloudHardeningWithCriticallyAvailableTechnicalAssetRiskCreatedWithHighImpact(t *testing.T) {
 	testCases := map[string]CloudHardeningRuleTest{
 		"aws": {
@@ -355,9 +376,6 @@ func TestMissingCloudHardeningRuleGenerateRisksSharedRuntimeWithoutCloudHardenin
 			cloud:                 "ocp",
 			expectedTitleSuffix:   " (OCP)",
 			expectedMessageSuffix: ": <u>Vendor Best Practices for Oracle Cloud Platform</u>",
-		},
-		"unspecific-cloud": {
-			cloud: "unspecific-cloud",
 		},
 	}
 
@@ -423,9 +441,6 @@ func TestMissingCloudHardeningRuleGenerateRisksSharedRuntimeWithoutCloudHardenin
 			cloud:                 "ocp",
 			expectedTitleSuffix:   " (OCP)",
 			expectedMessageSuffix: ": <u>Vendor Best Practices for Oracle Cloud Platform</u>",
-		},
-		"unspecific-cloud": {
-			cloud: "unspecific-cloud",
 		},
 	}
 

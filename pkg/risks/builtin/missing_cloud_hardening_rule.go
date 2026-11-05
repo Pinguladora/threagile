@@ -125,7 +125,7 @@ func (r *MissingCloudHardeningRule) collectCloudAssets(
 
 	r.collectTaggedTrustBoundaryAssets(input, cloudAssets, techAssetIDsWithSubtagSpecificCloudRisks)
 
-	for _, sR := range input.SharedRuntimes {
+	for _, sR := range input.SharedRuntimesTaggedWithAny(r.SupportedTags()...) {
 		r.addSharedRuntimeAccordingToBaseTag(sR, cloudAssets)
 		for _, techAssetID := range sR.TechnicalAssetsRunning {
 			tA := input.TechnicalAssets[techAssetID]
