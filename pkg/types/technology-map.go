@@ -106,13 +106,18 @@ func (what TechnologyMap) Copy(from Technology) error {
 	return nil
 }
 
+// Get returns the technology of the name, or of which the name is an alias, or nil when there is none.
 func (what TechnologyMap) Get(name string) *Technology {
-	technology, exists := what[name]
-	if !exists {
-		return nil
+	if technology, exists := what[name]; exists {
+		return &technology
+	}
+	for _, technologyName := range slices.Sorted(maps.Keys(what)) {
+		if technology := what[technologyName]; slices.Contains(technology.Aliases, name) {
+			return &technology
+		}
 	}
 
-	return &technology
+	return nil
 }
 
 func (what TechnologyMap) GetAll(names ...string) ([]*Technology, error) {
