@@ -46,6 +46,22 @@ func TestContainerBaseImageBackdooringRuleMachineIsNotContainerNotRisksCreated(t
 	assert.Empty(t, risks)
 }
 
+func TestContainerBaseImageBackdooringRuleExternalEntityNotRisksCreated(t *testing.T) {
+	rule := NewContainerBaseImageBackdooringRule()
+
+	risks, err := rule.GenerateRisks(&types.Model{
+		TechnicalAssets: map[string]*types.TechnicalAsset{
+			"ta1": {
+				Machine: types.Container,
+				Type:    types.ExternalEntity,
+			},
+		},
+	})
+
+	assert.Nil(t, err)
+	assert.Empty(t, risks)
+}
+
 func TestContainerBaseImageBackdooringRuleMachineIsContainerRiskCreated(t *testing.T) {
 	rule := NewContainerBaseImageBackdooringRule()
 
@@ -53,6 +69,7 @@ func TestContainerBaseImageBackdooringRuleMachineIsContainerRiskCreated(t *testi
 		TechnicalAssets: map[string]*types.TechnicalAsset{
 			"ta1": {
 				Machine: types.Container,
+				Type:    types.Process,
 			},
 		},
 	})
@@ -68,6 +85,7 @@ func TestContainerBaseImageBackdooringRuleGenerateRisksTechAssetProcessedConfide
 		TechnicalAssets: map[string]*types.TechnicalAsset{
 			"ta1": {
 				Machine:             types.Container,
+				Type:                types.Process,
 				DataAssetsProcessed: []string{"confidential-data-asset", "strictly-confidential-data-asset"},
 			},
 		},
@@ -93,6 +111,7 @@ func TestContainerBaseImageBackdooringRuleGenerateRisksTechAssetProcessedIntegri
 		TechnicalAssets: map[string]*types.TechnicalAsset{
 			"ta1": {
 				Machine:             types.Container,
+				Type:                types.Process,
 				DataAssetsProcessed: []string{"critical-data-asset", "mission-critical-data-asset"},
 			},
 		},
@@ -118,6 +137,7 @@ func TestContainerBaseImageBackdooringRuleGenerateRisksTechAssetProcessedAvailab
 		TechnicalAssets: map[string]*types.TechnicalAsset{
 			"ta1": {
 				Machine:             types.Container,
+				Type:                types.Process,
 				DataAssetsProcessed: []string{"critical-data-asset", "mission-critical-data-asset"},
 			},
 		},
@@ -143,6 +163,7 @@ func TestContainerBaseImageBackdooringRuleGenerateRisksContainerWithCriticalInte
 		TechnicalAssets: map[string]*types.TechnicalAsset{
 			"ta1": {
 				Machine:             types.Container,
+				Type:                types.Process,
 				DataAssetsProcessed: []string{"critical-integrity-data"},
 			},
 		},
@@ -165,6 +186,7 @@ func TestContainerBaseImageBackdooringRuleGenerateRisksContainerWithCriticalAvai
 		TechnicalAssets: map[string]*types.TechnicalAsset{
 			"ta1": {
 				Machine:             types.Container,
+				Type:                types.Process,
 				DataAssetsProcessed: []string{"critical-availability-data"},
 			},
 		},
@@ -189,11 +211,13 @@ func TestContainerBaseImageBackdooringRuleGenerateRisksMultipleContainersEachGen
 				Id:      "ta1",
 				Title:   "First Container",
 				Machine: types.Container,
+				Type:    types.Process,
 			},
 			"ta2": {
 				Id:      "ta2",
 				Title:   "Second Container",
 				Machine: types.Container,
+				Type:    types.Process,
 			},
 		},
 	})
@@ -214,6 +238,7 @@ func TestContainerBaseImageBackdooringRuleGenerateRisksAllThreeSensitivityCondit
 				Id:                  "ta1",
 				Title:               "Highly Sensitive Container",
 				Machine:             types.Container,
+				Type:                types.Process,
 				DataAssetsProcessed: []string{"sensitive-data"},
 			},
 		},

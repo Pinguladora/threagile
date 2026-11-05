@@ -29,10 +29,11 @@ func (*ContainerBaseImageBackdooringRule) Category() *types.RiskCategory {
 			"vendors, verify digital signatures and apply image creation best practices. Also consider using Google's " +
 			"<i>Distroless</i> base images or otherwise very small base images. Regularly execute container image scans with " +
 			"tools checking the layers for vulnerable components.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
-		Function:       types.Operations,
-		STRIDE:         types.Tampering,
-		DetectionLogic: "In-scope technical assets running as containers.",
+		Check:    "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
+		Function: types.Operations,
+		STRIDE:   types.Tampering,
+		DetectionLogic: "In-scope technical assets running as containers, other than external entities. To track " +
+			"the risks of all containers at once, use the risk tracking key <i>container-baseimage-backdooring@*</i>.",
 		RiskAssessment: "The risk rating depends on the sensitivity of the technical asset itself and of the data assets.",
 		FalsePositives: "Fully trusted (i.e. reviewed and cryptographically signed or similar) base images of containers " +
 			"can be considered as false positives after individual review.",
@@ -50,7 +51,9 @@ func (r *ContainerBaseImageBackdooringRule) GenerateRisks(parsedModel *types.Mod
 	risks := make([]*types.Risk, 0)
 	for _, id := range parsedModel.SortedTechnicalAssetIDs() {
 		technicalAsset := parsedModel.TechnicalAssets[id]
-		if !technicalAsset.OutOfScope && technicalAsset.Machine == types.Container {
+		// the images of external entities are built and patched by others
+		if !technicalAsset.OutOfScope && technicalAsset.Machine == types.Container &&
+			technicalAsset.Type != types.ExternalEntity {
 			risks = append(risks, r.createRisk(parsedModel, technicalAsset))
 		}
 	}
