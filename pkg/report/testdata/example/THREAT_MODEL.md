@@ -456,7 +456,7 @@ All **91 risks** by severity, with their tracking status. Each risk links to its
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
-| Medium | [**Accidental Secret Leak(Git)** risk at **Git Repository**: _Git Leak Prevention_](#accidental-secret-leak) | [Accidental Secret Leak](#accidental-secret-leak) | [Git Repository](#git-repository) | Unchecked |
+| Medium | [**Accidental Secret Leak (Git)** risk at **Git Repository**: _Git Leak Prevention_](#accidental-secret-leak) | [Accidental Secret Leak](#accidental-secret-leak) | [Git Repository](#git-repository) | Unchecked |
 | Medium | [**Code Backdooring** risk at **Git Repository**](#code-backdooring) | [Code Backdooring](#code-backdooring) | [Git Repository](#git-repository) | Unchecked |
 | Medium | [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) | [Code Backdooring](#code-backdooring) | [Jenkins Build Server](#jenkins-build-server) | Unchecked |
 | Medium | [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) | [Container Base Image Backdooring](#container-base-image-backdooring) | [Apache Webserver](#apache-webserver) | Unchecked |
@@ -1130,7 +1130,7 @@ Operations
 
 - **Medium**: [Accidental Secret Leak](#accidental-secret-leak): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _High_ impact
 
-    Establish measures preventing accidental check-in or package-in of secrets into sourcecode repositories and artifact registries. This starts by using good .gitignore and .dockerignore files, but does not stop there. See for example tools like _\\"git-secrets\\"_ or _\\"Talisman\\"_ to have check-in preventive measures for secrets. Consider also to regularly scan your repositories for secrets accidentally checked-in using scanning tools like _"gitleaks"_ or _"gitrob"_.
+    Establish measures preventing accidental check-in or package-in of secrets into sourcecode repositories and artifact registries. This starts by using good .gitignore and .dockerignore files, but does not stop there. See for example tools like _"git-secrets" or "Talisman"_ to have check-in preventive measures for secrets. Consider also to regularly scan your repositories for secrets accidentally checked-in using scanning tools like _"gitleaks" or "gitrob"_.
 
 - **Medium**: [Code Backdooring](#code-backdooring): 2/2 unmitigated Risks, exploitation likelihood is _Unlikely_ with _High_ impact
 
@@ -2196,6 +2196,7 @@ The risk **Untrusted Deserialization** was found **2 times** in the analyzed arc
 | Action | Build Pipeline Hardening |
 | ASVS chapter | V14 - Configuration Verification Requirements |
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
+| References | OWASP NHI2:2025 Secret Leakage |
 
 **Description**
 
@@ -2219,7 +2220,7 @@ Usually no false positives.
 
 **Mitigation**
 
-Establish measures preventing accidental check-in or package-in of secrets into sourcecode repositories and artifact registries. This starts by using good .gitignore and .dockerignore files, but does not stop there. See for example tools like _\\"git-secrets\\"_ or _\\"Talisman\\"_ to have check-in preventive measures for secrets. Consider also to regularly scan your repositories for secrets accidentally checked-in using scanning tools like _"gitleaks"_ or _"gitrob"_.
+Establish measures preventing accidental check-in or package-in of secrets into sourcecode repositories and artifact registries. This starts by using good .gitignore and .dockerignore files, but does not stop there. See for example tools like _"git-secrets" or "Talisman"_ to have check-in preventive measures for secrets. Consider also to regularly scan your repositories for secrets accidentally checked-in using scanning tools like _"gitleaks" or "gitrob"_.
 
 **Check**
 
@@ -2231,7 +2232,7 @@ The risk **Accidental Secret Leak** was found **1 time** in the analyzed archite
 
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Medium | **Accidental Secret Leak(Git)** risk at **Git Repository**: _Git Leak Prevention_ | `accidental-secret-leak@git-repo` | Unlikely | High | [Git Repository](#git-repository) | Unchecked | _not tracked_ |
+| Medium | **Accidental Secret Leak (Git)** risk at **Git Repository**: _Git Leak Prevention_ | `accidental-secret-leak@git-repo` | Unlikely | High | [Git Repository](#git-repository) | Unchecked | _not tracked_ |
 
 ### Code Backdooring
 
@@ -3351,7 +3352,7 @@ Git repository server
 - **Elevated**: [**Long-Lived Credentials** risk at **Git Repository** used by **External Development Client** (long-lived-token)](#long-lived-credentials) (Unchecked)
 - **Elevated**: [**Unguarded Access from Internet** of **Git Repository** by **External Development Client** via **Git-Repo Code Write Access**](#unguarded-access-from-internet) (Unchecked)
 - **Elevated**: [**Unguarded Access from Internet** of **Git Repository** by **External Development Client** via **Git-Repo Web-UI Access**](#unguarded-access-from-internet) (Unchecked)
-- **Medium**: [**Accidental Secret Leak(Git)** risk at **Git Repository**: _Git Leak Prevention_](#accidental-secret-leak) (Unchecked)
+- **Medium**: [**Accidental Secret Leak (Git)** risk at **Git Repository**: _Git Leak Prevention_](#accidental-secret-leak) (Unchecked)
 - **Medium**: [**Code Backdooring** risk at **Git Repository**](#code-backdooring) (Unchecked)
 - **Medium**: [**Unencrypted Technical Asset** named **Git Repository**](#unencrypted-technical-assets) (Mitigated)
 - **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Git-Repo Code Write Access** from **External Development Client** to **Git Repository**](#missing-multi-factor-authentication-mfa) (Mitigated)
@@ -3882,7 +3883,7 @@ Angular and other client-side code delivered by the application.
 
 This data asset has data breach potential because of 28 remaining risks:
 
-- Probable, **Medium**: [**Accidental Secret Leak(Git)** risk at **Git Repository**: _Git Leak Prevention_](#accidental-secret-leak) (Unchecked)
+- Probable, **Medium**: [**Accidental Secret Leak (Git)** risk at **Git Repository**: _Git Leak Prevention_](#accidental-secret-leak) (Unchecked)
 - Probable, **Medium**: [**Code Backdooring** risk at **Git Repository**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -4344,7 +4345,7 @@ API and other server-side code of the application.
 
 This data asset has data breach potential because of 28 remaining risks:
 
-- Probable, **Medium**: [**Accidental Secret Leak(Git)** risk at **Git Repository**: _Git Leak Prevention_](#accidental-secret-leak) (Unchecked)
+- Probable, **Medium**: [**Accidental Secret Leak (Git)** risk at **Git Repository**: _Git Leak Prevention_](#accidental-secret-leak) (Unchecked)
 - Probable, **Medium**: [**Code Backdooring** risk at **Git Repository**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Code Backdooring** risk at **Jenkins Build Server**](#code-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Apache Webserver**](#container-base-image-backdooring) (Unchecked)
@@ -5086,7 +5087,7 @@ The risk rules checked **5 of 10** entries of the [OWASP Non-Human Identities To
 | Entry | Risk rules | Risks |
 | --- | --- | --- |
 | `NHI1` Improper Offboarding | none | _not checked by any risk rule_ |
-| `NHI2` Secret Leakage | [Long-Lived Credentials](#long-lived-credentials), [Missing Vault (Secret Storage)](#missing-vault-secret-storage) | 7/7 unmitigated Risks |
+| `NHI2` Secret Leakage | [Accidental Secret Leak](#accidental-secret-leak), [Long-Lived Credentials](#long-lived-credentials), [Missing Vault (Secret Storage)](#missing-vault-secret-storage) | 8/8 unmitigated Risks |
 | `NHI3` Vulnerable Third-Party NHI | none | _not checked by any risk rule_ |
 | `NHI4` Insecure Authentication | none | _not checked by any risk rule_ |
 | `NHI5` Overprivileged NHI | none | _not checked by any risk rule_ |

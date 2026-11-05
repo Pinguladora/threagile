@@ -2264,7 +2264,8 @@
       "name": "Accidental Secret Leak",
       "description": "Sourcecode repositories (including their histories) as well as artifact registries can accidentally contain secrets like checked-in or packaged-in passwords, API tokens, certificates, crypto keys, etc.",
       "categories": [
-        "Information Disclosure"
+        "Information Disclosure",
+        "OWASP NHI2:2025 Secret Leakage"
       ],
       "cwes": [
         "CWE-200"
@@ -3026,7 +3027,7 @@
     {
       "id": "accidental-secret-leak-mitigation",
       "name": "Build Pipeline Hardening",
-      "description": "Establish measures preventing accidental check-in or package-in of secrets into sourcecode repositories and artifact registries. This starts by using good .gitignore and .dockerignore files, but does not stop there. See for example tools like \u003ci\u003e\\\"git-secrets\\\"\u003c/i\u003e or \u003ci\u003e\\\"Talisman\\\"\u003c/i\u003e to have check-in preventive measures for secrets. Consider also to regularly scan your repositories for secrets accidentally checked-in using scanning tools like \u003ci\u003e\"gitleaks\"\u003c/i\u003e or \u003ci\u003e\"gitrob\"\u003c/i\u003e.",
+      "description": "Establish measures preventing accidental check-in or package-in of secrets into sourcecode repositories and artifact registries. This starts by using good .gitignore and .dockerignore files, but does not stop there. See for example tools like \u003ci\u003e\"git-secrets\" or \"Talisman\"\u003c/i\u003e to have check-in preventive measures for secrets. Consider also to regularly scan your repositories for secrets accidentally checked-in using scanning tools like \u003ci\u003e\"gitleaks\" or \"gitrob\"\u003c/i\u003e.",
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
