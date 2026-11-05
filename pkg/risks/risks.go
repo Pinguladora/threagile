@@ -52,6 +52,7 @@ func aiRiskRules() []types.RiskRule {
 		builtin.NewModelSupplyChainRule(),
 		builtin.NewPromptInjectionRule(),
 		builtin.NewUnauthenticatedMCPServerRule(),
+		builtin.NewUnboundedModelConsumptionRule(),
 		builtin.NewUnsandboxedCodeExecutionRule(),
 		builtin.NewVectorStorePoisoningRule(),
 	}
@@ -73,6 +74,7 @@ func accessRiskRules() []types.RiskRule {
 		builtin.NewLongLivedCredentialsRule(),
 		builtin.NewMissingObjectLevelAuthorizationRule(),
 		builtin.NewMissingPolicyDecisionPointRedundancyRule(),
+		builtin.NewOverprivilegedMachineIdentityRule(),
 		builtin.NewSharedMachineAccountRule(),
 		builtin.NewUnprotectedAuthorizationDecisionsRule(),
 	}

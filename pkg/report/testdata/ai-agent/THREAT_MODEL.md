@@ -42,13 +42,13 @@ Threagile toolkit was used to model the architecture of "AI Support Assistant" a
 
 Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.
 
-In total **66 initial risks** in **28 categories** have been identified during the threat modeling process:
+In total **68 initial risks** in **29 categories** have been identified during the threat modeling process:
 
 | Severity | Risks | Status | Risks |
 | --- | ---: | --- | ---: |
-| Critical | 0 | Unchecked | 65 |
+| Critical | 0 | Unchecked | 67 |
 | High | 0 | In Discussion | 0 |
-| Elevated | 30 | Accepted | 0 |
+| Elevated | 32 | Accepted | 0 |
 | Medium | 28 | In Progress | 1 |
 | Low | 8 | Mitigated | 0 |
 |  |  | False Positive | 0 |
@@ -57,7 +57,7 @@ The assistant acts for the customers: besides answering, it changes orders and i
 
 ## Impact Analysis of the Initial Risks
 
-The most prevalent impacts of the **66 initial risks** (distributed over **28 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **68 initial risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Confused Deputy Agent](#confused-deputy-agent): 1 Initial Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -102,6 +102,10 @@ The most prevalent impacts of the **66 initial risks** (distributed over **28 ri
 - **Elevated**: [Unauthenticated MCP Server](#unauthenticated-mcp-server): 1 Initial Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers who reach the server might call its tools directly and read or change what they reach, bypassing the agents and their controls.
+
+- **Elevated**: [Unbounded Model Consumption](#unbounded-model-consumption): 2 Initial Risks, exploitation likelihood is _Very Likely_ with _Medium_ impact
+
+    If this risk is unmitigated, attackers, or a runaway agent, might make the model or the agent unavailable for others, or run up its costs (denial of wallet).
 
 - **Elevated**: [Vector Store Poisoning](#vector-store-poisoning): 1 Initial Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -179,23 +183,23 @@ The following table gives a high-level overview of the risk tracking status (inc
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Critical | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | High | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Elevated | 30 | 30 | 0 | 0 | 0 | 0 | 0 |
+| Elevated | 32 | 32 | 0 | 0 | 0 | 0 | 0 |
 | Medium | 28 | 27 | 0 | 0 | 1 | 0 | 0 |
 | Low | 8 | 8 | 0 | 0 | 0 | 0 | 0 |
 
-After removal of risks with status _mitigated_ and _false positive_ the following **66 remain unmitigated**:
+After removal of risks with status _mitigated_ and _false positive_ the following **68 remain unmitigated**:
 
 | Severity | Unmitigated risks | To be checked by | Unmitigated risks |
 | --- | ---: | --- | ---: |
 | Critical | 0 | Business Side | 1 |
-| High | 0 | Architecture | 12 |
-| Elevated | 30 | Development | 22 |
+| High | 0 | Architecture | 14 |
+| Elevated | 32 | Development | 22 |
 | Medium | 28 | Operations | 31 |
 | Low | 8 |  |  |
 
 ## Impact Analysis of the Remaining Risks
 
-The most prevalent impacts of the **66 remaining risks** (distributed over **28 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **68 remaining risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Confused Deputy Agent](#confused-deputy-agent): 1 Remaining Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -240,6 +244,10 @@ The most prevalent impacts of the **66 remaining risks** (distributed over **28 
 - **Elevated**: [Unauthenticated MCP Server](#unauthenticated-mcp-server): 1 Remaining Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers who reach the server might call its tools directly and read or change what they reach, bypassing the agents and their controls.
+
+- **Elevated**: [Unbounded Model Consumption](#unbounded-model-consumption): 2 Remaining Risks, exploitation likelihood is _Very Likely_ with _Medium_ impact
+
+    If this risk is unmitigated, attackers, or a runaway agent, might make the model or the agent unavailable for others, or run up its costs (denial of wallet).
 
 - **Elevated**: [Vector Store Poisoning](#vector-store-poisoning): 1 Remaining Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -311,7 +319,7 @@ The most prevalent impacts of the **66 remaining risks** (distributed over **28 
 
 ## Risks by Severity
 
-All **66 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
+All **68 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
 
 ### Critical
 
@@ -327,7 +335,7 @@ _No risks._
 
 ### Elevated
 
-**30 risks**
+**32 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
@@ -360,6 +368,8 @@ _No risks._
 | Elevated | [**SQL/NoSQL-Injection** risk at **Support Agent** against database **Knowledge Index** via **Memory Write**](#sqlnosql-injection) | [SQL/NoSQL-Injection](#sqlnosql-injection) | [Support Agent](#support-agent), [Memory Write](#memory-write) | Unchecked |
 | Elevated | [**SQL/NoSQL-Injection** risk at **Support Agent** against database **Knowledge Index** via **Retrieval**](#sqlnosql-injection) | [SQL/NoSQL-Injection](#sqlnosql-injection) | [Support Agent](#support-agent), [Retrieval](#retrieval) | Unchecked |
 | Elevated | [**Unauthenticated MCP Server** risk at **Support Tools** called by **Support Agent**](#unauthenticated-mcp-server) | [Unauthenticated MCP Server](#unauthenticated-mcp-server) | [Support Tools](#support-tools), [Tool Calls](#tool-calls) | Unchecked |
+| Elevated | [**Unbounded Model Consumption** risk at **Guardrail Model**](#unbounded-model-consumption) | [Unbounded Model Consumption](#unbounded-model-consumption) | [Guardrail Model](#guardrail-model) | Unchecked |
+| Elevated | [**Unbounded Model Consumption** risk at **Support Agent**](#unbounded-model-consumption) | [Unbounded Model Consumption](#unbounded-model-consumption) | [Support Agent](#support-agent) | Unchecked |
 | Elevated | [**Vector Store Poisoning** risk at **Knowledge Index** used by **Support Agent**](#vector-store-poisoning) | [Vector Store Poisoning](#vector-store-poisoning) | [Knowledge Index](#knowledge-index) | Unchecked |
 
 ### Medium
@@ -594,7 +604,7 @@ _This list is not complete and regulatory or law relevant abuse cases have to be
 
 ## STRIDE Classification of Identified Risks
 
-This chapter clusters and classifies the risks by STRIDE categories: in total **66 potential risks** have been identified during the threat modeling process.
+This chapter clusters and classifies the risks by STRIDE categories: in total **68 potential risks** have been identified during the threat modeling process.
 
 ### Spoofing
 
@@ -698,9 +708,13 @@ Information disclosure - Confidentiality
 
 ### Denial of Service
 
-**2 risks**
+**4 risks**
 
 Denial of service - Availability
+
+- **Elevated**: [Unbounded Model Consumption](#unbounded-model-consumption): 2/2 unmitigated Risks, exploitation likelihood is _Very Likely_ with _Medium_ impact
+
+    Every request to a language model or an agent costs compute and tokens, and an agent can turn one request into many model calls. Users who reach a model or an agent without a gateway that limits their requests and tokens can exhaust its capacity, or the budget of a model paid for by use.
 
 - **Low**: [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary): 2/2 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Low_ impact
 
@@ -746,7 +760,7 @@ Elevation of privilege - Authorization
 
 ## Assignment by Function
 
-This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **66 potential risks** have been identified during the threat modeling process.
+This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **68 potential risks** have been identified during the threat modeling process.
 
 ### Business Side
 
@@ -760,7 +774,7 @@ Business
 
 ### Architecture
 
-**12 risks**
+**14 risks**
 
 Architecture
 
@@ -783,6 +797,10 @@ Architecture
 - **Elevated**: [Unauthenticated MCP Server](#unauthenticated-mcp-server): 1/1 unmitigated Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
     Authenticate every caller of the server, for example with OAuth 2.1 as the MCP specification describes for HTTP transports, and pass on the identity of the user an agent acts for, so that each tool call is authorized for that user. Expose the server only to the agents that need it.
+
+- **Elevated**: [Unbounded Model Consumption](#unbounded-model-consumption): 2/2 unmitigated Risks, exploitation likelihood is _Very Likely_ with _Medium_ impact
+
+    Put a gateway between the users and the model or agent, like an API gateway or an AI gateway, that limits the requests and the tokens per user and per period, caps the length of inputs and outputs, and alerts on spending, and limit the number of model calls and tool calls per task in the agent. Model the gateway as a gateway technical asset in the path from the users, or between the agent and its language models.
 
 - **Elevated**: [Vector Store Poisoning](#vector-store-poisoning): 1/1 unmitigated Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -984,13 +1002,17 @@ This chapter lists all technical assets that have been defined as out-of-scope. 
 
 ## Potential Model Failures
 
-**5 of 5 unmitigated**
+**7 of 7 unmitigated**
 
 This chapter lists potential model failures where not all relevant assets have been modeled or the model might itself contain inconsistencies. Each potential model failure should be checked in the model against the architecture design:
 
 - **Elevated**: [Missing AI Monitoring](#missing-ai-monitoring): 2/2 unmitigated Risks, exploitation likelihood is _Likely_ with _Medium_ impact
 
     What an AI agent or a language model does depends on what it reads, so it cannot be tested in full before it runs. Without a record of its prompts, its tool calls and its answers in a monitoring system, nobody sees a prompt injection, an agent going astray or a model that drifts, nor can tell afterwards what it did.
+
+- **Elevated**: [Unbounded Model Consumption](#unbounded-model-consumption): 2/2 unmitigated Risks, exploitation likelihood is _Very Likely_ with _Medium_ impact
+
+    Every request to a language model or an agent costs compute and tokens, and an agent can turn one request into many model calls. Users who reach a model or an agent without a gateway that limits their requests and tokens can exhaust its capacity, or the budget of a model paid for by use.
 
 - **Medium**: [Missing Build Infrastructure](#missing-build-infrastructure): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -1020,7 +1042,7 @@ This chapter lists custom questions that arose during the threat modeling proces
 
 ## Identified Risks by Vulnerability Category
 
-In total **66 potential risks** have been identified during the threat modeling process, distributed across **28 vulnerability categories**. The following sections describe each identified risk category and its risks.
+In total **68 potential risks** have been identified during the threat modeling process, distributed across **29 vulnerability categories**. The following sections describe each identified risk category and its risks.
 
 ### Confused Deputy Agent
 
@@ -1589,6 +1611,57 @@ The risk **Unauthenticated MCP Server** was found **1 time** in the analyzed arc
 | Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Elevated | **Unauthenticated MCP Server** risk at **Support Tools** called by **Support Agent** | `unauthenticated-mcp-server@support-tools@support-agent>tool-calls` | Likely | Medium | [Support Tools](#support-tools), [Tool Calls](#tool-calls) | Unchecked | _not tracked_ |
+
+### Unbounded Model Consumption
+
+**Elevated** · 2/2 unmitigated Risks · `unbounded-model-consumption`
+
+| Property | Value |
+| --- | --- |
+| STRIDE | Denial of Service |
+| CWE | [CWE 770](https://cwe.mitre.org/data/definitions/770.html) |
+| Function | Architecture |
+| Action | Rate Limits and Token Budgets |
+| ASVS chapter | V11 - Business Logic Verification Requirements |
+| Cheat sheet | [Denial_of_Service_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html) |
+| References | OWASP LLM10:2025 Unbounded Consumption; OWASP API4:2023 Unrestricted Resource Consumption; MAESTRO Layer 4: Deployment and Infrastructure |
+
+**Description**
+
+Every request to a language model or an agent costs compute and tokens, and an agent can turn one request into many model calls. Users who reach a model or an agent without a gateway that limits their requests and tokens can exhaust its capacity, or the budget of a model paid for by use.
+
+**Impact**
+
+If this risk is unmitigated, attackers, or a runaway agent, might make the model or the agent unavailable for others, or run up its costs (denial of wallet).
+
+**Detection Logic**
+
+In-scope llm and ai-agent technical assets that users reach, from the internet or from clients used by humans, through communication links that pass no gateway technical asset. An agent that calls all its language models through a gateway technical asset is skipped, as the gateway can limit its tokens.
+
+**Risk Rating**
+
+The risk rating depends on the availability rating of the data processed by the model or agent, at least medium for the costs. The attack is very likely when users on the internet reach it, and likely otherwise.
+
+**False Positives**
+
+Models and agents whose platform enforces quotas per user, like a managed model service with rate limits, can be considered as false positives after individual review.
+
+**Mitigation**
+
+Put a gateway between the users and the model or agent, like an API gateway or an AI gateway, that limits the requests and the tokens per user and per period, caps the length of inputs and outputs, and alerts on spending, and limit the number of model calls and tool calls per task in the agent. Model the gateway as a gateway technical asset in the path from the users, or between the agent and its language models.
+
+**Check**
+
+Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
+
+**Risk Findings**
+
+The risk **Unbounded Model Consumption** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
+
+| Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Elevated | **Unbounded Model Consumption** risk at **Guardrail Model** | `unbounded-model-consumption@guardrail-model` | Very Likely | Medium | [Guardrail Model](#guardrail-model) | Unchecked | _not tracked_ |
+| Elevated | **Unbounded Model Consumption** risk at **Support Agent** | `unbounded-model-consumption@support-agent` | Very Likely | Medium | [Support Agent](#support-agent) | Unchecked | _not tracked_ |
 
 ### Vector Store Poisoning
 
@@ -2475,7 +2548,7 @@ The risk **Unchecked Deployment** was found **1 time** in the analyzed architect
 
 ## Identified Risks by Technical Asset
 
-In total **66 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
+In total **68 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
 
 ### Chat Frontend
 
@@ -2528,12 +2601,13 @@ The support chat page and its backend for frontend
 
 ### Guardrail Model
 
-**Elevated** · 6/6 unmitigated Risks · `guardrail-model`
+**Elevated** · 7/7 unmitigated Risks · `guardrail-model`
 
 A small self-hosted model fine-tuned to classify harmful content
 
 **Identified Risks of the Asset**
 
+- **Elevated**: [**Unbounded Model Consumption** risk at **Guardrail Model**](#unbounded-model-consumption) (Unchecked)
 - **Elevated**: [**Missing AI Monitoring** risk at **Guardrail Model**](#missing-ai-monitoring) (Unchecked)
 - **Elevated**: [**Prompt Injection** risk at **Guardrail Model**](#prompt-injection) (Unchecked)
 - **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Guardrail Model**](#sensitive-data-disclosure-through-model-output) (Unchecked)
@@ -2768,7 +2842,7 @@ Manages orders and refunds
 
 ### Support Agent
 
-**Elevated** · 18/18 unmitigated Risks · `support-agent`
+**Elevated** · 19/19 unmitigated Risks · `support-agent`
 
 Answers support questions, looks up orders and issues refunds through its tools
 
@@ -2777,6 +2851,7 @@ Answers support questions, looks up orders and issues refunds through its tools
 - **Elevated**: [**Prompt Injection** risk at **Support Agent**](#prompt-injection) (Unchecked)
 - **Elevated**: [**SQL/NoSQL-Injection** risk at **Support Agent** against database **Knowledge Index** via **Memory Write**](#sqlnosql-injection) (Unchecked)
 - **Elevated**: [**SQL/NoSQL-Injection** risk at **Support Agent** against database **Knowledge Index** via **Retrieval**](#sqlnosql-injection) (Unchecked)
+- **Elevated**: [**Unbounded Model Consumption** risk at **Support Agent**](#unbounded-model-consumption) (Unchecked)
 - **Elevated**: [**Confused Deputy Agent** risk at **Support Agent** reaching **Knowledge Index** with its own identity](#confused-deputy-agent) (Unchecked)
 - **Elevated**: [**Excessive Agency** risk at **Support Agent** changing **Order Service**](#excessive-agency) (Unchecked)
 - **Elevated**: [**Missing AI Monitoring** risk at **Support Agent**](#missing-ai-monitoring) (Unchecked)
@@ -3106,11 +3181,11 @@ _The asset was defined as out-of-scope._
 
 ## Identified Data Breach Probabilities by Data Asset
 
-In total **66 potential risks** have been identified during the threat modeling process, distributed across **6 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
+In total **68 potential risks** have been identified during the threat modeling process, distributed across **6 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
 
 ### Chat Transcripts
 
-**Probable** · 40/40 unmitigated Risks · `chat-transcripts`
+**Probable** · 42/42 unmitigated Risks · `chat-transcripts`
 
 The conversations of the customers with the assistant
 
@@ -3133,7 +3208,7 @@ The conversations of the customers with the assistant
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 40 remaining risks:
+This data asset has data breach potential because of 42 remaining risks:
 
 - Probable, **Elevated**: [**Confused Deputy Agent** risk at **Support Agent** reaching **Knowledge Index** with its own identity](#confused-deputy-agent) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Chat Frontend**](#container-base-image-backdooring) (Unchecked)
@@ -3172,13 +3247,15 @@ This data asset has data breach potential because of 40 remaining risks:
 - Improbable, **Medium**: [**Missing Hardening** risk at **Support Agent**](#missing-hardening) (Unchecked)
 - Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Knowledge Index** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Support Agent** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
+- Improbable, **Elevated**: [**Unbounded Model Consumption** risk at **Guardrail Model**](#unbounded-model-consumption) (Unchecked)
+- Improbable, **Elevated**: [**Unbounded Model Consumption** risk at **Support Agent**](#unbounded-model-consumption) (Unchecked)
 - Improbable, **Medium**: [**Unencrypted Technical Asset** named **Knowledge Index**](#unencrypted-technical-assets) (Unchecked)
 - Improbable, **Elevated**: [**Vector Store Poisoning** risk at **Knowledge Index** used by **Support Agent**](#vector-store-poisoning) (Unchecked)
 - Improbable, **Medium**: [**Unverified Model Supply Chain** risk at **Guardrail Model**](#unverified-model-supply-chain) (In Progress)
 
 ### Customer Data
 
-**Probable** · 32/32 unmitigated Risks · `customer-data`
+**Probable** · 33/33 unmitigated Risks · `customer-data`
 
 Names, addresses and contact details of the customers
 
@@ -3201,7 +3278,7 @@ Names, addresses and contact details of the customers
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 32 remaining risks:
+This data asset has data breach potential because of 33 remaining risks:
 
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Order Service**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Orders Database**](#container-base-image-backdooring) (Unchecked)
@@ -3235,10 +3312,11 @@ This data asset has data breach potential because of 32 remaining risks:
 - Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Orders Database** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Support Agent** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Low**: [**Missing Web Application Firewall (WAF)** risk at **Order Service**](#missing-web-application-firewall-waf) (Unchecked)
+- Improbable, **Elevated**: [**Unbounded Model Consumption** risk at **Support Agent**](#unbounded-model-consumption) (Unchecked)
 
 ### Knowledge Articles
 
-**Probable** · 33/33 unmitigated Risks · `knowledge-articles`
+**Probable** · 34/34 unmitigated Risks · `knowledge-articles`
 
 The support articles the assistant answers from
 
@@ -3261,7 +3339,7 @@ The support articles the assistant answers from
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 33 remaining risks:
+This data asset has data breach potential because of 34 remaining risks:
 
 - Probable, **Elevated**: [**Confused Deputy Agent** risk at **Support Agent** reaching **Knowledge Index** with its own identity](#confused-deputy-agent) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Ingestion Pipeline**](#container-base-image-backdooring) (Unchecked)
@@ -3294,12 +3372,13 @@ This data asset has data breach potential because of 33 remaining risks:
 - Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Knowledge Index** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Support Agent** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Low**: [**Missing Web Application Firewall (WAF)** risk at **Knowledge CMS**](#missing-web-application-firewall-waf) (Unchecked)
+- Improbable, **Elevated**: [**Unbounded Model Consumption** risk at **Support Agent**](#unbounded-model-consumption) (Unchecked)
 - Improbable, **Medium**: [**Unencrypted Technical Asset** named **Knowledge Index**](#unencrypted-technical-assets) (Unchecked)
 - Improbable, **Elevated**: [**Vector Store Poisoning** risk at **Knowledge Index** used by **Support Agent**](#vector-store-poisoning) (Unchecked)
 
 ### Model Weights
 
-**Probable** · 21/21 unmitigated Risks · `model-weights`
+**Probable** · 22/22 unmitigated Risks · `model-weights`
 
 The weights of the self-hosted guardrail model
 
@@ -3322,7 +3401,7 @@ The weights of the self-hosted guardrail model
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 21 remaining risks:
+This data asset has data breach potential because of 22 remaining risks:
 
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Guardrail Model**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Model Registry**](#container-base-image-backdooring) (Unchecked)
@@ -3342,13 +3421,14 @@ This data asset has data breach potential because of 21 remaining risks:
 - Possible, **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Tools** server-side web-requesting the target **Search API** via **Web Search**](#server-side-request-forgery-ssrf) (Unchecked)
 - Possible, **Low**: [**Unchecked Deployment** risk at **Model Registry**](#unchecked-deployment) (Unchecked)
 - Improbable, **Elevated**: [**Missing AI Monitoring** risk at **Guardrail Model**](#missing-ai-monitoring) (Unchecked)
+- Improbable, **Elevated**: [**Unbounded Model Consumption** risk at **Guardrail Model**](#unbounded-model-consumption) (Unchecked)
 - Improbable, **Medium**: [**Unencrypted Technical Asset** named **Model Registry**](#unencrypted-technical-assets) (Unchecked)
 - Improbable, **Medium**: [**Unverified Model Supply Chain** risk at **Model Registry**](#unverified-model-supply-chain) (Unchecked)
 - Improbable, **Medium**: [**Unverified Model Supply Chain** risk at **Guardrail Model**](#unverified-model-supply-chain) (In Progress)
 
 ### Order Data
 
-**Probable** · 32/32 unmitigated Risks · `order-data`
+**Probable** · 33/33 unmitigated Risks · `order-data`
 
 Orders, payments and refunds
 
@@ -3371,7 +3451,7 @@ Orders, payments and refunds
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 32 remaining risks:
+This data asset has data breach potential because of 33 remaining risks:
 
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Order Service**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Orders Database**](#container-base-image-backdooring) (Unchecked)
@@ -3405,6 +3485,7 @@ This data asset has data breach potential because of 32 remaining risks:
 - Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Orders Database** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Support Agent** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - Improbable, **Low**: [**Missing Web Application Firewall (WAF)** risk at **Order Service**](#missing-web-application-firewall-waf) (Unchecked)
+- Improbable, **Elevated**: [**Unbounded Model Consumption** risk at **Support Agent**](#unbounded-model-consumption) (Unchecked)
 
 ### Web Content
 
@@ -3818,7 +3899,7 @@ Looks up orders and issues refunds
 
 ## Risk Tracking
 
-**1 of 66 risks** are tracked in the model; the others are unchecked.
+**1 of 68 risks** are tracked in the model; the others are unchecked.
 
 | Risk | ID | Severity | Status | Date | Checked by | Ticket | Justification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -3834,7 +3915,7 @@ The risk rules checked **10 of 10** entries of the [OWASP Top 10:2025](https://t
 
 | Entry | Risk rules | Risks |
 | --- | --- | --- |
-| `A01` Broken Access Control | [Confused Deputy Agent](#confused-deputy-agent), Cross-Account Takeover, [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf), Missing Identity Propagation, [Missing Object-Level Authorization](#missing-object-level-authorization), Path-Traversal, Public Cloud Asset Access, [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 15/15 unmitigated Risks |
+| `A01` Broken Access Control | [Confused Deputy Agent](#confused-deputy-agent), Cross-Account Takeover, [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf), Missing Identity Propagation, [Missing Object-Level Authorization](#missing-object-level-authorization), Overprivileged Machine Identity, Path-Traversal, Public Cloud Asset Access, [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 15/15 unmitigated Risks |
 | `A02` Security Misconfiguration | Container Platform Escape, [Missing Cloud Hardening](#missing-cloud-hardening), [Missing Hardening](#missing-hardening), Public Cloud Asset Access, Publicly Shared Cloud Snapshot, XML External Entity (XXE) | 7/7 unmitigated Risks |
 | `A03` Software Supply Chain Failures | Code Backdooring, [Container Base Image Backdooring](#container-base-image-backdooring), [Unchecked Deployment](#unchecked-deployment) | 11/11 unmitigated Risks |
 | `A04` Cryptographic Failures | Unencrypted Communication, [Unencrypted Technical Assets](#unencrypted-technical-assets) | 2/2 unmitigated Risks |
@@ -3854,7 +3935,7 @@ The risk rules checked **6 of 10** entries of the [OWASP API Security Top 10 202
 | `API1` Broken Object Level Authorization | Missing Identity Propagation, [Missing Object-Level Authorization](#missing-object-level-authorization) | 2/2 unmitigated Risks |
 | `API2` Broken Authentication | [Missing Authentication](#missing-authentication), [Missing Multi-Factor Authentication (MFA)](#missing-multi-factor-authentication-mfa) | 2/2 unmitigated Risks |
 | `API3` Broken Object Property Level Authorization | none | _not checked by any risk rule_ |
-| `API4` Unrestricted Resource Consumption | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary) | 2/2 unmitigated Risks |
+| `API4` Unrestricted Resource Consumption | [DoS-risky Access Across Trust-Boundary](#dos-risky-access-across-trust-boundary), [Unbounded Model Consumption](#unbounded-model-consumption) | 4/4 unmitigated Risks |
 | `API5` Broken Function Level Authorization | [Missing Object-Level Authorization](#missing-object-level-authorization) | 2/2 unmitigated Risks |
 | `API6` Unrestricted Access to Sensitive Business Flows | none | _not checked by any risk rule_ |
 | `API7` Server Side Request Forgery | [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 11/11 unmitigated Risks |
@@ -3864,7 +3945,7 @@ The risk rules checked **6 of 10** entries of the [OWASP API Security Top 10 202
 
 ### OWASP Top 10 for LLM Applications 2025
 
-The risk rules checked **7 of 10** entries of the [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/).
+The risk rules checked **8 of 10** entries of the [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/).
 
 | Entry | Risk rules | Risks |
 | --- | --- | --- |
@@ -3877,7 +3958,7 @@ The risk rules checked **7 of 10** entries of the [OWASP Top 10 for LLM Applicat
 | `LLM07` System Prompt Leakage | none | _not checked by any risk rule_ |
 | `LLM08` Vector and Embedding Weaknesses | [Vector Store Poisoning](#vector-store-poisoning) | 1/1 unmitigated Risk |
 | `LLM09` Misinformation | none | _not checked by any risk rule_ |
-| `LLM10` Unbounded Consumption | none | _not checked by any risk rule_ |
+| `LLM10` Unbounded Consumption | [Unbounded Model Consumption](#unbounded-model-consumption) | 2/2 unmitigated Risks |
 
 ### OWASP Top 10 for Agentic Applications 2026
 
@@ -3887,7 +3968,7 @@ The risk rules checked **9 of 10** entries of the [OWASP Top 10 for Agentic Appl
 | --- | --- | --- |
 | `ASI01` Agent Goal Hijack | Missing AI Guardrail, [Prompt Injection](#prompt-injection) | 2/2 unmitigated Risks |
 | `ASI02` Tool Misuse and Exploitation | [Excessive Agency](#excessive-agency), [Unauthenticated MCP Server](#unauthenticated-mcp-server) | 2/2 unmitigated Risks |
-| `ASI03` Identity and Privilege Abuse | [Confused Deputy Agent](#confused-deputy-agent), [Excessive Agency](#excessive-agency), Human Use of Machine Identity, Shared Machine Account, [Unauthenticated MCP Server](#unauthenticated-mcp-server) | 3/3 unmitigated Risks |
+| `ASI03` Identity and Privilege Abuse | [Confused Deputy Agent](#confused-deputy-agent), [Excessive Agency](#excessive-agency), Human Use of Machine Identity, Overprivileged Machine Identity, Shared Machine Account, [Unauthenticated MCP Server](#unauthenticated-mcp-server) | 3/3 unmitigated Risks |
 | `ASI04` Agentic Supply Chain Vulnerabilities | [Unverified Model Supply Chain](#unverified-model-supply-chain) | 2/2 unmitigated Risks |
 | `ASI05` Unexpected Code Execution | Unsandboxed Code Execution | _no risks found_ |
 | `ASI06` Memory and Context Poisoning | [Vector Store Poisoning](#vector-store-poisoning) | 1/1 unmitigated Risk |
@@ -3905,14 +3986,14 @@ The risk rules checked **7 of 7** entries of the [CSA MAESTRO](https://cloudsecu
 | `L1` Foundation Models | [Prompt Injection](#prompt-injection), [Sensitive Data Disclosure through Model Output](#sensitive-data-disclosure-through-model-output), [Unverified Model Supply Chain](#unverified-model-supply-chain) | 6/6 unmitigated Risks |
 | `L2` Data Operations | [Vector Store Poisoning](#vector-store-poisoning) | 1/1 unmitigated Risk |
 | `L3` Agent Frameworks | [Confused Deputy Agent](#confused-deputy-agent), [Excessive Agency](#excessive-agency), [Prompt Injection](#prompt-injection), Unsandboxed Code Execution | 4/4 unmitigated Risks |
-| `L4` Deployment and Infrastructure | [Unauthenticated MCP Server](#unauthenticated-mcp-server), Unsandboxed Code Execution | 1/1 unmitigated Risk |
+| `L4` Deployment and Infrastructure | [Unauthenticated MCP Server](#unauthenticated-mcp-server), [Unbounded Model Consumption](#unbounded-model-consumption), Unsandboxed Code Execution | 3/3 unmitigated Risks |
 | `L5` Evaluation and Observability | [Missing AI Monitoring](#missing-ai-monitoring) | 2/2 unmitigated Risks |
 | `L6` Security and Compliance | Missing AI Guardrail | _no risks found_ |
 | `L7` Agent Ecosystem | Insecure Inter-Agent Communication, [Unauthenticated MCP Server](#unauthenticated-mcp-server) | 1/1 unmitigated Risk |
 
 ### OWASP Non-Human Identities Top 10 2025
 
-The risk rules checked **5 of 10** entries of the [OWASP Non-Human Identities Top 10 2025](https://owasp.org/www-project-non-human-identities-top-10/2025/).
+The risk rules checked **6 of 10** entries of the [OWASP Non-Human Identities Top 10 2025](https://owasp.org/www-project-non-human-identities-top-10/2025/).
 
 | Entry | Risk rules | Risks |
 | --- | --- | --- |
@@ -3920,7 +4001,7 @@ The risk rules checked **5 of 10** entries of the [OWASP Non-Human Identities To
 | `NHI2` Secret Leakage | Accidental Secret Leak, [Long-Lived Credentials](#long-lived-credentials), [Missing Vault (Secret Storage)](#missing-vault-secret-storage) | 2/2 unmitigated Risks |
 | `NHI3` Vulnerable Third-Party NHI | none | _not checked by any risk rule_ |
 | `NHI4` Insecure Authentication | none | _not checked by any risk rule_ |
-| `NHI5` Overprivileged NHI | none | _not checked by any risk rule_ |
+| `NHI5` Overprivileged NHI | Overprivileged Machine Identity | _no risks found_ |
 | `NHI6` Insecure Cloud Deployment Configurations | Push instead of Pull Deployment | _no risks found_ |
 | `NHI7` Long-Lived Secrets | [Long-Lived Credentials](#long-lived-credentials) | 1/1 unmitigated Risk |
 | `NHI8` Environment Isolation | none | _not checked by any risk rule_ |
@@ -3980,6 +4061,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Mixed Targets on Shared Runtime | `mixed-targets-on-shared-runtime` | Elevation of Privilege | Different attacker targets (like frontend and backend/datastore components) should not be running on the same shared (underlying) runtime. | Shared runtime running technical assets of different trust-boundaries is at risk. Also mixing backend/datastore with frontend components on the same shared runtime is considered a risk. | The risk rating (low or medium) depends on the confidentiality, integrity, and availability rating of the technical asset running on the shared runtime. |
 | Sensitive Data Disclosure through Model Output | `model-output-disclosure` | Information Disclosure | Whatever a language model or an agent can read, it can be talked into writing: data in its prompt, in its context window, in the documents it retrieves or in its training data. A model that has confidential data at hand and answers callers from the internet, from users or from another trust zone may hand that data to callers who are not allowed to see it. | In-scope llm and ai-agent technical assets that take untrusted input (as the prompt-injection rule defines it) and process, or read from a vector-database technical asset, data rated at least as confidential. | The risk rating depends on the confidentiality of the data the model or agent can read. Talking to the internet directly makes the attack very likely, other untrusted input likely. |
 | Unverified Model Supply Chain | `model-supply-chain` | Tampering | Model weights are code in all but name: they decide what the system answers, and some model formats run code when they are loaded. Models that are self-hosted, fine-tuned or pulled from a model registry can be swapped, backdoored or poisoned anywhere between their training and their deployment. | In-scope model-registry technical assets, and in-scope llm technical assets that are custom-developed or communicate with a model-registry. | The risk rating depends on the sensitivity of the data processed by the model, or by the models a registry serves. |
+| Overprivileged Machine Identity | `overprivileged-machine-identity` | Elevation of Privilege | A service account or workload identity that the target lets do everything, because it checks only that the caller is authenticated, like a cluster-admin binding, a subscription-wide role or a database owner, gives whoever controls the caller the whole target, while the caller needs only a part of it. | In-scope technical assets processing or storing data rated at least as confidential or critical with an incoming communication link that is not process-local and not readonly, whose identity is _service-account_ or _workload_ and whose authorization is _none_ or _authenticated-only_. Links whose authorization is _unknown_ are skipped. | The risk rating depends on the sensitivity of the data processed or stored by the target. The attack is likely when the link crosses a network trust boundary, and unlikely otherwise. |
 | Path-Traversal | `path-traversal` | Information Disclosure | When a filesystem is accessed Path-Traversal or Local-File-Inclusion (LFI) risks might arise. The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. | Filesystems accessed by in-scope callers. | The risk rating depends on the sensitivity of the data stored inside the technical asset. |
 | Prompt Injection | `prompt-injection` | Elevation of Privilege | A language model cannot tell the instructions of its prompt apart from the data in it. Content that reaches a model or an agent from users, the internet or another trust zone can carry instructions of its own, either directly in a request or indirectly in a document, a web page or a tool response the model reads, and so take over what the model does. | In-scope llm and ai-agent technical assets that untrusted content reaches: they are on the internet, are called across a network trust boundary, read from internet assets (directly or through a tool that does), or are sent requests, directly or through other technical assets, by internet assets or clients used by humans. | The risk rating depends on the sensitivity of the data processed by the model or agent, raised by one step for agents as they act on what they read. Talking to the internet directly makes the attack very likely, other untrusted input likely. |
 | Public Cloud Asset Access | `public-cloud-asset-access` | Information Disclosure | Cloud storage and messaging services like object storage buckets or message queues are governed by resource policies and access control lists. A policy with wildcards (like a principal of _"\*"_) or an ACL granting access to all users makes the asset public. | In-scope cloud technical assets (residing in cloud trust boundaries or tagged with cloud provider tags) processing or storing data assets, that are either tagged as resource-policy governed services (aws:s3, aws:sqs) or are serverless file storage (like file-server), data-lake or message-queue assets, which is how managed cloud storage and queue services are modelled. | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed and stored. The likelihood rises when the asset is reachable from the internet (the internet flag of the asset or a communication link from an internet asset). |
@@ -3991,6 +4073,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Shared Machine Account | `shared-machine-account` | Elevation of Privilege | Several technical assets that call others with one service account, API key or workload identity share all of its permissions: each can do what any of them needs, and the targets cannot tell them apart. | In-scope technical assets with a communication link naming an _account_ that communication links of other technical assets name as well, with the identity _service-account_ or _workload_. Links that name no account are skipped. | The risk rating depends on the sensitivity of the data processed or stored by the targets of all links of the account. The attack is likely when the callers are in different trust boundaries, so that the compromise of one crosses into others, and unlikely otherwise. |
 | SQL/NoSQL-Injection | `sql-nosql-injection` | Tampering | When a database is accessed via database access protocols SQL/NoSQL-Injection risks might arise. The risk rating depends on the sensitivity technical asset itself and of the data assets processed. | In-scope datastores accessed via typical database access protocols, and databases accessed via HTTP or binary protocols as well (like NoSQL databases with a REST interface). | The risk rating depends on the sensitivity of the data stored inside the database. |
 | Unauthenticated MCP Server | `unauthenticated-mcp-server` | Spoofing | An MCP server, or another server exposing tools to AI agents, acts on the systems behind its tools with its own permissions. When it does not authenticate its callers, anyone who can reach it can call those tools, and it cannot tell one agent or user from another to limit what each may do. | In-scope mcp-server technical assets with an incoming communication link without authentication that is not process-local, whose tools (the outgoing communication links) reach technical assets processing or storing data rated at least as confidential or critical. | The risk rating depends on the sensitivity of the technical assets the tools reach. The attack is very likely when the caller is on the internet, likely when it takes untrusted input or sits across a network trust boundary, and unlikely otherwise. |
+| Unbounded Model Consumption | `unbounded-model-consumption` | Denial of Service | Every request to a language model or an agent costs compute and tokens, and an agent can turn one request into many model calls. Users who reach a model or an agent without a gateway that limits their requests and tokens can exhaust its capacity, or the budget of a model paid for by use. | In-scope llm and ai-agent technical assets that users reach, from the internet or from clients used by humans, through communication links that pass no gateway technical asset. An agent that calls all its language models through a gateway technical asset is skipped, as the gateway can limit its tokens. | The risk rating depends on the availability rating of the data processed by the model or agent, at least medium for the costs. The attack is very likely when users on the internet reach it, and likely otherwise. |
 | Unchecked Deployment | `unchecked-deployment` | Tampering | For each build-pipeline component Unchecked Deployment risks might arise when the build-pipeline does not include established DevSecOps best-practices. DevSecOps best-practices scan as part of CI/CD pipelines for vulnerabilities in source- or byte-code, dependencies, container layers, and dynamically against running test systems. There are several open-source and commercial tools existing in the categories DAST, SAST, and IAST. | All development-relevant technical assets. | The risk rating depends on the highest rating of the technical assets and data assets processed by deployment-receiving targets. |
 | Unencrypted Technical Assets | `unencrypted-asset` | Information Disclosure | Due to the confidentiality rating of the technical asset itself and/or the stored data assets this technical asset must be encrypted. The risk rating depends on the sensitivity technical asset itself and of the data assets stored. | In-scope unencrypted technical assets (excluding reverse-proxy, load-balancer, waf, ids, ips and embedded components like library) storing data assets rated at least as confidential or critical. For technical assets storing data assets rated as strictly-confidential or mission-critical the encryption must be of type data-with-end-user-individual-key. | Depending on the confidentiality rating of the stored data-assets either medium or high risk. |
 | Unencrypted Communication | `unencrypted-communication` | Information Disclosure | Due to the confidentiality and/or integrity rating of the data assets transferred over the communication link this connection must be encrypted. | Unencrypted technical communication links of in-scope technical assets (excluding monitoring traffic as well as local-file-access, in-process-library-call and inter-process-communication) transferring sensitive data. | Depending on the confidentiality rating of the transferred data-assets either medium or high risk. |

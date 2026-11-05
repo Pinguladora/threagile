@@ -108,6 +108,7 @@ through other assets: content passes on along the communication links.
 | Confused Deputy Agent (`confused-deputy-agent`) | agents that act for users (an incoming link with identity `end-user`, or from a client of humans) and reach assets with confidential or critical data with identity `service-account` or `workload`, directly or through the tools of an MCP server | none | the most sensitive asset reached; likely when the agent takes untrusted content | ASI03, LLM06, NHI9, MAESTRO layer 3 |
 | Insecure Inter-Agent Communication (`insecure-inter-agent-communication`) | links between agents, into an in-scope agent, that are not process-local and are unauthenticated, authenticated with `credentials`, `session-id` or `long-lived-token`, or unencrypted, when the receiving agent processes confidential or critical data or can change such an asset | none | what the receiving agent can do; likely across a network trust boundary | ASI07, ASI08, MAESTRO layer 7 |
 | Unsandboxed Code Execution (`unsandboxed-code-execution`) | code interpreters that a language model or agent taking untrusted content sends code to, or that run inside such an agent, when the code can reach confidential or critical data: through a link of the interpreter, in an asset of a shared runtime it runs in, by sending what it processes to an internet asset, or through what the agent processes and changes | none | the most sensitive data the code can reach; very likely when the model or agent writing the code talks to the internet directly | ASI05, LLM05, MAESTRO layers 3 and 4 |
+| Unbounded Model Consumption (`unbounded-model-consumption`) | language models and agents that users, on the internet or using clients, reach through links passing no `gateway` asset; agents calling all their models through a `gateway` are skipped | none | the availability of the data the model or agent processes, at least medium; very likely from the internet | LLM10, API4, MAESTRO layer 4 |
 | Missing AI Guardrail (`missing-ai-guardrail`) | language models and agents that untrusted content reaches through a link no guardrail screens: one not from an `ai-guardrail` asset, when the model or agent is no guardrail itself and asks none; links from other models and agents are skipped | none | the data the model or agent processes; likely when it talks to the internet directly | MAESTRO layer 6, LLM01, ASI01 |
 | Missing AI Monitoring (`missing-ai-monitoring`) | agents, and language models not on the internet, without a link to or from a `monitoring` asset | none | the data the agent or model processes; likely when it takes untrusted content | MAESTRO layer 5, ASI10 |
 
@@ -124,6 +125,10 @@ library that runs inside an agent, like NeMo Guardrails, is the `ai-guardrail` t
 next to `ai-agent` in the `technologies` of the agent. A guardrail lowers the risk of
 prompt injection without removing it, so the prompt injection rule still reports the
 agent or model.
+
+Model an API gateway or an AI gateway that limits requests and tokens, like LiteLLM or an
+LLM egress gateway, as a `gateway` asset (aliases `api-gateway`, `ai-gateway`,
+`llm-gateway`): in the path from the users, or between an agent and its language models.
 
 Model a code interpreter, like a Python sandbox or a notebook kernel, as a
 `code-interpreter` asset with the links the code can use and in the shared runtime it
@@ -182,6 +187,7 @@ that depend on them, so models that do not set these fields get no findings from
 | Missing Policy Decision Point Redundancy (`missing-policy-decision-point-redundancy`) | policy decision points that are not redundant and that other assets ask over the network | the availability of the services that ask it | AuthZEN Authorization API, NIST SP 800-162 |
 | Unprotected Authorization Decisions (`unprotected-authorization-decisions`) | links to a policy decision point that are unauthenticated or unencrypted | the data of the service that asks; likely across a network trust boundary | AuthZEN Authorization API, NIST SP 800-162 |
 | Human Use of Machine Identity (`human-use-of-machine-identity`) | links into assets with confidential or critical data from clients of humans with identity `service-account` or `workload` | the data of the target; likely | OWASP NHI10, ASI03 |
+| Overprivileged Machine Identity (`overprivileged-machine-identity`) | non-readonly links into assets with confidential or critical data with identity `service-account` or `workload` and authorization `none` or `authenticated-only` | the data of the target; likely across a network trust boundary | OWASP NHI5, A01, ASI03 |
 | Shared Machine Account (`shared-machine-account`) | in-scope assets whose links name an `account` that links of other assets name too, with identity `service-account` or `workload` | the data of all targets of the account; likely when the callers are in different trust boundaries | OWASP NHI9, ASI03 |
 
 The shared account rule needs the optional `account` of a link, which names the account behind a machine identity;

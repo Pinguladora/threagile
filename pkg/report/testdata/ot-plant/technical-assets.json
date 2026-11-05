@@ -412,7 +412,12 @@
     "technologies": [
       {
         "name": "gateway",
-        "description": "A gateway connecting two systems or trust boundaries",
+        "description": "A gateway connecting two systems or trust boundaries, like an API gateway or an AI gateway enforcing rate limits and token budgets",
+        "aliases": [
+          "api-gateway",
+          "ai-gateway",
+          "llm-gateway"
+        ],
         "attributes": {
           "frontend_related": true,
           "ftp_internet_access_ok": true,
