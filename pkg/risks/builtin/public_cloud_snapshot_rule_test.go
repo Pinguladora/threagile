@@ -25,6 +25,7 @@ type PublicCloudSnapshotRuleTest struct {
 	outOfScope        bool
 	stored            bool
 	processedOnly     bool
+	machine           types.TechnicalAssetMachine
 	confidentiality   types.Confidentiality
 	integrity         types.Criticality
 
@@ -129,6 +130,23 @@ func TestPublicCloudSnapshotRuleGenerateRisks(t *testing.T) {
 			inCloud:    true,
 			stored:     true,
 		},
+		"untagged database in a container": {
+			technology: types.Database,
+			inCloud:    true,
+			stored:     true,
+			machine:    types.Container,
+		},
+		"tagged database in a container": {
+			technology: types.Database,
+			tags:       []string{"aws:rds"},
+			stored:     true,
+			machine:    types.Container,
+
+			riskCreated:      true,
+			expectedTitle:    "<b>Publicly Shared Cloud Snapshot (RDS)</b> risk at <b>Cloud Asset</b>",
+			expectedImpact:   types.MediumImpact,
+			expectedSeverity: types.MediumSeverity,
+		},
 	}
 
 	for name, testCase := range testCases {
@@ -141,6 +159,7 @@ func TestPublicCloudSnapshotRuleGenerateRisks(t *testing.T) {
 						Technologies: cloudTestTechnology(testCase.technology),
 						Tags:         testCase.tags,
 						OutOfScope:   testCase.outOfScope,
+						Machine:      testCase.machine,
 					},
 				},
 				TrustBoundaries: map[string]*types.TrustBoundary{},

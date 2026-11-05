@@ -42,14 +42,14 @@ Threagile toolkit was used to model the architecture of "AI Support Assistant" a
 
 Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.
 
-In total **67 initial risks** in **29 categories** have been identified during the threat modeling process:
+In total **66 initial risks** in **28 categories** have been identified during the threat modeling process:
 
 | Severity | Risks | Status | Risks |
 | --- | ---: | --- | ---: |
-| Critical | 0 | Unchecked | 66 |
+| Critical | 0 | Unchecked | 65 |
 | High | 0 | In Discussion | 0 |
 | Elevated | 30 | Accepted | 0 |
-| Medium | 29 | In Progress | 1 |
+| Medium | 28 | In Progress | 1 |
 | Low | 8 | Mitigated | 0 |
 |  |  | False Positive | 0 |
 
@@ -57,7 +57,7 @@ The assistant acts for the customers: besides answering, it changes orders and i
 
 ## Impact Analysis of the Initial Risks
 
-The most prevalent impacts of the **67 initial risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **66 initial risks** (distributed over **28 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Confused Deputy Agent](#confused-deputy-agent): 1 Initial Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -143,10 +143,6 @@ The most prevalent impacts of the **67 initial risks** (distributed over **29 ri
 
     If this risk is unmitigated, attackers might be able to easier steal config secrets (like credentials, private keys, client certificates, etc.) once a vulnerability to access files is present and exploited.
 
-- **Medium**: [Publicly Shared Cloud Snapshot](#publicly-shared-cloud-snapshot): 1 Initial Risk, exploitation likelihood is _Unlikely_ with _High_ impact
-
-    If this risk is unmitigated, attackers might restore a publicly shared snapshot or image and read the data stored on it, including credentials baked into an image.
-
 - **Medium**: [Unencrypted Technical Assets](#unencrypted-technical-assets): 2 Initial Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to access unencrypted data when successfully compromising sensitive components.
@@ -184,22 +180,22 @@ The following table gives a high-level overview of the risk tracking status (inc
 | Critical | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | High | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Elevated | 30 | 30 | 0 | 0 | 0 | 0 | 0 |
-| Medium | 29 | 28 | 0 | 0 | 1 | 0 | 0 |
+| Medium | 28 | 27 | 0 | 0 | 1 | 0 | 0 |
 | Low | 8 | 8 | 0 | 0 | 0 | 0 | 0 |
 
-After removal of risks with status _mitigated_ and _false positive_ the following **67 remain unmitigated**:
+After removal of risks with status _mitigated_ and _false positive_ the following **66 remain unmitigated**:
 
 | Severity | Unmitigated risks | To be checked by | Unmitigated risks |
 | --- | ---: | --- | ---: |
 | Critical | 0 | Business Side | 1 |
 | High | 0 | Architecture | 12 |
 | Elevated | 30 | Development | 22 |
-| Medium | 29 | Operations | 32 |
+| Medium | 28 | Operations | 31 |
 | Low | 8 |  |  |
 
 ## Impact Analysis of the Remaining Risks
 
-The most prevalent impacts of the **67 remaining risks** (distributed over **29 risk categories**) are (taking the severity ratings into account and using the highest for each category):
+The most prevalent impacts of the **66 remaining risks** (distributed over **28 risk categories**) are (taking the severity ratings into account and using the highest for each category):
 
 - **Elevated**: [Confused Deputy Agent](#confused-deputy-agent): 1 Remaining Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -285,10 +281,6 @@ The most prevalent impacts of the **67 remaining risks** (distributed over **29 
 
     If this risk is unmitigated, attackers might be able to easier steal config secrets (like credentials, private keys, client certificates, etc.) once a vulnerability to access files is present and exploited.
 
-- **Medium**: [Publicly Shared Cloud Snapshot](#publicly-shared-cloud-snapshot): 1 Remaining Risk, exploitation likelihood is _Unlikely_ with _High_ impact
-
-    If this risk is unmitigated, attackers might restore a publicly shared snapshot or image and read the data stored on it, including credentials baked into an image.
-
 - **Medium**: [Unencrypted Technical Assets](#unencrypted-technical-assets): 2 Remaining Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     If this risk is unmitigated, attackers might be able to access unencrypted data when successfully compromising sensitive components.
@@ -319,7 +311,7 @@ The most prevalent impacts of the **67 remaining risks** (distributed over **29 
 
 ## Risks by Severity
 
-All **67 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
+All **66 risks** by severity, with their tracking status. Each risk links to its details in the chapter of its category.
 
 ### Critical
 
@@ -372,7 +364,7 @@ _No risks._
 
 ### Medium
 
-**29 risks**
+**28 risks**
 
 | Severity | Risk | Category | Most relevant | Status |
 | --- | --- | --- | --- | --- |
@@ -401,7 +393,6 @@ _No risks._
 | Medium | [**Missing Vault (Secret Storage)** in the threat model (referencing asset **Order Service** as an example)](#missing-vault-secret-storage) | [Missing Vault (Secret Storage)](#missing-vault-secret-storage) | [Order Service](#order-service) | Unchecked |
 | Medium | [**Unverified Model Supply Chain** risk at **Model Registry**](#unverified-model-supply-chain) | [Unverified Model Supply Chain](#unverified-model-supply-chain) | [Model Registry](#model-registry) | Unchecked |
 | Medium | [**Unverified Model Supply Chain** risk at **Guardrail Model**](#unverified-model-supply-chain) | [Unverified Model Supply Chain](#unverified-model-supply-chain) | [Guardrail Model](#guardrail-model) | In Progress |
-| Medium | [**Publicly Shared Cloud Snapshot** risk at **Orders Database**](#publicly-shared-cloud-snapshot) | [Publicly Shared Cloud Snapshot](#publicly-shared-cloud-snapshot) | [Orders Database](#orders-database) | Unchecked |
 | Medium | [**Unencrypted Technical Asset** named **Knowledge Index**](#unencrypted-technical-assets) | [Unencrypted Technical Assets](#unencrypted-technical-assets) | [Knowledge Index](#knowledge-index) | Unchecked |
 | Medium | [**Unencrypted Technical Asset** named **Model Registry**](#unencrypted-technical-assets) | [Unencrypted Technical Assets](#unencrypted-technical-assets) | [Model Registry](#model-registry) | Unchecked |
 | Medium | [**Unguarded Access from Internet** of **Chat Frontend** by **Customer Browser** via **Support Chat**](#unguarded-access-from-internet) | [Unguarded Access From Internet](#unguarded-access-from-internet) | [Chat Frontend](#chat-frontend), [Support Chat](#support-chat) | Unchecked |
@@ -603,7 +594,7 @@ _This list is not complete and regulatory or law relevant abuse cases have to be
 
 ## STRIDE Classification of Identified Risks
 
-This chapter clusters and classifies the risks by STRIDE categories: in total **67 potential risks** have been identified during the threat modeling process.
+This chapter clusters and classifies the risks by STRIDE categories: in total **66 potential risks** have been identified during the threat modeling process.
 
 ### Spoofing
 
@@ -685,7 +676,7 @@ Repudiation - Non-repudiability
 
 ### Information Disclosure
 
-**17 risks**
+**16 risks**
 
 Information disclosure - Confidentiality
 
@@ -700,10 +691,6 @@ Information disclosure - Confidentiality
 - **Medium**: [Missing Vault (Secret Storage)](#missing-vault-secret-storage): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
     In order to avoid the risk of secret leakage via config files (when attacked through vulnerabilities being able to read files like Path-Traversal and others), it is best practice to use a separate hardened process with proper authentication, authorization, and audit logging to access config secrets (like credentials, private keys, client certificates, etc.). This component is usually some kind of Vault.
-
-- **Medium**: [Publicly Shared Cloud Snapshot](#publicly-shared-cloud-snapshot): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _High_ impact
-
-    Snapshots and images of cloud disks, databases and virtual machines (like EBS or RDS snapshots and EC2 AMIs) can be shared with all accounts of the cloud provider. A snapshot shared publicly by mistake hands everything stored on the asset to anyone.
 
 - **Medium**: [Unencrypted Technical Assets](#unencrypted-technical-assets): 2/2 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -759,7 +746,7 @@ Elevation of privilege - Authorization
 
 ## Assignment by Function
 
-This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **67 potential risks** have been identified during the threat modeling process.
+This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total **66 potential risks** have been identified during the threat modeling process.
 
 ### Business Side
 
@@ -853,7 +840,7 @@ Development
 
 ### Operations
 
-**32 risks**
+**31 risks**
 
 Operations
 
@@ -876,10 +863,6 @@ Operations
 - **Medium**: [Missing Hardening](#missing-hardening): 3/3 unmitigated Risks, exploitation likelihood is _Likely_ with _Low_ impact
 
     Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).
-
-- **Medium**: [Publicly Shared Cloud Snapshot](#publicly-shared-cloud-snapshot): 1/1 unmitigated Risk, exploitation likelihood is _Unlikely_ with _High_ impact
-
-    Prevent the public sharing of snapshots and images with a cloud configuration rule that revokes it, and audit the sharing settings regularly. Do not bake credentials into images; see the secrets management cheat sheet at [https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html).
 
 - **Medium**: [Unencrypted Technical Assets](#unencrypted-technical-assets): 2/2 unmitigated Risks, exploitation likelihood is _Unlikely_ with _Medium_ impact
 
@@ -1037,7 +1020,7 @@ This chapter lists custom questions that arose during the threat modeling proces
 
 ## Identified Risks by Vulnerability Category
 
-In total **67 potential risks** have been identified during the threat modeling process, distributed across **29 vulnerability categories**. The following sections describe each identified risk category and its risks.
+In total **66 potential risks** have been identified during the threat modeling process, distributed across **28 vulnerability categories**. The following sections describe each identified risk category and its risks.
 
 ### Confused Deputy Agent
 
@@ -2135,58 +2118,6 @@ The risk **Missing Vault (Secret Storage)** was found **1 time** in the analyzed
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Medium | **Missing Vault (Secret Storage)** in the threat model (referencing asset **Order Service** as an example) | `missing-vault@order-service` | Unlikely | Medium | [Order Service](#order-service) | Unchecked | _not tracked_ |
 
-### Publicly Shared Cloud Snapshot
-
-**Medium** · 1/1 unmitigated Risk · `public-cloud-snapshot`
-
-| Property | Value |
-| --- | --- |
-| STRIDE | Information Disclosure |
-| CWE | [CWE 668](https://cwe.mitre.org/data/definitions/668.html) |
-| Function | Operations |
-| Action | Snapshot Sharing Restrictions |
-| ASVS chapter | V14 - Configuration Verification Requirements |
-| Cheat sheet | [Secure_Cloud_Architecture_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secure_Cloud_Architecture_Cheat_Sheet.html) |
-| References | OWASP A02:2025 Security Misconfiguration |
-
-**Description**
-
-Snapshots and images of cloud disks, databases and virtual machines (like EBS or RDS snapshots and EC2 AMIs) can be shared with all accounts of the cloud provider. A snapshot shared publicly by mistake hands everything stored on the asset to anyone.
-
-**Impact**
-
-If this risk is unmitigated, attackers might restore a publicly shared snapshot or image and read the data stored on it, including credentials baked into an image.
-
-**Detection Logic**
-
-In-scope cloud technical assets (residing in cloud trust boundaries or tagged with cloud provider tags) storing data assets, that are either tagged as snapshot-capable services (aws:ebs, aws:rds, aws:ec2 for AMIs) or are database or block-storage assets.
-
-**Risk Rating**
-
-The risk rating depends on the confidentiality of the technical asset itself and of the data assets stored, as a snapshot discloses the stored data but does not alter it.
-
-**False Positives**
-
-Cloud assets whose snapshots and images are not shared at all, or are shared only with fixed accounts while public sharing is blocked at the account level, can be considered as false positives after individual review.
-
-**Mitigation**
-
-Prevent the public sharing of snapshots and images with a cloud configuration rule that revokes it, and audit the sharing settings regularly. Do not bake credentials into images; see the secrets management cheat sheet at [https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html).
-
-For **Amazon Web Services (AWS)**: Turn on _block public access_ for EBS snapshots ([https://docs.aws.amazon.com/ebs/latest/userguide/block-public-access-snapshots.html](https://docs.aws.amazon.com/ebs/latest/userguide/block-public-access-snapshots.html)) and for AMIs ([https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-to-amis.html](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-to-amis.html)) in every region, use the AWS Config managed rules _ebs-snapshot-public-restorable-check_ ([https://docs.aws.amazon.com/config/latest/developerguide/ebs-snapshot-public-restorable-check.html](https://docs.aws.amazon.com/config/latest/developerguide/ebs-snapshot-public-restorable-check.html)) and _rds-snapshots-public-prohibited_ ([https://docs.aws.amazon.com/config/latest/developerguide/rds-snapshots-public-prohibited.html](https://docs.aws.amazon.com/config/latest/developerguide/rds-snapshots-public-prohibited.html)) with an automatic remediation, and review the snapshot findings of _IAM Access Analyzer_ ([https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html)).
-
-**Check**
-
-Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
-
-**Risk Findings**
-
-The risk **Publicly Shared Cloud Snapshot** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
-
-| Severity | Risk | ID | Likelihood | Impact | Most relevant | Status | Tracking |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Medium | **Publicly Shared Cloud Snapshot** risk at **Orders Database** | `public-cloud-snapshot@orders-db` | Unlikely | High | [Orders Database](#orders-database) | Unchecked | _not tracked_ |
-
 ### Unencrypted Technical Assets
 
 **Medium** · 2/2 unmitigated Risks · `unencrypted-asset`
@@ -2544,7 +2475,7 @@ The risk **Unchecked Deployment** was found **1 time** in the analyzed architect
 
 ## Identified Risks by Technical Asset
 
-In total **67 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
+In total **66 potential risks** have been identified during the threat modeling process, distributed across **10 in-scope technical assets**. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.
 
 ### Chat Frontend
 
@@ -2993,13 +2924,12 @@ Stores the versions of the guardrail model
 
 ### Orders Database
 
-**Medium** · 5/5 unmitigated Risks · `orders-db`
+**Medium** · 4/4 unmitigated Risks · `orders-db`
 
 Orders, payments and customers
 
 **Identified Risks of the Asset**
 
-- **Medium**: [**Publicly Shared Cloud Snapshot** risk at **Orders Database**](#publicly-shared-cloud-snapshot) (Unchecked)
 - **Medium**: [**Container Base Image Backdooring** risk at **Orders Database**](#container-base-image-backdooring) (Unchecked)
 - **Medium**: [**Long-Lived Credentials** risk at **Orders Database** used by **Order Service** (credentials)](#long-lived-credentials) (Unchecked)
 - **Medium**: [**Missing Hardening** risk at **Orders Database**](#missing-hardening) (Unchecked)
@@ -3176,7 +3106,7 @@ _The asset was defined as out-of-scope._
 
 ## Identified Data Breach Probabilities by Data Asset
 
-In total **67 potential risks** have been identified during the threat modeling process, distributed across **6 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
+In total **66 potential risks** have been identified during the threat modeling process, distributed across **6 data assets**. The following sections describe the derived data breach probabilities grouped by data asset.
 
 ### Chat Transcripts
 
@@ -3248,7 +3178,7 @@ This data asset has data breach potential because of 40 remaining risks:
 
 ### Customer Data
 
-**Probable** · 33/33 unmitigated Risks · `customer-data`
+**Probable** · 32/32 unmitigated Risks · `customer-data`
 
 Names, addresses and contact details of the customers
 
@@ -3271,7 +3201,7 @@ Names, addresses and contact details of the customers
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 33 remaining risks:
+This data asset has data breach potential because of 32 remaining risks:
 
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Order Service**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Orders Database**](#container-base-image-backdooring) (Unchecked)
@@ -3282,7 +3212,6 @@ This data asset has data breach potential because of 33 remaining risks:
 - Probable, **Medium**: [**Missing Cloud Hardening** risk at **Cloud Account**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Object-Level Authorization** risk at **Order Service** for **Support Tools** (function-level)](#missing-object-level-authorization) (Unchecked)
 - Probable, **Elevated**: [**Missing Object-Level Authorization** risk at **Support Agent** for **Chat Frontend** (function-level)](#missing-object-level-authorization) (Unchecked)
-- Probable, **Medium**: [**Publicly Shared Cloud Snapshot** risk at **Orders Database**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Order Service** against database **Orders Database** via **Order Storage**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Support Agent**](#sensitive-data-disclosure-through-model-output) (Unchecked)
 - Possible, **Medium**: [**Long-Lived Credentials** risk at **Orders Database** used by **Order Service** (credentials)](#long-lived-credentials) (Unchecked)
@@ -3419,7 +3348,7 @@ This data asset has data breach potential because of 21 remaining risks:
 
 ### Order Data
 
-**Probable** · 33/33 unmitigated Risks · `order-data`
+**Probable** · 32/32 unmitigated Risks · `order-data`
 
 Orders, payments and refunds
 
@@ -3442,7 +3371,7 @@ Orders, payments and refunds
 
 **Data Breach Risks**
 
-This data asset has data breach potential because of 33 remaining risks:
+This data asset has data breach potential because of 32 remaining risks:
 
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Order Service**](#container-base-image-backdooring) (Unchecked)
 - Probable, **Medium**: [**Container Base Image Backdooring** risk at **Orders Database**](#container-base-image-backdooring) (Unchecked)
@@ -3453,7 +3382,6 @@ This data asset has data breach potential because of 33 remaining risks:
 - Probable, **Medium**: [**Missing Cloud Hardening** risk at **Cloud Account**](#missing-cloud-hardening) (Unchecked)
 - Probable, **Elevated**: [**Missing Object-Level Authorization** risk at **Order Service** for **Support Tools** (function-level)](#missing-object-level-authorization) (Unchecked)
 - Probable, **Elevated**: [**Missing Object-Level Authorization** risk at **Support Agent** for **Chat Frontend** (function-level)](#missing-object-level-authorization) (Unchecked)
-- Probable, **Medium**: [**Publicly Shared Cloud Snapshot** risk at **Orders Database**](#publicly-shared-cloud-snapshot) (Unchecked)
 - Probable, **Elevated**: [**SQL/NoSQL-Injection** risk at **Order Service** against database **Orders Database** via **Order Storage**](#sqlnosql-injection) (Unchecked)
 - Probable, **Elevated**: [**Sensitive Data Disclosure through Model Output** risk at **Support Agent**](#sensitive-data-disclosure-through-model-output) (Unchecked)
 - Possible, **Medium**: [**Long-Lived Credentials** risk at **Orders Database** used by **Order Service** (credentials)](#long-lived-credentials) (Unchecked)
@@ -3890,7 +3818,7 @@ Looks up orders and issues refunds
 
 ## Risk Tracking
 
-**1 of 67 risks** are tracked in the model; the others are unchecked.
+**1 of 66 risks** are tracked in the model; the others are unchecked.
 
 | Risk | ID | Severity | Status | Date | Checked by | Ticket | Justification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -3907,7 +3835,7 @@ The risk rules checked **10 of 10** entries of the [OWASP Top 10:2025](https://t
 | Entry | Risk rules | Risks |
 | --- | --- | --- |
 | `A01` Broken Access Control | [Confused Deputy Agent](#confused-deputy-agent), Cross-Account Takeover, [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf), Missing Identity Propagation, [Missing Object-Level Authorization](#missing-object-level-authorization), Path-Traversal, Public Cloud Asset Access, [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf) | 15/15 unmitigated Risks |
-| `A02` Security Misconfiguration | Container Platform Escape, [Missing Cloud Hardening](#missing-cloud-hardening), [Missing Hardening](#missing-hardening), Public Cloud Asset Access, [Publicly Shared Cloud Snapshot](#publicly-shared-cloud-snapshot), XML External Entity (XXE) | 8/8 unmitigated Risks |
+| `A02` Security Misconfiguration | Container Platform Escape, [Missing Cloud Hardening](#missing-cloud-hardening), [Missing Hardening](#missing-hardening), Public Cloud Asset Access, Publicly Shared Cloud Snapshot, XML External Entity (XXE) | 7/7 unmitigated Risks |
 | `A03` Software Supply Chain Failures | Code Backdooring, [Container Base Image Backdooring](#container-base-image-backdooring), [Unchecked Deployment](#unchecked-deployment) | 11/11 unmitigated Risks |
 | `A04` Cryptographic Failures | Unencrypted Communication, [Unencrypted Technical Assets](#unencrypted-technical-assets) | 2/2 unmitigated Risks |
 | `A05` Injection | [Cross-Site Scripting (XSS)](#cross-site-scripting-xss), LDAP-Injection, [SQL/NoSQL-Injection](#sqlnosql-injection), Search-Query Injection | 6/6 unmitigated Risks |
@@ -4055,7 +3983,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Path-Traversal | `path-traversal` | Information Disclosure | When a filesystem is accessed Path-Traversal or Local-File-Inclusion (LFI) risks might arise. The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed. | Filesystems accessed by in-scope callers. | The risk rating depends on the sensitivity of the data stored inside the technical asset. |
 | Prompt Injection | `prompt-injection` | Elevation of Privilege | A language model cannot tell the instructions of its prompt apart from the data in it. Content that reaches a model or an agent from users, the internet or another trust zone can carry instructions of its own, either directly in a request or indirectly in a document, a web page or a tool response the model reads, and so take over what the model does. | In-scope llm and ai-agent technical assets that untrusted content reaches: they are on the internet, are called across a network trust boundary, read from internet assets (directly or through a tool that does), or are sent requests, directly or through other technical assets, by internet assets or clients used by humans. | The risk rating depends on the sensitivity of the data processed by the model or agent, raised by one step for agents as they act on what they read. Talking to the internet directly makes the attack very likely, other untrusted input likely. |
 | Public Cloud Asset Access | `public-cloud-asset-access` | Information Disclosure | Cloud storage and messaging services like object storage buckets or message queues are governed by resource policies and access control lists. A policy with wildcards (like a principal of _"\*"_) or an ACL granting access to all users makes the asset public. | In-scope cloud technical assets (residing in cloud trust boundaries or tagged with cloud provider tags) processing or storing data assets, that are either tagged as resource-policy governed services (aws:s3, aws:sqs) or are serverless file storage (like file-server), data-lake or message-queue assets, which is how managed cloud storage and queue services are modelled. | The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed and stored. The likelihood rises when the asset is reachable from the internet (the internet flag of the asset or a communication link from an internet asset). |
-| Publicly Shared Cloud Snapshot | `public-cloud-snapshot` | Information Disclosure | Snapshots and images of cloud disks, databases and virtual machines (like EBS or RDS snapshots and EC2 AMIs) can be shared with all accounts of the cloud provider. A snapshot shared publicly by mistake hands everything stored on the asset to anyone. | In-scope cloud technical assets (residing in cloud trust boundaries or tagged with cloud provider tags) storing data assets, that are either tagged as snapshot-capable services (aws:ebs, aws:rds, aws:ec2 for AMIs) or are database or block-storage assets. | The risk rating depends on the confidentiality of the technical asset itself and of the data assets stored, as a snapshot discloses the stored data but does not alter it. |
+| Publicly Shared Cloud Snapshot | `public-cloud-snapshot` | Information Disclosure | Snapshots and images of cloud disks, databases and virtual machines (like EBS or RDS snapshots and EC2 AMIs) can be shared with all accounts of the cloud provider. A snapshot shared publicly by mistake hands everything stored on the asset to anyone. | In-scope cloud technical assets (residing in cloud trust boundaries or tagged with cloud provider tags) storing data assets, that are either tagged as snapshot-capable services (aws:ebs, aws:rds, aws:ec2 for AMIs) or are database or block-storage assets not running as containers. | The risk rating depends on the confidentiality of the technical asset itself and of the data assets stored, as a snapshot discloses the stored data but does not alter it. |
 | Push instead of Pull Deployment | `push-instead-of-pull-deployment` | Tampering | When comparing push-based vs. pull-based deployments from a security perspective, pull-based deployments improve the overall security of the deployment targets. Every exposed interface of a production system to accept a deployment increases the attack surface of the production system, thus a pull-based approach exposes less attack surface relevant interfaces. | Models with build pipeline components accessing in-scope targets of deployment (in a non-readonly way) which are not build-related components themselves. | The risk rating depends on the highest sensitivity of the deployment targets running custom-developed parts. |
 | Search-Query Injection | `search-query-injection` | Tampering | When a search engine server is accessed Search-Query Injection risks might arise. | In-scope clients accessing search engine servers via typical search access protocols. | The risk rating depends on the sensitivity of the search engine server itself and of the data assets processed. |
 | Server-Side Request Forgery (SSRF) | `server-side-request-forgery` | Information Disclosure | When a server system (i.e. not a client) is accessing other server systems via typical web protocols Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might arise. | In-scope non-client systems accessing (using outgoing communication links) targets with either HTTP or HTTPS protocol. | The risk rating (low or medium) depends on the sensitivity of the data assets receivable via web protocols from targets within the same network trust-boundary as well on the sensitivity of the data assets receivable via web protocols from the target asset itself. Also for cloud-based environments the exploitation impact is at least medium, as cloud backend services can be attacked via SSRF. |
