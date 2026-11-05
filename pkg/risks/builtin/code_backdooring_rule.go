@@ -67,7 +67,8 @@ func (r *CodeBackdooringRule) GenerateRisks(parsedModel *types.Model) ([]*types.
 
 			for _, callerLink := range parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id] {
 				caller := parsedModel.TechnicalAssets[callerLink.SourceId]
-				if !callerLink.VPN && caller.Internet {
+				if !callerLink.VPN && caller.Internet ||
+					caller.OutOfScope && caller.Technologies.GetAttribute(types.DevOpsClient) {
 					risks = append(risks, r.createRisk(parsedModel, technicalAsset))
 					break
 				}
