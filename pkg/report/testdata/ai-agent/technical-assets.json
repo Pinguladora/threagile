@@ -374,7 +374,8 @@
         ],
         "attributes": {
           "backend_related": true,
-          "vector-database": true
+          "vector-database": true,
+          "vulnerable_to_query_injection": true
         }
       }
     ],
