@@ -487,3 +487,24 @@ func TestServerSideRequestForgeryRuleGenerateRisksStrictlyConfidentialNotHttpAcc
 	assert.Equal(t, types.Likely, risks[0].ExploitationLikelihood)
 	assert.Equal(t, "<b>Server-Side Request Forgery (SSRF)</b> risk at <b>Test Technical Asset</b> server-side web-requesting the target <b>Test Target Asset</b> via <b>Test Communication Link</b>", risks[0].Title)
 }
+
+func TestServerSideRequestForgeryRuleGenerateRisksExecutionEnvironmentInCloudMediumImpact(t *testing.T) {
+	rule := NewServerSideRequestForgeryRule()
+	cloud := &types.TrustBoundary{Id: "cloud", Type: types.NetworkCloudProvider, TrustBoundariesNested: []string{"namespace"}}
+	namespace := &types.TrustBoundary{Id: "namespace", Type: types.ExecutionEnvironment, TechnicalAssetsInside: []string{"ta1"}}
+	link := &types.CommunicationLink{Id: "ta1>ta2", SourceId: "ta1", TargetId: "ta2", Protocol: types.HTTP}
+
+	risks, err := rule.GenerateRisks(&types.Model{
+		TechnicalAssets: map[string]*types.TechnicalAsset{
+			"ta1": {Id: "ta1", Type: types.Process, CommunicationLinks: []*types.CommunicationLink{link}},
+			"ta2": {Id: "ta2", Type: types.Process},
+		},
+		TrustBoundaries: map[string]*types.TrustBoundary{cloud.Id: cloud, namespace.Id: namespace},
+		DirectContainingTrustBoundaryMappedByTechnicalAssetId: map[string]*types.TrustBoundary{"ta1": namespace},
+		IncomingTechnicalCommunicationLinksMappedByTargetId:   map[string][]*types.CommunicationLink{"ta2": {link}},
+	})
+
+	assert.Nil(t, err)
+	assert.Len(t, risks, 1)
+	assert.Equal(t, types.MediumImpact, risks[0].ExploitationImpact, "the namespace is in the cloud")
+}
