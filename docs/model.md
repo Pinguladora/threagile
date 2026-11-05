@@ -97,7 +97,8 @@ fields. It changes only the lines it migrates, so comments and layout stay, and 
 authorization of the migrated links, which it leaves `unknown`, and links authenticated with `token`, which may be
 `short-lived-token` or `long-lived-token`. It also lists the links of clients used by humans that move to
 `service-account`: `technical-user` often meant that people sign in with accounts of their own, which is
-`end-user`. Links written in flow style (`{ target: ..., authorization: ... }`) are
+`end-user`. It turns `individual_risk_categories`, a mapping of risk categories by title, into
+`custom_risk_categories`, a list of risk categories with a `title` each. Links written in flow style (`{ target: ..., authorization: ... }`) are
 listed to migrate by hand.
 
 ## Connections through proxies (`via`)
