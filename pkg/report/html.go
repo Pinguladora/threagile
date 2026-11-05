@@ -42,6 +42,7 @@ var (
 
 	htmlReportFuncs = template.FuncMap{
 		"markup": htmlMarkup, "yesNo": yesNo, "catalogCoverageIntro": func() string { return catalogCoverageIntro },
+		"decisionPointsIntro": func() string { return decisionPointsIntro },
 	}
 
 	htmlReportTemplate = template.Must(template.New("report.html.tmpl").

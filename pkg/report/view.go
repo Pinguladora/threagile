@@ -76,6 +76,7 @@ type reportView struct {
 	DataAssets         []viewDataAsset
 	TrustBoundaries    []viewTrustBoundary
 	SharedRuntimes     []viewSharedRuntime
+	DecisionPoints     []viewDecisionPoint
 	CommunicationLinks []viewCommunicationLink
 	RiskRules          []viewRiskRule
 	Catalogs           []viewCatalog
@@ -172,6 +173,7 @@ func newReportView(parsedModel *types.Model, options ReportOptions) *reportView 
 	report.addRiskChapters(parsedModel, risks)
 	report.Baseline = newViewBaseline(options.Baseline, risks)
 	report.addAssetChapters(parsedModel, risks)
+	report.DecisionPoints = viewDecisionPoints(parsedModel)
 	report.RiskRules = viewRiskRules(parsedModel, options)
 	report.Catalogs = viewCatalogs(report.RiskRules, report.Categories)
 	report.Confidentiality, report.Criticality = viewRatings()
@@ -198,6 +200,7 @@ func (what *reportView) sections(options ReportOptions) []viewSection {
 		chapterTags:                 len(what.Tags) > 0,
 		chapterQuestions:            len(what.Questions) > 0,
 		chapterCatalogCoverage:      len(what.Catalogs) > 0,
+		chapterDecisionPoints:       len(what.DecisionPoints) > 0,
 		chapterRiskRules:            !options.HideChapters[RiskRulesCheckedByThreagile],
 	}
 	sections := make([]viewSection, 0, len(viewChapters))
@@ -219,6 +222,7 @@ const (
 	chapterTags                 = "tags"
 	chapterQuestions            = "questions"
 	chapterCatalogCoverage      = "catalog-coverage"
+	chapterDecisionPoints       = "decision-points"
 	chapterRiskRules            = "risk-rules"
 )
 
@@ -251,6 +255,7 @@ var viewChapters = []viewSection{
 	{"data-assets", "Identified Data Breach Probabilities by Data Asset"},
 	{"trust-boundaries", "Trust Boundaries"},
 	{"shared-runtimes", "Shared Runtimes"},
+	{chapterDecisionPoints, textPolicyDecisionPoints},
 	{"communication-links", "Communication Links"},
 	{"risk-tracking", "Risk Tracking"},
 	{chapterCatalogCoverage, textCatalogCoverage},
