@@ -27,8 +27,8 @@ import (
 	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"go.yaml.in/yaml/v3"
 	"golang.org/x/crypto/argon2"
-	"gopkg.in/yaml.v3"
 )
 
 // creates a sub-folder (named by a new UUID) inside the token folder.

@@ -15,7 +15,7 @@ import (
 	"github.com/Pinguladora/threagile/pkg/risks"
 	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 )
 
 // yamlIndent is the indentation of the model YAML files that threagile ships.
