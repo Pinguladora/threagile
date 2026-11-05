@@ -57,24 +57,26 @@ func (r *UnencryptedCommunicationRule) GenerateRisks(input *types.Model) ([]*typ
 			}
 
 			transferringAuthData := dataFlow.Authentication != types.NoneAuthentication
-			// a new slice: appending to DataAssetsSent could share its array, and the sort
-			// below would then reorder the model's own data assets sent
-			dataAssetIds := slices.Concat(dataFlow.DataAssetsSent, dataFlow.DataAssetsReceived)
-			slices.Sort(dataAssetIds) // ensure deterministic order
-			for _, sentDataAsset := range dataAssetIds {
-				dataAsset := input.DataAssets[sentDataAsset]
-				if isHighSensitivity(dataAsset) || transferringAuthData {
-					risks = append(risks, r.createRisk(input, technicalAsset, dataFlow, true, transferringAuthData))
-					break
-				}
-				if !dataFlow.VPN && isMediumSensitivity(dataAsset) {
-					risks = append(risks, r.createRisk(input, technicalAsset, dataFlow, false, transferringAuthData))
-					break
-				}
+			highRisk, mediumRisk := rateUnencryptedDataFlow(input, dataFlow, transferringAuthData)
+			if highRisk || mediumRisk {
+				risks = append(risks, r.createRisk(input, technicalAsset, dataFlow, highRisk, transferringAuthData))
 			}
 		}
 	}
 	return risks, nil
+}
+
+// rateUnencryptedDataFlow tells whether the data the link transfers makes its missing encryption a high or a medium
+// risk: the most sensitive data asset rates it, wherever it is in the lists.
+func rateUnencryptedDataFlow(
+	input *types.Model, dataFlow *types.CommunicationLink, transferringAuthData bool,
+) (highRisk bool, mediumRisk bool) {
+	for _, dataAssetId := range slices.Concat(dataFlow.DataAssetsSent, dataFlow.DataAssetsReceived) {
+		dataAsset := input.DataAssets[dataAssetId]
+		highRisk = highRisk || isHighSensitivity(dataAsset) || transferringAuthData
+		mediumRisk = mediumRisk || !dataFlow.VPN && isMediumSensitivity(dataAsset)
+	}
+	return highRisk, mediumRisk
 }
 
 func skipUnencryptedDataFlow(input *types.Model, dataFlow *types.CommunicationLink) bool {

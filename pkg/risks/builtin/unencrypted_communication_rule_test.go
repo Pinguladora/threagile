@@ -606,3 +606,26 @@ func TestUnencryptedCommunicationRuleKeepsTheModelsDataAssetOrder(t *testing.T) 
 	assert.NoError(t, err)
 	assert.Equal(t, []string{"zeta", "alpha"}, link.DataAssetsSent, "the rule must not reorder the model")
 }
+
+func TestUnencryptedCommunicationRuleGenerateRisksMostSensitiveDataAssetRatesTheRisk(t *testing.T) {
+	rule := NewUnencryptedCommunicationRule()
+	link := &types.CommunicationLink{
+		Id: "a>b", SourceId: "a", TargetId: "b", Protocol: types.HTTP, Authentication: types.NoneAuthentication,
+		DataAssetsSent: []string{"a-medium", "z-high"},
+	}
+
+	risks, err := rule.GenerateRisks(&types.Model{
+		TechnicalAssets: map[string]*types.TechnicalAsset{
+			"a": {Id: "a", CommunicationLinks: []*types.CommunicationLink{link}},
+			"b": {Id: "b"},
+		},
+		DataAssets: map[string]*types.DataAsset{
+			"a-medium": {Id: "a-medium", Confidentiality: types.Confidential},
+			"z-high":   {Id: "z-high", Confidentiality: types.StrictlyConfidential},
+		},
+	})
+
+	assert.Nil(t, err)
+	assert.Len(t, risks, 1)
+	assert.Equal(t, types.HighImpact, risks[0].ExploitationImpact)
+}
