@@ -943,6 +943,16 @@
               "state": "implemented"
             }
           ]
+        },
+        {
+          "threat": "missing-waf",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-waf-mitigation",
+              "state": "recommended"
+            }
+          ]
         }
       ],
       "tags": [
@@ -1372,6 +1382,16 @@
         "customer-accounts"
       ],
       "threats": [
+        {
+          "threat": "dos-risky-access-across-trust-boundary",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "dos-risky-access-across-trust-boundary-mitigation",
+              "state": "required"
+            }
+          ]
+        },
         {
           "threat": "long-lived-credentials",
           "state": "exposed",
@@ -2215,6 +2235,16 @@
         "customer-accounts"
       ],
       "threats": [
+        {
+          "threat": "dos-risky-access-across-trust-boundary",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "dos-risky-access-across-trust-boundary-mitigation",
+              "state": "required"
+            }
+          ]
+        },
         {
           "threat": "ldap-injection",
           "state": "mitigated",
