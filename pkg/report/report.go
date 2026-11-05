@@ -1,8 +1,10 @@
 package report
 
 import (
+	"bytes"
 	"fmt"
 	"image"
+	"io"
 	"log"
 	"maps"
 	"os"
@@ -129,12 +131,12 @@ func (r *pdfReporter) WriteReportPDF(reportFilename string,
 func (r *pdfReporter) createOverviewChapters(model *types.Model, modelFilename string,
 	dataFlowDiagramFilenamePNG string, tempFolder string, hideChapters map[ChaptersToShowHide]bool,
 ) error {
-	err := r.createManagementSummary(model, tempFolder)
+	err := r.createManagementSummary(model)
 	if err != nil {
 		return fmt.Errorf("error creating management summary: %w", err)
 	}
 	r.createImpactInitialRisks(model)
-	err = r.createRiskMitigationStatus(model, tempFolder)
+	err = r.createRiskMitigationStatus(model)
 	if err != nil {
 		return fmt.Errorf("error creating risk mitigation status: %w", err)
 	}
@@ -708,7 +710,7 @@ func (r *pdfReporter) createDisclaimer(parsedModel *types.Model) {
 	r.pdfColorBlack()
 }
 
-func (r *pdfReporter) createManagementSummary(parsedModel *types.Model, tempFolder string) error {
+func (r *pdfReporter) createManagementSummary(parsedModel *types.Model) error {
 	uni := r.pdf.UnicodeTranslatorFromDescriptor("")
 	r.pdf.SetTextColor(0, 0, 0)
 	title := "Management Summary"
@@ -895,12 +897,12 @@ func (r *pdfReporter) createManagementSummary(parsedModel *types.Model, tempFold
 	}
 
 	y := r.pdf.GetY() + 5
-	err := r.embedPieChart(pieChartRiskSeverity, 15.0, y, tempFolder)
+	err := r.embedPieChart("chart-risk-severity", pieChartRiskSeverity, 15.0, y)
 	if err != nil {
 		return fmt.Errorf("unable to embed pie chart: %w", err)
 	}
 
-	err = r.embedPieChart(pieChartRiskStatus, 110.0, y, tempFolder)
+	err = r.embedPieChart("chart-risk-status", pieChartRiskStatus, 110.0, y)
 	if err != nil {
 		return fmt.Errorf("unable to embed pie chart: %w", err)
 	}
@@ -945,7 +947,7 @@ func riskStatusStackedBar(severity types.RiskSeverity, risks []*types.Risk) char
 	}
 }
 
-func (r *pdfReporter) createRiskMitigationStatus(parsedModel *types.Model, tempFolder string) error {
+func (r *pdfReporter) createRiskMitigationStatus(parsedModel *types.Model) error {
 	r.pdf.SetTextColor(0, 0, 0)
 	stillAtRisk := filteredByStillAtRisk(parsedModel)
 	count := len(stillAtRisk)
@@ -986,7 +988,7 @@ func (r *pdfReporter) createRiskMitigationStatus(parsedModel *types.Model, tempF
 	}
 
 	y := r.pdf.GetY() + 12
-	err := r.embedStackedBarChart(stackedBarChartRiskTracking, 15.0, y, tempFolder)
+	err := r.embedStackedBarChart("chart-risk-tracking", stackedBarChartRiskTracking, 15.0, y)
 	if err != nil {
 		return err
 	}
@@ -1133,8 +1135,8 @@ func (r *pdfReporter) createRiskMitigationStatus(parsedModel *types.Model, tempF
 			},
 		}
 
-		_ = r.embedPieChart(pieChartRemainingRiskSeverity, 15.0, 216, tempFolder)
-		_ = r.embedPieChart(pieChartRemainingRisksByFunction, 110.0, 216, tempFolder)
+		_ = r.embedPieChart("chart-remaining-risk-severity", pieChartRemainingRiskSeverity, 15.0, 216)
+		_ = r.embedPieChart("chart-remaining-risks-by-function", pieChartRemainingRisksByFunction, 110.0, 216)
 
 		r.pdf.SetFont("Helvetica", "B", fontSizeBody)
 		r.pdf.Ln(8)
@@ -1277,46 +1279,26 @@ func (r *pdfReporter) registeredTechnicalAsset(technicalAsset *types.TechnicalAs
 }
 
 // CAUTION: Long labels might cause endless loop, then remove labels and render them manually later inside the PDF.
-func (r *pdfReporter) embedStackedBarChart(sbcChart chart.StackedBarChart, x float64, y float64,
-	tempFolder string,
-) error {
-	tmpFilePNG, err := os.CreateTemp(tempFolder, "chart-*-.png")
-	if err != nil {
-		return fmt.Errorf("error creating temporary file for chart: %w", err)
-	}
-	defer func() { _ = os.Remove(tmpFilePNG.Name()) }()
-	file, _ := os.Create(tmpFilePNG.Name())
-	defer func() { _ = file.Close() }()
-	err = sbcChart.Render(chart.PNG, file)
-	if err != nil {
-		return fmt.Errorf("error rendering chart: %w", err)
-	}
-	var options gofpdf.ImageOptions
-	options.ImageType = ""
-	r.pdf.RegisterImage(tmpFilePNG.Name(), "")
-	r.pdf.ImageOptions(tmpFilePNG.Name(), x, y, 0, 110, false, options, 0, "")
-	return nil
+func (r *pdfReporter) embedStackedBarChart(name string, sbcChart chart.StackedBarChart, x float64, y float64) error {
+	return r.embedChart(name, sbcChart.Render, x, y, 0, 110)
 }
 
-func (r *pdfReporter) embedPieChart(pieChart chart.PieChart, x float64, y float64, tempFolder string) error {
-	tmpFilePNG, err := os.CreateTemp(tempFolder, "chart-*-.png")
-	if err != nil {
-		return fmt.Errorf("error creating temporary file for chart: %w", err)
-	}
-	defer func() { _ = os.Remove(tmpFilePNG.Name()) }()
-	file, err := os.Create(tmpFilePNG.Name())
-	if err != nil {
-		return fmt.Errorf("error creating temporary file for chart: %w", err)
-	}
-	defer func() { _ = file.Close() }()
-	err = pieChart.Render(chart.PNG, file)
-	if err != nil {
+func (r *pdfReporter) embedPieChart(name string, pieChart chart.PieChart, x float64, y float64) error {
+	return r.embedChart(name, pieChart.Render, x, y, 60, 0)
+}
+
+// embedChart renders a chart as PNG into the PDF, as an image of the name: the PDF lists its images by name, so a
+// fixed name keeps the PDF the same from one run to the next.
+func (r *pdfReporter) embedChart(name string, render func(chart.RendererProvider, io.Writer) error,
+	x float64, y float64, width float64, height float64,
+) error {
+	var png bytes.Buffer
+	if err := render(chart.PNG, &png); err != nil {
 		return fmt.Errorf("error rendering chart: %w", err)
 	}
-	var options gofpdf.ImageOptions
-	options.ImageType = ""
-	r.pdf.RegisterImage(tmpFilePNG.Name(), "")
-	r.pdf.ImageOptions(tmpFilePNG.Name(), x, y, 60, 0, false, options, 0, "")
+	options := gofpdf.ImageOptions{ImageType: "PNG"}
+	r.pdf.RegisterImageOptionsReader(name, options, &png)
+	r.pdf.ImageOptions(name, x, y, width, height, false, options, 0, "")
 	return nil
 }
 
