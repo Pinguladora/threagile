@@ -1106,35 +1106,35 @@ In total **73 potential risks** have been identified during the threat modeling 
 | Cheat sheet | [Authorization_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) |
 | References | OWASP A01:2025 Broken Access Control; OWASP ASI03:2026 Identity and Privilege Abuse; OWASP LLM06:2025 Excessive Agency; OWASP NHI9:2025 NHI Reuse; MAESTRO Layer 3: Agent Frameworks |
 
-**Description**
+#### Description
 
 An AI agent that acts for its users but reaches data and tools with an identity of its own, a service account or a workload, can do for any user what the agent may do for all of them. The targets check the agent, not the user, so whatever a user asks for, or a prompt injection makes the agent ask for, is allowed.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, users and attackers who steer the agent might read or change the data of other users through it.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope ai-agent technical assets that act for users, through an incoming communication link with the identity _end-user_ or from a caller used by humans (other than devops links), and reach a technical asset (other than an llm) processing or storing data rated at least as confidential or critical with the identity _service-account_ or _workload_, either directly or through the tools of an mcp-server technical asset.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the most sensitive technical asset the agent reaches with its own identity. The attack is likely when the agent takes untrusted input, and unlikely otherwise.
 
-**False Positives**
+#### False Positives
 
 Agents whose data and tools hold nothing that any one user may not see or change, or that authorize each call by the user themselves, can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Let the agent call data and tools with the identity of the user it acts for, for example through OAuth 2.0 token exchange or on-behalf-of flows, scoped to the task, and model those links with the identity _end-user_. Where the agent must use its own identity, authorize each call by the user in the agent and keep its own permissions to what every user may do.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Confused Deputy Agent** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1156,35 +1156,35 @@ The risk **Confused Deputy Agent** was found **1 time** in the analyzed architec
 | Cheat sheet | [Cross_Site_Scripting_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html) |
 | References | OWASP A05:2025 Injection |
 
-**Description**
+#### Description
 
 For each web application Cross-Site Scripting (XSS) risks might arise. In terms of the overall risk level take other applications running on the same domain into account as well.
 
-**Impact**
+#### Impact
 
 If this risk remains unmitigated, attackers might be able to access individual victim sessions and steal or modify user data.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope web applications.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the data processed in the web application.
 
-**False Positives**
+#### False Positives
 
 When the technical asset is not accessed via a browser-like component (i.e not by a human user initiating the request that gets passed through all components until it reaches the web application) this can be considered a false positive.
 
-**Mitigation**
+#### Mitigation
 
 Try to encode all values sent back to the browser and also handle DOM-manipulations in a safe way to avoid DOM-based XSS. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Cross-Site Scripting (XSS)** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1207,35 +1207,35 @@ The risk **Cross-Site Scripting (XSS)** was found **2 times** in the analyzed ar
 | Cheat sheet | [Authorization_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) |
 | References | OWASP LLM06:2025 Excessive Agency; OWASP ASI02:2026 Tool Misuse and Exploitation; OWASP ASI03:2026 Identity and Privilege Abuse; MAESTRO Layer 3: Agent Frameworks |
 
-**Description**
+#### Description
 
 An AI agent decides on its own which tools to call and with which arguments. An agent that can change critical systems, directly or through the tools of an MCP server, without a human approving the change, does whatever a prompt injection, a hallucination or a misunderstanding makes it do.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers who steer the agent, or the agent's own mistakes, might change or delete critical data and trigger actions with real-world effects.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope ai-agent technical assets with a non-readonly communication link to a technical asset (other than an llm) processing or storing data rated at least as critical in integrity, either directly or through the tools of an mcp-server technical asset. Agents and links tagged with _human-in-the-loop_ are skipped.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the integrity rating of the technical asset the agent can change. The attack is likely when the agent takes untrusted input, and unlikely otherwise.
 
-**False Positives**
+#### False Positives
 
 Agents whose changes are reviewed by a human or are limited by other controls to what is safe can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Give the agent only the tools and the permissions its task needs, read-only where possible, and with the identity of the user it acts for rather than a broad technical one. Require a human approval for changes to critical systems and tag the agent or the link with _human-in-the-loop_ when it is in place. Limit the rate and the scope of actions and log every tool call.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Excessive Agency** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1257,35 +1257,35 @@ The risk **Excessive Agency** was found **1 time** in the analyzed architecture 
 | Cheat sheet | [Logging_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html) |
 | References | OWASP A09:2025 Security Logging and Alerting Failures; MAESTRO Layer 5: Evaluation and Observability; OWASP ASI10:2026 Rogue Agents |
 
-**Description**
+#### Description
 
 What an AI agent or a language model does depends on what it reads, so it cannot be tested in full before it runs. Without a record of its prompts, its tool calls and its answers in a monitoring system, nobody sees a prompt injection, an agent going astray or a model that drifts, nor can tell afterwards what it did.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attacks through the model or the agent, and its own mistakes, might go on unnoticed, and their effects could not be traced.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope ai-agent technical assets, and in-scope llm technical assets not on the internet (self-hosted models), with no communication link to or from a monitoring technical asset.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the data processed by the agent or model. The attack is likely when the agent or model takes untrusted content, and unlikely otherwise.
 
-**False Positives**
+#### False Positives
 
 Agents and models whose platform records their prompts, tool calls and answers without a modelled link, like a managed agent service with built-in tracing, can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Send the prompts, tool calls, answers and decisions of the agent or model, with the user they were for, to a monitoring system, for example as OpenTelemetry traces, and alert on anomalies like injection attempts, unusual tool use and spikes in cost. Evaluate the quality and the safety of the answers continuously, and model the monitoring system as a monitoring technical asset with a link to or from the agent or model.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing AI Monitoring** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1308,35 +1308,35 @@ The risk **Missing AI Monitoring** was found **2 times** in the analyzed archite
 | Cheat sheet | [Authentication_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html) |
 | References | OWASP A07:2025 Authentication Failures; OWASP API2:2023 Broken Authentication |
 
-**Description**
+#### Description
 
 Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes sensitive data.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to access or modify sensitive data in an unauthenticated way.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope technical assets (except load-balancer, reverse-proxy, service-registry, waf, ids, and ips and in-process calls) should authenticate incoming requests when the asset processes sensitive data. This is especially the case for all multi-tenant assets (there even non-sensitive ones). Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating (medium or high) depends on the sensitivity of the data sent across the communication link. Monitoring callers are exempted from this risk.
 
-**False Positives**
+#### False Positives
 
 Technical assets which do not process requests regarding functionality or data linked to end-users (customers) can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of multi-factor authentication for human users.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Authentication** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1358,35 +1358,35 @@ The risk **Missing Authentication** was found **1 time** in the analyzed archite
 | Cheat sheet | [Authorization_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) |
 | References | OWASP A01:2025 Broken Access Control; OWASP API1:2023 Broken Object Level Authorization; OWASP API5:2023 Broken Function Level Authorization |
 
-**Description**
+#### Description
 
 A service that acts for its users must check in each request that the user may access the object at hand, like the order or the account the request names. Checking only that the caller is logged in, or that its role may call the operation, lets any user read or change the objects of others by changing an id in the request (BOLA, also known as IDOR).
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers with any account might read or change the data of all other users.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope technical assets other than datastores and assets that forward requests without authenticating them (like load balancers and reverse proxies), processing or storing data rated at least as confidential or critical, with an incoming communication link whose authorization is _none_, _authenticated-only_ or _function-level_, and whose identity is _end-user_ or whose caller is used by humans. DevOps links, which administrators use by role, and links whose authorization is _unknown_ are skipped.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the data processed or stored by the target, one step higher when the link has no function-level authorization either. The attack is very likely when the caller is on the internet, and likely otherwise.
 
-**False Positives**
+#### False Positives
 
 Services whose objects belong to all users alike, like a product catalog, can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Check in every operation that the user of the request may access each object it names, by the identity of the user rather than an id the request carries, and deny by default, for example by asking a policy decision point with the user, the action and the object. Set the authorization of the link to _object-level_ once this is in place.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Object-Level Authorization** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1409,35 +1409,35 @@ The risk **Missing Object-Level Authorization** was found **2 times** in the ana
 | Cheat sheet | [LLM_Prompt_Injection_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html) |
 | References | OWASP LLM01:2025 Prompt Injection; OWASP ASI01:2026 Agent Goal Hijack; MAESTRO Layer 1: Foundation Models; MAESTRO Layer 3: Agent Frameworks |
 
-**Description**
+#### Description
 
 A language model cannot tell the instructions of its prompt apart from the data in it. Content that reaches a model or an agent from users, the internet or another trust zone can carry instructions of its own, either directly in a request or indirectly in a document, a web page or a tool response the model reads, and so take over what the model does.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might make the model leak what it has access to, give misleading answers, or, for an agent, use its tools and permissions for their own goals.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope llm and ai-agent technical assets that untrusted content reaches: they are on the internet, are called across a network trust boundary, read from internet assets (directly or through a tool that does), or are sent requests, directly or through other technical assets, by internet assets or clients used by humans.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the data processed by the model or agent, raised by one step for agents as they act on what they read. Talking to the internet directly makes the attack very likely, other untrusted input likely.
 
-**False Positives**
+#### False Positives
 
 Models that only ever see content from fully trusted sources, for example a fixed set of internal documents reviewed before ingestion, can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Treat everything a model reads as untrusted, including retrieved documents and tool responses: keep instructions apart from data (for example with clearly delimited and labelled content), filter input and output, and give the model and its tools only the permissions the task needs. Require a human approval for actions with side effects, and monitor for injection attempts. See the OWASP GenAI Security Project at [https://genai.owasp.org/](https://genai.owasp.org/).
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Prompt Injection** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1460,35 +1460,35 @@ The risk **Prompt Injection** was found **2 times** in the analyzed architecture
 | Cheat sheet | [SQL_Injection_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html) |
 | References | OWASP A05:2025 Injection |
 
-**Description**
+#### Description
 
 When a database is accessed via database access protocols SQL/NoSQL-Injection risks might arise. The risk rating depends on the sensitivity technical asset itself and of the data assets processed.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to modify SQL/NoSQL queries to steal and modify data and eventually further escalate towards a deeper system penetration via code executions.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope datastores accessed via typical database access protocols, and databases accessed via HTTP or binary protocols as well (like NoSQL databases with a REST interface).
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the data stored inside the database.
 
-**False Positives**
+#### False Positives
 
 Database accesses by queries not consisting of parts controllable by the caller can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Try to use parameter binding to be safe from injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **SQL/NoSQL-Injection** was found **4 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1513,35 +1513,35 @@ The risk **SQL/NoSQL-Injection** was found **4 times** in the analyzed architect
 | Cheat sheet | [LLM_Prompt_Injection_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html) |
 | References | OWASP LLM02:2025 Sensitive Information Disclosure; MAESTRO Layer 1: Foundation Models |
 
-**Description**
+#### Description
 
 Whatever a language model or an agent can read, it can be talked into writing: data in its prompt, in its context window, in the documents it retrieves or in its training data. A model that has confidential data at hand and answers callers from the internet, from users or from another trust zone may hand that data to callers who are not allowed to see it.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might extract confidential data, other users' data or the system prompt through crafted questions.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope llm and ai-agent technical assets that take untrusted input (as the prompt-injection rule defines it) and process, or read from a vector-database technical asset, data rated at least as confidential.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the confidentiality of the data the model or agent can read. Talking to the internet directly makes the attack very likely, other untrusted input likely.
 
-**False Positives**
+#### False Positives
 
 Models that only read data every one of their callers may see can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Give the model only the data the caller may see: filter retrieved documents by the caller's permissions before they reach the prompt, keep secrets and other users' data out of prompts and training data, and filter the output for sensitive data. Do not rely on the system prompt to keep anything secret.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Sensitive Data Disclosure through Model Output** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1564,35 +1564,35 @@ The risk **Sensitive Data Disclosure through Model Output** was found **2 times*
 | Cheat sheet | [Server_Side_Request_Forgery_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html) |
 | References | OWASP A01:2025 Broken Access Control; OWASP API7:2023 Server Side Request Forgery |
 
-**Description**
+#### Description
 
 When a server system (i.e. not a client) is accessing other server systems via typical web protocols Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might arise.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to access sensitive services or files of network-reachable components by modifying outgoing calls of affected components.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope non-client systems accessing (using outgoing communication links) targets with either HTTP or HTTPS protocol.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating (low or medium) depends on the sensitivity of the data assets receivable via web protocols from targets within the same network trust-boundary as well on the sensitivity of the data assets receivable via web protocols from the target asset itself. Also for cloud-based environments the exploitation impact is at least medium, as cloud backend services can be attacked via SSRF.
 
-**False Positives**
+#### False Positives
 
 Servers not sending outgoing web requests can be considered as false positives after review.
 
-**Mitigation**
+#### Mitigation
 
 Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Server-Side Request Forgery (SSRF)** was found **12 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1625,35 +1625,35 @@ The risk **Server-Side Request Forgery (SSRF)** was found **12 times** in the an
 | Cheat sheet | [Authentication_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html) |
 | References | OWASP ASI02:2026 Tool Misuse and Exploitation; OWASP ASI03:2026 Identity and Privilege Abuse; OWASP LLM06:2025 Excessive Agency; MAESTRO Layer 7: Agent Ecosystem; MAESTRO Layer 4: Deployment and Infrastructure |
 
-**Description**
+#### Description
 
 An MCP server, or another server exposing tools to AI agents, acts on the systems behind its tools with its own permissions. When it does not authenticate its callers, anyone who can reach it can call those tools, and it cannot tell one agent or user from another to limit what each may do.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers who reach the server might call its tools directly and read or change what they reach, bypassing the agents and their controls.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope mcp-server technical assets with an incoming communication link without authentication that is not process-local, whose tools (the outgoing communication links) reach technical assets processing or storing data rated at least as confidential or critical.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the technical assets the tools reach. The attack is very likely when the caller is on the internet, likely when it takes untrusted input or sits across a network trust boundary, and unlikely otherwise.
 
-**False Positives**
+#### False Positives
 
 Servers whose tools only ever act with the permissions of an authenticated user, checked by the systems behind them, can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Authenticate every caller of the server, for example with OAuth 2.1 as the MCP specification describes for HTTP transports, and pass on the identity of the user an agent acts for, so that each tool call is authorized for that user. Expose the server only to the agents that need it.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Unauthenticated MCP Server** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1675,35 +1675,35 @@ The risk **Unauthenticated MCP Server** was found **1 time** in the analyzed arc
 | Cheat sheet | [Denial_of_Service_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html) |
 | References | OWASP LLM10:2025 Unbounded Consumption; OWASP API4:2023 Unrestricted Resource Consumption; MAESTRO Layer 4: Deployment and Infrastructure |
 
-**Description**
+#### Description
 
 Every request to a language model or an agent costs compute and tokens, and an agent can turn one request into many model calls. Users who reach a model or an agent without a gateway that limits their requests and tokens can exhaust its capacity, or the budget of a model paid for by use.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers, or a runaway agent, might make the model or the agent unavailable for others, or run up its costs (denial of wallet).
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope llm and ai-agent technical assets that users reach, from the internet or from clients used by humans, through communication links that pass no gateway technical asset. An agent that calls all its language models through a gateway technical asset is skipped, as the gateway can limit its tokens.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the availability rating of the data processed by the model or agent, at least medium for the costs. The attack is very likely when users on the internet reach it, and likely otherwise.
 
-**False Positives**
+#### False Positives
 
 Models and agents whose platform enforces quotas per user, like a managed model service with rate limits, can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Put a gateway between the users and the model or agent, like an API gateway or an AI gateway, that limits the requests and the tokens per user and per period, caps the length of inputs and outputs, and alerts on spending, and limit the number of model calls and tool calls per task in the agent. Model the gateway as a gateway technical asset in the path from the users, or between the agent and its language models.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Unbounded Model Consumption** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1726,35 +1726,35 @@ The risk **Unbounded Model Consumption** was found **2 times** in the analyzed a
 | Cheat sheet | [LLM_Prompt_Injection_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html) |
 | References | OWASP LLM04:2025 Data and Model Poisoning; OWASP LLM08:2025 Vector and Embedding Weaknesses; OWASP ASI06:2026 Memory and Context Poisoning; MAESTRO Layer 2: Data Operations |
 
-**Description**
+#### Description
 
 Language models and agents answer and act on what they retrieve from vector stores, for retrieval-augmented generation (RAG) or as the memory of an agent. Whoever can write into the store decides what the model believes: a poisoned document or memory entry carries false facts or hidden instructions into every answer that retrieves it, long after it was written.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might plant content that misleads the model, injects instructions into its prompts or makes it disclose data, persistently and for every user.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope vector-database technical assets that an llm or ai-agent technical asset communicates with.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the data processed by the models and agents that use the store. The attack is likely when the store is written by an asset that takes untrusted input or sits across a network trust boundary, and unlikely otherwise.
 
-**False Positives**
+#### False Positives
 
 Vector stores filled only from fully trusted and reviewed content can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Ingest only content from vetted sources, record where each entry came from and validate it before it is embedded. Keep the entries of different users and tenants apart with access controls at retrieval time, limit what agents may write into their memory, and review and expire stored entries regularly.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Vector Store Poisoning** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1776,37 +1776,37 @@ The risk **Vector Store Poisoning** was found **1 time** in the analyzed archite
 | Cheat sheet | [Docker_Security_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) |
 | References | OWASP A03:2025 Software Supply Chain Failures |
 
-**Description**
+#### Description
 
 When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors.
 
 See for example: [https://techcrunch.com/2018/06/15/tainted-crypto-mining-containers-pulled-from-docker-hub/](https://techcrunch.com/2018/06/15/tainted-crypto-mining-containers-pulled-from-docker-hub/)
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to deeply persist in the target system by executing code in deployed containers.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope technical assets running as containers, other than external entities. To track the risks of all containers at once, use the risk tracking key _container-baseimage-backdooring@\*_.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the technical asset itself and of the data assets.
 
-**False Positives**
+#### False Positives
 
 Fully trusted (i.e. reviewed and cryptographically signed or similar) base images of containers can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Apply hardening of all container infrastructures (see for example the _CIS-Benchmarks for Docker and Kubernetes_ and the _Docker Bench for Security_). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's _Distroless_ base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Container Base Image Backdooring** was found **11 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1838,35 +1838,35 @@ The risk **Container Base Image Backdooring** was found **11 times** in the anal
 | Cheat sheet | [Cross-Site_Request_Forgery_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) |
 | References | OWASP A01:2025 Broken Access Control |
 
-**Description**
+#### Description
 
 When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.
 
-**Impact**
+#### Impact
 
 If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope web applications accessed via typical web access protocols by a caller used by humans or a browser, directly or through technical assets forwarding the traffic, like load balancers, reverse proxies and WAFs. Requests of other callers, like a backend or a batch job, come from no browser a forged request could use, and are skipped.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the integrity rating of the data sent across the communication link. The attack is very likely, likely for DevOps usage, and unlikely when the link is authenticated with a token (_token_, _short-lived-token_ or _long-lived-token_), which a browser does not send on its own like a cookie.
 
-**False Positives**
+#### False Positives
 
 Web applications passing the authentication state via custom headers instead of cookies can eventually be false positives; model their links with a token authentication. Clients used by humans that are no browser and render no web content, like a command-line tool, can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Cross-Site Request Forgery (CSRF)** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1888,35 +1888,35 @@ The risk **Cross-Site Request Forgery (CSRF)** was found **1 time** in the analy
 | Cheat sheet | [Secrets_Management_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) |
 | References | OWASP A07:2025 Authentication Failures; OWASP NHI7:2025 Long-Lived Secrets; OWASP NHI2:2025 Secret Leakage |
 
-**Description**
+#### Description
 
 Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope technical assets processing or storing data rated at least as confidential or critical with an incoming communication link that is not process-local and is authenticated with _long-lived-token_, or with _credentials_ by a caller not used by humans, unless the identity of the link is _workload_. Links authenticated with _token_ are skipped, as the lifetime of the token is not modelled.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the data processed or stored by the target. The attack is likely when the caller is on the internet, is used by humans or calls across a network trust boundary, where secrets leak more easily, and unlikely otherwise.
 
-**False Positives**
+#### False Positives
 
 Secrets that are rotated automatically within hours can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity _workload_ or the authentication _short-lived-token_. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Long-Lived Credentials** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1937,35 +1937,35 @@ The risk **Long-Lived Credentials** was found **1 time** in the analyzed archite
 | ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
 
-**Description**
+#### Description
 
 The modeled architecture does not contain a build infrastructure (devops-client, sourcecode-repo, build-pipeline, etc.), which might be the risk of a model missing critical assets (and thus not seeing their risks). If the architecture contains custom-developed parts, the pipeline where code gets developed and built needs to be part of the model.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model due to critical build infrastructure components missing in the model.
 
-**Detection Logic**
+#### Detection Logic
 
 Models with in-scope custom-developed parts missing in-scope development (code creation) and build infrastructure components (devops-client, sourcecode-repo, build-pipeline, etc.).
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the highest sensitivity of the in-scope assets running custom-developed parts.
 
-**False Positives**
+#### False Positives
 
 Models not having any custom-developed parts can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Include the build infrastructure in the model.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Build Infrastructure** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1987,27 +1987,27 @@ The risk **Missing Build Infrastructure** was found **1 time** in the analyzed a
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
 | References | OWASP A02:2025 Security Misconfiguration; OWASP API8:2023 Security Misconfiguration |
 
-**Description**
+#### Description
 
 Cloud components should be hardened according to the cloud vendor best practices. This affects their configuration, auditing, and further areas.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might access cloud components in an unintended way.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope cloud components (either residing in cloud trust boundaries or more specifically tagged with cloud provider types).
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.
 
-**False Positives**
+#### False Positives
 
 Cloud components not running parts of the target architecture can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model).
 
@@ -2025,11 +2025,11 @@ For **Google Cloud Platform**: Follow the _CIS Benchmark for Google Cloud Comput
 
 For **Oracle Cloud Platform**: Follow the hardening best practices (see also the automated checks of cloud audit tools like _"CloudSploit"_).
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Cloud Hardening** was found **4 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -2054,35 +2054,35 @@ The risk **Missing Cloud Hardening** was found **4 times** in the analyzed archi
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
 | References | OWASP A02:2025 Security Misconfiguration; OWASP API8:2023 Security Misconfiguration |
 
-**Description**
+#### Description
 
 Technical assets with a Relative Attacker Attractiveness (RAA) value of 55 % or higher should be explicitly hardened taking best practices and vendor hardening guides into account.
 
-**Impact**
+#### Impact
 
 If this risk remains unmitigated, attackers might be able to easier attack high-value targets.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope technical assets with RAA values of 55 % or higher. Generally for high-value targets like data stores, application servers, identity providers and ERP systems this limit is reduced to 40 %
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the data processed in the technical asset.
 
-**False Positives**
+#### False Positives
 
 Usually no false positives.
 
-**Mitigation**
+#### Mitigation
 
 Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Hardening** was found **3 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -2106,35 +2106,35 @@ The risk **Missing Hardening** was found **3 times** in the analyzed architectur
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
 | References | OWASP A06:2025 Insecure Design |
 
-**Description**
+#### Description
 
 Highly sensitive identity provider assets and their identity data stores should be isolated from other assets by their own network segmentation trust-boundary (execution-environment boundaries do not count as network isolation).
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards highly sensitive identity provider assets and their identity data stores, as they are not separated by network segmentation.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope identity provider assets and their identity data stores when surrounded by other (not identity-related) assets (without a network trust-boundary in-between). This risk is especially prevalent when other non-identity related assets are within the same execution environment (i.e. same database or same application server).
 
-**Risk Rating**
+#### Risk Rating
 
 Default is high impact. The impact is increased to very-high when the asset missing the trust-boundary protection is rated as strictly-confidential or mission-critical.
 
-**False Positives**
+#### False Positives
 
 When all assets within the network segmentation trust-boundary are hardened and protected to the same extend as if all were identity providers with data of highest sensitivity.
 
-**Mitigation**
+#### Mitigation
 
 Apply a network segmentation trust-boundary around the highly sensitive identity provider assets and their identity data stores.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Identity Provider Isolation** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -2155,35 +2155,35 @@ The risk **Missing Identity Provider Isolation** was found **1 time** in the ana
 | ASVS chapter | V2 - Authentication Verification Requirements |
 | Cheat sheet | [Authentication_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html) |
 
-**Description**
+#### Description
 
 The modeled architecture does not contain an identity store, which might be the risk of a model missing critical assets (and thus not seeing their risks).
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model in the identity provider/store that is currently missing in the model.
 
-**Detection Logic**
+#### Detection Logic
 
 Models with authenticated data-flows authorized via end user identity missing an in-scope identity store.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the end user-identity authorized technical assets and their data assets processed.
 
-**False Positives**
+#### False Positives
 
 Models only offering data/services without any real authentication need can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Include an identity store in the model if the application has a login.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Identity Store** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -2205,35 +2205,35 @@ The risk **Missing Identity Store** was found **1 time** in the analyzed archite
 | Cheat sheet | [Multifactor_Authentication_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html) |
 | References | OWASP A07:2025 Authentication Failures; OWASP API2:2023 Broken Authentication |
 
-**Description**
+#### Description
 
 Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via multi-factor authentication (MFA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule.
 
-**Risk Rating**
+#### Risk Rating
 
 medium
 
-**False Positives**
+#### False Positives
 
 Technical assets which do not process requests regarding functionality or data linked to end-users (customers) can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Apply an authentication method to the technical asset protecting highly sensitive data via multi-factor authentication for human users.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Multi-Factor Authentication (MFA)** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -2255,35 +2255,35 @@ The risk **Missing Multi-Factor Authentication (MFA)** was found **1 time** in t
 | Cheat sheet | [Authorization_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) |
 | References | OWASP A10:2025 Mishandling of Exceptional Conditions; OpenID AuthZEN Authorization API 1.0; NIST SP 800-162 Guide to Attribute Based Access Control |
 
-**Description**
+#### Description
 
 Services that externalize their authorization to a policy decision point, for example through the AuthZEN Authorization API, cannot decide a request without it. When it fails, they either deny every request and stop working, or, when they fail open, allow every request.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, an outage of the policy decision point might stop every service that asks it, or let any request through services that fail open.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope policy-decision-point technical assets that are not redundant and that in-scope technical assets ask for decisions through communication links that are not process-local.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the highest availability rating of the services that ask the policy decision point.
 
-**False Positives**
+#### False Positives
 
 Policy decision points whose callers keep working on cached policies of their own can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Run the policy decision point redundantly, or as a local instance next to each service that asks it, with the policies distributed to each instance. Let the services deny requests they cannot get a decision for, and cache decisions only briefly.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Policy Decision Point Redundancy** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -2305,35 +2305,35 @@ The risk **Missing Policy Decision Point Redundancy** was found **1 time** in th
 | Cheat sheet | [Cryptographic_Storage_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html) |
 | References | OWASP NHI2:2025 Secret Leakage |
 
-**Description**
+#### Description
 
 In order to avoid the risk of secret leakage via config files (when attacked through vulnerabilities being able to read files like Path-Traversal and others), it is best practice to use a separate hardened process with proper authentication, authorization, and audit logging to access config secrets (like credentials, private keys, client certificates, etc.). This component is usually some kind of Vault.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to easier steal config secrets (like credentials, private keys, client certificates, etc.) once a vulnerability to access files is present and exploited.
 
-**Detection Logic**
+#### Detection Logic
 
 Models without a Vault (Secret Storage).
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.
 
-**False Positives**
+#### False Positives
 
 Models where no technical assets have any kind of sensitive config data to protect can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Consider using a Vault (Secret Storage) to securely store and access config secrets (like credentials, private keys, client certificates, etc.).
 
-**Check**
+#### Check
 
 GetAttribute a Vault (Secret Storage) in place?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Vault (Secret Storage)** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -2355,35 +2355,35 @@ The risk **Missing Vault (Secret Storage)** was found **1 time** in the analyzed
 | Cheat sheet | [Cryptographic_Storage_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html) |
 | References | OWASP A04:2025 Cryptographic Failures |
 
-**Description**
+#### Description
 
 Due to the confidentiality rating of the technical asset itself and/or the stored data assets this technical asset must be encrypted. The risk rating depends on the sensitivity technical asset itself and of the data assets stored.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to access unencrypted data when successfully compromising sensitive components.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope unencrypted technical assets (excluding reverse-proxy, load-balancer, waf, ids, ips and embedded components like library) storing data assets rated at least as confidential or critical. For technical assets storing data assets rated as strictly-confidential or mission-critical the encryption must be of type data-with-end-user-individual-key.
 
-**Risk Rating**
+#### Risk Rating
 
 Depending on the confidentiality rating of the stored data-assets either medium or high risk.
 
-**False Positives**
+#### False Positives
 
 When all sensitive data stored within the asset is already fully encrypted on document or data level.
 
-**Mitigation**
+#### Mitigation
 
 Apply encryption to the technical asset.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Unencrypted Technical Assets** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -2406,35 +2406,35 @@ The risk **Unencrypted Technical Assets** was found **2 times** in the analyzed 
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
 | References | OWASP A06:2025 Insecure Design |
 
-**Description**
+#### Description
 
 Internet-exposed assets must be guarded by a protecting service, application, or reverse-proxy.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to directly attack sensitive systems without any hardening components in-between due to them being directly exposed on the internet.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope technical assets (excluding load-balancer) with confidentiality rating of confidential (or higher) or with integrity rating of critical (or higher) when accessed directly from the internet. All web-server, web-application, reverse-proxy, waf, and gateway assets are exempted from this risk when they do not consist of custom developed code and the data-flow only consists of HTTP or FTP protocols. Access from monitoring systems as well as VPN-protected connections are exempted.
 
-**Risk Rating**
+#### Risk Rating
 
 The matching technical assets are at low risk. When either the confidentiality rating is strictly-confidential or the integrity rating is mission-critical, the risk-rating is considered medium. For assets with RAA values higher than 40 % the risk-rating increases.
 
-**False Positives**
+#### False Positives
 
 When other means of filtering client requests are applied equivalent of reverse-proxy, waf, or gateway components.
 
-**Mitigation**
+#### Mitigation
 
 Encapsulate the asset behind a guarding service, application, or reverse-proxy. For admin maintenance a bastion-host should be used as a jump-server. For file transfer a store-and-forward-host should be used as an indirect file exchange platform.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Unguarded Access From Internet** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -2456,35 +2456,35 @@ The risk **Unguarded Access From Internet** was found **1 time** in the analyzed
 | Cheat sheet | [Software_Supply_Chain_Security_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Software_Supply_Chain_Security_Cheat_Sheet.html) |
 | References | OWASP LLM03:2025 Supply Chain; OWASP LLM04:2025 Data and Model Poisoning; OWASP ASI04:2026 Agentic Supply Chain Vulnerabilities; MAESTRO Layer 1: Foundation Models |
 
-**Description**
+#### Description
 
 Model weights are code in all but name: they decide what the system answers, and some model formats run code when they are loaded. Models that are self-hosted, fine-tuned or pulled from a model registry can be swapped, backdoored or poisoned anywhere between their training and their deployment.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might deploy a backdoored or tampered model that answers as they want, leaks data or runs code on the systems that load it.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope model-registry technical assets, and in-scope llm technical assets that are custom-developed or communicate with a model-registry.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the data processed by the model, or by the models a registry serves.
 
-**False Positives**
+#### False Positives
 
 Models whose provenance is verified on every deployment, for example by signature checks in the deployment pipeline, can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Take models only from trusted sources, pin them by digest and verify their signatures or hashes before they are loaded. Keep a bill of materials of the models and their training data (an ML BOM), prefer formats that cannot run code when loaded (like safetensors), restrict who can write to the model registry, and evaluate a model before it reaches production.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Unverified Model Supply Chain** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -2507,35 +2507,35 @@ The risk **Unverified Model Supply Chain** was found **2 times** in the analyzed
 | Cheat sheet | [Denial_of_Service_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html) |
 | References | OWASP API4:2023 Unrestricted Resource Consumption |
 
-**Description**
+#### Description
 
 Assets accessed across trust boundaries with critical or mission-critical availability rating are more prone to Denial-of-Service (DoS) risks.
 
-**Impact**
+#### Impact
 
 If this risk remains unmitigated, attackers might be able to disturb the availability of important parts of the system.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope technical assets (excluding load-balancer) with availability rating of critical or higher which have incoming data-flows across a network trust-boundary (excluding devops usage).
 
-**Risk Rating**
+#### Risk Rating
 
 Matching technical assets with availability rating of critical or higher are at low risk. When the availability rating is mission-critical and neither a VPN nor IP filter for the incoming data-flow nor redundancy for the asset is applied, the risk-rating is considered medium.
 
-**False Positives**
+#### False Positives
 
 When the accessed target operations are not time- or resource-consuming.
 
-**Mitigation**
+#### Mitigation
 
 Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **DoS-risky Access Across Trust-Boundary** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -2558,35 +2558,35 @@ The risk **DoS-risky Access Across Trust-Boundary** was found **2 times** in the
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
 | References | OWASP A06:2025 Insecure Design |
 
-**Description**
+#### Description
 
 Highly sensitive assets and/or data stores residing in the same network segment than other lower sensitive assets (like webservers or content management systems etc.) should be better protected by a network segmentation trust-boundary.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards more valuable targets, as they are not separated by network segmentation.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope technical assets with high sensitivity and RAA values as well as data stores when surrounded by assets (without a network trust-boundary in-between) which are of type client-system, web-server, web-application, cms, web-service-rest, web-service-soap, build-pipeline, sourcecode-repository, monitoring, or similar and there is no direct connection between these (hence no requirement to be so close to each other).
 
-**Risk Rating**
+#### Risk Rating
 
 Default is low risk. The risk is increased to medium when the asset missing the trust-boundary protection is rated as strictly-confidential or mission-critical.
 
-**False Positives**
+#### False Positives
 
 When all assets within the network segmentation trust-boundary are hardened and protected to the same extend as if all were containing/processing highly sensitive data.
 
-**Mitigation**
+#### Mitigation
 
 Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Network Segmentation** was found **4 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -2610,35 +2610,35 @@ The risk **Missing Network Segmentation** was found **4 times** in the analyzed 
 | ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
 | Cheat sheet | [Virtual_Patching_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Virtual_Patching_Cheat_Sheet.html) |
 
-**Description**
+#### Description
 
 To have a first line of filtering defense, security architectures with web-services or web-applications should include a WAF in front of them. Even though a WAF is not a replacement for security (all components must be secure even without a WAF) it adds another layer of defense to the overall system by delaying some attacks and having easier attack alerting through it.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to apply standard attack pattern tests at great speed without any filtering.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope web-services and/or web-applications accessed across a network trust boundary not having a Web Application Firewall (WAF) in front of them.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.
 
-**False Positives**
+#### False Positives
 
 Targets only accessible via WAFs or reverse proxies containing a WAF component (like ModSecurity) can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Consider placing a Web Application Firewall (WAF) in front of the web-services and/or web-applications. For cloud environments many cloud providers offer pre-configured WAFs. Even reverse proxies can be enhances by a WAF component via ModSecurity plugins.
 
-**Check**
+#### Check
 
 GetAttribute a Web Application Firewall (WAF) in place?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Web Application Firewall (WAF)** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -2661,35 +2661,35 @@ The risk **Missing Web Application Firewall (WAF)** was found **2 times** in the
 | Cheat sheet | [Vulnerable_Dependency_Management_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html) |
 | References | OWASP A03:2025 Software Supply Chain Failures |
 
-**Description**
+#### Description
 
 For each build-pipeline component Unchecked Deployment risks might arise when the build-pipeline does not include established DevSecOps best-practices. DevSecOps best-practices scan as part of CI/CD pipelines for vulnerabilities in source- or byte-code, dependencies, container layers, and dynamically against running test systems. There are several open-source and commercial tools existing in the categories DAST, SAST, and IAST.
 
-**Impact**
+#### Impact
 
 If this risk remains unmitigated, vulnerabilities in custom-developed software or their dependencies might not be identified during continuous deployment cycles.
 
-**Detection Logic**
+#### Detection Logic
 
 All development-relevant technical assets.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the highest rating of the technical assets and data assets processed by deployment-receiving targets.
 
-**False Positives**
+#### False Positives
 
 When the build-pipeline does not build any software components it can be considered a false positive after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Apply DevSecOps best-practices and use scanning tools to identify vulnerabilities in source- or byte-code,dependencies, container layers, and optionally also via dynamic scans against running test systems.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Unchecked Deployment** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -2707,7 +2707,7 @@ In total **73 potential risks** have been identified during the threat modeling 
 
 The support chat page and its backend for frontend
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**Cross-Site Scripting (XSS)** risk at **Chat Frontend**](#cross-site-scripting-xss) (Unchecked)
 - **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Chat Frontend** server-side web-requesting the target **Support Agent** via **Assistant Request**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -2716,7 +2716,7 @@ The support chat page and its backend for frontend
 - **Medium**: [**Cross-Site Request Forgery (CSRF)** risk at **Chat Frontend** via **Support Chat** from **Customer Browser**](#cross-site-request-forgery-csrf) (Unchecked)
 - **Medium**: [**Unguarded Access from Internet** of **Chat Frontend** by **Customer Browser** via **Support Chat**](#unguarded-access-from-internet) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -2740,7 +2740,7 @@ The support chat page and its backend for frontend
 | Outgoing communication links | [Assistant Request](#assistant-request) |
 | Incoming communication links | [Support Chat](#support-chat) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -2756,7 +2756,7 @@ The support chat page and its backend for frontend
 
 A small self-hosted model fine-tuned to classify harmful content
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**Unbounded Model Consumption** risk at **Guardrail Model**](#unbounded-model-consumption) (Unchecked)
 - **Elevated**: [**Missing AI Monitoring** risk at **Guardrail Model**](#missing-ai-monitoring) (Unchecked)
@@ -2766,7 +2766,7 @@ A small self-hosted model fine-tuned to classify harmful content
 - **Medium**: [**Container Base Image Backdooring** risk at **Guardrail Model**](#container-base-image-backdooring) (Unchecked)
 - **Medium**: [**Unverified Model Supply Chain** risk at **Guardrail Model**](#unverified-model-supply-chain) (In Progress)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -2790,7 +2790,7 @@ A small self-hosted model fine-tuned to classify harmful content
 | Outgoing communication links | [Model Pull](#model-pull) |
 | Incoming communication links | [Moderation](#moderation) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -2806,14 +2806,14 @@ A small self-hosted model fine-tuned to classify harmful content
 
 Embeds the published support articles into the index
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**SQL/NoSQL-Injection** risk at **Ingestion Pipeline** against database **Knowledge Index** via **Embedding Upsert**](#sqlnosql-injection) (Unchecked)
 - **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Ingestion Pipeline** server-side web-requesting the target **Knowledge CMS** via **Article Export**](#server-side-request-forgery-ssrf) (Unchecked)
 - **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Ingestion Pipeline** server-side web-requesting the target **Knowledge Index** via **Embedding Upsert**](#server-side-request-forgery-ssrf) (Unchecked)
 - **Medium**: [**Container Base Image Backdooring** risk at **Ingestion Pipeline**](#container-base-image-backdooring) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -2837,7 +2837,7 @@ Embeds the published support articles into the index
 | Outgoing communication links | [Embedding Upsert](#embedding-upsert), [Article Export](#article-export) |
 | Incoming communication links | none |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -2853,13 +2853,13 @@ Embeds the published support articles into the index
 
 Where the support team writes and reviews the articles
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**Cross-Site Scripting (XSS)** risk at **Knowledge CMS**](#cross-site-scripting-xss) (Unchecked)
 - **Medium**: [**Container Base Image Backdooring** risk at **Knowledge CMS**](#container-base-image-backdooring) (Unchecked)
 - **Low**: [**Missing Web Application Firewall (WAF)** risk at **Knowledge CMS**](#missing-web-application-firewall-waf) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -2883,7 +2883,7 @@ Where the support team writes and reviews the articles
 | Outgoing communication links | none |
 | Incoming communication links | [Article Export](#article-export) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -2899,7 +2899,7 @@ Where the support team writes and reviews the articles
 
 Embeddings of the support articles and the memory of the agent
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**Vector Store Poisoning** risk at **Knowledge Index** used by **Support Agent**](#vector-store-poisoning) (Unchecked)
 - **Medium**: [**Container Base Image Backdooring** risk at **Knowledge Index**](#container-base-image-backdooring) (Unchecked)
@@ -2907,7 +2907,7 @@ Embeddings of the support articles and the memory of the agent
 - **Medium**: [**Missing Hardening** risk at **Knowledge Index**](#missing-hardening) (Unchecked)
 - **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Knowledge Index** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -2931,7 +2931,7 @@ Embeddings of the support articles and the memory of the agent
 | Outgoing communication links | none |
 | Incoming communication links | [Embedding Upsert](#embedding-upsert), [Memory Write](#memory-write), [Retrieval](#retrieval) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -2947,7 +2947,7 @@ Embeddings of the support articles and the memory of the agent
 
 Manages orders and refunds
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**SQL/NoSQL-Injection** risk at **Order Service** against database **Orders Database** via **Order Storage**](#sqlnosql-injection) (Unchecked)
 - **Elevated**: [**Missing Object-Level Authorization** risk at **Order Service** for **Support Tools** (function-level)](#missing-object-level-authorization) (Unchecked)
@@ -2958,7 +2958,7 @@ Manages orders and refunds
 - **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Order Service** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 - **Low**: [**Missing Web Application Firewall (WAF)** risk at **Order Service**](#missing-web-application-firewall-waf) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -2982,7 +2982,7 @@ Manages orders and refunds
 | Outgoing communication links | [Refund Authorization](#refund-authorization), [Order Storage](#order-storage) |
 | Incoming communication links | [Order API](#order-api) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -2998,7 +2998,7 @@ Manages orders and refunds
 
 Answers support questions, looks up orders and issues refunds through its tools
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**Prompt Injection** risk at **Support Agent**](#prompt-injection) (Unchecked)
 - **Elevated**: [**SQL/NoSQL-Injection** risk at **Support Agent** against database **Knowledge Index** via **Memory Write**](#sqlnosql-injection) (Unchecked)
@@ -3020,7 +3020,7 @@ Answers support questions, looks up orders and issues refunds through its tools
 - **Low**: [**Denial-of-Service** risky access of **Support Agent** by **Chat Frontend** via **Assistant Request**](#dos-risky-access-across-trust-boundary) (Unchecked)
 - **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Support Agent** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -3044,7 +3044,7 @@ Answers support questions, looks up orders and issues refunds through its tools
 | Outgoing communication links | [Tool Calls](#tool-calls), [Retrieval](#retrieval), [Moderation](#moderation), [Memory Write](#memory-write), [Completion](#completion) |
 | Incoming communication links | [Assistant Request](#assistant-request) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -3060,7 +3060,7 @@ Answers support questions, looks up orders and issues refunds through its tools
 
 MCP server exposing the order, refund and web search tools to the agent
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**Missing Authentication** covering communication link **Tool Calls** from **Support Agent** to **Support Tools**](#missing-authentication) (Unchecked)
 - **Elevated**: [**Server-Side Request Forgery (SSRF)** risk at **Support Tools** server-side web-requesting the target **Order Service** via **Order API**](#server-side-request-forgery-ssrf) (Unchecked)
@@ -3068,7 +3068,7 @@ MCP server exposing the order, refund and web search tools to the agent
 - **Elevated**: [**Unauthenticated MCP Server** risk at **Support Tools** called by **Support Agent**](#unauthenticated-mcp-server) (Unchecked)
 - **Medium**: [**Container Base Image Backdooring** risk at **Support Tools**](#container-base-image-backdooring) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -3092,7 +3092,7 @@ MCP server exposing the order, refund and web search tools to the agent
 | Outgoing communication links | [Web Search](#web-search), [Order API](#order-api) |
 | Incoming communication links | [Tool Calls](#tool-calls) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -3108,14 +3108,14 @@ MCP server exposing the order, refund and web search tools to the agent
 
 Stores the versions of the guardrail model
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Medium**: [**Container Base Image Backdooring** risk at **Model Registry**](#container-base-image-backdooring) (Unchecked)
 - **Medium**: [**Unencrypted Technical Asset** named **Model Registry**](#unencrypted-technical-assets) (Unchecked)
 - **Medium**: [**Unverified Model Supply Chain** risk at **Model Registry**](#unverified-model-supply-chain) (Unchecked)
 - **Low**: [**Unchecked Deployment** risk at **Model Registry**](#unchecked-deployment) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -3139,7 +3139,7 @@ Stores the versions of the guardrail model
 | Outgoing communication links | none |
 | Incoming communication links | [Model Pull](#model-pull) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -3155,14 +3155,14 @@ Stores the versions of the guardrail model
 
 Decides which orders a customer may see and refund, as an OpenFGA relationship graph
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Medium**: [**Missing Identity Provider Isolation** to further encapsulate and protect identity-related asset **Order Policy** against unrelated lower protected assets **in the same network segment**, which might be easier to compromise by attackers](#missing-identity-provider-isolation) (Unchecked)
 - **Medium**: [**Container Base Image Backdooring** risk at **Order Policy**](#container-base-image-backdooring) (Unchecked)
 - **Medium**: [**Missing Policy Decision Point Redundancy** risk at **Order Policy**](#missing-policy-decision-point-redundancy) (Unchecked)
 - **Medium**: [**Missing Vault (Secret Storage)** in the threat model (referencing asset **Order Policy** as an example)](#missing-vault-secret-storage) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -3186,7 +3186,7 @@ Decides which orders a customer may see and refund, as an OpenFGA relationship g
 | Outgoing communication links | none |
 | Incoming communication links | [Refund Authorization](#refund-authorization) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -3202,14 +3202,14 @@ Decides which orders a customer may see and refund, as an OpenFGA relationship g
 
 Orders, payments and customers
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Medium**: [**Container Base Image Backdooring** risk at **Orders Database**](#container-base-image-backdooring) (Unchecked)
 - **Medium**: [**Long-Lived Credentials** risk at **Orders Database** used by **Order Service** (credentials)](#long-lived-credentials) (Unchecked)
 - **Medium**: [**Missing Hardening** risk at **Orders Database**](#missing-hardening) (Unchecked)
 - **Low**: [**Missing Network Segmentation** to further encapsulate and protect **Orders Database** against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers](#missing-network-segmentation) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -3233,7 +3233,7 @@ Orders, payments and customers
 | Outgoing communication links | none |
 | Incoming communication links | [Order Storage](#order-storage) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -3249,11 +3249,11 @@ Orders, payments and customers
 
 The web browsers of the customers using the support chat
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 _The asset was defined as out-of-scope._
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -3277,7 +3277,7 @@ _The asset was defined as out-of-scope._
 | Outgoing communication links | [Support Chat](#support-chat) |
 | Incoming communication links | none |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -3294,11 +3294,11 @@ _The asset was defined as out-of-scope._
 
 The language model of a provider, used through its API
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 _The asset was defined as out-of-scope._
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -3322,7 +3322,7 @@ _The asset was defined as out-of-scope._
 | Outgoing communication links | none |
 | Incoming communication links | [Completion](#completion) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -3339,11 +3339,11 @@ _The asset was defined as out-of-scope._
 
 A web search service
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 _The asset was defined as out-of-scope._
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -3367,7 +3367,7 @@ _The asset was defined as out-of-scope._
 | Outgoing communication links | none |
 | Incoming communication links | [Web Search](#web-search) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -3405,7 +3405,7 @@ The conversations of the customers with the assistant
 | Received via | [Support Chat](#support-chat), [Moderation](#moderation), [Completion](#completion), [Assistant Request](#assistant-request) |
 | Data breach | Probable |
 
-**Data Breach Risks**
+#### Data Breach Risks
 
 This data asset has data breach potential because of 42 remaining risks:
 
@@ -3475,7 +3475,7 @@ Names, addresses and contact details of the customers
 | Received via | [Tool Calls](#tool-calls), [Order Storage](#order-storage), [Order API](#order-api) |
 | Data breach | Probable |
 
-**Data Breach Risks**
+#### Data Breach Risks
 
 This data asset has data breach potential because of 35 remaining risks:
 
@@ -3538,7 +3538,7 @@ The support articles the assistant answers from
 | Received via | [Retrieval](#retrieval), [Article Export](#article-export) |
 | Data breach | Probable |
 
-**Data Breach Risks**
+#### Data Breach Risks
 
 This data asset has data breach potential because of 35 remaining risks:
 
@@ -3601,7 +3601,7 @@ The weights of the self-hosted guardrail model
 | Received via | [Model Pull](#model-pull) |
 | Data breach | Probable |
 
-**Data Breach Risks**
+#### Data Breach Risks
 
 This data asset has data breach potential because of 22 remaining risks:
 
@@ -3651,7 +3651,7 @@ Orders, payments and refunds
 | Received via | [Tool Calls](#tool-calls), [Order Storage](#order-storage), [Order API](#order-api) |
 | Data breach | Probable |
 
-**Data Breach Risks**
+#### Data Breach Risks
 
 This data asset has data breach potential because of 38 remaining risks:
 
@@ -3717,7 +3717,7 @@ Product information found on the web
 | Received via | [Web Search](#web-search) |
 | Data breach | Probable |
 
-**Data Breach Risks**
+#### Data Breach Risks
 
 This data asset has data breach potential because of 15 remaining risks:
 
