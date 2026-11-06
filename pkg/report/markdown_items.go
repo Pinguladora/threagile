@@ -22,8 +22,13 @@ func itemLine(level *viewLevel, summary string, id string) string {
 
 // labelled writes markup text below its label, as the HTML report writes it below a heading.
 func (what *markdownWriter) labelled(label string, text markupText) {
-	what.paragraph(strong(label))
+	what.subheading(label)
 	what.markup(text)
+}
+
+// subheading is the heading of a part of an item, below the item's own heading, as the HTML report has it.
+func (what *markdownWriter) subheading(title string) {
+	what.heading(4, "", title)
 }
 
 func (what *markdownWriter) riskCategories(view *reportView) {
@@ -52,7 +57,7 @@ func (what *markdownWriter) riskCategory(category *viewCategory) {
 	what.labelled("Mitigation", category.Mitigation)
 	what.labelled("Check", category.Check)
 
-	what.paragraph(strong("Risk Findings"))
+	what.subheading("Risk Findings")
 	what.paragraph("The risk " + strong(markdownText(category.Category.Title)) + " was found " +
 		strong(plural(len(category.Risks), "time", "times")) + " in the analyzed architecture to be potentially " +
 		"possible. Each spot should be checked individually by reviewing the implementation whether all controls " +
@@ -126,7 +131,7 @@ func (what *markdownWriter) technicalAsset(asset *viewTechnicalAsset) {
 	}
 	what.markup(asset.Description)
 
-	what.paragraph(strong("Identified Risks of the Asset"))
+	what.subheading("Identified Risks of the Asset")
 	switch {
 	case len(asset.Risks) > 0:
 		what.list(what.riskItems(asset.Risks, false)...)
@@ -140,7 +145,7 @@ func (what *markdownWriter) technicalAsset(asset *viewTechnicalAsset) {
 	if asset.TrustBoundary != nil {
 		trustBoundary = what.ref(*asset.TrustBoundary)
 	}
-	what.paragraph(strong("Asset Information"))
+	what.subheading("Asset Information")
 	what.properties(
 		[]string{"Type", markdownText(asset.Asset.Type.String())},
 		[]string{columnUsage, markdownText(asset.Asset.Usage.String())},
@@ -172,7 +177,7 @@ func (what *markdownWriter) technicalAsset(asset *viewTechnicalAsset) {
 	if asset.Asset.OutOfScope {
 		rating = append(rating, []string{"Out-of-scope justification", markdownInline(asset.OutOfScope)})
 	}
-	what.paragraph(strong("Asset Rating"))
+	what.subheading("Asset Rating")
 	what.properties(rating...)
 }
 
@@ -224,7 +229,7 @@ func (what *markdownWriter) dataAsset(asset *viewDataAsset) {
 		[]string{"Received via", what.refs(asset.ReceivedVia)},
 		[]string{"Data breach", breach},
 	)
-	what.paragraph(strong("Data Breach Risks"))
+	what.subheading("Data Breach Risks")
 	if len(asset.BreachRisks) == 0 {
 		what.paragraph(muted("This data asset has no data breach potential."))
 		return

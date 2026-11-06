@@ -866,35 +866,35 @@ In total **43 potential risks** have been identified during the threat modeling 
 | Cheat sheet | [final](https://csrc.nist.gov/pubs/sp/800/82/r3/final) |
 | References | IEC 62443-3-3 SR 5.1 Network Segmentation; IEC 62443-3-3 SR 5.2 Zone Boundary Protection; MITRE ATT&amp;CK for ICS T0883 Internet Accessible Device; MITRE ATT&amp;CK for ICS T0886 Remote Services; NIST SP 800-82r3 Guide to Operational Technology (OT) Security |
 
-**Description**
+#### Description
 
 Controllers, field devices, HMIs, SCADA servers and engineering workstations of an industrial control system belong into control zones that IT assets reach only through an industrial DMZ. A direct communication link between an IT asset and an asset of a control zone lets attackers who compromise the IT side, which is far more exposed, move straight into the control of the physical process.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers who compromise an IT asset might reach the industrial control system and change, stop or damage the physical process it controls.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope OT technical assets (plc, rtu, safety-controller, field-device, hmi, scada-server, engineering-workstation) with a communication link, in either direction, with a technical asset that is neither an OT asset nor in the industrial DMZ (a historian or an asset tagged with _industrial-dmz_).
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the integrity and availability of the OT asset, and is the highest for safety controllers. The attack is very likely when the other asset is on the internet, and likely otherwise.
 
-**False Positives**
+#### False Positives
 
 Links that pass through a firewall allowing only them, and that are documented exceptions of the zone model, can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Separate IT and OT with an industrial DMZ, so that no communication link crosses from IT into a control zone directly: replicate the historian into the DMZ for IT users, give remote and vendor access only through a jump host there, and filter what passes with firewalls on both sides. Tag the assets in the DMZ with _industrial-dmz_.
 
-**Check**
+#### Check
 
 Are the recommendations of NIST SP 800-82 and the referenced IEC 62443 requirements applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Direct IT/OT Communication** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -916,35 +916,35 @@ The risk **Direct IT/OT Communication** was found **1 time** in the analyzed arc
 | Cheat sheet | [Secrets_Management_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) |
 | References | OWASP A07:2025 Authentication Failures; OWASP NHI10:2025 Human Use of NHI; OWASP ASI03:2026 Identity and Privilege Abuse |
 
-**Description**
+#### Description
 
 People who call a service with the account of a machine, like an administrator using the credentials of a service account or a client that ships with an API key of its own, act without an identity of theirs. The service cannot tell them apart, nor require a second factor or end their access when they leave, and the secret gets copied to wherever they work.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might use a secret copied from a laptop, a script or a client to access the target, and nobody can tell who did what with it.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope technical assets processing or storing data rated at least as confidential or critical with an incoming communication link that is not process-local, from a caller used by humans, whose identity is _service-account_ or _workload_.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the data processed or stored by the target. The attack is likely, as secrets in the hands of people leak easily.
 
-**False Positives**
+#### False Positives
 
 Clients whose users sign in with their own identity first, which a service then exchanges for the narrowly scoped account of the client, can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Let people sign in with their own identity, through single sign-on with multi-factor authentication, and pass it on to the target, modelling the link with the identity _end-user_. Where an administrator needs the permissions of a service, grant them for a limited time through a privileged access workflow that records who used them. Keep secrets of service accounts out of clients.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Human Use of Machine Identity** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -966,35 +966,35 @@ The risk **Human Use of Machine Identity** was found **1 time** in the analyzed 
 | Cheat sheet | [final](https://csrc.nist.gov/pubs/sp/800/82/r3/final) |
 | References | IEC 62443-3-3 SR 1.2 Software Process and Device Identification and Authentication; IEC 62443-3-3 SR 3.1 Communication Integrity; MITRE ATT&amp;CK for ICS T0855 Unauthorized Command Message; MITRE ATT&amp;CK for ICS T0830 Adversary-in-the-Middle; NIST SP 800-82r3 Guide to Operational Technology (OT) Security |
 
-**Description**
+#### Description
 
 Most industrial control protocols, like Modbus, DNP3, S7comm, EtherNet/IP or PROFINET, were designed for closed networks: a controller or field device executes every command it receives, without checking who sent it or whether it was changed on the way. Anyone who can send packets to it can write setpoints and outputs, stop it or download a new program.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers in the network might send commands that change, stop or damage the physical process, or alter the commands and readings exchanged with the controller.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope controllers (plc, rtu, safety-controller) and field-device technical assets with an incoming non-readonly communication link over an industrial control protocol without a secure variant in use (all of them except modbus-security, dnp3-encrypted and opc-ua-encrypted).
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the integrity and availability of the controlled process, and is the highest for safety controllers. The attack is very likely when the sender is on the internet, likely when it is an IT asset, reaches IT or calls across a network trust boundary, and unlikely otherwise.
 
-**False Positives**
+#### False Positives
 
 Links in an isolated network that only the sender and the receiver are part of can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Use the secure variant of the protocol where the devices support it (Modbus/TCP Security, DNP3 over TLS or with Secure Authentication, CIP Security, OPC UA with SignAndEncrypt, S7comm-plus with access protection), and enable the access protection of the controllers. Where the protocol cannot be secured, allow only the expected senders and function codes with an industrial firewall in front of the controller, and keep controllers in RUN mode with the key switch.
 
-**Check**
+#### Check
 
 Are the recommendations of NIST SP 800-82 and the referenced IEC 62443 requirements applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Insecure Control Protocol** was found **6 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1021,35 +1021,35 @@ The risk **Insecure Control Protocol** was found **6 times** in the analyzed arc
 | Cheat sheet | [Secrets_Management_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) |
 | References | OWASP A07:2025 Authentication Failures; OWASP NHI7:2025 Long-Lived Secrets; OWASP NHI2:2025 Secret Leakage |
 
-**Description**
+#### Description
 
 Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope technical assets processing or storing data rated at least as confidential or critical with an incoming communication link that is not process-local and is authenticated with _long-lived-token_, or with _credentials_ by a caller not used by humans, unless the identity of the link is _workload_. Links authenticated with _token_ are skipped, as the lifetime of the token is not modelled.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the data processed or stored by the target. The attack is likely when the caller is on the internet, is used by humans or calls across a network trust boundary, where secrets leak more easily, and unlikely otherwise.
 
-**False Positives**
+#### False Positives
 
 Secrets that are rotated automatically within hours can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity _workload_ or the authentication _short-lived-token_. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Long-Lived Credentials** was found **3 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1073,35 +1073,35 @@ The risk **Long-Lived Credentials** was found **3 times** in the analyzed archit
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
 | References | OWASP A02:2025 Security Misconfiguration; OWASP API8:2023 Security Misconfiguration |
 
-**Description**
+#### Description
 
 Technical assets with a Relative Attacker Attractiveness (RAA) value of 55 % or higher should be explicitly hardened taking best practices and vendor hardening guides into account.
 
-**Impact**
+#### Impact
 
 If this risk remains unmitigated, attackers might be able to easier attack high-value targets.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope technical assets with RAA values of 55 % or higher. Generally for high-value targets like data stores, application servers, identity providers and ERP systems this limit is reduced to 40 %
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the data processed in the technical asset.
 
-**False Positives**
+#### False Positives
 
 Usually no false positives.
 
-**Mitigation**
+#### Mitigation
 
 Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Hardening** was found **3 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1125,35 +1125,35 @@ The risk **Missing Hardening** was found **3 times** in the analyzed architectur
 | Cheat sheet | [final](https://csrc.nist.gov/pubs/sp/800/82/r3/final) |
 | References | IEC 61511 Independence of the Safety Instrumented System; MITRE ATT&amp;CK for ICS T0880 Loss of Safety; MITRE ATT&amp;CK for ICS T0843 Program Download; IEC 62443-3-3 SR 5.1 Network Segmentation; NIST SP 800-82r3 Guide to Operational Technology (OT) Security |
 
-**Description**
+#### Description
 
 A safety instrumented system brings the process into a safe state when the basic process control fails or is attacked. It only does so when it is independent of that control: when assets other than a dedicated safety engineering workstation can change its program, setpoints or outputs, one compromise can disable the control and the safety function together, as the TRITON attack did.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might disable or trip the safety function and so cause explosions, releases of hazardous material or injuries.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope safety-controller technical assets with an incoming non-readonly communication link that is not process-local, from a technical asset other than an engineering-workstation that has no non-readonly communication links to other controllers.
 
-**Risk Rating**
+#### Risk Rating
 
 The impact is very high, as the safety function protects people. The attack is very likely when the sender is on the internet, likely when it is an IT asset, reaches IT or calls across a network trust boundary, and unlikely otherwise.
 
-**False Positives**
+#### False Positives
 
 Links whose writes the safety controller itself restricts to values that cannot impair the safety function can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Let only a dedicated safety engineering workstation, which programs no other controllers, change the safety controller, and give the basic process control and the HMIs readonly access to its status. Keep the key switch of the safety controller in RUN mode outside of maintenance, and alert on every program change.
 
-**Check**
+#### Check
 
 Are the recommendations of NIST SP 800-82 and the referenced IEC 62443 requirements applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Safety System Independence** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1176,35 +1176,35 @@ The risk **Missing Safety System Independence** was found **2 times** in the ana
 | Cheat sheet | [SQL_Injection_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html) |
 | References | OWASP A05:2025 Injection |
 
-**Description**
+#### Description
 
 When a database is accessed via database access protocols SQL/NoSQL-Injection risks might arise. The risk rating depends on the sensitivity technical asset itself and of the data assets processed.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to modify SQL/NoSQL queries to steal and modify data and eventually further escalate towards a deeper system penetration via code executions.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope datastores accessed via typical database access protocols, and databases accessed via HTTP or binary protocols as well (like NoSQL databases with a REST interface).
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the data stored inside the database.
 
-**False Positives**
+#### False Positives
 
 Database accesses by queries not consisting of parts controllable by the caller can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Try to use parameter binding to be safe from injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **SQL/NoSQL-Injection** was found **3 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1228,35 +1228,35 @@ The risk **SQL/NoSQL-Injection** was found **3 times** in the analyzed architect
 | Cheat sheet | [Transport_Layer_Protection_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html) |
 | References | OWASP A04:2025 Cryptographic Failures; OWASP API8:2023 Security Misconfiguration |
 
-**Description**
+#### Description
 
 Due to the confidentiality and/or integrity rating of the data assets transferred over the communication link this connection must be encrypted.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, network attackers might be able to eavesdrop on unencrypted sensitive data sent between components.
 
-**Detection Logic**
+#### Detection Logic
 
 Unencrypted technical communication links of in-scope technical assets (excluding monitoring traffic as well as local-file-access, in-process-library-call and inter-process-communication) transferring sensitive data.
 
-**Risk Rating**
+#### Risk Rating
 
 Depending on the confidentiality rating of the transferred data-assets either medium or high risk.
 
-**False Positives**
+#### False Positives
 
 When all sensitive data sent over the communication link is already fully encrypted on document or data level. Also intra-container/pod communication can be considered false positive when container orchestration platform handles encryption.
 
-**Mitigation**
+#### Mitigation
 
 Apply transport layer encryption to the communication link.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Unencrypted Communication** was found **10 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1287,35 +1287,35 @@ The risk **Unencrypted Communication** was found **10 times** in the analyzed ar
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
 | References | OWASP A06:2025 Insecure Design |
 
-**Description**
+#### Description
 
 Internet-exposed assets must be guarded by a protecting service, application, or reverse-proxy.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to directly attack sensitive systems without any hardening components in-between due to them being directly exposed on the internet.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope technical assets (excluding load-balancer) with confidentiality rating of confidential (or higher) or with integrity rating of critical (or higher) when accessed directly from the internet. All web-server, web-application, reverse-proxy, waf, and gateway assets are exempted from this risk when they do not consist of custom developed code and the data-flow only consists of HTTP or FTP protocols. Access from monitoring systems as well as VPN-protected connections are exempted.
 
-**Risk Rating**
+#### Risk Rating
 
 The matching technical assets are at low risk. When either the confidentiality rating is strictly-confidential or the integrity rating is mission-critical, the risk-rating is considered medium. For assets with RAA values higher than 40 % the risk-rating increases.
 
-**False Positives**
+#### False Positives
 
 When other means of filtering client requests are applied equivalent of reverse-proxy, waf, or gateway components.
 
-**Mitigation**
+#### Mitigation
 
 Encapsulate the asset behind a guarding service, application, or reverse-proxy. For admin maintenance a bastion-host should be used as a jump-server. For file transfer a store-and-forward-host should be used as an indirect file exchange platform.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Unguarded Access From Internet** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1337,35 +1337,35 @@ The risk **Unguarded Access From Internet** was found **1 time** in the analyzed
 | Cheat sheet | [Denial_of_Service_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html) |
 | References | OWASP API4:2023 Unrestricted Resource Consumption |
 
-**Description**
+#### Description
 
 Assets accessed across trust boundaries with critical or mission-critical availability rating are more prone to Denial-of-Service (DoS) risks.
 
-**Impact**
+#### Impact
 
 If this risk remains unmitigated, attackers might be able to disturb the availability of important parts of the system.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope technical assets (excluding load-balancer) with availability rating of critical or higher which have incoming data-flows across a network trust-boundary (excluding devops usage).
 
-**Risk Rating**
+#### Risk Rating
 
 Matching technical assets with availability rating of critical or higher are at low risk. When the availability rating is mission-critical and neither a VPN nor IP filter for the incoming data-flow nor redundancy for the asset is applied, the risk-rating is considered medium.
 
-**False Positives**
+#### False Positives
 
 When the accessed target operations are not time- or resource-consuming.
 
-**Mitigation**
+#### Mitigation
 
 Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. Generally applying redundancy on the targeted technical asset reduces the risk of DoS.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **DoS-risky Access Across Trust-Boundary** was found **8 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1393,35 +1393,35 @@ The risk **DoS-risky Access Across Trust-Boundary** was found **8 times** in the
 | ASVS chapter | V2 - Authentication Verification Requirements |
 | Cheat sheet | [Authentication_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html) |
 
-**Description**
+#### Description
 
 The modeled architecture does not contain an identity store, which might be the risk of a model missing critical assets (and thus not seeing their risks).
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model in the identity provider/store that is currently missing in the model.
 
-**Detection Logic**
+#### Detection Logic
 
 Models with authenticated data-flows authorized via end user identity missing an in-scope identity store.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the end user-identity authorized technical assets and their data assets processed.
 
-**False Positives**
+#### False Positives
 
 Models only offering data/services without any real authentication need can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Include an identity store in the model if the application has a login.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Identity Store** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1443,35 +1443,35 @@ The risk **Missing Identity Store** was found **1 time** in the analyzed archite
 | Cheat sheet | [Multifactor_Authentication_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html) |
 | References | OWASP A07:2025 Authentication Failures; OWASP API2:2023 Broken Authentication |
 
-**Description**
+#### Description
 
 Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via multi-factor authentication (MFA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule.
 
-**Risk Rating**
+#### Risk Rating
 
 medium
 
-**False Positives**
+#### False Positives
 
 Technical assets which do not process requests regarding functionality or data linked to end-users (customers) can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Apply an authentication method to the technical asset protecting highly sensitive data via multi-factor authentication for human users.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Multi-Factor Authentication (MFA)** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1493,35 +1493,35 @@ The risk **Missing Multi-Factor Authentication (MFA)** was found **1 time** in t
 | Cheat sheet | [Cryptographic_Storage_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html) |
 | References | OWASP NHI2:2025 Secret Leakage |
 
-**Description**
+#### Description
 
 In order to avoid the risk of secret leakage via config files (when attacked through vulnerabilities being able to read files like Path-Traversal and others), it is best practice to use a separate hardened process with proper authentication, authorization, and audit logging to access config secrets (like credentials, private keys, client certificates, etc.). This component is usually some kind of Vault.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to easier steal config secrets (like credentials, private keys, client certificates, etc.) once a vulnerability to access files is present and exploited.
 
-**Detection Logic**
+#### Detection Logic
 
 Models without a Vault (Secret Storage).
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.
 
-**False Positives**
+#### False Positives
 
 Models where no technical assets have any kind of sensitive config data to protect can be considered as false positives after individual review.
 
-**Mitigation**
+#### Mitigation
 
 Consider using a Vault (Secret Storage) to securely store and access config secrets (like credentials, private keys, client certificates, etc.).
 
-**Check**
+#### Check
 
 GetAttribute a Vault (Secret Storage) in place?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Missing Vault (Secret Storage)** was found **1 time** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1543,35 +1543,35 @@ The risk **Missing Vault (Secret Storage)** was found **1 time** in the analyzed
 | Cheat sheet | [Server_Side_Request_Forgery_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html) |
 | References | OWASP A01:2025 Broken Access Control; OWASP API7:2023 Server Side Request Forgery |
 
-**Description**
+#### Description
 
 When a server system (i.e. not a client) is accessing other server systems via typical web protocols Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might arise.
 
-**Impact**
+#### Impact
 
 If this risk is unmitigated, attackers might be able to access sensitive services or files of network-reachable components by modifying outgoing calls of affected components.
 
-**Detection Logic**
+#### Detection Logic
 
 In-scope non-client systems accessing (using outgoing communication links) targets with either HTTP or HTTPS protocol.
 
-**Risk Rating**
+#### Risk Rating
 
 The risk rating (low or medium) depends on the sensitivity of the data assets receivable via web protocols from targets within the same network trust-boundary as well on the sensitivity of the data assets receivable via web protocols from the target asset itself. Also for cloud-based environments the exploitation impact is at least medium, as cloud backend services can be attacked via SSRF.
 
-**False Positives**
+#### False Positives
 
 Servers not sending outgoing web requests can be considered as false positives after review.
 
-**Mitigation**
+#### Mitigation
 
 Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.
 
-**Check**
+#### Check
 
 Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?
 
-**Risk Findings**
+#### Risk Findings
 
 The risk **Server-Side Request Forgery (SSRF)** was found **2 times** in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.
 
@@ -1590,7 +1590,7 @@ In total **43 potential risks** have been identified during the threat modeling 
 
 Closes the chlorine supply when a leak or an overdose is detected
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**Insecure Control Protocol** risk at **Chlorine Safety Controller** over **modbus** from **SCADA Server**](#insecure-control-protocol) (Unchecked)
 - **Elevated**: [**Insecure Control Protocol** risk at **Chlorine Safety Controller** over **s7comm** from **Engineering Workstation**](#insecure-control-protocol) (Unchecked)
@@ -1602,7 +1602,7 @@ Closes the chlorine supply when a leak or an overdose is detected
 - **Medium**: [**Missing Vault (Secret Storage)** in the threat model (referencing asset **Chlorine Safety Controller** as an example)](#missing-vault-secret-storage) (Unchecked)
 - **Medium**: [**Unencrypted Communication** named **Leak Detection** between **Chlorine Safety Controller** and **Chlorine Gas Detector**](#unencrypted-communication) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -1626,7 +1626,7 @@ Closes the chlorine supply when a leak or an overdose is detected
 | Outgoing communication links | [Leak Detection](#leak-detection) |
 | Incoming communication links | [Safety Programming](#safety-programming), [Safety Reset](#safety-reset), [Safety Status](#safety-status) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -1642,7 +1642,7 @@ Closes the chlorine supply when a leak or an overdose is detected
 
 Doses chlorine into the treated water
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**Insecure Control Protocol** risk at **Dosing PLC** over **modbus** from **SCADA Server**](#insecure-control-protocol) (Unchecked)
 - **Elevated**: [**Insecure Control Protocol** risk at **Dosing PLC** over **s7comm** from **Engineering Workstation**](#insecure-control-protocol) (Unchecked)
@@ -1652,7 +1652,7 @@ Doses chlorine into the treated water
 - **Medium**: [**Denial-of-Service** risky access of **Dosing PLC** by **SCADA Server** via **Dosing Control**](#dos-risky-access-across-trust-boundary) (Unchecked)
 - **Medium**: [**Unencrypted Communication** named **Chlorine Reading** between **Dosing PLC** and **Chlorine Analyzer**](#unencrypted-communication) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -1676,7 +1676,7 @@ Doses chlorine into the treated water
 | Outgoing communication links | [Dosing Pump Control](#dosing-pump-control), [Chlorine Reading](#chlorine-reading) |
 | Incoming communication links | [Dosing Control](#dosing-control), [Dosing Programming](#dosing-programming) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -1692,14 +1692,14 @@ Doses chlorine into the treated water
 
 Programs the PLCs, the RTU and the safety controller
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**Long-Lived Credentials** risk at **Engineering Workstation** used by **Jump Host** (credentials)](#long-lived-credentials) (Unchecked)
 - **Elevated**: [**Unencrypted Communication** named **Dosing Programming** between **Engineering Workstation** and **Dosing PLC**](#unencrypted-communication) (Unchecked)
 - **Elevated**: [**Unencrypted Communication** named **Safety Programming** between **Engineering Workstation** and **Chlorine Safety Controller**](#unencrypted-communication) (Unchecked)
 - **Medium**: [**Missing Identity Store** in the threat model (referencing asset **Engineering Workstation** as an example)](#missing-identity-store) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -1723,7 +1723,7 @@ Programs the PLCs, the RTU and the safety controller
 | Outgoing communication links | [Safety Programming](#safety-programming), [Dosing Programming](#dosing-programming) |
 | Incoming communication links | [Remote Desktop](#remote-desktop) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -1739,12 +1739,12 @@ Programs the PLCs, the RTU and the safety controller
 
 Runs the filters and their backwash
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**Long-Lived Credentials** risk at **Filter PLC** used by **SCADA Server** (credentials)](#long-lived-credentials) (Unchecked)
 - **Medium**: [**Denial-of-Service** risky access of **Filter PLC** by **SCADA Server** via **Filter Control**](#dos-risky-access-across-trust-boundary) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -1768,7 +1768,7 @@ Runs the filters and their backwash
 | Outgoing communication links | none |
 | Incoming communication links | [Filter Control](#filter-control) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -1784,11 +1784,11 @@ Runs the filters and their backwash
 
 The only way into the plant network for remote access
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**Unguarded Access from Internet** of **Jump Host** by **Vendor Laptop** via **Remote Support**](#unguarded-access-from-internet) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -1812,7 +1812,7 @@ The only way into the plant network for remote access
 | Outgoing communication links | [Remote Desktop](#remote-desktop) |
 | Incoming communication links | [Remote Support](#remote-support) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -1828,12 +1828,12 @@ The only way into the plant network for remote access
 
 The workstations of the plant management in the corporate network
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**Unencrypted Communication** named **Live Dashboard** between **Office Workstation** and **SCADA Server** transferring authentication data (like credentials, token, session-id, etc.)](#unencrypted-communication) (Unchecked)
 - **Elevated**: [**SQL/NoSQL-Injection** risk at **Office Workstation** against database **Historian Replica** via **Report Access**](#sqlnosql-injection) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -1857,7 +1857,7 @@ The workstations of the plant management in the corporate network
 | Outgoing communication links | [Report Access](#report-access), [Live Dashboard](#live-dashboard) |
 | Incoming communication links | none |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -1873,11 +1873,11 @@ The workstations of the plant management in the corporate network
 
 The screens the operators run the plant with
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**Unencrypted Communication** named **Safety Status** between **Operator HMI** and **Chlorine Safety Controller**](#unencrypted-communication) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -1901,7 +1901,7 @@ The screens the operators run the plant with
 | Outgoing communication links | [Safety Status](#safety-status), [Operation](#operation) |
 | Incoming communication links | none |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -1917,14 +1917,14 @@ The screens the operators run the plant with
 
 Archives the process values of the plant
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**SQL/NoSQL-Injection** risk at **Plant Historian** against database **Historian Replica** via **Replication**](#sqlnosql-injection) (Unchecked)
 - **Medium**: [**Long-Lived Credentials** risk at **Plant Historian** used by **SCADA Server** (credentials)](#long-lived-credentials) (Unchecked)
 - **Medium**: [**Missing Hardening** risk at **Plant Historian**](#missing-hardening) (Unchecked)
 - **Medium**: [**Server-Side Request Forgery (SSRF)** risk at **Plant Historian** server-side web-requesting the target **Historian Replica** via **Replication**](#server-side-request-forgery-ssrf) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -1948,7 +1948,7 @@ Archives the process values of the plant
 | Outgoing communication links | [Replication](#replication) |
 | Incoming communication links | [Archiving](#archiving) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -1964,12 +1964,12 @@ Archives the process values of the plant
 
 Runs the pumps of the remote pump station
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**Insecure Control Protocol** risk at **Pump Station RTU** over **dnp3** from **SCADA Server**](#insecure-control-protocol) (In Progress)
 - **Medium**: [**Denial-of-Service** risky access of **Pump Station RTU** by **SCADA Server** via **Pump Station Telemetry**](#dos-risky-access-across-trust-boundary) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -1993,7 +1993,7 @@ Runs the pumps of the remote pump station
 | Outgoing communication links | none |
 | Incoming communication links | [Pump Station Telemetry](#pump-station-telemetry) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -2009,7 +2009,7 @@ Runs the pumps of the remote pump station
 
 Supervises the treatment and sends the commands of the operators
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Elevated**: [**Direct IT/OT Communication** risk at **SCADA Server** with **Office Workstation**](#direct-itot-communication) (Unchecked)
 - **Elevated**: [**Human Use of Machine Identity** risk at **SCADA Server** by users of **Office Workstation** (service-account)](#human-use-of-machine-identity) (Unchecked)
@@ -2022,7 +2022,7 @@ Supervises the treatment and sends the commands of the operators
 - **Medium**: [**Missing Multi-Factor Authentication** covering communication link **Operation** from **Operator HMI** to **SCADA Server**](#missing-multi-factor-authentication-mfa) (Unchecked)
 - **Medium**: [**Server-Side Request Forgery (SSRF)** risk at **SCADA Server** server-side web-requesting the target **Plant Historian** via **Archiving**](#server-side-request-forgery-ssrf) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -2046,7 +2046,7 @@ Supervises the treatment and sends the commands of the operators
 | Outgoing communication links | [Safety Reset](#safety-reset), [Pump Station Telemetry](#pump-station-telemetry), [Filter Control](#filter-control), [Dosing Control](#dosing-control), [Archiving](#archiving) |
 | Incoming communication links | [Live Dashboard](#live-dashboard), [Operation](#operation) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -2062,11 +2062,11 @@ Supervises the treatment and sends the commands of the operators
 
 The pump dosing the chlorine
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 - **Medium**: [**Insecure Control Protocol** risk at **Dosing Pump** over **profinet** from **Dosing PLC**](#insecure-control-protocol) (Unchecked)
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -2090,7 +2090,7 @@ The pump dosing the chlorine
 | Outgoing communication links | none |
 | Incoming communication links | [Dosing Pump Control](#dosing-pump-control) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -2106,11 +2106,11 @@ The pump dosing the chlorine
 
 Measures the chlorine in the treated water
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 _No risks were identified._
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -2134,7 +2134,7 @@ _No risks were identified._
 | Outgoing communication links | none |
 | Incoming communication links | [Chlorine Reading](#chlorine-reading) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -2150,11 +2150,11 @@ _No risks were identified._
 
 Detects chlorine gas in the dosing room
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 _No risks were identified._
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -2178,7 +2178,7 @@ _No risks were identified._
 | Outgoing communication links | none |
 | Incoming communication links | [Leak Detection](#leak-detection) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -2194,11 +2194,11 @@ _No risks were identified._
 
 A copy of the plant historian for the corporate network
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 _No risks were identified._
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -2222,7 +2222,7 @@ _No risks were identified._
 | Outgoing communication links | none |
 | Incoming communication links | [Replication](#replication), [Report Access](#report-access) |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -2238,11 +2238,11 @@ _No risks were identified._
 
 The laptops of the PLC vendor for remote support
 
-**Identified Risks of the Asset**
+#### Identified Risks of the Asset
 
 _The asset was defined as out-of-scope._
 
-**Asset Information**
+#### Asset Information
 
 | Property | Value |
 | --- | --- |
@@ -2266,7 +2266,7 @@ _The asset was defined as out-of-scope._
 | Outgoing communication links | [Remote Support](#remote-support) |
 | Incoming communication links | none |
 
-**Asset Rating**
+#### Asset Rating
 
 | Property | Value |
 | --- | --- |
@@ -2304,7 +2304,7 @@ Archived process values for reports and compliance
 | Received via | [Report Access](#report-access) |
 | Data breach | Probable |
 
-**Data Breach Risks**
+#### Data Breach Risks
 
 This data asset has data breach potential because of 12 remaining risks:
 
@@ -2344,7 +2344,7 @@ Measurements of flow, level, pressure and chlorine concentration
 | Received via | [Safety Status](#safety-status), [Safety Reset](#safety-reset), [Pump Station Telemetry](#pump-station-telemetry), [Operation](#operation), [Live Dashboard](#live-dashboard), [Leak Detection](#leak-detection), [Filter Control](#filter-control), [Dosing Control](#dosing-control), [Chlorine Reading](#chlorine-reading) |
 | Data breach | Probable |
 
-**Data Breach Risks**
+#### Data Breach Risks
 
 This data asset has data breach potential because of 27 remaining risks:
 
@@ -2399,7 +2399,7 @@ Setpoints, start and stop commands and outputs to pumps and valves
 | Received via | none |
 | Data breach | Possible |
 
-**Data Breach Risks**
+#### Data Breach Risks
 
 This data asset has data breach potential because of 23 remaining risks:
 
@@ -2450,7 +2450,7 @@ The logic and configuration of the PLCs and the RTU
 | Received via | [Remote Support](#remote-support), [Remote Desktop](#remote-desktop), [Dosing Programming](#dosing-programming) |
 | Data breach | Possible |
 
-**Data Breach Risks**
+#### Data Breach Risks
 
 This data asset has data breach potential because of 8 remaining risks:
 
@@ -2486,7 +2486,7 @@ The program of the chlorine safety controller
 | Received via | [Safety Programming](#safety-programming) |
 | Data breach | Possible |
 
-**Data Breach Risks**
+#### Data Breach Risks
 
 This data asset has data breach potential because of 8 remaining risks:
 
