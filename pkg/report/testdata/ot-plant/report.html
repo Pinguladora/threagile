@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src &#39;none&#39;; style-src &#39;sha256-dPCRbpWIhq4B5iq5Ma2aU7CuSZuKIm&#43;fz0&#43;BKGnAOP8=&#39;; base-uri &#39;none&#39;; form-action &#39;none&#39;">
+<meta http-equiv="Content-Security-Policy" content="default-src &#39;none&#39;; style-src &#39;sha256-xmhHkSpNfUQBT4PhGOIa7q4s4d7Lks71qWjhc/1yiFw=&#39;; base-uri &#39;none&#39;; form-action &#39;none&#39;">
 <meta name="referrer" content="no-referrer">
 <title>Threat Model Report: Water Treatment Plant</title>
 <style>:root {
   color-scheme: light dark;
   --bg: #ffffff;
   --fg: #1c1c21;
-  --muted: #55555f;
+  --muted: #51515b;
   --border: #d4d4dc;
   --surface: #f3f3f6;
-  --link: #0b57d0;
-  --accent: #3a52c8;
+  --link: #094bb4;
+  --accent: #3348b0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -190,12 +190,13 @@ h4 {
   vertical-align: 0.1em;
 }
 
-/* The severity and status colours of the PDF report, with black or white text, whichever
-   contrasts more. The text always names the severity or status. */
+/* The severity and status colours, with black or white text, whichever contrasts more. Each
+   pair reaches the 7:1 contrast of WCAG 2.2 level AAA (see contrast_test.go); the text always
+   names the severity or status, so the colour only adds to it. */
 .sev-critical {
-  background: #ff2600;
+  background: #ff6044;
   color: #000000;
-  fill: #ff2600;
+  fill: #ff6044;
 }
 
 .sev-high {
@@ -211,9 +212,9 @@ h4 {
 }
 
 .sev-medium {
-  background: #c87832;
+  background: #cd8545;
   color: #000000;
-  fill: #c87832;
+  fill: #cd8545;
 }
 
 .sev-low {
@@ -223,9 +224,9 @@ h4 {
 }
 
 .status-unchecked {
-  background: #ff0000;
-  color: #000000;
-  fill: #ff0000;
+  background: #b60000;
+  color: #ffffff;
+  fill: #b60000;
 }
 
 .status-in-discussion {
@@ -247,19 +248,19 @@ h4 {
 }
 
 .status-mitigated {
-  background: #008f00;
+  background: #3daa3d;
   color: #000000;
-  fill: #008f00;
+  fill: #3daa3d;
 }
 
 .status-false-positive {
-  background: #666666;
+  background: #595959;
   color: #ffffff;
-  fill: #666666;
+  fill: #595959;
 }
 
 .out-of-scope {
-  background: #7f7f7f;
+  background: #959595;
   color: #000000;
 }
 
@@ -401,7 +402,7 @@ footer {
     --border: #bbbbbb;
     --surface: #eeeeee;
     --link: #000000;
-    --accent: #3a52c8;
+    --accent: #3145aa;
   }
 
   body {

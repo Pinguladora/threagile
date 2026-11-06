@@ -20,6 +20,15 @@ import (
 //go:embed templates/report.typ
 var typstTemplate []byte
 
+// The bold and oblique DejaVu Sans 2.37 that the PDF report uses besides the regular one of the diagrams, with the
+// same license (see fonts/DejaVuSans-LICENSE).
+var (
+	//go:embed fonts/DejaVuSans-Bold.ttf
+	typstFontBold []byte
+	//go:embed fonts/DejaVuSans-Oblique.ttf
+	typstFontOblique []byte
+)
+
 // typstPDFStandards are the standards that typst checks the PDF report against: PDF/A-3a for archiving and
 // PDF/UA-1 for accessibility.
 const typstPDFStandards = "a-3a,ua-1"
@@ -83,7 +92,10 @@ func writeTypstSources(dir string, parsedModel *types.Model, options PDFReportOp
 ) error {
 	view := newReportView(parsedModel, options.ReportOptions)
 	diagrams := make([]typstDiagram, 0, 2)
-	files := map[string][]byte{"report.typ": typstTemplate, "DejaVuSans.ttf": diagramFontTTF}
+	files := map[string][]byte{
+		"report.typ": typstTemplate, "DejaVuSans.ttf": diagramFontTTF,
+		"DejaVuSans-Bold.ttf": typstFontBold, "DejaVuSans-Oblique.ttf": typstFontOblique,
+	}
 	for _, diagram := range []struct {
 		file, alt string
 		dot       []byte
@@ -161,15 +173,20 @@ func typstDiagramSVG(dot []byte, label string) ([]byte, error) {
 	return []byte(strings.ReplaceAll(inline, `font-family="Verdana"`, `font-family="DejaVu Sans"`)), nil
 }
 
-// typstColors are the colours of the severities and statuses that the tables show, and of the links.
+// typstColors are the colours of the text of the PDF report besides black: of the severities and statuses that the
+// tables show, of the links and of the muted text of the page headers. Each is darkened as far as needed for the
+// contrast that WCAG 2.2 asks at level AAA on the white page; the words name the level, so the colour only adds to
+// them.
 func typstColors() map[string]string {
-	colors := map[string]string{"link": rgbHexColorTwilight()}
+	colors := map[string]string{"link": rgbHexColorTwilight(), "muted": "#5A5A5A"}
 	for _, severity := range viewSeverities {
-		level := severityLevel(severity)
-		colors[level.Title] = riskSeverityColor(severity)
+		colors[severityLevel(severity).Title] = riskSeverityColor(severity)
 	}
 	for _, status := range viewStatuses {
 		colors[statusLevel(status).Title] = riskStatusColor(status)
+	}
+	for name, color := range colors {
+		colors[name] = darkenedForContrast(color, "#FFFFFF", contrastAAA)
 	}
 	return colors
 }
