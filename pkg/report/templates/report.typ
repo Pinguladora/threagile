@@ -9,7 +9,10 @@
 #set document(title: data.title, author: data.author, keywords: ("threat model", "Threagile"))
 #set text(font: "DejaVu Sans", size: 9.5pt, lang: "en")
 #set par(justify: false, leading: 0.6em)
+// chapters and their sections are numbered, the parts of an item below them are not
 #set heading(numbering: "1.1")
+#show heading.where(level: 3): set heading(numbering: none)
+#show heading.where(level: 3): set text(size: 1em)
 #set table(stroke: 0.5pt + luma(190), inset: 4pt)
 #show table: set text(size: 8pt)
 #show raw: set text(font: "DejaVu Sans Mono", size: 0.95em)
@@ -80,25 +83,26 @@
     image(data.logo, width: 6cm, alt: "Logo")
     v(1cm)
   }
-  #text(size: 26pt, weight: "bold", data.title)
+  // the title of the document, tagged as its title
+  #show title: set text(size: 26pt, weight: "bold")
+  #title()
   #v(0.5cm)
   #text(size: 14pt, data.subtitle)
   #v(2cm)
-  #grid(
-    columns: 2,
-    column-gutter: 1.5em,
-    row-gutter: 0.8em,
-    [Author], [#data.author],
-    ..if data.at("contributors", default: ()).len() > 0 { ([Contributors], [#data.contributors.join(", ")]) },
-    [Date], [#data.date],
-    [Threagile version], [#data.version],
+  // the details of the model, tagged as a list of terms with their descriptions
+  #let details = (
+    ("Author", data.author),
+    ..if data.at("contributors", default: ()).len() > 0 { (("Contributors", data.contributors.join(", ")),) },
+    ("Date", data.date),
+    ("Threagile version", data.version),
   )
+  #terms(separator: [: ], spacing: 0.8em, ..details.map(((term, description)) => terms.item(term, description)))
 ]
 
 #set page(
   numbering: "1",
   header: context [
-    #set text(size: 7.5pt, fill: luma(90))
+    #set text(size: 7.5pt, fill: rgb(data.colors.at("muted")))
     #data.title #h(1fr) Threat Model Report
   ],
 )
