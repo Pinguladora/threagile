@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"path"
 	"path/filepath"
 	"slices"
@@ -421,4 +422,56 @@ func TestBackupHistoryKeepsTheNewest(t *testing.T) {
 	if !strings.HasSuffix(made[0], " Cover Update.backup") {
 		t.Errorf("backup %q is not named after the change", made[0])
 	}
+}
+
+func TestUpdatingADataAssetKeepsTheOthers(t *testing.T) {
+	s, router := newModelServer(t)
+	headers, model := newModel(t, router)
+	seedModel(t, s, headers, model, shopModel)
+
+	call(t, router, http.MethodPut, model+"/data-assets/customers", strings.Replace(customersPayload, `"Customers"`,
+		`"Orders"`, 1), headers, http.StatusConflict)
+	call(t, router, http.MethodPut, model+"/data-assets/customers", strings.Replace(customersPayload, `"customers"`,
+		`"orders"`, 1), headers, http.StatusConflict)
+
+	modelInput := readBack(t, router, headers, model)
+	if modelInput.DataAssets["Customers"].ID != "customers" || modelInput.DataAssets["Orders"].ID != "orders" {
+		t.Errorf("data assets %+v", modelInput.DataAssets)
+	}
+}
+
+func TestUpdatingASharedRuntimeKeepsTheOthers(t *testing.T) {
+	s, router := newModelServer(t)
+	headers, model := newModel(t, router)
+	seedModel(t, s, headers, model, shopModel)
+	runtimes := model + "/shared-runtimes"
+	call(t, router, http.MethodPost, runtimes, `{"title":"Batch","id":"batch","technical_assets_running":["database"]}`,
+		headers, http.StatusOK)
+
+	call(t, router, http.MethodPut, runtimes+"/node-pool", `{"title":"Batch","id":"node-pool"}`, headers,
+		http.StatusConflict)
+	call(t, router, http.MethodPut, runtimes+"/node-pool", `{"title":"Node Pool","id":"batch"}`, headers,
+		http.StatusConflict)
+	call(t, router, http.MethodPut, runtimes+"/node-pool",
+		`{"title":"Node Pool","id":"node-pool","technical_assets_running":["unknown"]}`, headers, http.StatusBadRequest)
+
+	modelInput := readBack(t, router, headers, model)
+	if modelInput.SharedRuntimes["Node Pool"].ID != "node-pool" || modelInput.SharedRuntimes["Batch"].ID != "batch" ||
+		!slices.Equal(modelInput.SharedRuntimes["Node Pool"].TechnicalAssetsRunning, []string{"web-server"}) {
+		t.Errorf("shared runtimes %+v", modelInput.SharedRuntimes)
+	}
+}
+
+func TestATruncatedModelFileIsAnError(t *testing.T) {
+	s, router := newModelServer(t)
+	headers, model := newModel(t, router)
+	files, err := filepath.Glob(filepath.Join(s.config.GetDataFolder(), "keys", "*", path.Base(model), "threagile.yaml"))
+	if err != nil || len(files) != 1 {
+		t.Fatalf("model files %q: %v", files, err)
+	}
+	if err := os.WriteFile(files[0], []byte("short"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	call(t, router, http.MethodGet, model+"/cover", "", headers, http.StatusInternalServerError)
 }
