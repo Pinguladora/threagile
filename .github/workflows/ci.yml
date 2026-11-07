@@ -120,3 +120,52 @@ jobs:
         run: mise run snapshot:container
       - name: Render the example's PDF report with the image
         run: mise run image:check
+
+  mutation:
+    name: Mutation testing
+    # Mutates the Go files that a pull request changes in the rules, the model and the types, and reports the mutants
+    # that the tests miss in the job summary. It does not fail the build: some mutants are equivalent (they cannot
+    # change behaviour).
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read # checkout
+    env:
+      MISE_ENV: ci
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: block
+          disable-telemetry: "true"
+          disable-sudo: "true"
+          allowed-endpoints: >
+            github.com:443 api.github.com:443 codeload.github.com:443 objects.githubusercontent.com:443 release-assets.githubusercontent.com:443 raw.githubusercontent.com:443 mise.jdx.dev:443 proxy.golang.org:443 sum.golang.org:443 storage.googleapis.com:443 dl.google.com:443 go.dev:443 *.actions.githubusercontent.com:443 *.blob.core.windows.net:443
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0 # gomu diffs against the base commit of the pull request
+      - name: Set up mise
+        uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
+      - name: Cache the Go build and module cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: go-${{ runner.os }}-${{ hashFiles('go.sum') }}
+          restore-keys: |
+            go-${{ runner.os }}-
+      - name: Mutate the changed files
+        env:
+          MUTATION_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          mise run test:mutation | tee mutation.txt
+          {
+            echo '## Mutation testing'
+            echo '```'
+            grep -E '^(\[|Mutation Score|No changed)' mutation.txt || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
