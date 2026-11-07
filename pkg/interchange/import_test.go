@@ -231,6 +231,18 @@ func containsPrefix(notes []string, prefix string) bool {
 	return false
 }
 
+func TestKubernetesFieldsTravelThroughOTM(t *testing.T) {
+	cluster := analyze(t, "../../demo/kubernetes/threagile.yaml")
+
+	result, notes := interchange.ToInput(interchange.FromModel(cluster), technologies(t))
+
+	assert.Empty(t, notes)
+	assert.True(t, result.TechnicalAssets["Log Collector"].Privileged)
+	assert.False(t, result.TechnicalAssets["Storefront"].Privileged)
+	assert.Equal(t, "ingress", result.TrustBoundaries["Checkout Namespace"].NetworkPolicy)
+	assert.Empty(t, result.TrustBoundaries["Monitoring Namespace"].NetworkPolicy, "not modelled")
+}
+
 func TestToInputDropsNetworkPolicyOutsideNamespaces(t *testing.T) {
 	elements := foreignModel()
 	elements.Zones[1].Properties = interchange.Properties{"network_policy": "none"}

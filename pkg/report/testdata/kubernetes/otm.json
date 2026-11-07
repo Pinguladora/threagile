@@ -1,0 +1,1749 @@
+{
+  "otmVersion": "0.2.0",
+  "project": {
+    "name": "Web Shop on Kubernetes",
+    "id": "web-shop-on-kubernetes",
+    "owner": "Jane Doe",
+    "ownerContact": "jane.doe@example.com",
+    "attributes": {
+      "threagile:business_criticality": "critical",
+      "threagile:date": "2026-11-07"
+    }
+  },
+  "assets": [
+    {
+      "name": "Product Catalog",
+      "id": "catalog",
+      "description": "The products and their prices",
+      "risk": {
+        "confidentiality": 0,
+        "integrity": 50,
+        "availability": 50,
+        "comment": "Public, but wrong prices cost money"
+      },
+      "attributes": {
+        "threagile:origin": "Shop Operations",
+        "threagile:owner": "Shop Operations",
+        "threagile:quantity": "many",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "name": "Cluster Configuration",
+      "id": "cluster-config",
+      "description": "The manifests of the workloads, applied by the operator",
+      "risk": {
+        "confidentiality": 75,
+        "integrity": 75,
+        "availability": 50,
+        "comment": "Changing them changes what runs in the cluster"
+      },
+      "attributes": {
+        "threagile:origin": "Platform Team",
+        "threagile:owner": "Platform Team",
+        "threagile:quantity": "few",
+        "threagile:usage": "devops"
+      }
+    },
+    {
+      "name": "Customer Orders",
+      "id": "orders",
+      "description": "The orders of the customers, with their addresses",
+      "risk": {
+        "confidentiality": 75,
+        "integrity": 75,
+        "availability": 75,
+        "comment": "Personal data of the customers, and the business of the shop"
+      },
+      "attributes": {
+        "threagile:origin": "Customers",
+        "threagile:owner": "Shop Operations",
+        "threagile:quantity": "many",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "name": "Payment Tokens",
+      "id": "payment-tokens",
+      "description": "Tokens of the payment provider for the cards of the customers",
+      "risk": {
+        "confidentiality": 100,
+        "integrity": 100,
+        "availability": 75,
+        "comment": "Stolen tokens let attackers charge the cards of the customers"
+      },
+      "attributes": {
+        "threagile:origin": "Payment Provider",
+        "threagile:owner": "Shop Operations",
+        "threagile:quantity": "many",
+        "threagile:usage": "business"
+      }
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "checkout-namespace",
+      "name": "Checkout Namespace",
+      "type": "execution-environment",
+      "description": "Checkout Namespace",
+      "risk": {
+        "trustRating": 60
+      },
+      "parent": {
+        "trustZone": "cluster-network"
+      },
+      "attributes": {
+        "threagile:network_policy": "ingress"
+      }
+    },
+    {
+      "id": "cluster-network",
+      "name": "Cluster Network",
+      "type": "network-cloud-security-group",
+      "description": "Cluster Network",
+      "risk": {
+        "trustRating": 60
+      }
+    },
+    {
+      "id": "data-namespace",
+      "name": "Data Namespace",
+      "type": "execution-environment",
+      "description": "Data Namespace",
+      "risk": {
+        "trustRating": 60
+      },
+      "parent": {
+        "trustZone": "cluster-network"
+      },
+      "attributes": {
+        "threagile:network_policy": "ingress-and-egress"
+      }
+    },
+    {
+      "id": "monitoring-namespace",
+      "name": "Monitoring Namespace",
+      "type": "execution-environment",
+      "description": "Monitoring Namespace",
+      "risk": {
+        "trustRating": 60
+      },
+      "parent": {
+        "trustZone": "cluster-network"
+      }
+    },
+    {
+      "id": "outside-trust-boundaries",
+      "name": "Outside of all trust boundaries",
+      "type": "untrusted",
+      "description": "The technical assets that are in no trust boundary of the threagile model.",
+      "risk": {
+        "trustRating": 0
+      },
+      "attributes": {
+        "threagile:outside-trust-boundaries": "true"
+      }
+    },
+    {
+      "id": "shop-namespace",
+      "name": "Shop Namespace",
+      "type": "execution-environment",
+      "description": "Shop Namespace",
+      "risk": {
+        "trustRating": 60
+      },
+      "parent": {
+        "trustZone": "cluster-network"
+      },
+      "attributes": {
+        "threagile:network_policy": "none"
+      }
+    },
+    {
+      "id": "system-namespace",
+      "name": "System Namespace",
+      "type": "execution-environment",
+      "description": "System Namespace",
+      "risk": {
+        "trustRating": 60
+      },
+      "parent": {
+        "trustZone": "cluster-network"
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "catalog-service",
+      "name": "Catalog Service",
+      "type": "web-service-rest",
+      "description": "Catalog Service",
+      "parent": {
+        "trustZone": "shop-namespace"
+      },
+      "assets": {
+        "processed": [
+          "catalog"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "container-baseimage-backdooring",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "container-baseimage-backdooring-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "mixed-targets-on-shared-runtime",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "mixed-targets-on-shared-runtime-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:availability": "important",
+        "threagile:confidentiality": "public",
+        "threagile:custom_developed_parts": "true",
+        "threagile:data_formats_accepted": "json",
+        "threagile:encryption": "none",
+        "threagile:integrity": "important",
+        "threagile:justification_cia_rating": "Test",
+        "threagile:machine": "container",
+        "threagile:owner": "Some Company",
+        "threagile:size": "service",
+        "threagile:type": "process",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "checkout-service",
+      "name": "Checkout Service",
+      "type": "web-service-rest",
+      "description": "Checkout Service",
+      "parent": {
+        "trustZone": "checkout-namespace"
+      },
+      "assets": {
+        "processed": [
+          "orders",
+          "payment-tokens"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "container-baseimage-backdooring",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "container-baseimage-backdooring-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-build-infrastructure",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-build-infrastructure-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-network-policy",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-network-policy-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-network-segmentation",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-network-segmentation-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-vault",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-vault-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "mixed-targets-on-shared-runtime",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "mixed-targets-on-shared-runtime-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:availability": "critical",
+        "threagile:confidentiality": "strictly-confidential",
+        "threagile:custom_developed_parts": "true",
+        "threagile:data_formats_accepted": "json",
+        "threagile:encryption": "none",
+        "threagile:integrity": "mission-critical",
+        "threagile:justification_cia_rating": "Test",
+        "threagile:machine": "container",
+        "threagile:owner": "Some Company",
+        "threagile:size": "service",
+        "threagile:type": "process",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "customer-browser",
+      "name": "Customer Browser",
+      "type": "browser",
+      "description": "Customer Browser",
+      "parent": {
+        "trustZone": "outside-trust-boundaries"
+      },
+      "assets": {
+        "processed": [
+          "catalog",
+          "orders"
+        ]
+      },
+      "attributes": {
+        "threagile:availability": "critical",
+        "threagile:confidentiality": "confidential",
+        "threagile:custom_developed_parts": "true",
+        "threagile:data_formats_accepted": "json",
+        "threagile:encryption": "none",
+        "threagile:integrity": "critical",
+        "threagile:internet": "true",
+        "threagile:justification_cia_rating": "Test",
+        "threagile:machine": "physical",
+        "threagile:out_of_scope": "true",
+        "threagile:owner": "Some Company",
+        "threagile:size": "service",
+        "threagile:type": "external-entity",
+        "threagile:usage": "business",
+        "threagile:used_as_client_by_human": "true"
+      }
+    },
+    {
+      "id": "gitops-operator",
+      "name": "GitOps Operator",
+      "type": "tool",
+      "description": "GitOps Operator",
+      "parent": {
+        "trustZone": "system-namespace"
+      },
+      "assets": {
+        "processed": [
+          "cluster-config"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "container-baseimage-backdooring",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "container-baseimage-backdooring-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "mixed-targets-on-shared-runtime",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "mixed-targets-on-shared-runtime-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:availability": "critical",
+        "threagile:confidentiality": "confidential",
+        "threagile:custom_developed_parts": "true",
+        "threagile:data_formats_accepted": "json",
+        "threagile:encryption": "none",
+        "threagile:integrity": "critical",
+        "threagile:justification_cia_rating": "Test",
+        "threagile:machine": "container",
+        "threagile:owner": "Some Company",
+        "threagile:size": "service",
+        "threagile:type": "process",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "ingress-controller",
+      "name": "Ingress Controller",
+      "type": "load-balancer",
+      "description": "Ingress Controller",
+      "parent": {
+        "trustZone": "cluster-network"
+      },
+      "assets": {
+        "processed": [
+          "catalog",
+          "orders"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "container-baseimage-backdooring",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "container-baseimage-backdooring-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-identity-store",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-identity-store-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "mixed-targets-on-shared-runtime",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "mixed-targets-on-shared-runtime-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:availability": "critical",
+        "threagile:confidentiality": "confidential",
+        "threagile:custom_developed_parts": "true",
+        "threagile:data_formats_accepted": "json",
+        "threagile:encryption": "none",
+        "threagile:integrity": "critical",
+        "threagile:justification_cia_rating": "Test",
+        "threagile:machine": "container",
+        "threagile:owner": "Some Company",
+        "threagile:size": "service",
+        "threagile:type": "process",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "kube-api",
+      "name": "Kubernetes API",
+      "type": "container-platform",
+      "description": "Kubernetes API",
+      "parent": {
+        "trustZone": "system-namespace"
+      },
+      "assets": {
+        "processed": [
+          "cluster-config"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "container-baseimage-backdooring",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "container-baseimage-backdooring-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "container-platform-escape",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "container-platform-escape-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-network-segmentation",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-network-segmentation-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:availability": "critical",
+        "threagile:confidentiality": "confidential",
+        "threagile:custom_developed_parts": "true",
+        "threagile:data_formats_accepted": "json",
+        "threagile:encryption": "none",
+        "threagile:integrity": "critical",
+        "threagile:justification_cia_rating": "Test",
+        "threagile:machine": "container",
+        "threagile:owner": "Some Company",
+        "threagile:size": "service",
+        "threagile:type": "process",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "log-collector",
+      "name": "Log Collector",
+      "type": "monitoring",
+      "description": "Log Collector",
+      "parent": {
+        "trustZone": "monitoring-namespace"
+      },
+      "assets": {
+        "processed": [
+          "catalog"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "container-baseimage-backdooring",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "container-baseimage-backdooring-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "mixed-targets-on-shared-runtime",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "mixed-targets-on-shared-runtime-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "privileged-workload",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "privileged-workload-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "unnecessary-technical-asset",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "unnecessary-technical-asset-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:availability": "important",
+        "threagile:confidentiality": "public",
+        "threagile:custom_developed_parts": "true",
+        "threagile:data_formats_accepted": "json",
+        "threagile:encryption": "none",
+        "threagile:integrity": "important",
+        "threagile:justification_cia_rating": "Test",
+        "threagile:machine": "container",
+        "threagile:owner": "Some Company",
+        "threagile:privileged": "true",
+        "threagile:size": "service",
+        "threagile:type": "process",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "orders-db",
+      "name": "Orders Database",
+      "type": "database",
+      "description": "Orders Database",
+      "parent": {
+        "trustZone": "data-namespace"
+      },
+      "assets": {
+        "processed": [
+          "orders"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "container-baseimage-backdooring",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "container-baseimage-backdooring-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-network-segmentation",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-network-segmentation-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "mixed-targets-on-shared-runtime",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "mixed-targets-on-shared-runtime-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:availability": "critical",
+        "threagile:confidentiality": "confidential",
+        "threagile:custom_developed_parts": "true",
+        "threagile:data_formats_accepted": "json",
+        "threagile:encryption": "none",
+        "threagile:integrity": "critical",
+        "threagile:justification_cia_rating": "Test",
+        "threagile:machine": "container",
+        "threagile:owner": "Some Company",
+        "threagile:size": "service",
+        "threagile:type": "datastore",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "payment-provider",
+      "name": "Payment Provider",
+      "type": "web-service-rest",
+      "description": "Payment Provider",
+      "parent": {
+        "trustZone": "outside-trust-boundaries"
+      },
+      "assets": {
+        "processed": [
+          "payment-tokens"
+        ]
+      },
+      "attributes": {
+        "threagile:availability": "critical",
+        "threagile:confidentiality": "strictly-confidential",
+        "threagile:custom_developed_parts": "true",
+        "threagile:data_formats_accepted": "json",
+        "threagile:encryption": "none",
+        "threagile:integrity": "mission-critical",
+        "threagile:internet": "true",
+        "threagile:justification_cia_rating": "Test",
+        "threagile:machine": "virtual",
+        "threagile:out_of_scope": "true",
+        "threagile:owner": "Some Company",
+        "threagile:size": "service",
+        "threagile:type": "process",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "storefront",
+      "name": "Storefront",
+      "type": "web-application",
+      "description": "Storefront",
+      "parent": {
+        "trustZone": "shop-namespace"
+      },
+      "assets": {
+        "processed": [
+          "catalog",
+          "orders"
+        ]
+      },
+      "threats": [
+        {
+          "threat": "container-baseimage-backdooring",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "container-baseimage-backdooring-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "cross-site-scripting",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "cross-site-scripting-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-cloud-hardening",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-cloud-hardening-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-network-policy",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-network-policy-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "mixed-targets-on-shared-runtime",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "mixed-targets-on-shared-runtime-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:availability": "critical",
+        "threagile:confidentiality": "confidential",
+        "threagile:custom_developed_parts": "true",
+        "threagile:data_formats_accepted": "json",
+        "threagile:encryption": "none",
+        "threagile:integrity": "critical",
+        "threagile:justification_cia_rating": "Test",
+        "threagile:machine": "container",
+        "threagile:owner": "Some Company",
+        "threagile:size": "service",
+        "threagile:type": "process",
+        "threagile:usage": "business"
+      }
+    }
+  ],
+  "dataflows": [
+    {
+      "id": "checkout-service\u003eorder-storage",
+      "name": "Order Storage",
+      "description": "Order Storage",
+      "bidirectional": true,
+      "source": "checkout-service",
+      "destination": "orders-db",
+      "assets": [
+        "orders"
+      ],
+      "threats": [
+        {
+          "threat": "long-lived-credentials",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "long-lived-credentials-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "sql-nosql-injection",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "sql-nosql-injection-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "credentials",
+        "threagile:authorization": "function-level",
+        "threagile:data_assets_received": "orders",
+        "threagile:data_assets_sent": "orders",
+        "threagile:identity": "service-account",
+        "threagile:protocol": "jdbc-encrypted",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "checkout-service\u003epayment",
+      "name": "Payment",
+      "description": "Payment",
+      "bidirectional": true,
+      "source": "checkout-service",
+      "destination": "payment-provider",
+      "assets": [
+        "payment-tokens"
+      ],
+      "threats": [
+        {
+          "threat": "server-side-request-forgery",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "server-side-request-forgery-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "client-certificate",
+        "threagile:authorization": "function-level",
+        "threagile:data_assets_received": "payment-tokens",
+        "threagile:data_assets_sent": "payment-tokens",
+        "threagile:identity": "service-account",
+        "threagile:protocol": "https",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "customer-browser\u003eshop-traffic",
+      "name": "Shop Traffic",
+      "description": "Shop Traffic",
+      "bidirectional": true,
+      "source": "customer-browser",
+      "destination": "ingress-controller",
+      "assets": [
+        "catalog",
+        "orders"
+      ],
+      "attributes": {
+        "threagile:authentication": "session-id",
+        "threagile:authorization": "object-level",
+        "threagile:data_assets_received": "orders,catalog",
+        "threagile:data_assets_sent": "orders",
+        "threagile:identity": "end-user",
+        "threagile:protocol": "https",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "gitops-operator\u003eapply-manifests",
+      "name": "Apply Manifests",
+      "description": "Apply Manifests",
+      "bidirectional": true,
+      "source": "gitops-operator",
+      "destination": "kube-api",
+      "assets": [
+        "cluster-config"
+      ],
+      "threats": [
+        {
+          "threat": "kubernetes-api-write-access",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "kubernetes-api-write-access-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "server-side-request-forgery",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "server-side-request-forgery-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "client-certificate",
+        "threagile:authorization": "function-level",
+        "threagile:data_assets_received": "cluster-config",
+        "threagile:data_assets_sent": "cluster-config",
+        "threagile:identity": "workload",
+        "threagile:protocol": "https",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "ingress-controller\u003estorefront-traffic",
+      "name": "Storefront Traffic",
+      "description": "Storefront Traffic",
+      "bidirectional": true,
+      "source": "ingress-controller",
+      "destination": "storefront",
+      "assets": [
+        "catalog",
+        "orders"
+      ],
+      "threats": [
+        {
+          "threat": "cross-site-request-forgery",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "cross-site-request-forgery-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "missing-authentication-second-factor",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-authentication-second-factor-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "session-id",
+        "threagile:authorization": "object-level",
+        "threagile:data_assets_received": "orders,catalog",
+        "threagile:data_assets_sent": "orders",
+        "threagile:identity": "end-user",
+        "threagile:protocol": "https",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "storefront\u003ecatalog-api",
+      "name": "Catalog API",
+      "description": "Catalog API",
+      "source": "storefront",
+      "destination": "catalog-service",
+      "assets": [
+        "catalog"
+      ],
+      "threats": [
+        {
+          "threat": "server-side-request-forgery",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "server-side-request-forgery-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "client-certificate",
+        "threagile:authorization": "function-level",
+        "threagile:data_assets_received": "catalog",
+        "threagile:identity": "workload",
+        "threagile:protocol": "https",
+        "threagile:readonly": "true",
+        "threagile:usage": "business"
+      }
+    },
+    {
+      "id": "storefront\u003echeckout-api",
+      "name": "Checkout API",
+      "description": "Checkout API",
+      "bidirectional": true,
+      "source": "storefront",
+      "destination": "checkout-service",
+      "assets": [
+        "orders"
+      ],
+      "threats": [
+        {
+          "threat": "missing-identity-propagation",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "missing-identity-propagation-mitigation",
+              "state": "recommended"
+            }
+          ]
+        },
+        {
+          "threat": "server-side-request-forgery",
+          "state": "exposed",
+          "mitigations": [
+            {
+              "mitigation": "server-side-request-forgery-mitigation",
+              "state": "recommended"
+            }
+          ]
+        }
+      ],
+      "attributes": {
+        "threagile:authentication": "client-certificate",
+        "threagile:authorization": "function-level",
+        "threagile:data_assets_received": "orders",
+        "threagile:data_assets_sent": "orders",
+        "threagile:identity": "workload",
+        "threagile:protocol": "https",
+        "threagile:usage": "business"
+      }
+    }
+  ],
+  "threats": [
+    {
+      "id": "container-baseimage-backdooring",
+      "name": "Container Base Image Backdooring",
+      "description": "When a technical asset is built using container technologies, Base Image Backdooring risks might arise where base images and other layers used contain vulnerable components or backdoors.\u003cbr\u003e\u003cbr\u003eSee for example: \u003ca href=\"https://techcrunch.com/2018/06/15/tainted-crypto-mining-containers-pulled-from-docker-hub/\"\u003ehttps://techcrunch.com/2018/06/15/tainted-crypto-mining-containers-pulled-from-docker-hub/\u003c/a\u003e",
+      "categories": [
+        "Tampering",
+        "OWASP A03:2025 Software Supply Chain Failures"
+      ],
+      "cwes": [
+        "CWE-912"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 75,
+        "impactComment": "If this risk is unmitigated, attackers might be able to deeply persist in the target system by executing code in deployed containers."
+      },
+      "attributes": {
+        "threagile:asvs": "V10 - Malicious Code Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "container-platform-escape",
+      "name": "Container Platform Escape",
+      "description": "Container platforms are especially interesting targets for attackers as they host big parts of a containerized runtime infrastructure. When not configured and operated with security best practices in mind, attackers might exploit a vulnerability inside an container and escape towards the platform as highly privileged users. These scenarios might give attackers capabilities to attack every other container as owning the container platform (via container escape attacks) equals to owning every container.",
+      "categories": [
+        "Elevation of Privilege",
+        "OWASP A02:2025 Security Misconfiguration"
+      ],
+      "cwes": [
+        "CWE-1008"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers which have successfully compromised a container (via other vulnerabilities) might be able to deeply persist in the target system by executing code in many deployed containers and the container platform itself."
+      },
+      "attributes": {
+        "threagile:asvs": "V14 - Configuration Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "cross-site-request-forgery",
+      "name": "Cross-Site Request Forgery (CSRF)",
+      "description": "When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.",
+      "categories": [
+        "Spoofing",
+        "OWASP A01:2025 Broken Access Control"
+      ],
+      "cwes": [
+        "CWE-352"
+      ],
+      "risk": {
+        "likelihood": 75,
+        "impact": 25,
+        "impactComment": "If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site."
+      },
+      "attributes": {
+        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+        "threagile:function": "development"
+      }
+    },
+    {
+      "id": "cross-site-scripting",
+      "name": "Cross-Site Scripting (XSS)",
+      "description": "For each web application Cross-Site Scripting (XSS) risks might arise. In terms of the overall risk level take other applications running on the same domain into account as well.",
+      "categories": [
+        "Tampering",
+        "OWASP A05:2025 Injection"
+      ],
+      "cwes": [
+        "CWE-79"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 50,
+        "impactComment": "If this risk remains unmitigated, attackers might be able to access individual victim sessions and steal or modify user data."
+      },
+      "attributes": {
+        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
+        "threagile:function": "development"
+      }
+    },
+    {
+      "id": "kubernetes-api-write-access",
+      "name": "Kubernetes API Write Access",
+      "description": "A workload whose service account may change resources through the API of its cluster, even narrowly, like creating pods, reading secrets or patching deployments, hands that power to whoever compromises the workload: a pod created with a mounted host path, or a secret read, opens the rest of the cluster.",
+      "categories": [
+        "Elevation of Privilege",
+        "OWASP K02:2025 Overly Permissive Authorization Configurations",
+        "OWASP A01:2025 Broken Access Control"
+      ],
+      "cwes": [
+        "CWE-250"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 75,
+        "impactComment": "If this risk is unmitigated, attackers who compromise the workload might run their own workloads in the cluster, read its secrets and take over the other workloads and their data."
+      },
+      "attributes": {
+        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Kubernetes_Security_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "long-lived-credentials",
+      "name": "Long-Lived Credentials",
+      "description": "Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it.",
+      "categories": [
+        "Spoofing",
+        "OWASP A07:2025 Authentication Failures",
+        "OWASP NHI7:2025 Long-Lived Secrets",
+        "OWASP NHI2:2025 Secret Leakage"
+      ],
+      "cwes": [
+        "CWE-522"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller."
+      },
+      "attributes": {
+        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "missing-authentication-second-factor",
+      "name": "Missing Multi-Factor Authentication (MFA)",
+      "description": "Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.",
+      "categories": [
+        "Elevation of Privilege",
+        "OWASP A07:2025 Authentication Failures",
+        "OWASP API2:2023 Broken Authentication"
+      ],
+      "cwes": [
+        "CWE-308"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication."
+      },
+      "attributes": {
+        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html",
+        "threagile:function": "business-side"
+      }
+    },
+    {
+      "id": "missing-build-infrastructure",
+      "name": "Missing Build Infrastructure",
+      "description": "The modeled architecture does not contain a build infrastructure (devops-client, sourcecode-repo, build-pipeline, etc.), which might be the risk of a model missing critical assets (and thus not seeing their risks). If the architecture contains custom-developed parts, the pipeline where code gets developed and built needs to be part of the model.",
+      "categories": [
+        "Tampering"
+      ],
+      "cwes": [
+        "CWE-1127"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model due to critical build infrastructure components missing in the model."
+      },
+      "attributes": {
+        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+        "threagile:function": "architecture"
+      }
+    },
+    {
+      "id": "missing-cloud-hardening",
+      "name": "Missing Cloud Hardening",
+      "description": "Cloud components should be hardened according to the cloud vendor best practices. This affects their configuration, auditing, and further areas.",
+      "categories": [
+        "Tampering",
+        "OWASP A02:2025 Security Misconfiguration",
+        "OWASP API8:2023 Security Misconfiguration"
+      ],
+      "cwes": [
+        "CWE-1008"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 100,
+        "impactComment": "If this risk is unmitigated, attackers might access cloud components in an unintended way."
+      },
+      "attributes": {
+        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "missing-hardening",
+      "name": "Missing Hardening",
+      "description": "Technical assets with a Relative Attacker Attractiveness (RAA) value of 55 % or higher should be explicitly hardened taking best practices and vendor hardening guides into account.",
+      "categories": [
+        "Tampering",
+        "OWASP A02:2025 Security Misconfiguration",
+        "OWASP API8:2023 Security Misconfiguration"
+      ],
+      "cwes": [
+        "CWE-16"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 50,
+        "impactComment": "If this risk remains unmitigated, attackers might be able to easier attack high-value targets."
+      },
+      "attributes": {
+        "threagile:asvs": "V14 - Configuration Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "missing-identity-propagation",
+      "name": "Missing Identity Propagation",
+      "description": "Technical assets (especially multi-tenant systems), which usually process data for end users should authorize every request based on the identity of the end user when the data flow is authenticated (i.e. non-public). For DevOps usages at least the identity of a service account or a workload is required.",
+      "categories": [
+        "Elevation of Privilege",
+        "OWASP A01:2025 Broken Access Control",
+        "OWASP API1:2023 Broken Object Level Authorization"
+      ],
+      "cwes": [
+        "CWE-284"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might be able to access or modify foreign data after a successful compromise of a component within the system due to missing resource-based authorization checks."
+      },
+      "attributes": {
+        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html",
+        "threagile:function": "architecture"
+      }
+    },
+    {
+      "id": "missing-identity-store",
+      "name": "Missing Identity Store",
+      "description": "The modeled architecture does not contain an identity store, which might be the risk of a model missing critical assets (and thus not seeing their risks).",
+      "categories": [
+        "Spoofing"
+      ],
+      "cwes": [
+        "CWE-287"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model in the identity provider/store that is currently missing in the model."
+      },
+      "attributes": {
+        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+        "threagile:function": "architecture"
+      }
+    },
+    {
+      "id": "missing-network-policy",
+      "name": "Missing Network Policy",
+      "description": "Without network policies, every pod of a Kubernetes cluster can reach the pods of a namespace, and its pods can reach the rest of the cluster and beyond: the namespace separates names, not traffic.",
+      "categories": [
+        "Elevation of Privilege",
+        "OWASP K05:2025 Missing Network Segmentation Controls",
+        "OWASP A02:2025 Security Misconfiguration"
+      ],
+      "cwes": [
+        "CWE-923"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 75,
+        "impactComment": "If this risk is unmitigated, attackers who compromise any pod of the cluster might move on to the workloads of the namespace and their data, or, from a pod of the namespace, to anything it can reach."
+      },
+      "attributes": {
+        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Kubernetes_Security_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "missing-network-segmentation",
+      "name": "Missing Network Segmentation",
+      "description": "Highly sensitive assets and/or data stores residing in the same network segment than other lower sensitive assets (like webservers or content management systems etc.) should be better protected by a network segmentation trust-boundary.",
+      "categories": [
+        "Elevation of Privilege",
+        "OWASP A06:2025 Insecure Design"
+      ],
+      "cwes": [
+        "CWE-1008"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards more valuable targets, as they are not separated by network segmentation."
+      },
+      "attributes": {
+        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "missing-vault",
+      "name": "Missing Vault (Secret Storage)",
+      "description": "In order to avoid the risk of secret leakage via config files (when attacked through vulnerabilities being able to read files like Path-Traversal and others), it is best practice to use a separate hardened process with proper authentication, authorization, and audit logging to access config secrets (like credentials, private keys, client certificates, etc.). This component is usually some kind of Vault.",
+      "categories": [
+        "Information Disclosure",
+        "OWASP NHI2:2025 Secret Leakage"
+      ],
+      "cwes": [
+        "CWE-522"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might be able to easier steal config secrets (like credentials, private keys, client certificates, etc.) once a vulnerability to access files is present and exploited."
+      },
+      "attributes": {
+        "threagile:asvs": "V6 - Stored Cryptography Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
+        "threagile:function": "architecture"
+      }
+    },
+    {
+      "id": "mixed-targets-on-shared-runtime",
+      "name": "Mixed Targets on Shared Runtime",
+      "description": "Different attacker targets (like frontend and backend/datastore components) should not be running on the same shared (underlying) runtime.",
+      "categories": [
+        "Elevation of Privilege",
+        "OWASP A06:2025 Insecure Design"
+      ],
+      "cwes": [
+        "CWE-1008"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards more valuable targets, as they are running on the same shared runtime."
+      },
+      "attributes": {
+        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "privileged-workload",
+      "name": "Privileged Workload",
+      "description": "A workload that runs as a privileged container, mounts a path of its node or shares the node's network, process or IPC namespace is not contained by its container: whoever controls the workload controls the node, the other workloads on it and the credentials of the node's kubelet.",
+      "categories": [
+        "Elevation of Privilege",
+        "OWASP K01:2025 Insecure Workload Configurations",
+        "OWASP A02:2025 Security Misconfiguration"
+      ],
+      "cwes": [
+        "CWE-250"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 75,
+        "impactComment": "If this risk is unmitigated, attackers who compromise the workload might take over its node and from there the other workloads of the shared runtime and their data, and possibly the cluster."
+      },
+      "attributes": {
+        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Kubernetes_Security_Cheat_Sheet.html",
+        "threagile:function": "operations"
+      }
+    },
+    {
+      "id": "server-side-request-forgery",
+      "name": "Server-Side Request Forgery (SSRF)",
+      "description": "When a server system (i.e. not a client) is accessing other server systems via typical web protocols Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might arise. ",
+      "categories": [
+        "Information Disclosure",
+        "OWASP A01:2025 Broken Access Control",
+        "OWASP API7:2023 Server Side Request Forgery"
+      ],
+      "cwes": [
+        "CWE-918"
+      ],
+      "risk": {
+        "likelihood": 50,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might be able to access sensitive services or files of network-reachable components by modifying outgoing calls of affected components."
+      },
+      "attributes": {
+        "threagile:asvs": "V12 - File and Resources Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
+        "threagile:function": "development"
+      }
+    },
+    {
+      "id": "sql-nosql-injection",
+      "name": "SQL/NoSQL-Injection",
+      "description": "When a database is accessed via database access protocols SQL/NoSQL-Injection risks might arise. The risk rating depends on the sensitivity technical asset itself and of the data assets processed.",
+      "categories": [
+        "Tampering",
+        "OWASP A05:2025 Injection"
+      ],
+      "cwes": [
+        "CWE-89"
+      ],
+      "risk": {
+        "likelihood": 75,
+        "impact": 50,
+        "impactComment": "If this risk is unmitigated, attackers might be able to modify SQL/NoSQL queries to steal and modify data and eventually further escalate towards a deeper system penetration via code executions."
+      },
+      "attributes": {
+        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+        "threagile:function": "development"
+      }
+    },
+    {
+      "id": "unnecessary-technical-asset",
+      "name": "Unnecessary Technical Asset",
+      "description": "When a technical asset does not process any data assets, this is an indicator for an unnecessary technical asset (or for an incomplete model). This is also the case if the asset has no communication links (either outgoing or incoming).",
+      "categories": [
+        "Elevation of Privilege"
+      ],
+      "cwes": [
+        "CWE-1008"
+      ],
+      "risk": {
+        "likelihood": 25,
+        "impact": 25,
+        "impactComment": "If this risk is unmitigated, attackers might be able to target unnecessary technical assets."
+      },
+      "attributes": {
+        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
+        "threagile:function": "architecture"
+      }
+    }
+  ],
+  "mitigations": [
+    {
+      "id": "container-baseimage-backdooring-mitigation",
+      "name": "Container Infrastructure Hardening",
+      "description": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?"
+      }
+    },
+    {
+      "id": "container-platform-escape-mitigation",
+      "name": "Container Infrastructure Hardening",
+      "description": "Apply hardening of all container infrastructures. \u003cp\u003eSee for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e as well as the \u003ci\u003eDocker Bench for Security\u003c/i\u003e ( \u003ca href=\"https://github.com/docker/docker-bench-security\"\u003ehttps://github.com/docker/docker-bench-security\u003c/a\u003e ) or \u003ci\u003eInSpec Checks for Docker and Kubernetes\u003c/i\u003e ( \u003ca href=\"https://github.com/dev-sec/cis-kubernetes-benchmark\"\u003ehttps://github.com/dev-sec/cis-docker-benchmark\u003c/a\u003e and \u003ca href=\"https://github.com/dev-sec/cis-kubernetes-benchmark\"\u003ehttps://github.com/dev-sec/cis-kubernetes-benchmark\u003c/a\u003e ). Use only trusted base images, verify digital signatures and apply image creation best practices. Also consider using Google's \u003cb\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Apply namespace isolation and nod affinity to separate pods from each other in terms of access and nodes the same style as you separate data.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS or CSVS chapter applied?"
+      }
+    },
+    {
+      "id": "cross-site-request-forgery-mitigation",
+      "name": "CSRF Prevention",
+      "description": "Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "cross-site-scripting-mitigation",
+      "name": "XSS Prevention",
+      "description": "Try to encode all values sent back to the browser and also handle DOM-manipulations in a safe way to avoid DOM-based XSS. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "kubernetes-api-write-access-mitigation",
+      "name": "Least Privilege for Service Accounts",
+      "description": "Give the workload a service account of its own, bound to a role in its namespace with only the verbs and resources it uses (no create on pods, no get on secrets, no wildcards), disable the mounting of its token where it does not call the API, and leave changes to the cluster to the deployment pipeline or an operator on nodes of its own.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "long-lived-credentials-mitigation",
+      "name": "Short-Lived Credentials",
+      "description": "Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity \u003ci\u003eworkload\u003c/i\u003e or the authentication \u003ci\u003eshort-lived-token\u003c/i\u003e. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-authentication-second-factor-mitigation",
+      "name": "Multi-Factor Authentication (MFA)",
+      "description": "Apply an authentication method to the technical asset protecting highly sensitive data via multi-factor authentication for human users.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-build-infrastructure-mitigation",
+      "name": "Build Pipeline Hardening",
+      "description": "Include the build infrastructure in the model.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-cloud-hardening-mitigation",
+      "name": "Cloud Hardening",
+      "description": "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Amazon Web Services\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", or \"Prowler AWS CIS Benchmark Tool\"\u003c/i\u003e). \u003cbr\u003eFor EC2 and other servers running Amazon Linux, follow the \u003ci\u003eCIS Benchmark for Amazon Linux\u003c/i\u003e and switch to IMDSv2. \u003cbr\u003eFor S3 buckets follow the \u003ci\u003eSecurity Best Practices for Amazon S3\u003c/i\u003e at \u003ca href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\"\u003ehttps://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\u003c/a\u003e to avoid accidental leakage. \u003cbr\u003eAlso take a look at some of these tools: \u003ca href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\"\u003ehttps://github.com/toniblyx/my-arsenal-of-aws-security-tools\u003c/a\u003e \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eMicrosoft Azure\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Microsoft Azure\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e).\u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eGoogle Cloud Platform\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Google Cloud Computing Platform\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eOracle Cloud Platform\u003c/b\u003e: Follow the hardening best practices (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\"\u003c/i\u003e).",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-hardening-mitigation",
+      "name": "System Hardening",
+      "description": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-identity-propagation-mitigation",
+      "name": "Identity Propagation and Resource-based Authorization",
+      "description": "When processing requests for end users if possible authorize in the backend against the propagated identity of the end user. This can be achieved in passing JWTs or similar tokens and checking them in the backend services, and model the link with the identity \u003ci\u003eend-user\u003c/i\u003e. For DevOps usages pass at least the identity of a service account or a workload.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-identity-store-mitigation",
+      "name": "Identity Store",
+      "description": "Include an identity store in the model if the application has a login.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-network-policy-mitigation",
+      "name": "Network Segmentation of Namespaces",
+      "description": "Deny all ingress and egress traffic of the namespace by default with a network policy, allow only the traffic that its workloads need, by namespace and pod labels and ports, and make sure the network plugin of the cluster enforces network policies. Model the namespace with the network_policy \u003ci\u003eingress-and-egress\u003c/i\u003e once they are in place.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-network-segmentation-mitigation",
+      "name": "Network Segmentation",
+      "description": "Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "missing-vault-mitigation",
+      "name": "Vault (Secret Storage)",
+      "description": "Consider using a Vault (Secret Storage) to securely store and access config secrets (like credentials, private keys, client certificates, etc.).",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "GetAttribute a Vault (Secret Storage) in place?"
+      }
+    },
+    {
+      "id": "mixed-targets-on-shared-runtime-mitigation",
+      "name": "Runtime Separation",
+      "description": "Use separate runtime environments for running different target components or apply similar separation styles to prevent load- or breach-related problems originating from one more attacker-facing asset impacts also the other more critical rated backend/datastore assets.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "privileged-workload-mitigation",
+      "name": "Unprivileged Workloads",
+      "description": "Run the workload unprivileged, as a non-root user with a read-only root file system, without host paths, host namespaces and added capabilities, and enforce the restricted Pod Security Standard on its namespace. A workload that must stay privileged, like a node agent, belongs on nodes of its own and deserves the hardening of the node itself.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "server-side-request-forgery-mitigation",
+      "name": "SSRF Prevention",
+      "description": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "sql-nosql-injection-mitigation",
+      "name": "SQL/NoSQL-Injection Prevention",
+      "description": "Try to use parameter binding to be safe from injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    },
+    {
+      "id": "unnecessary-technical-asset-mitigation",
+      "name": "Attack Surface Reduction",
+      "description": "Try to avoid using technical assets that do not process or store anything.",
+      "riskReduction": 100,
+      "attributes": {
+        "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+      }
+    }
+  ]
+}

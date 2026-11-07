@@ -37,7 +37,7 @@ func GetBuiltInRiskRules() types.RiskRules {
 }
 
 func builtInRiskRules() []types.RiskRule {
-	return slices.Concat(coreRiskRules(), aiRiskRules(), otRiskRules(), accessRiskRules())
+	return slices.Concat(coreRiskRules(), aiRiskRules(), otRiskRules(), accessRiskRules(), kubernetesRiskRules())
 }
 
 // aiRiskRules are the rules of systems built on language models and agents.
@@ -167,4 +167,13 @@ func (what RiskRules) LoadRiskRules() (RiskRules, error) {
 	}
 
 	return what, nil
+}
+
+// kubernetesRiskRules are the rules of workloads in Kubernetes clusters.
+func kubernetesRiskRules() []types.RiskRule {
+	return []types.RiskRule{
+		builtin.NewKubernetesAPIWriteAccessRule(),
+		builtin.NewMissingNetworkPolicyRule(),
+		builtin.NewPrivilegedWorkloadRule(),
+	}
 }

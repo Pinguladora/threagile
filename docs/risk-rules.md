@@ -198,6 +198,23 @@ service and agent check access per function only, which the object-level rule re
 [`demo/example/threagile.yaml`](../demo/example/threagile.yaml), an administrator shares the database account of
 the ERP system.
 
+## Kubernetes rules
+
+These rules judge workloads in Kubernetes clusters, modelled as described in
+[Kubernetes clusters](./model.md#kubernetes-clusters): namespaces as `execution-environment` trust boundaries with a
+`network_policy`, privileged workloads, and access to the Kubernetes API as links to a `container-platform` asset.
+Namespaces whose network policy is not modelled are skipped, so models that do not set these fields get no findings
+from the network policy rule.
+
+| Rule (id) | Fires on | Rated by | References |
+|-----------|----------|----------|------------|
+| Missing Network Policy (`missing-network-policy`) | namespaces whose `network_policy` is `none`, `ingress` or `egress`, holding in-scope assets with confidential or critical data | the most sensitive asset of the namespace; likely when incoming traffic is not restricted | OWASP K05, A02 |
+| Privileged Workload (`privileged-workload`) | in-scope technical assets that are `privileged` | the workload and what shares a runtime with it, at least medium; likely next to the internet | OWASP K01, A02 |
+| Kubernetes API Write Access (`kubernetes-api-write-access`) | non-readonly links to a `container-platform` asset from assets no human uses, except links of `devops` usage like deployments | the platform, the workload and what shares a runtime with it; likely next to the internet | OWASP K02, A01 |
+
+[`demo/kubernetes/threagile.yaml`](../demo/kubernetes/threagile.yaml) is a web shop on a managed cluster with each
+of them.
+
 ## Risk ids of Push instead of Pull Deployment
 
 Push instead of Pull Deployment creates one risk per deployment target, with the id

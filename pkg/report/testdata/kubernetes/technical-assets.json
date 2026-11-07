@@ -1,0 +1,547 @@
+{
+  "catalog-service": {
+    "id": "catalog-service",
+    "title": "Catalog Service",
+    "description": "Catalog Service",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "web-service-rest",
+        "description": "A REST web service (API)",
+        "aliases": [
+          "rest-api"
+        ],
+        "attributes": {
+          "backend_related": true,
+          "less_protected_type": true,
+          "processing_end_user_requests": true,
+          "propagate_identity_to_outgoing_targets": true,
+          "web-service-rest": true,
+          "web_service": true
+        }
+      }
+    ],
+    "machine": "container",
+    "custom_developed_parts": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "public",
+    "integrity": "important",
+    "availability": "important",
+    "justification_cia_rating": "Test",
+    "data_assets_processed": [
+      "catalog"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 10.657894736842104
+  },
+  "checkout-service": {
+    "id": "checkout-service",
+    "title": "Checkout Service",
+    "description": "Checkout Service",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "web-service-rest",
+        "description": "A REST web service (API)",
+        "aliases": [
+          "rest-api"
+        ],
+        "attributes": {
+          "backend_related": true,
+          "less_protected_type": true,
+          "processing_end_user_requests": true,
+          "propagate_identity_to_outgoing_targets": true,
+          "web-service-rest": true,
+          "web_service": true
+        }
+      }
+    ],
+    "machine": "container",
+    "custom_developed_parts": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "strictly-confidential",
+    "integrity": "mission-critical",
+    "availability": "critical",
+    "justification_cia_rating": "Test",
+    "data_assets_processed": [
+      "orders",
+      "payment-tokens"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "checkout-service\u003eorder-storage",
+        "source_id": "checkout-service",
+        "target_id": "orders-db",
+        "title": "Order Storage",
+        "description": "Order Storage",
+        "protocol": "jdbc-encrypted",
+        "authentication": "credentials",
+        "identity": "service-account",
+        "authorization": "function-level",
+        "data_assets_sent": [
+          "orders"
+        ],
+        "data_assets_received": [
+          "orders"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      },
+      {
+        "id": "checkout-service\u003epayment",
+        "source_id": "checkout-service",
+        "target_id": "payment-provider",
+        "title": "Payment",
+        "description": "Payment",
+        "protocol": "https",
+        "authentication": "client-certificate",
+        "identity": "service-account",
+        "authorization": "function-level",
+        "data_assets_sent": [
+          "payment-tokens"
+        ],
+        "data_assets_received": [
+          "payment-tokens"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 90.39473684210526
+  },
+  "customer-browser": {
+    "id": "customer-browser",
+    "title": "Customer Browser",
+    "description": "Customer Browser",
+    "usage": "business",
+    "type": "external-entity",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "browser",
+        "description": "A web browser",
+        "aliases": [
+          "web-browser"
+        ],
+        "attributes": {
+          "browser": true,
+          "client": true,
+          "frontend_related": true,
+          "less_protected_type": true,
+          "propagate_identity_to_outgoing_targets": true
+        }
+      }
+    ],
+    "machine": "physical",
+    "internet": true,
+    "custom_developed_parts": true,
+    "out_of_scope": true,
+    "used_as_client_by_human": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "critical",
+    "availability": "critical",
+    "justification_cia_rating": "Test",
+    "data_assets_processed": [
+      "orders",
+      "catalog"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "customer-browser\u003eshop-traffic",
+        "source_id": "customer-browser",
+        "target_id": "ingress-controller",
+        "title": "Shop Traffic",
+        "description": "Shop Traffic",
+        "protocol": "https",
+        "authentication": "session-id",
+        "identity": "end-user",
+        "authorization": "object-level",
+        "data_assets_sent": [
+          "orders"
+        ],
+        "data_assets_received": [
+          "orders",
+          "catalog"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 1
+  },
+  "gitops-operator": {
+    "id": "gitops-operator",
+    "title": "GitOps Operator",
+    "description": "GitOps Operator",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "tool",
+        "description": "A specific tool",
+        "aliases": [
+          "utility"
+        ],
+        "attributes": {
+          "propagate_identity_to_outgoing_targets": true,
+          "tool": true
+        }
+      }
+    ],
+    "machine": "container",
+    "custom_developed_parts": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "critical",
+    "availability": "critical",
+    "justification_cia_rating": "Test",
+    "data_assets_processed": [
+      "cluster-config"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "gitops-operator\u003eapply-manifests",
+        "source_id": "gitops-operator",
+        "target_id": "kube-api",
+        "title": "Apply Manifests",
+        "description": "Apply Manifests",
+        "protocol": "https",
+        "authentication": "client-certificate",
+        "identity": "workload",
+        "authorization": "function-level",
+        "data_assets_sent": [
+          "cluster-config"
+        ],
+        "data_assets_received": [
+          "cluster-config"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 32.8185595567867
+  },
+  "ingress-controller": {
+    "id": "ingress-controller",
+    "title": "Ingress Controller",
+    "description": "Ingress Controller",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "load-balancer",
+        "description": "A load balancer directing incoming requests to available internal infrastructure",
+        "aliases": [
+          "lb"
+        ],
+        "attributes": {
+          "close_to_high_value_targets_tolerated": true,
+          "frontend_related": true,
+          "load-balancer": true,
+          "no_authentication_required": true,
+          "no_storage_at_rest": true,
+          "propagate_identity_to_outgoing_targets": true,
+          "traffic_forwarding": true
+        }
+      }
+    ],
+    "machine": "container",
+    "custom_developed_parts": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "critical",
+    "availability": "critical",
+    "justification_cia_rating": "Test",
+    "data_assets_processed": [
+      "orders",
+      "catalog"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "ingress-controller\u003estorefront-traffic",
+        "source_id": "ingress-controller",
+        "target_id": "storefront",
+        "title": "Storefront Traffic",
+        "description": "Storefront Traffic",
+        "protocol": "https",
+        "authentication": "session-id",
+        "identity": "end-user",
+        "authorization": "object-level",
+        "data_assets_sent": [
+          "orders"
+        ],
+        "data_assets_received": [
+          "orders",
+          "catalog"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 10.770586753966255
+  },
+  "kube-api": {
+    "id": "kube-api",
+    "title": "Kubernetes API",
+    "description": "Kubernetes API",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "container-platform",
+        "description": "A platform for hosting and executing containers",
+        "aliases": [
+          "container",
+          "docker",
+          "kubernetes"
+        ],
+        "attributes": {
+          "backend_related": true,
+          "container-platform": true,
+          "container_platform": true
+        }
+      }
+    ],
+    "machine": "container",
+    "custom_developed_parts": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "critical",
+    "availability": "critical",
+    "justification_cia_rating": "Test",
+    "data_assets_processed": [
+      "cluster-config"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 100
+  },
+  "log-collector": {
+    "id": "log-collector",
+    "title": "Log Collector",
+    "description": "Log Collector",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "monitoring",
+        "description": "A monitoring system (SIEM, logs)",
+        "aliases": [
+          "siem"
+        ],
+        "attributes": {
+          "close_to_high_value_targets_tolerated": true,
+          "less_protected_type": true,
+          "monitoring": true,
+          "unnecessary_data_tolerated": true,
+          "unprotected_communications_tolerated": true
+        }
+      }
+    ],
+    "machine": "container",
+    "privileged": true,
+    "custom_developed_parts": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "public",
+    "integrity": "important",
+    "availability": "important",
+    "justification_cia_rating": "Test",
+    "data_assets_processed": [
+      "catalog"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 2.131578947368421
+  },
+  "orders-db": {
+    "id": "orders-db",
+    "title": "Orders Database",
+    "description": "Orders Database",
+    "usage": "business",
+    "type": "datastore",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "database",
+        "description": "A database",
+        "aliases": [
+          "db"
+        ],
+        "attributes": {
+          "backend_related": true,
+          "database": true,
+          "storing_end_user_data": true,
+          "vulnerable_to_query_injection": true
+        }
+      }
+    ],
+    "machine": "container",
+    "custom_developed_parts": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "critical",
+    "availability": "critical",
+    "justification_cia_rating": "Test",
+    "data_assets_processed": [
+      "orders"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 50.26315789473684
+  },
+  "payment-provider": {
+    "id": "payment-provider",
+    "title": "Payment Provider",
+    "description": "Payment Provider",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "web-service-rest",
+        "description": "A REST web service (API)",
+        "aliases": [
+          "rest-api"
+        ],
+        "attributes": {
+          "backend_related": true,
+          "less_protected_type": true,
+          "processing_end_user_requests": true,
+          "propagate_identity_to_outgoing_targets": true,
+          "web-service-rest": true,
+          "web_service": true
+        }
+      }
+    ],
+    "machine": "virtual",
+    "internet": true,
+    "custom_developed_parts": true,
+    "out_of_scope": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "strictly-confidential",
+    "integrity": "mission-critical",
+    "availability": "critical",
+    "justification_cia_rating": "Test",
+    "data_assets_processed": [
+      "payment-tokens"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "raa": 1
+  },
+  "storefront": {
+    "id": "storefront",
+    "title": "Storefront",
+    "description": "Storefront",
+    "usage": "business",
+    "type": "process",
+    "size": "service",
+    "technologies": [
+      {
+        "name": "web-application",
+        "description": "A web application",
+        "aliases": [
+          "web-app"
+        ],
+        "attributes": {
+          "http_internet_access_ok": true,
+          "less_protected_type": true,
+          "processing_end_user_requests": true,
+          "propagate_identity_to_outgoing_targets": true,
+          "web-application": true,
+          "web_application": true
+        }
+      }
+    ],
+    "machine": "container",
+    "custom_developed_parts": true,
+    "encryption": "none",
+    "owner": "Some Company",
+    "confidentiality": "confidential",
+    "integrity": "critical",
+    "availability": "critical",
+    "justification_cia_rating": "Test",
+    "data_assets_processed": [
+      "orders",
+      "catalog"
+    ],
+    "data_formats_accepted": [
+      "json"
+    ],
+    "communication_links": [
+      {
+        "id": "storefront\u003ecatalog-api",
+        "source_id": "storefront",
+        "target_id": "catalog-service",
+        "title": "Catalog API",
+        "description": "Catalog API",
+        "protocol": "https",
+        "readonly": true,
+        "authentication": "client-certificate",
+        "identity": "workload",
+        "authorization": "function-level",
+        "data_assets_received": [
+          "catalog"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      },
+      {
+        "id": "storefront\u003echeckout-api",
+        "source_id": "storefront",
+        "target_id": "checkout-service",
+        "title": "Checkout API",
+        "description": "Checkout API",
+        "protocol": "https",
+        "authentication": "client-certificate",
+        "identity": "workload",
+        "authorization": "function-level",
+        "data_assets_sent": [
+          "orders"
+        ],
+        "data_assets_received": [
+          "orders"
+        ],
+        "diagram_tweak_weight": 1,
+        "diagram_tweak_constraint": true
+      }
+    ],
+    "raa": 51.26846722068329
+  }
+}

@@ -1,0 +1,89 @@
+digraph generatedModel { concentrate=true 
+	graph [
+		dpi=100
+		fontname="Verdana"
+		labelloc="c"
+		fontsize="20"
+		splines=false
+		rankdir="LR"
+		nodesep=1.0
+		ranksep=3.0
+        outputorder="nodesfirst"
+	];
+	node [
+		fontcolor="white"
+		fontname="Verdana"
+		fontsize="20"
+	];
+	edge [
+		shape="none"
+		fontname="Verdana"
+		fontsize="18"
+	];
+  3518454073 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Storefront</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  2302604993 [ shape="box" style="filled" fillcolor="#7F7F7F"
+				label=<<b>Payment Provider</b>> penwidth="3.0" color="#7F7F7F" ];
+				
+  1312838741 [ shape="box" style="filled" fillcolor="#C87832"
+				label=<<b>Orders Database</b>> penwidth="3.0" color="#C87832" ];
+				
+  1026569035 [ shape="box" style="filled" fillcolor="#C87832"
+				label=<<b>Log Collector</b>> penwidth="3.0" color="#C87832" ];
+				
+  2848817845 [ shape="box" style="filled" fillcolor="#C87832"
+				label=<<b>Kubernetes API</b>> penwidth="3.0" color="#C87832" ];
+				
+  2921317587 [ shape="box" style="filled" fillcolor="#C87832"
+				label=<<b>Ingress Controller</b>> penwidth="3.0" color="#C87832" ];
+				
+  3581460200 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>GitOps Operator</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  2799826308 [ shape="box" style="filled" fillcolor="#7F7F7F"
+				label=<<b>Customer Browser</b>> penwidth="3.0" color="#7F7F7F" ];
+				
+  3759127119 [ shape="box" style="filled" fillcolor="#FF8E00"
+				label=<<b>Checkout Service</b>> penwidth="3.0" color="#FF8E00" ];
+				
+  3561047634 [ shape="box" style="filled" fillcolor="#C87832"
+				label=<<b>Catalog Service</b>> penwidth="3.0" color="#C87832" ];
+				
+  3498833422 [ label=<<b>Cluster Configuration</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  845059820 [ label=<<b>Customer Orders</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  1011442438 [ label=<<b>Payment Tokens</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+  1979092248 [ label=<<b>Product Catalog</b>> penwidth="3.0" style="filled" fillcolor="#A0281E" color="#A0281E"
+  ]; 
+
+845059820 -> 3518454073 [ color="#666666" style="dashed" ];
+
+1979092248 -> 3518454073 [ color="#666666" style="dashed" ];
+
+1011442438 -> 2302604993 [ color="#666666" style="dashed" ];
+
+845059820 -> 1312838741 [ color="#666666" style="dashed" ];
+
+1979092248 -> 1026569035 [ color="#666666" style="dashed" ];
+
+3498833422 -> 2848817845 [ color="#666666" style="dashed" ];
+
+845059820 -> 2921317587 [ color="#666666" style="dashed" ];
+
+1979092248 -> 2921317587 [ color="#666666" style="dashed" ];
+
+3498833422 -> 3581460200 [ color="#666666" style="dashed" ];
+
+845059820 -> 2799826308 [ color="#666666" style="dashed" ];
+
+1979092248 -> 2799826308 [ color="#666666" style="dashed" ];
+
+845059820 -> 3759127119 [ color="#666666" style="dashed" ];
+
+1011442438 -> 3759127119 [ color="#666666" style="dashed" ];
+
+1979092248 -> 3561047634 [ color="#666666" style="dashed" ];
+}
