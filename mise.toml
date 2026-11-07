@@ -34,6 +34,8 @@ actionlint = "1.7.12"
 zizmor = "1.31.1"
 # Renders the PDF report at run time (the binary runs it when it is on the PATH); the tests and CI render with it.
 "aqua:typst/typst" = "0.15.1"
+# Mutation testing (test:mutation and the CI job), built from source against the pinned go like golangci-lint.
+"go:github.com/sivchari/gomu/cmd/gomu" = "v0.3.0"
 
 [tasks."secret:scan"]
 run = "kingfisher scan . --no-validate --redact"
@@ -62,6 +64,30 @@ alias = "b"
 run = "go test ./..."
 description = "Run all Go tests"
 alias = "t"
+
+[tasks."test:mutation"]
+description = "Mutation testing of the Go files changed against main (or MUTATION_BASE_SHA), or of PATH in full"
+# Reports surviving mutants without failing: some are equivalent (they cannot change behaviour), so the score is a
+# guide rather than a gate. Without a path, it mutates the changed files of the logic-heavy packages only, one by one:
+# gomu mutates whole files, and the server, the CLI and the report layout take too long for every change.
+usage = 'arg "[path]" help="a file, package or folder to mutate in full, such as ./pkg/risks/builtin"'
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+if [ -n "${usage_path:-}" ]; then
+  exec gomu run "${usage_path}" --incremental=false --fail-on-gate=false
+fi
+base="${MUTATION_BASE_SHA:-$(git merge-base main HEAD)}"
+mapfile -t files < <(git diff --name-only --diff-filter=AM "${base}" -- \
+  'pkg/risks/*.go' 'pkg/model/*.go' 'pkg/types/*.go' 'pkg/baseline/*.go' 'pkg/catalog/*.go' | grep -v '_test\.go$' || true)
+if [ -z "${files[*]:-}" ]; then
+  echo "No changed Go files to mutate."
+  exit 0
+fi
+for file in "${files[@]}"; do
+  gomu run "./${file}" --incremental=false --fail-on-gate=false
+done
+'''
 
 [tasks.snapshot]
 run = "goreleaser release --snapshot --clean --skip=sign,sbom,docker"

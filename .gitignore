@@ -53,3 +53,6 @@ go.work.sum
 # env file
 .env
 *:Zone.Identifier
+
+# mutation testing history (mise run test:mutation)
+.gomu_history.json
