@@ -14,8 +14,9 @@ import (
 	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/v2/extension"
+	"github.com/yuin/goldmark/v2/parser"
+	gfmhtml "github.com/yuin/goldmark/v2/renderer/html"
 	"golang.org/x/net/html"
 )
 
@@ -136,9 +137,11 @@ func renderGFM(t *testing.T, source []byte) []byte {
 	t.Helper()
 	var page bytes.Buffer
 	// GitHub-flavoured Markdown, with the alignment of table cells as attributes rather than styles
-	gfm := goldmark.New(goldmark.WithExtensions(extension.Linkify, extension.Strikethrough, extension.TaskList,
-		extension.NewTable(extension.WithTableCellAlignMethod(extension.TableCellAlignAttribute))))
-	require.NoError(t, gfm.Convert(source, &page))
+	document := parser.New(parser.WithExtensions(extension.GFMParser)).Parse(source)
+	renderer := gfmhtml.New(gfmhtml.WithExtensions(extension.StrikethroughHTMLRenderer,
+		extension.TaskListItemHTMLRenderer,
+		extension.NewTableHTMLRenderer(extension.WithTableCellAlignMethod(extension.TableCellAlignAttribute))))
+	require.NoError(t, renderer.Render(&page, source, document))
 	return page.Bytes()
 }
 

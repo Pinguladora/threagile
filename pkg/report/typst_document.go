@@ -4,12 +4,10 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark/ast"
-	"github.com/yuin/goldmark/extension"
-	extensionast "github.com/yuin/goldmark/extension/ast"
-	"github.com/yuin/goldmark/text"
-	"github.com/yuin/goldmark/util"
+	"github.com/yuin/goldmark/v2/ast"
+	"github.com/yuin/goldmark/v2/extension"
+	extensionast "github.com/yuin/goldmark/v2/extension/ast"
+	"github.com/yuin/goldmark/v2/parser"
 )
 
 // typstDocument is the report as data for the Typst template: the chapters of the Markdown report, read back as
@@ -70,8 +68,7 @@ type typstDiagram struct {
 // top level, and the Mermaid diagrams are replaced by the diagrams given, in their order, or left out when there are
 // fewer.
 func newTypstDocument(markdown []byte, diagrams []typstDiagram) []*typstBlock {
-	parser := goldmark.New(goldmark.WithExtensions(extension.Table)).Parser()
-	root := parser.Parse(text.NewReader(markdown))
+	root := parser.New(parser.WithExtensions(extension.TableParser)).Parse(markdown)
 	converter := &typstConverter{source: markdown, slugs: make(headingSlugs), diagrams: diagrams}
 	blocks := make([]*typstBlock, 0)
 	skipping := false // the title, the details of the model below it and the contents, which the template replaces
@@ -105,7 +102,7 @@ type typstConverter struct {
 // blocks converts a block node of the Markdown report.
 func (what *typstConverter) blocks(node ast.Node) []*typstBlock {
 	switch node := node.(type) {
-	case *ast.Paragraph, *ast.TextBlock:
+	case *ast.Paragraph:
 		return []*typstBlock{{Kind: "paragraph", Spans: what.inlines(node)}}
 	case *ast.List:
 		list := &typstBlock{Kind: "list", Ordered: node.IsOrdered()}
@@ -119,8 +116,8 @@ func (what *typstConverter) blocks(node ast.Node) []*typstBlock {
 		return []*typstBlock{list}
 	case *extensionast.Table:
 		return []*typstBlock{what.table(node)}
-	case *ast.FencedCodeBlock:
-		if string(node.Language(what.source)) != "mermaid" || len(what.diagrams) == 0 {
+	case *ast.CodeBlock:
+		if language, _ := node.Language(what.source); language != "mermaid" || len(what.diagrams) == 0 {
 			return nil
 		}
 		diagram := what.diagrams[0]
@@ -133,22 +130,24 @@ func (what *typstConverter) blocks(node ast.Node) []*typstBlock {
 
 func (what *typstConverter) table(node *extensionast.Table) *typstBlock {
 	table := &typstBlock{Kind: "table"}
-	for row := node.FirstChild(); row != nil; row = row.NextSibling() {
-		cells := make([][]typstSpan, 0)
-		for cell := row.FirstChild(); cell != nil; cell = cell.NextSibling() {
-			cells = append(cells, what.inlines(cell))
-		}
-		if _, isHeader := row.(*extensionast.TableHeader); isHeader {
-			for index, cell := range cells {
-				column := typstColumn{Title: plainSpans(cell)}
-				if index < len(node.Alignments) {
-					column.Number = node.Alignments[index] == extensionast.AlignRight
+	for part := node.FirstChild(); part != nil; part = part.NextSibling() {
+		if _, isHeader := part.(*extensionast.TableHeader); isHeader {
+			for cell := part.FirstChild(); cell != nil; cell = cell.NextSibling() {
+				column := typstColumn{Title: what.plainText(cell)}
+				if cell, ok := cell.(*extensionast.TableCell); ok {
+					column.Number = cell.Alignment == extensionast.AlignRight
 				}
 				table.Columns = append(table.Columns, column)
 			}
 			continue
 		}
-		table.Rows = append(table.Rows, cells)
+		for row := part.FirstChild(); row != nil; row = row.NextSibling() {
+			cells := make([][]typstSpan, 0)
+			for cell := row.FirstChild(); cell != nil; cell = cell.NextSibling() {
+				cells = append(cells, what.inlines(cell))
+			}
+			table.Rows = append(table.Rows, cells)
+		}
 	}
 	return table
 }
@@ -166,18 +165,22 @@ func (what *typstConverter) walkInlines(node ast.Node, style typstSpan, spans *[
 		switch child := child.(type) {
 		case *ast.Text:
 			*spans = append(*spans, what.textSpans(child, style)...)
-		case *ast.String:
-			*spans = append(*spans, styled(style, string(child.Value)))
 		case *ast.CodeSpan:
-			span := styled(style, what.plainText(child))
+			span := styled(style, child.Value.Value(what.source))
 			span.Code = true
 			*spans = append(*spans, span)
 		case *ast.Emphasis:
-			what.walkInlines(child, emphasisStyle(style, child.Level), spans)
+			italic := style
+			italic.Italic = true
+			what.walkInlines(child, italic, spans)
+		case *ast.Strong:
+			bold := style
+			bold.Bold = true
+			what.walkInlines(child, bold, spans)
 		case *ast.Link:
-			what.walkInlines(child, linkStyle(style, string(child.Destination)), spans)
+			what.walkInlines(child, linkStyle(style, child.Destination.Value(what.source)), spans)
 		case *ast.AutoLink:
-			url := string(child.URL(what.source))
+			url := child.Destination.Value(what.source)
 			*spans = append(*spans, linkStyle(styled(style, url), url))
 		default:
 			what.walkInlines(child, style, spans)
@@ -185,10 +188,10 @@ func (what *typstConverter) walkInlines(node ast.Node, style typstSpan, spans *[
 	}
 }
 
-// textSpans is the text with its escapes resolved, followed by the line break that ends it, if any: a hard one as a
-// break, a soft one as a space.
+// textSpans is the text, with its escapes and character references resolved by the parser, followed by the line
+// break that ends it, if any: a hard one as a break, a soft one as a space.
 func (what *typstConverter) textSpans(text *ast.Text, style typstSpan) []typstSpan {
-	spans := []typstSpan{styled(style, unescapedMarkdown(text.Segment.Value(what.source)))}
+	spans := []typstSpan{styled(style, text.Value.Value(what.source))}
 	switch {
 	case text.HardLineBreak():
 		spans = append(spans, typstSpan{Break: true})
@@ -196,13 +199,6 @@ func (what *typstConverter) textSpans(text *ast.Text, style typstSpan) []typstSp
 		spans = append(spans, styled(style, " "))
 	}
 	return spans
-}
-
-// emphasisStyle is the style with the emphasis of the level: bold for two delimiters, italics for one.
-func emphasisStyle(style typstSpan, level int) typstSpan {
-	style.Bold = style.Bold || level >= 2
-	style.Italic = style.Italic || level < 2
-	return style
 }
 
 // styled is a span of the text in the style.
@@ -253,10 +249,4 @@ func plainSpans(spans []typstSpan) string {
 		result.WriteString(span.Text)
 	}
 	return result.String()
-}
-
-// unescapedMarkdown is the text of a Markdown text segment, with its backslash escapes and character references
-// resolved, as a Markdown renderer shows it.
-func unescapedMarkdown(segment []byte) string {
-	return string(util.ResolveEntityNames(util.ResolveNumericReferences(util.UnescapePunctuations(segment))))
 }

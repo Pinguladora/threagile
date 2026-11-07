@@ -11,7 +11,7 @@ require (
 	github.com/spf13/pflag v1.1.0
 	github.com/stretchr/testify v1.12.1
 	github.com/xuri/excelize/v2 v2.11.1
-	github.com/yuin/goldmark v1.8.7
+	github.com/yuin/goldmark/v2 v2.1.13
 	go.yaml.in/yaml/v3 v3.0.6
 	golang.org/x/crypto v0.58.0
 	golang.org/x/image v0.47.0
