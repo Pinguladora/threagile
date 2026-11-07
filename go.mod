@@ -40,7 +40,7 @@ require (
 	github.com/richardlehane/msoleps v1.0.4 // indirect
 	github.com/tetratelabs/wazero v1.10.1 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
-	golang.org/x/sys v0.41.0 // indirect
+	golang.org/x/sys v0.44.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
