@@ -7,13 +7,12 @@ package threagile
 import (
 	"errors"
 	"fmt"
+	"io"
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 
 	"github.com/Pinguladora/threagile/pkg/report"
-	"github.com/chzyer/readline"
 	"github.com/mattn/go-shellwords"
 	"github.com/spf13/cobra"
 )
@@ -221,11 +220,9 @@ func (what *Threagile) run(thisCmd *cobra.Command, args []string) {
 		return
 	}
 
-	defer func() { _ = shell.Close() }()
-
 	for {
-		line, readError := shell.Readline()
-		if errors.Is(readError, readline.ErrInterrupt) {
+		line, readError := shell.readLine()
+		if errors.Is(readError, io.EOF) {
 			return
 		}
 		if readError != nil {
@@ -236,42 +233,6 @@ func (what *Threagile) run(thisCmd *cobra.Command, args []string) {
 
 		what.runLine(line)
 	}
-}
-
-// historyLimit is how many lines the history of the interactive mode keeps.
-const historyLimit = 1000
-
-// newShell sets up the line reader of the interactive mode; it reports why it could not.
-func (what *Threagile) newShell() (*readline.Instance, bool) {
-	completer := readline.NewPrefixCompleter()
-	for _, child := range what.rootCmd.Commands() {
-		what.cobraToReadline(completer, child)
-	}
-
-	dir, homeError := os.UserHomeDir()
-	if homeError != nil {
-		what.rootCmd.Println("Error, please report bug at https://github.com/Threagile/threagile. " +
-			"Unable to find home directory: " + homeError.Error())
-		return nil, false
-	}
-
-	shell, readlineError := readline.NewEx(&readline.Config{
-		Prompt:            "\033[31m>>\033[0m ",
-		HistoryFile:       filepath.Join(dir, ".threagile_history"),
-		HistoryLimit:      historyLimit,
-		AutoComplete:      completer,
-		InterruptPrompt:   "^C",
-		EOFPrompt:         "quit",
-		HistorySearchFold: true,
-	})
-
-	if readlineError != nil {
-		what.rootCmd.Println("Error, please report bug at https://github.com/Threagile/threagile. " +
-			"Unable to initialize readline: " + readlineError.Error())
-		return nil, false
-	}
-
-	return shell, true
 }
 
 // runLine runs the command on a line of the interactive mode.
@@ -332,17 +293,6 @@ func (what *Threagile) runCommand(cmd *cobra.Command, args []string) {
 	}
 
 	_ = cmd.Help()
-}
-
-func (what *Threagile) cobraToReadline(node readline.PrefixCompleterInterface, cmd *cobra.Command) {
-	cmd.SetUsageTemplate(UsageTemplate)
-	cmd.Use = what.usage(cmd)
-	pcItem := readline.PcItem(cmd.Use)
-	node.SetChildren(append(node.GetChildren(), pcItem))
-
-	for _, child := range cmd.Commands() {
-		what.cobraToReadline(pcItem, child)
-	}
 }
 
 func (what *Threagile) usage(cmd *cobra.Command) string {

@@ -22,11 +22,11 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"uuid"
 
 	"github.com/Pinguladora/threagile/pkg/input"
 	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"go.yaml.in/yaml/v3"
 	"golang.org/x/crypto/argon2"
 )

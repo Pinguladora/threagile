@@ -7,10 +7,10 @@ package model
 import (
 	"slices"
 	"testing"
+	"uuid"
 
 	"github.com/Pinguladora/threagile/pkg/input"
 	"github.com/Pinguladora/threagile/pkg/types"
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

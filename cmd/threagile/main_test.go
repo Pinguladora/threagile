@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/Pinguladora/threagile/pkg/input"
-	"github.com/akedrou/textdiff"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestParseModelYaml(t *testing.T) {
@@ -49,10 +49,8 @@ func TestParseModelYaml(t *testing.T) {
 		return
 	}
 
-	if string(flatData) != string(splitData) {
-		t.Errorf("parsing split model files is broken; diff: %v", textdiff.Unified(flatModelFile, splitModelFile, string(flatData), string(splitData)))
-		return
-	}
+	assert.Equal(t, string(flatData), string(splitData),
+		"parsing split model files is broken: %s and %s differ", flatModelFile, splitModelFile)
 }
 
 func TestParseModelJson(t *testing.T) {
