@@ -21,8 +21,8 @@ type ReportOptions struct {
 	RiskRules        types.RiskRules
 	CustomRiskRules  types.RiskRules
 	HideChapters     map[ChaptersToShowHide]bool
-	// HideEmptyChapters leaves out the chapter of the remaining risks when there are none, as
-	// the AsciiDoc report does; the optional chapters of the model are left out when empty anyway.
+	// HideEmptyChapters leaves out the chapter of the remaining risks when there are none; the
+	// optional chapters of the model are left out when empty anyway.
 	HideEmptyChapters bool
 	// Baseline compares the risks with those of an earlier analysis; nil when there is none to compare with.
 	Baseline *baseline.Comparison
@@ -279,7 +279,7 @@ func reportDate(parsedModel *types.Model) types.Date {
 	return parsedModel.Date
 }
 
-// authorHomepage is the homepage as a link, with https:// added as the AsciiDoc report does.
+// authorHomepage is the homepage as a link, with https:// added when it has no scheme.
 func authorHomepage(homepage string) string {
 	homepage = strings.TrimSpace(homepage)
 	if homepage == "" {

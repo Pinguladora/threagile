@@ -24,7 +24,6 @@ type GenerateCommands struct {
 	RisksExcel          bool
 	TagsExcel           bool
 	ReportPDF           bool
-	ReportADOC          bool
 	ReportHTML          bool
 	ReportMarkdown      bool
 }
@@ -40,7 +39,6 @@ func (c *GenerateCommands) Defaults() *GenerateCommands {
 		RisksExcel:          true,
 		TagsExcel:           true,
 		ReportPDF:           true,
-		ReportADOC:          true,
 		ReportHTML:          true,
 		ReportMarkdown:      true,
 	}
@@ -99,8 +97,6 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 	_ = os.MkdirAll(filepath.Clean(config.GetOutputFolder()), 0o750)
 	_ = os.MkdirAll(filepath.Clean(config.GetTempFolder()), 0o700)
 
-	generateDataFlowDiagram, generateDataAssetsDiagram := diagramsToGenerate(config, commands, progressReporter)
-
 	diagramDPI := config.GetDiagramDPI()
 	if diagramDPI < config.GetMinGraphvizDPI() {
 		diagramDPI = config.GetMinGraphvizDPI()
@@ -108,7 +104,7 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 		diagramDPI = config.GetMaxGraphvizDPI()
 	}
 	// Data-flow Diagram rendering
-	if generateDataFlowDiagram {
+	if commands.DataFlowDiagram {
 		writeDOT := func(filename string) (*os.File, error) {
 			return WriteDataFlowDiagramGraphvizDOT(readResult.ParsedModel, filename, diagramDPI,
 				config.GetAddModelTitle(), config.GetAddLegend(), progressReporter)
@@ -121,7 +117,7 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 		}
 	}
 	// Data Asset Diagram rendering
-	if generateDataAssetsDiagram {
+	if commands.DataAssetDiagram {
 		writeDOT := func(filename string) (*os.File, error) {
 			return WriteDataAssetDiagramGraphvizDOT(readResult.ParsedModel, filename, diagramDPI, progressReporter)
 		}
@@ -140,33 +136,6 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 		return err
 	}
 	return writeReports(config, readResult, commands, riskRules, diagramDPI, progressReporter)
-}
-
-// diagramsToGenerate returns whether to generate the data-flow and the data asset diagram: when
-// asked to, or when a PDF or AsciiDoc report needs a diagram that does not exist yet.
-func diagramsToGenerate(config reportConfigReader, commands *GenerateCommands,
-	progressReporter progressReporter,
-) (generateDataFlowDiagram bool, generateDataAssetsDiagram bool) {
-	generateDataFlowDiagram = commands.DataFlowDiagram
-	generateDataAssetsDiagram = commands.DataAssetDiagram
-
-	if commands.ReportPDF || commands.ReportADOC { // as the PDF report includes both diagrams
-		if !generateDataFlowDiagram {
-			dataFlowFile := filepath.Join(config.GetOutputFolder(), config.GetDataFlowDiagramFilenamePNG())
-			if _, err := os.Stat(dataFlowFile); errors.Is(err, os.ErrNotExist) {
-				progressReporter.Warn("Forcibly create the needed Data-Flow Diagram file to enable report generation.")
-				generateDataFlowDiagram = true
-			}
-		}
-		if !generateDataAssetsDiagram {
-			dataAssetFile := filepath.Join(config.GetOutputFolder(), config.GetDataAssetDiagramFilenamePNG())
-			if _, err := os.Stat(dataAssetFile); errors.Is(err, os.ErrNotExist) {
-				progressReporter.Warn("Forcibly create the needed Data-Asset Diagram file to enable report generation.")
-				generateDataAssetsDiagram = true
-			}
-		}
-	}
-	return generateDataFlowDiagram, generateDataAssetsDiagram
 }
 
 // renderDiagram writes the DOT source of a diagram and renders it to PNG, only warning when the
@@ -269,19 +238,12 @@ func writeExcelOutputs(config reportConfigReader, readResult *model.ReadResult, 
 	return nil
 }
 
-// writeReports writes the PDF, AsciiDoc, HTML and Markdown reports that are asked for.
+// writeReports writes the PDF, HTML and Markdown reports that are asked for.
 func writeReports(config reportConfigReader, readResult *model.ReadResult, commands *GenerateCommands,
 	riskRules types.RiskRules, diagramDPI int, progressReporter progressReporter,
 ) error {
 	if commands.ReportPDF {
 		err := writeReportPDF(config, readResult, riskRules, progressReporter)
-		if err != nil {
-			return err
-		}
-	}
-
-	if commands.ReportADOC {
-		err := writeReportADOC(config, readResult, riskRules, progressReporter)
 		if err != nil {
 			return err
 		}
@@ -359,32 +321,6 @@ func writeReportPDF(config reportConfigReader, readResult *model.ReadResult, ris
 		return nil
 	}
 	return err
-}
-
-// writeReportADOC writes the AsciiDoc report.
-func writeReportADOC(config reportConfigReader, readResult *model.ReadResult, riskRules types.RiskRules,
-	progressReporter progressReporter,
-) error {
-	modelHash, err := hashFile(config.GetInputFile())
-	if err != nil {
-		return err
-	}
-
-	// report ADOC
-	progressReporter.Info("Writing report adoc")
-	adocReporter := NewAdocReport(config.GetOutputFolder(), riskRules, config.GetHideEmptyChapters())
-	return adocReporter.WriteReport(readResult.ParsedModel,
-		filepath.Join(config.GetOutputFolder(), config.GetDataFlowDiagramFilenamePNG()),
-		filepath.Join(config.GetOutputFolder(), config.GetDataAssetDiagramFilenamePNG()),
-		config.GetInputFile(),
-		config.GetSkipRiskRules(),
-		config.GetBuildTimestamp(),
-		config.GetThreagileVersion(),
-		modelHash,
-		readResult.IntroTextRAA,
-		readResult.CustomRiskRules,
-		config.GetReportLogoImagePath(),
-		config.GetReportConfigurationHideChapters())
 }
 
 // writeReportHTML writes the HTML report. It renders the diagrams from DOT sources of its own, as

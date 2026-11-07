@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/Pinguladora/threagile/pkg/catalog"
-	"github.com/Pinguladora/threagile/pkg/types"
 )
 
 // viewCatalog is the coverage of a threat catalog: which risk rules checked each of its entries and the risks
@@ -67,18 +66,6 @@ func viewCatalogs(rules []viewRiskRule, categories []viewCategory) []viewCatalog
 		}
 	}
 	return catalogs
-}
-
-// modelCatalogs is the coverage of the threat catalogs for the reports that build no report view, the PDF and
-// AsciiDoc reports.
-func modelCatalogs(parsedModel *types.Model, options ReportOptions) []viewCatalog {
-	risks := newViewRisks(parsedModel)
-	sorted := parsedModel.SortedRiskCategories()
-	categories := make([]viewCategory, 0, len(sorted))
-	for _, category := range sorted {
-		categories = append(categories, newViewCategory(category, risks.of(parsedModel.SortedRisksOfCategory(category))))
-	}
-	return viewCatalogs(viewRiskRules(parsedModel, options), categories)
 }
 
 // newViewCatalogEntry is the coverage of the catalog entry by the risk rules that were not skipped and reference

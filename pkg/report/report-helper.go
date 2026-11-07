@@ -11,7 +11,7 @@ import (
 	"github.com/Pinguladora/threagile/pkg/types"
 )
 
-// Words that the PDF and AsciiDoc reports choose between depending on a count.
+// Words that the reports choose between depending on a count.
 const (
 	textRisk       = "Risk"
 	textRisks      = "Risks"
@@ -25,7 +25,7 @@ const (
 	textHave       = "have"
 )
 
-// Texts that the PDF and AsciiDoc reports show in place of, or in front of, a value.
+// Texts that the reports show in place of, or in front of, a value.
 const (
 	textNone          = "none"
 	textNotApplicable = "n/a"
@@ -424,23 +424,6 @@ func questionsUnanswered(parsedModel *types.Model) int {
 	return result
 }
 
-func titleOfSeverity(severity types.RiskSeverity) string {
-	switch severity {
-	case types.CriticalSeverity:
-		return "Critical Risk Severity"
-	case types.HighSeverity:
-		return "High Risk Severity"
-	case types.ElevatedSeverity:
-		return "Elevated Risk Severity"
-	case types.MediumSeverity:
-		return "Medium Risk Severity"
-	case types.LowSeverity:
-		return "Low Risk Severity"
-	default:
-		return ""
-	}
-}
-
 func riskSuffix(remainingRisks int, totalRisks int) string {
 	suffix := ""
 	if remainingRisks > 0 {
@@ -510,21 +493,6 @@ func tagRows(parsedModel *types.Model) []tagRow {
 		rows = append(rows, tagRow{sharedRuntime.Title, sharedRuntime.Tags})
 	}
 	return rows
-}
-
-// taggedTitles returns the titles of the model elements with the tag, comma separated, in the
-// order of the tag rows.
-func taggedTitles(parsedModel *types.Model, tag string) string {
-	description := ""
-	for _, row := range tagRows(parsedModel) {
-		if contains(row.tags, tag) {
-			if len(description) > 0 {
-				description += ", "
-			}
-			description += row.title
-		}
-	}
-	return description
 }
 
 // linkIdentity is the identity of a communication link, followed by the account it names, if any.

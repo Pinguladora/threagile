@@ -82,7 +82,7 @@ type Config struct {
 	SkipRisksExcelValue          bool `json:"SkipRisksExcel,omitempty"          yaml:"SkipRisksExcel"`
 	SkipTagsExcelValue           bool `json:"SkipTagsExcel,omitempty"           yaml:"SkipTagsExcel"`
 	SkipReportPDFValue           bool `json:"SkipReportPDF,omitempty"           yaml:"SkipReportPDF"`
-	SkipReportADOCValue          bool `json:"SkipReportADOC,omitempty"          yaml:"SkipReportADOC"`
+	SkipReportADOCValue          bool `json:"SkipReportADOC,omitempty"          yaml:"SkipReportADOC"` // no effect, the AsciiDoc report was removed
 	SkipReportHTMLValue          bool `json:"SkipReportHTML,omitempty"          yaml:"SkipReportHTML"`
 	SkipReportMarkdownValue      bool `json:"SkipReportMarkdown,omitempty"      yaml:"SkipReportMarkdown"`
 

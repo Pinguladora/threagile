@@ -10,11 +10,10 @@ The output of running tool may be in different formats:
 * `data-flow-diagram.png` - image/dot file which contains all technical assets and relationship between them.
 * `stats.json` - contains statistics of identified risks.
 * `otm.json` - the model and its risks as an [Open Threat Model (OTM)](./otm.md) document, for other threat modeling tools.
-* [adocReport](./docs/asciidoctor-report.md)
 
 ## Reproducible reports
 
-The same model always produces the same diagrams, JSON, Excel, HTML, Markdown and AsciiDoc files.
+The same model always produces the same diagrams, JSON, Excel, HTML, Markdown and PDF files.
 The only thing that changes between runs is the timestamp the reports are stamped
 with (the report date when the model has no `date`, and the execution timestamp).
 Set [`SOURCE_DATE_EPOCH`](https://reproducible-builds.org/specs/source-date-epoch/)

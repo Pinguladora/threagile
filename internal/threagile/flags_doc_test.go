@@ -63,6 +63,9 @@ func flagsDoc(root *cobra.Command) string {
 func writeFlagTable(doc *strings.Builder, flags *pflag.FlagSet) {
 	doc.WriteString("| Flag | Type | Default | Description |\n|------|------|---------|-------------|\n")
 	flags.VisitAll(func(f *pflag.Flag) {
+		if f.Deprecated != "" && f.Hidden { // flags kept only so that existing calls keep working
+			return
+		}
 		name := "`--" + f.Name + "`"
 		if f.Shorthand != "" {
 			name += ", `-" + f.Shorthand + "`"

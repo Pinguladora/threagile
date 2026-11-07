@@ -111,7 +111,7 @@ trap 'rm -rf "${out}"' EXIT
 chmod 777 "${out}" # the image runs as an unprivileged user
 cp demo/example/threagile.yaml "${out}/"
 "${engine}" run --rm -v "${out}:/work:Z" ghcr.io/pinguladora/threagile:latest-amd64 \
-  analyze-model --model /work/threagile.yaml --output /work --skip-report-adoc
+  analyze-model --model /work/threagile.yaml --output /work
 test -s "${out}/report.pdf"
 echo "the image renders the PDF report"
 '''
@@ -195,7 +195,7 @@ trap 'rm -rf "${out}"' EXIT
 for demo in example ai-agent; do
   mkdir -p "${out}/${demo}"
   go run ./cmd/threagile analyze-model --model "demo/${demo}/threagile.yaml" --output "${out}/${demo}" \
-    --temp-dir "${out}" --skip-report-adoc --skip-risks-excel --skip-tags-excel
+    --temp-dir "${out}" --skip-risks-excel --skip-tags-excel
   for flavour in ua1 3a; do
     "${engine}" run --rm -v "${out}/${demo}:/data:Z" "${image}" --flavour "${flavour}" /data/report.pdf \
       > "${out}/${demo}/verapdf-${flavour}.xml" || true
