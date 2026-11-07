@@ -3,7 +3,7 @@
 lockfile_version = 3
 
 [[tools."github:mongodb/kingfisher"]]
-version = "v2.16.0"
+version = "2.16.0"
 backend = "github:mongodb/kingfisher"
 specifiers = ["v2.16.0"]
 
