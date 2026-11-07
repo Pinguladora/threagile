@@ -100,6 +100,18 @@ Used by `identity` of communication links.
 | `workload` | The caller's own identity, short-lived and issued by the platform, like a cloud IAM role, a Kubernetes service account token or a SPIFFE ID |
 | `end-user` | The identity of the end user is passed on, like a forwarded or exchanged user token (formerly the end-user-identity-propagation authorization) |
 
+## Network Policy
+
+Used by `network_policy` of trust boundaries of the type `execution-environment` (Kubernetes namespaces).
+
+| Value | Description |
+|-------|-------------|
+| `unknown` | Not modelled, or not a Kubernetes namespace; the risk rules assume nothing about network policies |
+| `none` | No network policy: every pod of the cluster may reach the pods of the namespace, and they may reach anything |
+| `ingress` | Incoming traffic is denied unless a policy allows it; outgoing traffic is not restricted |
+| `egress` | Outgoing traffic is denied unless a policy allows it; incoming traffic is not restricted |
+| `ingress-and-egress` | Incoming and outgoing traffic are denied unless a policy allows them |
+
 ## Protocol
 
 Used by `protocol` of communication links.

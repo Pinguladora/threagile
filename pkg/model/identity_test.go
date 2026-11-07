@@ -119,3 +119,54 @@ func TestParseRejectsAccountOfOtherIdentities(t *testing.T) {
 		assert.Contains(t, err.Error(), `'account' "shared" needs the identity service-account or workload`, identity)
 	}
 }
+
+func TestParseReadsNetworkPolicies(t *testing.T) {
+	model := accessModel(map[string]input.CommunicationLink{"Link": {Identity: "workload"}})
+	model.TrustBoundaries = map[string]input.TrustBoundary{
+		"Orders": {
+			ID: "orders", Type: "execution-environment", NetworkPolicy: " ingress ",
+			TechnicalAssetsInside: []string{"server"},
+		},
+		"Legacy": {ID: "legacy", Type: "execution-environment", TechnicalAssetsInside: []string{"client"}},
+	}
+
+	parsedModel, err := ParseModel(&mockConfig{}, model, make(types.RiskRules), make(types.RiskRules))
+	require.NoError(t, err)
+
+	assert.Equal(t, types.IngressNetworkPolicy, parsedModel.TrustBoundaries["orders"].NetworkPolicy)
+	assert.Equal(t, types.UnknownNetworkPolicy, parsedModel.TrustBoundaries["legacy"].NetworkPolicy, "not modelled")
+}
+
+func TestParseRejectsNetworkPolicyOutsideNamespaces(t *testing.T) {
+	for boundaryType, message := range map[string]string{
+		"network-on-prem":       "needs the type execution-environment, not network-on-prem",
+		"execution-environment": "unknown 'network_policy'",
+	} {
+		model := accessModel(map[string]input.CommunicationLink{"Link": {Identity: "workload"}})
+		policy := "none"
+		if boundaryType == "execution-environment" {
+			policy = "allow-all"
+		}
+		model.TrustBoundaries = map[string]input.TrustBoundary{
+			"Boundary": {ID: "boundary", Type: boundaryType, NetworkPolicy: policy},
+		}
+
+		_, err := ParseModel(&mockConfig{}, model, make(types.RiskRules), make(types.RiskRules))
+
+		require.Error(t, err, boundaryType)
+		assert.Contains(t, err.Error(), message, boundaryType)
+	}
+}
+
+func TestParseReadsPrivileged(t *testing.T) {
+	model := accessModel(map[string]input.CommunicationLink{"Link": {Identity: "workload"}})
+	server := model.TechnicalAssets["Server"]
+	server.Privileged = true
+	model.TechnicalAssets["Server"] = server
+
+	parsedModel, err := ParseModel(&mockConfig{}, model, make(types.RiskRules), make(types.RiskRules))
+	require.NoError(t, err)
+
+	assert.True(t, parsedModel.TechnicalAssets["server"].Privileged)
+	assert.False(t, parsedModel.TechnicalAssets["client"].Privileged)
+}

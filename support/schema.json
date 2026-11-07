@@ -24,14 +24,6 @@
           "description": "CWE",
           "type": "integer"
         },
-        "references": {
-          "description": "Entries of other threat catalogs the risk category matches, like \"OWASP LLM01:2025 Prompt Injection\"",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "uniqueItems": true
-        },
         "description": {
           "description": "Description",
           "type": [
@@ -72,6 +64,14 @@
         "model_failure_possible_reason": {
           "description": "Model failure possible reason",
           "type": "boolean"
+        },
+        "references": {
+          "description": "Entries of other threat catalogs the risk category matches, like \"OWASP LLM01:2025 Prompt Injection\"",
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
         },
         "risk_assessment": {
           "description": "Risk assessment",
@@ -736,6 +736,10 @@
           "communication_links": {
             "additionalProperties": {
               "properties": {
+                "account": {
+                  "description": "The name of the account that the caller uses for a service-account or workload identity, like the name of a service account or a cloud IAM role, so that the rules see an account that several callers share",
+                  "type": "string"
+                },
                 "authentication": {
                   "description": "How the caller authenticates: token leaves the lifetime of the token open, two-factor is the earlier name of multi-factor",
                   "enum": [
@@ -750,20 +754,6 @@
                     "externalized",
                     "two-factor"
                   ],
-                  "type": "string"
-                },
-                "identity": {
-                  "description": "The identity the link carries to its target: none, the caller's own service account with static credentials, its workload identity issued by the platform, or the end user's",
-                  "enum": [
-                    "none",
-                    "service-account",
-                    "workload",
-                    "end-user"
-                  ],
-                  "type": "string"
-                },
-                "account": {
-                  "description": "The name of the account that the caller uses for a service-account or workload identity, like the name of a service account or a cloud IAM role, so that the rules see an account that several callers share",
                   "type": "string"
                 },
                 "authorization": {
@@ -815,6 +805,16 @@
                 "diagram_tweak_weight": {
                   "description": "weight of the link in the layout of the data-flow diagram; heavier links are drawn shorter and straighter",
                   "type": "integer"
+                },
+                "identity": {
+                  "description": "The identity the link carries to its target: none, the caller's own service account with static credentials, its workload identity issued by the platform, or the end user's",
+                  "enum": [
+                    "none",
+                    "service-account",
+                    "workload",
+                    "end-user"
+                  ],
+                  "type": "string"
                 },
                 "ip_filtered": {
                   "description": "IP filtered",
@@ -1084,6 +1084,10 @@
               "string",
               "null"
             ]
+          },
+          "privileged": {
+            "description": "Specifies whether the workload runs privileged, as a privileged container or sharing a host path, network, process or IPC namespace with its node, which lets it take over the node.",
+            "type": "boolean"
           },
           "redundant": {
             "description": "Specifies whether the technical asset has redundancy (e.g., backup systems or failover), which impacts availability and resilience risk assessments.",
@@ -1367,6 +1371,17 @@
           },
           "id": {
             "description": "ID",
+            "type": "string"
+          },
+          "network_policy": {
+            "description": "For a Kubernetes namespace (type execution-environment): the traffic its network policies deny unless they allow it. Leave it out when it is not modelled",
+            "enum": [
+              "unknown",
+              "none",
+              "ingress",
+              "egress",
+              "ingress-and-egress"
+            ],
             "type": "string"
           },
           "tags": {

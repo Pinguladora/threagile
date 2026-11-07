@@ -463,6 +463,9 @@ that may carry threagile's basic markup go through markup, which keeps only that
 <tr><th scope="row">Encryption</th><td>{{.Asset.Encryption}}</td></tr>
 <tr><th scope="row">Multi-tenant</th><td>{{yesNo .Asset.MultiTenant}}</td></tr>
 <tr><th scope="row">Redundant</th><td>{{yesNo .Asset.Redundant}}</td></tr>
+{{- if .Asset.Privileged}}
+<tr><th scope="row">Privileged</th><td>{{yesNo .Asset.Privileged}}</td></tr>
+{{- end}}
 <tr><th scope="row">Custom-developed</th><td>{{yesNo .Asset.CustomDevelopedParts}}</td></tr>
 <tr><th scope="row">Client used by a human</th><td>{{yesNo .Asset.UsedAsClientByHuman}}</td></tr>
 <tr><th scope="row">Data formats accepted</th><td>{{.FormatsAccepted}}</td></tr>
@@ -547,6 +550,9 @@ that may carry threagile's basic markup go through markup, which keeps only that
 <table class="props">
 <tbody>
 <tr><th scope="row">Type</th><td>{{.Boundary.Type}}{{if not .Boundary.Type.IsNetworkBoundary}} <span class="muted">(not a network boundary)</span>{{end}}</td></tr>
+{{- if .Boundary.NetworkPolicy}}
+<tr><th scope="row">Network policy</th><td>{{.Boundary.NetworkPolicy}}</td></tr>
+{{- end}}
 <tr><th scope="row">Tags</th><td>{{.Tags}}</td></tr>
 <tr><th scope="row">Nested in</th><td>{{with .Parent}}{{template "ref" .}}{{else}}<span class="muted">none</span>{{end}}</td></tr>
 <tr><th scope="row">Assets inside</th><td>{{template "refs" .AssetsInside}}</td></tr>

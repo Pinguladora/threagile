@@ -61,14 +61,23 @@ func All() []Catalog {
 				"Overprivileged NHI", "Insecure Cloud Deployment Configurations", "Long-Lived Secrets",
 				"Environment Isolation", "NHI Reuse", "Human Use of NHI",
 			}),
+		owaspCatalog("owasp-kubernetes-2025", "OWASP Kubernetes Top 10 2025", "https://kubernetes-top10.owasp.org/",
+			"K", "2025", []string{
+				"Insecure Workload Configurations", "Overly Permissive Authorization Configurations",
+				"Secrets Management Failures", "Lack Of Cluster Level Policy Enforcement",
+				"Missing Network Segmentation Controls", "Overly Exposed Kubernetes Components",
+				"Misconfigured And Vulnerable Cluster Components", "Cluster To Cloud Lateral Movement",
+				"Broken Authentication Mechanisms", "Inadequate Logging And Monitoring",
+			}),
 	}
 }
 
 // owaspCatalog is an OWASP top 10 whose entries are numbered with the prefix and referenced like
-// "OWASP LLM01:2025 Prompt Injection", with two digits for the web, LLM and agentic lists, as OWASP writes them.
+// "OWASP LLM01:2025 Prompt Injection", with two digits for the web, LLM, agentic and Kubernetes lists, as OWASP
+// writes them.
 func owaspCatalog(id, title, link, prefix, year string, titles []string) Catalog {
 	format := "%s%d"
-	if prefix == "A" || prefix == "LLM" || prefix == "ASI" {
+	if prefix == "A" || prefix == "LLM" || prefix == "ASI" || prefix == "K" {
 		format = "%s%02d"
 	}
 	entries := make([]Entry, 0, len(titles))

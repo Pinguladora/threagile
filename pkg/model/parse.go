@@ -276,6 +276,7 @@ func (parser *technicalAssetParser) parseTechnicalAsset(
 		Internet:                asset.Internet,
 		MultiTenant:             asset.MultiTenant,
 		Redundant:               asset.Redundant,
+		Privileged:              asset.Privileged,
 		CustomDevelopedParts:    asset.CustomDevelopedParts,
 		UsedAsClientByHuman:     asset.UsedAsClientByHuman,
 		OutOfScope:              asset.OutOfScope,
@@ -677,6 +678,10 @@ func parseTrustBoundary(
 	if err != nil {
 		return nil, err
 	}
+	networkPolicy, err := parseNetworkPolicy(title, boundary.NetworkPolicy, trustBoundaryType)
+	if err != nil {
+		return nil, err
+	}
 	trustBoundary := &types.TrustBoundary{
 		Id:                    id,
 		Title:                 title, // fmt.Sprintf("%v", boundary["title"]),
@@ -685,6 +690,7 @@ func parseTrustBoundary(
 		Tags:                  tags,
 		TechnicalAssetsInside: technicalAssetsInside,
 		TrustBoundariesNested: trustBoundariesNested,
+		NetworkPolicy:         networkPolicy,
 	}
 	err = checkIdSyntax(id)
 	if err != nil {
@@ -694,6 +700,22 @@ func parseTrustBoundary(
 		return nil, fmt.Errorf("duplicate id used: %v", id)
 	}
 	return trustBoundary, nil
+}
+
+// parseNetworkPolicy parses the network policy of a trust boundary, which only a Kubernetes namespace, an execution
+// environment, has.
+func parseNetworkPolicy(
+	title string, value string, boundaryType types.TrustBoundaryType,
+) (types.NetworkPolicy, error) {
+	networkPolicy, err := types.ParseNetworkPolicy(strings.TrimSpace(value))
+	if err != nil {
+		return networkPolicy, fmt.Errorf("unknown 'network_policy' of trust boundary %q: %v", title, value)
+	}
+	if networkPolicy != types.UnknownNetworkPolicy && boundaryType != types.ExecutionEnvironment {
+		return networkPolicy, fmt.Errorf("'network_policy' of trust boundary %q needs the type %v, not %v: only "+
+			"a Kubernetes namespace has network policies", title, types.ExecutionEnvironment, boundaryType)
+	}
+	return networkPolicy, nil
 }
 
 // parseTechnicalAssetsInside checks the technical assets inside a trust boundary, which may not be inside

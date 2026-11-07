@@ -230,3 +230,13 @@ func containsPrefix(notes []string, prefix string) bool {
 	}
 	return false
 }
+
+func TestToInputDropsNetworkPolicyOutsideNamespaces(t *testing.T) {
+	elements := foreignModel()
+	elements.Zones[1].Properties = interchange.Properties{"network_policy": "none"}
+
+	result, notes := interchange.ToInput(elements, technologies(t))
+
+	assert.Empty(t, result.TrustBoundaries["DMZ"].NetworkPolicy)
+	assert.Contains(t, strings.Join(notes, "\n"), `network_policy "none" needs the type execution-environment`)
+}

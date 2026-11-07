@@ -50,6 +50,7 @@ var schemaEnumTypes = map[string][]types.TypeEnum{
 	"technical_assets/*/usage":                                            types.UsageValues(),
 	"technical_assets/*/type":                                             types.TechnicalAssetTypeValues(),
 	"trust_boundaries/*/type":                                             types.TrustBoundaryTypeValues(),
+	"trust_boundaries/*/network_policy":                                   types.NetworkPolicyValues(),
 	"custom_risk_categories/*/function":                                   types.RiskFunctionValues(),
 	"custom_risk_categories/*/stride":                                     types.STRIDEValues(),
 	"custom_risk_categories/*/risks_identified/*/severity":                types.RiskSeverityValues(),

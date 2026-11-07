@@ -20,6 +20,7 @@ type TechnicalAsset struct {
 	Internet                bool                  `json:"internet,omitempty"                   yaml:"internet,omitempty"`
 	MultiTenant             bool                  `json:"multi_tenant,omitempty"               yaml:"multi_tenant,omitempty"`
 	Redundant               bool                  `json:"redundant,omitempty"                  yaml:"redundant,omitempty"`
+	Privileged              bool                  `json:"privileged,omitempty"                 yaml:"privileged,omitempty"`
 	CustomDevelopedParts    bool                  `json:"custom_developed_parts,omitempty"     yaml:"custom_developed_parts,omitempty"`
 	OutOfScope              bool                  `json:"out_of_scope,omitempty"               yaml:"out_of_scope,omitempty"`
 	UsedAsClientByHuman     bool                  `json:"used_as_client_by_human,omitempty"    yaml:"used_as_client_by_human,omitempty"`

@@ -32,6 +32,7 @@ func TestReferencesReadAsOWASPAndMAESTROWriteThem(t *testing.T) {
 		"MAESTRO Layer 7: Agent Ecosystem",
 		"OWASP NHI10:2025 Human Use of NHI",
 		"OWASP API1:2023 Broken Object Level Authorization",
+		"OWASP K05:2025 Missing Network Segmentation Controls",
 	} {
 		assert.True(t, references[reference], reference)
 	}
