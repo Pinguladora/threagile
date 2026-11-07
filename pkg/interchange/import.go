@@ -148,6 +148,7 @@ func (what *importer) addTechnicalAssets(result *input.Model) {
 			JustificationCiaRating:  properties["justification_cia_rating"],
 			MultiTenant:             properties.flag("multi_tenant"),
 			Redundant:               properties.flag("redundant"),
+			Privileged:              properties.flag("privileged"),
 			CustomDevelopedParts:    properties.flag("custom_developed_parts"),
 			DataAssetsProcessed:     what.dataAssetRefs(component.Processed, where),
 			DataAssetsStored:        what.dataAssetRefs(component.Stored, where),
@@ -261,14 +262,17 @@ func (what *importer) addTrustBoundaries(result *input.Model) {
 	titles := make(map[string]bool)
 	boundaryTitles := make(map[string]string, len(what.model.Zones)) // by zone id
 	for _, zone := range what.model.Zones {
-		fields := what.fieldsOf(Properties{"type": zone.Type}, fmt.Sprintf("trust zone %q", zone.ID))
+		fields := what.fieldsOf(Properties{"type": zone.Type, "network_policy": zone.Properties["network_policy"]},
+			fmt.Sprintf("trust zone %q", zone.ID))
 		title := uniqueName(titles, identity, zone.Name, zone.ID)
 		boundaryTitles[zone.ID] = title
+		boundaryType := fields.enum("type", DefaultTrustBoundaryType, parses(types.ParseTrustBoundary))
 		result.TrustBoundaries[title] = input.TrustBoundary{
-			ID:          what.zoneIDs[zone.ID],
-			Description: zone.Description,
-			Type:        fields.enum("type", DefaultTrustBoundaryType, parses(types.ParseTrustBoundary)),
-			Tags:        what.useTags(zone.Properties.list(tagsProperty)),
+			ID:            what.zoneIDs[zone.ID],
+			Description:   zone.Description,
+			Type:          boundaryType,
+			Tags:          what.useTags(zone.Properties.list(tagsProperty)),
+			NetworkPolicy: fields.networkPolicy(boundaryType),
 		}
 	}
 
@@ -389,6 +393,18 @@ func (what fields) enum(key string, fallback string, parse func(string) error) s
 	}
 
 	return value
+}
+
+// networkPolicy returns the network policy of a trust zone, which only a Kubernetes namespace, an execution
+// environment, has: it is left out of the other zones, with a note.
+func (what fields) networkPolicy(boundaryType string) string {
+	networkPolicy := what.enum("network_policy", "", parses(types.ParseNetworkPolicy))
+	if networkPolicy != "" && boundaryType != types.ExecutionEnvironment.String() {
+		what.importer.note("%s: network_policy %q needs the type %v, left out", what.where, networkPolicy,
+			types.ExecutionEnvironment)
+		return ""
+	}
+	return networkPolicy
 }
 
 // linkAccess returns the identity and the authorization of a flow. A flow without an identity may hold it in its

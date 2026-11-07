@@ -86,6 +86,39 @@ asset with a link from each service that asks it, so that the rules see the deci
 The HTML and Markdown reports list each decision point in the chapter "Policy Decision Points", with the services
 that ask it and the requests that those services authorize.
 
+## Kubernetes clusters
+
+A Kubernetes cluster is modelled with the elements threagile has, plus two optional fields:
+
+```yaml
+technical_assets:
+  Log Collector:
+    machine: container
+    privileged: true          # a privileged container, or one sharing a host path or namespace with its node
+  Kubernetes API:
+    technologies: [container-platform]
+trust_boundaries:
+  Checkout Namespace:
+    type: execution-environment
+    network_policy: ingress   # none, ingress, egress or ingress-and-egress
+shared_runtimes:
+  Node Pool:
+    technical_assets_running: [log-collector, checkout-service]
+```
+
+- A namespace is a trust boundary of the type `execution-environment`, nested in the network boundary of the
+  cluster. Its `network_policy` is the traffic its network policies deny unless they allow it: `none`, `ingress`,
+  `egress` or `ingress-and-egress`. It is `unknown` when left out, and the rules then assume nothing; other types
+  of trust boundaries cannot have it.
+- A node pool is a shared runtime running the workloads scheduled on it.
+- `privileged` marks a workload that its container does not contain: a privileged container, a host path, or the
+  network, process or IPC namespace of its node.
+- Access to the Kubernetes API is a communication link to a `container-platform` asset, with the `identity`,
+  `authorization` and `readonly` of the service account's role; a readonly link stands for a role that only gets
+  and lists.
+
+[`demo/kubernetes/threagile.yaml`](../demo/kubernetes/threagile.yaml) models a web shop this way.
+
 ## Migrating models of earlier versions
 
 Earlier versions of the model put the identity that a communication link carries into its `authorization`

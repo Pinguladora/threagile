@@ -24,6 +24,7 @@ type TechnicalAsset struct {
 	JustificationCiaRating  string                       `json:"justification_cia_rating,omitempty"   yaml:"justification_cia_rating,omitempty"`
 	MultiTenant             bool                         `json:"multi_tenant,omitempty"               yaml:"multi_tenant,omitempty"`
 	Redundant               bool                         `json:"redundant,omitempty"                  yaml:"redundant,omitempty"`
+	Privileged              bool                         `json:"privileged,omitempty"                 yaml:"privileged,omitempty"`
 	CustomDevelopedParts    bool                         `json:"custom_developed_parts,omitempty"     yaml:"custom_developed_parts,omitempty"`
 	DataAssetsProcessed     []string                     `json:"data_assets_processed,omitempty"      yaml:"data_assets_processed,omitempty"`
 	DataAssetsStored        []string                     `json:"data_assets_stored,omitempty"         yaml:"data_assets_stored,omitempty"`
@@ -76,6 +77,7 @@ func (what *TechnicalAsset) Merge(other TechnicalAsset) error {
 
 	mergeFlag(&what.MultiTenant, other.MultiTenant)
 	mergeFlag(&what.Redundant, other.Redundant)
+	mergeFlag(&what.Privileged, other.Privileged)
 	mergeFlag(&what.CustomDevelopedParts, other.CustomDevelopedParts)
 
 	if what.DiagramTweakOrder == 0 {

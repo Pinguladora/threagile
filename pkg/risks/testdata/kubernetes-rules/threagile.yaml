@@ -1,0 +1,505 @@
+threagile_version: 1.0.0
+
+# Exercises the Kubernetes rules: missing network policies, privileged workloads and write access to the Kubernetes
+# API, with what they find and what they skip.
+
+title: Kubernetes Rules
+
+date: 2026-11-07
+
+author:
+  name: John Doe
+
+business_criticality: critical
+
+business_overview:
+  description: Kubernetes rules test
+  images: []
+
+technical_overview:
+  description: Kubernetes rules test
+  images: []
+
+data_assets:
+
+  Orders:
+    id: orders
+    description: Orders
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Orders of the customers
+
+  Catalog:
+    id: catalog
+    description: Catalog
+    usage: business
+    tags: []
+    origin: Some Company
+    owner: Some Company
+    quantity: many
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Public product catalog
+
+technical_assets:
+
+  Shop Browser:
+    id: shop-browser
+    description: Shop Browser
+    type: external-entity
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: true
+    size: service
+    technologies: [browser]
+    tags: []
+    internet: true
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Shop Traffic:
+        target: frontend
+        description: Shop Traffic
+        protocol: https
+        authentication: session-id
+        identity: end-user
+        authorization: object-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Frontend:
+    id: frontend
+    description: Frontend
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [web-application]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    privileged: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Create Jobs:
+        target: kube-api
+        description: Create Jobs
+        protocol: https
+        authentication: client-certificate
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Order API:
+        target: order-service
+        description: Order API
+        protocol: https
+        authentication: client-certificate
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Order Service:
+    id: order-service
+    description: Order Service
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [web-service-rest]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Read Config:
+        target: kube-api
+        description: Read Config
+        protocol: https
+        authentication: client-certificate
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Order Storage:
+        target: orders-db
+        description: Order Storage
+        protocol: https
+        authentication: client-certificate
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Orders Database:
+    id: orders-db
+    description: Orders Database
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [database]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Catalog Service:
+    id: catalog-service
+    description: Catalog Service
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [web-service-rest]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Log Agent:
+    id: log-agent
+    description: Log Agent
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [monitoring]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    privileged: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Operator:
+    id: operator
+    description: Operator
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [tool]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Reconcile:
+        target: kube-api
+        description: Reconcile
+        protocol: https
+        authentication: client-certificate
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+
+  Kubernetes API:
+    id: kube-api
+    description: Kubernetes API
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [container-platform]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Deployer:
+    id: deployer
+    description: Deployer
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [build-pipeline]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Deploy:
+        target: kube-api
+        description: Deploy
+        protocol: https
+        authentication: client-certificate
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: devops
+        data_assets_sent: [catalog]
+        data_assets_received: []
+
+  Admin Client:
+    id: admin-client
+    description: Admin Client
+    type: process
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: false
+    size: service
+    technologies: [devops-client]
+    tags: []
+    internet: false
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Administer:
+        target: kube-api
+        description: Administer
+        protocol: https
+        authentication: multi-factor
+        identity: end-user
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: devops
+        data_assets_sent: [catalog]
+        data_assets_received: []
+
+trust_boundaries:
+
+  Cluster Network:
+    id: cluster-network
+    description: Cluster Network
+    type: network-cloud-security-group
+    tags: []
+    technical_assets_inside: []
+    trust_boundaries_nested: [shop-namespace, orders-namespace, data-namespace, catalog-namespace, logging-namespace, system-namespace]
+
+  Shop Namespace:
+    id: shop-namespace
+    description: Shop Namespace
+    type: execution-environment
+    tags: []
+    network_policy: none
+    technical_assets_inside: [frontend]
+    trust_boundaries_nested: []
+
+  Orders Namespace:
+    id: orders-namespace
+    description: Orders Namespace
+    type: execution-environment
+    tags: []
+    network_policy: ingress
+    technical_assets_inside: [order-service]
+    trust_boundaries_nested: []
+
+  Data Namespace:
+    id: data-namespace
+    description: Data Namespace
+    type: execution-environment
+    tags: []
+    network_policy: ingress-and-egress
+    technical_assets_inside: [orders-db]
+    trust_boundaries_nested: []
+
+  Catalog Namespace:
+    id: catalog-namespace
+    description: Catalog Namespace
+    type: execution-environment
+    tags: []
+    network_policy: none
+    technical_assets_inside: [catalog-service]
+    trust_boundaries_nested: []
+
+  Logging Namespace:
+    id: logging-namespace
+    description: Logging Namespace
+    type: execution-environment
+    tags: []
+    technical_assets_inside: [log-agent]
+    trust_boundaries_nested: []
+
+  System Namespace:
+    id: system-namespace
+    description: System Namespace
+    type: execution-environment
+    tags: []
+    technical_assets_inside: [operator, kube-api]
+    trust_boundaries_nested: []
+
+  Build Network:
+    id: build-network
+    description: Build Network
+    type: network-cloud-security-group
+    tags: []
+    technical_assets_inside: [deployer]
+    trust_boundaries_nested: []
+
+shared_runtimes:
+
+  Node Pool:
+    id: node-pool
+    description: The nodes of the cluster
+    tags: []
+    technical_assets_running: [frontend, order-service, orders-db, catalog-service, log-agent, operator]
+
+risk_tracking: {}

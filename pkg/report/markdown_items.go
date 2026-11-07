@@ -1,8 +1,11 @@
 package report
 
 import (
+	"slices"
 	"strconv"
 	"strings"
+
+	"github.com/Pinguladora/threagile/pkg/types"
 )
 
 // itemLine is the line below the heading of an object: its level, if any, its summary and its id.
@@ -146,27 +149,29 @@ func (what *markdownWriter) technicalAsset(asset *viewTechnicalAsset) {
 		trustBoundary = what.ref(*asset.TrustBoundary)
 	}
 	what.subheading("Asset Information")
-	what.properties(
-		[]string{"Type", markdownText(asset.Asset.Type.String())},
-		[]string{columnUsage, markdownText(asset.Asset.Usage.String())},
-		[]string{"RAA", markdownText(asset.RAA)},
-		[]string{"Size", markdownText(asset.Asset.Size.String())},
-		[]string{"Technology", markdownText(asset.Asset.Technologies.String())},
-		[]string{columnTags, markdownText(asset.Tags)},
-		[]string{"Trust boundary", trustBoundary},
-		[]string{"Internet", yesNo(asset.Asset.Internet)},
-		[]string{"Machine", markdownText(asset.Asset.Machine.String())},
-		[]string{"Encryption", markdownText(asset.Asset.Encryption.String())},
-		[]string{"Multi-tenant", yesNo(asset.Asset.MultiTenant)},
-		[]string{"Redundant", yesNo(asset.Asset.Redundant)},
-		[]string{"Custom-developed", yesNo(asset.Asset.CustomDevelopedParts)},
-		[]string{"Client used by a human", yesNo(asset.Asset.UsedAsClientByHuman)},
-		[]string{"Data formats accepted", markdownText(asset.FormatsAccepted)},
-		[]string{"Data processed", what.refs(asset.DataProcessed)},
-		[]string{"Data stored", what.refs(asset.DataStored)},
-		[]string{"Outgoing communication links", what.refs(asset.Outgoing)},
-		[]string{"Incoming communication links", what.refs(asset.Incoming)},
-	)
+	information := [][]string{
+		{"Type", markdownText(asset.Asset.Type.String())},
+		{columnUsage, markdownText(asset.Asset.Usage.String())},
+		{"RAA", markdownText(asset.RAA)},
+		{"Size", markdownText(asset.Asset.Size.String())},
+		{"Technology", markdownText(asset.Asset.Technologies.String())},
+		{columnTags, markdownText(asset.Tags)},
+		{"Trust boundary", trustBoundary},
+		{"Internet", yesNo(asset.Asset.Internet)},
+		{"Machine", markdownText(asset.Asset.Machine.String())},
+		{"Encryption", markdownText(asset.Asset.Encryption.String())},
+		{"Multi-tenant", yesNo(asset.Asset.MultiTenant)},
+		{"Redundant", yesNo(asset.Asset.Redundant)},
+		privilegedRow(asset.Asset),
+		{"Custom-developed", yesNo(asset.Asset.CustomDevelopedParts)},
+		{"Client used by a human", yesNo(asset.Asset.UsedAsClientByHuman)},
+		{"Data formats accepted", markdownText(asset.FormatsAccepted)},
+		{"Data processed", what.refs(asset.DataProcessed)},
+		{"Data stored", what.refs(asset.DataStored)},
+		{"Outgoing communication links", what.refs(asset.Outgoing)},
+		{"Incoming communication links", what.refs(asset.Incoming)},
+	}
+	what.properties(slices.DeleteFunc(information, func(row []string) bool { return row == nil })...)
 	rating := [][]string{
 		{"Owner", markdownText(asset.Asset.Owner)},
 		{"Confidentiality", markdownText(asset.Asset.Confidentiality.String())},
@@ -254,13 +259,16 @@ func (what *markdownWriter) trustBoundaries(view *reportView) {
 		if boundary.Parent != nil {
 			parent = what.ref(*boundary.Parent)
 		}
-		what.properties(
-			[]string{"Type", boundaryType},
+		properties := [][]string{{"Type", boundaryType}}
+		if boundary.Boundary.NetworkPolicy != types.UnknownNetworkPolicy {
+			properties = append(properties, []string{"Network policy", markdownText(boundary.Boundary.NetworkPolicy.String())})
+		}
+		what.properties(append(properties,
 			[]string{columnTags, markdownText(boundary.Tags)},
 			[]string{"Nested in", parent},
 			[]string{"Assets inside", what.refs(boundary.AssetsInside)},
 			[]string{"Boundaries nested", what.refs(boundary.Nested)},
-		)
+		)...)
 	}
 }
 
@@ -394,4 +402,13 @@ func (what *markdownWriter) disclaimer(view *reportView) {
 	what.paragraph("Distribution of this report (in full or in part like diagrams or risk findings) requires that this " +
 		"disclaimer as well as the chapter about the Threagile toolkit and method used is kept intact as part of the " +
 		"distributed report or referenced from the distributed parts.")
+}
+
+// privilegedRow is the row of an asset's information that says it is privileged, or nil for the other assets, which
+// leave the row out.
+func privilegedRow(asset *types.TechnicalAsset) []string {
+	if !asset.Privileged {
+		return nil
+	}
+	return []string{"Privileged", yesNo(true)}
 }

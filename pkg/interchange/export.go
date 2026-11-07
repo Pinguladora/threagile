@@ -81,6 +81,9 @@ func newZones(model *types.Model) []Zone {
 		}
 
 		zone.Properties.setList(tagsProperty, boundary.Tags)
+		if boundary.NetworkPolicy != types.UnknownNetworkPolicy {
+			zone.Properties.set("network_policy", boundary.NetworkPolicy.String())
+		}
 		zones = append(zones, zone)
 	}
 
@@ -130,6 +133,7 @@ func technicalAssetProperties(asset *types.TechnicalAsset) Properties {
 	properties.setFlag("internet", asset.Internet)
 	properties.setFlag("multi_tenant", asset.MultiTenant)
 	properties.setFlag("redundant", asset.Redundant)
+	properties.setFlag("privileged", asset.Privileged)
 	properties.setFlag("custom_developed_parts", asset.CustomDevelopedParts)
 	properties.setFlag("out_of_scope", asset.OutOfScope)
 	properties.setFlag("used_as_client_by_human", asset.UsedAsClientByHuman)

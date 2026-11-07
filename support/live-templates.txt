@@ -145,6 +145,7 @@ Live template for a technical asset:
     justification_cia_rating:
     multi_tenant: $multi_tenant$
     redundant: $redundant$
+    privileged: $privileged$
     custom_developed_parts: $custom_developed_parts$
     data_assets_processed: # sequence of IDs to reference
     data_assets_stored: # sequence of IDs to reference
@@ -187,6 +188,7 @@ Live template for a trust boundary:
     id: $id$
     description: $END$
     type: $type$
+    network_policy: $network_policy$ # Kubernetes namespaces (type execution-environment) only
     tags: $tags$
     technical_assets_inside: # sequence of IDs to reference
     trust_boundaries_nested: # sequence of IDs to reference

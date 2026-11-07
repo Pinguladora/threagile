@@ -1,0 +1,512 @@
+threagile_version: 1.0.0
+
+# A web shop on a managed Kubernetes cluster: namespaces with and without network policies, a privileged node agent
+# and an operator that changes the cluster through its API. It shows the Kubernetes rules at work.
+
+title: Web Shop on Kubernetes
+
+date: 2026-11-07
+
+author:
+  name: Jane Doe
+  contact: jane.doe@example.com
+
+business_criticality: critical
+
+business_overview:
+  description: An online shop whose services run in a managed Kubernetes cluster.
+  images: []
+
+technical_overview:
+  description: The shop's services run in namespaces of one cluster on a shared node pool. An ingress controller takes
+    the traffic of the customers, a GitOps operator applies the deployments, and a node agent collects the logs.
+  images: []
+
+questions: {}
+
+abuse_cases: {}
+
+security_requirements: {}
+
+tags_available: []
+
+data_assets:
+
+  Customer Orders:
+    id: orders
+    description: The orders of the customers, with their addresses
+    usage: business
+    tags: []
+    origin: Customers
+    owner: Shop Operations
+    quantity: many
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Personal data of the customers, and the business of the shop
+
+  Payment Tokens:
+    id: payment-tokens
+    description: Tokens of the payment provider for the cards of the customers
+    usage: business
+    tags: []
+    origin: Payment Provider
+    owner: Shop Operations
+    quantity: many
+    confidentiality: strictly-confidential
+    integrity: mission-critical
+    availability: critical
+    justification_cia_rating: Stolen tokens let attackers charge the cards of the customers
+
+  Product Catalog:
+    id: catalog
+    description: The products and their prices
+    usage: business
+    tags: []
+    origin: Shop Operations
+    owner: Shop Operations
+    quantity: many
+    confidentiality: public
+    integrity: important
+    availability: important
+    justification_cia_rating: Public, but wrong prices cost money
+
+  Cluster Configuration:
+    id: cluster-config
+    description: The manifests of the workloads, applied by the operator
+    usage: devops
+    tags: []
+    origin: Platform Team
+    owner: Platform Team
+    quantity: few
+    confidentiality: confidential
+    integrity: critical
+    availability: important
+    justification_cia_rating: Changing them changes what runs in the cluster
+
+technical_assets:
+
+  Customer Browser:
+    id: customer-browser
+    description: Customer Browser
+    type: external-entity
+    usage: business
+    used_as_client_by_human: true
+    out_of_scope: true
+    size: service
+    technologies: [browser]
+    tags: []
+    internet: true
+    machine: physical
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders, catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Shop Traffic:
+        target: ingress-controller
+        description: Shop Traffic
+        protocol: https
+        authentication: session-id
+        identity: end-user
+        authorization: object-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders, catalog]
+
+  Ingress Controller:
+    id: ingress-controller
+    description: Ingress Controller
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [load-balancer]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders, catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Storefront Traffic:
+        target: storefront
+        description: Storefront Traffic
+        protocol: https
+        authentication: session-id
+        identity: end-user
+        authorization: object-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders, catalog]
+
+  Storefront:
+    id: storefront
+    description: Storefront
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [web-application]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders, catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Checkout API:
+        target: checkout-service
+        description: Checkout API
+        protocol: https
+        authentication: client-certificate
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Catalog API:
+        target: catalog-service
+        description: Catalog API
+        protocol: https
+        authentication: client-certificate
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: true
+        usage: business
+        data_assets_sent: []
+        data_assets_received: [catalog]
+
+  Checkout Service:
+    id: checkout-service
+    description: Checkout Service
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [web-service-rest]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: strictly-confidential
+    integrity: mission-critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders, payment-tokens]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Order Storage:
+        target: orders-db
+        description: Order Storage
+        protocol: jdbc-encrypted
+        authentication: credentials
+        identity: service-account
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [orders]
+        data_assets_received: [orders]
+      Payment:
+        target: payment-provider
+        description: Payment
+        protocol: https
+        authentication: client-certificate
+        identity: service-account
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [payment-tokens]
+        data_assets_received: [payment-tokens]
+
+  Catalog Service:
+    id: catalog-service
+    description: Catalog Service
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [web-service-rest]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Orders Database:
+    id: orders-db
+    description: Orders Database
+    type: datastore
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [database]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [orders]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Payment Provider:
+    id: payment-provider
+    description: Payment Provider
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: true
+    size: service
+    technologies: [web-service-rest]
+    tags: []
+    internet: true
+    machine: virtual
+    encryption: none
+    owner: Some Company
+    confidentiality: strictly-confidential
+    integrity: mission-critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [payment-tokens]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  Log Collector:
+    id: log-collector
+    description: Log Collector
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [monitoring]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: public
+    integrity: operational
+    availability: operational
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    privileged: true
+    data_assets_processed: [catalog]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+  GitOps Operator:
+    id: gitops-operator
+    description: GitOps Operator
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [tool]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [cluster-config]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links:
+      Apply Manifests:
+        target: kube-api
+        description: Apply Manifests
+        protocol: https
+        authentication: client-certificate
+        identity: workload
+        authorization: function-level
+        tags: []
+        vpn: false
+        ip_filtered: false
+        readonly: false
+        usage: business
+        data_assets_sent: [cluster-config]
+        data_assets_received: [cluster-config]
+
+  Kubernetes API:
+    id: kube-api
+    description: Kubernetes API
+    type: process
+    usage: business
+    used_as_client_by_human: false
+    out_of_scope: false
+    size: service
+    technologies: [container-platform]
+    tags: []
+    internet: false
+    machine: container
+    encryption: none
+    owner: Some Company
+    confidentiality: confidential
+    integrity: critical
+    availability: critical
+    justification_cia_rating: Test
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: [cluster-config]
+    data_assets_stored: []
+    data_formats_accepted: [json]
+    communication_links: {}
+
+trust_boundaries:
+
+  Cluster Network:
+    id: cluster-network
+    description: Cluster Network
+    type: network-cloud-security-group
+    tags: []
+    technical_assets_inside: [ingress-controller]
+    trust_boundaries_nested: [shop-namespace, checkout-namespace, data-namespace, monitoring-namespace, system-namespace]
+
+  Shop Namespace:
+    id: shop-namespace
+    description: Shop Namespace
+    type: execution-environment
+    tags: []
+    network_policy: none
+    technical_assets_inside: [storefront, catalog-service]
+    trust_boundaries_nested: []
+
+  Checkout Namespace:
+    id: checkout-namespace
+    description: Checkout Namespace
+    type: execution-environment
+    tags: []
+    network_policy: ingress
+    technical_assets_inside: [checkout-service]
+    trust_boundaries_nested: []
+
+  Data Namespace:
+    id: data-namespace
+    description: Data Namespace
+    type: execution-environment
+    tags: []
+    network_policy: ingress-and-egress
+    technical_assets_inside: [orders-db]
+    trust_boundaries_nested: []
+
+  Monitoring Namespace:
+    id: monitoring-namespace
+    description: Monitoring Namespace
+    type: execution-environment
+    tags: []
+    technical_assets_inside: [log-collector]
+    trust_boundaries_nested: []
+
+  System Namespace:
+    id: system-namespace
+    description: System Namespace
+    type: execution-environment
+    tags: []
+    technical_assets_inside: [gitops-operator, kube-api]
+    trust_boundaries_nested: []
+
+shared_runtimes:
+
+  Node Pool:
+    id: node-pool
+    description: The nodes that run the workloads of the shop
+    tags: []
+    technical_assets_running: [ingress-controller, storefront, checkout-service, catalog-service, orders-db, log-collector,
+      gitops-operator]
+
+individual_risk_categories: {}
+
+risk_tracking: {}

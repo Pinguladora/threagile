@@ -1,0 +1,993 @@
+[
+  {
+    "category": "container-baseimage-backdooring",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eContainer Base Image Backdooring\u003c/b\u003e risk at \u003cb\u003eCheckout Service\u003c/b\u003e",
+    "synthetic_id": "container-baseimage-backdooring@checkout-service",
+    "most_relevant_technical_asset": "checkout-service",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "checkout-service"
+    ],
+    "plain_title": "Container Base Image Backdooring risk at Checkout Service",
+    "category_title": "Container Base Image Backdooring",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
+    "action": "Container Infrastructure Hardening",
+    "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
+    "most_relevant_technical_asset_title": "Checkout Service",
+    "most_relevant_technical_asset_raa": 90.39473684210526
+  },
+  {
+    "category": "container-baseimage-backdooring",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eContainer Base Image Backdooring\u003c/b\u003e risk at \u003cb\u003eCatalog Service\u003c/b\u003e",
+    "synthetic_id": "container-baseimage-backdooring@catalog-service",
+    "most_relevant_technical_asset": "catalog-service",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "catalog-service"
+    ],
+    "plain_title": "Container Base Image Backdooring risk at Catalog Service",
+    "category_title": "Container Base Image Backdooring",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
+    "action": "Container Infrastructure Hardening",
+    "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
+    "most_relevant_technical_asset_title": "Catalog Service",
+    "most_relevant_technical_asset_raa": 10.657894736842104
+  },
+  {
+    "category": "container-baseimage-backdooring",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eContainer Base Image Backdooring\u003c/b\u003e risk at \u003cb\u003eGitOps Operator\u003c/b\u003e",
+    "synthetic_id": "container-baseimage-backdooring@gitops-operator",
+    "most_relevant_technical_asset": "gitops-operator",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "gitops-operator"
+    ],
+    "plain_title": "Container Base Image Backdooring risk at GitOps Operator",
+    "category_title": "Container Base Image Backdooring",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
+    "action": "Container Infrastructure Hardening",
+    "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
+    "most_relevant_technical_asset_title": "GitOps Operator",
+    "most_relevant_technical_asset_raa": 32.8185595567867
+  },
+  {
+    "category": "container-baseimage-backdooring",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eContainer Base Image Backdooring\u003c/b\u003e risk at \u003cb\u003eIngress Controller\u003c/b\u003e",
+    "synthetic_id": "container-baseimage-backdooring@ingress-controller",
+    "most_relevant_technical_asset": "ingress-controller",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "ingress-controller"
+    ],
+    "plain_title": "Container Base Image Backdooring risk at Ingress Controller",
+    "category_title": "Container Base Image Backdooring",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
+    "action": "Container Infrastructure Hardening",
+    "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
+    "most_relevant_technical_asset_title": "Ingress Controller",
+    "most_relevant_technical_asset_raa": 10.770586753966255
+  },
+  {
+    "category": "container-baseimage-backdooring",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eContainer Base Image Backdooring\u003c/b\u003e risk at \u003cb\u003eKubernetes API\u003c/b\u003e",
+    "synthetic_id": "container-baseimage-backdooring@kube-api",
+    "most_relevant_technical_asset": "kube-api",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "kube-api"
+    ],
+    "plain_title": "Container Base Image Backdooring risk at Kubernetes API",
+    "category_title": "Container Base Image Backdooring",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
+    "action": "Container Infrastructure Hardening",
+    "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
+    "most_relevant_technical_asset_title": "Kubernetes API",
+    "most_relevant_technical_asset_raa": 100
+  },
+  {
+    "category": "container-baseimage-backdooring",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eContainer Base Image Backdooring\u003c/b\u003e risk at \u003cb\u003eLog Collector\u003c/b\u003e",
+    "synthetic_id": "container-baseimage-backdooring@log-collector",
+    "most_relevant_technical_asset": "log-collector",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "log-collector"
+    ],
+    "plain_title": "Container Base Image Backdooring risk at Log Collector",
+    "category_title": "Container Base Image Backdooring",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
+    "action": "Container Infrastructure Hardening",
+    "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
+    "most_relevant_technical_asset_title": "Log Collector",
+    "most_relevant_technical_asset_raa": 2.131578947368421
+  },
+  {
+    "category": "container-baseimage-backdooring",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eContainer Base Image Backdooring\u003c/b\u003e risk at \u003cb\u003eOrders Database\u003c/b\u003e",
+    "synthetic_id": "container-baseimage-backdooring@orders-db",
+    "most_relevant_technical_asset": "orders-db",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "orders-db"
+    ],
+    "plain_title": "Container Base Image Backdooring risk at Orders Database",
+    "category_title": "Container Base Image Backdooring",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
+    "action": "Container Infrastructure Hardening",
+    "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
+    "most_relevant_technical_asset_title": "Orders Database",
+    "most_relevant_technical_asset_raa": 50.26315789473684
+  },
+  {
+    "category": "container-baseimage-backdooring",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eContainer Base Image Backdooring\u003c/b\u003e risk at \u003cb\u003eStorefront\u003c/b\u003e",
+    "synthetic_id": "container-baseimage-backdooring@storefront",
+    "most_relevant_technical_asset": "storefront",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "storefront"
+    ],
+    "plain_title": "Container Base Image Backdooring risk at Storefront",
+    "category_title": "Container Base Image Backdooring",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 912,
+    "references": [
+      "OWASP A03:2025 Software Supply Chain Failures"
+    ],
+    "action": "Container Infrastructure Hardening",
+    "mitigation": "Apply hardening of all container infrastructures (see for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e and the \u003ci\u003eDocker Bench for Security\u003c/i\u003e). Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Regularly execute container image scans with tools checking the layers for vulnerable components.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
+    "most_relevant_technical_asset_title": "Storefront",
+    "most_relevant_technical_asset_raa": 51.26846722068329
+  },
+  {
+    "category": "container-platform-escape",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eContainer Platform Escape\u003c/b\u003e risk at \u003cb\u003eKubernetes API\u003c/b\u003e",
+    "synthetic_id": "container-platform-escape@kube-api",
+    "most_relevant_technical_asset": "kube-api",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "catalog-service",
+      "checkout-service",
+      "gitops-operator",
+      "ingress-controller",
+      "kube-api",
+      "log-collector",
+      "orders-db",
+      "storefront"
+    ],
+    "plain_title": "Container Platform Escape risk at Kubernetes API",
+    "category_title": "Container Platform Escape",
+    "stride": "elevation-of-privilege",
+    "function": "operations",
+    "cwe": 1008,
+    "references": [
+      "OWASP A02:2025 Security Misconfiguration"
+    ],
+    "action": "Container Infrastructure Hardening",
+    "mitigation": "Apply hardening of all container infrastructures. \u003cp\u003eSee for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e as well as the \u003ci\u003eDocker Bench for Security\u003c/i\u003e ( \u003ca href=\"https://github.com/docker/docker-bench-security\"\u003ehttps://github.com/docker/docker-bench-security\u003c/a\u003e ) or \u003ci\u003eInSpec Checks for Docker and Kubernetes\u003c/i\u003e ( \u003ca href=\"https://github.com/dev-sec/cis-kubernetes-benchmark\"\u003ehttps://github.com/dev-sec/cis-docker-benchmark\u003c/a\u003e and \u003ca href=\"https://github.com/dev-sec/cis-kubernetes-benchmark\"\u003ehttps://github.com/dev-sec/cis-kubernetes-benchmark\u003c/a\u003e ). Use only trusted base images, verify digital signatures and apply image creation best practices. Also consider using Google's \u003cb\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Apply namespace isolation and nod affinity to separate pods from each other in terms of access and nodes the same style as you separate data.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS or CSVS chapter applied?",
+    "most_relevant_technical_asset_title": "Kubernetes API",
+    "most_relevant_technical_asset_raa": 100
+  },
+  {
+    "category": "cross-site-request-forgery",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "very-likely",
+    "exploitation_impact": "low",
+    "title": "\u003cb\u003eCross-Site Request Forgery (CSRF)\u003c/b\u003e risk at \u003cb\u003eStorefront\u003c/b\u003e via \u003cb\u003eStorefront Traffic\u003c/b\u003e from \u003cb\u003eIngress Controller\u003c/b\u003e",
+    "synthetic_id": "cross-site-request-forgery@storefront@ingress-controller\u003estorefront-traffic",
+    "most_relevant_technical_asset": "storefront",
+    "most_relevant_communication_link": "ingress-controller\u003estorefront-traffic",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "storefront"
+    ],
+    "plain_title": "Cross-Site Request Forgery (CSRF) risk at Storefront via Storefront Traffic from Ingress Controller",
+    "category_title": "Cross-Site Request Forgery (CSRF)",
+    "stride": "spoofing",
+    "function": "development",
+    "cwe": 352,
+    "references": [
+      "OWASP A01:2025 Broken Access Control"
+    ],
+    "action": "CSRF Prevention",
+    "mitigation": "Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Storefront",
+    "most_relevant_technical_asset_raa": 51.26846722068329,
+    "most_relevant_communication_link_title": "Storefront Traffic"
+  },
+  {
+    "category": "cross-site-scripting",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eCross-Site Scripting (XSS)\u003c/b\u003e risk at \u003cb\u003eStorefront\u003c/b\u003e",
+    "synthetic_id": "cross-site-scripting@storefront",
+    "most_relevant_technical_asset": "storefront",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "storefront"
+    ],
+    "plain_title": "Cross-Site Scripting (XSS) risk at Storefront",
+    "category_title": "Cross-Site Scripting (XSS)",
+    "stride": "tampering",
+    "function": "development",
+    "cwe": 79,
+    "references": [
+      "OWASP A05:2025 Injection"
+    ],
+    "action": "XSS Prevention",
+    "mitigation": "Try to encode all values sent back to the browser and also handle DOM-manipulations in a safe way to avoid DOM-based XSS. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Storefront",
+    "most_relevant_technical_asset_raa": 51.26846722068329
+  },
+  {
+    "category": "kubernetes-api-write-access",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eKubernetes API Write Access\u003c/b\u003e risk at \u003cb\u003eGitOps Operator\u003c/b\u003e to \u003cb\u003eKubernetes API\u003c/b\u003e",
+    "synthetic_id": "kubernetes-api-write-access@gitops-operator@gitops-operator\u003eapply-manifests",
+    "most_relevant_technical_asset": "gitops-operator",
+    "most_relevant_communication_link": "gitops-operator\u003eapply-manifests",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "kube-api"
+    ],
+    "plain_title": "Kubernetes API Write Access risk at GitOps Operator to Kubernetes API",
+    "category_title": "Kubernetes API Write Access",
+    "stride": "elevation-of-privilege",
+    "function": "operations",
+    "cwe": 250,
+    "references": [
+      "OWASP K02:2025 Overly Permissive Authorization Configurations",
+      "OWASP A01:2025 Broken Access Control"
+    ],
+    "action": "Least Privilege for Service Accounts",
+    "mitigation": "Give the workload a service account of its own, bound to a role in its namespace with only the verbs and resources it uses (no create on pods, no get on secrets, no wildcards), disable the mounting of its token where it does not call the API, and leave changes to the cluster to the deployment pipeline or an operator on nodes of its own.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "GitOps Operator",
+    "most_relevant_technical_asset_raa": 32.8185595567867,
+    "most_relevant_communication_link_title": "Apply Manifests"
+  },
+  {
+    "category": "long-lived-credentials",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eLong-Lived Credentials\u003c/b\u003e risk at \u003cb\u003eOrders Database\u003c/b\u003e used by \u003cb\u003eCheckout Service\u003c/b\u003e (credentials)",
+    "synthetic_id": "long-lived-credentials@orders-db@checkout-service\u003eorder-storage",
+    "most_relevant_technical_asset": "orders-db",
+    "most_relevant_communication_link": "checkout-service\u003eorder-storage",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "orders-db"
+    ],
+    "plain_title": "Long-Lived Credentials risk at Orders Database used by Checkout Service (credentials)",
+    "category_title": "Long-Lived Credentials",
+    "stride": "spoofing",
+    "function": "operations",
+    "cwe": 522,
+    "references": [
+      "OWASP A07:2025 Authentication Failures",
+      "OWASP NHI7:2025 Long-Lived Secrets",
+      "OWASP NHI2:2025 Secret Leakage"
+    ],
+    "action": "Short-Lived Credentials",
+    "mitigation": "Replace static secrets between services with a workload identity issued by the platform (cloud IAM roles, Kubernetes service account tokens, SPIFFE), or with short-lived tokens obtained through OAuth 2.0 client credentials or token exchange, and model the link with the identity \u003ci\u003eworkload\u003c/i\u003e or the authentication \u003ci\u003eshort-lived-token\u003c/i\u003e. Where a long-lived secret remains, keep it in a vault, scope it narrowly, rotate it automatically and detect its use from unexpected places.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Orders Database",
+    "most_relevant_technical_asset_raa": 50.26315789473684,
+    "most_relevant_communication_link_title": "Order Storage"
+  },
+  {
+    "category": "missing-authentication-second-factor",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMissing Multi-Factor Authentication\u003c/b\u003e covering communication link \u003cb\u003eStorefront Traffic\u003c/b\u003e from \u003cb\u003eCustomer Browser\u003c/b\u003e forwarded via \u003cb\u003eIngress Controller\u003c/b\u003e to \u003cb\u003eStorefront\u003c/b\u003e",
+    "synthetic_id": "missing-authentication-second-factor@ingress-controller\u003estorefront-traffic@customer-browser@storefront",
+    "most_relevant_technical_asset": "storefront",
+    "most_relevant_communication_link": "ingress-controller\u003estorefront-traffic",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "storefront"
+    ],
+    "plain_title": "Missing Multi-Factor Authentication covering communication link Storefront Traffic from Customer Browser forwarded via Ingress Controller to Storefront",
+    "category_title": "Missing Multi-Factor Authentication (MFA)",
+    "stride": "elevation-of-privilege",
+    "function": "business-side",
+    "cwe": 308,
+    "references": [
+      "OWASP A07:2025 Authentication Failures",
+      "OWASP API2:2023 Broken Authentication"
+    ],
+    "action": "Multi-Factor Authentication (MFA)",
+    "mitigation": "Apply an authentication method to the technical asset protecting highly sensitive data via multi-factor authentication for human users.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Storefront",
+    "most_relevant_technical_asset_raa": 51.26846722068329,
+    "most_relevant_communication_link_title": "Storefront Traffic"
+  },
+  {
+    "category": "missing-build-infrastructure",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMissing Build Infrastructure\u003c/b\u003e in the threat model (referencing asset \u003cb\u003eCheckout Service\u003c/b\u003e as an example)",
+    "synthetic_id": "missing-build-infrastructure@checkout-service",
+    "most_relevant_technical_asset": "checkout-service",
+    "data_breach_probability": "improbable",
+    "plain_title": "Missing Build Infrastructure in the threat model (referencing asset Checkout Service as an example)",
+    "category_title": "Missing Build Infrastructure",
+    "stride": "tampering",
+    "function": "architecture",
+    "cwe": 1127,
+    "action": "Build Pipeline Hardening",
+    "mitigation": "Include the build infrastructure in the model.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Checkout Service",
+    "most_relevant_technical_asset_raa": 90.39473684210526
+  },
+  {
+    "category": "missing-cloud-hardening",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "very-high",
+    "title": "\u003cb\u003eMissing Cloud Hardening\u003c/b\u003e risk at \u003cb\u003eCluster Network\u003c/b\u003e",
+    "synthetic_id": "missing-cloud-hardening@cluster-network",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "ingress-controller",
+      "storefront",
+      "catalog-service",
+      "checkout-service",
+      "orders-db",
+      "log-collector",
+      "gitops-operator",
+      "kube-api"
+    ],
+    "plain_title": "Missing Cloud Hardening risk at Cluster Network",
+    "category_title": "Missing Cloud Hardening",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 1008,
+    "references": [
+      "OWASP A02:2025 Security Misconfiguration",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
+    "action": "Cloud Hardening",
+    "mitigation": "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which depend on the cloud provider tags in the model). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Amazon Web Services\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", or \"Prowler AWS CIS Benchmark Tool\"\u003c/i\u003e). \u003cbr\u003eFor EC2 and other servers running Amazon Linux, follow the \u003ci\u003eCIS Benchmark for Amazon Linux\u003c/i\u003e and switch to IMDSv2. \u003cbr\u003eFor S3 buckets follow the \u003ci\u003eSecurity Best Practices for Amazon S3\u003c/i\u003e at \u003ca href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\"\u003ehttps://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\u003c/a\u003e to avoid accidental leakage. \u003cbr\u003eAlso take a look at some of these tools: \u003ca href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\"\u003ehttps://github.com/toniblyx/my-arsenal-of-aws-security-tools\u003c/a\u003e \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eMicrosoft Azure\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Microsoft Azure\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e).\u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eGoogle Cloud Platform\u003c/b\u003e: Follow the \u003ci\u003eCIS Benchmark for Google Cloud Computing Platform\u003c/i\u003e (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\" or \"ScoutSuite\"\u003c/i\u003e). \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eOracle Cloud Platform\u003c/b\u003e: Follow the hardening best practices (see also the automated checks of cloud audit tools like \u003ci\u003e\"CloudSploit\"\u003c/i\u003e).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+  },
+  {
+    "category": "missing-hardening",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMissing Hardening\u003c/b\u003e risk at \u003cb\u003eCheckout Service\u003c/b\u003e",
+    "synthetic_id": "missing-hardening@checkout-service",
+    "most_relevant_technical_asset": "checkout-service",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "checkout-service"
+    ],
+    "plain_title": "Missing Hardening risk at Checkout Service",
+    "category_title": "Missing Hardening",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 16,
+    "references": [
+      "OWASP A02:2025 Security Misconfiguration",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
+    "action": "System Hardening",
+    "mitigation": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Checkout Service",
+    "most_relevant_technical_asset_raa": 90.39473684210526
+  },
+  {
+    "category": "missing-hardening",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "low",
+    "title": "\u003cb\u003eMissing Hardening\u003c/b\u003e risk at \u003cb\u003eKubernetes API\u003c/b\u003e",
+    "synthetic_id": "missing-hardening@kube-api",
+    "most_relevant_technical_asset": "kube-api",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "kube-api"
+    ],
+    "plain_title": "Missing Hardening risk at Kubernetes API",
+    "category_title": "Missing Hardening",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 16,
+    "references": [
+      "OWASP A02:2025 Security Misconfiguration",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
+    "action": "System Hardening",
+    "mitigation": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Kubernetes API",
+    "most_relevant_technical_asset_raa": 100
+  },
+  {
+    "category": "missing-hardening",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "low",
+    "title": "\u003cb\u003eMissing Hardening\u003c/b\u003e risk at \u003cb\u003eOrders Database\u003c/b\u003e",
+    "synthetic_id": "missing-hardening@orders-db",
+    "most_relevant_technical_asset": "orders-db",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "orders-db"
+    ],
+    "plain_title": "Missing Hardening risk at Orders Database",
+    "category_title": "Missing Hardening",
+    "stride": "tampering",
+    "function": "operations",
+    "cwe": 16,
+    "references": [
+      "OWASP A02:2025 Security Misconfiguration",
+      "OWASP API8:2023 Security Misconfiguration"
+    ],
+    "action": "System Hardening",
+    "mitigation": "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Orders Database",
+    "most_relevant_technical_asset_raa": 50.26315789473684
+  },
+  {
+    "category": "missing-identity-propagation",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMissing End User Identity Propagation\u003c/b\u003e over communication link \u003cb\u003eCheckout API\u003c/b\u003e from \u003cb\u003eStorefront\u003c/b\u003e to \u003cb\u003eCheckout Service\u003c/b\u003e",
+    "synthetic_id": "missing-identity-propagation@storefront\u003echeckout-api@storefront@checkout-service",
+    "most_relevant_technical_asset": "checkout-service",
+    "most_relevant_communication_link": "storefront\u003echeckout-api",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "checkout-service"
+    ],
+    "plain_title": "Missing End User Identity Propagation over communication link Checkout API from Storefront to Checkout Service",
+    "category_title": "Missing Identity Propagation",
+    "stride": "elevation-of-privilege",
+    "function": "architecture",
+    "cwe": 284,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API1:2023 Broken Object Level Authorization"
+    ],
+    "action": "Identity Propagation and Resource-based Authorization",
+    "mitigation": "When processing requests for end users if possible authorize in the backend against the propagated identity of the end user. This can be achieved in passing JWTs or similar tokens and checking them in the backend services, and model the link with the identity \u003ci\u003eend-user\u003c/i\u003e. For DevOps usages pass at least the identity of a service account or a workload.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Checkout Service",
+    "most_relevant_technical_asset_raa": 90.39473684210526,
+    "most_relevant_communication_link_title": "Checkout API"
+  },
+  {
+    "category": "missing-identity-store",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMissing Identity Store\u003c/b\u003e in the threat model (referencing asset \u003cb\u003eIngress Controller\u003c/b\u003e as an example)",
+    "synthetic_id": "missing-identity-store@ingress-controller",
+    "most_relevant_technical_asset": "ingress-controller",
+    "data_breach_probability": "improbable",
+    "plain_title": "Missing Identity Store in the threat model (referencing asset Ingress Controller as an example)",
+    "category_title": "Missing Identity Store",
+    "stride": "spoofing",
+    "function": "architecture",
+    "cwe": 287,
+    "action": "Identity Store",
+    "mitigation": "Include an identity store in the model if the application has a login.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Ingress Controller",
+    "most_relevant_technical_asset_raa": 10.770586753966255
+  },
+  {
+    "category": "missing-network-policy",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMissing Network Policy\u003c/b\u003e risk at \u003cb\u003eShop Namespace\u003c/b\u003e (no ingress and no egress restriction)",
+    "synthetic_id": "missing-network-policy@shop-namespace",
+    "most_relevant_trust_boundary": "shop-namespace",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "storefront"
+    ],
+    "plain_title": "Missing Network Policy risk at Shop Namespace (no ingress and no egress restriction)",
+    "category_title": "Missing Network Policy",
+    "stride": "elevation-of-privilege",
+    "function": "operations",
+    "cwe": 923,
+    "references": [
+      "OWASP K05:2025 Missing Network Segmentation Controls",
+      "OWASP A02:2025 Security Misconfiguration"
+    ],
+    "action": "Network Segmentation of Namespaces",
+    "mitigation": "Deny all ingress and egress traffic of the namespace by default with a network policy, allow only the traffic that its workloads need, by namespace and pod labels and ports, and make sure the network plugin of the cluster enforces network policies. Model the namespace with the network_policy \u003ci\u003eingress-and-egress\u003c/i\u003e once they are in place.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+  },
+  {
+    "category": "missing-network-policy",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003eMissing Network Policy\u003c/b\u003e risk at \u003cb\u003eCheckout Namespace\u003c/b\u003e (no egress restriction)",
+    "synthetic_id": "missing-network-policy@checkout-namespace",
+    "most_relevant_trust_boundary": "checkout-namespace",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "checkout-service"
+    ],
+    "plain_title": "Missing Network Policy risk at Checkout Namespace (no egress restriction)",
+    "category_title": "Missing Network Policy",
+    "stride": "elevation-of-privilege",
+    "function": "operations",
+    "cwe": 923,
+    "references": [
+      "OWASP K05:2025 Missing Network Segmentation Controls",
+      "OWASP A02:2025 Security Misconfiguration"
+    ],
+    "action": "Network Segmentation of Namespaces",
+    "mitigation": "Deny all ingress and egress traffic of the namespace by default with a network policy, allow only the traffic that its workloads need, by namespace and pod labels and ports, and make sure the network plugin of the cluster enforces network policies. Model the namespace with the network_policy \u003ci\u003eingress-and-egress\u003c/i\u003e once they are in place.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+  },
+  {
+    "category": "missing-network-segmentation",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMissing Network Segmentation\u003c/b\u003e to further encapsulate and protect \u003cb\u003eCheckout Service\u003c/b\u003e against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers",
+    "synthetic_id": "missing-network-segmentation@checkout-service",
+    "most_relevant_technical_asset": "checkout-service",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "checkout-service"
+    ],
+    "plain_title": "Missing Network Segmentation to further encapsulate and protect Checkout Service against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers",
+    "category_title": "Missing Network Segmentation",
+    "stride": "elevation-of-privilege",
+    "function": "operations",
+    "cwe": 1008,
+    "references": [
+      "OWASP A06:2025 Insecure Design"
+    ],
+    "action": "Network Segmentation",
+    "mitigation": "Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Checkout Service",
+    "most_relevant_technical_asset_raa": 90.39473684210526
+  },
+  {
+    "category": "missing-network-segmentation",
+    "risk_status": "unchecked",
+    "severity": "low",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "low",
+    "title": "\u003cb\u003eMissing Network Segmentation\u003c/b\u003e to further encapsulate and protect \u003cb\u003eKubernetes API\u003c/b\u003e against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers",
+    "synthetic_id": "missing-network-segmentation@kube-api",
+    "most_relevant_technical_asset": "kube-api",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "kube-api"
+    ],
+    "plain_title": "Missing Network Segmentation to further encapsulate and protect Kubernetes API against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers",
+    "category_title": "Missing Network Segmentation",
+    "stride": "elevation-of-privilege",
+    "function": "operations",
+    "cwe": 1008,
+    "references": [
+      "OWASP A06:2025 Insecure Design"
+    ],
+    "action": "Network Segmentation",
+    "mitigation": "Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Kubernetes API",
+    "most_relevant_technical_asset_raa": 100
+  },
+  {
+    "category": "missing-network-segmentation",
+    "risk_status": "unchecked",
+    "severity": "low",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "low",
+    "title": "\u003cb\u003eMissing Network Segmentation\u003c/b\u003e to further encapsulate and protect \u003cb\u003eOrders Database\u003c/b\u003e against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers",
+    "synthetic_id": "missing-network-segmentation@orders-db",
+    "most_relevant_technical_asset": "orders-db",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "orders-db"
+    ],
+    "plain_title": "Missing Network Segmentation to further encapsulate and protect Orders Database against unrelated lower protected assets in the same network segment, which might be easier to compromise by attackers",
+    "category_title": "Missing Network Segmentation",
+    "stride": "elevation-of-privilege",
+    "function": "operations",
+    "cwe": 1008,
+    "references": [
+      "OWASP A06:2025 Insecure Design"
+    ],
+    "action": "Network Segmentation",
+    "mitigation": "Apply a network segmentation trust-boundary around the highly sensitive assets and/or data stores.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Orders Database",
+    "most_relevant_technical_asset_raa": 50.26315789473684
+  },
+  {
+    "category": "missing-vault",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMissing Vault (Secret Storage)\u003c/b\u003e in the threat model (referencing asset \u003cb\u003eCheckout Service\u003c/b\u003e as an example)",
+    "synthetic_id": "missing-vault@checkout-service",
+    "most_relevant_technical_asset": "checkout-service",
+    "data_breach_probability": "improbable",
+    "plain_title": "Missing Vault (Secret Storage) in the threat model (referencing asset Checkout Service as an example)",
+    "category_title": "Missing Vault (Secret Storage)",
+    "stride": "information-disclosure",
+    "function": "architecture",
+    "cwe": 522,
+    "references": [
+      "OWASP NHI2:2025 Secret Leakage"
+    ],
+    "action": "Vault (Secret Storage)",
+    "mitigation": "Consider using a Vault (Secret Storage) to securely store and access config secrets (like credentials, private keys, client certificates, etc.).",
+    "check": "GetAttribute a Vault (Secret Storage) in place?",
+    "most_relevant_technical_asset_title": "Checkout Service",
+    "most_relevant_technical_asset_raa": 90.39473684210526
+  },
+  {
+    "category": "mixed-targets-on-shared-runtime",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eMixed Targets on Shared Runtime\u003c/b\u003e named \u003cb\u003eNode Pool\u003c/b\u003e might enable attackers moving from one less valuable target to a more valuable one",
+    "synthetic_id": "mixed-targets-on-shared-runtime@node-pool",
+    "most_relevant_shared_runtime": "node-pool",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "ingress-controller",
+      "storefront",
+      "checkout-service",
+      "catalog-service",
+      "orders-db",
+      "log-collector",
+      "gitops-operator"
+    ],
+    "plain_title": "Mixed Targets on Shared Runtime named Node Pool might enable attackers moving from one less valuable target to a more valuable one",
+    "category_title": "Mixed Targets on Shared Runtime",
+    "stride": "elevation-of-privilege",
+    "function": "operations",
+    "cwe": 1008,
+    "references": [
+      "OWASP A06:2025 Insecure Design"
+    ],
+    "action": "Runtime Separation",
+    "mitigation": "Use separate runtime environments for running different target components or apply similar separation styles to prevent load- or breach-related problems originating from one more attacker-facing asset impacts also the other more critical rated backend/datastore assets.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
+  },
+  {
+    "category": "privileged-workload",
+    "risk_status": "unchecked",
+    "severity": "medium",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "high",
+    "title": "\u003cb\u003ePrivileged Workload\u003c/b\u003e risk at \u003cb\u003eLog Collector\u003c/b\u003e",
+    "synthetic_id": "privileged-workload@log-collector",
+    "most_relevant_technical_asset": "log-collector",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "log-collector"
+    ],
+    "plain_title": "Privileged Workload risk at Log Collector",
+    "category_title": "Privileged Workload",
+    "stride": "elevation-of-privilege",
+    "function": "operations",
+    "cwe": 250,
+    "references": [
+      "OWASP K01:2025 Insecure Workload Configurations",
+      "OWASP A02:2025 Security Misconfiguration"
+    ],
+    "action": "Unprivileged Workloads",
+    "mitigation": "Run the workload unprivileged, as a non-root user with a read-only root file system, without host paths, host namespaces and added capabilities, and enforce the restricted Pod Security Standard on its namespace. A workload that must stay privileged, like a node agent, belongs on nodes of its own and deserves the hardening of the node itself.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Log Collector",
+    "most_relevant_technical_asset_raa": 2.131578947368421
+  },
+  {
+    "category": "server-side-request-forgery",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eServer-Side Request Forgery (SSRF)\u003c/b\u003e risk at \u003cb\u003eCheckout Service\u003c/b\u003e server-side web-requesting the target \u003cb\u003ePayment Provider\u003c/b\u003e via \u003cb\u003ePayment\u003c/b\u003e",
+    "synthetic_id": "server-side-request-forgery@checkout-service@payment-provider@checkout-service\u003epayment",
+    "most_relevant_technical_asset": "checkout-service",
+    "most_relevant_communication_link": "checkout-service\u003epayment",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "catalog-service",
+      "checkout-service",
+      "ingress-controller",
+      "kube-api",
+      "storefront"
+    ],
+    "plain_title": "Server-Side Request Forgery (SSRF) risk at Checkout Service server-side web-requesting the target Payment Provider via Payment",
+    "category_title": "Server-Side Request Forgery (SSRF)",
+    "stride": "information-disclosure",
+    "function": "development",
+    "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
+    "action": "SSRF Prevention",
+    "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Checkout Service",
+    "most_relevant_technical_asset_raa": 90.39473684210526,
+    "most_relevant_communication_link_title": "Payment"
+  },
+  {
+    "category": "server-side-request-forgery",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eServer-Side Request Forgery (SSRF)\u003c/b\u003e risk at \u003cb\u003eGitOps Operator\u003c/b\u003e server-side web-requesting the target \u003cb\u003eKubernetes API\u003c/b\u003e via \u003cb\u003eApply Manifests\u003c/b\u003e",
+    "synthetic_id": "server-side-request-forgery@gitops-operator@kube-api@gitops-operator\u003eapply-manifests",
+    "most_relevant_technical_asset": "gitops-operator",
+    "most_relevant_communication_link": "gitops-operator\u003eapply-manifests",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "catalog-service",
+      "checkout-service",
+      "gitops-operator",
+      "ingress-controller",
+      "kube-api",
+      "storefront"
+    ],
+    "plain_title": "Server-Side Request Forgery (SSRF) risk at GitOps Operator server-side web-requesting the target Kubernetes API via Apply Manifests",
+    "category_title": "Server-Side Request Forgery (SSRF)",
+    "stride": "information-disclosure",
+    "function": "development",
+    "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
+    "action": "SSRF Prevention",
+    "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "GitOps Operator",
+    "most_relevant_technical_asset_raa": 32.8185595567867,
+    "most_relevant_communication_link_title": "Apply Manifests"
+  },
+  {
+    "category": "server-side-request-forgery",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eServer-Side Request Forgery (SSRF)\u003c/b\u003e risk at \u003cb\u003eStorefront\u003c/b\u003e server-side web-requesting the target \u003cb\u003eCatalog Service\u003c/b\u003e via \u003cb\u003eCatalog API\u003c/b\u003e",
+    "synthetic_id": "server-side-request-forgery@storefront@catalog-service@storefront\u003ecatalog-api",
+    "most_relevant_technical_asset": "storefront",
+    "most_relevant_communication_link": "storefront\u003ecatalog-api",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "catalog-service",
+      "checkout-service",
+      "ingress-controller",
+      "kube-api",
+      "storefront"
+    ],
+    "plain_title": "Server-Side Request Forgery (SSRF) risk at Storefront server-side web-requesting the target Catalog Service via Catalog API",
+    "category_title": "Server-Side Request Forgery (SSRF)",
+    "stride": "information-disclosure",
+    "function": "development",
+    "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
+    "action": "SSRF Prevention",
+    "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Storefront",
+    "most_relevant_technical_asset_raa": 51.26846722068329,
+    "most_relevant_communication_link_title": "Catalog API"
+  },
+  {
+    "category": "server-side-request-forgery",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "likely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eServer-Side Request Forgery (SSRF)\u003c/b\u003e risk at \u003cb\u003eStorefront\u003c/b\u003e server-side web-requesting the target \u003cb\u003eCheckout Service\u003c/b\u003e via \u003cb\u003eCheckout API\u003c/b\u003e",
+    "synthetic_id": "server-side-request-forgery@storefront@checkout-service@storefront\u003echeckout-api",
+    "most_relevant_technical_asset": "storefront",
+    "most_relevant_communication_link": "storefront\u003echeckout-api",
+    "data_breach_probability": "possible",
+    "data_breach_technical_assets": [
+      "catalog-service",
+      "checkout-service",
+      "ingress-controller",
+      "kube-api",
+      "storefront"
+    ],
+    "plain_title": "Server-Side Request Forgery (SSRF) risk at Storefront server-side web-requesting the target Checkout Service via Checkout API",
+    "category_title": "Server-Side Request Forgery (SSRF)",
+    "stride": "information-disclosure",
+    "function": "development",
+    "cwe": 918,
+    "references": [
+      "OWASP A01:2025 Broken Access Control",
+      "OWASP API7:2023 Server Side Request Forgery"
+    ],
+    "action": "SSRF Prevention",
+    "mitigation": "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller controllable values. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Storefront",
+    "most_relevant_technical_asset_raa": 51.26846722068329,
+    "most_relevant_communication_link_title": "Checkout API"
+  },
+  {
+    "category": "sql-nosql-injection",
+    "risk_status": "unchecked",
+    "severity": "elevated",
+    "exploitation_likelihood": "very-likely",
+    "exploitation_impact": "medium",
+    "title": "\u003cb\u003eSQL/NoSQL-Injection\u003c/b\u003e risk at \u003cb\u003eCheckout Service\u003c/b\u003e against database \u003cb\u003eOrders Database\u003c/b\u003e via \u003cb\u003eOrder Storage\u003c/b\u003e",
+    "synthetic_id": "sql-nosql-injection@checkout-service@orders-db@checkout-service\u003eorder-storage",
+    "most_relevant_technical_asset": "checkout-service",
+    "most_relevant_communication_link": "checkout-service\u003eorder-storage",
+    "data_breach_probability": "probable",
+    "data_breach_technical_assets": [
+      "orders-db"
+    ],
+    "plain_title": "SQL/NoSQL-Injection risk at Checkout Service against database Orders Database via Order Storage",
+    "category_title": "SQL/NoSQL-Injection",
+    "stride": "tampering",
+    "function": "development",
+    "cwe": 89,
+    "references": [
+      "OWASP A05:2025 Injection"
+    ],
+    "action": "SQL/NoSQL-Injection Prevention",
+    "mitigation": "Try to use parameter binding to be safe from injection vulnerabilities. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Checkout Service",
+    "most_relevant_technical_asset_raa": 90.39473684210526,
+    "most_relevant_communication_link_title": "Order Storage"
+  },
+  {
+    "category": "unnecessary-technical-asset",
+    "risk_status": "unchecked",
+    "severity": "low",
+    "exploitation_likelihood": "unlikely",
+    "exploitation_impact": "low",
+    "title": "\u003cb\u003eUnnecessary Technical Asset\u003c/b\u003e named \u003cb\u003eLog Collector\u003c/b\u003e",
+    "synthetic_id": "unnecessary-technical-asset@log-collector",
+    "most_relevant_technical_asset": "log-collector",
+    "data_breach_probability": "improbable",
+    "data_breach_technical_assets": [
+      "log-collector"
+    ],
+    "plain_title": "Unnecessary Technical Asset named Log Collector",
+    "category_title": "Unnecessary Technical Asset",
+    "stride": "elevation-of-privilege",
+    "function": "architecture",
+    "cwe": 1008,
+    "action": "Attack Surface Reduction",
+    "mitigation": "Try to avoid using technical assets that do not process or store anything.",
+    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+    "most_relevant_technical_asset_title": "Log Collector",
+    "most_relevant_technical_asset_raa": 2.131578947368421
+  }
+]

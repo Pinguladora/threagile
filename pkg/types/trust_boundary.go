@@ -12,6 +12,8 @@ type TrustBoundary struct {
 	Tags                  []string          `json:"tags,omitempty"                    yaml:"tags,omitempty"`
 	TechnicalAssetsInside []string          `json:"technical_assets_inside,omitempty" yaml:"technical_assets_inside,omitempty"`
 	TrustBoundariesNested []string          `json:"trust_boundaries_nested,omitempty" yaml:"trust_boundaries_nested,omitempty"`
+	// NetworkPolicy is set for a Kubernetes namespace, an execution environment, as far as it is modelled.
+	NetworkPolicy NetworkPolicy `json:"network_policy,omitempty" yaml:"network_policy,omitempty"`
 }
 
 func (what TrustBoundary) IsTaggedWithAny(tags ...string) bool {

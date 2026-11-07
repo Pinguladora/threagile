@@ -9,6 +9,7 @@ type TrustBoundary struct {
 	Tags                  []string `json:"tags,omitempty"                    yaml:"tags,omitempty"`
 	TechnicalAssetsInside []string `json:"technical_assets_inside,omitempty" yaml:"technical_assets_inside,omitempty"`
 	TrustBoundariesNested []string `json:"trust_boundaries_nested,omitempty" yaml:"trust_boundaries_nested,omitempty"`
+	NetworkPolicy         string   `json:"network_policy,omitempty"          yaml:"network_policy,omitempty"`
 }
 
 func (what *TrustBoundary) Merge(other TrustBoundary) error {
@@ -26,6 +27,11 @@ func (what *TrustBoundary) Merge(other TrustBoundary) error {
 	what.Type, mergeError = new(Strings).MergeSingleton(what.Type, other.Type)
 	if mergeError != nil {
 		return fmt.Errorf("failed to merge type: %w", mergeError)
+	}
+
+	what.NetworkPolicy, mergeError = new(Strings).MergeSingleton(what.NetworkPolicy, other.NetworkPolicy)
+	if mergeError != nil {
+		return fmt.Errorf("failed to merge network_policy: %w", mergeError)
 	}
 
 	what.Tags = new(Strings).MergeUniqueSlice(what.Tags, other.Tags)

@@ -50,6 +50,7 @@ var schemaEnumTypes = map[string][]types.TypeEnum{
 	"technical_assets/*/usage":                                            types.UsageValues(),
 	"technical_assets/*/type":                                             types.TechnicalAssetTypeValues(),
 	"trust_boundaries/*/type":                                             types.TrustBoundaryTypeValues(),
+	"trust_boundaries/*/network_policy":                                   types.NetworkPolicyValues(),
 	"custom_risk_categories/*/function":                                   types.RiskFunctionValues(),
 	"custom_risk_categories/*/stride":                                     types.STRIDEValues(),
 	"custom_risk_categories/*/risks_identified/*/severity":                types.RiskSeverityValues(),
@@ -167,7 +168,9 @@ func TestBundledModelsMatchSchema(t *testing.T) {
 
 // unbundledDemoModels are the demo models of an AI system and of an OT plant, which are not bundled into the
 // binary.
-var unbundledDemoModels = []string{"demo/ai-agent/threagile.yaml", "demo/ot-plant/threagile.yaml"}
+var unbundledDemoModels = []string{
+	"demo/ai-agent/threagile.yaml", "demo/ot-plant/threagile.yaml", "demo/kubernetes/threagile.yaml",
+}
 
 // demoModels returns the content of the demo models by name: the bundled ones and the unbundled ones.
 func demoModels(t *testing.T) map[string][]byte {
