@@ -502,6 +502,10 @@ func (s *server) setDataAsset(ginContext *gin.Context) {
 				}
 				// in order to also update the title, remove the asset from the map and re-insert it (with new key)
 				delete(modelInput.DataAssets, title)
+				if conflict := dataAssetConflict(modelInput.DataAssets, payload); conflict != "" {
+					respondError(ginContext, http.StatusConflict, conflict)
+					return
+				}
 				modelInput.DataAssets[payload.Title] = dataAssetInput
 				idChanged := dataAssetInput.ID != dataAsset.ID
 				if idChanged { // ID-CHANGE-PROPAGATION
@@ -586,17 +590,9 @@ func (s *server) createNewDataAsset(ginContext *gin.Context) {
 			respondError(ginContext, http.StatusBadRequest, "unable to parse request payload")
 			return
 		}
-		// yes, here keyed by title in YAML for better readability in the YAML file itself
-		if _, exists := modelInput.DataAssets[payload.Title]; exists {
-			respondError(ginContext, http.StatusConflict, "data asset with this title already exists")
+		if conflict := dataAssetConflict(modelInput.DataAssets, payload); conflict != "" {
+			respondError(ginContext, http.StatusConflict, conflict)
 			return
-		}
-		// but later it will in memory keyed by its "id", so do this uniqueness check also
-		for _, asset := range modelInput.DataAssets {
-			if asset.ID == payload.Id {
-				respondError(ginContext, http.StatusConflict, "data asset with this id already exists")
-				return
-			}
 		}
 		dataAssetInput, ok := s.populateDataAsset(ginContext, payload)
 		if !ok {
@@ -613,6 +609,22 @@ func (s *server) createNewDataAsset(ginContext *gin.Context) {
 			})
 		}
 	}
+}
+
+// dataAssetConflict tells why the data asset of the payload would clash with one of the given data assets, if it
+// would.
+func dataAssetConflict(dataAssets map[string]input.DataAsset, payload payloadDataAsset) string {
+	// yes, here keyed by title in YAML for better readability in the YAML file itself
+	if _, exists := dataAssets[payload.Title]; exists {
+		return "data asset with this title already exists"
+	}
+	// but later it will in memory keyed by its "id", so do this uniqueness check also
+	for _, asset := range dataAssets {
+		if asset.ID == payload.Id {
+			return "data asset with this id already exists"
+		}
+	}
+	return ""
 }
 
 func (s *server) populateDataAsset(
@@ -705,6 +717,9 @@ func (s *server) setSharedRuntime(ginContext *gin.Context) {
 				}
 				// in order to also update the title, remove the shared runtime from the map and re-insert it (with new key)
 				delete(modelInput.SharedRuntimes, title)
+				if !checkSharedRuntime(ginContext, modelInput, payload) {
+					return
+				}
 				modelInput.SharedRuntimes[payload.Title] = sharedRuntimeInput
 				idChanged := sharedRuntimeInput.ID != sharedRuntime.ID
 				if idChanged { // ID-CHANGE-PROPAGATION
@@ -764,12 +779,7 @@ func (s *server) createNewSharedRuntime(ginContext *gin.Context) {
 			respondError(ginContext, http.StatusBadRequest, "unable to parse request payload")
 			return
 		}
-		if conflict := sharedRuntimeConflict(modelInput, payload); conflict != "" {
-			respondError(ginContext, http.StatusConflict, conflict)
-			return
-		}
-		if !checkTechnicalAssetsExisting(modelInput, payload.TechnicalAssetsRunning) {
-			respondError(ginContext, http.StatusBadRequest, "referenced technical asset does not exist")
+		if !checkSharedRuntime(ginContext, modelInput, payload) {
 			return
 		}
 		sharedRuntimeInput, ok := populateSharedRuntime(ginContext, payload)
@@ -789,14 +799,29 @@ func (s *server) createNewSharedRuntime(ginContext *gin.Context) {
 	}
 }
 
-// sharedRuntimeConflict tells why a new shared runtime would clash with one of the model, if it would.
-func sharedRuntimeConflict(modelInput input.Model, payload payloadSharedRuntime) string {
+// checkSharedRuntime answers the request with an error if the shared runtime of the payload would clash with one
+// of the model or run a technical asset that the model does not have; it reports whether it is fine.
+func checkSharedRuntime(ginContext *gin.Context, modelInput input.Model, payload payloadSharedRuntime) bool {
+	if conflict := sharedRuntimeConflict(modelInput.SharedRuntimes, payload); conflict != "" {
+		respondError(ginContext, http.StatusConflict, conflict)
+		return false
+	}
+	if !checkTechnicalAssetsExisting(modelInput, payload.TechnicalAssetsRunning) {
+		respondError(ginContext, http.StatusBadRequest, "referenced technical asset does not exist")
+		return false
+	}
+	return true
+}
+
+// sharedRuntimeConflict tells why the shared runtime of the payload would clash with one of the given shared
+// runtimes, if it would.
+func sharedRuntimeConflict(sharedRuntimes map[string]input.SharedRuntime, payload payloadSharedRuntime) string {
 	// yes, here keyed by title in YAML for better readability in the YAML file itself
-	if _, exists := modelInput.SharedRuntimes[payload.Title]; exists {
+	if _, exists := sharedRuntimes[payload.Title]; exists {
 		return "shared runtime with this title already exists"
 	}
 	// but later it will in memory keyed by its "id", so do this uniqueness check also
-	for _, sharedRuntime := range modelInput.SharedRuntimes {
+	for _, sharedRuntime := range sharedRuntimes {
 		if sharedRuntime.ID == payload.Id {
 			return "shared runtime with this id already exists"
 		}
@@ -914,6 +939,11 @@ func (s *server) readModel(
 		return modelInputResult, yamlText, false
 	}
 
+	if len(fileBytes) < nonceSize {
+		log.Println("model file shorter than its nonce: " + modelFolder)
+		respondError(ginContext, http.StatusInternalServerError, "unable to open model")
+		return modelInputResult, yamlText, false
+	}
 	nonce := fileBytes[0:nonceSize]
 	ciphertext := fileBytes[nonceSize:]
 	plaintext, err := aesGcm.Open(nil, nonce, ciphertext, nil) // #nosec G407 // nonce read from the file to decrypt
@@ -1072,12 +1102,12 @@ func (s *server) analyzeModelOnServerDirectly(ginContext *gin.Context) {
 	}
 
 	err = os.WriteFile(tmpModelFile, []byte(yamlText), 0o400) // #nosec G703
-
-	s.doItViaRuntimeCall(tmpModelFile, tmpOutputDir, allAnalysisOutputs, dpi)
 	if err != nil {
 		handleErrorInServiceCall(err, ginContext)
 		return
 	}
+
+	s.doItViaRuntimeCall(tmpModelFile, tmpOutputDir, allAnalysisOutputs, dpi)
 	err = os.WriteFile(filepath.Join(tmpOutputDir, s.config.GetInputFile()), []byte(yamlText), 0o400)
 	if err != nil {
 		handleErrorInServiceCall(err, ginContext)
