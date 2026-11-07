@@ -14,8 +14,8 @@ import (
 	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/v2"
+	"github.com/yuin/goldmark/v2/extension"
 	"golang.org/x/net/html"
 )
 
