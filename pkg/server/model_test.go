@@ -20,17 +20,24 @@ import (
 // dataFolderConfig provides what the key, token and model routes read.
 type dataFolderConfig struct {
 	serverConfigReader
-	dataFolder string
+	dataFolder    string
+	backupsToKeep int // 50 if not set
 }
 
-func (c dataFolderConfig) GetServerFolder() string        { return c.dataFolder }
-func (c dataFolderConfig) GetDataFolder() string          { return c.dataFolder }
-func (c dataFolderConfig) GetTempFolder() string          { return c.dataFolder }
-func (dataFolderConfig) GetKeyFolder() string             { return "keys" }
-func (dataFolderConfig) GetInputFile() string             { return "threagile.yaml" }
-func (dataFolderConfig) GetThreagileVersion() string      { return "1.0.0" }
-func (dataFolderConfig) GetBackupHistoryFilesToKeep() int { return 50 }
-func (dataFolderConfig) GetVerbose() bool                 { return false }
+func (c dataFolderConfig) GetServerFolder() string   { return c.dataFolder }
+func (c dataFolderConfig) GetDataFolder() string     { return c.dataFolder }
+func (c dataFolderConfig) GetTempFolder() string     { return c.dataFolder }
+func (dataFolderConfig) GetKeyFolder() string        { return "keys" }
+func (dataFolderConfig) GetInputFile() string        { return "threagile.yaml" }
+func (dataFolderConfig) GetThreagileVersion() string { return "1.0.0" }
+func (dataFolderConfig) GetVerbose() bool            { return false }
+
+func (c dataFolderConfig) GetBackupHistoryFilesToKeep() int {
+	if c.backupsToKeep == 0 {
+		return 50
+	}
+	return c.backupsToKeep
+}
 
 func newModelServer(t *testing.T) (*server, *gin.Engine) {
 	t.Helper()
