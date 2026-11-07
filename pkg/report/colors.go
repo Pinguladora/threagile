@@ -106,22 +106,6 @@ func rgbHexColorTwilight() string {
 	return "#3A52C8"
 }
 
-func rgbHexColorBusiness() string {
-	return "#531B93"
-}
-
-func rgbHexColorArchitecture() string {
-	return "#005493"
-}
-
-func rgbHexColorDevelopment() string {
-	return "#DE9223"
-}
-
-func rgbHexColorOperation() string {
-	return "#947F50"
-}
-
 // riskSeverityColor is the colour of the severity, as the reports show it.
 func riskSeverityColor(severity types.RiskSeverity) string {
 	switch severity {

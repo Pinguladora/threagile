@@ -205,6 +205,11 @@ func (what *Threagile) initSkipFlags() {
 		"(deprecated, use the matching --skip flag) generate report pdf, including diagrams")
 	flags.BoolVar(&what.flags.generateReportADOCFlag, generateReportADOCFlagName, !what.config.GetSkipReportADOC(),
 		"(deprecated, use the matching --skip flag) generate report adoc, including diagrams")
+
+	// The AsciiDoc report was removed; its flags stay accepted, so that existing calls keep working.
+	for _, name := range []string{skipReportADOCFlagName, generateReportADOCFlagName} {
+		_ = flags.MarkDeprecated(name, "the AsciiDoc report was removed, so it has no effect")
+	}
 }
 
 func (what *Threagile) run(thisCmd *cobra.Command, args []string) {
@@ -317,7 +322,6 @@ func (what *Threagile) readCommands() *report.GenerateCommands {
 	commands.RisksExcel = !what.flags.SkipRisksExcelValue
 	commands.TagsExcel = !what.flags.SkipTagsExcelValue
 	commands.ReportPDF = !what.flags.SkipReportPDFValue
-	commands.ReportADOC = !what.flags.SkipReportADOCValue
 	commands.ReportHTML = !what.flags.SkipReportHTMLValue
 	commands.ReportMarkdown = !what.flags.SkipReportMarkdownValue
 	return commands

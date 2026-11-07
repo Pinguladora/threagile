@@ -3,14 +3,10 @@ package report_test
 import (
 	"bytes"
 	"flag"
-	"image"
-	"image/png"
 	"io/fs"
 	"maps"
 	"os"
-	"path"
 	"path/filepath"
-	"regexp"
 	"slices"
 	"testing"
 
@@ -56,9 +52,6 @@ var goldenFiles = []string{
 	"report.html",
 	"THREAT_MODEL.md",
 }
-
-// executionTimestamp matches the wall-clock time the AsciiDoc report records for the run.
-var executionTimestamp = regexp.MustCompile(`(Threagile Execution Timestamp: *\| )\d{14}`)
 
 func TestGoldenOutputs(t *testing.T) {
 	for _, golden := range goldenModels {
@@ -118,7 +111,7 @@ func testOutputsAreDeterministic(t *testing.T, golden goldenModel) {
 
 // generateOutputs analyzes a demo model and writes every output but the PDF report and the
 // PNG diagrams, the same way report.Generate does. It returns the written files by path relative
-// to the output folder, with the execution timestamp of the AsciiDoc report normalised.
+// to the output folder.
 func generateOutputs(t *testing.T, golden goldenModel) map[string][]byte {
 	t.Helper()
 	// the HTML and Markdown reports record when they were generated
@@ -171,23 +164,6 @@ func generateOutputs(t *testing.T, golden goldenModel) map[string][]byte {
 	require.NoError(t, report.WriteRisksExcelToFile(parsedModel, filepath.Join(outputDir, config.GetExcelRisksFilename()), config))
 	require.NoError(t, report.WriteTagsExcelToFile(parsedModel, filepath.Join(outputDir, config.GetExcelTagsFilename()), config))
 
-	// the AsciiDoc report copies the rendered diagrams; stand-in images keep Graphviz out of the test
-	imageDir := t.TempDir()
-	adoc := report.NewAdocReport(outputDir, risks.GetBuiltInRiskRules(), config.GetHideEmptyChapters())
-	err = adoc.WriteReport(parsedModel,
-		writePlaceholderPNG(t, filepath.Join(imageDir, config.GetDataFlowDiagramFilenamePNG())),
-		writePlaceholderPNG(t, filepath.Join(imageDir, config.GetDataAssetDiagramFilenamePNG())),
-		config.GetInputFile(),
-		config.GetSkipRiskRules(),
-		"test-build-timestamp",
-		"test-version",
-		"test-model-hash",
-		result.IntroTextRAA,
-		result.CustomRiskRules,
-		"",
-		config.GetReportConfigurationHideChapters())
-	require.NoError(t, err)
-
 	return readOutputs(t, outputDir)
 }
 
@@ -209,9 +185,6 @@ func readOutputs(t *testing.T, outputDir string) map[string][]byte {
 			return readError
 		}
 
-		if path.Ext(name) == ".adoc" {
-			content = executionTimestamp.ReplaceAll(content, []byte("${1}YYYYMMDDhhmmss"))
-		}
 		outputs[name] = content
 		return nil
 	})
@@ -224,15 +197,6 @@ func readFile(t *testing.T, filename string) []byte {
 	content, err := os.ReadFile(filepath.Clean(filename))
 	require.NoError(t, err)
 	return content
-}
-
-func writePlaceholderPNG(t *testing.T, filename string) string {
-	t.Helper()
-	file, err := os.Create(filepath.Clean(filename))
-	require.NoError(t, err)
-	defer func() { _ = file.Close() }()
-	require.NoError(t, png.Encode(file, image.NewGray(image.Rect(0, 0, 4, 3))))
-	return filename
 }
 
 // testReporter sends warnings to the test log and fails the test on errors.

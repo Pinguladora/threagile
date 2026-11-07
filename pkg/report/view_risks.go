@@ -256,8 +256,8 @@ func (what *reportView) addRiskChapters(parsedModel *types.Model, risks viewRisk
 	}
 }
 
-// viewImpactEntries lists the categories of the risks by severity, as the impact analysis of the
-// PDF and AsciiDoc reports does: the initial risks or only those still at risk, the latter also
+// viewImpactEntries lists the categories of the risks by severity, for the impact analysis: the
+// initial risks or only those still at risk, the latter also
 // counted against all when both is set, with the first paragraph of a text of the category.
 func viewImpactEntries(parsedModel *types.Model, risksByCategory map[string][]*types.Risk, initialRisks, both bool,
 	text func(*types.RiskCategory) string,
@@ -355,8 +355,8 @@ func newViewCategory(category *types.RiskCategory, risks []*viewRisk) viewCatego
 	return result
 }
 
-// cheatSheetTitle is the last part of the link without an .html or .htm extension, as the
-// AsciiDoc report shows it.
+// cheatSheetTitle is the last part of the link without an .html or .htm extension, which the
+// reports show as the title of the link.
 func cheatSheetTitle(link string) string {
 	parts := strings.Split(link, "/")
 	title := parts[len(parts)-1]
@@ -381,7 +381,7 @@ type viewRiskRule struct {
 	RiskAssessment markupText
 }
 
-// viewRiskRules lists the risk rules checked as the PDF and AsciiDoc reports do: the custom risk
+// viewRiskRules lists the risk rules checked: the custom risk
 // rules, the individual risk categories of the model and the built-in rules.
 func viewRiskRules(parsedModel *types.Model, options ReportOptions) []viewRiskRule {
 	count := len(options.CustomRiskRules) + len(parsedModel.CustomRiskCategories) + len(options.RiskRules)

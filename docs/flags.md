@@ -23,7 +23,6 @@ Every flag can also be set in the [config file](./config.md). Every command take
 | `--fail-on` | string |  | exit with status 2 when unchecked risks of this severity or higher remain (low, medium, elevated, high, critical) |
 | `--generate-data-asset-diagram` | bool | `true` | (deprecated, use the matching --skip flag) generate data asset diagram |
 | `--generate-data-flow-diagram` | bool | `true` | (deprecated, use the matching --skip flag) generate data flow diagram |
-| `--generate-report-adoc` | bool | `true` | (deprecated, use the matching --skip flag) generate report adoc, including diagrams |
 | `--generate-report-pdf` | bool | `true` | (deprecated, use the matching --skip flag) generate report pdf, including diagrams |
 | `--generate-risks-excel` | bool | `true` | (deprecated, use the matching --skip flag) generate risks excel |
 | `--generate-risks-json` | bool | `true` | (deprecated, use the matching --skip flag) generate risks json |
@@ -51,7 +50,6 @@ Every flag can also be set in the [config file](./config.md). Every command take
 | `--skip-data-asset-diagram` | bool | `false` | skip generating data asset diagram |
 | `--skip-data-flow-diagram` | bool | `false` | skip generating data flow diagram |
 | `--skip-otm-json` | bool | `false` | skip generating Open Threat Model (OTM) json |
-| `--skip-report-adoc` | bool | `false` | skip generating report adoc, including diagrams |
 | `--skip-report-html` | bool | `false` | skip generating report html |
 | `--skip-report-md` | bool | `false` | skip generating report markdown |
 | `--skip-report-pdf` | bool | `false` | skip generating report pdf, including diagrams |

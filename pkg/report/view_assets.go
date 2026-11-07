@@ -69,7 +69,7 @@ func (what *reportView) addModelChapters(parsedModel *types.Model) {
 	}
 }
 
-// viewTags lists for each tag of the model what is tagged with it, as the PDF and AsciiDoc reports do.
+// viewTags lists for each tag of the model what is tagged with it.
 func viewTags(parsedModel *types.Model) []viewTag {
 	tagged := viewTaggedObjects(parsedModel)
 	tags := make([]viewTag, 0)

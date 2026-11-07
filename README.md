@@ -57,7 +57,7 @@ threagile analyze-model --model threagile.yaml --output out
 |------|------------|
 | `THREAT_MODEL.md` | the [report as Markdown](./docs/markdown-report.md), with Mermaid diagrams, to keep in the repository |
 | `report.html` | the report as a single self-contained HTML page |
-| `report.pdf`, `adocReport/` | the report as PDF/A-3a and PDF/UA-1 (rendered by [typst](https://typst.app) when it is installed) and as AsciiDoc |
+| `report.pdf` | the report as PDF/A-3a and PDF/UA-1, rendered by [typst](https://typst.app) when it is installed |
 | `data-flow-diagram.png`, `data-asset-diagram.png` | the diagrams; add `--keep-diagram-source-files` to also keep their Graphviz sources (`.gv`) |
 | `risks.json`, `technical-assets.json`, `stats.json` | the results for other tools |
 | `risks.xlsx`, `tags.xlsx` | the risks and the tags as spreadsheets |
