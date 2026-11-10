@@ -29,9 +29,9 @@ go = "1.27.3"
 # go1.27 build.
 "go:github.com/golangci/golangci-lint/v2/cmd/golangci-lint" = "v2.15.0"
 goreleaser = "2.19.0"
-syft = "1.55.0"
+syft = "1.56.0"
 actionlint = "1.7.12"
-zizmor = "1.31.1"
+zizmor = "1.32.0"
 # Renders the PDF report at run time (the binary runs it when it is on the PATH); the tests and CI render with it.
 "aqua:typst/typst" = "0.15.1"
 # Mutation testing (test:mutation and the CI job), built from source against the pinned go like golangci-lint.
