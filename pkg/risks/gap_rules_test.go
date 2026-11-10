@@ -66,4 +66,11 @@ func TestGapRulesEndToEnd(t *testing.T) {
 			assert.Equal(t, expectedRisks, got)
 		})
 	}
+
+	for _, risk := range result.ParsedModel.GeneratedRisksByCategory["overprivileged-machine-identity"] {
+		if risk.SyntheticId == "overprivileged-machine-identity@cloud-api@deployer>provision" {
+			assert.Equal(t, "deployer", risk.MostRelevantTechnicalAssetId, "the in-scope caller, for an out-of-scope target")
+			assert.Equal(t, []string{"cloud-api"}, risk.DataBreachTechnicalAssetIDs)
+		}
+	}
 }

@@ -110,6 +110,9 @@ func (r *OverprivilegedMachineIdentityRule) createRisk(
 		DataBreachProbability:           types.Possible,
 		DataBreachTechnicalAssetIDs:     []string{target.Id},
 	}
+	if target.OutOfScope {
+		risk.MostRelevantTechnicalAssetId = caller.Id // the report rates in-scope assets only
+	}
 	risk.SyntheticId = risk.CategoryId + "@" + target.Id + "@" + link.Id
 	return risk
 }
