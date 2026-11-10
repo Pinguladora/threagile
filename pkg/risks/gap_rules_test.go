@@ -13,7 +13,8 @@ import (
 
 // TestGapRulesEndToEnd analyzes a shop with all built-in rules and checks the risks of the rules on overprivileged
 // machine identities and unbounded model consumption. The model also holds what the rules must skip: a readonly
-// link, an authorization by role or not modelled, the identity of a user, a target with no sensitive data, a gateway
+// link, an authorization by role or not modelled, the identity of a user, a target with no sensitive data, an
+// out-of-scope target with no sensitive data, an out-of-scope caller of an out-of-scope target, a gateway
 // in front of an agent, an agent calling its model through a gateway, and a model that no user reaches.
 func TestGapRulesEndToEnd(t *testing.T) {
 	config := new(threagile.Config).Defaults("")
@@ -39,6 +40,10 @@ func TestGapRulesEndToEnd(t *testing.T) {
 			},
 			"overprivileged-machine-identity@orders-db@order-service>order-storage": {
 				types.Unlikely, types.MediumImpact, types.MediumSeverity,
+			},
+			// out of scope, one level lower, and on the internet
+			"overprivileged-machine-identity@cloud-api@deployer>provision": {
+				types.Likely, types.LowImpact, types.MediumSeverity,
 			},
 		},
 		"unbounded-model-consumption": {
