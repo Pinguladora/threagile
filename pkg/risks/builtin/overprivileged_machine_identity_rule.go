@@ -31,14 +31,19 @@ func (*OverprivilegedMachineIdentityRule) Category() *types.RiskCategory {
 		Check:    checkCheatSheetAndASVS,
 		Function: types.Operations,
 		STRIDE:   types.ElevationOfPrivilege,
-		DetectionLogic: "In-scope technical assets processing or storing data rated at least as " +
-			types.Confidential.String() + " or " + types.Critical.String() + " with an incoming communication link " +
-			"that is not process-local and not readonly, whose identity is <i>" + types.ServiceAccount.String() +
-			"</i> or <i>" + types.Workload.String() + "</i> and whose authorization is <i>" +
-			types.NoneAuthorization.String() + "</i> or <i>" + types.AuthenticatedOnly.String() + "</i>. Links whose " +
-			"authorization is <i>" + types.UnknownAuthorization.String() + "</i> are skipped.",
+		DetectionLogic: "Communication links that are not process-local and not readonly, whose identity is <i>" +
+			types.ServiceAccount.String() + "</i> or <i>" + types.Workload.String() + "</i> and whose authorization " +
+			"is <i>" + types.NoneAuthorization.String() + "</i> or <i>" + types.AuthenticatedOnly.String() + "</i>, " +
+			"to technical assets processing or storing data rated at least as " + types.Confidential.String() +
+			" or " + types.Critical.String() + ". Out-of-scope targets, like the API of a cloud provider, count for " +
+			"links from in-scope callers. Links whose authorization is <i>" + types.UnknownAuthorization.String() +
+			"</i> are skipped.",
 		RiskAssessment: "The risk rating depends on the sensitivity of the data processed or stored by the target. " +
-			"The attack is likely when the link crosses a network trust boundary, and unlikely otherwise.",
+			"An out-of-scope target is rated one level lower, as the model does not hold what else it holds. The " +
+			"rating of an out-of-scope target includes the data its callers send it and its own rating, so a cloud " +
+			"API rated by what the identity may change there is rated as such. The attack is likely " +
+			"when the link crosses a network trust boundary or the target is on the internet, where stolen " +
+			"credentials of the identity work from anywhere, and unlikely otherwise.",
 		FalsePositives: "Callers that administer the whole target by design, like the operator of a database it " +
 			"creates, can be considered as false positives after individual review.",
 		ModelFailurePossibleReason: false,
@@ -53,29 +58,45 @@ func (*OverprivilegedMachineIdentityRule) SupportedTags() []string {
 
 func (r *OverprivilegedMachineIdentityRule) GenerateRisks(input *types.Model) ([]*types.Risk, error) {
 	risks := make([]*types.Risk, 0)
-	for _, target := range input.InScopeTechnicalAssets() {
+	for _, id := range input.SortedTechnicalAssetIDs() {
+		target := input.TechnicalAssets[id]
 		if !isSensitive(input, target) {
 			continue
 		}
 		for _, link := range sortedIncomingLinks(input, target) {
 			caller, ok := input.TechnicalAssets[link.SourceId]
-			if ok && isMachineIdentity(link.Identity) && !link.Readonly && !link.Protocol.IsProcessLocal() &&
-				(link.Authorization == types.NoneAuthorization || link.Authorization == types.AuthenticatedOnly) {
-				risks = append(risks, r.createRisk(input, target, caller, link))
+			if !ok || !grantsMoreThanNeeded(link) {
+				continue
 			}
+			impact := assetImpact(input, target)
+			if target.OutOfScope {
+				if caller.OutOfScope {
+					continue
+				}
+				impact-- // the model does not hold what else the out-of-scope target holds
+			}
+			risks = append(risks, r.createRisk(input, target, caller, link, impact))
 		}
 	}
 	return risks, nil
 }
 
+// grantsMoreThanNeeded tells whether the link lets a machine identity change the target with no more than an
+// authentication: one that is not readonly and not process-local, whose authorization is none or authenticated-only.
+func grantsMoreThanNeeded(link *types.CommunicationLink) bool {
+	return isMachineIdentity(link.Identity) && !link.Readonly && !link.Protocol.IsProcessLocal() &&
+		(link.Authorization == types.NoneAuthorization || link.Authorization == types.AuthenticatedOnly)
+}
+
 func (r *OverprivilegedMachineIdentityRule) createRisk(
 	input *types.Model, target, caller *types.TechnicalAsset, link *types.CommunicationLink,
+	impact types.RiskExploitationImpact,
 ) *types.Risk {
 	likelihood := types.Unlikely
-	if isAcrossTrustBoundaryNetworkOnly(input, link) {
+	// stolen credentials of the identity work from anywhere when the target is on the internet
+	if isAcrossTrustBoundaryNetworkOnly(input, link) || target.Internet {
 		likelihood = types.Likely
 	}
-	impact := assetImpact(input, target)
 
 	risk := &types.Risk{
 		CategoryId:             r.Category().ID,
