@@ -34,7 +34,7 @@ jobs:
       MISE_ENV: ci
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
         with:
           egress-policy: block
           disable-telemetry: "true"
@@ -46,7 +46,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Set up mise
-        uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
+        uses: jdx/mise-action@f5be966e4a917d54244728e6a5fdcd1d93a35e6c # v5.2.6
       - name: Lint workflows
         run: mise run lint:gha
         env:
