@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/Pinguladora/threagile/pkg/types"
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 )
 
 // Migration is what MigrateModelFile changed in a model file and the files it includes, and what it left for the

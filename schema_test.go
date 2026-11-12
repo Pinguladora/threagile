@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/Pinguladora/threagile/pkg/types"
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 )
 
 // These tests keep support/schema.json, which editors use to validate and complete models, in

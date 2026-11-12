@@ -14,7 +14,7 @@ import (
 
 	"github.com/Pinguladora/threagile/pkg/input"
 	"github.com/gin-gonic/gin"
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 )
 
 // shopModel is a model with references to its data assets and shared runtimes from every place that can hold one.
