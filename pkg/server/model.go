@@ -27,7 +27,7 @@ import (
 	"github.com/Pinguladora/threagile/pkg/input"
 	"github.com/Pinguladora/threagile/pkg/types"
 	"github.com/gin-gonic/gin"
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 	"golang.org/x/crypto/argon2"
 )
 
