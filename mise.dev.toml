@@ -20,4 +20,4 @@ oxlint = "1.82.0"                  # JS linter for the server's model editor (se
 oxfmt = "0.71.0"                   # JS formatter
 yamlfmt = "0.21.0"                 # YAML formatter (hk pairs it with yamllint)
 yamllint = "1.38.0"
-"github:mongodb/kingfisher" = "v2.16.0"   # secret scanner (hk + secret:* tasks)
+"github:mongodb/kingfisher" = "v2.17.0"   # secret scanner (hk + secret:* tasks)
