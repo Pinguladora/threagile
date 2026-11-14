@@ -40,5 +40,6 @@ func GetBuiltinTypeValues(cfg technologyMapConfigReader) map[string][]TypeEnum {
 		"Technical Asset Type":                         TechnicalAssetTypeValues(),
 		"Trust Boundary Type":                          TrustBoundaryTypeValues(),
 		"Usage":                                        UsageValues(),
+		"Layer":                                        LayerValues(),
 	}
 }

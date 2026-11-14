@@ -41,6 +41,7 @@ type Model struct {
 	SharedRuntimes                                map[string]SharedRuntime  `json:"shared_runtimes,omitempty"                                    yaml:"shared_runtimes,omitempty"`
 	CustomRiskCategories                          RiskCategories            `json:"custom_risk_categories,omitempty"                             yaml:"custom_risk_categories,omitempty"`
 	RiskTracking                                  map[string]RiskTracking   `json:"risk_tracking,omitempty"                                      yaml:"risk_tracking,omitempty"`
+	ReportExclude                                 ReportExclusion           `json:"report_exclude,omitempty"                                     yaml:"report_exclude,omitempty"`
 	DiagramTweakNodesep                           int                       `json:"diagram_tweak_nodesep,omitempty"                              yaml:"diagram_tweak_nodesep,omitempty"`
 	DiagramTweakRanksep                           int                       `json:"diagram_tweak_ranksep,omitempty"                              yaml:"diagram_tweak_ranksep,omitempty"`
 	DiagramTweakEdgeLayout                        string                    `json:"diagram_tweak_edge_layout,omitempty"                          yaml:"diagram_tweak_edge_layout,omitempty"`
@@ -251,6 +252,10 @@ var modelSectionMergers = map[string]func(model *Model, included *Model) error{
 		model.DiagramTweakSuppressEdgeLabels = included.DiagramTweakSuppressEdgeLabels
 		return nil
 	},
+	"report_exclude": func(model *Model, included *Model) error {
+		model.ReportExclude = included.ReportExclude
+		return nil
+	},
 	"diagram_tweak_layout_left_to_right": func(model *Model, included *Model) error {
 		model.DiagramTweakLayoutLeftToRight = included.DiagramTweakLayoutLeftToRight
 		return nil
@@ -315,4 +320,12 @@ func (model *Model) AddTagToModelInput(tag string, dryRun bool, changes *[]strin
 
 func NormalizeTag(tag string) string {
 	return strings.TrimSpace(strings.ToLower(tag))
+}
+
+// ReportExclusion is what the reports leave out of the model, see types.ReportExclusion.
+type ReportExclusion struct {
+	Layers          []string `json:"layers,omitempty"           yaml:"layers,omitempty"`
+	Tags            []string `json:"tags,omitempty"             yaml:"tags,omitempty"`
+	TechnicalAssets []string `json:"technical_assets,omitempty" yaml:"technical_assets,omitempty"`
+	TrustBoundaries []string `json:"trust_boundaries,omitempty" yaml:"trust_boundaries,omitempty"`
 }

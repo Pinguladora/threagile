@@ -89,6 +89,7 @@ type reportConfigReader interface {
 	GetReportConfigurationHideChapters() map[ChaptersToShowHide]bool
 
 	GetHideEmptyChapters() bool
+	GetReportExclude() []string
 }
 
 func Generate(config reportConfigReader, readResult *model.ReadResult, commands *GenerateCommands,
@@ -96,6 +97,12 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 ) error {
 	_ = os.MkdirAll(filepath.Clean(config.GetOutputFolder()), 0o750)
 	_ = os.MkdirAll(filepath.Clean(config.GetTempFolder()), 0o700)
+
+	// The JSON outputs keep the whole analysis, the diagrams, Excel files and reports show reportResult.
+	reportResult, err := withoutExcluded(config, readResult)
+	if err != nil {
+		return err
+	}
 
 	diagramDPI := config.GetDiagramDPI()
 	if diagramDPI < config.GetMinGraphvizDPI() {
@@ -106,7 +113,7 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 	// Data-flow Diagram rendering
 	if commands.DataFlowDiagram {
 		writeDOT := func(filename string) (*os.File, error) {
-			return WriteDataFlowDiagramGraphvizDOT(readResult.ParsedModel, filename, diagramDPI,
+			return WriteDataFlowDiagramGraphvizDOT(reportResult.ParsedModel, filename, diagramDPI,
 				config.GetAddModelTitle(), config.GetAddLegend(), progressReporter)
 		}
 		removeDOT, err := renderDiagram(config, "data flow", config.GetDataFlowDiagramFilenameDOT(),
@@ -119,7 +126,7 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 	// Data Asset Diagram rendering
 	if commands.DataAssetDiagram {
 		writeDOT := func(filename string) (*os.File, error) {
-			return WriteDataAssetDiagramGraphvizDOT(readResult.ParsedModel, filename, diagramDPI, progressReporter)
+			return WriteDataAssetDiagramGraphvizDOT(reportResult.ParsedModel, filename, diagramDPI, progressReporter)
 		}
 		removeDOT, err := renderDiagram(config, "data asset", config.GetDataAssetDiagramFilenameDOT(),
 			config.GetDataAssetDiagramFilenamePNG(), writeDOT, GenerateDataAssetDiagramGraphvizImage, progressReporter)
@@ -132,10 +139,37 @@ func Generate(config reportConfigReader, readResult *model.ReadResult, commands 
 	if err := writeJSONOutputs(config, readResult, commands, progressReporter); err != nil {
 		return err
 	}
-	if err := writeExcelOutputs(config, readResult, commands, progressReporter); err != nil {
+	if err := writeExcelOutputs(config, reportResult, commands, progressReporter); err != nil {
 		return err
 	}
-	return writeReports(config, readResult, commands, riskRules, diagramDPI, progressReporter)
+	return writeReports(config, reportResult, commands, riskRules, diagramDPI, progressReporter)
+}
+
+// withoutExcluded returns the read result with the model the reports show: without what they leave out.
+func withoutExcluded(config reportConfigReader, readResult *model.ReadResult) (*model.ReadResult, error) {
+	exclusion, err := reportExclusion(config, readResult.ParsedModel)
+	if err != nil {
+		return nil, err
+	}
+	parsedModel, leftOut := readResult.ParsedModel.Without(exclusion)
+	if leftOut == nil {
+		return readResult, nil
+	}
+	focused := *readResult
+	focused.ParsedModel, focused.LeftOut = parsedModel, leftOut
+	return &focused, nil
+}
+
+// reportExclusion returns what the reports leave out: what the config names, if it does, else what the model does.
+func reportExclusion(config reportConfigReader, parsedModel *types.Model) (types.ReportExclusion, error) {
+	exclusion := parsedModel.ReportExclude
+	if selectors := config.GetReportExclude(); selectors != nil {
+		var err error
+		if exclusion, err = types.ParseReportExclusion(selectors); err != nil {
+			return exclusion, err
+		}
+	}
+	return exclusion, parsedModel.CheckReportExclusion(exclusion)
 }
 
 // renderDiagram writes the DOT source of a diagram and renders it to PNG, only warning when the
@@ -362,6 +396,7 @@ func reportOptions(config reportConfigReader, readResult *model.ReadResult, risk
 ) ReportOptions {
 	return ReportOptions{
 		ModelFilename:     config.GetInputFile(),
+		LeftOut:           readResult.LeftOut,
 		ModelHash:         modelHash,
 		BuildTimestamp:    config.GetBuildTimestamp(),
 		ThreagileVersion:  config.GetThreagileVersion(),

@@ -127,6 +127,10 @@ func newParsedModel(modelInput *input.Model) (*types.Model, error) {
 		DiagramTweakSameRankAssets:                    modelInput.DiagramTweakSameRankAssets,
 	}
 
+	if parsedModel.ReportExclude, err = parseReportExclusion(modelInput.ReportExclude); err != nil {
+		return nil, err
+	}
+
 	parsedModel.CommunicationLinks = make(map[string]*types.CommunicationLink)
 	parsedModel.AllSupportedTags = make(map[string]bool)
 	parsedModel.IncomingTechnicalCommunicationLinksMappedByTargetId = make(map[string][]*types.CommunicationLink)
@@ -287,9 +291,9 @@ func (parser *technicalAssetParser) parseTechnicalAsset(
 	}
 
 	var err error
-	technicalAsset.Usage, err = types.ParseUsage(asset.Usage)
+	technicalAsset.Usage, technicalAsset.Layer, err = parseUsageAndLayer(title, asset)
 	if err != nil {
-		return nil, fmt.Errorf("unknown 'usage' value of technical asset %q: %v", title, asset.Usage)
+		return nil, err
 	}
 
 	technicalAsset.DataAssetsStored, err = appendCheckedDataAssets(parser.parsedModel, make([]string, 0),
@@ -1176,4 +1180,36 @@ func lowerCaseAndTrim(tags []string) []string {
 
 func contains(a []string, x string) bool {
 	return slices.Contains(a, x)
+}
+
+// parseUsageAndLayer parses the usage and the layer of a technical asset.
+func parseUsageAndLayer(title string, asset input.TechnicalAsset) (types.Usage, types.Layer, error) {
+	usage, err := types.ParseUsage(asset.Usage)
+	if err != nil {
+		return usage, types.UnsetLayer, fmt.Errorf("unknown 'usage' value of technical asset %q: %v", title,
+			asset.Usage)
+	}
+	layer, err := types.ParseLayer(asset.Layer)
+	if err != nil {
+		return usage, layer, fmt.Errorf("unknown 'layer' value of technical asset %q: %v", title, asset.Layer)
+	}
+	return usage, layer, nil
+}
+
+// parseReportExclusion parses what the reports leave out. Whether the model has the tags, technical assets and trust
+// boundaries it names is checked when the reports are written, as a flag may replace it.
+func parseReportExclusion(exclusion input.ReportExclusion) (types.ReportExclusion, error) {
+	result := types.ReportExclusion{
+		Tags:            lowerCaseAndTrim(exclusion.Tags),
+		TechnicalAssets: exclusion.TechnicalAssets,
+		TrustBoundaries: exclusion.TrustBoundaries,
+	}
+	for _, name := range exclusion.Layers {
+		layer, err := types.ParseLayer(name)
+		if err != nil || layer == types.UnsetLayer {
+			return result, fmt.Errorf("unknown layer %q in report_exclude, use application, platform or delivery", name)
+		}
+		result.Layers = append(result.Layers, layer)
+	}
+	return result, nil
 }

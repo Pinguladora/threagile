@@ -121,6 +121,7 @@ func writeTypstSources(dir string, parsedModel *types.Model, options PDFReportOp
 		Author:   view.Author.Name,
 		Date:     view.Date,
 		Version:  view.Run.ThreagileVersion,
+		LeftOut:  view.LeftOut,
 		Colors:   typstColors(),
 		Blocks:   newTypstDocument(renderReportMarkdownView(view), diagrams),
 	}

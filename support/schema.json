@@ -575,6 +575,53 @@
       ],
       "uniqueItems": true
     },
+    "report_exclude": {
+      "additionalProperties": false,
+      "description": "What the reports leave out, with the links and risks that go with it. The analysis and its JSON outputs keep everything",
+      "properties": {
+        "layers": {
+          "description": "The technical assets of these layers",
+          "items": {
+            "enum": [
+              "application",
+              "platform",
+              "delivery"
+            ],
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "tags": {
+          "description": "The technical assets with any of these tags",
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "technical_assets": {
+          "description": "These technical assets, by id",
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "trust_boundaries": {
+          "description": "The technical assets inside these trust boundaries, by id, nested boundaries included",
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
     "risk_tracking": {
       "additionalProperties": {
         "properties": {
@@ -1059,6 +1106,15 @@
               "string",
               "null"
             ]
+          },
+          "layer": {
+            "description": "The part of the system the technical asset belongs to, so that a report can leave it out: the application itself, the platform it runs on, or how it is delivered. Unset, business assets are application and devops assets delivery.",
+            "enum": [
+              "application",
+              "platform",
+              "delivery"
+            ],
+            "type": "string"
           },
           "machine": {
             "description": "Describes the type of environment the technical asset runs on, such as virtual, container, physical, or serverless. This helps assess risks related to deployment, isolation, and infrastructure.",

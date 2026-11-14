@@ -13,6 +13,7 @@ type TechnicalAsset struct {
 	Title                   string                `json:"title,omitempty"                      yaml:"title,omitempty"`
 	Description             string                `json:"description,omitempty"                yaml:"description,omitempty"`
 	Usage                   Usage                 `json:"usage"                                yaml:"usage,omitempty"`
+	Layer                   Layer                 `json:"layer,omitempty"                      yaml:"layer,omitempty"`
 	Type                    TechnicalAssetType    `json:"type"                                 yaml:"type,omitempty"`
 	Size                    TechnicalAssetSize    `json:"size"                                 yaml:"size,omitempty"`
 	Technologies            TechnologyList        `json:"technologies,omitempty"               yaml:"technologies,omitempty"`

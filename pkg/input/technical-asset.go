@@ -7,6 +7,7 @@ type TechnicalAsset struct {
 	Description             string                       `json:"description,omitempty"                yaml:"description,omitempty"`
 	Type                    string                       `json:"type,omitempty"                       yaml:"type,omitempty"`
 	Usage                   string                       `json:"usage,omitempty"                      yaml:"usage,omitempty"`
+	Layer                   string                       `json:"layer,omitempty"                      yaml:"layer,omitempty"`
 	UsedAsClientByHuman     bool                         `json:"used_as_client_by_human,omitempty"    yaml:"used_as_client_by_human,omitempty"`
 	OutOfScope              bool                         `json:"out_of_scope,omitempty"               yaml:"out_of_scope,omitempty"`
 	JustificationOutOfScope string                       `json:"justification_out_of_scope,omitempty" yaml:"justification_out_of_scope,omitempty"`

@@ -72,6 +72,9 @@ func (what *markdownWriter) titlePage(view *reportView) {
 		"- "+strong("Business criticality:")+" "+markdownText(view.Model.BusinessCriticality.String()),
 		"- "+strong("Threagile version:")+" "+markdownText(view.Run.ThreagileVersion),
 	)
+	if view.LeftOut != "" {
+		lines = append(lines, "- "+strong("Left out:")+" "+markdownText(view.LeftOut))
+	}
 	what.block(lines...)
 }
 

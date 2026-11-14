@@ -40,6 +40,7 @@ type Model struct {
 	RiskTracking                                  map[string]*RiskTracking      `json:"risk_tracking,omitempty"                                      yaml:"risk_tracking,omitempty"`
 	CommunicationLinks                            map[string]*CommunicationLink `json:"communication_links,omitempty"                                yaml:"communication_links,omitempty"`
 	AllSupportedTags                              map[string]bool               `json:"all_supported_tags,omitempty"                                 yaml:"all_supported_tags,omitempty"`
+	ReportExclude                                 ReportExclusion               `json:"report_exclude,omitempty"                                     yaml:"report_exclude,omitempty"`
 	DiagramTweakNodesep                           int                           `json:"diagram_tweak_nodesep,omitempty"                              yaml:"diagram_tweak_nodesep,omitempty"`
 	DiagramTweakRanksep                           int                           `json:"diagram_tweak_ranksep,omitempty"                              yaml:"diagram_tweak_ranksep,omitempty"`
 	DiagramTweakEdgeLayout                        string                        `json:"diagram_tweak_edge_layout,omitempty"                          yaml:"diagram_tweak_edge_layout,omitempty"`

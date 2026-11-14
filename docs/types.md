@@ -100,6 +100,16 @@ Used by `identity` of communication links.
 | `workload` | The caller's own identity, short-lived and issued by the platform, like a cloud IAM role, a Kubernetes service account token or a SPIFFE ID |
 | `end-user` | The identity of the end user is passed on, like a forwarded or exchanged user token (formerly the end-user-identity-propagation authorization) |
 
+## Layer
+
+Used by `layer` of technical assets, and `layers` of `report_exclude`.
+
+| Value | Description |
+|-------|-------------|
+| `application` | The system itself: what serves its users and handles its business data |
+| `platform` | What the system is deployed on and run by, such as clusters, hypervisors, workload identity, logging and monitoring |
+| `delivery` | How the system is built, released and maintained, such as source repositories, CI, artifact registries, bots and developer machines |
+
 ## Network Policy
 
 Used by `network_policy` of trust boundaries of the type `execution-environment` (Kubernetes namespaces).
