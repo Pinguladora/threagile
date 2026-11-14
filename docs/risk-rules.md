@@ -5,6 +5,7 @@ Based on risk rules Threagile will analyze model and identify potential risks.
 There are a lot of built in rules.
 
 - DoS-risky Access Across Trust-Boundary;
+- Tenant Resource Exhaustion;
 - Incomplete Model;
 - Missing Build Infrastructure;
 - Missing File Validation;

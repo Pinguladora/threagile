@@ -116,6 +116,7 @@ func coreRiskRules() []types.RiskRule {
 		builtin.NewServerSideRequestForgeryRule(),
 		builtin.NewServiceRegistryPoisoningRule(),
 		builtin.NewSqlNoSqlInjectionRule(),
+		builtin.NewTenantResourceExhaustionRule(),
 		builtin.NewUncheckedDeploymentRule(),
 		builtin.NewUnencryptedAssetRule(),
 		builtin.NewUnencryptedCommunicationRule(),

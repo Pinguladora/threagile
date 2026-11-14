@@ -20,7 +20,7 @@ func (*UnboundedModelConsumptionRule) Category() *types.RiskCategory {
 		Impact: "If this risk is unmitigated, attackers, or a runaway agent, might make the model or the agent " +
 			"unavailable for others, or run up its costs (denial of wallet).",
 		ASVS:       asvsBusinessLogic,
-		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html",
+		CheatSheet: cheatSheetDenialOfService,
 		Action:     "Rate Limits and Token Budgets",
 		Mitigation: "Put a gateway between the users and the model or agent, like an API gateway or an AI gateway, " +
 			"that limits the requests and the tokens per user and per period, caps the length of inputs and outputs, " +
