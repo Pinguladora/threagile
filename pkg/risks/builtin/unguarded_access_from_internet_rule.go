@@ -36,7 +36,8 @@ func (*UnguardedAccessFromInternetRule) Category() *types.RiskCategory {
 			types.Gateway + " assets are exempted from this risk when " +
 			"they do not consist of custom developed code and " +
 			"the data-flow only consists of HTTP or FTP protocols. Access from " + types.Monitoring + " systems " +
-			"as well as VPN-protected connections are exempted.",
+			"as well as VPN-protected connections are exempted, and so are process-local links (in-process calls, " +
+			"inter-process communication and local file access), which never cross the internet.",
 		RiskAssessment: "The matching technical assets are at " + types.LowSeverity.String() + " risk. When either the " +
 			"confidentiality rating is " + types.StrictlyConfidential.String() + " or the integrity rating " +
 			"is " + types.MissionCritical.String() + ", the risk-rating is considered " + types.MediumSeverity.String() + ". " +
@@ -89,6 +90,10 @@ func skipIncomingAccessFromInternet(
 	}
 	if input.TechnicalAssets[incomingAccess.SourceId].Technologies.GetAttribute(types.Monitoring) ||
 		incomingAccess.VPN {
+		return true
+	}
+	// A process-local link stays on the caller's machine: the internet reaches the caller, not the target.
+	if incomingAccess.Protocol.IsProcessLocal() {
 		return true
 	}
 	if technicalAsset.Confidentiality < types.Confidential && technicalAsset.Integrity < types.Critical {

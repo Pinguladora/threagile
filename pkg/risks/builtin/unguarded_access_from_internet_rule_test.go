@@ -110,6 +110,22 @@ func TestUnguardedAccessFromInternetRuleGenerateRisks(t *testing.T) {
 
 			riskCreated: false,
 		},
+		"no risk for a process-local link": {
+			isSourceFromInternet: true,
+			protocol:             types.InterProcessCommunication,
+			confidentiality:      types.Confidential,
+			integrity:            types.Critical,
+
+			riskCreated: false,
+		},
+		"no risk for local file access": {
+			isSourceFromInternet: true,
+			protocol:             types.LocalFileAccess,
+			confidentiality:      types.Confidential,
+			integrity:            types.Critical,
+
+			riskCreated: false,
+		},
 		"no risk for low confidentiality and integrity": {
 			outOfScope:      false,
 			isLoadBalancer:  false,
