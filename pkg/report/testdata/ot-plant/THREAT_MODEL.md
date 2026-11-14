@@ -3073,7 +3073,7 @@ The risk rules checked **6 of 10** entries of the [OWASP Non-Human Identities To
 | Threagile version | test-version |
 | Threagile build timestamp | test-build-timestamp |
 | Threagile execution timestamp | 20231114221320 |
-| Model filename | ../../demo/ot-plant/threagile.yaml |
+| Model filename | threagile.yaml |
 | Model hash (SHA256) | `test-model-hash` |
 
 Threagile (see [threagile.io](https://threagile.io) for more details) is an open-source toolkit for agile threat modeling, created by Christian Schneider ([christian-schneider.net](https://christian-schneider.net)): It allows to model an architecture with its assets in an agile fashion as a YAML file directly inside the IDE. Upon execution of the Threagile toolkit all standard risk rules (as well as individual custom rules if present) are checked against the architecture model. At the time the Threagile toolkit was executed on the model input file the following risk rules were checked:
