@@ -2,12 +2,11 @@ name: OpenSSF Scorecard
 
 # Runs the OpenSSF Scorecard supply-chain checks and publishes the results to the
 # public OpenSSF Scorecard API, which powers the README badge and the scorecard.dev
-# viewer. Weekly, plus on every push to main so the score tracks the default branch.
+# viewer. Weekly only: it scores the settings of the repository more than its
+# commits, so a run for every push to main would add little.
 on:
   schedule:
     - cron: "0 6 * * 1" # Every Monday at 06:00 UTC
-  push:
-    branches: [main]
 
 permissions: {}
 

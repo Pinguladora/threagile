@@ -1,12 +1,14 @@
 name: CI
 
-# The Go gate for every pull request and every push to main. It runs the same
-# checks as the local hk hooks (format, tidy, build, vet, test, lint) through
-# mise, so contributors who do not have the hooks installed still get them
-# enforced. Everything runs via `mise run ci:check` (see mise.ci.toml), keeping
-# the pipeline portable across CI systems.
+# The Go gate for every pull request. It runs the same checks as the local hk
+# hooks (format, tidy, build, vet, test, lint) through mise, so contributors who
+# do not have the hooks installed still get them enforced. Everything runs via
+# `mise run ci:check` (see mise.ci.toml), keeping the pipeline portable across
+# CI systems.
 # A change to the docs or to the Markdown files at the root alone runs nothing, except to the docs that tests check
 # against the code. Later patterns win, so those are listed after the exclusions.
+# Main runs it only to save the caches of the tools and of the Go builds: a pull request can restore the caches of
+# main, but not those of another pull request. So it runs there only when what their keys hash changes.
 on:
   pull_request:
     paths:
@@ -18,11 +20,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "**"
-      - "!docs/**"
-      - "!*.md"
-      - docs/flags.md
-      - docs/types.md
+      - go.sum
+      - mise*.toml
+      - mise*.lock
+      - .miserc*
+      - .github/workflows/ci.yml
 
 permissions: {}
 
@@ -71,6 +73,9 @@ jobs:
     name: PDF compliance
     # Renders the PDF reports of the demos with typst and checks them with veraPDF as PDF/A-3a and PDF/UA-1. veraPDF
     # runs from its container image, which is amd64 only, as the runner is.
+    # Not on main: it saves no cache of its own, and its builds without the race detector would take the key of the
+    # Go check's if it finished first.
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
