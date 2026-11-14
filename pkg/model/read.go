@@ -22,6 +22,8 @@ type ReadResult struct {
 	CustomRiskRules  types.RiskRules
 	// Baseline compares the risks with those of an earlier analysis; nil when there is none to compare with.
 	Baseline *baseline.Comparison
+	// LeftOut counts what the reports leave out of ParsedModel, nil when they show all of it.
+	LeftOut *types.LeftOut
 }
 
 type configReader interface {

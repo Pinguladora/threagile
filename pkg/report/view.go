@@ -12,7 +12,9 @@ import (
 
 // ReportOptions are the inputs of the HTML and Markdown reports besides the model.
 type ReportOptions struct {
-	ModelFilename    string
+	ModelFilename string
+	// LeftOut counts what the report leaves out of the model, nil when it shows all of it.
+	LeftOut          *types.LeftOut
 	ModelHash        string
 	BuildTimestamp   string
 	ThreagileVersion string
@@ -43,8 +45,10 @@ type reportView struct {
 	Run                ReportOptions
 	ExecutionTimestamp string
 	Generated          string
-	Sections           []viewSection
-	sectionShown       map[string]bool
+	// LeftOut says what the report leaves out of the model, empty when it shows all of it.
+	LeftOut      string
+	Sections     []viewSection
+	sectionShown map[string]bool
 
 	ManagementSummaryComment markupText
 	BusinessOverview         *markupText // nil when the model has none, as is TechnicalOverview
@@ -161,6 +165,10 @@ func newReportView(parsedModel *types.Model, options ReportOptions) *reportView 
 	}
 	now := types.Now()
 	report.ExecutionTimestamp, report.Generated = now.Format("20060102150405"), now.Format(time.RFC3339)
+	if leftOut := options.LeftOut; leftOut != nil {
+		report.LeftOut = plural(leftOut.TechnicalAssets, "devops technical asset", "devops technical assets") +
+			" and " + plural(leftOut.Risks, "risk", "risks") + " about them, which the JSON outputs keep"
+	}
 	report.Author = newViewAuthor(parsedModel.Author)
 	for _, contributor := range parsedModel.Contributors {
 		if contributor != nil {

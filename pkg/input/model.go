@@ -41,6 +41,7 @@ type Model struct {
 	SharedRuntimes                                map[string]SharedRuntime  `json:"shared_runtimes,omitempty"                                    yaml:"shared_runtimes,omitempty"`
 	CustomRiskCategories                          RiskCategories            `json:"custom_risk_categories,omitempty"                             yaml:"custom_risk_categories,omitempty"`
 	RiskTracking                                  map[string]RiskTracking   `json:"risk_tracking,omitempty"                                      yaml:"risk_tracking,omitempty"`
+	HideDevOpsInReports                           bool                      `json:"hide_devops_in_reports,omitempty"                             yaml:"hide_devops_in_reports,omitempty"`
 	DiagramTweakNodesep                           int                       `json:"diagram_tweak_nodesep,omitempty"                              yaml:"diagram_tweak_nodesep,omitempty"`
 	DiagramTweakRanksep                           int                       `json:"diagram_tweak_ranksep,omitempty"                              yaml:"diagram_tweak_ranksep,omitempty"`
 	DiagramTweakEdgeLayout                        string                    `json:"diagram_tweak_edge_layout,omitempty"                          yaml:"diagram_tweak_edge_layout,omitempty"`
@@ -249,6 +250,10 @@ var modelSectionMergers = map[string]func(model *Model, included *Model) error{
 	},
 	"diagram_tweak_suppress_edge_labels": func(model *Model, included *Model) error {
 		model.DiagramTweakSuppressEdgeLabels = included.DiagramTweakSuppressEdgeLabels
+		return nil
+	},
+	"hide_devops_in_reports": func(model *Model, included *Model) error {
+		model.HideDevOpsInReports = included.HideDevOpsInReports
 		return nil
 	},
 	"diagram_tweak_layout_left_to_right": func(model *Model, included *Model) error {

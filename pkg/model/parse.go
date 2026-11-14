@@ -118,6 +118,7 @@ func newParsedModel(modelInput *input.Model) (*types.Model, error) {
 		Questions:                      modelInput.Questions,
 		AbuseCases:                     modelInput.AbuseCases,
 		TagsAvailable:                  lowerCaseAndTrim(modelInput.TagsAvailable),
+		HideDevOpsInReports:            modelInput.HideDevOpsInReports,
 		DiagramTweakNodesep:            modelInput.DiagramTweakNodesep,
 		DiagramTweakRanksep:            modelInput.DiagramTweakRanksep,
 		DiagramTweakEdgeLayout:         modelInput.DiagramTweakEdgeLayout,

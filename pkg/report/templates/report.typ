@@ -95,6 +95,7 @@
     ..if data.at("contributors", default: ()).len() > 0 { (("Contributors", data.contributors.join(", ")),) },
     ("Date", data.date),
     ("Threagile version", data.version),
+    ..if data.at("left_out", default: none) != none { (("Left out", data.left_out),) },
   )
   #terms(separator: [: ], spacing: 0.8em, ..details.map(((term, description)) => terms.item(term, description)))
 ]

@@ -53,6 +53,8 @@ type Config struct {
 	ReportLogoImagePathValue         string `json:"ReportLogoImagePath,omitempty"         yaml:"ReportLogoImagePath"`
 	TechnologyFilenameValue          string `json:"TechnologyFilename,omitempty"          yaml:"TechnologyFilename"`
 	HideEmptyChaptersValue           bool   `json:"HideEmptyChapters,omitempty"           yaml:"HideEmptyChapters"`
+	// HideDevOpsValue overrides the model's hide_devops_in_reports when set.
+	HideDevOpsValue *bool `json:"HideDevOps,omitempty" yaml:"HideDevOps"`
 
 	RiskRulePluginsValue   []string        `json:"RiskRulePlugins,omitempty"   yaml:"RiskRulePlugins"`
 	SkipRiskRulesValue     []string        `json:"SkipRiskRules,omitempty"     yaml:"SkipRiskRules"`
@@ -532,6 +534,9 @@ var configMergers = lowerCaseKeys(map[string]func(c *Config, config *Config, val
 	"HideEmptyChapters": func(c *Config, config *Config, _ any) {
 		c.HideEmptyChaptersValue = config.HideEmptyChaptersValue
 	},
+	"HideDevOps": func(c *Config, config *Config, _ any) {
+		c.HideDevOpsValue = config.HideDevOpsValue
+	},
 	"RiskRulePlugins": func(c *Config, config *Config, _ any) {
 		c.RiskRulePluginsValue = config.RiskRulePluginsValue
 	},
@@ -781,6 +786,11 @@ func (c *Config) GetTechnologyFilename() string {
 
 func (c *Config) GetHideEmptyChapters() bool {
 	return c.HideEmptyChaptersValue
+}
+
+// GetHideDevOps tells whether to leave the devops technical assets out of the reports, nil to leave it to the model.
+func (c *Config) GetHideDevOps() *bool {
+	return c.HideDevOpsValue
 }
 
 func (c *Config) GetInputFile() string {

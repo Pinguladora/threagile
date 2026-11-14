@@ -66,6 +66,7 @@ const (
 	skipRisksExcelFlagName          = "skip-risks-excel"
 	skipTagsExcelFlagName           = "skip-tags-excel"
 	skipReportPDFFlagName           = "skip-report-pdf"
+	hideDevOpsFlagName              = "hide-devops"
 	skipReportADOCFlagName          = "skip-report-adoc"
 	skipReportHTMLFlagName          = "skip-report-html"
 	skipReportMarkdownFlagName      = "skip-report-md"
@@ -87,6 +88,7 @@ type Flags struct {
 	configFlag           string
 	riskRulePluginsValue string
 	skipRiskRulesValue   string
+	hideDevOpsFlag       bool
 
 	generateDataFlowDiagramFlag     bool // deprecated
 	generateDataAssetDiagramFlag    bool // deprecated

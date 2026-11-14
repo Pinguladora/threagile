@@ -538,6 +538,13 @@
         "null"
       ]
     },
+    "hide_devops_in_reports": {
+      "description": "Leave the technical assets of usage devops, their links and their risks out of the reports. The analysis and its JSON outputs keep them",
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
     "includes": {
       "description": "Include other yaml files into the model",
       "items": {

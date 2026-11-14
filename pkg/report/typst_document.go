@@ -20,6 +20,7 @@ type typstDocument struct {
 	Contributors []string `json:"contributors,omitempty"`
 	Date         string   `json:"date"`
 	Version      string   `json:"version"`
+	LeftOut      string   `json:"left_out,omitempty"`
 	Logo         string   `json:"logo,omitempty"` // a file name next to the document
 	// Colors are the colours of the severities and statuses by their titles, and of the links.
 	Colors map[string]string `json:"colors"`

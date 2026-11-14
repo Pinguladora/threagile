@@ -86,6 +86,25 @@ asset with a link from each service that asks it, so that the rules see the deci
 The HTML and Markdown reports list each decision point in the chapter "Policy Decision Points", with the services
 that ask it and the requests that those services authorize.
 
+## Reports of the deployed system
+
+A model often covers how the system is built as well as what runs: the repository, CI, the release pipeline, the
+developers' machines and their tools. Give those technical assets `usage: devops`. For a system whose build tooling is
+gone once it is deployed, such as a web application or an API, set this at the top of the model:
+
+```yaml
+hide_devops_in_reports: true
+```
+
+The diagrams, the Excel files and the PDF, HTML and Markdown reports then leave out the devops technical assets, the
+links from and to them, and the risks about them. Devops data assets that no remaining asset or link holds go too, and
+so do trust boundaries and shared runtimes that only held devops assets. The title page of each report says how much
+it left out. The analysis itself does not change: the JSON outputs, the OTM file and `--fail-on` keep every risk.
+
+`--hide-devops` and `--hide-devops=false` override the model for one run, for instance to give the maintainers the
+full report. Desktop applications and developer tools ship their build pipeline to their users, so they keep the
+setting off.
+
 ## Kubernetes clusters
 
 A Kubernetes cluster is modelled with the elements threagile has, plus two optional fields:

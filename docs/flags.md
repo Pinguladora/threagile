@@ -29,6 +29,7 @@ Every flag can also be set in the [config file](./config.md). Every command take
 | `--generate-stats-json` | bool | `true` | (deprecated, use the matching --skip flag) generate stats json |
 | `--generate-tags-excel` | bool | `true` | (deprecated, use the matching --skip flag) generate tags excel |
 | `--generate-technical-assets-json` | bool | `true` | (deprecated, use the matching --skip flag) generate technical assets json |
+| `--hide-devops` | bool | `false` | leave the devops technical assets and their risks out of the reports, overriding the model's hide_devops_in_reports (--hide-devops=false shows them) |
 | `--ignore-orphaned-risk-tracking` | bool | `false` | ignore orphaned risk tracking (just log them) not matching a concrete risk |
 | `--imported-model` | string |  | imported input model yaml file |
 | `--interactive`, `-i` | bool | `false` | interactive mode |

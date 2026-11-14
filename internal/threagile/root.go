@@ -185,6 +185,9 @@ func (what *Threagile) initSkipFlags() {
 		"skip generating report html")
 	flags.BoolVar(&what.flags.SkipReportMarkdownValue, skipReportMarkdownFlagName, what.config.GetSkipReportMarkdown(),
 		"skip generating report markdown")
+	flags.BoolVar(&what.flags.hideDevOpsFlag, hideDevOpsFlagName, false,
+		"leave the devops technical assets and their risks out of the reports, overriding the model's "+
+			"hide_devops_in_reports (--hide-devops=false shows them)")
 
 	flags.BoolVar(&what.flags.generateDataFlowDiagramFlag, generateDataFlowDiagramFlagName,
 		!what.config.GetSkipDataFlowDiagram(), "(deprecated, use the matching --skip flag) generate data flow diagram")
@@ -447,6 +450,10 @@ func (what *Threagile) overrideSkipArgs(cmd *cobra.Command) {
 	override(what, cmd, skipReportHTMLFlagName, &what.config.SkipReportHTMLValue, what.flags.SkipReportHTMLValue)
 	override(what, cmd, skipReportMarkdownFlagName, &what.config.SkipReportMarkdownValue,
 		what.flags.SkipReportMarkdownValue)
+	if what.isFlagOverridden(cmd, hideDevOpsFlagName) {
+		hide := what.flags.hideDevOpsFlag
+		what.config.HideDevOpsValue = &hide
+	}
 
 	override(what, cmd, generateDataFlowDiagramFlagName, &what.config.SkipDataFlowDiagramValue,
 		!what.flags.generateDataFlowDiagramFlag)

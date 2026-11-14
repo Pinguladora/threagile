@@ -80,6 +80,9 @@ that may carry threagile's basic markup go through markup, which keeps only that
 <dt>Date</dt><dd>{{.Date}}</dd>
 <dt>Business criticality</dt><dd>{{.Model.BusinessCriticality}}</dd>
 <dt>Threagile version</dt><dd>{{.Run.ThreagileVersion}}</dd>
+{{- with .LeftOut}}
+<dt>Left out</dt><dd>{{.}}</dd>
+{{- end}}
 </dl>
 </header>
 
