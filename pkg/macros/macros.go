@@ -16,7 +16,7 @@ import (
 
 	"github.com/Pinguladora/threagile/pkg/input"
 	"github.com/Pinguladora/threagile/pkg/types"
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 )
 
 type Macros interface {

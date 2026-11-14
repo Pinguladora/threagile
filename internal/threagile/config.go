@@ -14,7 +14,7 @@ import (
 
 	"github.com/Pinguladora/threagile/pkg/report"
 	"github.com/Pinguladora/threagile/pkg/types"
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 )
 
 type Config struct {

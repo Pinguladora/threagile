@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 )
 
 // Layer is the part of the system a technical asset belongs to, so that a report can focus on some of them: the

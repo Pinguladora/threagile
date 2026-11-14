@@ -3,7 +3,7 @@ package common
 import (
 	"fmt"
 
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 )
 
 func ToLiteral(script any) string {
