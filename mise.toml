@@ -70,16 +70,27 @@ description = "Mutation testing of the Go files changed against main (or MUTATIO
 # Reports surviving mutants without failing: some are equivalent (they cannot change behaviour), so the score is a
 # guide rather than a gate. Without a path, it mutates the changed files of the logic-heavy packages only, one by one:
 # gomu mutates whole files, and the server, the CLI and the report layout take too long for every change.
-usage = 'arg "[path]" help="a file, package or folder to mutate in full, such as ./pkg/risks/builtin"'
+usage = '''
+arg "[path]" help="a file, package or folder to mutate in full, such as ./pkg/risks/builtin"
+flag "--list" help="only print the changed files it would mutate, one per line"
+'''
 run = '''
 #!/usr/bin/env bash
 set -euo pipefail
+if [ "${usage_list:-false}" = "true" ] && [ -n "${usage_path:-}" ]; then
+  echo "--list prints the changed files, so it takes no path." >&2
+  exit 2
+fi
 if [ -n "${usage_path:-}" ]; then
   exec gomu run "${usage_path}" --incremental=false --fail-on-gate=false
 fi
 base="${MUTATION_BASE_SHA:-$(git merge-base main HEAD)}"
 mapfile -t files < <(git diff --name-only --diff-filter=AM "${base}" -- \
   'pkg/risks/*.go' 'pkg/model/*.go' 'pkg/types/*.go' 'pkg/baseline/*.go' 'pkg/catalog/*.go' | grep -v '_test\.go$' || true)
+if [ "${usage_list:-false}" = "true" ]; then
+  [ -z "${files[*]:-}" ] || printf '%s\n' "${files[@]}"
+  exit 0
+fi
 if [ -z "${files[*]:-}" ]; then
   echo "No changed Go files to mutate."
   exit 0

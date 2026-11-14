@@ -5,10 +5,24 @@ name: CI
 # mise, so contributors who do not have the hooks installed still get them
 # enforced. Everything runs via `mise run ci:check` (see mise.ci.toml), keeping
 # the pipeline portable across CI systems.
+# A change to the docs or to the Markdown files at the root alone runs nothing, except to the docs that tests check
+# against the code. Later patterns win, so those are listed after the exclusions.
 on:
   pull_request:
+    paths:
+      - "**"
+      - "!docs/**"
+      - "!*.md"
+      - docs/flags.md
+      - docs/types.md
   push:
     branches: [main]
+    paths:
+      - "**"
+      - "!docs/**"
+      - "!*.md"
+      - docs/flags.md
+      - docs/types.md
 
 permissions: {}
 
@@ -116,6 +130,15 @@ jobs:
           fetch-depth: 0 # goreleaser versions the snapshot from the tags
       - name: Set up mise
         uses: jdx/mise-action@f5be966e4a917d54244728e6a5fdcd1d93a35e6c # v5.2.6
+      - name: Cache the Go build and module cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: go-image-${{ runner.os }}-${{ hashFiles('go.sum') }}
+          restore-keys: |
+            go-image-${{ runner.os }}-
       - name: Build the snapshot image
         run: mise run snapshot:container
       - name: Render the example's PDF report with the image
@@ -149,7 +172,22 @@ jobs:
           fetch-depth: 0 # gomu diffs against the base commit of the pull request
       - name: Set up mise
         uses: jdx/mise-action@f5be966e4a917d54244728e6a5fdcd1d93a35e6c # v5.2.6
+      # Most pull requests, dependency updates among them, change none of the files it mutates. Finding out first
+      # skips the Go cache and the run for them.
+      - name: List the changed files to mutate
+        id: changed
+        env:
+          MUTATION_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          # The task prints only the file names, and a failure of it fails the step.
+          files=$(mise run -q test:mutation --list)
+          if [ -n "$files" ]; then echo "any=true" >> "$GITHUB_OUTPUT"; else echo "any=false" >> "$GITHUB_OUTPUT"; fi
+          {
+            echo '## Mutation testing'
+            if [ -z "$files" ]; then echo 'No changed Go files to mutate.'; fi
+          } >> "$GITHUB_STEP_SUMMARY"
       - name: Cache the Go build and module cache
+        if: steps.changed.outputs.any == 'true'
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
@@ -159,12 +197,12 @@ jobs:
           restore-keys: |
             go-${{ runner.os }}-
       - name: Mutate the changed files
+        if: steps.changed.outputs.any == 'true'
         env:
           MUTATION_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           mise run test:mutation | tee mutation.txt
           {
-            echo '## Mutation testing'
             echo '```'
             grep -E '^(\[|Mutation Score|No changed)' mutation.txt || true
             echo '```'
