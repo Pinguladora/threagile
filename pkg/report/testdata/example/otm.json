@@ -2139,16 +2139,6 @@
           ]
         },
         {
-          "threat": "missing-authentication",
-          "state": "exposed",
-          "mitigations": [
-            {
-              "mitigation": "missing-authentication-mitigation",
-              "state": "recommended"
-            }
-          ]
-        },
-        {
           "threat": "missing-authentication-second-factor",
           "state": "mitigated",
           "mitigations": [

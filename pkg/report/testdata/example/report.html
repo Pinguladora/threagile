@@ -511,14 +511,14 @@ footer {
 <h2>Management Summary</h2>
 <p>Threagile toolkit was used to model the architecture of "Some Example Application" and derive risks by analyzing the components and data flows. The risks identified during this analysis are shown in the following chapters. Identified risks during threat modeling do not necessarily mean that the vulnerability associated with this risk actually exists: it is more to be seen as a list of potential risks and threats, which should be individually reviewed and reduced by removing false positives. For the remaining risks it should be checked in the design and implementation of "Some Example Application" whether the mitigation advices have been applied or not.</p>
 <p>Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden the application in a Defense-in-Depth approach. Additionally, for each risk finding a link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given.</p>
-<p>In total <strong>93 initial risks</strong> in <strong>34 categories</strong> have been identified during the threat modeling process:</p>
+<p>In total <strong>92 initial risks</strong> in <strong>34 categories</strong> have been identified during the threat modeling process:</p>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Severity</th><th scope="col" class="number">Risks</th><th scope="col">Status</th><th scope="col" class="number">Risks</th></tr></thead>
 <tbody>
-<tr><th scope="row"><span class="badge sev-critical">Critical</span></th><td class="number">1</td><th scope="row"><span class="badge status-unchecked">Unchecked</span></th><td class="number">62</td></tr>
+<tr><th scope="row"><span class="badge sev-critical">Critical</span></th><td class="number">1</td><th scope="row"><span class="badge status-unchecked">Unchecked</span></th><td class="number">61</td></tr>
 <tr><th scope="row"><span class="badge sev-high">High</span></th><td class="number">2</td><th scope="row"><span class="badge status-in-discussion">In Discussion</span></th><td class="number">0</td></tr>
-<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">38</td><th scope="row"><span class="badge status-accepted">Accepted</span></th><td class="number">1</td></tr>
+<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">37</td><th scope="row"><span class="badge status-accepted">Accepted</span></th><td class="number">1</td></tr>
 <tr><th scope="row"><span class="badge sev-medium">Medium</span></th><td class="number">43</td><th scope="row"><span class="badge status-in-progress">In Progress</span></th><td class="number">5</td></tr>
 <tr><th scope="row"><span class="badge sev-low">Low</span></th><td class="number">9</td><th scope="row"><span class="badge status-mitigated">Mitigated</span></th><td class="number">24</td></tr>
 <tr><td></td><td></td><th scope="row"><span class="badge status-false-positive">False Positive</span></th><td class="number">1</td></tr>
@@ -531,7 +531,7 @@ footer {
 
 <section class="chapter" id="initial-risks">
 <h2>Impact Analysis of the Initial Risks</h2>
-<p>The most prevalent impacts of the <strong>93 initial risks</strong> (distributed over <strong>34 risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
+<p>The most prevalent impacts of the <strong>92 initial risks</strong> (distributed over <strong>34 risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
 <dl class="entries">
 <dt><span class="badge sev-critical">Critical</span> <a href="#category-something-strange">Some Individual Risk Example</a>: <span class="summary">2 Initial Risks, exploitation likelihood is <em>Frequent</em> with <em>Very High</em> impact</span></dt>
 <dd>Some text describing the impact...</dd>
@@ -547,7 +547,7 @@ footer {
 <dd>If this risk remains unmitigated, attackers might be able to modify LDAP queries and access more data from the LDAP server than allowed.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-long-lived-credentials">Long-Lived Credentials</a>: <span class="summary">6 Initial Risks, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.</dd>
-<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-authentication">Missing Authentication</a>: <span class="summary">2 Initial Risks, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
+<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-authentication">Missing Authentication</a>: <span class="summary">1 Initial Risk, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might be able to access or modify sensitive data in an unauthenticated way.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">5 Initial Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might access cloud components in an unintended way.</dd>
@@ -627,8 +627,8 @@ footer {
 <td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="2.33" height="10"></rect></svg></td></tr>
 <tr><th scope="row"><span class="badge sev-high">High</span></th><td class="number">2</td><td class="number">2</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">0</td>
 <td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="4.65" height="10"></rect></svg></td></tr>
-<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">38</td><td class="number">28</td><td class="number">0</td><td class="number">1</td><td class="number">0</td><td class="number">8</td><td class="number">1</td>
-<td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="65.12" height="10"></rect><rect class="status-accepted" x="65.12" width="2.33" height="10"></rect><rect class="status-mitigated" x="67.44" width="18.60" height="10"></rect><rect class="status-false-positive" x="86.05" width="2.33" height="10"></rect></svg></td></tr>
+<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">37</td><td class="number">27</td><td class="number">0</td><td class="number">1</td><td class="number">0</td><td class="number">8</td><td class="number">1</td>
+<td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="62.79" height="10"></rect><rect class="status-accepted" x="62.79" width="2.33" height="10"></rect><rect class="status-mitigated" x="65.12" width="18.60" height="10"></rect><rect class="status-false-positive" x="83.72" width="2.33" height="10"></rect></svg></td></tr>
 <tr><th scope="row"><span class="badge sev-medium">Medium</span></th><td class="number">43</td><td class="number">27</td><td class="number">0</td><td class="number">0</td><td class="number">0</td><td class="number">16</td><td class="number">0</td>
 <td><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="track" width="100" height="10"></rect><rect class="status-unchecked" x="0.00" width="62.79" height="10"></rect><rect class="status-mitigated" x="62.79" width="37.21" height="10"></rect></svg></td></tr>
 <tr><th scope="row"><span class="badge sev-low">Low</span></th><td class="number">9</td><td class="number">4</td><td class="number">0</td><td class="number">0</td><td class="number">5</td><td class="number">0</td><td class="number">0</td>
@@ -636,14 +636,14 @@ footer {
 </tbody>
 </table>
 </div>
-<p>After removal of risks with status <em>mitigated</em> and <em>false positive</em> the following <strong>68 remain unmitigated</strong>:</p>
+<p>After removal of risks with status <em>mitigated</em> and <em>false positive</em> the following <strong>67 remain unmitigated</strong>:</p>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Severity</th><th scope="col" class="number">Unmitigated risks</th><th scope="col">To be checked by</th><th scope="col" class="number">Unmitigated risks</th></tr></thead>
 <tbody>
 <tr><th scope="row"><span class="badge sev-critical">Critical</span></th><td class="number">1</td><th scope="row">Business Side</th><td class="number">2</td></tr>
-<tr><th scope="row"><span class="badge sev-high">High</span></th><td class="number">2</td><th scope="row">Architecture</th><td class="number">14</td></tr>
-<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">29</td><th scope="row">Development</th><td class="number">15</td></tr>
+<tr><th scope="row"><span class="badge sev-high">High</span></th><td class="number">2</td><th scope="row">Architecture</th><td class="number">13</td></tr>
+<tr><th scope="row"><span class="badge sev-elevated">Elevated</span></th><td class="number">28</td><th scope="row">Development</th><td class="number">15</td></tr>
 <tr><th scope="row"><span class="badge sev-medium">Medium</span></th><td class="number">27</td><th scope="row">Operations</th><td class="number">37</td></tr>
 <tr><th scope="row"><span class="badge sev-low">Low</span></th><td class="number">9</td><td></td><td></td></tr>
 </tbody>
@@ -653,7 +653,7 @@ footer {
 
 <section class="chapter" id="remaining-risks">
 <h2>Impact Analysis of the Remaining Risks</h2>
-<p>The most prevalent impacts of the <strong>68 remaining risks</strong> (distributed over <strong>29 risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
+<p>The most prevalent impacts of the <strong>67 remaining risks</strong> (distributed over <strong>29 risk categories</strong>) are (taking the severity ratings into account and using the highest for each category):</p>
 <dl class="entries">
 <dt><span class="badge sev-critical">Critical</span> <a href="#category-something-strange">Some Individual Risk Example</a>: <span class="summary">2 Remaining Risks, exploitation likelihood is <em>Frequent</em> with <em>Very High</em> impact</span></dt>
 <dd>Some text describing the impact...</dd>
@@ -667,7 +667,7 @@ footer {
 <dd>If this risk is unmitigated, attackers might use a secret copied from a laptop, a script or a client to access the target, and nobody can tell who did what with it.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-long-lived-credentials">Long-Lived Credentials</a>: <span class="summary">6 Remaining Risks, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller.</dd>
-<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-authentication">Missing Authentication</a>: <span class="summary">2 Remaining Risks, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
+<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-authentication">Missing Authentication</a>: <span class="summary">1 Remaining Risk, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might be able to access or modify sensitive data in an unauthenticated way.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a>: <span class="summary">5 Remaining Risks, exploitation likelihood is <em>Unlikely</em> with <em>Very High</em> impact</span></dt>
 <dd>If this risk is unmitigated, attackers might access cloud components in an unintended way.</dd>
@@ -730,7 +730,7 @@ footer {
 
 <section class="chapter" id="risks-by-severity">
 <h2>Risks by Severity</h2>
-<p>All <strong>93 risks</strong> by severity, with their tracking status. Each risk links to its details in the chapter of its category.</p>
+<p>All <strong>92 risks</strong> by severity, with their tracking status. Each risk links to its details in the chapter of its category.</p>
 <h3>Critical <span class="summary">1 risk</span></h3>
 <div class="table-wrap">
 <table>
@@ -750,7 +750,7 @@ footer {
 </tbody>
 </table>
 </div>
-<h3>Elevated <span class="summary">38 risks</span></h3>
+<h3>Elevated <span class="summary">37 risks</span></h3>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Severity</th><th scope="col">Risk</th><th scope="col">Category</th><th scope="col">Most relevant</th><th scope="col">Status</th></tr></thead>
@@ -766,7 +766,6 @@ footer {
 <tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-long-lived-credentials_40git-repo_40external-dev-client_3egit-repo-web-ui-access"><b>Long-Lived Credentials</b> risk at <b>Git Repository</b> used by <b>External Development Client</b> (long-lived-token)</a></td><td><a href="#category-long-lived-credentials">Long-Lived Credentials</a></td><td><a href="#asset-git-repo">Git Repository</a>, <a href="#link-external-dev-client_3egit-repo-web-ui-access">Git-Repo Web-UI Access</a></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
 <tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-long-lived-credentials_40identity-provider_40apache-webserver_3eauth-credential-check-traffic"><b>Long-Lived Credentials</b> risk at <b>Identity Provider</b> used by <b>Apache Webserver</b> (credentials)</a></td><td><a href="#category-long-lived-credentials">Long-Lived Credentials</a></td><td><a href="#asset-identity-provider">Identity Provider</a>, <a href="#link-apache-webserver_3eauth-credential-check-traffic">Auth Credential Check Traffic</a></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
 <tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-long-lived-credentials_40ldap-auth-server_40marketing-cms_3eauth-traffic"><b>Long-Lived Credentials</b> risk at <b>LDAP Auth Server</b> used by <b>Marketing CMS</b> (credentials)</a></td><td><a href="#category-long-lived-credentials">Long-Lived Credentials</a></td><td><a href="#asset-ldap-auth-server">LDAP Auth Server</a>, <a href="#link-marketing-cms_3eauth-traffic">Auth Traffic</a></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
-<tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-missing-authentication_40load-balancer_3ecms-content-traffic_40load-balancer_40marketing-cms"><b>Missing Authentication</b> covering communication link <b>CMS Content Traffic</b> from <b>Load Balancer</b> to <b>Marketing CMS</b></a></td><td><a href="#category-missing-authentication">Missing Authentication</a></td><td><a href="#asset-marketing-cms">Marketing CMS</a>, <a href="#link-load-balancer_3ecms-content-traffic">CMS Content Traffic</a></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
 <tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-missing-authentication_40erp-system_3enfs-filesystem-access_40erp-system_40contract-file-server"><b>Missing Authentication</b> covering communication link <b>NFS Filesystem Access</b> from <b>Backoffice ERP System</b> to <b>Contract File Server</b></a></td><td><a href="#category-missing-authentication">Missing Authentication</a></td><td><a href="#asset-contract-file-server">Contract File Server</a>, <a href="#link-erp-system_3enfs-filesystem-access">NFS Filesystem Access</a></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
 <tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-missing-cloud-hardening_40application-network_40aws"><b>Missing Cloud Hardening (AWS)</b> risk at <b>Application Network</b>: <u>CIS Benchmark for AWS</u></a></td><td><a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a></td><td><span class="muted">none</span></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
 <tr><td><span class="badge sev-elevated">Elevated</span></td><td><a href="#risk-missing-cloud-hardening_40apache-webserver_40ec2"><b>Missing Cloud Hardening (EC2)</b> risk at <b>Apache Webserver</b>: <u>CIS Benchmark for Amazon Linux</u></a></td><td><a href="#category-missing-cloud-hardening">Missing Cloud Hardening</a></td><td><span class="muted">none</span></td><td><span class="badge status-unchecked">Unchecked</span></td></tr>
@@ -1044,7 +1043,7 @@ footer {
 
 <section class="chapter" id="stride">
 <h2>STRIDE Classification of Identified Risks</h2>
-<p>This chapter clusters and classifies the risks by STRIDE categories: in total <strong>93 potential risks</strong> have been identified during the threat modeling process.</p>
+<p>This chapter clusters and classifies the risks by STRIDE categories: in total <strong>92 potential risks</strong> have been identified during the threat modeling process.</p>
 <h3>Spoofing <span class="summary">12 risks</span></h3>
 <p class="muted">Spoofing, against authenticity</p>
 <dl class="entries">
@@ -1129,10 +1128,10 @@ footer {
 <dt><span class="badge sev-low">Low</span> <a href="#category-dos-risky-access-across-trust-boundary">DoS-risky Access Across Trust-Boundary</a>: <span class="summary">5/5 unmitigated Risks, exploitation likelihood is <em>Unlikely</em> with <em>Low</em> impact</span></dt>
 <dd>Assets accessed across trust boundaries with critical or mission-critical availability rating are more prone to Denial-of-Service (DoS) risks.</dd>
 </dl>
-<h3>Elevation of Privilege <span class="summary">20 risks</span></h3>
+<h3>Elevation of Privilege <span class="summary">19 risks</span></h3>
 <p class="muted">Elevation of privilege, against authorization</p>
 <dl class="entries">
-<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-authentication">Missing Authentication</a>: <span class="summary">2/2 unmitigated Risks, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
+<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-authentication">Missing Authentication</a>: <span class="summary">1/1 unmitigated Risk, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes sensitive data. </dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-object-level-authorization">Missing Object-Level Authorization</a>: <span class="summary">1 mitigated Risk, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
 <dd>A service that acts for its users must check in each request that the user may access the object at hand, like the order or the account the request names. Checking only that the caller is logged in, or that its role may call the operation, lets any user read or change the objects of others by changing an id in the request (BOLA, also known as IDOR).</dd>
@@ -1153,7 +1152,7 @@ footer {
 
 <section class="chapter" id="functions">
 <h2>Assignment by Function</h2>
-<p>This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total <strong>93 potential risks</strong> have been identified during the threat modeling process.</p>
+<p>This chapter clusters and assigns the risks by functions which are most likely able to check and mitigate them: in total <strong>92 potential risks</strong> have been identified during the threat modeling process.</p>
 <h3>Business Side <span class="summary">11 risks</span></h3>
 <p class="muted">Business</p>
 <dl class="entries">
@@ -1164,10 +1163,10 @@ footer {
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-something-strange">Some Individual Risk Example</a>: <span class="summary">2/2 unmitigated Risks, exploitation likelihood is <em>Frequent</em> with <em>Very High</em> impact</span></dt>
 <dd>Some text describing the mitigation...</dd>
 </dl>
-<h3>Architecture <span class="summary">14 risks</span></h3>
+<h3>Architecture <span class="summary">13 risks</span></h3>
 <p class="muted">Architecture</p>
 <dl class="entries">
-<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-authentication">Missing Authentication</a>: <span class="summary">2/2 unmitigated Risks, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
+<dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-authentication">Missing Authentication</a>: <span class="summary">1/1 unmitigated Risk, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of multi-factor authentication for human users.</dd>
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-unguarded-access-from-internet">Unguarded Access From Internet</a>: <span class="summary">3/3 unmitigated Risks, exploitation likelihood is <em>Very Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>Encapsulate the asset behind a guarding service, application, or reverse-proxy. For admin maintenance a bastion-host should be used as a jump-server. For file transfer a store-and-forward-host should be used as an indirect file exchange platform.</dd>
@@ -1329,7 +1328,7 @@ footer {
 
 <section class="chapter" id="risk-categories">
 <h2>Identified Risks by Vulnerability Category</h2>
-<p>In total <strong>93 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>34 vulnerability categories</strong>. The following sections describe each identified risk category and its risks.</p>
+<p>In total <strong>92 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>34 vulnerability categories</strong>. The following sections describe each identified risk category and its risks.</p>
 <section class="item" id="category-something-strange">
 <h3>Some Individual Risk Example <span class="badge sev-critical">Critical</span> <span class="summary">2/2 unmitigated Risks</span></h3>
 <p class="id">something-strange</p>
@@ -1600,7 +1599,7 @@ footer {
 </div>
 </section>
 <section class="item" id="category-missing-authentication">
-<h3>Missing Authentication <span class="badge sev-elevated">Elevated</span> <span class="summary">2/2 unmitigated Risks</span></h3>
+<h3>Missing Authentication <span class="badge sev-elevated">Elevated</span> <span class="summary">1/1 unmitigated Risk</span></h3>
 <p class="id">missing-authentication</p>
 <div class="table-wrap">
 <table class="props">
@@ -1620,7 +1619,7 @@ footer {
 <h4>Impact</h4>
 <div class="text">If this risk is unmitigated, attackers might be able to access or modify sensitive data in an unauthenticated way.</div>
 <h4>Detection Logic</h4>
-<div class="text">In-scope technical assets (except load-balancer, reverse-proxy, service-registry, waf, ids, and ips and in-process calls) should authenticate incoming requests when the asset processes sensitive data. This is especially the case for all multi-tenant assets (there even non-sensitive ones). Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule.</div>
+<div class="text">In-scope technical assets (except load-balancer, reverse-proxy, service-registry, waf, ids, and ips and in-process calls) should authenticate incoming requests when the asset processes sensitive data. This is especially the case for all multi-tenant assets (there even non-sensitive ones). Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. Read-only links that send nothing and only receive public data are exempted: anyone may read public data, and the integrity of a download is the reader&#39;s to check, by signature or checksum.</div>
 <h4>Risk Rating</h4>
 <div class="text">The risk rating (medium or high) depends on the sensitivity of the data sent across the communication link. Monitoring callers are exempted from this risk.</div>
 <h4>False Positives</h4>
@@ -1630,13 +1629,11 @@ footer {
 <h4>Check</h4>
 <div class="text">Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?</div>
 <h4>Risk Findings</h4>
-<p>The risk <strong>Missing Authentication</strong> was found <strong>2 times</strong> in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.</p>
+<p>The risk <strong>Missing Authentication</strong> was found <strong>1 time</strong> in the analyzed architecture to be potentially possible. Each spot should be checked individually by reviewing the implementation whether all controls have been applied properly in order to mitigate each risk.</p>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Severity</th><th scope="col">Risk</th><th scope="col">Likelihood</th><th scope="col">Impact</th><th scope="col">Most relevant</th><th scope="col">Status</th><th scope="col">Tracking</th></tr></thead>
 <tbody>
-<tr id="risk-missing-authentication_40load-balancer_3ecms-content-traffic_40load-balancer_40marketing-cms"><td><span class="badge sev-elevated">Elevated</span></td><td><b>Missing Authentication</b> covering communication link <b>CMS Content Traffic</b> from <b>Load Balancer</b> to <b>Marketing CMS</b><br><span class="id">missing-authentication@load-balancer&gt;cms-content-traffic@load-balancer@marketing-cms</span></td><td>Likely</td><td>Medium</td><td><a href="#asset-marketing-cms">Marketing CMS</a>, <a href="#link-load-balancer_3ecms-content-traffic">CMS Content Traffic</a></td><td><span class="badge status-unchecked">Unchecked</span></td>
-<td><span class="muted">not tracked</span></td></tr>
 <tr id="risk-missing-authentication_40erp-system_3enfs-filesystem-access_40erp-system_40contract-file-server"><td><span class="badge sev-elevated">Elevated</span></td><td><b>Missing Authentication</b> covering communication link <b>NFS Filesystem Access</b> from <b>Backoffice ERP System</b> to <b>Contract File Server</b><br><span class="id">missing-authentication@erp-system&gt;nfs-filesystem-access@erp-system@contract-file-server</span></td><td>Likely</td><td>Medium</td><td><a href="#asset-contract-file-server">Contract File Server</a>, <a href="#link-erp-system_3enfs-filesystem-access">NFS Filesystem Access</a></td><td><span class="badge status-unchecked">Unchecked</span></td>
 <td><span class="muted">not tracked</span></td></tr>
 </tbody>
@@ -2878,7 +2875,7 @@ footer {
 
 <section class="chapter" id="technical-assets">
 <h2>Identified Risks by Technical Asset</h2>
-<p>In total <strong>93 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>10 in-scope technical assets</strong>. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.</p>
+<p>In total <strong>92 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>10 in-scope technical assets</strong>. The RAA value of a technical asset is the calculated "Relative Attacker Attractiveness" value in percent.</p>
 <section class="item" id="asset-sql-database">
 <h3>Customer Contract Database <span class="badge sev-critical">Critical</span> <span class="summary">4/7 unmitigated Risks</span></h3>
 <p class="id">sql-database</p>
@@ -3376,14 +3373,13 @@ footer {
 </div>
 </section>
 <section class="item" id="asset-marketing-cms">
-<h3>Marketing CMS <span class="badge sev-elevated">Elevated</span> <span class="summary">9/13 unmitigated Risks</span></h3>
+<h3>Marketing CMS <span class="badge sev-elevated">Elevated</span> <span class="summary">8/12 unmitigated Risks</span></h3>
 <p class="id">marketing-cms</p>
 <div class="text">CMS for the marketing content</div>
 <h4>Identified Risks of the Asset</h4>
 <ul>
 <li><span class="badge sev-elevated">Elevated</span> <a href="#risk-cross-site-scripting_40marketing-cms"><b>Cross-Site Scripting (XSS)</b> risk at <b>Marketing CMS</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li><span class="badge sev-elevated">Elevated</span> <a href="#risk-unencrypted-communication_40marketing-cms_3eauth-traffic_40marketing-cms_40ldap-auth-server"><b>Unencrypted Communication</b> named <b>Auth Traffic</b> between <b>Marketing CMS</b> and <b>LDAP Auth Server</b> transferring authentication data (like credentials, token, session-id, etc.)</a> <span class="badge status-unchecked">Unchecked</span></li>
-<li><span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-authentication_40load-balancer_3ecms-content-traffic_40load-balancer_40marketing-cms"><b>Missing Authentication</b> covering communication link <b>CMS Content Traffic</b> from <b>Load Balancer</b> to <b>Marketing CMS</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li><span class="badge sev-elevated">Elevated</span> <a href="#risk-ldap-injection_40marketing-cms_40ldap-auth-server_40marketing-cms_3eauth-traffic"><b>LDAP-Injection</b> risk at <b>Marketing CMS</b> against LDAP server <b>LDAP Auth Server</b> via <b>Auth Traffic</b></a> <span class="badge status-mitigated">Mitigated</span></li>
 <li><span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-object-level-authorization_40marketing-cms_40backoffice-client_3emarketing-cms-editing"><b>Missing Object-Level Authorization</b> risk at <b>Marketing CMS</b> for <b>Backoffice Client</b> (function-level)</a> <span class="badge status-false-positive">False Positive</span></li>
 <li><span class="badge sev-medium">Medium</span> <a href="#risk-container-baseimage-backdooring_40marketing-cms"><b>Container Base Image Backdooring</b> risk at <b>Marketing CMS</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -3629,7 +3625,7 @@ footer {
 
 <section class="chapter" id="data-assets">
 <h2>Identified Data Breach Probabilities by Data Asset</h2>
-<p>In total <strong>93 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>12 data assets</strong>. The following sections describe the derived data breach probabilities grouped by data asset.</p>
+<p>In total <strong>92 potential risks</strong> have been identified during the threat modeling process, distributed across <strong>12 data assets</strong>. The following sections describe the derived data breach probabilities grouped by data asset.</p>
 <section class="item" id="data-asset-build-job-config">
 <h3>Build Job Config <span class="badge sev-high">Probable</span> <span class="summary">6/9 unmitigated Risks</span></h3>
 <p class="id">build-job-config</p>
@@ -3724,7 +3720,7 @@ footer {
 </ul>
 </section>
 <section class="item" id="data-asset-customer-accounts">
-<h3>Customer Accounts <span class="badge sev-high">Probable</span> <span class="summary">46/64 unmitigated Risks</span></h3>
+<h3>Customer Accounts <span class="badge sev-high">Probable</span> <span class="summary">45/63 unmitigated Risks</span></h3>
 <p class="id">customer-accounts</p>
 <div class="text">Customer Accounts (including transient credentials when entered for checking them)</div>
 <div class="table-wrap">
@@ -3749,7 +3745,7 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 46 remaining risks:</p>
+<p>This data asset has data breach potential because of 45 remaining risks:</p>
 <ul>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-code-backdooring_40jenkins-build-server"><b>Code Backdooring</b> risk at <b>Jenkins Build Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-container-baseimage-backdooring_40apache-webserver"><b>Container Base Image Backdooring</b> risk at <b>Apache Webserver</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -3775,7 +3771,6 @@ footer {
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-long-lived-credentials_40identity-provider_40apache-webserver_3eauth-credential-check-traffic"><b>Long-Lived Credentials</b> risk at <b>Identity Provider</b> used by <b>Apache Webserver</b> (credentials)</a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-medium">Medium</span> <a href="#risk-long-lived-credentials_40ldap-auth-server_40identity-provider_3eldap-credential-check-traffic"><b>Long-Lived Credentials</b> risk at <b>LDAP Auth Server</b> used by <b>Identity Provider</b> (credentials)</a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-long-lived-credentials_40ldap-auth-server_40marketing-cms_3eauth-traffic"><b>Long-Lived Credentials</b> risk at <b>LDAP Auth Server</b> used by <b>Marketing CMS</b> (credentials)</a> <span class="badge status-unchecked">Unchecked</span></li>
-<li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-authentication_40load-balancer_3ecms-content-traffic_40load-balancer_40marketing-cms"><b>Missing Authentication</b> covering communication link <b>CMS Content Traffic</b> from <b>Load Balancer</b> to <b>Marketing CMS</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-server-side-request-forgery_40apache-webserver_40erp-system_40apache-webserver_3eerp-system-traffic"><b>Server-Side Request Forgery (SSRF)</b> risk at <b>Apache Webserver</b> server-side web-requesting the target <b>Backoffice ERP System</b> via <b>ERP System Traffic</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-server-side-request-forgery_40apache-webserver_40identity-provider_40apache-webserver_3eauth-credential-check-traffic"><b>Server-Side Request Forgery (SSRF)</b> risk at <b>Apache Webserver</b> server-side web-requesting the target <b>Identity Provider</b> via <b>Auth Credential Check Traffic</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-shared-machine-account_40erp-system_40erp-db-owner"><b>Shared Machine Account</b> risk at <b>Backoffice ERP System</b> sharing <b>erp-db-owner</b> with <b>Backend Admin Client</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -4091,7 +4086,7 @@ footer {
 </ul>
 </section>
 <section class="item" id="data-asset-marketing-material">
-<h3>Marketing Material <span class="badge sev-high">Probable</span> <span class="summary">18/24 unmitigated Risks</span></h3>
+<h3>Marketing Material <span class="badge sev-high">Probable</span> <span class="summary">17/23 unmitigated Risks</span></h3>
 <p class="id">marketing-material</p>
 <div class="text">Website and marketing data to inform potential customers and generate new leads.</div>
 <div class="table-wrap">
@@ -4116,7 +4111,7 @@ footer {
 </table>
 </div>
 <h4>Data Breach Risks</h4>
-<p>This data asset has data breach potential because of 18 remaining risks:</p>
+<p>This data asset has data breach potential because of 17 remaining risks:</p>
 <ul>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-code-backdooring_40jenkins-build-server"><b>Code Backdooring</b> risk at <b>Jenkins Build Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-medium">Medium</span> <a href="#risk-container-baseimage-backdooring_40marketing-cms"><b>Container Base Image Backdooring</b> risk at <b>Marketing CMS</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -4124,7 +4119,6 @@ footer {
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-cloud-hardening_40web-dmz"><b>Missing Cloud Hardening</b> risk at <b>Web DMZ</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Probable: <span class="badge sev-elevated">Elevated</span> <a href="#risk-untrusted-deserialization_40jenkins-build-server"><b>Untrusted Deserialization</b> risk at <b>Jenkins Build Server</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-cross-site-scripting_40marketing-cms"><b>Cross-Site Scripting (XSS)</b> risk at <b>Marketing CMS</b></a> <span class="badge status-unchecked">Unchecked</span></li>
-<li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-missing-authentication_40load-balancer_3ecms-content-traffic_40load-balancer_40marketing-cms"><b>Missing Authentication</b> covering communication link <b>CMS Content Traffic</b> from <b>Load Balancer</b> to <b>Marketing CMS</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-server-side-request-forgery_40apache-webserver_40erp-system_40apache-webserver_3eerp-system-traffic"><b>Server-Side Request Forgery (SSRF)</b> risk at <b>Apache Webserver</b> server-side web-requesting the target <b>Backoffice ERP System</b> via <b>ERP System Traffic</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-elevated">Elevated</span> <a href="#risk-server-side-request-forgery_40apache-webserver_40identity-provider_40apache-webserver_3eauth-credential-check-traffic"><b>Server-Side Request Forgery (SSRF)</b> risk at <b>Apache Webserver</b> server-side web-requesting the target <b>Identity Provider</b> via <b>Auth Credential Check Traffic</b></a> <span class="badge status-unchecked">Unchecked</span></li>
 <li>Possible: <span class="badge sev-medium">Medium</span> <a href="#risk-unchecked-deployment_40external-dev-client"><b>Unchecked Deployment</b> risk at <b>External Development Client</b></a> <span class="badge status-unchecked">Unchecked</span></li>
@@ -4870,7 +4864,7 @@ footer {
 
 <section class="chapter" id="risk-tracking">
 <h2>Risk Tracking</h2>
-<p><strong>31 of 93 risks</strong> are tracked in the model. The others are unchecked.</p>
+<p><strong>31 of 92 risks</strong> are tracked in the model. The others are unchecked.</p>
 <div class="table-wrap">
 <table>
 <thead><tr><th scope="col">Risk</th><th scope="col">Severity</th><th scope="col">Status</th><th scope="col">Date</th><th scope="col">Checked by</th><th scope="col">Ticket</th><th scope="col">Justification</th></tr></thead>
@@ -4926,7 +4920,7 @@ footer {
 <tr><th scope="row"><span class="id">A04</span> Cryptographic Failures</th><td><a href="#category-unencrypted-communication">Unencrypted Communication</a>, <a href="#category-unencrypted-asset">Unencrypted Technical Assets</a></td><td>4/11 unmitigated Risks</td></tr>
 <tr><th scope="row"><span class="id">A05</span> Injection</th><td><a href="#category-cross-site-scripting">Cross-Site Scripting (XSS)</a>, <a href="#category-ldap-injection">LDAP-Injection</a>, <a href="#category-sql-nosql-injection">SQL/NoSQL-Injection</a>, Search-Query Injection</td><td>5/7 unmitigated Risks</td></tr>
 <tr><th scope="row"><span class="id">A06</span> Insecure Design</th><td><a href="#category-missing-file-validation">Missing File Validation</a>, Missing Identity Provider Isolation, <a href="#category-missing-network-segmentation">Missing Network Segmentation</a>, Missing Vault Isolation, <a href="#category-mixed-targets-on-shared-runtime">Mixed Targets on Shared Runtime</a>, <a href="#category-unguarded-access-from-internet">Unguarded Access From Internet</a>, Unguarded Direct Datastore Access</td><td>7/7 unmitigated Risks</td></tr>
-<tr><th scope="row"><span class="id">A07</span> Authentication Failures</th><td><a href="#category-human-use-of-machine-identity">Human Use of Machine Identity</a>, <a href="#category-long-lived-credentials">Long-Lived Credentials</a>, <a href="#category-missing-authentication">Missing Authentication</a>, <a href="#category-missing-authentication-second-factor">Missing Multi-Factor Authentication (MFA)</a></td><td>9/18 unmitigated Risks</td></tr>
+<tr><th scope="row"><span class="id">A07</span> Authentication Failures</th><td><a href="#category-human-use-of-machine-identity">Human Use of Machine Identity</a>, <a href="#category-long-lived-credentials">Long-Lived Credentials</a>, <a href="#category-missing-authentication">Missing Authentication</a>, <a href="#category-missing-authentication-second-factor">Missing Multi-Factor Authentication (MFA)</a></td><td>8/17 unmitigated Risks</td></tr>
 <tr><th scope="row"><span class="id">A08</span> Software or Data Integrity Failures</th><td><a href="#category-code-backdooring">Code Backdooring</a>, <a href="#category-push-instead-of-pull-deployment">Push instead of Pull Deployment</a>, Service Registry Poisoning, <a href="#category-untrusted-deserialization">Untrusted Deserialization</a></td><td>6/6 unmitigated Risks</td></tr>
 <tr><th scope="row"><span class="id">A09</span> Security Logging and Alerting Failures</th><td>Missing AI Monitoring</td><td><span class="muted">no risks found</span></td></tr>
 <tr><th scope="row"><span class="id">A10</span> Mishandling of Exceptional Conditions</th><td>Missing Policy Decision Point Redundancy</td><td><span class="muted">no risks found</span></td></tr>
@@ -4940,7 +4934,7 @@ footer {
 <thead><tr><th scope="col">Entry</th><th scope="col">Risk rules</th><th scope="col">Risks</th></tr></thead>
 <tbody>
 <tr><th scope="row"><span class="id">API1</span> Broken Object Level Authorization</th><td><a href="#category-missing-identity-propagation">Missing Identity Propagation</a>, <a href="#category-missing-object-level-authorization">Missing Object-Level Authorization</a></td><td>1/2 unmitigated Risks</td></tr>
-<tr><th scope="row"><span class="id">API2</span> Broken Authentication</th><td><a href="#category-missing-authentication">Missing Authentication</a>, <a href="#category-missing-authentication-second-factor">Missing Multi-Factor Authentication (MFA)</a></td><td>2/11 unmitigated Risks</td></tr>
+<tr><th scope="row"><span class="id">API2</span> Broken Authentication</th><td><a href="#category-missing-authentication">Missing Authentication</a>, <a href="#category-missing-authentication-second-factor">Missing Multi-Factor Authentication (MFA)</a></td><td>1/10 unmitigated Risks</td></tr>
 <tr><th scope="row"><span class="id">API3</span> Broken Object Property Level Authorization</th><td><span class="muted">none</span></td><td><span class="muted">not checked by any risk rule</span></td></tr>
 <tr><th scope="row"><span class="id">API4</span> Unrestricted Resource Consumption</th><td><a href="#category-dos-risky-access-across-trust-boundary">DoS-risky Access Across Trust-Boundary</a>, Unbounded Model Consumption</td><td>5/5 unmitigated Risks</td></tr>
 <tr><th scope="row"><span class="id">API5</span> Broken Function Level Authorization</th><td><a href="#category-missing-object-level-authorization">Missing Object-Level Authorization</a></td><td>1 mitigated Risk</td></tr>
@@ -5032,7 +5026,7 @@ footer {
 <tr><th scope="row">Long-Lived Credentials<br><span class="id">long-lived-credentials</span></th><td>Spoofing</td><td>Passwords of service accounts, API keys and personal access tokens stay valid for months or for good. Once one leaks, from a repository, a log, a build system or a laptop, it lets anyone in until someone notices and rotates it.</td><td>In-scope technical assets processing or storing data rated at least as confidential or critical with an incoming communication link that is not process-local and is authenticated with <i>long-lived-token</i>, or with <i>credentials</i> by a caller not used by humans, unless the identity of the link is <i>workload</i>. Links authenticated with <i>token</i> are skipped, as the lifetime of the token is not modelled.</td><td>The risk rating depends on the sensitivity of the data processed or stored by the target. The attack is likely when the caller is on the internet, is used by humans or calls across a network trust boundary, where secrets leak more easily, and unlikely otherwise.</td></tr>
 <tr><th scope="row">Missing AI Guardrail<br><span class="id">missing-ai-guardrail</span></th><td>Elevation of Privilege</td><td>A guardrail screens what reaches a language model or an agent, and what comes back from it, for prompt injection, jailbreaks and data that must not pass, independently of the model. Without one, the instructions of the system prompt are the only defense, and a model follows whatever content convinces it.</td><td>In-scope llm and ai-agent technical assets that untrusted content reaches (as for prompt injection) through a communication link that no guardrail screens. A link is screened when it comes from an ai-guardrail technical asset, or when the model or agent is one itself or has a link to one. Links from other language models and agents are skipped, as the rule reports a missing guardrail where the content first reaches a model.</td><td>The risk rating depends on the sensitivity of the data processed by the model or agent. The attack is likely when the model or agent talks to the internet directly, and unlikely otherwise.</td></tr>
 <tr><th scope="row">Missing AI Monitoring<br><span class="id">missing-ai-monitoring</span></th><td>Repudiation</td><td>What an AI agent or a language model does depends on what it reads, so it cannot be tested in full before it runs. Without a record of its prompts, its tool calls and its answers in a monitoring system, nobody sees a prompt injection, an agent going astray or a model that drifts, nor can tell afterwards what it did.</td><td>In-scope ai-agent technical assets, and in-scope llm technical assets not on the internet (self-hosted models), with no communication link to or from a monitoring technical asset.</td><td>The risk rating depends on the sensitivity of the data processed by the agent or model. The attack is likely when the agent or model takes untrusted content, and unlikely otherwise.</td></tr>
-<tr><th scope="row">Missing Authentication<br><span class="id">missing-authentication</span></th><td>Elevation of Privilege</td><td>Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes sensitive data. </td><td>In-scope technical assets (except load-balancer, reverse-proxy, service-registry, waf, ids, and ips and in-process calls) should authenticate incoming requests when the asset processes sensitive data. This is especially the case for all multi-tenant assets (there even non-sensitive ones). Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule.</td><td>The risk rating (medium or high) depends on the sensitivity of the data sent across the communication link. Monitoring callers are exempted from this risk.</td></tr>
+<tr><th scope="row">Missing Authentication<br><span class="id">missing-authentication</span></th><td>Elevation of Privilege</td><td>Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes sensitive data. </td><td>In-scope technical assets (except load-balancer, reverse-proxy, service-registry, waf, ids, and ips and in-process calls) should authenticate incoming requests when the asset processes sensitive data. This is especially the case for all multi-tenant assets (there even non-sensitive ones). Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. Read-only links that send nothing and only receive public data are exempted: anyone may read public data, and the integrity of a download is the reader&#39;s to check, by signature or checksum.</td><td>The risk rating (medium or high) depends on the sensitivity of the data sent across the communication link. Monitoring callers are exempted from this risk.</td></tr>
 <tr><th scope="row">Missing Multi-Factor Authentication (MFA)<br><span class="id">missing-authentication-second-factor</span></th><td>Elevation of Privilege</td><td>Technical assets (especially multi-tenant systems) should authenticate incoming requests with multi-factor (MFA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.</td><td>In-scope technical assets (except load-balancer, reverse-proxy, waf, ids, and ips) should authenticate incoming requests via multi-factor authentication (MFA) when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user. Links over industrial control protocols that cannot authenticate are left to the insecure-control-protocol rule. Process-local links (in-process calls, inter-process communication and local file access) are exempted, as they stay on the machine the user has already logged in to.</td><td>medium</td></tr>
 <tr><th scope="row">Missing Build Infrastructure<br><span class="id">missing-build-infrastructure</span></th><td>Tampering</td><td>The modeled architecture does not contain a build infrastructure (devops-client, sourcecode-repo, build-pipeline, etc.), which might be the risk of a model missing critical assets (and thus not seeing their risks). If the architecture contains custom-developed parts, the pipeline where code gets developed and built needs to be part of the model.</td><td>Models with in-scope custom-developed parts missing in-scope development (code creation) and build infrastructure components (devops-client, sourcecode-repo, build-pipeline, etc.).</td><td>The risk rating depends on the highest sensitivity of the in-scope assets running custom-developed parts.</td></tr>
 <tr><th scope="row">Missing Cloud Hardening<br><span class="id">missing-cloud-hardening</span></th><td>Tampering</td><td>Cloud components should be hardened according to the cloud vendor best practices. This affects their configuration, auditing, and further areas.</td><td>In-scope cloud components (either residing in cloud trust boundaries or more specifically tagged with cloud provider types).</td><td>The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed.</td></tr>
