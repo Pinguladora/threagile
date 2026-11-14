@@ -72,6 +72,7 @@ const (
 	Tool                   = "tool"
 	UnknownTechnology      = "unknown-technology"
 	Vault                  = "vault"
+	WorkloadIdentity       = "workload-identity"
 	WAF                    = "waf"
 	WebApplication         = "web-application"
 	WebServer              = "web-server"

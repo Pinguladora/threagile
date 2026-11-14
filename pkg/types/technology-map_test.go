@@ -22,6 +22,10 @@ func TestTechnologyMapGetResolvesAliases(t *testing.T) {
 	require.NotNil(t, hypervisor)
 	assert.Equal(t, Hypervisor, hypervisor.Name)
 	assert.False(t, hypervisor.GetAttribute(ContainerPlatform), "a hypervisor is not a container platform")
+	spire := technologies.Get("spire")
+	require.NotNil(t, spire)
+	assert.Equal(t, WorkloadIdentity, spire.Name)
+	assert.True(t, spire.GetAttribute(WorkloadIdentity))
 	assert.Nil(t, technologies.Get("no-such-technology"))
 
 	owners := make(map[string]string)

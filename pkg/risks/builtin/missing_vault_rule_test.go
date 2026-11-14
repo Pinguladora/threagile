@@ -278,3 +278,20 @@ func TestMissingVaultRuleGenerateRisksSingleAssetWithVaultTechnologyNoRiskCreate
 	assert.Nil(t, err)
 	assert.Empty(t, risks)
 }
+
+func TestMissingVaultRuleGenerateRisksWorkloadIdentityNoRisksCreated(t *testing.T) {
+	risks, err := NewMissingVaultRule().GenerateRisks(&types.Model{
+		TechnicalAssets: map[string]*types.TechnicalAsset{
+			"spire": {
+				Id: "spire", Title: "SPIRE Agent",
+				Technologies: types.TechnologyList{{
+					Name: types.WorkloadIdentity, Attributes: map[string]bool{types.WorkloadIdentity: true},
+				}},
+			},
+			"sink": {Id: "sink", Title: "Sink", Confidentiality: types.StrictlyConfidential},
+		},
+	})
+
+	assert.Nil(t, err)
+	assert.Empty(t, risks, "workloads get short-lived credentials instead of stored secrets")
+}

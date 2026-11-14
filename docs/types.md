@@ -376,6 +376,7 @@ A model may name a technology by one of its aliases; threagile reads it as the v
 | `web-server` |  | A web server |
 | `web-service-rest` | `rest-api` | A REST web service (API) |
 | `web-service-soap` | `soap-api` | A SOAP web service (API) |
+| `workload-identity` | `workload-identity-provider`, `spiffe`, `spire` | A workload identity provider that issues short-lived credentials to workloads, like SPIFFE with SPIRE |
 
 ## Technical Asset Type
 
