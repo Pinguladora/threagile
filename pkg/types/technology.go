@@ -43,6 +43,7 @@ const (
 	Function               = "function"
 	Gateway                = "gateway"
 	HSM                    = "hsm"
+	Hypervisor             = "hypervisor"
 	IdentityProvider       = "identity-provider"
 	IdentityStoreDatabase  = "identity-store-database"
 	IdentityStoreLDAP      = "identity-store-ldap"
