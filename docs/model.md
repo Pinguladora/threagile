@@ -100,16 +100,25 @@ report_exclude:
   trust_boundaries: [github]      # every technical asset inside, nested boundaries included
 ```
 
-Each technical asset belongs to a `layer` (see [types](./types.md#layer)):
+Each technical asset belongs to a `layer` (see [types](./types.md#layer)). Layers are relative to the system the model
+is about, not kinds of technology, so the same asset can be in different layers in different models:
 
 | Layer | For |
 |-------|-----|
-| `application` | the system itself: what serves its users and handles its business data |
-| `platform` | what it is deployed on and run by, such as clusters, hypervisors, workload identity, logging and monitoring |
-| `delivery` | how it is built, released and maintained, such as repositories, CI, registries, bots and developer machines |
+| `delivery` | not involved while the system runs: what builds, releases, deploys or maintains it, such as repositories, CI and CD, artifact registries, bots and developer machines |
+| `application` | what the system provides: what its project builds, or ships and configures as part of it |
+| `platform` | what the system runs on or depends on at runtime without owning it, such as the clusters, hypervisors, workload identity, secret stores or log collectors it expects to find |
+
+To place an asset, first ask whether it takes part while the system runs. If not, it is `delivery`. If it does, ask
+whether the project builds it, or ships and configures it as part of the system. If so, it is `application`,
+otherwise `platform`. When the system is itself a platform, such as a Kubernetes operator, what it ships and the
+resources it manages are its `application`, and only what it is installed into is its `platform`. The workloads it
+hosts for others are neither: model them as out of scope and group them with a tag or a trust boundary, so that
+`report_exclude` can leave them out too.
 
 Unset, a `business` asset is `application` and a `devops` asset is `delivery`, so mark the platform assets with
-`layer: platform`, such as a Kubernetes API or a SPIRE agent, which are devops but stay when the system is deployed.
+`layer: platform`, such as the Kubernetes API or the SPIRE agent of an application, which are devops but stay when
+the system is deployed.
 
 The diagrams, the Excel files and the PDF, HTML and Markdown reports then leave out those technical assets, the links
 from and to them and the risks about them. Data assets that only those assets held go too, and so do trust boundaries
