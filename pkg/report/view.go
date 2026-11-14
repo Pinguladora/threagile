@@ -2,6 +2,7 @@ package report
 
 import (
 	"fmt"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -149,6 +150,8 @@ var (
 )
 
 func newReportView(parsedModel *types.Model, options ReportOptions) *reportView {
+	// A report names the model file without its directory: where it was run is local information.
+	options.ModelFilename = filepath.Base(options.ModelFilename)
 	report := &reportView{
 		Model:                    parsedModel,
 		Title:                    parsedModel.Title,
