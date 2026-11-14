@@ -395,7 +395,7 @@ flowchart TB
     class ta_2799826308,ta_2302604993 outOfScope
 ```
 
-Data-flow diagram of "Web Shop on Kubernetes". A box is an external entity, a stadium a process, a cylinder a datastore and a hexagon a client used by a human; assets out of scope have a dashed border, and the trust boundaries enclose the assets inside them. An arrow points from the asset that initiates a communication link to its target and names the protocol; a thick arrow is a link that also receives data back.
+Data-flow diagram of "Web Shop on Kubernetes". A box is an external entity, a stadium a process, a cylinder a datastore and a hexagon a client used by a human. Assets out of scope have a dashed border, and the trust boundaries enclose the assets inside them. An arrow points from the asset that initiates a communication link to its target and names the protocol. A thick arrow is a link that also receives data back.
 
 ## Asset Register
 
@@ -467,7 +467,7 @@ This chapter clusters and classifies the risks by STRIDE categories: in total **
 
 **3 risks**
 
-Spoofing - Authenticity
+Spoofing, against authenticity
 
 - **Medium**: [Cross-Site Request Forgery (CSRF)](#cross-site-request-forgery-csrf): 1/1 unmitigated Risk, exploitation likelihood is _Very Likely_ with _Low_ impact
 
@@ -485,7 +485,7 @@ Spoofing - Authenticity
 
 **15 risks**
 
-Tampering - Integrity
+Tampering, against integrity
 
 - **Elevated**: [Cross-Site Scripting (XSS)](#cross-site-scripting-xss): 1/1 unmitigated Risk, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -519,7 +519,7 @@ Tampering - Integrity
 
 **0 risks**
 
-Repudiation - Non-repudiability
+Repudiation, against non-repudiability
 
 _No risks were identified._
 
@@ -527,7 +527,7 @@ _No risks were identified._
 
 **5 risks**
 
-Information disclosure - Confidentiality
+Information disclosure, against confidentiality
 
 - **Elevated**: [Server-Side Request Forgery (SSRF)](#server-side-request-forgery-ssrf): 4/4 unmitigated Risks, exploitation likelihood is _Likely_ with _Medium_ impact
 
@@ -541,7 +541,7 @@ Information disclosure - Confidentiality
 
 **0 risks**
 
-Denial of service - Availability
+Denial of service, against availability
 
 _No risks were identified._
 
@@ -549,7 +549,7 @@ _No risks were identified._
 
 **12 risks**
 
-Elevation of privilege - Authorization
+Elevation of privilege, against authorization
 
 - **Elevated**: [Missing Network Policy](#missing-network-policy): 2/2 unmitigated Risks, exploitation likelihood is _Likely_ with _High_ impact
 
@@ -808,7 +808,7 @@ In total **35 potential risks** have been identified during the threat modeling 
 
 ### Cross-Site Scripting (XSS)
 
-**Elevated** · 1/1 unmitigated Risk · `cross-site-scripting`
+**Elevated**, 1/1 unmitigated Risk, `cross-site-scripting`
 
 | Property | Value |
 | --- | --- |
@@ -816,7 +816,7 @@ In total **35 potential risks** have been identified during the threat modeling 
 | CWE | [CWE 79](https://cwe.mitre.org/data/definitions/79.html) |
 | Function | Development |
 | Action | XSS Prevention |
-| ASVS chapter | V5 - Validation, Sanitization and Encoding Verification Requirements |
+| ASVS chapter | V5: Validation, Sanitization and Encoding Verification Requirements |
 | Cheat sheet | [Cross_Site_Scripting_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html) |
 | References | OWASP A05:2025 Injection |
 
@@ -858,7 +858,7 @@ The risk **Cross-Site Scripting (XSS)** was found **1 time** in the analyzed arc
 
 ### Missing Cloud Hardening
 
-**Elevated** · 1/1 unmitigated Risk · `missing-cloud-hardening`
+**Elevated**, 1/1 unmitigated Risk, `missing-cloud-hardening`
 
 | Property | Value |
 | --- | --- |
@@ -866,9 +866,9 @@ The risk **Cross-Site Scripting (XSS)** was found **1 time** in the analyzed arc
 | CWE | [CWE 1008](https://cwe.mitre.org/data/definitions/1008.html) |
 | Function | Operations |
 | Action | Cloud Hardening |
-| ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
+| ASVS chapter | V1: Architecture, Design and Threat Modeling Requirements |
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
-| References | OWASP A02:2025 Security Misconfiguration; OWASP API8:2023 Security Misconfiguration |
+| References | OWASP A02:2025 Security Misconfiguration, OWASP API8:2023 Security Misconfiguration |
 
 #### Description
 
@@ -922,7 +922,7 @@ The risk **Missing Cloud Hardening** was found **1 time** in the analyzed archit
 
 ### Missing Hardening
 
-**Elevated** · 3/3 unmitigated Risks · `missing-hardening`
+**Elevated**, 3/3 unmitigated Risks, `missing-hardening`
 
 | Property | Value |
 | --- | --- |
@@ -930,9 +930,9 @@ The risk **Missing Cloud Hardening** was found **1 time** in the analyzed archit
 | CWE | [CWE 16](https://cwe.mitre.org/data/definitions/16.html) |
 | Function | Operations |
 | Action | System Hardening |
-| ASVS chapter | V14 - Configuration Verification Requirements |
+| ASVS chapter | V14: Configuration Verification Requirements |
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
-| References | OWASP A02:2025 Security Misconfiguration; OWASP API8:2023 Security Misconfiguration |
+| References | OWASP A02:2025 Security Misconfiguration, OWASP API8:2023 Security Misconfiguration |
 
 #### Description
 
@@ -974,7 +974,7 @@ The risk **Missing Hardening** was found **3 times** in the analyzed architectur
 
 ### Missing Network Policy
 
-**Elevated** · 2/2 unmitigated Risks · `missing-network-policy`
+**Elevated**, 2/2 unmitigated Risks, `missing-network-policy`
 
 | Property | Value |
 | --- | --- |
@@ -982,9 +982,9 @@ The risk **Missing Hardening** was found **3 times** in the analyzed architectur
 | CWE | [CWE 923](https://cwe.mitre.org/data/definitions/923.html) |
 | Function | Operations |
 | Action | Network Segmentation of Namespaces |
-| ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
+| ASVS chapter | V1: Architecture, Design and Threat Modeling Requirements |
 | Cheat sheet | [Kubernetes_Security_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Kubernetes_Security_Cheat_Sheet.html) |
-| References | OWASP K05:2025 Missing Network Segmentation Controls; OWASP A02:2025 Security Misconfiguration |
+| References | OWASP K05:2025 Missing Network Segmentation Controls, OWASP A02:2025 Security Misconfiguration |
 
 #### Description
 
@@ -1025,7 +1025,7 @@ The risk **Missing Network Policy** was found **2 times** in the analyzed archit
 
 ### SQL/NoSQL-Injection
 
-**Elevated** · 1/1 unmitigated Risk · `sql-nosql-injection`
+**Elevated**, 1/1 unmitigated Risk, `sql-nosql-injection`
 
 | Property | Value |
 | --- | --- |
@@ -1033,7 +1033,7 @@ The risk **Missing Network Policy** was found **2 times** in the analyzed archit
 | CWE | [CWE 89](https://cwe.mitre.org/data/definitions/89.html) |
 | Function | Development |
 | Action | SQL/NoSQL-Injection Prevention |
-| ASVS chapter | V5 - Validation, Sanitization and Encoding Verification Requirements |
+| ASVS chapter | V5: Validation, Sanitization and Encoding Verification Requirements |
 | Cheat sheet | [SQL_Injection_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html) |
 | References | OWASP A05:2025 Injection |
 
@@ -1075,7 +1075,7 @@ The risk **SQL/NoSQL-Injection** was found **1 time** in the analyzed architectu
 
 ### Server-Side Request Forgery (SSRF)
 
-**Elevated** · 4/4 unmitigated Risks · `server-side-request-forgery`
+**Elevated**, 4/4 unmitigated Risks, `server-side-request-forgery`
 
 | Property | Value |
 | --- | --- |
@@ -1083,9 +1083,9 @@ The risk **SQL/NoSQL-Injection** was found **1 time** in the analyzed architectu
 | CWE | [CWE 918](https://cwe.mitre.org/data/definitions/918.html) |
 | Function | Development |
 | Action | SSRF Prevention |
-| ASVS chapter | V12 - File and Resources Verification Requirements |
+| ASVS chapter | V12: File and Resources Verification Requirements |
 | Cheat sheet | [Server_Side_Request_Forgery_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html) |
-| References | OWASP A01:2025 Broken Access Control; OWASP API7:2023 Server Side Request Forgery |
+| References | OWASP A01:2025 Broken Access Control, OWASP API7:2023 Server Side Request Forgery |
 
 #### Description
 
@@ -1128,7 +1128,7 @@ The risk **Server-Side Request Forgery (SSRF)** was found **4 times** in the ana
 
 ### Container Base Image Backdooring
 
-**Medium** · 8/8 unmitigated Risks · `container-baseimage-backdooring`
+**Medium**, 8/8 unmitigated Risks, `container-baseimage-backdooring`
 
 | Property | Value |
 | --- | --- |
@@ -1136,7 +1136,7 @@ The risk **Server-Side Request Forgery (SSRF)** was found **4 times** in the ana
 | CWE | [CWE 912](https://cwe.mitre.org/data/definitions/912.html) |
 | Function | Operations |
 | Action | Container Infrastructure Hardening |
-| ASVS chapter | V10 - Malicious Code Verification Requirements |
+| ASVS chapter | V10: Malicious Code Verification Requirements |
 | Cheat sheet | [Docker_Security_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) |
 | References | OWASP A03:2025 Software Supply Chain Failures |
 
@@ -1187,7 +1187,7 @@ The risk **Container Base Image Backdooring** was found **8 times** in the analy
 
 ### Container Platform Escape
 
-**Medium** · 1/1 unmitigated Risk · `container-platform-escape`
+**Medium**, 1/1 unmitigated Risk, `container-platform-escape`
 
 | Property | Value |
 | --- | --- |
@@ -1195,7 +1195,7 @@ The risk **Container Base Image Backdooring** was found **8 times** in the analy
 | CWE | [CWE 1008](https://cwe.mitre.org/data/definitions/1008.html) |
 | Function | Operations |
 | Action | Container Infrastructure Hardening |
-| ASVS chapter | V14 - Configuration Verification Requirements |
+| ASVS chapter | V14: Configuration Verification Requirements |
 | Cheat sheet | [Docker_Security_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) |
 | References | OWASP A02:2025 Security Misconfiguration |
 
@@ -1221,7 +1221,9 @@ Container platforms not running parts of the target architecture can be consider
 
 #### Mitigation
 
-Apply hardening of all container infrastructures. &lt;p&gt;See for example the _CIS-Benchmarks for Docker and Kubernetes_ as well as the _Docker Bench for Security_ ( [https://github.com/docker/docker-bench-security](https://github.com/docker/docker-bench-security) ) or _InSpec Checks for Docker and Kubernetes_ ( [https://github.com/dev-sec/cis-docker-benchmark](https://github.com/dev-sec/cis-kubernetes-benchmark) and [https://github.com/dev-sec/cis-kubernetes-benchmark](https://github.com/dev-sec/cis-kubernetes-benchmark) ). Use only trusted base images, verify digital signatures and apply image creation best practices. Also consider using Google's **Distroless&lt;/i&gt; base images or otherwise very small base images. Apply namespace isolation and nod affinity to separate pods from each other in terms of access and nodes the same style as you separate data.**
+Apply hardening of all container infrastructures.
+
+See for example the _CIS-Benchmarks for Docker and Kubernetes_ as well as the _Docker Bench for Security_ ( [https://github.com/docker/docker-bench-security](https://github.com/docker/docker-bench-security) ) or _InSpec Checks for Docker and Kubernetes_ ( [https://github.com/dev-sec/cis-docker-benchmark](https://github.com/dev-sec/cis-kubernetes-benchmark) and [https://github.com/dev-sec/cis-kubernetes-benchmark](https://github.com/dev-sec/cis-kubernetes-benchmark) ). Use only trusted base images, verify digital signatures and apply image creation best practices. Also consider using Google's _Distroless_ base images or otherwise very small base images. Apply namespace isolation and node affinity to separate pods from each other in terms of access and nodes the same style as you separate data.
 
 #### Check
 
@@ -1237,7 +1239,7 @@ The risk **Container Platform Escape** was found **1 time** in the analyzed arch
 
 ### Cross-Site Request Forgery (CSRF)
 
-**Medium** · 1/1 unmitigated Risk · `cross-site-request-forgery`
+**Medium**, 1/1 unmitigated Risk, `cross-site-request-forgery`
 
 | Property | Value |
 | --- | --- |
@@ -1245,7 +1247,7 @@ The risk **Container Platform Escape** was found **1 time** in the analyzed arch
 | CWE | [CWE 352](https://cwe.mitre.org/data/definitions/352.html) |
 | Function | Development |
 | Action | CSRF Prevention |
-| ASVS chapter | V4 - Access Control Verification Requirements |
+| ASVS chapter | V4: Access Control Verification Requirements |
 | Cheat sheet | [Cross-Site_Request_Forgery_Prevention_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) |
 | References | OWASP A01:2025 Broken Access Control |
 
@@ -1267,7 +1269,7 @@ The risk rating depends on the integrity rating of the data sent across the comm
 
 #### False Positives
 
-Web applications passing the authentication state via custom headers instead of cookies can eventually be false positives; model their links with a token authentication. Clients used by humans that are no browser and render no web content, like a command-line tool, can be considered as false positives after individual review.
+Web applications passing the authentication state via custom headers instead of cookies can eventually be false positives. Model their links with a token authentication. Clients used by humans that are no browser and render no web content, like a command-line tool, can be considered as false positives after individual review.
 
 #### Mitigation
 
@@ -1287,7 +1289,7 @@ The risk **Cross-Site Request Forgery (CSRF)** was found **1 time** in the analy
 
 ### Kubernetes API Write Access
 
-**Medium** · 1/1 unmitigated Risk · `kubernetes-api-write-access`
+**Medium**, 1/1 unmitigated Risk, `kubernetes-api-write-access`
 
 | Property | Value |
 | --- | --- |
@@ -1295,9 +1297,9 @@ The risk **Cross-Site Request Forgery (CSRF)** was found **1 time** in the analy
 | CWE | [CWE 250](https://cwe.mitre.org/data/definitions/250.html) |
 | Function | Operations |
 | Action | Least Privilege for Service Accounts |
-| ASVS chapter | V4 - Access Control Verification Requirements |
+| ASVS chapter | V4: Access Control Verification Requirements |
 | Cheat sheet | [Kubernetes_Security_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Kubernetes_Security_Cheat_Sheet.html) |
-| References | OWASP K02:2025 Overly Permissive Authorization Configurations; OWASP A01:2025 Broken Access Control |
+| References | OWASP K02:2025 Overly Permissive Authorization Configurations, OWASP A01:2025 Broken Access Control |
 
 #### Description
 
@@ -1337,7 +1339,7 @@ The risk **Kubernetes API Write Access** was found **1 time** in the analyzed ar
 
 ### Long-Lived Credentials
 
-**Medium** · 1/1 unmitigated Risk · `long-lived-credentials`
+**Medium**, 1/1 unmitigated Risk, `long-lived-credentials`
 
 | Property | Value |
 | --- | --- |
@@ -1345,9 +1347,9 @@ The risk **Kubernetes API Write Access** was found **1 time** in the analyzed ar
 | CWE | [CWE 522](https://cwe.mitre.org/data/definitions/522.html) |
 | Function | Operations |
 | Action | Short-Lived Credentials |
-| ASVS chapter | V2 - Authentication Verification Requirements |
+| ASVS chapter | V2: Authentication Verification Requirements |
 | Cheat sheet | [Secrets_Management_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) |
-| References | OWASP A07:2025 Authentication Failures; OWASP NHI7:2025 Long-Lived Secrets; OWASP NHI2:2025 Secret Leakage |
+| References | OWASP A07:2025 Authentication Failures, OWASP NHI7:2025 Long-Lived Secrets, OWASP NHI2:2025 Secret Leakage |
 
 #### Description
 
@@ -1387,7 +1389,7 @@ The risk **Long-Lived Credentials** was found **1 time** in the analyzed archite
 
 ### Missing Build Infrastructure
 
-**Medium** · 1/1 unmitigated Risk · `missing-build-infrastructure`
+**Medium**, 1/1 unmitigated Risk, `missing-build-infrastructure`
 
 | Property | Value |
 | --- | --- |
@@ -1395,7 +1397,7 @@ The risk **Long-Lived Credentials** was found **1 time** in the analyzed archite
 | CWE | [CWE 1127](https://cwe.mitre.org/data/definitions/1127.html) |
 | Function | Architecture |
 | Action | Build Pipeline Hardening |
-| ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
+| ASVS chapter | V1: Architecture, Design and Threat Modeling Requirements |
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
 
 #### Description
@@ -1436,7 +1438,7 @@ The risk **Missing Build Infrastructure** was found **1 time** in the analyzed a
 
 ### Missing Identity Propagation
 
-**Medium** · 1/1 unmitigated Risk · `missing-identity-propagation`
+**Medium**, 1/1 unmitigated Risk, `missing-identity-propagation`
 
 | Property | Value |
 | --- | --- |
@@ -1444,9 +1446,9 @@ The risk **Missing Build Infrastructure** was found **1 time** in the analyzed a
 | CWE | [CWE 284](https://cwe.mitre.org/data/definitions/284.html) |
 | Function | Architecture |
 | Action | Identity Propagation and Resource-based Authorization |
-| ASVS chapter | V4 - Access Control Verification Requirements |
+| ASVS chapter | V4: Access Control Verification Requirements |
 | Cheat sheet | [Access_Control_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html) |
-| References | OWASP A01:2025 Broken Access Control; OWASP API1:2023 Broken Object Level Authorization |
+| References | OWASP A01:2025 Broken Access Control, OWASP API1:2023 Broken Object Level Authorization |
 
 #### Description
 
@@ -1486,7 +1488,7 @@ The risk **Missing Identity Propagation** was found **1 time** in the analyzed a
 
 ### Missing Identity Store
 
-**Medium** · 1/1 unmitigated Risk · `missing-identity-store`
+**Medium**, 1/1 unmitigated Risk, `missing-identity-store`
 
 | Property | Value |
 | --- | --- |
@@ -1494,7 +1496,7 @@ The risk **Missing Identity Propagation** was found **1 time** in the analyzed a
 | CWE | [CWE 287](https://cwe.mitre.org/data/definitions/287.html) |
 | Function | Architecture |
 | Action | Identity Store |
-| ASVS chapter | V2 - Authentication Verification Requirements |
+| ASVS chapter | V2: Authentication Verification Requirements |
 | Cheat sheet | [Authentication_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html) |
 
 #### Description
@@ -1535,7 +1537,7 @@ The risk **Missing Identity Store** was found **1 time** in the analyzed archite
 
 ### Missing Multi-Factor Authentication (MFA)
 
-**Medium** · 1/1 unmitigated Risk · `missing-authentication-second-factor`
+**Medium**, 1/1 unmitigated Risk, `missing-authentication-second-factor`
 
 | Property | Value |
 | --- | --- |
@@ -1543,9 +1545,9 @@ The risk **Missing Identity Store** was found **1 time** in the analyzed archite
 | CWE | [CWE 308](https://cwe.mitre.org/data/definitions/308.html) |
 | Function | Business Side |
 | Action | Multi-Factor Authentication (MFA) |
-| ASVS chapter | V2 - Authentication Verification Requirements |
+| ASVS chapter | V2: Authentication Verification Requirements |
 | Cheat sheet | [Multifactor_Authentication_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html) |
-| References | OWASP A07:2025 Authentication Failures; OWASP API2:2023 Broken Authentication |
+| References | OWASP A07:2025 Authentication Failures, OWASP API2:2023 Broken Authentication |
 
 #### Description
 
@@ -1585,7 +1587,7 @@ The risk **Missing Multi-Factor Authentication (MFA)** was found **1 time** in t
 
 ### Missing Network Segmentation
 
-**Medium** · 3/3 unmitigated Risks · `missing-network-segmentation`
+**Medium**, 3/3 unmitigated Risks, `missing-network-segmentation`
 
 | Property | Value |
 | --- | --- |
@@ -1593,7 +1595,7 @@ The risk **Missing Multi-Factor Authentication (MFA)** was found **1 time** in t
 | CWE | [CWE 1008](https://cwe.mitre.org/data/definitions/1008.html) |
 | Function | Operations |
 | Action | Network Segmentation |
-| ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
+| ASVS chapter | V1: Architecture, Design and Threat Modeling Requirements |
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
 | References | OWASP A06:2025 Insecure Design |
 
@@ -1637,7 +1639,7 @@ The risk **Missing Network Segmentation** was found **3 times** in the analyzed 
 
 ### Missing Vault (Secret Storage)
 
-**Medium** · 1/1 unmitigated Risk · `missing-vault`
+**Medium**, 1/1 unmitigated Risk, `missing-vault`
 
 | Property | Value |
 | --- | --- |
@@ -1645,7 +1647,7 @@ The risk **Missing Network Segmentation** was found **3 times** in the analyzed 
 | CWE | [CWE 522](https://cwe.mitre.org/data/definitions/522.html) |
 | Function | Architecture |
 | Action | Vault (Secret Storage) |
-| ASVS chapter | V6 - Stored Cryptography Verification Requirements |
+| ASVS chapter | V6: Stored Cryptography Verification Requirements |
 | Cheat sheet | [Cryptographic_Storage_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html) |
 | References | OWASP NHI2:2025 Secret Leakage |
 
@@ -1687,7 +1689,7 @@ The risk **Missing Vault (Secret Storage)** was found **1 time** in the analyzed
 
 ### Mixed Targets on Shared Runtime
 
-**Medium** · 1/1 unmitigated Risk · `mixed-targets-on-shared-runtime`
+**Medium**, 1/1 unmitigated Risk, `mixed-targets-on-shared-runtime`
 
 | Property | Value |
 | --- | --- |
@@ -1695,7 +1697,7 @@ The risk **Missing Vault (Secret Storage)** was found **1 time** in the analyzed
 | CWE | [CWE 1008](https://cwe.mitre.org/data/definitions/1008.html) |
 | Function | Operations |
 | Action | Runtime Separation |
-| ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
+| ASVS chapter | V1: Architecture, Design and Threat Modeling Requirements |
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
 | References | OWASP A06:2025 Insecure Design |
 
@@ -1737,7 +1739,7 @@ The risk **Mixed Targets on Shared Runtime** was found **1 time** in the analyze
 
 ### Privileged Workload
 
-**Medium** · 1/1 unmitigated Risk · `privileged-workload`
+**Medium**, 1/1 unmitigated Risk, `privileged-workload`
 
 | Property | Value |
 | --- | --- |
@@ -1745,9 +1747,9 @@ The risk **Mixed Targets on Shared Runtime** was found **1 time** in the analyze
 | CWE | [CWE 250](https://cwe.mitre.org/data/definitions/250.html) |
 | Function | Operations |
 | Action | Unprivileged Workloads |
-| ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
+| ASVS chapter | V1: Architecture, Design and Threat Modeling Requirements |
 | Cheat sheet | [Kubernetes_Security_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Kubernetes_Security_Cheat_Sheet.html) |
-| References | OWASP K01:2025 Insecure Workload Configurations; OWASP A02:2025 Security Misconfiguration |
+| References | OWASP K01:2025 Insecure Workload Configurations, OWASP A02:2025 Security Misconfiguration |
 
 #### Description
 
@@ -1787,7 +1789,7 @@ The risk **Privileged Workload** was found **1 time** in the analyzed architectu
 
 ### Unnecessary Technical Asset
 
-**Low** · 1/1 unmitigated Risk · `unnecessary-technical-asset`
+**Low**, 1/1 unmitigated Risk, `unnecessary-technical-asset`
 
 | Property | Value |
 | --- | --- |
@@ -1795,7 +1797,7 @@ The risk **Privileged Workload** was found **1 time** in the analyzed architectu
 | CWE | [CWE 1008](https://cwe.mitre.org/data/definitions/1008.html) |
 | Function | Architecture |
 | Action | Attack Surface Reduction |
-| ASVS chapter | V1 - Architecture, Design and Threat Modeling Requirements |
+| ASVS chapter | V1: Architecture, Design and Threat Modeling Requirements |
 | Cheat sheet | [Attack_Surface_Analysis_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html) |
 
 #### Description
@@ -1840,7 +1842,7 @@ In total **35 potential risks** have been identified during the threat modeling 
 
 ### Checkout Service
 
-**Elevated** · 8/8 unmitigated Risks · `checkout-service`
+**Elevated**, 8/8 unmitigated Risks, `checkout-service`
 
 Checkout Service
 
@@ -1891,7 +1893,7 @@ Checkout Service
 
 ### GitOps Operator
 
-**Elevated** · 3/3 unmitigated Risks · `gitops-operator`
+**Elevated**, 3/3 unmitigated Risks, `gitops-operator`
 
 GitOps Operator
 
@@ -1937,7 +1939,7 @@ GitOps Operator
 
 ### Storefront
 
-**Elevated** · 6/6 unmitigated Risks · `storefront`
+**Elevated**, 6/6 unmitigated Risks, `storefront`
 
 Storefront
 
@@ -1986,7 +1988,7 @@ Storefront
 
 ### Catalog Service
 
-**Medium** · 1/1 unmitigated Risk · `catalog-service`
+**Medium**, 1/1 unmitigated Risk, `catalog-service`
 
 Catalog Service
 
@@ -2030,7 +2032,7 @@ Catalog Service
 
 ### Ingress Controller
 
-**Medium** · 2/2 unmitigated Risks · `ingress-controller`
+**Medium**, 2/2 unmitigated Risks, `ingress-controller`
 
 Ingress Controller
 
@@ -2075,7 +2077,7 @@ Ingress Controller
 
 ### Kubernetes API
 
-**Medium** · 4/4 unmitigated Risks · `kube-api`
+**Medium**, 4/4 unmitigated Risks, `kube-api`
 
 Kubernetes API
 
@@ -2122,7 +2124,7 @@ Kubernetes API
 
 ### Log Collector
 
-**Medium** · 3/3 unmitigated Risks · `log-collector`
+**Medium**, 3/3 unmitigated Risks, `log-collector`
 
 Log Collector
 
@@ -2169,7 +2171,7 @@ Log Collector
 
 ### Orders Database
 
-**Medium** · 4/4 unmitigated Risks · `orders-db`
+**Medium**, 4/4 unmitigated Risks, `orders-db`
 
 Orders Database
 
@@ -2216,7 +2218,7 @@ Orders Database
 
 ### Customer Browser
 
-**out of scope** · `customer-browser`
+**out of scope**, `customer-browser`
 
 Customer Browser
 
@@ -2261,7 +2263,7 @@ _The asset was defined as out-of-scope._
 
 ### Payment Provider
 
-**out of scope** · `payment-provider`
+**out of scope**, `payment-provider`
 
 Payment Provider
 
@@ -2310,7 +2312,7 @@ In total **35 potential risks** have been identified during the threat modeling 
 
 ### Cluster Configuration
 
-**Probable** · 12/12 unmitigated Risks · `cluster-config`
+**Probable**, 12/12 unmitigated Risks, `cluster-config`
 
 The manifests of the workloads, applied by the operator
 
@@ -2350,7 +2352,7 @@ This data asset has data breach potential because of 12 remaining risks:
 
 ### Customer Orders
 
-**Probable** · 23/23 unmitigated Risks · `orders`
+**Probable**, 23/23 unmitigated Risks, `orders`
 
 The orders of the customers, with their addresses
 
@@ -2401,7 +2403,7 @@ This data asset has data breach potential because of 23 remaining risks:
 
 ### Payment Tokens
 
-**Probable** · 12/12 unmitigated Risks · `payment-tokens`
+**Probable**, 12/12 unmitigated Risks, `payment-tokens`
 
 Tokens of the payment provider for the cards of the customers
 
@@ -2441,7 +2443,7 @@ This data asset has data breach potential because of 12 remaining risks:
 
 ### Product Catalog
 
-**Probable** · 17/17 unmitigated Risks · `catalog`
+**Probable**, 17/17 unmitigated Risks, `catalog`
 
 The products and their prices
 
@@ -2596,7 +2598,7 @@ In total **7 communication links have** been modeled, listed by their source ass
 
 ### Payment
 
-from [Checkout Service](#checkout-service) to [Payment Provider](#payment-provider) · `checkout-service>payment`
+from [Checkout Service](#checkout-service) to [Payment Provider](#payment-provider) (`checkout-service>payment`)
 
 Payment
 
@@ -2619,7 +2621,7 @@ Payment
 
 ### Order Storage
 
-from [Checkout Service](#checkout-service) to [Orders Database](#orders-database) · `checkout-service>order-storage`
+from [Checkout Service](#checkout-service) to [Orders Database](#orders-database) (`checkout-service>order-storage`)
 
 Order Storage
 
@@ -2642,7 +2644,7 @@ Order Storage
 
 ### Shop Traffic
 
-from [Customer Browser](#customer-browser) to [Ingress Controller](#ingress-controller) · `customer-browser>shop-traffic`
+from [Customer Browser](#customer-browser) to [Ingress Controller](#ingress-controller) (`customer-browser>shop-traffic`)
 
 Shop Traffic
 
@@ -2665,7 +2667,7 @@ Shop Traffic
 
 ### Apply Manifests
 
-from [GitOps Operator](#gitops-operator) to [Kubernetes API](#kubernetes-api) · `gitops-operator>apply-manifests`
+from [GitOps Operator](#gitops-operator) to [Kubernetes API](#kubernetes-api) (`gitops-operator>apply-manifests`)
 
 Apply Manifests
 
@@ -2688,7 +2690,7 @@ Apply Manifests
 
 ### Storefront Traffic
 
-from [Ingress Controller](#ingress-controller) to [Storefront](#storefront) · `ingress-controller>storefront-traffic`
+from [Ingress Controller](#ingress-controller) to [Storefront](#storefront) (`ingress-controller>storefront-traffic`)
 
 Storefront Traffic
 
@@ -2711,7 +2713,7 @@ Storefront Traffic
 
 ### Checkout API
 
-from [Storefront](#storefront) to [Checkout Service](#checkout-service) · `storefront>checkout-api`
+from [Storefront](#storefront) to [Checkout Service](#checkout-service) (`storefront>checkout-api`)
 
 Checkout API
 
@@ -2734,7 +2736,7 @@ Checkout API
 
 ### Catalog API
 
-from [Storefront](#storefront) to [Catalog Service](#catalog-service) · `storefront>catalog-api`
+from [Storefront](#storefront) to [Catalog Service](#catalog-service) (`storefront>catalog-api`)
 
 Catalog API
 
@@ -2757,7 +2759,7 @@ Catalog API
 
 ## Risk Tracking
 
-**0 of 35 risks** are tracked in the model; the others are unchecked.
+**0 of 35 risks** are tracked in the model. The others are unchecked.
 
 ## Threat Catalog Coverage
 
@@ -2924,7 +2926,7 @@ Threagile (see [threagile.io](https://threagile.io) for more details) is an open
 | Name | Value | Description |
 | --- | ---: | --- |
 | public | 1 | Public available information |
-| internal | 2 | (Company) internal information - but all people in the institution can access it |
+| internal | 2 | (Company) internal information, which all people in the institution can access |
 | restricted | 3 | Internal and with restricted access |
 | confidential | 4 | Only a few selected people have access |
 | strictly-confidential | 5 | Highest secrecy level |

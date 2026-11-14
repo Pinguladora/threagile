@@ -44,7 +44,7 @@ var AuthenticationTypeDescription = [...]TypeDescription{
 	{"none", "No authentication"},
 	{"credentials", "Username and password, pin or passphrase"},
 	{"session-id", "A server generated session id with limited life span"},
-	{"token", "A cryptographically signed token whose lifetime is not modelled; prefer short-lived-token or " +
+	{"token", "A cryptographically signed token whose lifetime is not modelled. Prefer short-lived-token or " +
 		"long-lived-token"},
 	{"client-certificate", "A certificate file stored on the client identifying this specific client"},
 	{"multi-factor", "Credentials plus one or more other factors, like a security key, an authenticator app or " +

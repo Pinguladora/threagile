@@ -37,7 +37,7 @@ func (*PublicCloudSnapshotRule) Category() *types.RiskCategory {
 		CheatSheet: cheatSheetSecureCloudArchitecture,
 		Action:     "Snapshot Sharing Restrictions",
 		Mitigation: "Prevent the public sharing of snapshots and images with a cloud configuration rule that " +
-			"revokes it, and audit the sharing settings regularly. Do not bake credentials into images; see " +
+			"revokes it, and audit the sharing settings regularly. Do not bake credentials into images, see " +
 			"the secrets management cheat sheet at " + htmlLink(cheatSheetSecretsManagement) + ". " +
 			"<br><br>For <b>Amazon Web Services (AWS)</b>: Turn on <i>block public access</i> for EBS " +
 			"snapshots (" + htmlLink(awsEBSBlockPublicAccess) + ") and for AMIs (" +

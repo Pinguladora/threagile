@@ -20,7 +20,7 @@ func (*MissingAIMonitoringRule) Category() *types.RiskCategory {
 			"can tell afterwards what it did.",
 		Impact: "If this risk is unmitigated, attacks through the model or the agent, and its own mistakes, might " +
 			"go on unnoticed, and their effects could not be traced.",
-		ASVS:       "V7 - Error Handling and Logging Verification Requirements",
+		ASVS:       "V7: Error Handling and Logging Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
 		Action:     "AI Observability",
 		Mitigation: "Send the prompts, tool calls, answers and decisions of the agent or model, with the user they " +

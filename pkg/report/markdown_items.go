@@ -20,7 +20,7 @@ func itemLine(level *viewLevel, summary string, id string) string {
 	if id != "" {
 		parts = append(parts, markdownCode(id))
 	}
-	return strings.Join(parts, " · ")
+	return strings.Join(parts, ", ")
 }
 
 // labelled writes markup text below its label, as the HTML report writes it below a heading.
@@ -110,7 +110,7 @@ func categoryProperties(category *viewCategory) [][]string {
 		for _, reference := range category.Category.References {
 			references = append(references, markdownText(reference))
 		}
-		properties = append(properties, []string{"References", strings.Join(references, "; ")})
+		properties = append(properties, []string{"References", strings.Join(references, ", ")})
 	}
 	return properties
 }
@@ -291,8 +291,8 @@ func (what *markdownWriter) communicationLinks(view *reportView) {
 		"communication links have")) + " been modeled, listed by their source asset.")
 	for _, link := range view.CommunicationLinks {
 		what.heading(3, link.Anchor, link.Link.Title)
-		what.paragraph("from " + what.ref(link.Source) + " to " + what.ref(link.Target) + " · " +
-			markdownCode(link.Link.Id))
+		what.paragraph("from " + what.ref(link.Source) + " to " + what.ref(link.Target) + " (" +
+			markdownCode(link.Link.Id) + ")")
 		what.markup(link.Description)
 		what.properties(
 			[]string{"Source", what.ref(link.Source)},

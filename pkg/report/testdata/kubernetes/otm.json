@@ -1133,7 +1133,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to deeply persist in the target system by executing code in deployed containers."
       },
       "attributes": {
-        "threagile:asvs": "V10 - Malicious Code Verification Requirements",
+        "threagile:asvs": "V10: Malicious Code Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -1155,7 +1155,7 @@
         "impactComment": "If this risk is unmitigated, attackers which have successfully compromised a container (via other vulnerabilities) might be able to deeply persist in the target system by executing code in many deployed containers and the container platform itself."
       },
       "attributes": {
-        "threagile:asvs": "V14 - Configuration Verification Requirements",
+        "threagile:asvs": "V14: Configuration Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -1177,7 +1177,7 @@
         "impactComment": "If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site."
       },
       "attributes": {
-        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:asvs": "V4: Access Control Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -1199,7 +1199,7 @@
         "impactComment": "If this risk remains unmitigated, attackers might be able to access individual victim sessions and steal or modify user data."
       },
       "attributes": {
-        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
+        "threagile:asvs": "V5: Validation, Sanitization and Encoding Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -1222,7 +1222,7 @@
         "impactComment": "If this risk is unmitigated, attackers who compromise the workload might run their own workloads in the cluster, read its secrets and take over the other workloads and their data."
       },
       "attributes": {
-        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:asvs": "V4: Access Control Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Kubernetes_Security_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -1246,7 +1246,7 @@
         "impactComment": "If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller."
       },
       "attributes": {
-        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:asvs": "V2: Authentication Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -1269,7 +1269,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication."
       },
       "attributes": {
-        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:asvs": "V2: Authentication Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html",
         "threagile:function": "business-side"
       }
@@ -1290,7 +1290,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model due to critical build infrastructure components missing in the model."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -1313,7 +1313,7 @@
         "impactComment": "If this risk is unmitigated, attackers might access cloud components in an unintended way."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -1336,7 +1336,7 @@
         "impactComment": "If this risk remains unmitigated, attackers might be able to easier attack high-value targets."
       },
       "attributes": {
-        "threagile:asvs": "V14 - Configuration Verification Requirements",
+        "threagile:asvs": "V14: Configuration Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -1359,7 +1359,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to access or modify foreign data after a successful compromise of a component within the system due to missing resource-based authorization checks."
       },
       "attributes": {
-        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:asvs": "V4: Access Control Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -1380,7 +1380,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model in the identity provider/store that is currently missing in the model."
       },
       "attributes": {
-        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:asvs": "V2: Authentication Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -1403,7 +1403,7 @@
         "impactComment": "If this risk is unmitigated, attackers who compromise any pod of the cluster might move on to the workloads of the namespace and their data, or, from a pod of the namespace, to anything it can reach."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Kubernetes_Security_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -1425,7 +1425,7 @@
         "impactComment": "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards more valuable targets, as they are not separated by network segmentation."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -1447,7 +1447,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to easier steal config secrets (like credentials, private keys, client certificates, etc.) once a vulnerability to access files is present and exploited."
       },
       "attributes": {
-        "threagile:asvs": "V6 - Stored Cryptography Verification Requirements",
+        "threagile:asvs": "V6: Stored Cryptography Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -1469,7 +1469,7 @@
         "impactComment": "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards more valuable targets, as they are running on the same shared runtime."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -1492,7 +1492,7 @@
         "impactComment": "If this risk is unmitigated, attackers who compromise the workload might take over its node and from there the other workloads of the shared runtime and their data, and possibly the cluster."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Kubernetes_Security_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -1515,7 +1515,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to access sensitive services or files of network-reachable components by modifying outgoing calls of affected components."
       },
       "attributes": {
-        "threagile:asvs": "V12 - File and Resources Verification Requirements",
+        "threagile:asvs": "V12: File and Resources Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -1537,7 +1537,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to modify SQL/NoSQL queries to steal and modify data and eventually further escalate towards a deeper system penetration via code executions."
       },
       "attributes": {
-        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
+        "threagile:asvs": "V5: Validation, Sanitization and Encoding Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -1558,7 +1558,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to target unnecessary technical assets."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -1577,7 +1577,7 @@
     {
       "id": "container-platform-escape-mitigation",
       "name": "Container Infrastructure Hardening",
-      "description": "Apply hardening of all container infrastructures. \u003cp\u003eSee for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e as well as the \u003ci\u003eDocker Bench for Security\u003c/i\u003e ( \u003ca href=\"https://github.com/docker/docker-bench-security\"\u003ehttps://github.com/docker/docker-bench-security\u003c/a\u003e ) or \u003ci\u003eInSpec Checks for Docker and Kubernetes\u003c/i\u003e ( \u003ca href=\"https://github.com/dev-sec/cis-kubernetes-benchmark\"\u003ehttps://github.com/dev-sec/cis-docker-benchmark\u003c/a\u003e and \u003ca href=\"https://github.com/dev-sec/cis-kubernetes-benchmark\"\u003ehttps://github.com/dev-sec/cis-kubernetes-benchmark\u003c/a\u003e ). Use only trusted base images, verify digital signatures and apply image creation best practices. Also consider using Google's \u003cb\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Apply namespace isolation and nod affinity to separate pods from each other in terms of access and nodes the same style as you separate data.",
+      "description": "Apply hardening of all container infrastructures. \u003cbr\u003e\u003cbr\u003eSee for example the \u003ci\u003eCIS-Benchmarks for Docker and Kubernetes\u003c/i\u003e as well as the \u003ci\u003eDocker Bench for Security\u003c/i\u003e ( \u003ca href=\"https://github.com/docker/docker-bench-security\"\u003ehttps://github.com/docker/docker-bench-security\u003c/a\u003e ) or \u003ci\u003eInSpec Checks for Docker and Kubernetes\u003c/i\u003e ( \u003ca href=\"https://github.com/dev-sec/cis-kubernetes-benchmark\"\u003ehttps://github.com/dev-sec/cis-docker-benchmark\u003c/a\u003e and \u003ca href=\"https://github.com/dev-sec/cis-kubernetes-benchmark\"\u003ehttps://github.com/dev-sec/cis-kubernetes-benchmark\u003c/a\u003e ). Use only trusted base images, verify digital signatures and apply image creation best practices. Also consider using Google's \u003ci\u003eDistroless\u003c/i\u003e base images or otherwise very small base images. Apply namespace isolation and node affinity to separate pods from each other in terms of access and nodes the same style as you separate data.",
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS or CSVS chapter applied?"

@@ -20,7 +20,7 @@ func (*UnencryptedCommunicationRule) Category() *types.RiskCategory {
 			"communication link this connection must be encrypted.",
 		Impact: "If this risk is unmitigated, network attackers might be able to eavesdrop on unencrypted " +
 			"sensitive data sent between components.",
-		ASVS:       "V9 - Communication Verification Requirements",
+		ASVS:       "V9: Communication Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html",
 		Action:     "Encryption of Communication Links",
 		Mitigation: "Apply transport layer encryption to the communication link.",

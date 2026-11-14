@@ -49,5 +49,5 @@ func TestAnalyzeModelReadsLegacyIdentityWithWarning(t *testing.T) {
 	}
 	assert.Contains(t, reporter.warnings, "the authorization of 2 communication links holds their identity (none, "+
 		"technical-user or end-user-identity-propagation), as earlier versions of the model did: read it as their "+
-		"identity, and their authorization as not modelled; set identity and authorization to remove this warning")
+		"identity, and their authorization as not modelled. Set identity and authorization to remove this warning")
 }

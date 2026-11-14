@@ -20,7 +20,7 @@ func (*MissingVaultRule) Category() *types.RiskCategory {
 			"keys, client certificates, etc.). This component is usually some kind of Vault.",
 		Impact: "If this risk is unmitigated, attackers might be able to easier steal config secrets (like credentials, " +
 			"private keys, client certificates, etc.) once a vulnerability to access files is present and exploited.",
-		ASVS:       "V6 - Stored Cryptography Verification Requirements",
+		ASVS:       "V6: Stored Cryptography Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
 		Action:     "Vault (Secret Storage)",
 		Mitigation: "Consider using a Vault (Secret Storage) to securely store and access config secrets (like " +

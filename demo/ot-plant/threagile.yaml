@@ -14,7 +14,7 @@ author:
   homepage: www.example.com
 
 management_summary_comment: >
-  The plant supplies the drinking water of the town; a failure of the dosing or of the safety function
+  The plant supplies the drinking water of the town. A failure of the dosing or of the safety function
   endangers the public and the operators.
 
 business_criticality: mission-critical

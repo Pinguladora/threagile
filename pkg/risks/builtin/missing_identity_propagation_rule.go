@@ -19,7 +19,7 @@ func (*MissingIdentityPropagationRule) Category() *types.RiskCategory {
 			"non-public). For DevOps usages at least the identity of a service account or a workload is required.",
 		Impact: "If this risk is unmitigated, attackers might be able to access or modify foreign data after a successful " +
 			"compromise of a component within the system due to missing resource-based authorization checks.",
-		ASVS:       "V4 - Access Control Verification Requirements",
+		ASVS:       "V4: Access Control Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html",
 		Action:     "Identity Propagation and Resource-based Authorization",
 		Mitigation: "When processing requests for end users if possible authorize in the backend against the propagated " +

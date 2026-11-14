@@ -167,7 +167,7 @@ func riskCategoryLines(category *types.RiskCategory) []string {
 		lines[0] += fmt.Sprintf(", CWE-%d", category.CWE)
 	}
 	if len(category.References) > 0 {
-		lines = append(lines, "  References: "+strings.Join(category.References, "; "))
+		lines = append(lines, "  References: "+strings.Join(category.References, ", "))
 	}
 	for _, field := range []struct{ label, text string }{
 		{"Detection logic", category.DetectionLogic},

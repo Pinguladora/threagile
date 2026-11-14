@@ -11,7 +11,7 @@ Used by `authentication` of communication links.
 | `none` | No authentication |
 | `credentials` | Username and password, pin or passphrase |
 | `session-id` | A server generated session id with limited life span |
-| `token` | A cryptographically signed token whose lifetime is not modelled; prefer short-lived-token or long-lived-token |
+| `token` | A cryptographically signed token whose lifetime is not modelled. Prefer short-lived-token or long-lived-token |
 | `short-lived-token` | A signed token that expires within hours, like an OAuth 2.0 access token or an OpenID Connect ID token |
 | `long-lived-token` | A bearer secret that does not expire soon, like an API key or a personal access token |
 | `client-certificate` | A certificate file stored on the client identifying this specific client |
@@ -24,7 +24,7 @@ Used by `authorization` of communication links.
 
 | Value | Description |
 |-------|-------------|
-| `unknown` | Not modelled; the risk rules assume nothing about the authorization |
+| `unknown` | Not modelled. The risk rules assume nothing about the authorization |
 | `none` | No authorization: every caller may do everything |
 | `authenticated-only` | Every authenticated caller may do everything |
 | `function-level` | Each operation checks whether the caller may call it, for example by role |
@@ -37,7 +37,7 @@ Used by `confidentiality` of data assets and technical assets.
 | Value | Description |
 |-------|-------------|
 | `public` | Public available information |
-| `internal` | (Company) internal information - but all people in the institution can access it |
+| `internal` | (Company) internal information, which all people in the institution can access |
 | `restricted` | Internal and with restricted access |
 | `confidential` | Only a few selected people have access |
 | `strictly-confidential` | Highest secrecy level |
@@ -106,10 +106,10 @@ Used by `network_policy` of trust boundaries of the type `execution-environment`
 
 | Value | Description |
 |-------|-------------|
-| `unknown` | Not modelled, or not a Kubernetes namespace; the risk rules assume nothing about network policies |
+| `unknown` | Not modelled, or not a Kubernetes namespace. The risk rules assume nothing about network policies |
 | `none` | No network policy: every pod of the cluster may reach the pods of the namespace, and they may reach anything |
-| `ingress` | Incoming traffic is denied unless a policy allows it; outgoing traffic is not restricted |
-| `egress` | Outgoing traffic is denied unless a policy allows it; incoming traffic is not restricted |
+| `ingress` | Incoming traffic is denied unless a policy allows it. Outgoing traffic is not restricted |
+| `egress` | Outgoing traffic is denied unless a policy allows it. Incoming traffic is not restricted |
 | `ingress-and-egress` | Incoming and outgoing traffic are denied unless a policy allows them |
 
 ## Protocol
@@ -150,8 +150,8 @@ Used by `protocol` of communication links.
 | `ftps` | FTP with TLS |
 | `sftp` | FTP on SSH |
 | `scp` | Secure Shell to copy files |
-| `ldap` | Lightweight Directory Access Protocol - User directories |
-| `ldaps` | Lightweight Directory Access Protocol - User directories on TLS |
+| `ldap` | Lightweight Directory Access Protocol for user directories |
+| `ldaps` | Lightweight Directory Access Protocol for user directories, on TLS |
 | `jms` | Jakarta Messaging |
 | `nfs` | Network File System |
 | `smb` | Server Message Block |
@@ -255,12 +255,12 @@ Used by `stride` of individual risk categories.
 
 | Value | Description |
 |-------|-------------|
-| `spoofing` | Spoofing - Authenticity |
-| `tampering` | Tampering - Integrity |
-| `repudiation` | Repudiation - Non-repudiability |
-| `information-disclosure` | Information disclosure - Confidentiality |
-| `denial-of-service` | Denial of service - Availability |
-| `elevation-of-privilege` | Elevation of privilege - Authorization |
+| `spoofing` | Spoofing, against authenticity |
+| `tampering` | Tampering, against integrity |
+| `repudiation` | Repudiation, against non-repudiability |
+| `information-disclosure` | Information disclosure, against confidentiality |
+| `denial-of-service` | Denial of service, against availability |
+| `elevation-of-privilege` | Elevation of privilege, against authorization |
 
 ## Technical Asset Machine
 

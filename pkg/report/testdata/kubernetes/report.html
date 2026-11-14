@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src &#39;none&#39;; style-src &#39;sha256-xmhHkSpNfUQBT4PhGOIa7q4s4d7Lks71qWjhc/1yiFw=&#39;; base-uri &#39;none&#39;; form-action &#39;none&#39;">
+<meta http-equiv="Content-Security-Policy" content="default-src &#39;none&#39;; style-src &#39;sha256-uQ9SnxD3Z6xzgOLGVGtHABZMehfA9B9drpk7tDPCCjw=&#39;; base-uri &#39;none&#39;; form-action &#39;none&#39;">
 <meta name="referrer" content="no-referrer">
 <title>Threat Model Report: Web Shop on Kubernetes</title>
 <style>:root {
@@ -191,7 +191,7 @@ h4 {
 }
 
 /* The severity and status colours, with black or white text, whichever contrasts more. Each
-   pair reaches the 7:1 contrast of WCAG 2.2 level AAA (see contrast_test.go); the text always
+   pair reaches the 7:1 contrast of WCAG 2.2 level AAA (see contrast_test.go). The text always
    names the severity or status, so the colour only adds to it. */
 .sev-critical {
   background: #ff6044;
@@ -800,7 +800,7 @@ footer {
 <h2>STRIDE Classification of Identified Risks</h2>
 <p>This chapter clusters and classifies the risks by STRIDE categories: in total <strong>35 potential risks</strong> have been identified during the threat modeling process.</p>
 <h3>Spoofing <span class="summary">3 risks</span></h3>
-<p class="muted">Spoofing - Authenticity</p>
+<p class="muted">Spoofing, against authenticity</p>
 <dl class="entries">
 <dt><span class="badge sev-medium">Medium</span> <a href="#category-cross-site-request-forgery">Cross-Site Request Forgery (CSRF)</a>: <span class="summary">1/1 unmitigated Risk, exploitation likelihood is <em>Very Likely</em> with <em>Low</em> impact</span></dt>
 <dd>When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.</dd>
@@ -810,7 +810,7 @@ footer {
 <dd>The modeled architecture does not contain an identity store, which might be the risk of a model missing critical assets (and thus not seeing their risks).</dd>
 </dl>
 <h3>Tampering <span class="summary">15 risks</span></h3>
-<p class="muted">Tampering - Integrity</p>
+<p class="muted">Tampering, against integrity</p>
 <dl class="entries">
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-cross-site-scripting">Cross-Site Scripting (XSS)</a>: <span class="summary">1/1 unmitigated Risk, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>For each web application Cross-Site Scripting (XSS) risks might arise. In terms of the overall risk level take other applications running on the same domain into account as well.</dd>
@@ -828,10 +828,10 @@ footer {
 <dd>Technical assets with a Relative Attacker Attractiveness (RAA) value of 55 % or higher should be explicitly hardened taking best practices and vendor hardening guides into account.</dd>
 </dl>
 <h3>Repudiation <span class="summary">0 risks</span></h3>
-<p class="muted">Repudiation - Non-repudiability</p>
+<p class="muted">Repudiation, against non-repudiability</p>
 <p class="muted">No risks were identified.</p>
 <h3>Information Disclosure <span class="summary">5 risks</span></h3>
-<p class="muted">Information disclosure - Confidentiality</p>
+<p class="muted">Information disclosure, against confidentiality</p>
 <dl class="entries">
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-server-side-request-forgery">Server-Side Request Forgery (SSRF)</a>: <span class="summary">4/4 unmitigated Risks, exploitation likelihood is <em>Likely</em> with <em>Medium</em> impact</span></dt>
 <dd>When a server system (i.e. not a client) is accessing other server systems via typical web protocols Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might arise. </dd>
@@ -839,10 +839,10 @@ footer {
 <dd>In order to avoid the risk of secret leakage via config files (when attacked through vulnerabilities being able to read files like Path-Traversal and others), it is best practice to use a separate hardened process with proper authentication, authorization, and audit logging to access config secrets (like credentials, private keys, client certificates, etc.). This component is usually some kind of Vault.</dd>
 </dl>
 <h3>Denial of Service <span class="summary">0 risks</span></h3>
-<p class="muted">Denial of service - Availability</p>
+<p class="muted">Denial of service, against availability</p>
 <p class="muted">No risks were identified.</p>
 <h3>Elevation of Privilege <span class="summary">12 risks</span></h3>
-<p class="muted">Elevation of privilege - Authorization</p>
+<p class="muted">Elevation of privilege, against authorization</p>
 <dl class="entries">
 <dt><span class="badge sev-elevated">Elevated</span> <a href="#category-missing-network-policy">Missing Network Policy</a>: <span class="summary">2/2 unmitigated Risks, exploitation likelihood is <em>Likely</em> with <em>High</em> impact</span></dt>
 <dd>Without network policies, every pod of a Kubernetes cluster can reach the pods of a namespace, and its pods can reach the rest of the cluster and beyond: the namespace separates names, not traffic.</dd>
@@ -1007,7 +1007,7 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/79.html" rel="noopener noreferrer">CWE 79</a></td></tr>
 <tr><th scope="row">Function</th><td>Development</td></tr>
 <tr><th scope="row">Action</th><td>XSS Prevention</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V5 - Validation, Sanitization and Encoding Verification Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V5: Validation, Sanitization and Encoding Verification Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html" rel="noopener noreferrer">Cross_Site_Scripting_Prevention_Cheat_Sheet</a></td></tr>
 <tr><th scope="row">References</th><td>OWASP A05:2025 Injection</td></tr>
 </tbody>
@@ -1049,9 +1049,9 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/1008.html" rel="noopener noreferrer">CWE 1008</a></td></tr>
 <tr><th scope="row">Function</th><td>Operations</td></tr>
 <tr><th scope="row">Action</th><td>Cloud Hardening</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V1 - Architecture, Design and Threat Modeling Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V1: Architecture, Design and Threat Modeling Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html" rel="noopener noreferrer">Attack_Surface_Analysis_Cheat_Sheet</a></td></tr>
-<tr><th scope="row">References</th><td>OWASP A02:2025 Security Misconfiguration; OWASP API8:2023 Security Misconfiguration</td></tr>
+<tr><th scope="row">References</th><td>OWASP A02:2025 Security Misconfiguration, OWASP API8:2023 Security Misconfiguration</td></tr>
 </tbody>
 </table>
 </div>
@@ -1091,9 +1091,9 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/16.html" rel="noopener noreferrer">CWE 16</a></td></tr>
 <tr><th scope="row">Function</th><td>Operations</td></tr>
 <tr><th scope="row">Action</th><td>System Hardening</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V14 - Configuration Verification Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V14: Configuration Verification Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html" rel="noopener noreferrer">Attack_Surface_Analysis_Cheat_Sheet</a></td></tr>
-<tr><th scope="row">References</th><td>OWASP A02:2025 Security Misconfiguration; OWASP API8:2023 Security Misconfiguration</td></tr>
+<tr><th scope="row">References</th><td>OWASP A02:2025 Security Misconfiguration, OWASP API8:2023 Security Misconfiguration</td></tr>
 </tbody>
 </table>
 </div>
@@ -1137,9 +1137,9 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/923.html" rel="noopener noreferrer">CWE 923</a></td></tr>
 <tr><th scope="row">Function</th><td>Operations</td></tr>
 <tr><th scope="row">Action</th><td>Network Segmentation of Namespaces</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V1 - Architecture, Design and Threat Modeling Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V1: Architecture, Design and Threat Modeling Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Kubernetes_Security_Cheat_Sheet.html" rel="noopener noreferrer">Kubernetes_Security_Cheat_Sheet</a></td></tr>
-<tr><th scope="row">References</th><td>OWASP K05:2025 Missing Network Segmentation Controls; OWASP A02:2025 Security Misconfiguration</td></tr>
+<tr><th scope="row">References</th><td>OWASP K05:2025 Missing Network Segmentation Controls, OWASP A02:2025 Security Misconfiguration</td></tr>
 </tbody>
 </table>
 </div>
@@ -1181,7 +1181,7 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/89.html" rel="noopener noreferrer">CWE 89</a></td></tr>
 <tr><th scope="row">Function</th><td>Development</td></tr>
 <tr><th scope="row">Action</th><td>SQL/NoSQL-Injection Prevention</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V5 - Validation, Sanitization and Encoding Verification Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V5: Validation, Sanitization and Encoding Verification Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html" rel="noopener noreferrer">SQL_Injection_Prevention_Cheat_Sheet</a></td></tr>
 <tr><th scope="row">References</th><td>OWASP A05:2025 Injection</td></tr>
 </tbody>
@@ -1223,9 +1223,9 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/918.html" rel="noopener noreferrer">CWE 918</a></td></tr>
 <tr><th scope="row">Function</th><td>Development</td></tr>
 <tr><th scope="row">Action</th><td>SSRF Prevention</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V12 - File and Resources Verification Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V12: File and Resources Verification Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html" rel="noopener noreferrer">Server_Side_Request_Forgery_Prevention_Cheat_Sheet</a></td></tr>
-<tr><th scope="row">References</th><td>OWASP A01:2025 Broken Access Control; OWASP API7:2023 Server Side Request Forgery</td></tr>
+<tr><th scope="row">References</th><td>OWASP A01:2025 Broken Access Control, OWASP API7:2023 Server Side Request Forgery</td></tr>
 </tbody>
 </table>
 </div>
@@ -1271,7 +1271,7 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/912.html" rel="noopener noreferrer">CWE 912</a></td></tr>
 <tr><th scope="row">Function</th><td>Operations</td></tr>
 <tr><th scope="row">Action</th><td>Container Infrastructure Hardening</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V10 - Malicious Code Verification Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V10: Malicious Code Verification Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html" rel="noopener noreferrer">Docker_Security_Cheat_Sheet</a></td></tr>
 <tr><th scope="row">References</th><td>OWASP A03:2025 Software Supply Chain Failures</td></tr>
 </tbody>
@@ -1327,7 +1327,7 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/1008.html" rel="noopener noreferrer">CWE 1008</a></td></tr>
 <tr><th scope="row">Function</th><td>Operations</td></tr>
 <tr><th scope="row">Action</th><td>Container Infrastructure Hardening</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V14 - Configuration Verification Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V14: Configuration Verification Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html" rel="noopener noreferrer">Docker_Security_Cheat_Sheet</a></td></tr>
 <tr><th scope="row">References</th><td>OWASP A02:2025 Security Misconfiguration</td></tr>
 </tbody>
@@ -1344,7 +1344,7 @@ footer {
 <h4>False Positives</h4>
 <div class="text">Container platforms not running parts of the target architecture can be considered as false positives after individual review.</div>
 <h4>Mitigation</h4>
-<div class="text">Apply hardening of all container infrastructures. &lt;p&gt;See for example the <i>CIS-Benchmarks for Docker and Kubernetes</i> as well as the <i>Docker Bench for Security</i> ( <a href="https://github.com/docker/docker-bench-security" rel="noopener noreferrer">https://github.com/docker/docker-bench-security</a> ) or <i>InSpec Checks for Docker and Kubernetes</i> ( <a href="https://github.com/dev-sec/cis-kubernetes-benchmark" rel="noopener noreferrer">https://github.com/dev-sec/cis-docker-benchmark</a> and <a href="https://github.com/dev-sec/cis-kubernetes-benchmark" rel="noopener noreferrer">https://github.com/dev-sec/cis-kubernetes-benchmark</a> ). Use only trusted base images, verify digital signatures and apply image creation best practices. Also consider using Google&#39;s <b>Distroless&lt;/i&gt; base images or otherwise very small base images. Apply namespace isolation and nod affinity to separate pods from each other in terms of access and nodes the same style as you separate data.</b></div>
+<div class="text">Apply hardening of all container infrastructures. <br><br>See for example the <i>CIS-Benchmarks for Docker and Kubernetes</i> as well as the <i>Docker Bench for Security</i> ( <a href="https://github.com/docker/docker-bench-security" rel="noopener noreferrer">https://github.com/docker/docker-bench-security</a> ) or <i>InSpec Checks for Docker and Kubernetes</i> ( <a href="https://github.com/dev-sec/cis-kubernetes-benchmark" rel="noopener noreferrer">https://github.com/dev-sec/cis-docker-benchmark</a> and <a href="https://github.com/dev-sec/cis-kubernetes-benchmark" rel="noopener noreferrer">https://github.com/dev-sec/cis-kubernetes-benchmark</a> ). Use only trusted base images, verify digital signatures and apply image creation best practices. Also consider using Google&#39;s <i>Distroless</i> base images or otherwise very small base images. Apply namespace isolation and node affinity to separate pods from each other in terms of access and nodes the same style as you separate data.</div>
 <h4>Check</h4>
 <div class="text">Are recommendations from the linked cheat sheet and referenced ASVS or CSVS chapter applied?</div>
 <h4>Risk Findings</h4>
@@ -1369,7 +1369,7 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/352.html" rel="noopener noreferrer">CWE 352</a></td></tr>
 <tr><th scope="row">Function</th><td>Development</td></tr>
 <tr><th scope="row">Action</th><td>CSRF Prevention</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V4 - Access Control Verification Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V4: Access Control Verification Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html" rel="noopener noreferrer">Cross-Site_Request_Forgery_Prevention_Cheat_Sheet</a></td></tr>
 <tr><th scope="row">References</th><td>OWASP A01:2025 Broken Access Control</td></tr>
 </tbody>
@@ -1384,7 +1384,7 @@ footer {
 <h4>Risk Rating</h4>
 <div class="text">The risk rating depends on the integrity rating of the data sent across the communication link. The attack is very likely, likely for DevOps usage, and unlikely when the link is authenticated with a token (<i>token</i>, <i>short-lived-token</i> or <i>long-lived-token</i>), which a browser does not send on its own like a cookie.</div>
 <h4>False Positives</h4>
-<div class="text">Web applications passing the authentication state via custom headers instead of cookies can eventually be false positives; model their links with a token authentication. Clients used by humans that are no browser and render no web content, like a command-line tool, can be considered as false positives after individual review.</div>
+<div class="text">Web applications passing the authentication state via custom headers instead of cookies can eventually be false positives. Model their links with a token authentication. Clients used by humans that are no browser and render no web content, like a command-line tool, can be considered as false positives after individual review.</div>
 <h4>Mitigation</h4>
 <div class="text">Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). When your authentication scheme depends on cookies (like session or token cookies), consider marking them with the same-site flag. When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.</div>
 <h4>Check</h4>
@@ -1411,9 +1411,9 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/250.html" rel="noopener noreferrer">CWE 250</a></td></tr>
 <tr><th scope="row">Function</th><td>Operations</td></tr>
 <tr><th scope="row">Action</th><td>Least Privilege for Service Accounts</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V4 - Access Control Verification Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V4: Access Control Verification Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Kubernetes_Security_Cheat_Sheet.html" rel="noopener noreferrer">Kubernetes_Security_Cheat_Sheet</a></td></tr>
-<tr><th scope="row">References</th><td>OWASP K02:2025 Overly Permissive Authorization Configurations; OWASP A01:2025 Broken Access Control</td></tr>
+<tr><th scope="row">References</th><td>OWASP K02:2025 Overly Permissive Authorization Configurations, OWASP A01:2025 Broken Access Control</td></tr>
 </tbody>
 </table>
 </div>
@@ -1453,9 +1453,9 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/522.html" rel="noopener noreferrer">CWE 522</a></td></tr>
 <tr><th scope="row">Function</th><td>Operations</td></tr>
 <tr><th scope="row">Action</th><td>Short-Lived Credentials</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V2 - Authentication Verification Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V2: Authentication Verification Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html" rel="noopener noreferrer">Secrets_Management_Cheat_Sheet</a></td></tr>
-<tr><th scope="row">References</th><td>OWASP A07:2025 Authentication Failures; OWASP NHI7:2025 Long-Lived Secrets; OWASP NHI2:2025 Secret Leakage</td></tr>
+<tr><th scope="row">References</th><td>OWASP A07:2025 Authentication Failures, OWASP NHI7:2025 Long-Lived Secrets, OWASP NHI2:2025 Secret Leakage</td></tr>
 </tbody>
 </table>
 </div>
@@ -1495,7 +1495,7 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/1127.html" rel="noopener noreferrer">CWE 1127</a></td></tr>
 <tr><th scope="row">Function</th><td>Architecture</td></tr>
 <tr><th scope="row">Action</th><td>Build Pipeline Hardening</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V1 - Architecture, Design and Threat Modeling Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V1: Architecture, Design and Threat Modeling Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html" rel="noopener noreferrer">Attack_Surface_Analysis_Cheat_Sheet</a></td></tr>
 </tbody>
 </table>
@@ -1536,9 +1536,9 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/284.html" rel="noopener noreferrer">CWE 284</a></td></tr>
 <tr><th scope="row">Function</th><td>Architecture</td></tr>
 <tr><th scope="row">Action</th><td>Identity Propagation and Resource-based Authorization</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V4 - Access Control Verification Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V4: Access Control Verification Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html" rel="noopener noreferrer">Access_Control_Cheat_Sheet</a></td></tr>
-<tr><th scope="row">References</th><td>OWASP A01:2025 Broken Access Control; OWASP API1:2023 Broken Object Level Authorization</td></tr>
+<tr><th scope="row">References</th><td>OWASP A01:2025 Broken Access Control, OWASP API1:2023 Broken Object Level Authorization</td></tr>
 </tbody>
 </table>
 </div>
@@ -1578,7 +1578,7 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/287.html" rel="noopener noreferrer">CWE 287</a></td></tr>
 <tr><th scope="row">Function</th><td>Architecture</td></tr>
 <tr><th scope="row">Action</th><td>Identity Store</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V2 - Authentication Verification Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V2: Authentication Verification Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html" rel="noopener noreferrer">Authentication_Cheat_Sheet</a></td></tr>
 </tbody>
 </table>
@@ -1619,9 +1619,9 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/308.html" rel="noopener noreferrer">CWE 308</a></td></tr>
 <tr><th scope="row">Function</th><td>Business Side</td></tr>
 <tr><th scope="row">Action</th><td>Multi-Factor Authentication (MFA)</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V2 - Authentication Verification Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V2: Authentication Verification Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html" rel="noopener noreferrer">Multifactor_Authentication_Cheat_Sheet</a></td></tr>
-<tr><th scope="row">References</th><td>OWASP A07:2025 Authentication Failures; OWASP API2:2023 Broken Authentication</td></tr>
+<tr><th scope="row">References</th><td>OWASP A07:2025 Authentication Failures, OWASP API2:2023 Broken Authentication</td></tr>
 </tbody>
 </table>
 </div>
@@ -1661,7 +1661,7 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/1008.html" rel="noopener noreferrer">CWE 1008</a></td></tr>
 <tr><th scope="row">Function</th><td>Operations</td></tr>
 <tr><th scope="row">Action</th><td>Network Segmentation</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V1 - Architecture, Design and Threat Modeling Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V1: Architecture, Design and Threat Modeling Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html" rel="noopener noreferrer">Attack_Surface_Analysis_Cheat_Sheet</a></td></tr>
 <tr><th scope="row">References</th><td>OWASP A06:2025 Insecure Design</td></tr>
 </tbody>
@@ -1707,7 +1707,7 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/522.html" rel="noopener noreferrer">CWE 522</a></td></tr>
 <tr><th scope="row">Function</th><td>Architecture</td></tr>
 <tr><th scope="row">Action</th><td>Vault (Secret Storage)</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V6 - Stored Cryptography Verification Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V6: Stored Cryptography Verification Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html" rel="noopener noreferrer">Cryptographic_Storage_Cheat_Sheet</a></td></tr>
 <tr><th scope="row">References</th><td>OWASP NHI2:2025 Secret Leakage</td></tr>
 </tbody>
@@ -1749,7 +1749,7 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/1008.html" rel="noopener noreferrer">CWE 1008</a></td></tr>
 <tr><th scope="row">Function</th><td>Operations</td></tr>
 <tr><th scope="row">Action</th><td>Runtime Separation</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V1 - Architecture, Design and Threat Modeling Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V1: Architecture, Design and Threat Modeling Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html" rel="noopener noreferrer">Attack_Surface_Analysis_Cheat_Sheet</a></td></tr>
 <tr><th scope="row">References</th><td>OWASP A06:2025 Insecure Design</td></tr>
 </tbody>
@@ -1791,9 +1791,9 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/250.html" rel="noopener noreferrer">CWE 250</a></td></tr>
 <tr><th scope="row">Function</th><td>Operations</td></tr>
 <tr><th scope="row">Action</th><td>Unprivileged Workloads</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V1 - Architecture, Design and Threat Modeling Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V1: Architecture, Design and Threat Modeling Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Kubernetes_Security_Cheat_Sheet.html" rel="noopener noreferrer">Kubernetes_Security_Cheat_Sheet</a></td></tr>
-<tr><th scope="row">References</th><td>OWASP K01:2025 Insecure Workload Configurations; OWASP A02:2025 Security Misconfiguration</td></tr>
+<tr><th scope="row">References</th><td>OWASP K01:2025 Insecure Workload Configurations, OWASP A02:2025 Security Misconfiguration</td></tr>
 </tbody>
 </table>
 </div>
@@ -1833,7 +1833,7 @@ footer {
 <tr><th scope="row">CWE</th><td><a href="https://cwe.mitre.org/data/definitions/1008.html" rel="noopener noreferrer">CWE 1008</a></td></tr>
 <tr><th scope="row">Function</th><td>Architecture</td></tr>
 <tr><th scope="row">Action</th><td>Attack Surface Reduction</td></tr>
-<tr><th scope="row">ASVS chapter</th><td>V1 - Architecture, Design and Threat Modeling Requirements</td></tr>
+<tr><th scope="row">ASVS chapter</th><td>V1: Architecture, Design and Threat Modeling Requirements</td></tr>
 <tr><th scope="row">Cheat sheet</th><td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html" rel="noopener noreferrer">Attack_Surface_Analysis_Cheat_Sheet</a></td></tr>
 </tbody>
 </table>
@@ -2852,7 +2852,7 @@ footer {
 
 <section class="chapter" id="risk-tracking">
 <h2>Risk Tracking</h2>
-<p><strong>0 of 35 risks</strong> are tracked in the model; the others are unchecked.</p>
+<p><strong>0 of 35 risks</strong> are tracked in the model. The others are unchecked.</p>
 </section>
 
 <section class="chapter" id="catalog-coverage">
@@ -3038,7 +3038,7 @@ footer {
 <thead><tr><th scope="col">Name</th><th scope="col" class="number">Value</th><th scope="col">Description</th></tr></thead>
 <tbody>
 <tr><th scope="row">public</th><td class="number">1</td><td>Public available information</td></tr>
-<tr><th scope="row">internal</th><td class="number">2</td><td>(Company) internal information - but all people in the institution can access it</td></tr>
+<tr><th scope="row">internal</th><td class="number">2</td><td>(Company) internal information, which all people in the institution can access</td></tr>
 <tr><th scope="row">restricted</th><td class="number">3</td><td>Internal and with restricted access</td></tr>
 <tr><th scope="row">confidential</th><td class="number">4</td><td>Only a few selected people have access</td></tr>
 <tr><th scope="row">strictly-confidential</th><td class="number">5</td><td>Highest secrecy level</td></tr>

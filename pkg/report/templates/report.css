@@ -183,7 +183,7 @@ h4 {
 }
 
 /* The severity and status colours, with black or white text, whichever contrasts more. Each
-   pair reaches the 7:1 contrast of WCAG 2.2 level AAA (see contrast_test.go); the text always
+   pair reaches the 7:1 contrast of WCAG 2.2 level AAA (see contrast_test.go). The text always
    names the severity or status, so the colour only adds to it. */
 .sev-critical {
   background: #ff6044;
