@@ -21,6 +21,7 @@ There are a lot of built in rules.
 - Unguarded Access From Internet;
 - Container Base Image Backdooring;
 - Container Platform Escape;
+- Virtual Machine Escape;
 - Cross-Site Request Forgery (CSRF);
 - Cross-Site Scripting (XSS);
 - Push instead of Pull Deployment;
