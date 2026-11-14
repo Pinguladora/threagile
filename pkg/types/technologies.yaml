@@ -292,6 +292,20 @@ hsm:
     hsm: true
     backend_related: true
     security_control_related: true
+hypervisor:
+  aliases:
+    - vmm
+    - virtual-machine-monitor
+    - kvm
+    - qemu
+    - firecracker
+    - cloud-hypervisor
+    - xen
+  description: A hypervisor or virtual machine monitor that runs virtual machines, like KVM with QEMU, Firecracker or Cloud Hypervisor
+  attributes:
+    hypervisor: true
+    backend_related: true
+    high_value_target: true
 identity-provider:
   aliases:
     - idp

@@ -323,6 +323,7 @@ A model may name a technology by one of its aliases; threagile reads it as the v
 | `historian` | `process-historian`, `data-historian` | A historian storing the process data of an industrial control system |
 | `hmi` | `human-machine-interface`, `operator-panel`, `operator-station` | A human-machine interface that operators monitor and control an industrial process with |
 | `hsm` | `hardware-security-module` | Hardware Security Module |
+| `hypervisor` | `vmm`, `virtual-machine-monitor`, `kvm`, `qemu`, `firecracker`, `cloud-hypervisor`, `xen` | A hypervisor or virtual machine monitor that runs virtual machines, like KVM with QEMU, Firecracker or Cloud Hypervisor |
 | `identity-provider` | `idp` | A authentication provider |
 | `identity-store-database` | `identity-store` | Authentication data as database |
 | `identity-store-ldap` |  | Authentication data as LDAP |

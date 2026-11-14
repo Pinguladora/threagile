@@ -18,6 +18,10 @@ func TestTechnologyMapGetResolvesAliases(t *testing.T) {
 	require.NotNil(t, technology)
 	assert.Equal(t, "policy-decision-point", technology.Name, "an alias stands for its technology")
 	assert.True(t, technology.GetAttribute(PolicyDecisionPoint))
+	hypervisor := technologies.Get("firecracker")
+	require.NotNil(t, hypervisor)
+	assert.Equal(t, Hypervisor, hypervisor.Name)
+	assert.False(t, hypervisor.GetAttribute(ContainerPlatform), "a hypervisor is not a container platform")
 	assert.Nil(t, technologies.Get("no-such-technology"))
 
 	owners := make(map[string]string)
