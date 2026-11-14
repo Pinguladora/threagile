@@ -353,3 +353,45 @@ func TestMissingAuthenticationRuleGenerateRisksProcessingConfidentialDataRisksCr
 	assert.Equal(t, "<b>Missing Authentication</b> covering communication link <b>User Access via Browser</b> from <b>User Interface</b> to <b>Test Technical Asset</b>", risks[0].Title)
 	assert.Equal(t, types.MediumImpact, risks[0].ExploitationImpact)
 }
+
+func TestMissingAuthenticationRuleGenerateRisksPublicDownloads(t *testing.T) {
+	testCases := map[string]struct {
+		readonly bool
+		sent     []string
+		received []string
+		risk     bool
+	}{
+		"public download":               {readonly: true, received: []string{"public"}},
+		"download of confidential data": {readonly: true, received: []string{"public", "confidential"}, risk: true},
+		"upload alongside the download": {readonly: true, sent: []string{"public"}, received: []string{"public"}, risk: true},
+		"writing link":                  {received: []string{"public"}, risk: true},
+		"read-only link without data":   {readonly: true, risk: true},
+	}
+	for name, testCase := range testCases {
+		t.Run(name, func(t *testing.T) {
+			risks, err := NewMissingAuthenticationRule().GenerateRisks(&types.Model{
+				TechnicalAssets: map[string]*types.TechnicalAsset{
+					"registry": {Id: "registry", Title: "Registry", MultiTenant: true},
+					"builder":  {Id: "builder", Title: "Builder"},
+				},
+				IncomingTechnicalCommunicationLinksMappedByTargetId: map[string][]*types.CommunicationLink{
+					"registry": {{
+						Title:              "Download",
+						SourceId:           "builder",
+						Authentication:     types.NoneAuthentication,
+						Protocol:           types.HTTPS,
+						Readonly:           testCase.readonly,
+						DataAssetsSent:     testCase.sent,
+						DataAssetsReceived: testCase.received,
+					}},
+				},
+				DataAssets: map[string]*types.DataAsset{
+					"public":       {Id: "public", Confidentiality: types.Public, Integrity: types.MissionCritical},
+					"confidential": {Id: "confidential", Confidentiality: types.Confidential},
+				},
+			})
+			assert.Nil(t, err)
+			assert.Equal(t, testCase.risk, len(risks) == 1, "risks: %v", risks)
+		})
+	}
+}

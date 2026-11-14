@@ -830,36 +830,6 @@
     "severity": "elevated",
     "exploitation_likelihood": "likely",
     "exploitation_impact": "medium",
-    "title": "\u003cb\u003eMissing Authentication\u003c/b\u003e covering communication link \u003cb\u003eCMS Content Traffic\u003c/b\u003e from \u003cb\u003eLoad Balancer\u003c/b\u003e to \u003cb\u003eMarketing CMS\u003c/b\u003e",
-    "synthetic_id": "missing-authentication@load-balancer\u003ecms-content-traffic@load-balancer@marketing-cms",
-    "most_relevant_technical_asset": "marketing-cms",
-    "most_relevant_communication_link": "load-balancer\u003ecms-content-traffic",
-    "data_breach_probability": "possible",
-    "data_breach_technical_assets": [
-      "marketing-cms"
-    ],
-    "plain_title": "Missing Authentication covering communication link CMS Content Traffic from Load Balancer to Marketing CMS",
-    "category_title": "Missing Authentication",
-    "stride": "elevation-of-privilege",
-    "function": "architecture",
-    "cwe": 306,
-    "references": [
-      "OWASP A07:2025 Authentication Failures",
-      "OWASP API2:2023 Broken Authentication"
-    ],
-    "action": "Authentication of Incoming Requests",
-    "mitigation": "Apply an authentication method to the technical asset. To protect highly sensitive data consider the use of multi-factor authentication for human users.",
-    "check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
-    "most_relevant_technical_asset_title": "Marketing CMS",
-    "most_relevant_technical_asset_raa": 22.55383688062901,
-    "most_relevant_communication_link_title": "CMS Content Traffic"
-  },
-  {
-    "category": "missing-authentication",
-    "risk_status": "unchecked",
-    "severity": "elevated",
-    "exploitation_likelihood": "likely",
-    "exploitation_impact": "medium",
     "title": "\u003cb\u003eMissing Authentication\u003c/b\u003e covering communication link \u003cb\u003eNFS Filesystem Access\u003c/b\u003e from \u003cb\u003eBackoffice ERP System\u003c/b\u003e to \u003cb\u003eContract File Server\u003c/b\u003e",
     "synthetic_id": "missing-authentication@erp-system\u003enfs-filesystem-access@erp-system@contract-file-server",
     "most_relevant_technical_asset": "contract-file-server",

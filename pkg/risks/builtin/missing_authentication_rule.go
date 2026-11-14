@@ -30,7 +30,9 @@ func (*MissingAuthenticationRule) Category() *types.RiskCategory {
 			types.ServiceRegistry + ", " + types.WAF + ", " + types.IDS + ", and " + types.IPS +
 			" and in-process calls) should authenticate incoming requests when the asset processes sensitive data. This is " +
 			"especially the case for all multi-tenant assets (there even non-sensitive ones). Links over industrial " +
-			"control protocols that cannot authenticate are left to the insecure-control-protocol rule.",
+			"control protocols that cannot authenticate are left to the insecure-control-protocol rule. Read-only " +
+			"links that send nothing and only receive " + types.Public.String() + " data are exempted: anyone may " +
+			"read public data, and the integrity of a download is the reader's to check, by signature or checksum.",
 		RiskAssessment: "The risk rating (medium or high) " +
 			"depends on the sensitivity of the data sent across the communication link. Monitoring callers are exempted from " +
 			"this risk.",
@@ -58,7 +60,7 @@ func (r *MissingAuthenticationRule) GenerateRisks(input *types.Model) ([]*types.
 		commLinks := input.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id]
 		for _, commLink := range commLinks {
 			caller := input.TechnicalAssets[commLink.SourceId]
-			if isUnauthenticatedCallerTolerated(caller) {
+			if isUnauthenticatedCallerTolerated(caller) || isPublicDownload(input, commLink) {
 				continue
 			}
 			impact := r.calculateImpact(commLink, input)
@@ -132,4 +134,19 @@ func (r *MissingAuthenticationRule) createRisk(
 	risk.SyntheticId = risk.CategoryId + "@" + incomingAccess.Id + "@" +
 		input.TechnicalAssets[incomingAccessOrigin.SourceId].Id + "@" + technicalAsset.Id
 	return risk
+}
+
+// isPublicDownload reports whether the link only reads public data: read-only, nothing sent, and every data asset
+// received rated public.
+func isPublicDownload(input *types.Model, link *types.CommunicationLink) bool {
+	if !link.Readonly || len(link.DataAssetsSent) > 0 || len(link.DataAssetsReceived) == 0 {
+		return false
+	}
+	for _, id := range link.DataAssetsReceived {
+		dataAsset, ok := input.DataAssets[id]
+		if !ok || dataAsset.Confidentiality != types.Public {
+			return false
+		}
+	}
+	return true
 }
