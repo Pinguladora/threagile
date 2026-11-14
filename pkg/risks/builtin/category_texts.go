@@ -4,16 +4,16 @@ package builtin
 const (
 	checkCheatSheetAndASVS = "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"
 
-	asvsArchitecture       = "V1 - Architecture, Design and Threat Modeling Requirements"
-	asvsAuthentication     = "V2 - Authentication Verification Requirements"
-	asvsAccessControl      = "V4 - Access Control Verification Requirements"
-	asvsValidation         = "V5 - Validation, Sanitization and Encoding Verification Requirements"
-	asvsStoredCryptography = "V6 - Stored Cryptography Verification Requirements"
-	asvsDataProtection     = "V8 - Data Protection Verification Requirements"
-	asvsMaliciousCode      = "V10 - Malicious Code Verification Requirements"
-	asvsBusinessLogic      = "V11 - Business Logic Verification Requirements"
-	asvsFilesAndResources  = "V12 - File and Resources Verification Requirements"
-	asvsConfiguration      = "V14 - Configuration Verification Requirements"
+	asvsArchitecture       = "V1: Architecture, Design and Threat Modeling Requirements"
+	asvsAuthentication     = "V2: Authentication Verification Requirements"
+	asvsAccessControl      = "V4: Access Control Verification Requirements"
+	asvsValidation         = "V5: Validation, Sanitization and Encoding Verification Requirements"
+	asvsStoredCryptography = "V6: Stored Cryptography Verification Requirements"
+	asvsDataProtection     = "V8: Data Protection Verification Requirements"
+	asvsMaliciousCode      = "V10: Malicious Code Verification Requirements"
+	asvsBusinessLogic      = "V11: Business Logic Verification Requirements"
+	asvsFilesAndResources  = "V12: File and Resources Verification Requirements"
+	asvsConfiguration      = "V14: Configuration Verification Requirements"
 
 	cheatSheetAttackSurfaceAnalysis = "https://cheatsheetseries.owasp.org/cheatsheets/" +
 		"Attack_Surface_Analysis_Cheat_Sheet.html"

@@ -38,7 +38,7 @@ func ParseConfidentiality(value string) (confidentiality Confidentiality, err er
 
 var ConfidentialityTypeDescription = [...]TypeDescription{
 	{"public", "Public available information"},
-	{"internal", "(Company) internal information - but all people in the institution can access it"},
+	{"internal", "(Company) internal information, which all people in the institution can access"},
 	{"restricted", "Internal and with restricted access"},
 	{"confidential", "Only a few selected people have access"},
 	{"strictly-confidential", "Highest secrecy level"},

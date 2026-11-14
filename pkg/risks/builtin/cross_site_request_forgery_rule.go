@@ -18,7 +18,7 @@ func (*CrossSiteRequestForgeryRule) Category() *types.RiskCategory {
 			"arise.",
 		Impact: "If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted " +
 			"actions within the web application by visiting an attacker controlled web site.",
-		ASVS:       "V4 - Access Control Verification Requirements",
+		ASVS:       "V4: Access Control Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
 		Action:     "CSRF Prevention",
 		Mitigation: "Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). " +
@@ -38,7 +38,7 @@ func (*CrossSiteRequestForgeryRule) Category() *types.RiskCategory {
 			"(<i>" + types.Token.String() + "</i>, <i>" + types.ShortLivedToken.String() + "</i> or <i>" +
 			types.LongLivedToken.String() + "</i>), which a browser does not send on its own like a cookie.",
 		FalsePositives: "Web applications passing the authentication state via custom headers instead of cookies can " +
-			"eventually be false positives; model their links with a token authentication. Clients used by humans that are " +
+			"eventually be false positives. Model their links with a token authentication. Clients used by humans that are " +
 			"no browser and render no web content, like a command-line tool, can be considered as false positives " +
 			"after individual review.",
 		ModelFailurePossibleReason: false,

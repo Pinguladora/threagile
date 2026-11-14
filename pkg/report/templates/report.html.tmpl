@@ -396,7 +396,7 @@ that may carry threagile's basic markup go through markup, which keeps only that
 <tr><th scope="row">ASVS chapter</th><td>{{if .Category.ASVS}}{{.Category.ASVS}}{{else}}n/a{{end}}</td></tr>
 <tr><th scope="row">Cheat sheet</th><td>{{if .CheatSheet.Anchor}}<a href="{{.CheatSheet.Anchor}}" rel="noopener noreferrer">{{.CheatSheet.Title}}</a>{{else}}n/a{{end}}</td></tr>
 {{- if .Category.References}}
-<tr><th scope="row">References</th><td>{{range $index, $reference := .Category.References}}{{if $index}}; {{end}}{{$reference}}{{end}}</td></tr>
+<tr><th scope="row">References</th><td>{{range $index, $reference := .Category.References}}{{if $index}}, {{end}}{{$reference}}{{end}}</td></tr>
 {{- end}}
 </tbody>
 </table>
@@ -646,7 +646,7 @@ that may carry threagile's basic markup go through markup, which keeps only that
 
 <section class="chapter" id="risk-tracking">
 <h2>Risk Tracking</h2>
-<p><strong>{{len .TrackedRisks}} of {{.Summary.TotalRisks}} risks</strong> are tracked in the model; the others are unchecked.</p>
+<p><strong>{{len .TrackedRisks}} of {{.Summary.TotalRisks}} risks</strong> are tracked in the model. The others are unchecked.</p>
 {{- if .TrackedRisks}}
 <div class="table-wrap">
 <table>

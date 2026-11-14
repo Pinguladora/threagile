@@ -1744,7 +1744,7 @@
         "impactComment": "If this risk is unmitigated, users and attackers who steer the agent might read or change the data of other users through it."
       },
       "attributes": {
-        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:asvs": "V4: Access Control Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -1766,7 +1766,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to deeply persist in the target system by executing code in deployed containers."
       },
       "attributes": {
-        "threagile:asvs": "V10 - Malicious Code Verification Requirements",
+        "threagile:asvs": "V10: Malicious Code Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -1788,7 +1788,7 @@
         "impactComment": "If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site."
       },
       "attributes": {
-        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:asvs": "V4: Access Control Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -1810,7 +1810,7 @@
         "impactComment": "If this risk remains unmitigated, attackers might be able to access individual victim sessions and steal or modify user data."
       },
       "attributes": {
-        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
+        "threagile:asvs": "V5: Validation, Sanitization and Encoding Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -1832,7 +1832,7 @@
         "impactComment": "If this risk remains unmitigated, attackers might be able to disturb the availability of important parts of the system."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -1857,7 +1857,7 @@
         "impactComment": "If this risk is unmitigated, attackers who steer the agent, or the agent's own mistakes, might change or delete critical data and trigger actions with real-world effects."
       },
       "attributes": {
-        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:asvs": "V4: Access Control Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -1881,7 +1881,7 @@
         "impactComment": "If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller."
       },
       "attributes": {
-        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:asvs": "V2: Authentication Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -1905,7 +1905,7 @@
         "impactComment": "If this risk is unmitigated, attacks through the model or the agent, and its own mistakes, might go on unnoticed, and their effects could not be traced."
       },
       "attributes": {
-        "threagile:asvs": "V7 - Error Handling and Logging Verification Requirements",
+        "threagile:asvs": "V7: Error Handling and Logging Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -1928,7 +1928,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to access or modify sensitive data in an unauthenticated way."
       },
       "attributes": {
-        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:asvs": "V2: Authentication Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -1951,7 +1951,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication."
       },
       "attributes": {
-        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:asvs": "V2: Authentication Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html",
         "threagile:function": "business-side"
       }
@@ -1972,7 +1972,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model due to critical build infrastructure components missing in the model."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -1995,7 +1995,7 @@
         "impactComment": "If this risk is unmitigated, attackers might access cloud components in an unintended way."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2018,7 +2018,7 @@
         "impactComment": "If this risk remains unmitigated, attackers might be able to easier attack high-value targets."
       },
       "attributes": {
-        "threagile:asvs": "V14 - Configuration Verification Requirements",
+        "threagile:asvs": "V14: Configuration Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2040,7 +2040,7 @@
         "impactComment": "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards highly sensitive identity provider assets and their identity data stores, as they are not separated by network segmentation."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2061,7 +2061,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model in the identity provider/store that is currently missing in the model."
       },
       "attributes": {
-        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:asvs": "V2: Authentication Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -2083,7 +2083,7 @@
         "impactComment": "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards more valuable targets, as they are not separated by network segmentation."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2107,7 +2107,7 @@
         "impactComment": "If this risk is unmitigated, attackers with any account might read or change the data of all other users."
       },
       "attributes": {
-        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:asvs": "V4: Access Control Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -2131,7 +2131,7 @@
         "impactComment": "If this risk is unmitigated, an outage of the policy decision point might stop every service that asks it, or let any request through services that fail open."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -2153,7 +2153,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to easier steal config secrets (like credentials, private keys, client certificates, etc.) once a vulnerability to access files is present and exploited."
       },
       "attributes": {
-        "threagile:asvs": "V6 - Stored Cryptography Verification Requirements",
+        "threagile:asvs": "V6: Stored Cryptography Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -2174,7 +2174,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to apply standard attack pattern tests at great speed without any filtering."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Virtual_Patching_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2197,7 +2197,7 @@
         "impactComment": "If this risk is unmitigated, attackers might extract confidential data, other users' data or the system prompt through crafted questions."
       },
       "attributes": {
-        "threagile:asvs": "V8 - Data Protection Verification Requirements",
+        "threagile:asvs": "V8: Data Protection Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -2222,7 +2222,7 @@
         "impactComment": "If this risk is unmitigated, attackers might deploy a backdoored or tampered model that answers as they want, leaks data or runs code on the systems that load it."
       },
       "attributes": {
-        "threagile:asvs": "V14 - Configuration Verification Requirements",
+        "threagile:asvs": "V14: Configuration Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Software_Supply_Chain_Security_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2247,7 +2247,7 @@
         "impactComment": "If this risk is unmitigated, attackers might make the model leak what it has access to, give misleading answers, or, for an agent, use its tools and permissions for their own goals."
       },
       "attributes": {
-        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
+        "threagile:asvs": "V5: Validation, Sanitization and Encoding Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -2270,7 +2270,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to access sensitive services or files of network-reachable components by modifying outgoing calls of affected components."
       },
       "attributes": {
-        "threagile:asvs": "V12 - File and Resources Verification Requirements",
+        "threagile:asvs": "V12: File and Resources Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -2292,7 +2292,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to modify SQL/NoSQL queries to steal and modify data and eventually further escalate towards a deeper system penetration via code executions."
       },
       "attributes": {
-        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
+        "threagile:asvs": "V5: Validation, Sanitization and Encoding Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -2318,7 +2318,7 @@
         "impactComment": "If this risk is unmitigated, attackers who reach the server might call its tools directly and read or change what they reach, bypassing the agents and their controls."
       },
       "attributes": {
-        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:asvs": "V2: Authentication Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -2342,7 +2342,7 @@
         "impactComment": "If this risk is unmitigated, attackers, or a runaway agent, might make the model or the agent unavailable for others, or run up its costs (denial of wallet)."
       },
       "attributes": {
-        "threagile:asvs": "V11 - Business Logic Verification Requirements",
+        "threagile:asvs": "V11: Business Logic Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -2364,7 +2364,7 @@
         "impactComment": "If this risk remains unmitigated, vulnerabilities in custom-developed software or their dependencies might not be identified during continuous deployment cycles."
       },
       "attributes": {
-        "threagile:asvs": "V14 - Configuration Verification Requirements",
+        "threagile:asvs": "V14: Configuration Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -2386,7 +2386,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to access unencrypted data when successfully compromising sensitive components."
       },
       "attributes": {
-        "threagile:asvs": "V6 - Stored Cryptography Verification Requirements",
+        "threagile:asvs": "V6: Stored Cryptography Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2408,7 +2408,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to directly attack sensitive systems without any hardening components in-between due to them being directly exposed on the internet."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -2433,7 +2433,7 @@
         "impactComment": "If this risk is unmitigated, attackers might plant content that misleads the model, injects instructions into its prompts or makes it disclose data, persistently and for every user."
       },
       "attributes": {
-        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
+        "threagile:asvs": "V5: Validation, Sanitization and Encoding Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }

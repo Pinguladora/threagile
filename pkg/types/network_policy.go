@@ -35,11 +35,11 @@ func NetworkPolicyValues() []TypeEnum {
 }
 
 var NetworkPolicyTypeDescription = [...]TypeDescription{
-	{"unknown", "Not modelled, or not a Kubernetes namespace; the risk rules assume nothing about network policies"},
+	{"unknown", "Not modelled, or not a Kubernetes namespace. The risk rules assume nothing about network policies"},
 	{"none", "No network policy: every pod of the cluster may reach the pods of the namespace, and they may reach " +
 		"anything"},
-	{"ingress", "Incoming traffic is denied unless a policy allows it; outgoing traffic is not restricted"},
-	{"egress", "Outgoing traffic is denied unless a policy allows it; incoming traffic is not restricted"},
+	{"ingress", "Incoming traffic is denied unless a policy allows it. Outgoing traffic is not restricted"},
+	{"egress", "Outgoing traffic is denied unless a policy allows it. Incoming traffic is not restricted"},
 	{"ingress-and-egress", "Incoming and outgoing traffic are denied unless a policy allows them"},
 }
 

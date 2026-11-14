@@ -2306,7 +2306,7 @@
         "impactComment": "If this risk is unmitigated, attackers which have access to affected sourcecode repositories or artifact registries might find secrets accidentally checked-in."
       },
       "attributes": {
-        "threagile:asvs": "V14 - Configuration Verification Requirements",
+        "threagile:asvs": "V14: Configuration Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2329,7 +2329,7 @@
         "impactComment": "If this risk remains unmitigated, attackers might be able to execute code on and completely takeover production environments."
       },
       "attributes": {
-        "threagile:asvs": "V10 - Malicious Code Verification Requirements",
+        "threagile:asvs": "V10: Malicious Code Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2351,7 +2351,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to deeply persist in the target system by executing code in deployed containers."
       },
       "attributes": {
-        "threagile:asvs": "V10 - Malicious Code Verification Requirements",
+        "threagile:asvs": "V10: Malicious Code Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2373,7 +2373,7 @@
         "impactComment": "If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application by visiting an attacker controlled web site."
       },
       "attributes": {
-        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:asvs": "V4: Access Control Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -2395,7 +2395,7 @@
         "impactComment": "If this risk remains unmitigated, attackers might be able to access individual victim sessions and steal or modify user data."
       },
       "attributes": {
-        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
+        "threagile:asvs": "V5: Validation, Sanitization and Encoding Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -2417,7 +2417,7 @@
         "impactComment": "If this risk remains unmitigated, attackers might be able to disturb the availability of important parts of the system."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2441,7 +2441,7 @@
         "impactComment": "If this risk is unmitigated, attackers might use a secret copied from a laptop, a script or a client to access the target, and nobody can tell who did what with it."
       },
       "attributes": {
-        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:asvs": "V2: Authentication Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2463,7 +2463,7 @@
         "impactComment": "If this risk remains unmitigated, attackers might be able to modify LDAP queries and access more data from the LDAP server than allowed."
       },
       "attributes": {
-        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
+        "threagile:asvs": "V5: Validation, Sanitization and Encoding Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -2487,7 +2487,7 @@
         "impactComment": "If this risk is unmitigated, attackers who find a leaked secret might use it for a long time to access the target with the permissions of the caller."
       },
       "attributes": {
-        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:asvs": "V2: Authentication Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2510,7 +2510,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to access or modify sensitive data in an unauthenticated way."
       },
       "attributes": {
-        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:asvs": "V2: Authentication Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -2533,7 +2533,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication."
       },
       "attributes": {
-        "threagile:asvs": "V2 - Authentication Verification Requirements",
+        "threagile:asvs": "V2: Authentication Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html",
         "threagile:function": "business-side"
       }
@@ -2556,7 +2556,7 @@
         "impactComment": "If this risk is unmitigated, attackers might access cloud components in an unintended way."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2578,7 +2578,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to provide malicious files to the application."
       },
       "attributes": {
-        "threagile:asvs": "V12 - File and Resources Verification Requirements",
+        "threagile:asvs": "V12: File and Resources Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -2601,7 +2601,7 @@
         "impactComment": "If this risk remains unmitigated, attackers might be able to easier attack high-value targets."
       },
       "attributes": {
-        "threagile:asvs": "V14 - Configuration Verification Requirements",
+        "threagile:asvs": "V14: Configuration Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2624,7 +2624,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to access or modify foreign data after a successful compromise of a component within the system due to missing resource-based authorization checks."
       },
       "attributes": {
-        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:asvs": "V4: Access Control Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -2646,7 +2646,7 @@
         "impactComment": "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards more valuable targets, as they are not separated by network segmentation."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2670,7 +2670,7 @@
         "impactComment": "If this risk is unmitigated, attackers with any account might read or change the data of all other users."
       },
       "attributes": {
-        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:asvs": "V4: Access Control Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -2692,7 +2692,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to easier steal config secrets (like credentials, private keys, client certificates, etc.) once a vulnerability to access files is present and exploited."
       },
       "attributes": {
-        "threagile:asvs": "V6 - Stored Cryptography Verification Requirements",
+        "threagile:asvs": "V6: Stored Cryptography Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -2713,7 +2713,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to apply standard attack pattern tests at great speed without any filtering."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Virtual_Patching_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2735,7 +2735,7 @@
         "impactComment": "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards more valuable targets, as they are running on the same shared runtime."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2757,7 +2757,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to read sensitive files (configuration data, key/credential files, deployment files, business data files, etc.) from the filesystem of affected components."
       },
       "attributes": {
-        "threagile:asvs": "V12 - File and Resources Verification Requirements",
+        "threagile:asvs": "V12: File and Resources Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -2780,7 +2780,7 @@
         "impactComment": "If this risk is unmitigated, anyone on the internet might read (data leakage), alter or delete (tampering) the data held by the cloud asset."
       },
       "attributes": {
-        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:asvs": "V4: Access Control Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Secure_Cloud_Architecture_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2802,7 +2802,7 @@
         "impactComment": "If this risk is unmitigated, attackers might restore a publicly shared snapshot or image and read the data stored on it, including credentials baked into an image."
       },
       "attributes": {
-        "threagile:asvs": "V14 - Configuration Verification Requirements",
+        "threagile:asvs": "V14: Configuration Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Secure_Cloud_Architecture_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2825,7 +2825,7 @@
         "impactComment": "If this risk is unmitigated, attackers might have more potential target vectors for attacks, as the overall attack surface is unnecessarily increased."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -2848,7 +2848,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to access sensitive services or files of network-reachable components by modifying outgoing calls of affected components."
       },
       "attributes": {
-        "threagile:asvs": "V12 - File and Resources Verification Requirements",
+        "threagile:asvs": "V12: File and Resources Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -2871,7 +2871,7 @@
         "impactComment": "If this risk is unmitigated, attackers who compromise any one of the callers might use the shared account to access everything the other callers can, and the logs would not show which caller acted."
       },
       "attributes": {
-        "threagile:asvs": "V4 - Access Control Verification Requirements",
+        "threagile:asvs": "V4: Access Control Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2892,7 +2892,7 @@
         "impactComment": "Some text describing the impact..."
       },
       "attributes": {
-        "threagile:asvs": "V0 - Something Strange",
+        "threagile:asvs": "V0: Something Strange",
         "threagile:cheat_sheet": "https://example.com",
         "threagile:function": "business-side"
       }
@@ -2914,7 +2914,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to modify SQL/NoSQL queries to steal and modify data and eventually further escalate towards a deeper system penetration via code executions."
       },
       "attributes": {
-        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
+        "threagile:asvs": "V5: Validation, Sanitization and Encoding Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -2936,7 +2936,7 @@
         "impactComment": "If this risk remains unmitigated, vulnerabilities in custom-developed software or their dependencies might not be identified during continuous deployment cycles."
       },
       "attributes": {
-        "threagile:asvs": "V14 - Configuration Verification Requirements",
+        "threagile:asvs": "V14: Configuration Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -2958,7 +2958,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to access unencrypted data when successfully compromising sensitive components."
       },
       "attributes": {
-        "threagile:asvs": "V6 - Stored Cryptography Verification Requirements",
+        "threagile:asvs": "V6: Stored Cryptography Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -2981,7 +2981,7 @@
         "impactComment": "If this risk is unmitigated, network attackers might be able to eavesdrop on unencrypted sensitive data sent between components."
       },
       "attributes": {
-        "threagile:asvs": "V9 - Communication Verification Requirements",
+        "threagile:asvs": "V9: Communication Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html",
         "threagile:function": "operations"
       }
@@ -3003,7 +3003,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to directly attack sensitive systems without any hardening components in-between due to them being directly exposed on the internet."
       },
       "attributes": {
-        "threagile:asvs": "V1 - Architecture, Design and Threat Modeling Requirements",
+        "threagile:asvs": "V1: Architecture, Design and Threat Modeling Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -3025,7 +3025,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to execute code on target systems by exploiting untrusted deserialization endpoints."
       },
       "attributes": {
-        "threagile:asvs": "V5 - Validation, Sanitization and Encoding Verification Requirements",
+        "threagile:asvs": "V5: Validation, Sanitization and Encoding Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html",
         "threagile:function": "architecture"
       }
@@ -3047,7 +3047,7 @@
         "impactComment": "If this risk is unmitigated, attackers might be able to read sensitive files (configuration data, key/credential files, deployment files, business data files, etc.) form the filesystem of affected components and/or access sensitive services or files of other components."
       },
       "attributes": {
-        "threagile:asvs": "V14 - Configuration Verification Requirements",
+        "threagile:asvs": "V14: Configuration Verification Requirements",
         "threagile:cheat_sheet": "https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html",
         "threagile:function": "development"
       }
@@ -3255,7 +3255,7 @@
     {
       "id": "public-cloud-snapshot-mitigation",
       "name": "Snapshot Sharing Restrictions",
-      "description": "Prevent the public sharing of snapshots and images with a cloud configuration rule that revokes it, and audit the sharing settings regularly. Do not bake credentials into images; see the secrets management cheat sheet at \u003ca href=\"https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html\"\u003ehttps://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html\u003c/a\u003e. \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Turn on \u003ci\u003eblock public access\u003c/i\u003e for EBS snapshots (\u003ca href=\"https://docs.aws.amazon.com/ebs/latest/userguide/block-public-access-snapshots.html\"\u003ehttps://docs.aws.amazon.com/ebs/latest/userguide/block-public-access-snapshots.html\u003c/a\u003e) and for AMIs (\u003ca href=\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-to-amis.html\"\u003ehttps://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-to-amis.html\u003c/a\u003e) in every region, use the AWS Config managed rules \u003ci\u003eebs-snapshot-public-restorable-check\u003c/i\u003e (\u003ca href=\"https://docs.aws.amazon.com/config/latest/developerguide/ebs-snapshot-public-restorable-check.html\"\u003ehttps://docs.aws.amazon.com/config/latest/developerguide/ebs-snapshot-public-restorable-check.html\u003c/a\u003e) and \u003ci\u003erds-snapshots-public-prohibited\u003c/i\u003e (\u003ca href=\"https://docs.aws.amazon.com/config/latest/developerguide/rds-snapshots-public-prohibited.html\"\u003ehttps://docs.aws.amazon.com/config/latest/developerguide/rds-snapshots-public-prohibited.html\u003c/a\u003e) with an automatic remediation, and review the snapshot findings of \u003ci\u003eIAM Access Analyzer\u003c/i\u003e (\u003ca href=\"https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html\"\u003ehttps://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html\u003c/a\u003e).",
+      "description": "Prevent the public sharing of snapshots and images with a cloud configuration rule that revokes it, and audit the sharing settings regularly. Do not bake credentials into images, see the secrets management cheat sheet at \u003ca href=\"https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html\"\u003ehttps://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html\u003c/a\u003e. \u003cbr\u003e\u003cbr\u003eFor \u003cb\u003eAmazon Web Services (AWS)\u003c/b\u003e: Turn on \u003ci\u003eblock public access\u003c/i\u003e for EBS snapshots (\u003ca href=\"https://docs.aws.amazon.com/ebs/latest/userguide/block-public-access-snapshots.html\"\u003ehttps://docs.aws.amazon.com/ebs/latest/userguide/block-public-access-snapshots.html\u003c/a\u003e) and for AMIs (\u003ca href=\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-to-amis.html\"\u003ehttps://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-to-amis.html\u003c/a\u003e) in every region, use the AWS Config managed rules \u003ci\u003eebs-snapshot-public-restorable-check\u003c/i\u003e (\u003ca href=\"https://docs.aws.amazon.com/config/latest/developerguide/ebs-snapshot-public-restorable-check.html\"\u003ehttps://docs.aws.amazon.com/config/latest/developerguide/ebs-snapshot-public-restorable-check.html\u003c/a\u003e) and \u003ci\u003erds-snapshots-public-prohibited\u003c/i\u003e (\u003ca href=\"https://docs.aws.amazon.com/config/latest/developerguide/rds-snapshots-public-prohibited.html\"\u003ehttps://docs.aws.amazon.com/config/latest/developerguide/rds-snapshots-public-prohibited.html\u003c/a\u003e) with an automatic remediation, and review the snapshot findings of \u003ci\u003eIAM Access Analyzer\u003c/i\u003e (\u003ca href=\"https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html\"\u003ehttps://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html\u003c/a\u003e).",
       "riskReduction": 100,
       "attributes": {
         "threagile:check": "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?"

@@ -267,9 +267,9 @@ func (what *markdownWriter) dataFlowDiagram(view *reportView) {
 	}
 	what.mermaid(mermaidDataFlowDiagram(view.Model))
 	what.paragraph("Data-flow diagram of " + quoted(view.Title) + ". A box is an external entity, a stadium a " +
-		"process, a cylinder a datastore and a hexagon a client used by a human; assets out of scope have a dashed " +
+		"process, a cylinder a datastore and a hexagon a client used by a human. Assets out of scope have a dashed " +
 		"border, and the trust boundaries enclose the assets inside them. An arrow points from the asset that " +
-		"initiates a communication link to its target and names the protocol; a thick arrow is a link that also " +
+		"initiates a communication link to its target and names the protocol. A thick arrow is a link that also " +
 		"receives data back.")
 }
 
@@ -301,6 +301,6 @@ func (what *markdownWriter) dataMapping(view *reportView) {
 		return
 	}
 	what.paragraph("The diagram shows where the data assets are stored: an arrow points from a data asset, a " +
-		"stadium, to each technical asset that stores it, a box; assets out of scope have a dashed border.")
+		"stadium, to each technical asset that stores it, a box. Assets out of scope have a dashed border.")
 	what.mermaid(statements)
 }

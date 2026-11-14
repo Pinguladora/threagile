@@ -35,7 +35,7 @@ func AuthorizationValues() []TypeEnum {
 }
 
 var AuthorizationTypeDescription = [...]TypeDescription{
-	{"unknown", "Not modelled; the risk rules assume nothing about the authorization"},
+	{"unknown", "Not modelled. The risk rules assume nothing about the authorization"},
 	{"none", "No authorization: every caller may do everything"},
 	{"authenticated-only", "Every authenticated caller may do everything"},
 	{"function-level", "Each operation checks whether the caller may call it, for example by role"},

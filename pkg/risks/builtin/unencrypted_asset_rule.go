@@ -19,7 +19,7 @@ func (*UnencryptedAssetRule) Category() *types.RiskCategory {
 			"the data assets stored.",
 		Impact: "If this risk is unmitigated, attackers might be able to access unencrypted data when successfully " +
 			"compromising sensitive components.",
-		ASVS:       "V6 - Stored Cryptography Verification Requirements",
+		ASVS:       "V6: Stored Cryptography Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
 		Action:     "Encryption of Technical Asset",
 		Mitigation: "Apply encryption to the technical asset.",

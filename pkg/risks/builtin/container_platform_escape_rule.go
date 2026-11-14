@@ -26,7 +26,7 @@ func (*ContainerPlatformEscapeRule) Category() *types.RiskCategory {
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html",
 		Action:     "Container Infrastructure Hardening",
 		Mitigation: "Apply hardening of all container infrastructures. " +
-			"<p>See for example the <i>CIS-Benchmarks for Docker and Kubernetes</i> " +
+			"<br><br>See for example the <i>CIS-Benchmarks for Docker and Kubernetes</i> " +
 			"as well as the <i>Docker Bench for Security</i> ( <a " +
 			"href=\"https://github.com/docker/docker-bench-security\">https://github.com/docker/docker-bench-security</a> ) " +
 			"or <i>InSpec Checks for Docker and Kubernetes</i> ( <a " +
@@ -34,9 +34,9 @@ func (*ContainerPlatformEscapeRule) Category() *types.RiskCategory {
 			"and <a " +
 			"href=\"https://github.com/dev-sec/cis-kubernetes-benchmark\">" +
 			"https://github.com/dev-sec/cis-kubernetes-benchmark</a> ). Use only trusted base images, verify digital " +
-			"signatures and apply image creation best practices. Also consider using Google's <b>Distroless</i> base images " +
-			"or otherwise very small base images. Apply namespace isolation and nod affinity to separate pods from each other " +
-			"in terms of access and nodes the same style as you separate data.",
+			"signatures and apply image creation best practices. Also consider using Google's <i>Distroless</i> base images " +
+			"or otherwise very small base images. Apply namespace isolation and node affinity to separate pods from each " +
+			"other in terms of access and nodes the same style as you separate data.",
 		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS or CSVS chapter applied?",
 		Function:       types.Operations,
 		STRIDE:         types.ElevationOfPrivilege,

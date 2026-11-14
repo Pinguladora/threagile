@@ -35,12 +35,12 @@ func STRIDEValues() []TypeEnum {
 }
 
 var StrideTypeDescription = [...]TypeDescription{
-	{"spoofing", "Spoofing - Authenticity"},
-	{"tampering", "Tampering - Integrity"},
-	{"repudiation", "Repudiation - Non-repudiability"},
-	{"information-disclosure", "Information disclosure - Confidentiality"},
-	{"denial-of-service", "Denial of service - Availability"},
-	{"elevation-of-privilege", "Elevation of privilege - Authorization"},
+	{"spoofing", "Spoofing, against authenticity"},
+	{"tampering", "Tampering, against integrity"},
+	{"repudiation", "Repudiation, against non-repudiability"},
+	{"information-disclosure", "Information disclosure, against confidentiality"},
+	{"denial-of-service", "Denial of service, against availability"},
+	{"elevation-of-privilege", "Elevation of privilege, against authorization"},
 }
 
 func ParseSTRIDE(value string) (stride STRIDE, err error) {

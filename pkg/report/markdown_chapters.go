@@ -385,7 +385,7 @@ func (what *markdownWriter) questions(view *reportView) {
 
 func (what *markdownWriter) riskTracking(view *reportView) {
 	what.paragraph(strong(strconv.Itoa(len(view.TrackedRisks))+" of "+plural(view.Summary.TotalRisks, "risk", "risks")) +
-		" are tracked in the model; the others are unchecked.")
+		" are tracked in the model. The others are unchecked.")
 	if len(view.TrackedRisks) == 0 {
 		return
 	}
@@ -424,10 +424,14 @@ func trackingCell(risk *viewRisk) string {
 	if risk.Tracking.Ticket != "" {
 		parts = append(parts, "ticket "+markdownText(risk.Tracking.Ticket))
 	}
+	cell := strings.Join(parts, ", ")
 	if justification := markdownInline(risk.Justification); justification != "" {
-		parts = append(parts, justification)
+		if cell != "" {
+			cell += ". "
+		}
+		cell += justification
 	}
-	return strings.Join(parts, "; ")
+	return cell
 }
 
 func (what *markdownWriter) catalogCoverage(view *reportView) {
