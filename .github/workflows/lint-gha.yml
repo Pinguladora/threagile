@@ -4,13 +4,8 @@ name: Lint GitHub Actions
 # run through mise (`mise run lint:gha`) so the pipeline stays portable. The same
 # tools run locally via the hk pre-push hook, so this is the enforcement path for
 # contributors who do not have the hooks installed.
+# Pull requests only: main gets nothing a pull request has not already checked.
 on:
-  push:
-    branches: [main]
-    paths:
-      - ".github/zizmor.yml"
-      - ".github/workflows/**.yml"
-      - ".github/workflows/**.yaml"
   pull_request:
     paths:
       - ".github/zizmor.yml"

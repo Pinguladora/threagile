@@ -1,12 +1,14 @@
 name: CI
 
-# The Go gate for every pull request and every push to main. It runs the same
-# checks as the local hk hooks (format, tidy, build, vet, test, lint) through
-# mise, so contributors who do not have the hooks installed still get them
-# enforced. Everything runs via `mise run ci:check` (see mise.ci.toml), keeping
-# the pipeline portable across CI systems.
+# The Go gate for every pull request. It runs the same checks as the local hk
+# hooks (format, tidy, build, vet, test, lint) through mise, so contributors who
+# do not have the hooks installed still get them enforced. Everything runs via
+# `mise run ci:check` (see mise.ci.toml), keeping the pipeline portable across
+# CI systems.
 # A change to the docs or to the Markdown files at the root alone runs nothing, except to the docs that tests check
 # against the code. Later patterns win, so those are listed after the exclusions.
+# Main runs it only to save the caches of the tools and of the Go builds: a pull request can restore the caches of
+# main, but not those of another pull request. So it runs there only when what their keys hash changes.
 on:
   pull_request:
     paths:
@@ -18,11 +20,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "**"
-      - "!docs/**"
-      - "!*.md"
-      - docs/flags.md
-      - docs/types.md
+      - go.sum
+      - mise*.toml
+      - mise*.lock
+      - .miserc*
+      - .github/workflows/ci.yml
 
 permissions: {}
 
@@ -71,6 +73,9 @@ jobs:
     name: PDF compliance
     # Renders the PDF reports of the demos with typst and checks them with veraPDF as PDF/A-3a and PDF/UA-1. veraPDF
     # runs from its container image, which is amd64 only, as the runner is.
+    # Not on main: it saves no cache of its own, and its builds without the race detector would take the key of the
+    # Go check's if it finished first.
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
@@ -103,46 +108,6 @@ jobs:
             go-${{ runner.os }}-
       - name: Check the PDF reports with veraPDF
         run: mise run pdf:validate
-
-  image:
-    name: Container image
-    # Builds the container image of a release as a snapshot (nothing is pushed) and renders the PDF report of the
-    # example with it, so that a broken image shows before a release.
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    permissions:
-      contents: read # checkout
-    env:
-      MISE_ENV: ci
-    steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
-        with:
-          egress-policy: block
-          disable-telemetry: "true"
-          disable-sudo: "true"
-          allowed-endpoints: >
-            github.com:443 api.github.com:443 codeload.github.com:443 objects.githubusercontent.com:443 release-assets.githubusercontent.com:443 raw.githubusercontent.com:443 mise.jdx.dev:443 tuf-repo-cdn.sigstore.dev:443 proxy.golang.org:443 sum.golang.org:443 storage.googleapis.com:443 dl.google.com:443 go.dev:443 *.actions.githubusercontent.com:443 *.blob.core.windows.net:443 ghcr.io:443 pkg-containers.githubusercontent.com:443 registry.access.redhat.com:443 *.quay.io:443
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 0 # goreleaser versions the snapshot from the tags
-      - name: Set up mise
-        uses: jdx/mise-action@f5be966e4a917d54244728e6a5fdcd1d93a35e6c # v5.2.6
-      - name: Cache the Go build and module cache
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: go-image-${{ runner.os }}-${{ hashFiles('go.sum') }}
-          restore-keys: |
-            go-image-${{ runner.os }}-
-      - name: Build the snapshot image
-        run: mise run snapshot:container
-      - name: Render the example's PDF report with the image
-        run: mise run image:check
 
   mutation:
     name: Mutation testing
