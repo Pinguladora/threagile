@@ -27,16 +27,18 @@ func TestReportExclude(t *testing.T) {
 		append(modelText, []byte("\nreport_exclude:\n  layers: [delivery]\n")...), 0o600))
 	hiding := filepath.Join(modelDir, "threagile.yaml")
 
+	// Only one case writes the HTML report: its diagrams take minutes with the race detector.
 	for name, test := range map[string]struct {
 		modelFile string
 		override  []string
 		hidden    bool
+		html      bool
 	}{
-		"model shows them":              {"../../demo/example/threagile.yaml", nil, false},
-		"model leaves them out":         {hiding, nil, true},
-		"config leaves them out":        {"../../demo/example/threagile.yaml", []string{"layer:delivery"}, true},
-		"config by id":                  {"../../demo/example/threagile.yaml", []string{"asset:jenkins-build-server"}, true},
-		"config shows what model hides": {hiding, []string{""}, false},
+		"model shows them":              {"../../demo/example/threagile.yaml", nil, false, false},
+		"model leaves them out":         {hiding, nil, true, true},
+		"config leaves them out":        {"../../demo/example/threagile.yaml", []string{"layer:delivery"}, true, false},
+		"config by id":                  {"../../demo/example/threagile.yaml", []string{"asset:jenkins-build-server"}, true, false},
+		"config shows what model hides": {hiding, []string{""}, false, false},
 	} {
 		t.Run(name, func(t *testing.T) {
 			reporter := testReporter{t}
@@ -51,8 +53,9 @@ func TestReportExclude(t *testing.T) {
 
 			result, err := model.ReadAndAnalyzeModel(config, risks.GetBuiltInRiskRules(), reporter)
 			require.NoError(t, err)
-			commands := new(report.GenerateCommands).Defaults()
-			commands.ReportPDF = false
+			commands := &report.GenerateCommands{
+				RisksJSON: true, TechnicalAssetsJSON: true, ReportMarkdown: true, ReportHTML: test.html,
+			}
 			require.NoError(t, report.Generate(config, result, commands, risks.GetBuiltInRiskRules(), reporter))
 
 			outputRoot, err := os.OpenRoot(outputDir)
@@ -63,7 +66,11 @@ func TestReportExclude(t *testing.T) {
 				require.NoError(t, readError, name)
 				return string(content)
 			}
-			for _, name := range []string{config.GetReportMarkdownFilename(), config.GetReportHTMLFilename()} {
+			reports := []string{config.GetReportMarkdownFilename()}
+			if test.html {
+				reports = append(reports, config.GetReportHTMLFilename())
+			}
+			for _, name := range reports {
 				content := read(name)
 				if test.hidden {
 					assert.Contains(t, content, "Left out", name)
