@@ -86,6 +86,41 @@ asset with a link from each service that asks it, so that the rules see the deci
 The HTML and Markdown reports list each decision point in the chapter "Policy Decision Points", with the services
 that ask it and the requests that those services authorize.
 
+## Leaving parts out of the reports
+
+A model often covers more than one view of a system: the application, the platform it is deployed on, and how it is
+built, released and maintained. Each view matters to someone, but a report for one of them reads better without the
+others. `report_exclude` at the top of the model names what the reports leave out:
+
+```yaml
+report_exclude:
+  layers: [delivery]              # technical assets of these layers
+  tags: [experimental]            # technical assets with any of these tags
+  technical_assets: [renovate]    # technical assets by id
+  trust_boundaries: [github]      # every technical asset inside, nested boundaries included
+```
+
+Each technical asset belongs to a `layer` (see [types](./types.md#layer)):
+
+| Layer | For |
+|-------|-----|
+| `application` | the system itself: what serves its users and handles its business data |
+| `platform` | what it is deployed on and run by, such as clusters, hypervisors, workload identity, logging and monitoring |
+| `delivery` | how it is built, released and maintained, such as repositories, CI, registries, bots and developer machines |
+
+Unset, a `business` asset is `application` and a `devops` asset is `delivery`, so mark the platform assets with
+`layer: platform`, such as a Kubernetes API or a SPIRE agent, which are devops but stay when the system is deployed.
+
+The diagrams, the Excel files and the PDF, HTML and Markdown reports then leave out those technical assets, the links
+from and to them and the risks about them. Data assets that only those assets held go too, and so do trust boundaries
+and shared runtimes they leave empty. The title page of each report says what it left out. The analysis itself does
+not change: the JSON outputs, the OTM file and `--fail-on` keep every risk. Tags, technical assets and trust
+boundaries that the model does not have are an error, so that a typo does not silently leave nothing out.
+
+`--report-exclude` replaces the model's `report_exclude` for one run, with selectors like
+`--report-exclude layer:delivery,tag:experimental,asset:renovate,boundary:github`. `--report-exclude ""` shows
+everything, for instance for the maintainers.
+
 ## Kubernetes clusters
 
 A Kubernetes cluster is modelled with the elements threagile has, plus two optional fields:

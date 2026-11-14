@@ -53,6 +53,8 @@ type Config struct {
 	ReportLogoImagePathValue         string `json:"ReportLogoImagePath,omitempty"         yaml:"ReportLogoImagePath"`
 	TechnologyFilenameValue          string `json:"TechnologyFilename,omitempty"          yaml:"TechnologyFilename"`
 	HideEmptyChaptersValue           bool   `json:"HideEmptyChapters,omitempty"           yaml:"HideEmptyChapters"`
+	// ReportExcludeValue replaces the model's report_exclude when set, with selectors like layer:delivery.
+	ReportExcludeValue []string `json:"ReportExclude,omitempty" yaml:"ReportExclude"`
 
 	RiskRulePluginsValue   []string        `json:"RiskRulePlugins,omitempty"   yaml:"RiskRulePlugins"`
 	SkipRiskRulesValue     []string        `json:"SkipRiskRules,omitempty"     yaml:"SkipRiskRules"`
@@ -532,6 +534,9 @@ var configMergers = lowerCaseKeys(map[string]func(c *Config, config *Config, val
 	"HideEmptyChapters": func(c *Config, config *Config, _ any) {
 		c.HideEmptyChaptersValue = config.HideEmptyChaptersValue
 	},
+	"ReportExclude": func(c *Config, config *Config, _ any) {
+		c.ReportExcludeValue = config.ReportExcludeValue
+	},
 	"RiskRulePlugins": func(c *Config, config *Config, _ any) {
 		c.RiskRulePluginsValue = config.RiskRulePluginsValue
 	},
@@ -781,6 +786,11 @@ func (c *Config) GetTechnologyFilename() string {
 
 func (c *Config) GetHideEmptyChapters() bool {
 	return c.HideEmptyChaptersValue
+}
+
+// GetReportExclude returns the selectors of what the reports leave out, nil to leave it to the model.
+func (c *Config) GetReportExclude() []string {
+	return c.ReportExcludeValue
 }
 
 func (c *Config) GetInputFile() string {

@@ -185,6 +185,9 @@ func (what *Threagile) initSkipFlags() {
 		"skip generating report html")
 	flags.BoolVar(&what.flags.SkipReportMarkdownValue, skipReportMarkdownFlagName, what.config.GetSkipReportMarkdown(),
 		"skip generating report markdown")
+	flags.StringVar(&what.flags.reportExcludeFlag, reportExcludeFlagName, "",
+		"comma-separated list of what the reports leave out, like layer:delivery,tag:ci,asset:renovate,boundary:github, "+
+			"replacing the model's report_exclude (an empty list shows everything)")
 
 	flags.BoolVar(&what.flags.generateDataFlowDiagramFlag, generateDataFlowDiagramFlagName,
 		!what.config.GetSkipDataFlowDiagram(), "(deprecated, use the matching --skip flag) generate data flow diagram")
@@ -447,6 +450,9 @@ func (what *Threagile) overrideSkipArgs(cmd *cobra.Command) {
 	override(what, cmd, skipReportHTMLFlagName, &what.config.SkipReportHTMLValue, what.flags.SkipReportHTMLValue)
 	override(what, cmd, skipReportMarkdownFlagName, &what.config.SkipReportMarkdownValue,
 		what.flags.SkipReportMarkdownValue)
+	if what.isFlagOverridden(cmd, reportExcludeFlagName) {
+		what.config.ReportExcludeValue = strings.Split(what.flags.reportExcludeFlag, ",")
+	}
 
 	override(what, cmd, generateDataFlowDiagramFlagName, &what.config.SkipDataFlowDiagramValue,
 		!what.flags.generateDataFlowDiagramFlag)

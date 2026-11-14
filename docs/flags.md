@@ -40,6 +40,7 @@ Every flag can also be set in the [config file](./config.md). Every command take
 | `--output` | string | `.` | output directory |
 | `--plugin-dir` | string | `/app` | plugin directory |
 | `--report` | string | `report.pdf` | report file |
+| `--report-exclude` | string |  | comma-separated list of what the reports leave out, like layer:delivery,tag:ci,asset:renovate,boundary:github, replacing the model's report_exclude (an empty list shows everything) |
 | `--report-html` | string | `report.html` | HTML report file |
 | `--report-md` | string | `THREAT_MODEL.md` | Markdown report file |
 | `--reportLogoImagePath` | string | `report/threagile-logo.png` | report logo image |
