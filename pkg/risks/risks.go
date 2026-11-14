@@ -126,6 +126,7 @@ func coreRiskRules() []types.RiskRule {
 		builtin.NewUnnecessaryDataTransferRule(),
 		builtin.NewUnnecessaryTechnicalAssetRule(),
 		builtin.NewUntrustedDeserializationRule(),
+		builtin.NewVirtualMachineEscapeRule(),
 		builtin.NewWrongCommunicationLinkContentRule(),
 		builtin.NewWrongTrustBoundaryContentRule(),
 		builtin.NewXmlExternalEntityRule(),
