@@ -36,7 +36,8 @@ func (*MissingAuthenticationSecondFactorRule) Category() *types.RiskCategory {
 			") should authenticate incoming requests via multi-factor authentication (MFA) when the asset processes or stores " +
 			"highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client " +
 			"used by a human user. Links over industrial control protocols that cannot authenticate are left to the " +
-			"insecure-control-protocol rule.",
+			"insecure-control-protocol rule. Process-local links (in-process calls, inter-process communication and " +
+			"local file access) are exempted, as they stay on the machine the user has already logged in to.",
 		RiskAssessment: types.MediumSeverity.String(),
 		FalsePositives: "Technical assets which do not process requests regarding functionality or data linked to " +
 			"end-users (customers) can be considered as false positives after individual review.",
@@ -63,7 +64,9 @@ func (r *MissingAuthenticationSecondFactorRule) GenerateRisks(input *types.Model
 		commLinks := input.IncomingTechnicalCommunicationLinksMappedByTargetId[technicalAsset.Id]
 		for _, commLink := range commLinks {
 			caller := input.TechnicalAssets[commLink.SourceId]
-			if isUnauthenticatedCallerTolerated(caller) || commLink.Protocol.IsInsecureIndustrialControlProtocol() {
+			// A process-local link stays on the machine the user has already logged in to.
+			if isUnauthenticatedCallerTolerated(caller) || commLink.Protocol.IsInsecureIndustrialControlProtocol() ||
+				commLink.Protocol.IsProcessLocal() {
 				continue
 			}
 			if caller.UsedAsClientByHuman {

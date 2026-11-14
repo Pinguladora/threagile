@@ -757,3 +757,32 @@ func TestMissingAuthenticationSecondFactorRuleForwardedRisksOfEachHumanCallerHav
 		"missing-authentication-second-factor@proxy>app@mobile-app@app",
 	}, ids)
 }
+
+func TestMissingAuthenticationSecondFactorRuleProcessLocalLinks(t *testing.T) {
+	for protocol, risky := range map[types.Protocol]bool{
+		types.HTTPS:                     true,
+		types.LocalFileAccess:           false,
+		types.InterProcessCommunication: false,
+		types.InProcessLibraryCall:      false,
+	} {
+		t.Run(protocol.String(), func(t *testing.T) {
+			risks, err := NewMissingAuthenticationSecondFactorRule(NewMissingAuthenticationRule()).GenerateRisks(&types.Model{
+				TechnicalAssets: map[string]*types.TechnicalAsset{
+					"files": {Id: "files", Title: "Files", MultiTenant: true},
+					"cli":   {Id: "cli", Title: "CLI", UsedAsClientByHuman: true},
+				},
+				IncomingTechnicalCommunicationLinksMappedByTargetId: map[string][]*types.CommunicationLink{
+					"files": {{
+						SourceId: "cli", Title: "Read", Protocol: protocol, Authentication: types.NoneAuthentication,
+						DataAssetsSent: []string{"secret"},
+					}},
+				},
+				DataAssets: map[string]*types.DataAsset{
+					"secret": {Id: "secret", Title: "Secret", Confidentiality: types.Confidential},
+				},
+			})
+			assert.Nil(t, err)
+			assert.Equal(t, risky, len(risks) == 1, "risks: %v", risks)
+		})
+	}
+}
