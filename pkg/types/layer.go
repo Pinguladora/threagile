@@ -31,11 +31,11 @@ func LayerValues() []TypeEnum {
 
 var LayerTypeDescription = [...]TypeDescription{
 	{"", "Not set: business assets are application, devops assets delivery"},
-	{"application", "The system itself: what serves its users and handles its business data"},
-	{"platform", "What the system is deployed on and run by, such as clusters, hypervisors, workload identity, " +
-		"logging and monitoring"},
-	{"delivery", "How the system is built, released and maintained, such as source repositories, CI, artifact " +
-		"registries, bots and developer machines"},
+	{"application", "What the system provides: what its project builds, or ships and configures as part of it"},
+	{"platform", "What the system runs on or depends on at runtime without owning it, such as the clusters, " +
+		"hypervisors, workload identity, secret stores or log collectors it expects to find"},
+	{"delivery", "Not involved while the system runs: what builds, releases, deploys or maintains it, such as " +
+		"source repositories, CI and CD, artifact registries, bots and developer machines"},
 }
 
 // ParseLayer parses the name of a layer. An empty name is UnsetLayer.

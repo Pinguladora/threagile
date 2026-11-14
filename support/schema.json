@@ -1108,7 +1108,7 @@
             ]
           },
           "layer": {
-            "description": "The part of the system the technical asset belongs to, so that a report can leave it out: the application itself, the platform it runs on, or how it is delivered. Unset, business assets are application and devops assets delivery.",
+            "description": "The role of the technical asset relative to the system the model is about, so that a report can leave it out: application is what the system provides, platform what it runs on without owning it, delivery what builds, releases, deploys or maintains it. Unset, business assets are application and devops assets delivery.",
             "enum": [
               "application",
               "platform",
