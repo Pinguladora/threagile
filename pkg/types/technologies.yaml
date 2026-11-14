@@ -620,6 +620,17 @@ unknown-technology:
   aliases:
     - unknown
   description: Unknown technology
+workload-identity:
+  aliases:
+    - workload-identity-provider
+    - spiffe
+    - spire
+  description: A workload identity provider that issues short-lived credentials to workloads, like SPIFFE with SPIRE
+  attributes:
+    workload-identity: true
+    backend_related: true
+    high_value_target: true
+    identity_related: true
 vault:
   aliases:
     - hashicorp-vault

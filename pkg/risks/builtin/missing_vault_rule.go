@@ -25,10 +25,11 @@ func (*MissingVaultRule) Category() *types.RiskCategory {
 		Action:     "Vault (Secret Storage)",
 		Mitigation: "Consider using a Vault (Secret Storage) to securely store and access config secrets (like " +
 			"credentials, private keys, client certificates, etc.).",
-		Check:          "GetAttribute a Vault (Secret Storage) in place?",
-		Function:       types.Architecture,
-		STRIDE:         types.InformationDisclosure,
-		DetectionLogic: "Models without a Vault (Secret Storage).",
+		Check:    "GetAttribute a Vault (Secret Storage) in place?",
+		Function: types.Architecture,
+		STRIDE:   types.InformationDisclosure,
+		DetectionLogic: "Models without a Vault (Secret Storage) and without a " + types.WorkloadIdentity + " provider, " +
+			"which issues short-lived credentials to workloads so that they need not store secrets.",
 		RiskAssessment: ratingByAssetAndProcessedDataSensitivity,
 		FalsePositives: "Models where no technical assets have any kind of sensitive config data to protect " +
 			"can be considered as false positives after individual review.",
@@ -50,7 +51,7 @@ func (r *MissingVaultRule) GenerateRisks(input *types.Model) ([]*types.Risk, err
 	// use the sorted one to always get the same tech asset with the highest sensitivity as example asset
 	for _, id := range input.SortedTechnicalAssetIDs() {
 		techAsset := input.TechnicalAssets[id]
-		if techAsset.Technologies.GetAttribute(types.Vault) {
+		if techAsset.Technologies.GetAttribute(types.Vault) || techAsset.Technologies.GetAttribute(types.WorkloadIdentity) {
 			hasVault = true
 			break
 		}
