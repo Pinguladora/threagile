@@ -1,0 +1,55 @@
+name: Container image
+
+# Builds the container image of a release as a snapshot (nothing is pushed) and renders the PDF report of the example
+# with it, so that a broken image shows before a release. A snapshot runs the whole release configuration of
+# goreleaser, every binary included.
+# It runs only for the changes that can break the image and that the Go check does not cover: the Containerfile and
+# its base images, the goreleaser configuration and the pinned goreleaser, all of which Renovate updates too. Pull
+# requests only, and without a Go cache: it runs too seldom for one to pay, and a cache saved by a pull request is
+# not shared with the others.
+on:
+  pull_request:
+    paths:
+      - Containerfile
+      - .goreleaser.yaml
+      - mise.toml
+      - mise.lock
+      - mise.ci.toml
+      - mise.ci.lock
+      - .github/workflows/container-image.yml
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  image:
+    name: Container image
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read # checkout
+    env:
+      MISE_ENV: ci
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
+        with:
+          egress-policy: block
+          disable-telemetry: "true"
+          disable-sudo: "true"
+          allowed-endpoints: >
+            github.com:443 api.github.com:443 codeload.github.com:443 objects.githubusercontent.com:443 release-assets.githubusercontent.com:443 raw.githubusercontent.com:443 mise.jdx.dev:443 tuf-repo-cdn.sigstore.dev:443 proxy.golang.org:443 sum.golang.org:443 storage.googleapis.com:443 dl.google.com:443 go.dev:443 *.actions.githubusercontent.com:443 *.blob.core.windows.net:443 ghcr.io:443 pkg-containers.githubusercontent.com:443 registry.access.redhat.com:443 *.quay.io:443
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0 # goreleaser versions the snapshot from the tags
+      - name: Set up mise
+        uses: jdx/mise-action@f5be966e4a917d54244728e6a5fdcd1d93a35e6c # v5.2.6
+      - name: Build the snapshot image
+        run: mise run snapshot:container
+      - name: Render the example's PDF report with the image
+        run: mise run image:check
