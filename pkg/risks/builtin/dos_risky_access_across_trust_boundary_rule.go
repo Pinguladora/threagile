@@ -19,7 +19,7 @@ func (*DosRiskyAccessAcrossTrustBoundaryRule) Category() *types.RiskCategory {
 		Impact: "If this risk remains unmitigated, attackers might be able to disturb the availability of important " +
 			"parts of the system.",
 		ASVS:       asvsArchitecture,
-		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html",
+		CheatSheet: cheatSheetDenialOfService,
 		Action:     "Anti-DoS Measures",
 		Mitigation: "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. " +
 			"Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. " +

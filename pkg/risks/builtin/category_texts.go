@@ -17,8 +17,9 @@ const (
 
 	cheatSheetAttackSurfaceAnalysis = "https://cheatsheetseries.owasp.org/cheatsheets/" +
 		"Attack_Surface_Analysis_Cheat_Sheet.html"
-	cheatSheetAuthentication = "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html"
-	cheatSheetThreatModeling = "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html"
+	cheatSheetAuthentication  = "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html"
+	cheatSheetDenialOfService = "https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html"
+	cheatSheetThreatModeling  = "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html"
 
 	actionAttackSurfaceReduction = "Attack Surface Reduction"
 	actionBuildPipelineHardening = "Build Pipeline Hardening"
