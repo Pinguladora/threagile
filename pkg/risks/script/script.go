@@ -11,7 +11,7 @@ import (
 	"github.com/Pinguladora/threagile/pkg/risks/script/expressions"
 	"github.com/Pinguladora/threagile/pkg/risks/script/statements"
 	"github.com/Pinguladora/threagile/pkg/types"
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 )
 
 type Script struct {

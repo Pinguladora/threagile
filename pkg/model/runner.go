@@ -7,7 +7,7 @@ import (
 	"os"
 	"os/exec"
 
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 )
 
 // runner runs the plugin of a custom risk rule; it could move to an internal package.
