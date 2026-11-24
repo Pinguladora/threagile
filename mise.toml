@@ -28,7 +28,7 @@ go = "1.27.3"
 # at least the pinned go, or it panics on our go.mod (2.15.0 is built with go1.27).
 "aqua:golangci/golangci-lint" = "2.15.0"
 goreleaser = "2.20.2"
-syft = "1.57.1"
+syft = "1.57.2"
 actionlint = "1.7.12"
 zizmor = "1.32.0"
 # Renders the PDF report at run time (the binary runs it when it is on the PATH); the tests and CI render with it.
