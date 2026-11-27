@@ -27,7 +27,7 @@ go = "1.27.3"
 # a CI job's setup whenever the mise cache missed. Its release must be built with
 # at least the pinned go, or it panics on our go.mod (2.15.0 is built with go1.27).
 "aqua:golangci/golangci-lint" = "2.15.0"
-goreleaser = "2.20.2"
+goreleaser = "2.20.3"
 syft = "1.57.2"
 actionlint = "1.7.12"
 zizmor = "1.32.0"
